@@ -4,12 +4,12 @@ shared_examples_for 'a method filter parse result' do
   it { should be(response) }
 
   it 'should initialize method filter with correct arguments' do
-    expected_class.should_receive(:new).with('Foo','bar').and_return(response)
+    expected_class.should_receive(:new).with('Foo', 'bar').and_return(response)
     subject
   end
 end
 
-describe Mutant::Matcher::Method,'.parse' do
+describe Mutant::Matcher::Method, '.parse' do
   subject { described_class.parse(input) }
 
   before do

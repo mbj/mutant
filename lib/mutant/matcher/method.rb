@@ -27,8 +27,8 @@ module Mutant
       #
       # @api private
       #
-      def initialize(constant_name,method_name)
-        @constant_name,@method_name = constant_name,method_name
+      def initialize(constant_name, method_name)
+        @constant_name, @method_name = constant_name, method_name
       end
 
       # Parse a method string into filter
@@ -105,7 +105,7 @@ module Mutant
       #
       def root_node
         root_node = nil
-        ast.walk do |_,node|
+        ast.walk do |_, node|
           root_node = node if match?(node)
           true
         end
