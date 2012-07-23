@@ -15,10 +15,10 @@ module Mutant
         def self.run(input)
           match = SCOPE_FORMAT.match(input)
           raise ArgumentError,"Cannot determine subject from #{input.inspect}" unless match
-          new(match)
+          new(match).matcher
         end
 
-        def filter
+        def matcher
           scope.new(constant_name,method_name)
         end
 

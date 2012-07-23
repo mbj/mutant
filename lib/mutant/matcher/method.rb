@@ -40,7 +40,7 @@ module Mutant
       # @api private
       #
       def self.parse(input)
-        Classifier.run(input).filter
+        Classifier.run(input)
       end
 
       # Enumerate matches
