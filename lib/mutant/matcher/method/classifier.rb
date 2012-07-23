@@ -36,12 +36,12 @@ module Mutant
           @match[3]
         end
 
-        def scope_name
+        def scope_symbol
           @match[2]
         end
 
         def scope
-          TABLE.fetch(scope_name)
+          TABLE.fetch(scope_symbol)
         end
       end
     end
