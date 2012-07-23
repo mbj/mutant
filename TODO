@@ -1,0 +1,9 @@
+* Get a rid of heckle and test mutant with mutant.
+  This is interesting IMHO mutant should have another entry point
+  that does not create the ::Mutant namespace.
+  This will be easy when there is a gem release.
+  This ::Zombie namespace can be created with dynamically creating a 
+  new library under a differend load path. Also a gem release 
+  could provide this feature.
+* Get a rid of rspec-1 (can be done once we do not use heckle anymore)
+* Add an infrastructure to whitelist components to heckle. 

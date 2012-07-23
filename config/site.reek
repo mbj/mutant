@@ -1,0 +1,91 @@
+---
+UncommunicativeParameterName:
+  accept: []
+  exclude: []
+  enabled: true
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+LargeClass:
+  max_methods: 10
+  exclude: []
+  enabled: true
+  max_instance_variables: 3
+UncommunicativeMethodName:
+  accept: []
+  exclude: []
+  enabled: true
+  reject:
+  - !ruby/regexp /^[a-z]$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+LongParameterList:
+  max_params: 2
+  exclude: []
+  enabled: true
+  overrides: {}
+FeatureEnvy:
+  exclude: []
+  enabled: true
+ClassVariable:
+  exclude: []
+  enabled: true
+BooleanParameter:
+  exclude: []
+  enabled: true
+IrresponsibleModule:
+  exclude: []
+  enabled: true
+UncommunicativeModuleName:
+  accept: []
+  exclude: []
+  enabled: true
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+NestedIterators:
+  ignore_iterators: []
+  exclude: []
+  enabled: true
+  max_allowed_nesting: 1
+LongMethod:
+  max_statements: 6
+  exclude: []
+  enabled: true
+Duplication:
+  allow_calls: []
+  exclude: []
+  enabled: true
+  max_calls: 1
+UtilityFunction:
+  max_helper_calls: 0
+  exclude: []
+  enabled: true
+Attribute:
+  exclude: []
+  enabled: false
+UncommunicativeVariableName:
+  accept: []
+  exclude: []
+  enabled: true
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+SimulatedPolymorphism:
+  exclude: []
+  enabled: true
+  max_ifs: 1
+DataClump:
+  exclude: []
+  enabled: true
+  max_copies: 2
+  min_clump_size: 2
+ControlCouple:
+  exclude: []
+  enabled: true
+LongYieldList:
+  max_params: 1
+  exclude: []
+  enabled: true
