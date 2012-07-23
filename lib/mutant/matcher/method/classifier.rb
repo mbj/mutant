@@ -43,10 +43,6 @@ module Mutant
         def scope
           TABLE.fetch(scope_name)
         end
-
-        def method
-          scope.method(method_name)
-        end
       end
     end
   end
