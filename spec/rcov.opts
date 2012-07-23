@@ -1,0 +1,7 @@
+--exclude-only "spec/,^/"
+--sort coverage
+--callsites
+--xrefs
+--profile
+--text-summary
+--failure-threshold 100

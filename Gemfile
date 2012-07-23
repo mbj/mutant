@@ -4,6 +4,9 @@ source 'https://rubygems.org'
 
 gemspec
 
+# For Veritas::Immutable, will be extracted soon
+gem 'veritas', :git => 'https://github.com/dkubb/veritas'
+
 group :development do
   gem 'rake',    '~> 0.9.2'
   gem 'rspec',   '~> 1.3.2'
