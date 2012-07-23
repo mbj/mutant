@@ -29,12 +29,12 @@ begin
   end
 
   desc 'Heckle each module and class'
-  task :heckle => :rcov do
+  task :heckle do
     unless Ruby2Ruby::VERSION == '1.2.2'
       raise "ruby2ruby version #{Ruby2Ruby::VERSION} may not work properly, 1.2.2 *only* is recommended for use with heckle"
     end
 
-    require 'veritas-mongo-adapter'
+    require 'mutant'
 
     root_module_regexp = Regexp.union('Mutant')
 

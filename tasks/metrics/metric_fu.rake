@@ -1,4 +1,6 @@
 begin
+  # Require veritas before metric foo pulls AS
+  require 'veritas'
   require 'metric_fu'
   require 'json'
 

@@ -1,2 +1,4 @@
 /.rbx
 /Gemfile.lock
+/tmp
+/coverage

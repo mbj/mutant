@@ -7,6 +7,8 @@ module Mutant
     #
     # @api private
     #
+    # @return [undefined]
+    #
     def each
       Mutant.not_implemented(self)
     end

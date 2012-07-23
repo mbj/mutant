@@ -11,7 +11,7 @@ ClassVariableCheck:              {}
 CyclomaticComplexityBlockCheck:
   complexity: 2
 CyclomaticComplexityMethodCheck:
-  complexity: 2
+  complexity: 3
 EmptyRescueBodyCheck:            {}
 ForLoopCheck:                    {}
 MethodLineCountCheck:

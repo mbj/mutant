@@ -23,11 +23,30 @@ module Mutant
   # @return [undefined]
   #
   # @api private
+  #
   def self.not_implemented(object)
     method = caller(1).first[/`(.*)'/,1].to_sym
-    delimiter = object.kind_of?(Module) ? '.' : '#'
-    raise NotImplementedError,"#{object.class}#{delimiter}#{method} is not implemented"
+    constant_name,delimiter = not_implemented_info(object)
+    raise NotImplementedError,"#{constant_name}#{delimiter}#{method} is not implemented"
   end
+
+  # Return name and delimiter
+  #
+  # @param [Object] object
+  #
+  # @return [Array]
+  #
+  # @api private
+  #
+  def self.not_implemented_info(object)
+    if object.kind_of?(Module)
+      [object.name,'.']
+    else
+      [object.class.name,'#']
+    end
+  end
+
+  private_class_method :not_implemented_info
 end
 
 require 'mutant/matcher'

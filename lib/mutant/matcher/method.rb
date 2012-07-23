@@ -2,35 +2,6 @@ module Mutant
   class Matcher
     # A filter for methods
     class Method < Matcher
-      # Return constant name 
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      attr_reader :constant_name
-
-      # Return method name
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      attr_reader :method_name
-
-      # Initialize method filter
-      # 
-      # @param [String] constant_name
-      # @param [String] method_name
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(constant_name, method_name)
-        @constant_name, @method_name = constant_name, method_name
-      end
-
       # Parse a method string into filter
       #
       # @param [String] input
@@ -53,15 +24,69 @@ module Mutant
       #
       # @api private
       #   
-      def each
+      def each(&block)
         return to_enum(__method__) unless block_given?
-        yield root_node
+        node = root_node
+        yield node if node
         self
+      end
+
+    private
+
+      # Return constant name 
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      attr_reader :constant_name
+      private :constant_name
+
+      # Return method name
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      attr_reader :method_name
+      private :method_name
+
+      # Initialize method filter
+      # 
+      # @param [String] constant_name
+      # @param [Symbol] method_name
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def initialize(constant_name, method_name)
+        @constant_name, @method_name = constant_name, method_name
+      end
+
+      # Return method
+      # 
+      # @return [UnboundMethod]
+      #
+      # @api private
+      #
+      def method
+        Mutant.not_implemented(self)
+      end
+
+      # Return node classes this matcher matches
+      #
+      # @return [Rubinius::AST::Node]
+      #
+      # @api private
+      #
+      def node_class
+        Mutant.not_implemented(self)
       end
 
       # Check if node is matched 
       #
-      # @param [Rubinius::AST::Node]
+      # @param [Rubinius::AST::Node] node
       #
       # @return [true]
       #   returns true if node matches method
@@ -72,44 +97,9 @@ module Mutant
       # @api private
       #
       def match?(node)
-        node.line == source_file_line && node_class == node.class && node.name.to_s == method_name
-      end
-
-    private
-
-      # Return method
-      # 
-      # @return [UnboundMethod]
-      #
-      # @api private
-      #
-      def method
-        Mutant.not_implemente(self)
-      end
-
-      # Return node classes this matcher matches
-      #
-      # @return [Enumerable]
-      #
-      # @api private
-      #
-      def node_classes
-        Mutant.not_implemented(self)
-      end
-
-      # Return root node
-      #
-      # @return [Rubinus::AST::Node]
-      #
-      # @api private
-      #
-      def root_node
-        root_node = nil
-        ast.walk do |_, node|
-          root_node = node if match?(node)
-          true
-        end
-        root_node
+        node.line  == source_file_line && 
+        node.class == node_class && 
+        node.name  == method_name
       end
 
       # Return full ast
@@ -150,6 +140,21 @@ module Mutant
       #
       def source_location
         method.source_location
+      end
+
+      # Return root node
+      #
+      # @return [Rubinus::AST]
+      #
+      # @api private
+      #
+      def root_node
+        root_node = nil
+        ast.walk do |predicate, node|
+          root_node = node if match?(node)
+          true
+        end
+        root_node
       end
 
       # Return constant

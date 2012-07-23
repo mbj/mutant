@@ -1,34 +1,21 @@
 require 'spec_helper'
 
-shared_examples_for 'a method filter parse result' do
-  it { should be(response) }
-
-  it 'should initialize method filter with correct arguments' do
-    expected_class.should_receive(:new).with('Foo', 'bar').and_return(response)
-    subject
-  end
-end
-
 describe Mutant::Matcher::Method, '.parse' do
   subject { described_class.parse(input) }
 
-  before do
-    expected_class.stub(:new => response)
-  end
-
   let(:response) { mock('Response') }
+  let(:input)    { mock('Input')    }
 
-  context 'when input is in instance method format' do
-    let(:input)          { 'Foo#bar' }
-    let(:expected_class) { described_class::Instance }
+  let(:classifier) { described_class::Classifier }
 
-    it_should_behave_like 'a method filter parse result'
+  before do
+    classifier.stub(:run => response)
   end
 
-  context 'when input is in singleton method format' do
-    let(:input)          { 'Foo.bar' }
-    let(:expected_class) { described_class::Singleton }
+  it { should be(response) }
 
-    it_should_behave_like 'a method filter parse result'
+  it 'should call classifier' do
+    classifier.should_receive(:run).with(input).and_return(response)
+    subject
   end
 end
