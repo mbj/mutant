@@ -35,7 +35,7 @@ module Mutant
       #
       def root(node)
         root = root_ast
-        root.body = [@scope_class.new(1,root.name,[node])]
+        root.body = @scope_class.new(1,root.name,Rubinius::AST::Block.new(1, [ node ]))
         Rubinius::AST::Script.new(root)
       end
 
