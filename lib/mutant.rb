@@ -1,4 +1,4 @@
-# For Veritas::Immutable will be extracted soon
+# For Veritas::Immutable. will be extracted soon
 require 'veritas'
 
 # Library namespace
@@ -13,12 +13,12 @@ module Mutant
   #
   # @example
   #   class Foo
-  #     def x
+  #     def bar
   #       Mutant.not_implemented(self)
   #     end
   #   end
   #
-  #   Foo.new.x # raises NotImplementedError "Foo#x is not implemented"
+  #   Foo.new.x # raises NotImplementedError "Foo#bar is not implemented"
   #
   # @return [undefined]
   #
@@ -49,6 +49,11 @@ module Mutant
   private_class_method :not_implemented_info
 end
 
+require 'mutant/mutator'
+require 'mutant/loader'
+require 'mutant/context'
+require 'mutant/context/constant'
+require 'mutant/mutatee'
 require 'mutant/matcher'
 require 'mutant/matcher/method'
 require 'mutant/matcher/method/singleton'

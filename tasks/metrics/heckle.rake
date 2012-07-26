@@ -34,6 +34,7 @@ begin
       raise "ruby2ruby version #{Ruby2Ruby::VERSION} may not work properly, 1.2.2 *only* is recommended for use with heckle"
     end
 
+    require File.expand_path('../../../spec/support/fake_ast',__FILE__)
     require 'mutant'
 
     root_module_regexp = Regexp.union('Mutant')
@@ -53,6 +54,13 @@ begin
 
     ObjectSpace.each_object(Module) do |mod|
       next unless mod.name =~ /\A#{root_module_regexp}(?::|\z)/
+
+      # Mutation::Loader is to rbx specific
+      next if mod == Mutant::Loader
+      # Mutation::Matcher::Method is to rbx specific
+      next if mod == Mutant::Matcher::Method
+      # Mutation::Context::Constant is to rbx specific
+      next if mod == Mutant::Context::Constant
 
       spec_prefix = spec_dir.join(mod.name.underscore)
 

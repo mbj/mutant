@@ -8,10 +8,11 @@ UncommunicativeParameterName:
   - !ruby/regexp /[0-9]$/
   - !ruby/regexp /[A-Z]/
 LargeClass:
-  max_methods: 11
-  exclude: []
+  max_methods: 10
+  exclude: 
+  - "Mutant::Matcher::Method" # 13 methods
   enabled: true
-  max_instance_variables: 2
+  max_instance_variables: 3
 UncommunicativeMethodName:
   accept: []
   exclude: []
@@ -22,7 +23,8 @@ UncommunicativeMethodName:
   - !ruby/regexp /[A-Z]/
 LongParameterList:
   max_params: 2
-  exclude: []
+  exclude: 
+  - "Mutant::Context::Constant#initialize" # 3 params
   enabled: true
   overrides: {}
 FeatureEnvy:

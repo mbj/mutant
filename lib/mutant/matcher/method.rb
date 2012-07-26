@@ -1,7 +1,9 @@
 module Mutant
   class Matcher
-    # A filter for methods
+    # Matcher to find AST for method
     class Method < Matcher
+      include Veritas::Immutable
+
       # Parse a method string into filter
       #
       # @param [String] input
@@ -26,21 +28,25 @@ module Mutant
       #   
       def each(&block)
         return to_enum(__method__) unless block_given?
-        node = root_node
-        yield node if node
+        mutatee.tap do |mutatee|
+          yield mutatee if mutatee
+        end
+
         self
       end
 
-    private
-
-      # Return constant name 
+      # Return context of matcher
       #
-      # @return [String]
+      # @return [Context]
+      #   returns the context this matcher matches AST nodes
       #
       # @api private
       #
-      attr_reader :constant_name
-      private :constant_name
+      def context
+        Context::Constant.build(constant)
+      end
+
+    private
 
       # Return method name
       #
@@ -50,6 +56,16 @@ module Mutant
       #
       attr_reader :method_name
       private :method_name
+
+      # Return constant name
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      attr_reader :constant_name
+      private :constant_name
+
 
       # Initialize method filter
       # 
@@ -61,7 +77,7 @@ module Mutant
       # @api private
       #
       def initialize(constant_name, method_name)
-        @constant_name, @method_name = constant_name, method_name
+        @constant_name,@method_name = constant_name, method_name
       end
 
       # Return method
@@ -142,19 +158,27 @@ module Mutant
         method.source_location
       end
 
-      # Return root node
+      # Return matched node
       #
-      # @return [Rubinus::AST]
+      # @return [Rubinis::AST::Node]
       #
       # @api private
       #
-      def root_node
-        root_node = nil
-        ast.walk do |predicate, node|
-          root_node = node if match?(node)
-          true
+      def matched_node
+        Mutant.not_implemented(self)
+      end
+
+      # Return mutatee
+      #
+      # @return [Mutatee]
+      #
+      # @api private
+      #
+      def mutatee
+        node = matched_node
+        if node
+          Mutatee.new(context,node)
         end
-        root_node
       end
 
       # Return constant
@@ -164,10 +188,12 @@ module Mutant
       # @api private
       #
       def constant
-        constant_name.split(/::/).inject(Object) do |context, name|
-          context.const_get(name)
+        constant_name.split('::').inject(::Object) do |parent,name|
+          parent.const_get(name)
         end
       end
+
+      memoize :mutatee
     end
   end
 end

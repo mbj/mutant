@@ -10,3 +10,5 @@
     a second time with a differend module name ast node.
 * Get a rid of rspec-1 (can be done once we do not use heckle anymore)
 * Add an infrastructure to whitelist for components to heckle on ruby-1.8.
+* Allow matches on attr_reader with literal name argument(s)?
+* Allow matches on define_method with literal name argument?

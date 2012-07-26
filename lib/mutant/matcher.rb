@@ -1,9 +1,9 @@
 module Mutant
-  # Abstract filter for rubinius asts.
+  # Abstract matcher to find ASTs to mutate
   class Matcher
     include Enumerable
 
-    # Return each matched node
+    # Enumerate mutatees
     #
     # @api private
     #
@@ -12,5 +12,8 @@ module Mutant
     def each
       Mutant.not_implemented(self)
     end
+
+  private
+
   end
 end

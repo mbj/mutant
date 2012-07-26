@@ -11,7 +11,7 @@ ClassVariableCheck:              {}
 CyclomaticComplexityBlockCheck:
   complexity: 2
 CyclomaticComplexityMethodCheck:
-  complexity: 3
+  complexity: 4
 EmptyRescueBodyCheck:            {}
 ForLoopCheck:                    {}
 MethodLineCountCheck:
@@ -23,4 +23,4 @@ ModuleLineCountCheck:
 ModuleNameCheck:
   pattern: !ruby/regexp /\A(?:[A-Z]+|[A-Z][a-z](?:[A-Z]?[a-z])+)\z/
 ParameterNumberCheck:
-  parameter_count: 2
+  parameter_count: 3
