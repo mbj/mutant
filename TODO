@@ -12,3 +12,4 @@
 * Add an infrastructure to whitelist for components to heckle on ruby-1.8.
 * Allow matches on attr_reader with literal name argument(s)?
 * Allow matches on define_method with literal name argument?
+* Make sure file is set in generated asts. Blows up loading currently.
