@@ -203,6 +203,38 @@ describe Mutant::Mutator, '#each' do
     it_should_behave_like 'a mutation enumerator method'
   end
 
+  context 'range literal' do
+    let(:source) { '1..100' } 
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'nil'
+      mutations << '1...100'
+      mutations << '(0.0/0.0)..100'
+      mutations << '(-1.0/0.0)..100'
+      mutations << '1..(1.0/0.0)'
+      mutations << '1..(0.0/0.0)'
+    end
+
+    it_should_behave_like 'a mutation enumerator method'
+  end
+
+  context 'exclusive range literal' do
+    let(:source) { '1...100' } 
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'nil'
+      mutations << '1..100'
+      mutations << '(0.0/0.0)...100'
+      mutations << '(-1.0/0.0)...100'
+      mutations << '1...(1.0/0.0)'
+      mutations << '1...(0.0/0.0)'
+    end
+
+    it_should_behave_like 'a mutation enumerator method'
+  end
+
   context 'block literal' do
     let(:source) { "true\nfalse" }
 
