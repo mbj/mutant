@@ -40,18 +40,8 @@ module Mutant
     #
     def initialize(root)
       @root = root
-      root.file = "foo"
-      Rubinius.run_script(script.compiled_method)
-    end
-
-    # Return compiled method script for node
-    #
-    # @return [Rubinius::CompiledMethod::Script]
-    #
-    # @api private
-    #
-    def script
-      compiled_code.create_script
+      root.file ||= '(mutant)'
+      Rubinius.run_script(compiled_code)
     end
 
     # Return compiled code for node
