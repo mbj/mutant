@@ -12,14 +12,15 @@ describe Mutant::Mutatee,'#each' do
   let(:yields)   { []                               }
 
   before do
-    Mutant::Mutator.stub(:new => mutator)
+    Mutant::Mutator.stub(:build => mutator)
   end
 
   it_should_behave_like 'an #each method'
 
- #it 'should initialize mutator with ast' do
- #  Mutant::Mutator.should_receive(:new).with(ast).and_return(mutator)
- #end
+  it 'should initialize mutator with ast' do
+    Mutant::Mutator.should_receive(:build).with(ast).and_return(mutator)
+    subject
+  end
 
   it 'should yield mutations' do
     expect { subject }.to change { yields.dup }.from([]).to([mutation])

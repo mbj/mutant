@@ -1,6 +1,8 @@
 # For Veritas::Immutable. will be extracted soon
 require 'veritas'
 
+require 'securerandom'
+
 # Library namespace
 module Mutant
   # Helper method for raising not implemented exceptions
@@ -47,9 +49,49 @@ module Mutant
   end
 
   private_class_method :not_implemented_info
+
+  # Return random string
+  #
+  # @return [String]
+  #
+  # @api private
+  #
+  def self.random_hex_string
+    SecureRandom.hex(10)
+  end
+
+  # Return random fixnum
+  #
+  # @return [Fixnum]
+  #
+  # @api private
+  #
+  def self.random_fixnum
+    Random.rand(1000)
+  end
+
+  # Return random float
+  #
+  # @return [Float]
+  #
+  # @api private
+  #
+  def self.random_fixnum
+    Random.rand
+  end
 end
 
 require 'mutant/mutator'
+require 'mutant/mutator/true_literal'
+require 'mutant/mutator/false_literal'
+require 'mutant/mutator/symbol_literal'
+require 'mutant/mutator/string_literal'
+require 'mutant/mutator/fixnum_literal'
+require 'mutant/mutator/float_literal'
+require 'mutant/mutator/array_literal'
+require 'mutant/mutator/empty_array'
+require 'mutant/mutator/hash_literal'
+require 'mutant/mutator/block'
 require 'mutant/loader'
 require 'mutant/context'
 require 'mutant/context/constant'

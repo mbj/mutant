@@ -1,4 +1,3 @@
-* Add a nice way to access the root ast to place the mutated ast nodes into.
 * Get a rid of heckle and test mutant with mutant.
   This is interesting IMHO mutant should have another entry point
   that does not create the ::Mutant namespace, ideas:
@@ -13,3 +12,8 @@
 * Allow matches on attr_reader with literal name argument(s)?
 * Allow matches on define_method with literal name argument?
 * Make sure file is set in generated asts. Has a stupid default corrently.
+* Remove duplicated code in Mutatand::Mutator::*
+* Add some kind of a "do not touch me object" that raises on all messages.
+  It can be used to make sure each literal value is touched.
+* Replace nil or add "do not touch me object" to literal mutations.
+* Add remaining literals

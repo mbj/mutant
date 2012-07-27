@@ -31,7 +31,7 @@ module Mutant
     #
     def each(&block)
       return to_enum(__method__) unless block_given?
-      Mutator.new(node).each(&block)
+      Mutator.build(node).each(&block)
 
       self
     end
