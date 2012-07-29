@@ -48,7 +48,7 @@ module Mutant
     # @api private
     #
     def each(&block)
-      return to_enum(__method__) unless block_given?
+      return to_enum unless block_given?
       mutants(Generator.new(block))
       self
     end
