@@ -8,9 +8,15 @@ module Mutant
         TABLE = {
           '.' => Matcher::Method::Singleton,
           '#' => Matcher::Method::Instance
-        }
+        }.freeze
 
-        SCOPE_FORMAT = Regexp.new('\A([^#.]+)(\.|#)(.+)\z')
+        SCOPE_FORMAT = /\A([^#.]+)(\.|#)(.+)\z/.freeze
+
+        # Positions of captured regexp groups
+        # Freezing fixnums to avoid their singleton classes are patched.
+        CONSTANT_NAME_POSITION = 1.freeze
+        SCOPE_SYMBOL_POSITION  = 2.freeze
+        METHOD_NAME_POSITION   = 3.freeze
 
         private_class_method :new
 
@@ -59,7 +65,7 @@ module Mutant
         # @api private
         #
         def constant_name
-          @match[1]
+          @match[CONSTANT_NAME_POSITION]
         end
 
         # Return method name
@@ -69,7 +75,7 @@ module Mutant
         # @api private
         #
         def method_name
-          @match[3].to_sym
+          @match[METHOD_NAME_POSITION].to_sym
         end
 
         # Return scope symbol
@@ -79,7 +85,7 @@ module Mutant
         # @api private
         #
         def scope_symbol
-          @match[2]
+          @match[SCOPE_SYMBOL_POSITION]
         end
 
         # Return matcher class
