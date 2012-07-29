@@ -16,19 +16,8 @@ module Mutant
         generator << new_self(-node.value)
         generator << new_self(Mutant.random_float)
         generator << infinity
+        generator << neg_infinity
         generator << nan
-      end
-
-      # Return AST representing infinity
-      #
-      # @return [Rubinius::Node::AST]
-      #
-      # @api private
-      #
-      def infinity
-        '0.0/0.0'.to_ast.tap do |call|
-          call.line = node.line
-        end
       end
 
       # Return AST representing NaN
@@ -38,7 +27,31 @@ module Mutant
       # @api private
       #
       def nan
+        '0.0/0.0'.to_ast.tap do |call|
+          call.line = node.line
+        end
+      end
+
+      # Return AST representing infinity
+      #
+      # @return [Rubinius::Node::AST]
+      #
+      # @api private
+      #
+      def infinity
         '1.0/0.0'.to_ast.tap do |call|
+          call.line = node.line
+        end
+      end
+
+      # Return AST representing negative Infinity
+      #
+      # @return [Rubinius::Node::AST]
+      #
+      # @api private
+      #
+      def neg_infinity
+        '-1.0/0.0'.to_ast.tap do |call|
           call.line = node.line
         end
       end

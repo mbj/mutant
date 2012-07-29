@@ -112,7 +112,7 @@ describe Mutant::Mutator, '#each' do
     let(:source) { '10.0' }
 
     let(:mutations) do
-      %W(nil 0.0 1.0 #{random_float} 0.0/0.0 1.0/0.0) << [:lit, -10.0]
+      %W(nil 0.0 1.0 #{random_float} 0.0/0.0 1.0/0.0 -1.0/0.0) << [:lit, -10.0]
     end
     
     let(:random_float) { 7.123 }
