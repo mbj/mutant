@@ -76,7 +76,7 @@ module Mutant
   #
   # @api private
   #
-  def self.random_fixnum
+  def self.random_float
     Random.rand
   end
 end
