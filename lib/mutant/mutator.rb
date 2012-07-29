@@ -28,7 +28,7 @@ module Mutant
     #
     def self.mutator(node)
       unqualified_name = node.class.name.split('::').last
-      self.const_get(unqualified_name)
+      const_get(unqualified_name)
     end
 
     class Generator
