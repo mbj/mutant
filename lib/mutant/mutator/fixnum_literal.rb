@@ -14,7 +14,9 @@ module Mutant
         generator << new_self(0)
         generator << new_self(1)
         generator << new_self(-node.value)
-        generator << new_self(Mutant.random_fixnum)
+        generator.generate do
+          new_self(Mutant.random_fixnum)
+        end
       end
     end
   end

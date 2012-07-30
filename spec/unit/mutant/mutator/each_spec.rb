@@ -93,6 +93,21 @@ describe Mutant::Mutator, '#each' do
     it_should_behave_like 'a mutation enumerator method'
   end
 
+  context 'interpolated string literal (DynamicString)' do
+    let(:source) { '"foo#{1}bar"' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'nil'
+    end
+
+    before do
+      Mutant.stub(:random_hex_string => random_string)
+    end
+
+    it_should_behave_like 'a mutation enumerator method'
+  end
+
   context 'fixnum literal' do
     let(:source) { '10' }
 
@@ -233,6 +248,32 @@ describe Mutant::Mutator, '#each' do
     end
 
     it_should_behave_like 'a mutation enumerator method'
+  end
+
+  context 'regexp literal' do
+    let(:source) { '/foo/' }
+
+    let(:base_mutations) do
+      mutations = []
+      mutations << 'nil'
+      mutations << "/#{random_string}/"
+    end
+
+    before do
+      Mutant.stub(:random_hex_string => random_string)
+    end
+
+    let(:mutations) { base_mutations }
+
+    it_should_behave_like 'a mutation enumerator method'
+
+   #it 'when source is empty regexp' do
+   #  let(:source) { '//' }
+
+   #  let(:mutations) { base_mutations - [source.to_ast] }
+
+   #  it_should_behave_like 'a mutation enumerator method'
+   #end
   end
 
   context 'block literal' do

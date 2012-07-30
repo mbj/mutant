@@ -11,7 +11,9 @@ module Mutant
       #
       def mutants(generator)
         generator << new_nil
-        generator << new(Rubinius::AST::SymbolLiteral,Mutant.random_hex_string.to_sym)
+        generator.generate do
+          new_self(Mutant.random_hex_string.to_sym)
+        end
       end
     end
   end

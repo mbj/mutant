@@ -14,7 +14,9 @@ module Mutant
         generator << new_self(0.0)
         generator << new_self(1.0)
         generator << new_self(-node.value)
-        generator << new_self(Mutant.random_float)
+        generator.generate do
+          new_self(Mutant.random_float)
+        end
         generator << infinity
         generator << neg_infinity
         generator << nan

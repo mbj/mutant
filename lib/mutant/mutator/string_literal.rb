@@ -13,7 +13,9 @@ module Mutant
       #
       def mutants(generator)
         generator << new_nil
-        generator << new_self(Mutant.random_hex_string)
+        generator.generate do
+          new_self(Mutant.random_hex_string)
+        end
       end
     end
   end

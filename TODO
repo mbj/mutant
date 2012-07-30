@@ -17,6 +17,6 @@
   It can be used to make sure each literal value is touched.
 * Replace nil or add "do not touch me object" to literal mutations.
 * Add remaining literals
-* Mutate options for Regexp literals
+* Mutate options on Regexp literals
 * Move Mutant.random_* into Mutant::Random namespace.
 * Use inheritable alias once (virtus,veritas,mapper,session, ...) support gem is born.
