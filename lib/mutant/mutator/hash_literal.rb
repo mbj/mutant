@@ -1,9 +1,18 @@
 module Mutant
   class Mutator
+    # Mutator for hash literal AST nodes
     class HashLiteral < Mutator
 
     private
 
+      # Append mutants for hash literals
+      #
+      # @param [#<<] generator
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
       def mutants(generator)
         generator << new_nil
         generator << new_self([])
@@ -12,17 +21,34 @@ module Mutant
         mutate_presence(generator)
       end
 
+      # Return hash literal node array
+      #
+      # @return [Array]
+      #
+      # @api private
+      #
       def array
         node.array
       end
 
+      # Return duplicated literal array on each call
+      #
+      # @return [Array]
+      #
+      # @api private
+      #
       def dup_array
         array.dup
       end
 
-      def dup_pairs
-      end
-
+      # Append mutations on pair presence
+      #
+      # @param [#<<] generator
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
       def mutate_presence(generator)
         pairs = array.each_slice(2).to_a
         pairs.each_index do |index|
@@ -32,6 +58,14 @@ module Mutant
         end
       end
 
+      # Append mutations on members
+      #
+      # @param [#<<] generator
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
       def mutate_elements(generator)
         array.each_with_index do |child,index|
           array = dup_array

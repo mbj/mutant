@@ -21,8 +21,8 @@ module Mutant
     #
     # @return [Mutator]
     #
-    # @raise [ArgumentError]
-    #   raises ArgumentError if mutator for node cannot be found
+    # @raise [NameError]
+    #   raises NameError if mutator for node cannot be found
     #
     # @api private
     #
@@ -32,6 +32,14 @@ module Mutant
     end
 
     # Enumerate mutated asts
+    #
+    # @api private
+    #
+    # @return [self]
+    #   returns self if block given
+    #
+    # @return [Enumerator<Rubnius::AST::Node>]
+    #   returns enumerator on AST nodes otherwise
     #
     # @api private
     #

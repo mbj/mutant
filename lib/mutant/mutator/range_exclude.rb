@@ -1,13 +1,21 @@
 module Mutant
   class Mutator
+    # Mutator for range exclude literals
     class RangeExclude < Mutator
 
     private
 
+      # Append mutations on range exclude literals
+      #
+      # @param [#<<] generator
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
       def mutants(generator)
         generator << new_nil
         generator << new(Rubinius::AST::Range,node.start,node.finish)
-
         generator << new_self(neg_infinity,node.finish)
         generator << new_self(nan,node.finish)
         generator << new_self(node.start,infinity)

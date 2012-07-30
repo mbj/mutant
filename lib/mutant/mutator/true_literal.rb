@@ -12,7 +12,7 @@ module Mutant
       # @return [undefined]
       #
       def mutants(generator)
-        generator << new_ni
+        generator << new_nil
         generator << new(Rubinius::AST::FalseLiteral)
       end
     end
