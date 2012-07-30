@@ -16,5 +16,5 @@ Gem::Specification.new do |gem|
   gem.test_files       = `git ls-files -- spec`.split("\n")
   gem.extra_rdoc_files = %w[TODO]
 
-  gem.add_runtime_dependency('backports', '~> 2.6.1')
+  gem.add_runtime_dependency('backports', '~> 2.6')
 end
