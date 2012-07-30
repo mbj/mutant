@@ -6,10 +6,8 @@ module Mutant
       end
 
       def append(node)
-        p same_node?(node)
-        unless same_node?(node)
-          @block.call(node)
-        end
+        return if same_node?(node)
+        @block.call(node)
       end
 
       # FIXME: Use interhitable alias once in support gem.
