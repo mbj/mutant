@@ -82,6 +82,7 @@ module Mutant
 end
 
 require 'mutant/mutator'
+require 'mutant/mutator/generator'
 require 'mutant/mutator/true_literal'
 require 'mutant/mutator/false_literal'
 require 'mutant/mutator/symbol_literal'
@@ -93,6 +94,8 @@ require 'mutant/mutator/empty_array'
 require 'mutant/mutator/hash_literal'
 require 'mutant/mutator/range'
 require 'mutant/mutator/range_exclude'
+require 'mutant/mutator/regex_literal'
+require 'mutant/mutator/dynamic_string'
 require 'mutant/mutator/block'
 require 'mutant/loader'
 require 'mutant/context'

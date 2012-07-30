@@ -31,25 +31,13 @@ module Mutant
       const_get(unqualified_name)
     end
 
-    class Generator
-      def initialize(block)
-        @block = block
-      end
-
-      def append(node)
-        @block.call(node)
-      end
-
-      alias :<< :append
-    end
-
     # Enumerate mutated asts
     #
     # @api private
     #
     def each(&block)
       return to_enum unless block_given?
-      mutants(Generator.new(block))
+      mutants(Generator.new(@node,block))
       self
     end
 
