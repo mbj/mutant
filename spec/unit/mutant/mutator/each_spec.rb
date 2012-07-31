@@ -72,7 +72,7 @@ describe Mutant::Mutator, '.each' do
     end
 
     before do
-      Mutant.stub(:random_hex_string => random_string)
+      Mutant::Random.stub(:hex_string => random_string)
     end
 
     it_should_behave_like 'a mutation enumerator method'
@@ -86,7 +86,7 @@ describe Mutant::Mutator, '.each' do
     end
 
     before do
-      Mutant.stub(:random_hex_string => random_string)
+      Mutant::Random.stub(:hex_string => random_string)
     end
 
     it_should_behave_like 'a mutation enumerator method'
@@ -101,7 +101,7 @@ describe Mutant::Mutator, '.each' do
  #  end
 
  #  before do
- #    Mutant.stub(:random_hex_string => random_string)
+ #    Mutant::Random.stub(:hex_string => random_string)
  #  end
 
  #  it_should_behave_like 'a mutation enumerator method'
@@ -116,7 +116,7 @@ describe Mutant::Mutator, '.each' do
     end
 
     before do
-      Mutant.stub(:random_fixnum => random_integer)
+      Mutant::Random.stub(:fixnum => random_integer)
     end
 
     it_should_behave_like 'a mutation enumerator method'
@@ -140,7 +140,7 @@ describe Mutant::Mutator, '.each' do
     let(:random_float) { 7.123 }
 
     before do
-      Mutant.stub(:random_float => random_float)
+      Mutant::Random.stub(:float => random_float)
     end
 
     it_should_behave_like 'a mutation enumerator method'
@@ -267,7 +267,7 @@ describe Mutant::Mutator, '.each' do
     end
 
     before do
-      Mutant.stub(:random_hex_string => random_string)
+      Mutant::Random.stub(:hex_string => random_string)
     end
 
     let(:mutations) { base_mutations }

@@ -18,7 +18,7 @@ module Mutant
           emit_safe(infinity)
           emit_safe(negative_infinity)
           emit_safe(nan)
-          emit_new { new_self(Mutant.random_float) }
+          emit_new { new_self(Random.float) }
         end
 
         # Return values to test against

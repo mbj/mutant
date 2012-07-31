@@ -18,5 +18,4 @@
 * Replace nil or add "do not touch me object" to literal mutations.
 * Add remaining literals
 * Mutate options on Regexp literals
-* Move Mutant.random_* into Mutant::Random namespace.
 * Use inheritable alias once (virtus,veritas,mapper,session, ...) support gem is born.

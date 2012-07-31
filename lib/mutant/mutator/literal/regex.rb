@@ -16,7 +16,7 @@ module Mutant
         #
         def dispatch
           emit_nil
-          emit_new { new_self(Mutant.random_hex_string, node.options) }
+          emit_new { new_self(Random.hex_string, node.options) }
         end
       end
     end

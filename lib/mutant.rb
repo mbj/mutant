@@ -5,38 +5,10 @@ require 'securerandom'
 
 # Library namespace
 module Mutant
-  # Return random string
-  #
-  # @return [String]
-  #
-  # @api private
-  #
-  def self.random_hex_string
-    SecureRandom.hex(10)
-  end
-
-  # Return random fixnum
-  #
-  # @return [Fixnum]
-  #
-  # @api private
-  #
-  def self.random_fixnum
-    Random.rand(1000)
-  end
-
-  # Return random float
-  #
-  # @return [Float]
-  #
-  # @api private
-  #
-  def self.random_float
-    Random.rand
-  end
 end
 
 require 'mutant/support/abstract'
+require 'mutant/random'
 require 'mutant/mutator'
 require 'mutant/mutator/literal'
 require 'mutant/mutator/literal/boolean'
