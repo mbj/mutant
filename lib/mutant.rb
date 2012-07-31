@@ -2,9 +2,23 @@
 require 'veritas'
 
 require 'securerandom'
+require 'to_source'
+require 'ice_nine'
 
 # Library namespace
 module Mutant
+
+  # Return deep clone of object
+  #
+  # @param [Object] object
+  #
+  # @return [Object] object
+  #
+  # @api private
+  #
+  def self.deep_clone(object)
+    Marshal.load(Marshal.dump(object))
+  end
 end
 
 require 'mutant/support/abstract'
@@ -23,6 +37,9 @@ require 'mutant/mutator/literal/hash'
 require 'mutant/mutator/literal/regex'
 #require 'mutant/mutator/literal/dynamic'
 require 'mutant/mutator/block'
+require 'mutant/mutator/self'
+require 'mutant/mutator/send'
+require 'mutant/mutator/send_with_arguments'
 require 'mutant/loader'
 require 'mutant/context'
 require 'mutant/context/constant'

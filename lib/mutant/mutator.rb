@@ -73,7 +73,8 @@ module Mutant
     # @api private
     #
     def initialize(node, block)
-      @node, @block = node, block
+      @node, @block = Mutant.deep_clone(node), block
+      IceNine.deep_freeze(@node)
       dispatch
     end
 
