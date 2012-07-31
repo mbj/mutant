@@ -1,7 +1,5 @@
 # For Veritas::Immutable. will be extracted soon
 require 'veritas'
-# For Virtus::DescendantsTracker. will be extracted soon
-require 'virtus'
 
 require 'securerandom'
 
