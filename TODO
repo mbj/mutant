@@ -16,6 +16,8 @@
 * Add some kind of a "do not touch me object" that raises on all messages.
   It can be used to make sure each literal value is touched.
 * Replace nil or add "do not touch me object" to literal mutations.
-* Add remaining literals
+* Add support remaining dynamic literals
 * Mutate options on Regexp literals
 * Use inheritable alias once (virtus,veritas,mapper,session, ...) support gem is born.
+* Mutations on Rubinius::AST::Self?
+* Support the numerous Rubinius::AST::SendWithArguments mutations.

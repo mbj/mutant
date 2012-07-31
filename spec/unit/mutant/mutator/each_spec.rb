@@ -284,22 +284,83 @@ describe Mutant::Mutator, '.each' do
   end
 
   context 'block literal' do
-    let(:source) { "true\nfalse" }
+    # Two send operations
+    let(:source) { "self.foo\nself.bar" }
 
     let(:mutations) do
       mutations = []
     
       # Mutation of each statement in block
-      mutations << "nil\nfalse"
-      mutations << "false\nfalse"
-      mutations << "true\nnil"
-      mutations << "true\ntrue"
+      mutations << "foo\nself.bar"
+      mutations << "self.foo\nbar"
 
-      # Remove statement in block
-      mutations << [:block, [:true]]
-      mutations << [:block, [:false]]
+     ## Remove statement in block
+      mutations << [:block,'self.foo'.to_sexp]
+      mutations << [:block,'self.bar'.to_sexp]
     end
 
     it_should_behave_like 'a mutation enumerator method'
+  end
+
+
+  context 'self' do
+    let(:source) { 'self' }
+
+    let(:mutations) do
+      mutations = []
+    end
+
+    it_should_behave_like 'a mutation enumerator method'
+  end
+
+  context 'send' do
+    context 'to self' do
+
+      context 'implict' do
+        let(:source) { 'foo' }
+
+        let(:mutations) do
+          mutations = []
+        end
+
+        it_should_behave_like 'a mutation enumerator method'
+      end
+
+      context 'explict' do
+        let(:source) { 'self.foo' }
+
+        let(:mutations) do
+          mutations = []
+          mutations << 'foo' # without explict receiver (send privately)
+        end
+
+        it_should_behave_like 'a mutation enumerator method'
+      end
+    end
+  end
+
+  context 'send with arguments' do
+    context 'to self' do
+      context 'implict' do
+        let(:source) { 'foo(1)' }
+
+        let(:mutations) do
+          mutations = []
+        end
+
+        it_should_behave_like 'a mutation enumerator method'
+      end
+
+      context 'explict' do
+        let(:source) { 'self.foo(1)' }
+
+        let(:mutations) do
+          mutations = []
+          mutations << 'foo(1)' # without explict receiver (send privately)
+        end
+
+        it_should_behave_like 'a mutation enumerator method'
+      end
+    end
   end
 end
