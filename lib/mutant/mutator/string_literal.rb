@@ -5,17 +5,15 @@ module Mutant
 
     private
 
-      # Append mutants
-      #
-      # @param [#<<] generator
+      # Emit mutants
       #
       # @return [undefined]
       #
-      def mutants(generator)
-        generator << new_nil
-        generator.generate do
-          new_self(Mutant.random_hex_string)
-        end
+      # @api private
+      #
+      def dispatch
+        emit_nil
+        emit_new { new_self(Mutant.random_hex_string) }
       end
     end
   end

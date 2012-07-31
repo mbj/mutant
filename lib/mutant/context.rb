@@ -2,6 +2,7 @@ module Mutant
   # An abstract context where mutations can be appied to.
   class Context
     include Veritas::Immutable
+    extend Abstract
 
     # Return root ast for mutated node
     #
@@ -11,8 +12,6 @@ module Mutant
     #
     # @api private
     #
-    def root(node)
-      Mutant.not_implemented(self)
-    end
+    abstract :root
   end
 end

@@ -8,7 +8,7 @@ shared_examples_for 'a mutation enumerator method' do
 
 
   context 'with no block' do
-    subject { object.each }
+    subject { object.each(node) }
 
     it { should be_instance_of(to_enum.class) }
 
@@ -35,14 +35,13 @@ shared_examples_for 'a mutation enumerator method' do
 end
 
 
-describe Mutant::Mutator, '#each' do
-  subject { object.each { |item| yields << item } }
+describe Mutant::Mutator, '.each' do
+  subject { object.each(node) { |item| yields << item } }
 
-  let(:yields)              { []                            }
-  let(:object)              { class_under_test.new(node)    }
-  let(:class_under_test)    { described_class.mutator(node) }
-  let(:node)                { source.to_ast                 }
-  let(:random_string)       { 'bar'                         }
+  let(:yields)        { []              }
+  let(:object)        { described_class }
+  let(:node)          { source.to_ast   }
+  let(:random_string) { 'bar'           }
 
   context 'true literal' do
     let(:source) { 'true' }
@@ -127,7 +126,15 @@ describe Mutant::Mutator, '#each' do
     let(:source) { '10.0' }
 
     let(:mutations) do
-      %W(nil 0.0 1.0 #{random_float} 0.0/0.0 1.0/0.0 -1.0/0.0) << [:lit, -10.0]
+      mutations = []
+      mutations << 'nil'
+      mutations << '0.0'
+      mutations << '1.0'
+      mutations << random_float.to_s
+      mutations << '0.0/0.0'
+      mutations << '1.0/0.0'
+      mutations << [:negate, [:call, [:lit, 1.0], :/, [:arglist, [:lit, 0.0]]]]
+      mutations << [:lit, -10.0]
     end
     
     let(:random_float) { 7.123 }
@@ -226,7 +233,7 @@ describe Mutant::Mutator, '#each' do
       mutations << 'nil'
       mutations << '1...100'
       mutations << '(0.0/0.0)..100'
-      mutations << '(-1.0/0.0)..100'
+      mutations << [:dot2, [:negate, [:call, [:lit, 1.0], :/, [:arglist, [:lit, 0.0]]]], [:lit, 100]]
       mutations << '1..(1.0/0.0)'
       mutations << '1..(0.0/0.0)'
     end
@@ -242,7 +249,7 @@ describe Mutant::Mutator, '#each' do
       mutations << 'nil'
       mutations << '1..100'
       mutations << '(0.0/0.0)...100'
-      mutations << '(-1.0/0.0)...100'
+      mutations << [:dot3, [:negate, [:call, [:lit, 1.0], :/, [:arglist, [:lit, 0.0]]]], [:lit, 100]]
       mutations << '1...(1.0/0.0)'
       mutations << '1...(0.0/0.0)'
     end

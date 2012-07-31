@@ -1,19 +1,18 @@
 module Mutant
   class Mutator
     # Represent mutations of true literal
-    class TrueLiteral < Mutator
+    class TrueLiteral < Boolean
     
     private
 
-      # Append mutants
+      # Return inverse 
       #
-      # @param [#<<] generator
+      # @return [Rubinius::AST::FalseLiteral]
       #
-      # @return [undefined]
+      # @api private
       #
-      def mutants(generator)
-        generator << new_nil
-        generator << new(Rubinius::AST::FalseLiteral)
+      def inverse
+        new(Rubinius::AST::FalseLiteral)
       end
     end
   end

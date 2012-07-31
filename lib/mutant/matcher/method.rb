@@ -86,9 +86,7 @@ module Mutant
       #
       # @api private
       #
-      def method
-        Mutant.not_implemented(self)
-      end
+      abstract :method
 
       # Return node classes this matcher matches
       #
@@ -96,9 +94,7 @@ module Mutant
       #
       # @api private
       #
-      def node_class
-        Mutant.not_implemented(self)
-      end
+      abstract :node_class
 
       # Check if node is matched 
       #
@@ -164,9 +160,7 @@ module Mutant
       #
       # @api private
       #
-      def matched_node
-        Mutant.not_implemented(self)
-      end
+      abstract :matched_node 
 
       # Return mutatee
       #

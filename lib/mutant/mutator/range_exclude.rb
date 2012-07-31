@@ -1,61 +1,18 @@
 module Mutant
   class Mutator
     # Mutator for range exclude literals
-    class RangeExclude < Mutator
+    class RangeExclude < AbstractRange
 
     private
 
-      # Append mutations on range exclude literals
+      # Return inverse node
       #
-      # @param [#<<] generator
-      #
-      # @return [undefined]
+      # @return [Rubnius::AST::Range]
       #
       # @api private
       #
-      def mutants(generator)
-        generator << new_nil
-        generator << new(Rubinius::AST::Range,node.start,node.finish)
-        generator << new_self(neg_infinity,node.finish)
-        generator << new_self(nan,node.finish)
-        generator << new_self(node.start,infinity)
-        generator << new_self(node.start,nan)
-      end
-
-      # Return AST representing infinity
-      #
-      # @return [Rubinius::Node::AST]
-      #
-      # @api private
-      #
-      def neg_infinity
-        '-1.0/0.0'.to_ast.tap do |call|
-          call.line = node.line
-        end
-      end
-
-      # Return AST representing infinity
-      #
-      # @return [Rubinius::Node::AST]
-      #
-      # @api private
-      #
-      def infinity
-        '1.0/0.0'.to_ast.tap do |call|
-          call.line = node.line
-        end
-      end
-
-      # Return AST representing NaN
-      #
-      # @return [Rubinius::Node::AST]
-      #
-      # @api private
-      #
-      def nan
-        '0.0/0.0'.to_ast.tap do |call|
-          call.line = node.line
-        end
+      def inverse(*arguments)
+        new(Rubinius::AST::Range,*arguments)
       end
     end
   end

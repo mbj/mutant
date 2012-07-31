@@ -1,10 +1,10 @@
 ---
 AbcMetricMethodCheck:
-  score: 12.1
+  score: 12.2
 AssignmentInConditionalCheck:    {}
 CaseMissingElseCheck:            {}
 ClassLineCountCheck:
-  line_count: 200
+  line_count: 324
 ClassNameCheck:                  
   pattern: !ruby/regexp /\A(?:[A-Z]+|[A-Z][a-z](?:[A-Z]?[a-z])+)\z/
 ClassVariableCheck:              {}
@@ -19,7 +19,7 @@ MethodLineCountCheck:
 MethodNameCheck:
   pattern: !ruby/regexp /\A(?:[a-z\d](?:_?[a-z\d])+[?!=]?|\[\]=?|==|<=>|<<|[+*&|-])\z/
 ModuleLineCountCheck:
-  line_count: 202
+  line_count: 327
 ModuleNameCheck:
   pattern: !ruby/regexp /\A(?:[A-Z]+|[A-Z][a-z](?:[A-Z]?[a-z])+)\z/
 ParameterNumberCheck:

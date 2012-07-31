@@ -5,17 +5,15 @@ module Mutant
 
     private
 
-      # Append mutations on empty literals
-      #
-      # @param [#<<] generator
+      # Emit mutants
       #
       # @return [undefined]
       #
       # @api private
       #
-      def mutants(generator)
-        generator << new_nil
-        generator << new(Rubinius::AST::ArrayLiteral,[new_nil])
+      def dispatch
+        emit_nil
+        emit(Rubinius::AST::ArrayLiteral,[new_nil])
       end
     end
   end

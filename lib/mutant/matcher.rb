@@ -2,6 +2,7 @@ module Mutant
   # Abstract matcher to find ASTs to mutate
   class Matcher
     include Enumerable
+    extend Abstract
 
     # Enumerate mutatees
     #
@@ -9,9 +10,7 @@ module Mutant
     #
     # @return [undefined]
     #
-    def each
-      Mutant.not_implemented(self)
-    end
+    abstract :each
 
   private
 

@@ -5,23 +5,20 @@ module Mutant
 
     private
 
-      # Append mutants for hash literals
-      #
-      # @param [#<<] generator
+      # Emit mutations
       #
       # @return [undefined]
       #
       # @api private
       #
-      def mutants(generator)
-        generator << new_nil
-        generator << new_self([])
-        generator << new_self(array + [new_nil, new_nil])
-        mutate_elements(generator)
-        mutate_presence(generator)
+      def dispatch
+        emit_nil
+        emit_values(values)
+        emit_element_presence
+        emit_elements(array)
       end
 
-      # Return hash literal node array
+      # Return array of values in literal
       #
       # @return [Array]
       #
@@ -31,7 +28,7 @@ module Mutant
         node.array
       end
 
-      # Return duplicated literal array on each call
+      # Return duplicate of array values in literal
       #
       # @return [Array]
       #
@@ -41,38 +38,28 @@ module Mutant
         array.dup
       end
 
-      # Append mutations on pair presence
-      #
-      # @param [#<<] generator
-      #
-      # @return [undefined]
+      # Return values to mutate against
+      # 
+      # @return [Array]
       #
       # @api private
       #
-      def mutate_presence(generator)
-        pairs = array.each_slice(2).to_a
-        pairs.each_index do |index|
-          dup_pairs = pairs.dup
-          dup_pairs.delete_at(index)
-          generator << new_self(dup_pairs.flatten)
-        end
+      def values
+        [[], dup_array << new_nil << new_nil ]
       end
 
-      # Append mutations on members
-      #
-      # @param [#<<] generator
+      # Emit element presence mutations
       #
       # @return [undefined]
       #
       # @api private
       #
-      def mutate_elements(generator)
-        array.each_with_index do |child,index|
-          array = dup_array
-          Mutator.build(child).each do |mutation|
-            array[index]=mutation
-            generator << new_self(array)
-          end
+      def emit_element_presence
+        0.step(array.length-1,2) do |index|
+          contents = dup_array
+          contents.delete_at(index)
+          contents.delete_at(index)
+          emit_self(contents)
         end
       end
     end

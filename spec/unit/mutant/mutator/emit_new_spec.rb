@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Generator,'#generate' do
-  subject { object.generate { node } }
+describe Mutant::Mutator,'#emit_new' do
+  subject { object.send(:emit_new) { node } }
 
   class Block
     attr_reader :arguments
@@ -15,9 +15,17 @@ describe Mutant::Mutator::Generator,'#generate' do
     end
   end
 
-  let(:object)       { described_class.new(wrapped_node,block) }
-  let(:block)        { Block.new                               }
-  let(:wrapped_node) { '"foo"'.to_ast                          }
+  let(:object)       { class_under_test.new(wrapped_node,block) }
+  let(:block)        { Block.new                                }
+  let(:wrapped_node) { '"foo"'.to_ast                           }
+
+  let(:class_under_test) do
+    Class.new(described_class) do
+      def dispatch
+        #noop
+      end
+    end
+  end
 
   context 'when new AST is generated' do
     let(:node) { '"bar"'.to_ast }

@@ -1,7 +1,7 @@
 module Mutant
   class Mutator
-    # Mutator on AST blocks
-    class Block < Mutator
+    # Mutator for regexp literal AST nodes
+    class RegexLiteral < Mutator
 
     private
 
@@ -12,9 +12,8 @@ module Mutant
       # @api private
       #
       def dispatch
-        array = node.array
-        emit_elements(array)
-        emit_element_presence(array)
+        emit_nil
+        emit_new { new_self(Mutant.random_hex_string,node.options) }
       end
     end
   end
