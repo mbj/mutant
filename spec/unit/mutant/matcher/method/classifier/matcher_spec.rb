@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 # This method cannot be called directly, spec only exists for heckle demands
-describe Mutant::Matcher::Method::Classifier,'#matcher' do
+describe Mutant::Matcher::Method::Classifier, '#matcher' do
   subject { object.matcher }
 
-  let(:object) { described_class.send(:new,match) }
+  let(:object) { described_class.send(:new, match) }
 
-  let(:match) { [mock,constant_name,scope_symbol,method_name] }
+  let(:match) { [mock, constant_name, scope_symbol, method_name] }
 
   let(:constant_name) { mock('Constant Name') }
   let(:method_name)   { 'foo'                  }

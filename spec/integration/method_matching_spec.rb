@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 if "".respond_to?(:to_ast)
-  describe Mutant,'method matching' do
+  describe Mutant, 'method matching' do
     after do
       if defined?(::Foo)
-        Object.send(:remove_const,'Foo') 
+        Object.send(:remove_const, 'Foo')
       end
     end
 
@@ -12,7 +12,7 @@ if "".respond_to?(:to_ast)
       eval(body)
       File.stub(:read => body)
     end
-    
+  
     let(:defaults) { {} }
 
     context 'on instance methods' do
@@ -28,7 +28,7 @@ if "".respond_to?(:to_ast)
 
       context 'when method is defined once' do
         let(:body) do
-          <<-RUBY 
+          <<-RUBY
             class Foo
               def bar; end
             end
@@ -45,7 +45,7 @@ if "".respond_to?(:to_ast)
       context 'when method is defined multiple times' do
         context 'on differend lines' do
           let(:body) do
-            <<-RUBY 
+            <<-RUBY
               class Foo
                 def bar; end
                 def bar(arg); end
@@ -65,7 +65,7 @@ if "".respond_to?(:to_ast)
 
         context 'on the same line' do
           let(:body) do
-            <<-RUBY 
+            <<-RUBY
               class Foo
                 def bar; end; def bar(arg); end
               end
@@ -84,7 +84,7 @@ if "".respond_to?(:to_ast)
 
         context 'on the same line with differend scope' do
           let(:body) do
-            <<-RUBY 
+            <<-RUBY
               class Foo
                 def self.bar; end; def bar(arg); end
               end
@@ -107,7 +107,7 @@ if "".respond_to?(:to_ast)
           context 'in class' do
             let(:body) do
               <<-RUBY
-                class Foo 
+                class Foo
                   class Bar
                     def baz; end
                   end
@@ -116,7 +116,7 @@ if "".respond_to?(:to_ast)
             end
 
             let(:expectation) do
-              { 
+              {
                 :method_line => 3,
                 :method_name => :baz,
                 :constant => Foo::Bar
@@ -129,7 +129,7 @@ if "".respond_to?(:to_ast)
           context 'in module' do
             let(:body) do
               <<-RUBY
-                module Foo 
+                module Foo
                   class Bar
                     def baz; end
                   end
@@ -138,7 +138,7 @@ if "".respond_to?(:to_ast)
             end
 
             let(:expectation) do
-              { 
+              {
                 :method_line => 3,
                 :method_name => :baz,
                 :constant => Foo::Bar

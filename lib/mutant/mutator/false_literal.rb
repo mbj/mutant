@@ -2,7 +2,7 @@ module Mutant
   class Mutator
     # Represent mutations of false literal
     class FalseLiteral < Boolean
-    
+  
     private
 
       # Return inverse class

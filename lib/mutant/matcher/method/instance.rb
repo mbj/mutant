@@ -1,5 +1,5 @@
 module Mutant
-  class Matcher 
+  class Matcher
     class Method < Matcher
       # Matcher for instance methods
       class Instance < Method
@@ -7,7 +7,7 @@ module Mutant
       private
 
         # Return method instance
-        # 
+        #
         # @return [UnboundMethod]
         #
         # @api private
@@ -16,8 +16,8 @@ module Mutant
           constant.instance_method(method_name)
         end
 
-        # Return matched node class 
-        # 
+        # Return matched node class
+        #
         # @return [Rubinius::AST::Define]
         #
         # @api private

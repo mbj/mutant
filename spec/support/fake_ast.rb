@@ -8,8 +8,8 @@ unless defined?(Rubinius)
 
         attr_accessor :body
 
-        def initialize(line,name,body=[])
-          @line,@name,@body = line,name,body
+        def initialize(line, name, body=[])
+          @line, @name, @body = line, name, body
         end
       end
 
@@ -27,16 +27,16 @@ unless defined?(Rubinius)
 
       # Dummy class node
       class Class < Node
-        def initialize(line,name,superclass,body)
-          super(line,name)
-          @superclass,@body = superclass,body
+        def initialize(line, name, superclass, body)
+          super(line, name)
+          @superclass, @body = superclass, body
         end
       end
 
       # Dummy module node
       class Module < Node
-        def initialize(line,name,body)
-          super(line,name)
+        def initialize(line, name, body)
+          super(line, name)
           @body = body
         end
       end

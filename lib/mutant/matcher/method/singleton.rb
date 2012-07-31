@@ -7,7 +7,7 @@ module Mutant
       private
 
         # Return method instance
-        # 
+        #
         # @return [UnboundMethod]
         #
         # @api private
@@ -16,8 +16,8 @@ module Mutant
           constant.method(method_name)
         end
 
-        # Return matched node class 
-        # 
+        # Return matched node class
+        #
         # @return [Rubinius::AST::DefineSingletonScope]
         #
         # @api private
@@ -28,7 +28,7 @@ module Mutant
 
         # Check for stopping AST walk on branch
         #
-        # This method exist to protect against the 
+        # This method exist to protect against the
         # artifical edge case where DefineSingleton nodes
         # with differend receivers exist on the same line.
         #
@@ -41,13 +41,13 @@ module Mutant
         #   returns false when node can be followed
         #
         # @api private
-        #   
+        # 
         def stop?(node)
           node.is_a?(Rubinius::AST::DefineSingleton) && !match_receiver?(node)
         end
 
         # Check if receiver matches
-        # 
+        #
         # @param [Rubinius::AST::DefineSingleton] node
         #
         # @return [true]

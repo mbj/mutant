@@ -1,5 +1,5 @@
 module Mutant
-  class Context 
+  class Context
     # Constant context for mutation (Class or Module)
     class Constant < Context
       include Veritas::Immutable
@@ -24,7 +24,7 @@ module Mutant
           raise ArgumentError, 'Can only build constant mutation scope from class or module'
         end
 
-        new(value,*arguments)
+        new(value, *arguments)
       end
 
       # Return ast wrapping mutated node
@@ -35,13 +35,13 @@ module Mutant
       #
       def root(node)
         root = root_ast
-        root.body = @scope_class.new(1,root.name,node)
+        root.body = @scope_class.new(1, root.name, node)
         Rubinius::AST::Script.new(root)
       end
 
       # Return unqualified name of constant
       #
-      # @return [String] 
+      # @return [String]
       #
       # @api private
       #
@@ -66,11 +66,11 @@ module Mutant
       #
       # @api private
       #
-      def initialize(constant,keyword,scope_class)
-        @constant,@keyword,@scope_class = constant,keyword,scope_class
+      def initialize(constant, keyword, scope_class)
+        @constant, @keyword, @scope_class = constant, keyword, scope_class
       end
 
-      # Return new root ast 
+      # Return new root ast
       #
       # @return [Rubinius::AST::Node]
       #
@@ -82,7 +82,7 @@ module Mutant
 
       # Return qualified name of constant
       #
-      # @return [String] 
+      # @return [String]
       #
       # @api private
       #

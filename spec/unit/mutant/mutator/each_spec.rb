@@ -12,7 +12,7 @@ shared_examples_for 'a mutation enumerator method' do
 
     it { should be_instance_of(to_enum.class) }
 
-    let(:expected_mutations)  do 
+    let(:expected_mutations)  do
       mutations.map do |mutation|
         if mutation.respond_to?(:to_ast)
           mutation.to_ast.to_sexp
@@ -136,7 +136,7 @@ describe Mutant::Mutator, '.each' do
       mutations << [:negate, [:call, [:lit, 1.0], :/, [:arglist, [:lit, 0.0]]]]
       mutations << [:lit, -10.0]
     end
-    
+  
     let(:random_float) { 7.123 }
 
     before do
@@ -171,7 +171,7 @@ describe Mutant::Mutator, '.each' do
 
       # Literal replaced with nil
       mutations << [:nil]
-      
+    
       # Mutation of each element in array
       mutations << '[nil, false]'
       mutations << '[false, false]'
@@ -188,7 +188,7 @@ describe Mutant::Mutator, '.each' do
       # Extra element
       mutations << '[true, false, nil]'
     end
-    
+  
     it_should_behave_like 'a mutation enumerator method'
   end
 
@@ -226,7 +226,7 @@ describe Mutant::Mutator, '.each' do
   end
 
   context 'range literal' do
-    let(:source) { '1..100' } 
+    let(:source) { '1..100' }
 
     let(:mutations) do
       mutations = []
@@ -242,7 +242,7 @@ describe Mutant::Mutator, '.each' do
   end
 
   context 'exclusive range literal' do
-    let(:source) { '1...100' } 
+    let(:source) { '1...100' }
 
     let(:mutations) do
       mutations = []
@@ -288,7 +288,7 @@ describe Mutant::Mutator, '.each' do
 
     let(:mutations) do
       mutations = []
-      
+    
       # Mutation of each statement in block
       mutations << "nil\nfalse"
       mutations << "false\nfalse"

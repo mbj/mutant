@@ -2,10 +2,10 @@ module Mutant
   class Mutator
     # Represent mutations of true literal
     class TrueLiteral < Boolean
-    
+  
     private
 
-      # Return inverse 
+      # Return inverse
       #
       # @return [Rubinius::AST::FalseLiteral]
       #

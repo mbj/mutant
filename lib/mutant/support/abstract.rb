@@ -41,9 +41,9 @@ module Mutant
     # @api private
     #
     def define_singleton_method(name)
-      class_eval(<<-RUBY,__FILE__,__LINE__+1)
+      class_eval(<<-RUBY, __FILE__, __LINE__+1)
         def #{name}(*)
-          raise NotImplementedError,"\#{self.name}.\#{__method__} is not implemented"
+          raise NotImplementedError, "\#{self.name}.\#{__method__} is not implemented"
         end
       RUBY
     end
@@ -57,9 +57,9 @@ module Mutant
     # @api private
     #
     def define_instance_method(name)
-      class_eval(<<-RUBY,__FILE__,__LINE__+1)
+      class_eval(<<-RUBY, __FILE__, __LINE__+1)
         def #{name}(*)
-          raise NotImplementedError,"\#{self.class.name}#\#{__method__} is not implemented"
+          raise NotImplementedError, "\#{self.class.name}#\#{__method__} is not implemented"
         end
       RUBY
     end

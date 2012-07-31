@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Mutant::Mutatee,'#each' do
+describe Mutant::Mutatee, '#each' do
   subject { object.each { |item| yields << item }   }
 
-  let(:object)   { described_class.new(context,ast) }
+  let(:object)   { described_class.new(context, ast) }
   let(:root)     { mock('Root AST')                 }
   let(:ast)      { mock('AST')                      }
   let(:context)  { mock('Context', :root => root)   }

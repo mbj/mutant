@@ -12,7 +12,7 @@ module Mutant
       # @api private
       #
       def inverse(*arguments)
-        new(Rubinius::AST::Range,*arguments)
+        new(Rubinius::AST::Range, *arguments)
       end
     end
   end

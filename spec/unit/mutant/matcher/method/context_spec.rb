@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Mutant::Matcher::Method,'#context' do
+describe Mutant::Matcher::Method, '#context' do
   subject { object.context }
 
-  let(:object)  { described_class::Singleton.new('SampleSubjects::ExampleModule','foo') }
+  let(:object)  { described_class::Singleton.new('SampleSubjects::ExampleModule', 'foo') }
   let(:context) { mock('Context')                                                       }
 
   before do

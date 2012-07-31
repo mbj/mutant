@@ -24,7 +24,7 @@ module Mutant
       # @api private
       #
       def values
-        [0,1,-node.value]
+        [0, 1, -node.value]
       end
     end
   end

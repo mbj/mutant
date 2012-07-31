@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-if "".respond_to?(:to_ast) 
+if "".respond_to?(:to_ast)
   describe Mutant::Context::Constant, '#root' do
     subject { object.root(node) }
 

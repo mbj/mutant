@@ -38,7 +38,7 @@ describe Mutant::Matcher::Method::Classifier, '.run' do
     let(:input) { 'Foo' }
 
     it 'should raise error' do
-      expect { subject }.to raise_error(ArgumentError,"Cannot determine subject from #{input.inspect}")
+      expect { subject }.to raise_error(ArgumentError, "Cannot determine subject from #{input.inspect}")
     end
   end
 end

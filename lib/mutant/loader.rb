@@ -2,12 +2,12 @@ module Mutant
   # A method object for inserting an AST into the Rubinius VM
   #
   # The idea is to split the steps for a mutation into documented
-  # methods. Also subclasses can override the steps. Also passing 
+  # methods. Also subclasses can override the steps. Also passing
   # around the root node is not needed with a method object.
   #
-  # As the initializer does the work there is no need for the 
+  # As the initializer does the work there is no need for the
   # instances of this class to be used outside of this class, hence
-  # the Loader.new method is private and the Loader.run method 
+  # the Loader.new method is private and the Loader.run method
   # returns self.
   #
   class Loader
@@ -46,8 +46,8 @@ module Mutant
 
     # Return compiled code for node
     #
-    # This method actually returns a Rubnius::CompiledMethod 
-    # instance. But it is named on the future name of CompiledMethod 
+    # This method actually returns a Rubnius::CompiledMethod
+    # instance. But it is named on the future name of CompiledMethod
     # that will be renamed to Rubinius::CompiledCode.
     #
     # @return [Rubinius::CompiledMethod]

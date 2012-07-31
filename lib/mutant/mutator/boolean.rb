@@ -16,7 +16,7 @@ module Mutant
         emit_safe(inverse)
       end
 
-      # Return inverse 
+      # Return inverse
       #
       # @return [Rubinius::AST::Node]
       #

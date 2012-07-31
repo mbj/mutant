@@ -31,26 +31,26 @@ module Mutant
     #
     def each(&block)
       return to_enum unless block_given?
-      Mutator.each(node,&block)
+      Mutator.each(node, &block)
 
       self
     end
 
-    # Reset implementation to original 
+    # Reset implementation to original
     #
-    # This method inserts the original node again. 
+    # This method inserts the original node again.
     #
     # @return [self]
     #
     # @api private
-    # 
+    #
     def reset
       insert(@node)
 
       self
     end
 
-  private 
+  private
 
     # Initialize a mutatee
     #
@@ -64,18 +64,18 @@ module Mutant
     #
     # @api private
     #
-    def initialize(context,node)
-      @context,@node = context,node
+    def initialize(context, node)
+      @context, @node = context, node
     end
 
     # Insert AST node under context
     #
     # @param [Rubinius::AST::Node] node
-    # 
+    #
     # @return [self]
     #
     # @api private
-    # 
+    #
     def insert(node)
       Loader.load(context.root(node))
 

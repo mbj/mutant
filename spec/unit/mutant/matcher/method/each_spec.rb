@@ -2,7 +2,7 @@ require 'spec_helper'
 
 # This method implementation cannot be called from the outside, but heckle needs to be happy.
 
-describe Mutant::Matcher::Method,'#each' do
+describe Mutant::Matcher::Method, '#each' do
   let(:class_under_test) do
     node = self.matched_node
     Class.new(described_class) do

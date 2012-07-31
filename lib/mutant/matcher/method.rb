@@ -25,7 +25,7 @@ module Mutant
       #   returns self when block given
       #
       # @api private
-      #   
+      # 
       def each(&block)
         return to_enum unless block_given?
         mutatee.tap do |mutatee|
@@ -68,7 +68,7 @@ module Mutant
 
 
       # Initialize method filter
-      # 
+      #
       # @param [String] constant_name
       # @param [Symbol] method_name
       #
@@ -77,11 +77,11 @@ module Mutant
       # @api private
       #
       def initialize(constant_name, method_name)
-        @constant_name,@method_name = constant_name, method_name
+        @constant_name, @method_name = constant_name, method_name
       end
 
       # Return method
-      # 
+      #
       # @return [UnboundMethod]
       #
       # @api private
@@ -96,7 +96,7 @@ module Mutant
       #
       abstract :node_class
 
-      # Check if node is matched 
+      # Check if node is matched
       #
       # @param [Rubinius::AST::Node] node
       #
@@ -109,8 +109,8 @@ module Mutant
       # @api private
       #
       def match?(node)
-        node.line  == source_file_line && 
-        node.class == node_class && 
+        node.line  == source_file_line &&
+        node.class == node_class &&
         node.name  == method_name
       end
 
@@ -160,7 +160,7 @@ module Mutant
       #
       # @api private
       #
-      abstract :matched_node 
+      abstract :matched_node
 
       # Return mutatee
       #
@@ -171,7 +171,7 @@ module Mutant
       def mutatee
         node = matched_node
         if node
-          Mutatee.new(context,node)
+          Mutatee.new(context, node)
         end
       end
 
@@ -182,7 +182,7 @@ module Mutant
       # @api private
       #
       def constant
-        constant_name.split('::').inject(::Object) do |parent,name|
+        constant_name.split('::').inject(::Object) do |parent, name|
           parent.const_get(name)
         end
       end

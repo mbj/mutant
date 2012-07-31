@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Mutant::Mutatee,'#reset' do
+describe Mutant::Mutatee, '#reset' do
   subject { object.reset }
 
-  let(:object)  { described_class.new(context,ast) }
+  let(:object)  { described_class.new(context, ast) }
   let(:root)    { mock('Root AST') }
   let(:ast)     { mock('AST') }
   let(:context) { mock('Context', :root => root) }

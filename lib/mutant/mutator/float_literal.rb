@@ -5,7 +5,7 @@ module Mutant
 
     private
 
-      # Emit mutants 
+      # Emit mutants
       #
       # @return [undefined]
       #
@@ -25,7 +25,7 @@ module Mutant
       # @api private
       #
       def values
-        [0.0,1.0] << -node.value
+        [0.0, 1.0] << -node.value
       end
     end
   end

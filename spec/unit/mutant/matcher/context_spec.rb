@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Matcher,'#context' do
+describe Mutant::Matcher, '#context' do
   subject { object.context }
 
   let(:object)        { described_class.new(constant_name) }

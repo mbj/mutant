@@ -39,7 +39,7 @@ module Mutant
       end
 
       # Return values to mutate against
-      # 
+      #
       # @return [Array]
       #
       # @api private
@@ -55,7 +55,7 @@ module Mutant
       # @api private
       #
       def emit_element_presence
-        0.step(array.length-1,2) do |index|
+        0.step(array.length-1, 2) do |index|
           contents = dup_array
           contents.delete_at(index)
           contents.delete_at(index)

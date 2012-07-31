@@ -13,7 +13,7 @@ module Mutant
       #
       def dispatch
         emit_nil
-        emit_safe(inverse(node.start,node.finish))
+        emit_safe(inverse(node.start, node.finish))
         emit_range
       end
 
@@ -24,11 +24,11 @@ module Mutant
       # @api private
       #
       def emit_range
-        start,finish = node.start,node.finish
-        emit_self(negative_infinity,finish)
-        emit_self(nan,finish)
-        emit_self(start,infinity)
-        emit_self(start,nan)
+        start, finish = node.start, node.finish
+        emit_self(negative_infinity, finish)
+        emit_self(nan, finish)
+        emit_self(start, infinity)
+        emit_self(start, nan)
       end
 
       # Return inverse AST node class

@@ -30,10 +30,10 @@ shared_examples_for 'a method match' do
   end
 
   it 'should have correct constant in context' do
-    context.send(:constant).should eql(constant) 
+    context.send(:constant).should eql(constant)
   end
 
   it 'should have the correct node class' do
-    node.should be_a(node_class) 
+    node.should be_a(node_class)
   end
 end

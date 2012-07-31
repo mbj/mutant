@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Mutant::Mutatee,'#node' do
+describe Mutant::Mutatee, '#node' do
   subject { object.node }
-  let(:object)  { described_class.new(context,node) }
+  let(:object)  { described_class.new(context, node) }
   let(:node)    { mock('Node') }
   let(:context) { mock('Context') }
 
