@@ -92,20 +92,20 @@ describe Mutant::Mutator, '.each' do
     it_should_behave_like 'a mutation enumerator method'
   end
 
-  context 'interpolated string literal (DynamicString)' do
-    let(:source) { '"foo#{1}bar"' }
+ #context 'interpolated string literal (DynamicString)' do
+ #  let(:source) { '"foo#{1}bar"' }
 
-    let(:mutations) do
-      mutations = []
-      mutations << 'nil'
-    end
+ #  let(:mutations) do
+ #    mutations = []
+ #    mutations << 'nil'
+ #  end
 
-    before do
-      Mutant.stub(:random_hex_string => random_string)
-    end
+ #  before do
+ #    Mutant.stub(:random_hex_string => random_string)
+ #  end
 
-    it_should_behave_like 'a mutation enumerator method'
-  end
+ #  it_should_behave_like 'a mutation enumerator method'
+ #end
 
   context 'fixnum literal' do
     let(:source) { '10' }

@@ -3,6 +3,8 @@ module Mutant
     # Mutator on AST blocks
     class Block < Mutator
 
+      handle Rubinius::AST::Block
+
     private
 
       # Emit mutants

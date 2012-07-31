@@ -15,7 +15,7 @@ module Mutant
     #
     def self.each(node, &block)
       return to_enum(__method__, node) unless block_given?
-      generator(node).new(node, block)
+      mutator(node).new(node, block)
 
       self
     end
@@ -31,12 +31,35 @@ module Mutant
     #
     # @api private
     #
-    def self.generator(node)
-      unqualified_name = node.class.name.split('::').last
-      const_get(unqualified_name)
+    def self.mutator(node)
+      Mutator.map.fetch(node.class) do
+        raise ArgumentError,"No mutator to handle: #{node.inspect}"
+      end
     end
+    private_class_method :mutator
 
-    private_class_method :generator
+    # Register node class handler
+    #
+    # @param [Class:Rubinius::AST::Node] node_class
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def self.handle(node_class)
+      Mutator.map[node_class]=self
+    end
+    private_class_method :handle
+
+    # Return map of rubinus AST nodes to mutators
+    #
+    # @return [Hash]
+    #
+    # @api private
+    #
+    def self.map
+      @map ||= {}
+    end
 
   private
 
@@ -267,26 +290,6 @@ module Mutant
       emit_safe(new_nil)
     end
 
-    # Return AST representing negative infinity
-    #
-    # @return [Rubinius::Node::AST]
-    #
-    # @api private
-    #
-    def negative_infinity
-      new(Rubinius::AST::Negate, infinity)
-    end
-
-    # Return AST representing infinity
-    #
-    # @return [Rubinius::Node::AST]
-    #
-    # @api private
-    #
-    def infinity
-      new_call(new_float(1), :/, new_float(0))
-    end
-
 
     # Return AST representing send
     #
@@ -300,28 +303,6 @@ module Mutant
     #
     def new_call(receiver, name, arguments)
       new(Rubinius::AST::SendWithArguments, receiver, name, arguments)
-    end
-
-    # Return new float literal
-    #
-    # @param [#to_f] value
-    #
-    # @return [Rubinius::Node::FloatLiteral]
-    #
-    # @api private
-    #
-    def new_float(value)
-      new(Rubinius::AST::FloatLiteral, value)
-    end
-
-    # Return AST representing NaN
-    #
-    # @return [Rubinius::Node::AST]
-    #
-    # @api private
-    #
-    def nan
-      new_call(new_float(0), :/, new_float(0))
     end
 
     memoize :sexp

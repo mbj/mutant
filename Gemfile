@@ -4,6 +4,8 @@ gemspec
 
 # For Veritas::Immutable, will be extracted soon
 gem 'veritas', :git => 'https://github.com/dkubb/veritas'
+# For Veritas::DescendantsTracker, will be extracted soon
+gem 'virtus', '~> 0.5.1'
 
 group :development do
   gem 'rake',    '~> 0.9.2'
