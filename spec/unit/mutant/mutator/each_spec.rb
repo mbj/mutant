@@ -1,5 +1,5 @@
 # This file is the sandbox for new mutations.
-# Once finished mutation test will be moved to class specfic 
+# Once finished mutation test will be moved to class specfic
 # file.
 
 require 'spec_helper'
@@ -28,14 +28,14 @@ describe Mutant::Mutator, '.each' do
 
     let(:mutations) do
       mutations = []
-    
+
       # Mutation of each statement in block
       mutations << "foo\nself.bar"
       mutations << "self.foo\nbar"
 
      ## Remove statement in block
-      mutations << [:block,'self.foo'.to_sexp]
-      mutations << [:block,'self.bar'.to_sexp]
+      mutations << [:block, 'self.foo'.to_sexp]
+      mutations << [:block, 'self.bar'.to_sexp]
     end
 
     it_should_behave_like 'a mutation enumerator method'

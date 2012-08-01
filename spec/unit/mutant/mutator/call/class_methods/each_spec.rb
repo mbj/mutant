@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Call,'.each' do
+describe Mutant::Mutator::Call, '.each' do
   pending 'send' do
     context 'to self' do
 

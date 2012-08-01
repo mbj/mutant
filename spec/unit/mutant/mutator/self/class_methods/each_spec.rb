@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Self,'.each' do
+describe Mutant::Mutator::Self, '.each' do
   let(:source) { 'self' }
 
   let(:mutations) do

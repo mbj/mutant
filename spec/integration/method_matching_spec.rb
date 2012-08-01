@@ -12,7 +12,7 @@ if "".respond_to?(:to_ast)
       eval(body)
       File.stub(:read => body)
     end
-  
+
     let(:defaults) { {} }
 
     context 'on instance methods' do

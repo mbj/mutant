@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal::Regex,'.each' do
+describe Mutant::Mutator::Literal::Regex, '.each' do
   let(:random_string) { 'bar' }
 
   context 'regexp literal' do

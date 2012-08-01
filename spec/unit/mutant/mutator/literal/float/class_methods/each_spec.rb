@@ -15,7 +15,7 @@ describe Mutant::Mutator::Literal::Float, '.each' do
       mutations << [:negate, [:call, [:lit, 1.0], :/, [:arglist, [:lit, 0.0]]]]
       mutations << [:lit, -10.0]
     end
-  
+
     let(:random_float) { 7.123 }
 
     before do

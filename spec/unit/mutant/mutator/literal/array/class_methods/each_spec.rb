@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal::Array,'.each' do
+describe Mutant::Mutator::Literal::Array, '.each' do
   context 'array literal' do
     let(:source) { '[true, false]' }
 
@@ -9,7 +9,7 @@ describe Mutant::Mutator::Literal::Array,'.each' do
 
       # Literal replaced with nil
       mutations << [:nil]
-    
+
       # Mutation of each element in array
       mutations << '[nil, false]'
       mutations << '[false, false]'
@@ -26,7 +26,7 @@ describe Mutant::Mutator::Literal::Array,'.each' do
       # Extra element
       mutations << '[true, false, nil]'
     end
-  
+
     it_should_behave_like 'a mutation enumerator method'
   end
 end

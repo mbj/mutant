@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal::Boolean,'.each' do
+describe Mutant::Mutator::Literal::Boolean, '.each' do
   context 'true literal' do
     let(:source) { 'true' }
 

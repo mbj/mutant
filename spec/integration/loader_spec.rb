@@ -11,7 +11,7 @@ if "".respond_to?(:to_ast)
     let(:context) { Mutant::Context::Constant.build(CodeLoadingSubject) }
     let(:node)    { 'def foo; :bar; end'.to_ast                         }
     let(:root)    { context.root(node)                                  }
-                                                                     
+                             
     subject       { Mutant::Loader.load(root)                           }
 
     before { subject }

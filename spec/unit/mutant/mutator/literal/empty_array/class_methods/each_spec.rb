@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal::EmptyArray,'.each' do
+describe Mutant::Mutator::Literal::EmptyArray, '.each' do
   context 'empty array literal' do
     let(:source) { '[]' }
 

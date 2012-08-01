@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal::Fixnum,'.each' do
+describe Mutant::Mutator::Literal::Fixnum, '.each' do
   let(:random_fixnum) { 5 }
 
   context 'fixnum literal' do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal::String,'.each' do
+describe Mutant::Mutator::Literal::String, '.each' do
   let(:random_string) { 'bar' }
 
   context 'string literal' do

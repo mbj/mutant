@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal::Range,'.each' do
+describe Mutant::Mutator::Literal::Range, '.each' do
   context 'inclusive range literal' do
     let(:source) { '1..100' }
 
