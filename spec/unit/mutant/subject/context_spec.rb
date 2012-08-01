@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutatee, '#context' do
+describe Mutant::Subject, '#context' do
   subject { object.context }
 
   let(:object)  { described_class.new(context, ast) }

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutatee, '#each' do
+describe Mutant::Subject, '#each' do
   subject { object.each { |item| yields << item }   }
 
   let(:object)   { described_class.new(context, ast) }

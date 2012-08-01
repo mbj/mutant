@@ -4,7 +4,7 @@ module Mutant
     include Enumerable
     extend Abstract
 
-    # Enumerate mutatees
+    # Enumerate subjects
     #
     # @api private
     #

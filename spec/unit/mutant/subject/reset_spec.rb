@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutatee, '#reset' do
+describe Mutant::Subject, '#reset' do
   subject { object.reset }
 
   let(:object)  { described_class.new(context, ast) }

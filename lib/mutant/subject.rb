@@ -1,6 +1,6 @@
 module Mutant
-  # Represent a mutatable AST and its context
-  class Mutatee
+  # Subject for mutation wraps AST to mutate with its Context 
+  class Subject
     include Veritas::Immutable, Enumerable
 
     # Return context
@@ -60,7 +60,7 @@ module Mutant
 
   private
 
-    # Initialize a mutatee
+    # Initialize subject
     #
     # @param [Context] context
     #   the context of mutations

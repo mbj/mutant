@@ -26,8 +26,8 @@ describe Mutant::Matcher::Method, '#each' do
   let(:matched_node) { mock('Root Node') }
 
   context 'with match' do
-    it 'should yield mutatee' do
-      expect { subject }.to change { yields.dup }.from([]).to([object.send(:mutatee)])
+    it 'should yield subject' do
+      expect { subject }.to change { yields.dup }.from([]).to([object.send(:subject)])
     end
   end
 

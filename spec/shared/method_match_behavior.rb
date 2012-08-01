@@ -3,17 +3,17 @@ shared_examples_for 'a method match' do
 
   let(:values) { defaults.merge(expectation) }
 
-  let(:method_name)  { values.fetch(:method_name)  }
-  let(:method_line)  { values.fetch(:method_line)  }
-  let(:method_arity) { values.fetch(:method_arity) }
-  let(:constant)     { values.fetch(:constant)     }
-  let(:node_class)   { values.fetch(:node_class)   }
+  let(:method_name)       { values.fetch(:method_name)  }
+  let(:method_line)       { values.fetch(:method_line)  }
+  let(:method_arity)      { values.fetch(:method_arity) }
+  let(:constant)          { values.fetch(:constant)     }
+  let(:node_class)        { values.fetch(:node_class)   }
+                         
+  let(:node)              { mutation_subject.node    }
+  let(:context)           { mutation_subject.context }
+  let(:mutation_subject)  { subject.first   }
 
-  let(:node)         { mutatee.node    }
-  let(:context)      { mutatee.context }
-  let(:mutatee)      { subject.first   }
-
-  it 'should return one mutatee' do
+  it 'should return one subject' do
     subject.size.should be(1)
   end
 

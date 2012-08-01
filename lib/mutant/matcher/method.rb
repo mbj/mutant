@@ -28,8 +28,8 @@ module Mutant
       # 
       def each(&block)
         return to_enum unless block_given?
-        mutatee.tap do |mutatee|
-          yield mutatee if mutatee
+        subject.tap do |subject|
+          yield subject if subject
         end
 
         self
@@ -162,16 +162,20 @@ module Mutant
       #
       abstract :matched_node
 
-      # Return mutatee
+      # Return subject
       #
-      # @return [Mutatee]
+      # @return [Subject]
+      #   returns subject if there is a matched node
+      #
+      # @return [nil]
+      #   otherwise
       #
       # @api private
       #
-      def mutatee
+      def subject
         node = matched_node
         if node
-          Mutatee.new(context, node)
+          Subject.new(context, node)
         end
       end
 
@@ -187,7 +191,7 @@ module Mutant
         end
       end
 
-      memoize :mutatee
+      memoize :subject
     end
   end
 end
