@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Call, '.each' do
+describe Mutant::Mutator, 'call' do
   context 'send without arguments' do
     context 'to self' do
 
@@ -24,7 +24,7 @@ describe Mutant::Mutator::Call, '.each' do
     end
   end
 
-  pending 'send with arguments' do
+  context 'send with arguments' do
     context 'to self' do
       context 'implicit' do
         let(:source) { 'foo(1)' }

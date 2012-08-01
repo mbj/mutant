@@ -3,8 +3,9 @@ module Mutant
     # Abstract class for mutatiosn where messages are send
     class Call < Mutator
 
-      private
+      handle(Rubinius::AST::Send)
 
+    private
 
       # Return receiver AST node
       #
@@ -40,43 +41,29 @@ module Mutant
         receiver.kind_of?(Rubinius::AST::Self)
       end
 
-      class Send < Call
+      def emit_explicit_self_receiver
+        mutatee = dup_node
+        mutatee.privately = false
+        # TODO: Fix rubinius to allow this as an attr_accessor
+        mutatee.instance_variable_set(:@vcall_style,false)
+        emit_safe(mutatee)
+      end
 
-        handle(Rubinius::AST::Send)
-
-      private
-
-        # Emit mutations
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def dispatch
-          emit_explicit_self_receiver
-        end
-
-        # Emit an explicit self receiver if receiver is self
-        #
-        # Transforms a call on self with implict receiver into one with 
-        # explcit receiver.
-        #
-        #   foo => self.foo
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def emit_explicit_self_receiver
-          emit_self(receiver,name,false,false)
-        end
+      # Emit mutations
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def dispatch
+        emit_explicit_self_receiver
       end
 
       class SendWithArguments < Call
         
         handle(Rubinius::AST::SendWithArguments)
 
-        private
+      private
 
         # Emut mutations
         #
@@ -86,21 +73,6 @@ module Mutant
         #
         def dispatch
           emit_explicit_self_receiver
-        end
-
-        # Emit an explicit self receiver if receiver is self
-        #
-        # Transforms a call on self with implict receiver into one with 
-        # explcit receiver.
-        #
-        #   foo => self.foo
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def emit_explicit_self_receiver
-          emit_self(receiver,name,false,false)
         end
       end
     end
