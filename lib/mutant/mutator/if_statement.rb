@@ -69,6 +69,10 @@ module Mutant
       # capture literal symbol.
       #
       def invert(node)
+        if Mutant.on_18?
+          return new(Rubinius::AST::Not,node)
+        end
+
         new_send(node,:'!')
       end
 
