@@ -28,6 +28,8 @@ module Mutant
   # @return [false]
   #   returns false otherwise
   #
+  # @api private
+  #
   def self.on_18?
     RUBY_VERSION == '1.8.7'
   end
