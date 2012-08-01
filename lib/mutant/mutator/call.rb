@@ -42,11 +42,11 @@ module Mutant
       end
 
       def emit_explicit_self_receiver
-        mutatee = dup_node
-        mutatee.privately = false
+        mutant = dup_node
+        mutant.privately = false
         # TODO: Fix rubinius to allow this as an attr_accessor
-        mutatee.instance_variable_set(:@vcall_style,false)
-        emit_safe(mutatee)
+        mutant.instance_variable_set(:@vcall_style,false)
+        emit_safe(mutant)
       end
 
       # Emit mutations
