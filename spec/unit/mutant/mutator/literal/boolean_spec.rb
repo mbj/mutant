@@ -8,7 +8,7 @@ describe Mutant::Mutator::Literal, 'boolean' do
       %w(nil false)
     end
 
-    it_should_behave_like 'a mutation enumerator method'
+    it_should_behave_like 'a mutator'
   end
 
   context 'false literal' do
@@ -18,6 +18,6 @@ describe Mutant::Mutator::Literal, 'boolean' do
       %w(nil true)
     end
 
-    it_should_behave_like 'a mutation enumerator method'
+    it_should_behave_like 'a mutator'
   end
 end

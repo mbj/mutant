@@ -13,5 +13,5 @@ describe Mutant::Mutator::Literal, 'symbol' do
     Mutant::Random.stub(:hex_string => random_string)
   end
 
-  it_should_behave_like 'a mutation enumerator method'
+  it_should_behave_like 'a mutator'
 end

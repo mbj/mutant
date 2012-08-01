@@ -14,7 +14,7 @@ describe Mutant::Mutator::Literal, 'range' do
       mutations << '1..(0.0/0.0)'
     end
 
-    it_should_behave_like 'a mutation enumerator method'
+    it_should_behave_like 'a mutator'
   end
 
   context 'exclusive range literal' do
@@ -30,6 +30,6 @@ describe Mutant::Mutator::Literal, 'range' do
       mutations << '1...(0.0/0.0)'
     end
 
-    it_should_behave_like 'a mutation enumerator method'
+    it_should_behave_like 'a mutator'
   end
 end

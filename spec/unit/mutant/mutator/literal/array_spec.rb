@@ -26,5 +26,5 @@ describe Mutant::Mutator::Literal, 'array' do
     mutations << '[true, false, nil]'
   end
 
-  it_should_behave_like 'a mutation enumerator method'
+  it_should_behave_like 'a mutator'
 end

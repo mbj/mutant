@@ -7,7 +7,7 @@ describe Mutant::Mutator, 'call' do
       context 'implicit' do
         let(:source) { 'foo' }
 
-        it_should_behave_like 'a noop mutation enumerator method'
+        it_should_behave_like 'a noop mutator'
       end
 
       context 'explict' do
@@ -19,14 +19,14 @@ describe Mutant::Mutator, 'call' do
           mutations << 'foo' 
         end
 
-        it_should_behave_like 'a mutation enumerator method'
+        it_should_behave_like 'a mutator'
       end
     end
 
     context 'to some object' do
       let(:source) { '1.foo' }
 
-      it_should_behave_like 'a noop mutation enumerator method'
+      it_should_behave_like 'a noop mutator'
     end
   end
 
@@ -35,7 +35,7 @@ describe Mutant::Mutator, 'call' do
       context 'implicit' do
         let(:source) { 'foo(1)' }
 
-        it_should_behave_like 'a noop mutation enumerator method'
+        it_should_behave_like 'a noop mutator'
       end
 
       context 'explicit' do
@@ -47,7 +47,7 @@ describe Mutant::Mutator, 'call' do
           mutations << 'foo(1)'
         end
 
-        it_should_behave_like 'a mutation enumerator method'
+        it_should_behave_like 'a mutator'
       end
     end
   end

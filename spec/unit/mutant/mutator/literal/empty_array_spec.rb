@@ -13,5 +13,5 @@ describe Mutant::Mutator::Literal, 'empty array' do
     mutations << '[nil]'
   end
 
-  it_should_behave_like 'a mutation enumerator method'
+  it_should_behave_like 'a mutator'
 end

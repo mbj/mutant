@@ -13,5 +13,5 @@ describe Mutant::Mutator::Literal, 'fixnum' do
     Mutant::Random.stub(:fixnum => random_fixnum)
   end
 
-  it_should_behave_like 'a mutation enumerator method'
+  it_should_behave_like 'a mutator'
 end

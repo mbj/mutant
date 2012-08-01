@@ -16,5 +16,5 @@ describe Mutant::Mutator, 'block' do
     mutations << [:block, 'self.bar'.to_sexp]
   end
 
-  it_should_behave_like 'a mutation enumerator method'
+  it_should_behave_like 'a mutator'
 end

@@ -30,5 +30,5 @@ describe Mutant::Mutator::Literal, 'hash' do
     mutations << [:hash, [:true  ], [:true ], [:false], [:false ], [:nil], [:nil] ]
   end
 
-  it_should_behave_like 'a mutation enumerator method'
+  it_should_behave_like 'a mutator'
 end

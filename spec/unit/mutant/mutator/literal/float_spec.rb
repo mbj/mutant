@@ -21,5 +21,5 @@ describe Mutant::Mutator::Literal, 'float' do
     Mutant::Random.stub(:float => random_float)
   end
 
-  it_should_behave_like 'a mutation enumerator method'
+  it_should_behave_like 'a mutator'
 end
