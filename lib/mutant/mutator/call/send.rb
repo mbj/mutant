@@ -25,6 +25,10 @@ module Mutant
         #
         #   foo(1) => self.foo(1)
         #
+        # @return [undefined]
+        #
+        # @api private
+        #
         def emit_explicit_receiver
           emit_self(receiver,name,false,true)
         end

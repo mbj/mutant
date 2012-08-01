@@ -34,6 +34,8 @@ module Mutant
       # @return [false]
       #   return false otherwise
       #
+      # @api private
+      #
       def self?
         receiver.kind_of?(Rubinius::AST::Self)
       end
