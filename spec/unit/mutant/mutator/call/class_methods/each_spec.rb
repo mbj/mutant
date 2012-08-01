@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Mutant::Mutator::Call, '.each' do
-  pending 'send' do
+  context 'send without arguments' do
     context 'to self' do
 
       context 'implict' do
@@ -9,6 +9,7 @@ describe Mutant::Mutator::Call, '.each' do
 
         let(:mutations) do
           mutations = []
+          mutations << 'self.foo' # without explict receiver (not send privately)
         end
 
         it_should_behave_like 'a mutation enumerator method'
@@ -17,12 +18,7 @@ describe Mutant::Mutator::Call, '.each' do
       context 'explict' do
         let(:source) { 'self.foo' }
 
-        let(:mutations) do
-          mutations = []
-          mutations << 'foo' # without explict receiver (send privately)
-        end
-
-        it_should_behave_like 'a mutation enumerator method'
+        it_should_behave_like 'a noop mutation enumerator method'
       end
     end
   end

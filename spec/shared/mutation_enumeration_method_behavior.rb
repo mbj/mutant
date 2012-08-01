@@ -34,4 +34,8 @@ shared_examples_for 'a mutation enumerator method' do
   end
 end
 
+shared_examples_for 'a noop mutation enumerator method' do
+  let(:mutations) { [] }
 
+  it_should_behave_like 'a mutation enumerator method'
+end
