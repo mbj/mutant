@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Block, '.each' do
+describe Mutant::Mutator, 'block' do
   # Two send operations
-  let(:source) { "foo\nbar" }
+  let(:source) { "self.foo\nself.bar" }
 
   let(:mutations) do
     mutations = []
@@ -12,8 +12,8 @@ describe Mutant::Mutator::Block, '.each' do
     mutations << "self.foo\nbar"
 
    ## Remove statement in block
-    mutations << [:block, 'foo'.to_sexp]
-    mutations << [:block, 'bar'.to_sexp]
+    mutations << [:block, 'self.foo'.to_sexp]
+    mutations << [:block, 'self.bar'.to_sexp]
   end
 
   it_should_behave_like 'a mutation enumerator method'
