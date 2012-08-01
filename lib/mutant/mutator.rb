@@ -273,8 +273,12 @@ module Mutant
     #
     # @api private
     #
-    def new_call(receiver, name, arguments)
-      new(Rubinius::AST::SendWithArguments, receiver, name, arguments)
+    def new_send(receiver, name, arguments=nil)
+      if arguments
+        new(Rubinius::AST::SendWithArguments, receiver, name, arguments)
+      else
+        new(Rubinius::AST::Send, receiver, name)
+      end
     end
 
     # Return duplicated (unfrozen) node each call

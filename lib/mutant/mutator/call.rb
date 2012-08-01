@@ -41,7 +41,7 @@ module Mutant
         receiver.kind_of?(Rubinius::AST::Self)
       end
 
-      # Emit mutation that replaces explicit send to self with implicit send to self.
+      # Emit mutation that replaces explicit send to self with implicit send to self
       # 
       # @example:
       #

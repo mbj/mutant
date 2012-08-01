@@ -5,8 +5,6 @@
 require 'spec_helper'
 
 describe Mutant::Mutator, '.each' do
-  let(:random_string) { 'bar' }
-
   pending 'interpolated string literal (DynamicString)' do
     let(:source) { '"foo#{1}bar"' }
 

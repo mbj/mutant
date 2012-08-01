@@ -30,6 +30,8 @@ module Mutant
         #
         # @return [undefined]
         #
+        # @api private
+        #
         def new_self(source,options=nil)
           super(source,options || node.options)
         end
