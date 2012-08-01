@@ -62,7 +62,7 @@ module Mutant
       #   There will not be any exception so the mutant is not killed and such calls where
       #   implicit receiver should be used will be spotted.
       #
-      # @reutrn [undefined]
+      # @return [undefined]
       #
       # @api private
       #
