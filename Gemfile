@@ -5,6 +5,9 @@ gemspec
 # For Veritas::Immutable, will be extracted soon
 gem 'veritas', :git => 'https://github.com/dkubb/veritas'
 
+# Until there is a release with explicit sends to self fix
+gem 'to_source', :git => 'https://github.com/mbj/to_source'
+
 group :development do
   gem 'rake',    '~> 0.9.2'
   gem 'yard',    '~> 0.8.1'

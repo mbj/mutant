@@ -15,28 +15,10 @@ module Mutant
     #
     def self.each(node, &block)
       return to_enum(__method__, node) unless block_given?
-      mutator(node).new(node, block)
+      Registry.lookup(node.class).new(node, block)
 
       self
     end
-
-    # Return mutator for node or raise
-    #
-    # @param [Rubinius::AST::Node] node
-    #
-    # @return [Mutator]
-    #
-    # @raise [NameError]
-    #   raises NameError if mutator for node cannot be found
-    #
-    # @api private
-    #
-    def self.mutator(node)
-      Mutator.map.fetch(node.class) do
-        raise ArgumentError,"No mutator to handle: #{node.inspect}"
-      end
-    end
-    private_class_method :mutator
 
     # Register node class handler
     #
@@ -47,19 +29,9 @@ module Mutant
     # @api private
     #
     def self.handle(node_class)
-      Mutator.map[node_class]=self
+      Registry.register(node_class,self)
     end
     private_class_method :handle
-
-    # Return map of rubinus AST nodes to mutators
-    #
-    # @return [Hash]
-    #
-    # @api private
-    #
-    def self.map
-      @map ||= {}
-    end
 
   private
 
@@ -291,7 +263,6 @@ module Mutant
       emit_safe(new_nil)
     end
 
-
     # Return AST representing send
     #
     # @param [Rubinius::AST::Node] receiver
@@ -304,6 +275,16 @@ module Mutant
     #
     def new_call(receiver, name, arguments)
       new(Rubinius::AST::SendWithArguments, receiver, name, arguments)
+    end
+
+    # Return duplicated (unfrozen) node each call
+    #
+    # @return [Rubinius::AST::Node]
+    #
+    # @api private
+    #
+    def dup_node
+      node.dup
     end
 
     memoize :sexp
