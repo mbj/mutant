@@ -22,3 +22,4 @@
 * Mutations on Rubinius::AST::Self?
 * Support the numerous Rubinius::AST::SendWithArguments mutations.
 * Fix rubinius to allow setting @vcall_style variable in Rubinius::AST::Send nodes.
+* Add mutations on the conditiosn of case statements. (Rubinius::AST::When)
