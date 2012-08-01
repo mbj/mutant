@@ -9,7 +9,8 @@ describe Mutant::Mutator::Call, '.each' do
 
         let(:mutations) do
           mutations = []
-          mutations << 'self.foo' # without explict receiver (not send privately)
+          # with explicit receiver (not send privately)
+          mutations << 'self.foo' 
         end
 
         it_should_behave_like 'a mutation enumerator method'
@@ -25,25 +26,22 @@ describe Mutant::Mutator::Call, '.each' do
 
   pending 'send with arguments' do
     context 'to self' do
-      context 'implict' do
+      context 'implicit' do
         let(:source) { 'foo(1)' }
 
         let(:mutations) do
           mutations = []
+          # with explicit receiver (not send privately)
+          mutations << 'self.foo(1)'
         end
 
         it_should_behave_like 'a mutation enumerator method'
       end
 
-      context 'explict' do
+      context 'explicit' do
         let(:source) { 'self.foo(1)' }
 
-        let(:mutations) do
-          mutations = []
-          mutations << 'foo(1)' # without explict receiver (send privately)
-        end
-
-        it_should_behave_like 'a mutation enumerator method'
+        it_should_behave_like 'a noop mutation enumerator method'
       end
     end
   end

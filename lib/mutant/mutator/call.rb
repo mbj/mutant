@@ -53,21 +53,53 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_explicit_receiver
+          emit_explicit_self_receiver
         end
 
-        # Emit a private vcall mutation
+        # Emit an explicit self receiver if receiver is self
         #
         # Transforms a call on self with implict receiver into one with 
         # explcit receiver.
         #
-        #   foo(1) => self.foo(1)
+        #   foo => self.foo
         #
         # @return [undefined]
         #
         # @api private
         #
-        def emit_explicit_receiver
+        def emit_explicit_self_receiver
+          emit_self(receiver,name,false,false)
+        end
+      end
+
+      class SendWithArguments < Call
+        
+        handle(Rubinius::AST::SendWithArguments)
+
+        private
+
+        # Emut mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def dispatch
+          emit_explicit_self_receiver
+        end
+
+        # Emit an explicit self receiver if receiver is self
+        #
+        # Transforms a call on self with implict receiver into one with 
+        # explcit receiver.
+        #
+        #   foo => self.foo
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_explicit_self_receiver
           emit_self(receiver,name,false,false)
         end
       end
