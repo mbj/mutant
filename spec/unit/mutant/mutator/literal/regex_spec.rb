@@ -9,6 +9,8 @@ describe Mutant::Mutator::Literal, 'regex' do
     mutations = []
     mutations << 'nil'
     mutations << "/#{random_string}/"
+    mutations << '//' # match all
+    mutations << '/a\A/' # match nothing
   end
 
   before do
@@ -18,16 +20,4 @@ describe Mutant::Mutator::Literal, 'regex' do
   let(:mutations) { base_mutations }
 
   it_should_behave_like 'a mutator'
-
-  context 'when source is empty regexp' do
-    before do
-      pending
-    end
-
-    let(:source) { '//' }
-
-    let(:mutations) { base_mutations - [source.to_ast] }
-
-    it_should_behave_like 'a mutator'
-  end
 end
