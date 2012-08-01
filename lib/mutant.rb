@@ -37,6 +37,7 @@ end
 
 require 'mutant/support/abstract'
 require 'mutant/random'
+require 'mutant/runner'
 require 'mutant/mutator'
 require 'mutant/mutator/registry'
 require 'mutant/mutator/literal'
