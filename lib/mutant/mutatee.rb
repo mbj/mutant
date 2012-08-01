@@ -29,9 +29,17 @@ module Mutant
     #
     # @api private
     #
-    def each(&block)
+    def each
       return to_enum unless block_given?
-      Mutator.each(node, &block)
+      # FIXME:
+      #   Rubinus <=> Rspec bug
+      #
+      #     Mutator.each(node,&block) 
+      #
+      #   results in rspec expectation mismatch
+      Mutator.each(node) do |mutant|
+        yield mutant
+      end
 
       self
     end

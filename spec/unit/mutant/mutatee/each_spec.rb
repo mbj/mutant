@@ -14,7 +14,7 @@ describe Mutant::Mutatee, '#each' do
     Mutant::Mutator.stub(:each).with(ast).and_yield(mutation).and_return(Mutant::Mutator)
   end
 
-  #it_should_behave_like 'an #each method'
+  it_should_behave_like 'an #each method'
 
   it 'should initialize mutator with ast' do
     Mutant::Mutator.should_receive(:each).with(ast).and_yield(mutation).and_return(Mutant::Mutator)
