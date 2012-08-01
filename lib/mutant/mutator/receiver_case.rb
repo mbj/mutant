@@ -110,13 +110,16 @@ module Mutant
       # @return [true]
       #   returns true when there is only one when branch
       #
+      # @return [false]
+      #   returns false otherwise
+      #
       # @api private
       #
       def one?
-        when_branches.size == 1
+        when_branches.one?
       end
 
-      # Return duplicatedd when branches
+      # Return duplicate of when branches
       #
       # @return [Array]
       #

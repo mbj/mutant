@@ -30,6 +30,7 @@ describe Mutant::Mutator, '.each' do
 
     it_should_behave_like 'a mutator'
   end
+
   pending 'interpolated string literal (DynamicString)' do
     let(:source) { '"foo#{1}bar"' }
 
