@@ -1,7 +1,7 @@
 module Mutant
   # Generator for mutations
   class Mutator
-    include Veritas::Immutable
+    include Immutable
     extend Abstract
 
     # Enumerate mutations on node

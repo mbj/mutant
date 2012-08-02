@@ -1,7 +1,7 @@
 module Mutant
   # Abstract runner for tests
   class Runner
-    include Veritas::Immutable
+    include Immutable
     extend Abstract
 
     # Run runner

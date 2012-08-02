@@ -1,7 +1,7 @@
 module Mutant
   # Subject for mutation wraps AST to mutate with its Context 
   class Subject
-    include Veritas::Immutable, Enumerable
+    include Immutable, Enumerable
 
     # Return context
     #

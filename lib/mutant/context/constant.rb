@@ -2,7 +2,7 @@ module Mutant
   class Context
     # Constant context for mutation (Class or Module)
     class Constant < Context
-      include Veritas::Immutable
+      include Immutable
 
       private_class_method :new
 

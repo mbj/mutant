@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Matcher to find AST for method
     class Method < Matcher
-      include Veritas::Immutable
+      include Immutable
 
       # Parse a method string into filter
       #

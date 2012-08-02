@@ -3,7 +3,7 @@ module Mutant
     class Method < Matcher
       # A classifier for input strings
       class Classifier
-        extend Veritas::Immutable
+        extend Immutable
 
         TABLE = {
           '.' => Matcher::Method::Singleton,

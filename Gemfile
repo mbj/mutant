@@ -2,8 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-# For Veritas::Immutable, will be extracted soon
-gem 'veritas', :git => 'https://github.com/dkubb/veritas'
+gem 'immutable', :git => 'https://github.com/mbj/immutable'
 
 # Until there is a release with explicit sends to self fix
 gem 'to_source', :git => 'https://github.com/mbj/to_source'
