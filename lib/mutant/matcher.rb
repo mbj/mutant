@@ -1,8 +1,7 @@
 module Mutant
   # Abstract matcher to find ASTs to mutate
   class Matcher
-    include Enumerable
-    extend Abstract
+    include Enumerable, Abstract
 
     # Enumerate subjects
     #
@@ -10,7 +9,7 @@ module Mutant
     #
     # @return [undefined]
     #
-    abstract :each
+    abstract_method :each
 
   private
 

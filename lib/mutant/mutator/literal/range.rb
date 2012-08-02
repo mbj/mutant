@@ -48,7 +48,7 @@ module Mutant
         #
         # @api private
         #
-        abstract :inverse_class
+        abstract_method :inverse_class
 
         # Mutator for range exclude literals
         class Exclude < Range

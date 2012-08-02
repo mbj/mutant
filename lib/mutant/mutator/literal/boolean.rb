@@ -23,7 +23,7 @@ module Mutant
         #
         # @api private
         #
-        abstract :inverse
+        abstract_method :inverse
 
         # Represent mutations of true literal
         class TrueLiteral < Boolean

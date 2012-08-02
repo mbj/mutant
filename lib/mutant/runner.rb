@@ -1,8 +1,7 @@
 module Mutant
   # Abstract runner for tests
   class Runner
-    include Immutable
-    extend Abstract
+    include Immutable, Abstract
 
     # Run runner
     #
@@ -75,6 +74,6 @@ module Mutant
     #
     # @api private
     #
-    abstract :run
+    abstract_method :run
   end
 end

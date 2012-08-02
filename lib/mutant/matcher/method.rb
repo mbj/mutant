@@ -86,7 +86,7 @@ module Mutant
       #
       # @api private
       #
-      abstract :method
+      abstract_method :method
 
       # Return node classes this matcher matches
       #
@@ -94,7 +94,7 @@ module Mutant
       #
       # @api private
       #
-      abstract :node_class
+      abstract_method :node_class
 
       # Check if node is matched
       #
@@ -160,7 +160,7 @@ module Mutant
       #
       # @api private
       #
-      abstract :matched_node
+      abstract_method :matched_node
 
       # Return subject
       #

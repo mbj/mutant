@@ -16,7 +16,9 @@ Gem::Specification.new do |gem|
   gem.test_files       = `git ls-files -- spec`.split("\n")
   gem.extra_rdoc_files = %w[TODO]
 
-  gem.add_dependency('to_source', '~> 0.1.3')
-  gem.add_dependency('ice_nine', '~> 0.4.0')
+  gem.add_runtime_dependency('to_source', '~> 0.1.3')
+  gem.add_runtime_dependency('ice_nine',  '~> 0.4.0')
   gem.add_runtime_dependency('backports', '~> 2.6')
+  gem.add_runtime_dependency('immutable', '~> 0.0.1')
+  gem.add_runtime_dependency('abstract',  '~> 0.0.1')
 end

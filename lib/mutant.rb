@@ -1,4 +1,5 @@
 require 'immutable'
+require 'abstract'
 require 'securerandom'
 require 'to_source'
 require 'ice_nine'
@@ -33,7 +34,6 @@ module Mutant
   end
 end
 
-require 'mutant/support/abstract'
 require 'mutant/random'
 require 'mutant/runner'
 #require 'mutant/runner/rspec'

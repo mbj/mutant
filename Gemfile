@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'immutable', :git => 'https://github.com/mbj/immutable'
+gem 'abstract',  :git => 'https://github.com/mbj/abstract'
 
 # Until there is a release with explicit sends to self fix
 gem 'to_source', :git => 'https://github.com/mbj/to_source'

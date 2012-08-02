@@ -1,8 +1,7 @@
 module Mutant
   # Generator for mutations
   class Mutator
-    include Immutable
-    extend Abstract
+    include Immutable, Abstract
 
     # Enumerate mutations on node
     #
@@ -65,7 +64,7 @@ module Mutant
     #
     # @api private
     #
-    abstract :dispatch
+    abstract_method :dispatch
 
     # Append node to generated mutations if node does not equal orignal node
     #

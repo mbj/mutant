@@ -1,8 +1,7 @@
 module Mutant
   # An abstract context where mutations can be appied to.
   class Context
-    include Immutable
-    extend Abstract
+    include Immutable, Abstract
 
     # Return root ast for mutated node
     #
@@ -12,6 +11,6 @@ module Mutant
     #
     # @api private
     #
-    abstract :root
+    abstract_method :root
   end
 end
