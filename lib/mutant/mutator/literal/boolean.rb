@@ -23,43 +23,23 @@ module Mutant
         #
         # @api private
         #
-        abstract_method :inverse
+        def inverse
+          new(self.class::INVERSE_CLASS)
+        end
 
         # Represent mutations of true literal
         class TrueLiteral < Boolean
+          INVERSE_CLASS = Rubinius::AST::FalseLiteral
 
           handle(Rubinius::AST::TrueLiteral)
-      
-        private
-
-          # Return inverse
-          #
-          # @return [Rubinius::AST::FalseLiteral]
-          #
-          # @api private
-          #
-          def inverse
-            new(Rubinius::AST::FalseLiteral)
-          end
         end
 
 
         # Represent mutations of false literal
         class FalseLiteral < Boolean
+          INVERSE_CLASS = Rubinius::AST::TrueLiteral
 
           handle(Rubinius::AST::FalseLiteral)
-      
-        private
-
-          # Return inverse class
-          #
-          # @return [Rubinius::AST::TrueLiteral]
-          #
-          # @api private
-          #
-          def inverse
-            new(Rubinius::AST::TrueLiteral)
-          end
         end
       end
     end
