@@ -36,7 +36,7 @@ end
 
 require 'mutant/random'
 require 'mutant/runner'
-#require 'mutant/runner/rspec'
+require 'mutant/runner/rspec'
 require 'mutant/mutator'
 require 'mutant/mutator/registry'
 require 'mutant/mutator/literal'
