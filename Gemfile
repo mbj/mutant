@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'immutable', :git => 'https://github.com/mbj/immutable'
+gem 'immutable', :git => 'https://github.com/dkubb/immutable'
 gem 'abstract',  :git => 'https://github.com/mbj/abstract'
 
 # Until there is a release with explicit sends to self fix
