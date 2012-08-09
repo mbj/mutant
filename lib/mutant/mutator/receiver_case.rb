@@ -1,7 +1,7 @@
 module Mutant
   class Mutator
     # Mutator for Rubinius::AST::When nodes
-    class When < Mutator
+    class When < self
 
       handle(Rubinius::AST::When)
 
@@ -33,7 +33,7 @@ module Mutant
     end
 
     # Mutator for Rubinius::AST::ReceiverCase nodes
-    class ReceiverCase < Mutator
+    class ReceiverCase < self
 
       handle(Rubinius::AST::ReceiverCase)
 

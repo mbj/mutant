@@ -1,8 +1,8 @@
 module Mutant
   class Mutator
-    class Literal < Mutator
+    class Literal < self
       # Mutator for regexp literal AST nodes
-      class Regex < Literal
+      class Regex < self
 
         handle(Rubinius::AST::RegexLiteral)
 

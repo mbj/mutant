@@ -1,7 +1,7 @@
 module Mutant
   class Context
     # Constant context for mutation (Class or Module)
-    class Constant < Context
+    class Constant < self
       include Immutable
 
       private_class_method :new

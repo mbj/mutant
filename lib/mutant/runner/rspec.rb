@@ -1,7 +1,7 @@
 module Mutant
   class Runner
     # Simple runner for rspec tests
-    class Rspec < Runner
+    class Rspec < self
 
       # Return error stream
       #

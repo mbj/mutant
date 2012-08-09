@@ -1,7 +1,7 @@
 module Mutant
   class Mutator
     # Abstract mutator for literal AST nodes
-    class Literal < Mutator
+    class Literal < self
 
     private
 

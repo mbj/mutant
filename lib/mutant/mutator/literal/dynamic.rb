@@ -2,7 +2,7 @@ module Mutant
   class Mutator
     class Literal
       # Abstract mutations on dynamic literals
-      class Dynamic < Literal
+      class Dynamic < self
 
       private
 

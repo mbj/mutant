@@ -1,8 +1,8 @@
 module Mutant
   class Mutator
-    class Literal < Mutator
+    class Literal < self
       # Abstract mutator for boolean literals
-      class Boolean < Literal
+      class Boolean < self
 
       private
 
@@ -28,7 +28,7 @@ module Mutant
         end
 
         # Represent mutations of true literal
-        class TrueLiteral < Boolean
+        class TrueLiteral < self
           INVERSE_CLASS = Rubinius::AST::FalseLiteral
 
           handle(Rubinius::AST::TrueLiteral)
@@ -36,7 +36,7 @@ module Mutant
 
 
         # Represent mutations of false literal
-        class FalseLiteral < Boolean
+        class FalseLiteral < self
           INVERSE_CLASS = Rubinius::AST::TrueLiteral
 
           handle(Rubinius::AST::FalseLiteral)

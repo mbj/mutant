@@ -2,7 +2,7 @@ module Mutant
   class Mutator
     class Literal
       # Abstract literal range mutator
-      class Range < Literal
+      class Range < self
 
       private
 
@@ -51,7 +51,7 @@ module Mutant
         abstract_method :inverse_class
 
         # Mutator for range exclude literals
-        class Exclude < Range
+        class Exclude < self
 
           handle(Rubinius::AST::RangeExclude)
 
@@ -69,7 +69,7 @@ module Mutant
         end
 
         # Mutator for range literals
-        class Include < Range
+        class Include < self
 
           handle(Rubinius::AST::Range)
 

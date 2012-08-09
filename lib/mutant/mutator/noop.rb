@@ -1,7 +1,7 @@
 module Mutant
   class Mutator
     # Mutator that does do not mutations on ast
-    class Noop < Mutator
+    class Noop < self
 
       # Literal references to self do not need to be mutated. 
       handle(Rubinius::AST::Self)

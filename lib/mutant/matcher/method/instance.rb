@@ -1,8 +1,8 @@
 module Mutant
   class Matcher
-    class Method < Matcher
+    class Method < self
       # Matcher for instance methods
-      class Instance < Method
+      class Instance < self
 
       private
 

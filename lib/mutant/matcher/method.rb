@@ -1,7 +1,7 @@
 module Mutant
   class Matcher
     # Matcher to find AST for method
-    class Method < Matcher
+    class Method < self
       include Immutable
 
       # Parse a method string into filter

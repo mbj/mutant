@@ -1,7 +1,7 @@
 module Mutant
   class Mutator
     # Mutator for Rubinius::AST::If nodes
-    class IfStatement < Mutator
+    class IfStatement < self
 
       handle(Rubinius::AST::If)
 

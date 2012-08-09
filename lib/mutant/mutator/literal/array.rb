@@ -1,8 +1,8 @@
 module Mutant
   class Mutator
-    class Literal < Mutator
+    class Literal < self
       # Mutator for array literals
-      class Array < Literal
+      class Array < self
 
         handle(Rubinius::AST::ArrayLiteral)
 

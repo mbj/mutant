@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     class Method
       # Matcher for singleton methods
-      class Singleton < Method
+      class Singleton < self
 
       private
 

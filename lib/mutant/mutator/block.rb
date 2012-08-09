@@ -1,7 +1,7 @@
 module Mutant
   class Mutator
     # Mutator on AST blocks
-    class Block < Mutator
+    class Block < self
 
       handle Rubinius::AST::Block
 

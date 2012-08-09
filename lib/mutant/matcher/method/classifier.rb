@@ -1,6 +1,6 @@
 module Mutant
   class Matcher
-    class Method < Matcher
+    class Method < self
       # A classifier for input strings
       class Classifier
         extend Immutable

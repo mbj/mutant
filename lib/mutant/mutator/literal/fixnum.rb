@@ -1,8 +1,8 @@
 module Mutant
   class Mutator
-    class Literal < Mutator
+    class Literal < self
       # Represent mutations on fixnum literal
-      class Fixnum < Literal
+      class Fixnum < self
 
         handle(Rubinius::AST::FixnumLiteral)
 
