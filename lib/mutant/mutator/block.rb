@@ -3,7 +3,7 @@ module Mutant
     # Mutator on AST blocks
     class Block < self
 
-      handle Rubinius::AST::Block
+      handle(Rubinius::AST::Block)
 
     private
 
@@ -16,7 +16,11 @@ module Mutant
       def dispatch
         array = node.array
         emit_elements(array)
-        emit_element_presence(array)
+        if array.length > 1
+          emit_element_presence(array)
+        else
+          emit_self([new_nil])
+        end
       end
     end
   end

@@ -3,7 +3,10 @@ shared_examples_for 'a mutator' do
 
   let(:yields)        { []              }
   let(:object)        { described_class }
-  let(:node)          { source.to_ast   }
+
+  unless instance_methods.map(&:to_s).include?('node')
+    let(:node)          { source.to_ast   }
+  end
 
   it_should_behave_like 'a command method'
 
