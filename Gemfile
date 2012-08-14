@@ -5,8 +5,9 @@ gemspec
 gem 'immutable', :git => 'https://github.com/dkubb/immutable.git', :ref => '4a4b7ddd138a32944fa0ddaff8412490cf9dd875'
 gem 'abstract',  :git => 'https://github.com/mbj/abstract.git'
 
-# Until there is a release with explicit sends to self fix
-gem 'to_source', :git => 'https://github.com/mbj/to_source'
+# Remove git version once original to_source is updated
+#gem 'to_source', :git => 'https://github.com/mbj/to_source'
+gem 'to_source', :git => 'https://github.com/mbj/to_source.git'
 
 group :development do
   gem 'rake',    '~> 0.9.2'
