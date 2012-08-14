@@ -17,19 +17,6 @@ module Mutant
         emit_body_mutations
       end
 
-      # Emit body mutations
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def emit_body_mutations
-        Mutator.each(node.body) do |mutation|
-          node = dup_node
-          node.body = mutation
-          emit_unsafe(node)
-        end
-      end
     end
 
     # Mutator for Rubinius::AST::ReceiverCase nodes

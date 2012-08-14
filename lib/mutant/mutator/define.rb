@@ -13,11 +13,7 @@ module Mutant
       # @api private
       #
       def dispatch
-        Mutator.each(node.body) do |mutation|
-          node = dup_node
-          node.body = mutation
-          emit_safe(node)
-        end
+        emit_body_mutations
       end
     end
   end
