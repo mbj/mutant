@@ -9,15 +9,12 @@
     a second time with a differend module name ast node.
 * Allow matches on attr_reader with literal name argument(s)?
 * Allow matches on define_method with literal name argument?
-* Make sure file is set in generated ASTs. Has a stupid default currently.
-* Remove duplicated code in Mutant::Mutator::*
 * Add some kind of a "do not touch me object" that raises on all messages.
   It can be used to make sure each literal value is touched.
 * Replace nil or add "do not touch me object" to literal mutations.
 * Add support remaining dynamic literals
 * Mutate options on Regexp literals
 * Use inheritable alias once (virtus,veritas,mapper,session, ...) support gem is born.
-* Mutations on Rubinius::AST::Self?
 * Support the numerous Rubinius::AST::SendWithArguments mutations.
 * Fix rubinius to allow setting @vcall_style variable in Rubinius::AST::Send nodes.
-* Add mutations on the conditiosn of case statements. (Rubinius::AST::When)
+* Add mutations on the conditions of case statements. (Rubinius::AST::When)
