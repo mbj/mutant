@@ -2,32 +2,40 @@ module Mutant
   class Context
     # Constant context for mutation (Class or Module)
     class Constant < self
-      include Immutable
+      include Immutable, Abstract
 
-      private_class_method :new
+      class Class < self
+        SCOPE_CLASS = Rubinius::AST::ClassScope
+        KEYWORD     = 'class'.freeze
+      end
+
+      class Module < self
+        SCOPE_CLASS = Rubinius::AST::ModuleScope
+        KEYWORD     = 'module'.freeze
+      end
 
       TABLE = {
-        ::Class =>  ['class', Rubinius::AST::ClassScope],
-        ::Module => ['module', Rubinius::AST::ModuleScope]
+        ::Module => Module,
+        ::Class => Class
       }.freeze
 
       # Build constant from class or module
       #
-      # @param [::Class|::Module] value
+      # @param [String] source_path
       #
-      # @return [Constant]
+      # @param [::Class|::Module] constant
+      #
+      # @return [Context::Constant]
       #
       # @api private
       #
-      def self.build(value)
-        arguments = TABLE.fetch(value.class) do
+      def self.build(source_path, constant)
+        klass = TABLE.fetch(constant.class) do
           raise ArgumentError, 'Can only build constant mutation scope from class or module'
-        end
-
-        new(value, *arguments)
+        end.new(source_path, constant)
       end
 
-      # Return ast wrapping mutated node
+      # Return AST wrapping mutated node
       #
       # @return [Rubinius::AST::Script]
       #
@@ -36,8 +44,8 @@ module Mutant
       def root(node)
         root = root_ast
         block = Rubinius::AST::Block.new(1, [node])
-        root.body = @scope_class.new(1, root.name, block)
-        Rubinius::AST::Script.new(root)
+        root.body = scope_class.new(1, root.name, block)
+        script(root)
       end
 
       # Return unqualified name of constant
@@ -67,8 +75,29 @@ module Mutant
       #
       # @api private
       #
-      def initialize(constant, keyword, scope_class)
-        @constant, @keyword, @scope_class = constant, keyword, scope_class
+      def initialize(source_file_path, constant)
+        super(source_file_path)
+        @constant = constant
+      end
+
+      # Return scope AST class
+      #
+      # @return [Rubinius::AST::Node]
+      #
+      # @api private
+      #
+      def scope_class
+        self.class::SCOPE_CLASS
+      end
+
+      # Return keyword
+      #
+      # @return [Rubinius::AST::Node]
+      #
+      # @api private
+      #
+      def keyword
+        self.class::KEYWORD
       end
 
       # Return new root ast
@@ -78,7 +107,7 @@ module Mutant
       # @api private
       #
       def root_ast
-        "#{@keyword} #{qualified_name}; end".to_ast
+        "#{keyword} #{qualified_name}; end".to_ast
       end
 
       # Return qualified name of constant

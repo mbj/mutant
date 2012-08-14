@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mutant::Matcher::Method, '#context' do
   subject { object.context }
 
-  let(:object)  { described_class::Singleton.new('SampleSubjects::ExampleModule', 'foo') }
+  let(:object)  { described_class::Singleton.new('TestApp::Literal', 'string') }
   let(:context) { mock('Context')                                                       }
 
   before do
@@ -13,7 +13,10 @@ describe Mutant::Matcher::Method, '#context' do
   it { should be(context); }
 
   it 'should build context with subject' do
-    Mutant::Context::Constant.should_receive(:build).with(::SampleSubjects::ExampleModule).and_return(context)
+    Mutant::Context::Constant.should_receive(:build).with(
+      File.join(TestApp.root,'lib/test_app/literal.rb'),
+      TestApp::Literal
+    ).and_return(context)
     should be(context)
   end
 

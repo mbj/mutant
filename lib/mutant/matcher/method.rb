@@ -43,7 +43,7 @@ module Mutant
       # @api private
       #
       def context
-        Context::Constant.build(constant)
+        Context::Constant.build(source_path, constant)
       end
 
     private
@@ -121,16 +121,19 @@ module Mutant
       # @api private
       #
       def ast
-        File.read(source_filename).to_ast
+        if source_path == '(mutant)'
+          raise 'Trying to mutate mutated method!'
+        end
+        File.read(source_path).to_ast
       end
 
-      # Return source filename
+      # Return path to source
       #
       # @return [String]
       #
       # @api private
       #
-      def source_filename
+      def source_path
         source_location.first
       end
 

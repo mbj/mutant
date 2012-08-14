@@ -3,11 +3,25 @@ require 'spec_helper'
 describe Mutant::Context::Constant, '#unqualified_name' do
   subject { object.unqualified_name }
 
-  let(:object) { described_class.build(SampleSubjects::ExampleModule) }
+  let(:path)   { mock('Path')                                  }
 
-  it 'should return wrapped constants unqualified name' do
-    should eql('ExampleModule')
+  context 'with top level constant name' do
+    let(:object) { described_class.build(path, TestApp) }
+
+    it 'should return the unqualified name' do
+      should eql('TestApp')
+    end
+
+    it_should_behave_like 'an idempotent method'
   end
 
-  it_should_behave_like 'an idempotent method'
+  context 'with scoped constant name' do
+    let(:object) { described_class.build(path, TestApp::Literal) }
+
+    it 'should return the unqualified name' do
+      should eql('Literal')
+    end
+
+    it_should_behave_like 'an idempotent method'
+  end
 end
