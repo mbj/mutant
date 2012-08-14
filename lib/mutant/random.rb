@@ -18,7 +18,7 @@ module Mutant
     # @api private
     #
     def self.fixnum
-      Random.rand(1000)
+      ::Random.rand(1000)
     end
 
     # Return random float
@@ -28,7 +28,7 @@ module Mutant
     # @api private
     #
     def self.float
-      Random.rand
+      ::Random.rand
     end
   end
 end

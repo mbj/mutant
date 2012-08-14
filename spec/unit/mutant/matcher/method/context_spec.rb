@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mutant::Matcher::Method, '#context' do
   subject { object.context }
 
-  let(:object)  { described_class::Singleton.new('TestApp::Literal', 'string') }
+  let(:object)  { described_class::Singleton.new(TestApp::Literal, 'string') }
   let(:context) { mock('Context')                                                       }
 
   before do

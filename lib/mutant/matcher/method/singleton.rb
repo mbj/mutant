@@ -4,6 +4,17 @@ module Mutant
       # Matcher for singleton methods
       class Singleton < self
 
+        NODE_CLASS = Rubinius::AST::DefineSingletonScope
+
+        def self.extract(constant)
+          return [] 
+          constant.singleton_class.public_instance_methods(false).reject do |method|
+            method.to_sym == :__class_init__
+          end.map do |name|
+            new(constant, name)
+          end
+        end
+
       private
 
         # Return method instance
@@ -14,16 +25,6 @@ module Mutant
         #
         def method
           constant.method(method_name)
-        end
-
-        # Return matched node class
-        #
-        # @return [Rubinius::AST::DefineSingletonScope]
-        #
-        # @api private
-        #
-        def node_class
-          Rubinius::AST::DefineSingletonScope
         end
 
         # Check for stopping AST walk on branch

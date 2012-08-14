@@ -3,6 +3,7 @@ require 'abstract'
 require 'securerandom'
 require 'to_source'
 require 'ice_nine'
+require 'backports'
 
 # Library namespace
 module Mutant
@@ -35,8 +36,6 @@ module Mutant
 end
 
 require 'mutant/random'
-require 'mutant/killer'
-require 'mutant/killer/rspec'
 require 'mutant/mutator'
 require 'mutant/mutator/registry'
 require 'mutant/mutator/literal'
@@ -66,3 +65,7 @@ require 'mutant/matcher/method'
 require 'mutant/matcher/method/singleton'
 require 'mutant/matcher/method/instance'
 require 'mutant/matcher/method/classifier'
+
+require 'mutant/killer'
+require 'mutant/killer/rspec'
+require 'mutant/runner'

@@ -3,7 +3,7 @@ module Mutant
     class Method < self
       # A classifier for input strings
       class Classifier
-        extend Immutable
+        include Immutable
 
         TABLE = {
           '.' => Matcher::Method::Singleton,
@@ -34,8 +34,6 @@ module Mutant
           new(match).matcher
         end
 
-      public
-
         # Return method matcher
         #
         # @return [Matcher::Method]
@@ -43,7 +41,7 @@ module Mutant
         # @api private
         #
         def matcher
-          matcher_class.new(constant_name, method_name)
+          matcher_class.new(constant, method_name)
         end
 
       private
@@ -56,6 +54,18 @@ module Mutant
         #
         def initialize(match)
           @match = match
+        end
+
+        # Return constant 
+        #
+        # @return [Class|Module]
+        #
+        # @api private
+        #
+        def constant
+          constant_name.split('::').inject(::Object) do |parent, name|
+            parent.const_get(name)
+          end
         end
 
         # Return constant name
@@ -90,7 +100,7 @@ module Mutant
 
         # Return matcher class
         #
-        # @return [Class<Matcher>]
+        # @return [Class:Mutant::Matcher]
         #
         # @api private
         #

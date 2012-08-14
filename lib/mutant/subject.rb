@@ -68,9 +68,21 @@ module Mutant
     # @api private
     #
     def insert(node)
-      Loader.load(context.root(node))
+      Loader.load(root(node))
 
       self
+    end
+
+    # Return root AST for node
+    #
+    # @param [Rubinius::AST::Node] node
+    #
+    # @return [Rubinius::AST::Node]
+    #
+    # @api private
+    #
+    def root(node)
+      context.root(node)
     end
 
   private

@@ -17,14 +17,14 @@ describe Mutant::Killer::Rspec, '.run' do
   context 'when run exits zero' do
     let(:exit_status) { 0 }
 
-    its(:killed?) { should be(false)  }
+    its(:fail?) { should be(true)  }
     it { should be_a(described_class) }
   end
 
   context 'when run exits nonzero' do
     let(:exit_status) { 1 }
 
-    its(:killed?) { should be(true)   }
+    its(:fail?) { should be(false)   }
     it { should be_a(described_class) }
   end
 end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Mutant::Killer,'#killed?' do
-  subject { object.killed? }
+describe Mutant::Killer,'#fail?' do
+  subject { object.fail? }
 
   let(:object)           { class_under_test.run(mutation_subject,mutant)  }
   let(:mutation_subject) { mock('Subject', :insert => nil, :reset => nil) }
@@ -21,7 +21,7 @@ describe Mutant::Killer,'#killed?' do
     
     it_should_behave_like 'an idempotent method'
 
-    it { should be(true) }
+    it { should be(false) }
   end
 
   context 'when mutant was NOT killed' do
@@ -29,6 +29,6 @@ describe Mutant::Killer,'#killed?' do
     
     it_should_behave_like 'an idempotent method'
 
-    it { should be(false) }
+    it { should be(true) }
   end
 end

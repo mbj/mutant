@@ -13,7 +13,7 @@ describe Mutant,'rspec integration' do
       subject.each do |mutation|
         Mutant::Killer::Rspec.nest do 
           runner =  Mutant::Killer::Rspec.run(subject,mutation)
-          runner.killed?.should be(true)
+          runner.fail?.should be(false)
         end
       end
     end
@@ -22,7 +22,7 @@ describe Mutant,'rspec integration' do
       subject.each do |mutation|
         Mutant::Killer::Rspec.nest do 
           runner =  Mutant::Killer::Rspec.run(subject,mutation)
-          runner.killed?.should be(false)
+          runner.fail?.should be(true)
         end
       end
     end

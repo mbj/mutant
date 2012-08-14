@@ -39,8 +39,8 @@ module Mutant
     #
     # @api private
     #
-    def killed?
-      @killed
+    def fail?
+      !@killed
     end
 
   private

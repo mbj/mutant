@@ -46,6 +46,20 @@ module Mutant
         Context::Constant.build(source_path, constant)
       end
 
+      # Initialize method filter
+      #
+      # @param [Class|Module] constant
+      # @param [Symbol] method_name
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def initialize(constant, method_name)
+        raise if constant.kind_of?(String)
+        @constant, @method_name = constant, method_name.to_sym
+      end
+
     private
 
       # Return method name
@@ -57,27 +71,23 @@ module Mutant
       attr_reader :method_name
       private :method_name
 
+      # Return constant
+      #
+      # @return [Class|Module]
+      #
+      # @api private
+      #
+      attr_reader :constant
+      private :constant
+
       # Return constant name
       #
       # @return [String]
       #
       # @api private
       #
-      attr_reader :constant_name
-      private :constant_name
-
-
-      # Initialize method filter
-      #
-      # @param [String] constant_name
-      # @param [Symbol] method_name
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(constant_name, method_name)
-        @constant_name, @method_name = constant_name, method_name
+      def constant_name
+        @constant.name
       end
 
       # Return method
@@ -94,7 +104,9 @@ module Mutant
       #
       # @api private
       #
-      abstract_method :node_class
+      def node_class
+        self.class::NODE_CLASS
+      end
 
       # Check if node is matched
       #
@@ -109,7 +121,7 @@ module Mutant
       # @api private
       #
       def match?(node)
-        node.line  == source_file_line &&
+        node.line  == source_line &&
         node.class == node_class &&
         node.name  == method_name
       end
@@ -121,9 +133,6 @@ module Mutant
       # @api private
       #
       def ast
-        if source_path == '(mutant)'
-          raise 'Trying to mutate mutated method!'
-        end
         File.read(source_path).to_ast
       end
 
@@ -143,7 +152,7 @@ module Mutant
       #
       # @api private
       #
-      def source_file_line
+      def source_line
         source_location.last
       end
 
@@ -181,19 +190,6 @@ module Mutant
           Subject.new(context, node)
         end
       end
-
-      # Return constant
-      #
-      # @return [Class|Module]
-      #
-      # @api private
-      #
-      def constant
-        constant_name.split('::').inject(::Object) do |parent, name|
-          parent.const_get(name)
-        end
-      end
-
       memoize :subject
     end
   end

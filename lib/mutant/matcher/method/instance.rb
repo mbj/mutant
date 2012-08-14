@@ -4,6 +4,14 @@ module Mutant
       # Matcher for instance methods
       class Instance < self
 
+        NODE_CLASS = Rubinius::AST::Define
+
+        def self.extract(constant)
+          constant.public_instance_methods(false).map do |name|
+            new(constant, name)
+          end
+        end
+
       private
 
         # Return method instance
@@ -14,16 +22,6 @@ module Mutant
         #
         def method
           constant.instance_method(method_name)
-        end
-
-        # Return matched node class
-        #
-        # @return [Rubinius::AST::Define]
-        #
-        # @api private
-        #
-        def node_class
-          Rubinius::AST::Define
         end
 
         # Return matched node
