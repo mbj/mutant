@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Runner,'.run' do
+describe Mutant::Killer,'.run' do
   subject { class_under_test.run(mutation_subject,mutant) }
 
   let(:mutation_subject) { mock('Subject', :insert => nil, :reset => nil) }

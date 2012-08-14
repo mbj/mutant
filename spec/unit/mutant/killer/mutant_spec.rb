@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Runner,'#mutant' do
+describe Mutant::Killer,'#mutant' do
   subject { object.mutant }
 
   let(:object)           { class_under_test.run(mutation_subject, mutant) }

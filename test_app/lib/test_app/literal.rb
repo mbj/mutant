@@ -5,7 +5,19 @@ module TestApp
       true
     end
 
+    def self.freeze
+      raise
+    end
+
     def string
+      'string'
+    end
+
+    def uncovered_string
+      'string'
+    end
+
+    def self.string
       'string'
     end
 

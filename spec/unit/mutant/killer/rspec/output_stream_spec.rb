@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Runner::Rspec,'#output_stream' do
+describe Mutant::Killer::Rspec,'#output_stream' do
   subject { object.output_stream }
 
   let(:object)           { described_class.run(mutation_subject,mutant)  }

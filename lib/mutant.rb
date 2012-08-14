@@ -35,8 +35,8 @@ module Mutant
 end
 
 require 'mutant/random'
-require 'mutant/runner'
-require 'mutant/runner/rspec'
+require 'mutant/killer'
+require 'mutant/killer/rspec'
 require 'mutant/mutator'
 require 'mutant/mutator/registry'
 require 'mutant/mutator/literal'

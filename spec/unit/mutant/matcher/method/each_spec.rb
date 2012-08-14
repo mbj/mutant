@@ -10,6 +10,10 @@ describe Mutant::Matcher::Method, '#each' do
         node
       end
 
+      define_method(:method) do
+        TestApp::Literal.instance_method(:string)
+      end
+
       define_method(:constant) do
         ::SampleSubjects::ExampleModule
       end

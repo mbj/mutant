@@ -7,11 +7,11 @@ class CodeLoadingSubject
 end
 
 describe Mutant, 'code loading' do
-  let(:context) { Mutant::Context::Constant.build(CodeLoadingSubject) }
-  let(:node)    { 'def foo; :bar; end'.to_ast                         }
-  let(:root)    { context.root(node)                                  }
-                           
-  subject       { Mutant::Loader.load(root)                           }
+  let(:context) { Mutant::Context::Constant.build("/some/path",CodeLoadingSubject) }
+  let(:node)    { 'def foo; :bar; end'.to_ast                                      }
+  let(:root)    { context.root(node)                                               }
+                                                                           
+  subject       { Mutant::Loader.load(root)                                        }
 
   before { subject }
 

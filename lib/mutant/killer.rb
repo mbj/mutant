@@ -1,6 +1,6 @@
 module Mutant
-  # Abstract runner for tests
-  class Runner
+  # Abstract runner for mutant killers
+  class Killer
     include Immutable, Abstract
 
     # Run runner

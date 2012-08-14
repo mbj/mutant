@@ -59,6 +59,20 @@ module Mutant
       self
     end
 
+    # Insert AST node under context
+    #
+    # @param [Rubinius::AST::Node] node
+    #
+    # @return [self]
+    #
+    # @api private
+    #
+    def insert(node)
+      Loader.load(context.root(node))
+
+      self
+    end
+
   private
 
     # Initialize subject
@@ -75,20 +89,6 @@ module Mutant
     #
     def initialize(context, node)
       @context, @node = context, node
-    end
-
-    # Insert AST node under context
-    #
-    # @param [Rubinius::AST::Node] node
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    def insert(node)
-      Loader.load(context.root(node))
-
-      self
     end
   end
 end

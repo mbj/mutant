@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require 'rspec'
-
 require 'test_app'
 
 # require spec support files and shared behavior

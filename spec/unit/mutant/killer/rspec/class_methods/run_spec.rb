@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Mutant::Runner::Rspec, '.run' do
+describe Mutant::Killer::Rspec, '.run' do
   subject { object.run(context, mutant) }
 
-  let(:context) { mock('Context') }
-  let(:mutant)  { mock('Mutant')  }
+  let(:context)      { mock('Context')      }
+  let(:mutant)       { mock('Mutant')       }
 
   let(:object)  { described_class }
 
