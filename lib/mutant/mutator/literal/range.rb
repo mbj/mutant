@@ -36,9 +36,30 @@ module Mutant
         # @api private
         #
         def emit_range
-          start, finish = node.start, node.finish
+          emit_finish_mutations
+          eemit_start_mutations
+        end
+
+        # Emit range start mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_finish_mutations
+          finish = node.finish
           emit_self(negative_infinity, finish)
           emit_self(nan, finish)
+        end
+
+        # Emit start mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_start_mutations
+          start = node.start
           emit_self(start, infinity)
           emit_self(start, nan)
         end
