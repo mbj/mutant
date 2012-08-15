@@ -72,7 +72,7 @@ module Mutant
         mutant.privately = true
         # TODO: Fix rubinius to allow this as an attr_accessor
         mutant.instance_variable_set(:@vcall_style,true)
-        emit_safe(mutant)
+        emit(mutant)
       end
 
       # Emit mutations

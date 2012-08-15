@@ -16,7 +16,7 @@ module Mutant
         #
         def dispatch
           emit_nil
-          emit(Rubinius::AST::ArrayLiteral, [new_nil])
+          emit_node(Rubinius::AST::ArrayLiteral, [new_nil])
         end
       end
     end

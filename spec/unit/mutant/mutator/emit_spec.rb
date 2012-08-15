@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Mutant::Mutator, '#emit_safe' do
-  subject { object.send(:emit_safe, node) }
+describe Mutant::Mutator, '#emit' do
+  subject { object.send(:emit, node) }
 
   class Block
     attr_reader :arguments

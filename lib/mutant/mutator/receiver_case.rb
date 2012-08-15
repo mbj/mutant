@@ -113,6 +113,7 @@ module Mutant
       # @api private
       #
       def dup_when_branches
+
         when_branches.dup
       end
 

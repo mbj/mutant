@@ -27,7 +27,7 @@ module Mutant
         #
         def emit_special_cases
           [infinity, negative_infinity, nan].each do |value|
-            emit_safe(value)
+            emit(value)
           end
         end
 

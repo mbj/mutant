@@ -15,7 +15,7 @@ module Mutant
         #
         def dispatch
           emit_nil
-          emit_safe(inverse)
+          emit(inverse)
           emit_range
         end
 
