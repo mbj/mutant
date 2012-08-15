@@ -15,10 +15,20 @@ module Mutant
         def dispatch
           emit_nil
           emit_values(values)
-          emit_safe(infinity)
-          emit_safe(negative_infinity)
-          emit_safe(nan)
+          emit_special_cases
           emit_new { new_self(Random.float) }
+        end
+
+        # Emit special cases
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_special_cases
+          [infinity, negative_infinity, nan].each do |value|
+            emit_safe(value)
+          end
         end
 
         # Return values to test against
