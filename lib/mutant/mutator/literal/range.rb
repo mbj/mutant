@@ -37,7 +37,7 @@ module Mutant
         #
         def emit_range
           emit_finish_mutations
-          eemit_start_mutations
+          emit_start_mutations
         end
 
         # Emit range start mutations
