@@ -3,6 +3,7 @@ module Mutant
     class Literal
       # Abstract literal range mutator
       class Range < self
+        include Abstract
 
       private
 
@@ -48,42 +49,21 @@ module Mutant
         #
         # @api private
         #
-        abstract_method :inverse_class
+        def inverse_class
+          self.class::INVERSE_CLASS
+        end
 
         # Mutator for range exclude literals
         class Exclude < self
-
+          INVERSE_CLASS = Rubinius::AST::Range
           handle(Rubinius::AST::RangeExclude)
 
-        private
-
-          # Return inverse class
-          #
-          # @return [Class:Rubnius::AST::Range]
-          #
-          # @api private
-          #
-          def inverse_class
-            Rubinius::AST::Range
-          end
         end
 
-        # Mutator for range literals
+        # Mutator for range include literals
         class Include < self
-
+          INVERSE_CLASS = Rubinius::AST::RangeExclude
           handle(Rubinius::AST::Range)
-
-        private
-
-          # Return inverse class
-          #
-          # @return [Class:Rubnius::AST::RangeExclude]
-          #
-          # @api private
-          #
-          def inverse_class
-            Rubinius::AST::RangeExclude
-          end
         end
       end
     end
