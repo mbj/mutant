@@ -3,6 +3,8 @@ module Mutant
     class Define < self
 
       handle(Rubinius::AST::Define)
+      handle(Rubinius::AST::DefineSingleton)
+      handle(Rubinius::AST::DefineSingletonScope)
 
     private
 

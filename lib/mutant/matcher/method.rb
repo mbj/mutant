@@ -86,34 +86,6 @@ module Mutant
       #
       abstract_method :method
 
-      # Return node classes this matcher matches
-      #
-      # @return [Rubinius::AST::Node]
-      #
-      # @api private
-      #
-      def node_class
-        self.class::NODE_CLASS
-      end
-
-      # Check if node is matched
-      #
-      # @param [Rubinius::AST::Node] node
-      #
-      # @return [true]
-      #   returns true if node matches method
-      #
-      # @return [false]
-      #   returns false if node NOT matches method
-      #
-      # @api private
-      #
-      def match?(node)
-        node.line  == source_line &&
-        node.class == node_class &&
-        node.name  == method_name
-      end
-
       # Return full ast
       #
       # @return [Rubinius::AST::Node]
@@ -178,6 +150,21 @@ module Mutant
         Subject.new(context, node)
       end
       memoize :subject
+
+      # Return matched node
+      #
+      # @return [Rubinus::AST::Node]
+      #
+      # @api private
+      #
+      def matched_node
+        last_match = nil
+        ast.walk do |predicate, node|
+          last_match = node if match?(node)
+          predicate
+        end
+        last_match
+      end
     end
   end
 end

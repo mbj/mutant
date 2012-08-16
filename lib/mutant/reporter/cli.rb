@@ -38,7 +38,7 @@ module Mutant
         if killer.fail?
           @io.puts(colorize(Color::RED, "!!! Uncovered Mutation !!!"))
           differ = Differ.new(killer.original_source,killer.mutation_source)
-          diff = color? ? differ.colorized_diff : color
+          diff = color? ? differ.colorized_diff : differ.diff
           @io.puts(diff)
           @io.puts
         end

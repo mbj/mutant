@@ -15,6 +15,14 @@ describe Mutant, 'method matching' do
   let(:defaults) { {} }
 
   context 'on instance methods' do
+    def name(node)
+      node.name
+    end
+
+    def arguments(node)
+      node.arguments
+    end
+
     let(:pattern) { 'Foo#bar' }
     let(:defaults) do
       {
@@ -155,9 +163,17 @@ describe Mutant, 'method matching' do
     let(:defaults) do
       {
         :scope        => Foo,
-        :node_class   => Rubinius::AST::DefineSingletonScope,
+        :node_class   => Rubinius::AST::DefineSingleton,
         :method_arity => 0
       }
+    end
+
+    def name(node)
+      node.body.name
+    end
+
+    def arguments(node)
+      node.body.arguments
     end
 
     context 'when defined on self' do

@@ -4,8 +4,6 @@ module Mutant
       # Matcher for instance methods
       class Instance < self
 
-        NODE_CLASS = Rubinius::AST::Define
-
         # Extract instance method matchers from scope
         #
         # @param [Class|Module] scope
@@ -31,7 +29,26 @@ module Mutant
         def identification
           "#{scope.name}##{method_name}"
         end
+
       private
+
+        # Check if node is matched
+        #
+        # @param [Rubinius::AST::Node] node
+        #
+        # @return [true]
+        #   returns true if node matches method
+        #
+        # @return [false]
+        #   returns false if node NOT matches method
+        #
+        # @api private
+        #
+        def match?(node)
+          node.line  == source_line &&
+          node.class == Rubinius::AST::Define  &&
+          node.name  == method_name
+        end
 
         # Return method instance
         #
@@ -43,20 +60,6 @@ module Mutant
           scope.instance_method(method_name)
         end
 
-        # Return matched node
-        #
-        # @return [Rubinus::AST::Define]
-        #
-        # @api private
-        #
-        def matched_node
-          last_match = nil
-          ast.walk do |predicate, node|
-            last_match = node if match?(node)
-            predicate
-          end
-          last_match
-        end
       end
     end
   end

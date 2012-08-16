@@ -18,7 +18,7 @@ shared_examples_for 'a method match' do
   end
 
   it 'should have correct method name' do
-    node.name.should eql(method_name)
+    name(node).should eql(method_name)
   end
 
   it 'should have correct line number' do
@@ -26,7 +26,7 @@ shared_examples_for 'a method match' do
   end
 
   it 'should have correct arity' do
-    node.arguments.required.length.should eql(method_arity)
+    arguments(node).required.length.should eql(method_arity)
   end
 
   it 'should have correct scope in context' do
