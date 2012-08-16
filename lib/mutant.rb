@@ -35,6 +35,8 @@ module Mutant
   end
 end
 
+require 'mutant/support/method_object'
+
 require 'mutant/random'
 require 'mutant/mutator'
 require 'mutant/mutator/registry'
