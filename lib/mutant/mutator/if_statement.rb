@@ -65,11 +65,11 @@ module Mutant
       #
       # @api private
       #
-      # Using '!' instead of :! since syntax highlighting in vim does not 
+      # Using :'!' instead of :! since syntax highlighting in vim does not 
       # capture literal symbol.
       #
       def invert(node)
-        if Mutant.on_18?
+        if Helper.on_18?
           return new(Rubinius::AST::Not,node)
         end
 

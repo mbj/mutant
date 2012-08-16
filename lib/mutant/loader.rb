@@ -24,7 +24,7 @@ module Mutant
     # @api private
     #
     def initialize(root)
-      @root = Mutant.deep_clone(root)
+      @root = Helper.deep_clone(root)
       Rubinius.run_script(compiled_code)
     end
 

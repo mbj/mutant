@@ -10,36 +10,10 @@ require 'pp'
 
 # Library namespace
 module Mutant
-
-  # Return deep clone of object
-  #
-  # @param [Object] object
-  #
-  # @return [Object] object
-  #
-  # @api private
-  #
-  def self.deep_clone(object)
-    Marshal.load(Marshal.dump(object))
-  end
-  
-  # Check for ruby-1.8 mode
-  #
-  # @return [true]
-  #   returns true if running under 1.8 mode
-  #
-  # @return [false]
-  #   returns false otherwise
-  #
-  # @api private
-  #
-  def self.on_18?
-    RUBY_VERSION == '1.8.7'
-  end
 end
 
 require 'mutant/support/method_object'
-
+require 'mutant/helper'
 require 'mutant/random'
 require 'mutant/mutator'
 require 'mutant/mutation'

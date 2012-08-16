@@ -55,9 +55,7 @@ module Mutant
       end
 
       @reporter = options.fetch(:reporter, Reporter::Null)
-
       @errors = []
-
       run
     end
 
