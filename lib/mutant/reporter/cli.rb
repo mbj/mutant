@@ -11,7 +11,7 @@ module Mutant
       # @api private
       #
       def subject(subject)
-        @io.puts("Found subject: #{subject.identification}")
+        @io.puts("Subject: #{subject.identification}")
       end
 
       # Report mutations 
@@ -35,14 +35,15 @@ module Mutant
       # @api private
       #
       def killer(killer)
-        @io.puts('Killer: %s / %02.2fs' % [killer.identification,killer.runtime])
-
         if killer.fail?
-          @io.puts "Uncovered mutation"
-          @io.puts "=== Original ===\n#{killer.original_source}"
+          @io.puts(colorize(Color::RED, "!!! Uncovered Mutation !!!"))
+          differ = Differ.new(killer.original_source,killer.mutation_source)
+          diff = color? ? differ.colorized_diff : color
+          @io.puts(diff)
           @io.puts
-          @io.puts "=== Mutation ===\n#{killer.mutation_source}"
         end
+
+        self
       end
 
     private 
@@ -58,6 +59,47 @@ module Mutant
       def initialize(io)
         @io = io
       end
+
+      # Test for colored output
+      #
+      # @return [true]
+      #   returns true if output is colored
+      #
+      # @return [false]
+      #   returns false otherwise
+      #
+      # @api private
+      #
+      def color?
+        tty?
+      end
+
+      # Colorize message
+      #
+      # @param [Color] color
+      # @param [String] message
+      #
+      # @api private
+      #
+      def colorize(color, message)
+        color = Color::NONE unless color?
+        color.format(message)
+      end
+
+      # Test for output to tty
+      #
+      # @return [true]
+      #   returns true if output is a tty
+      # 
+      # @return [false]
+      #   returns false otherwise
+      #
+      # @api private
+      #
+      def tty?
+        @io.respond_to?(:tty?) && @io.tty?
+      end
+      memoize :tty?
     end
   end
 end

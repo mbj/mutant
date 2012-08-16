@@ -11,4 +11,5 @@ require 'test_app'
 require 'mutant'
 
 RSpec.configure do |config|
+  config.include(CompressHelper)
 end

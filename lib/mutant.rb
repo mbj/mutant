@@ -4,6 +4,9 @@ require 'securerandom'
 require 'to_source'
 require 'ice_nine'
 require 'backports'
+require 'diff/lcs'
+require 'diff/lcs/hunk'
+require 'pp'
 
 # Library namespace
 module Mutant
@@ -72,6 +75,8 @@ require 'mutant/matcher/method/classifier'
 require 'mutant/killer'
 require 'mutant/killer/rspec'
 require 'mutant/runner'
+require 'mutant/color'
+require 'mutant/differ'
 require 'mutant/reporter'
 require 'mutant/reporter/null'
 require 'mutant/reporter/cli'
