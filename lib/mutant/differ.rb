@@ -12,7 +12,7 @@ module Mutant
     def diff
       output = ''
       @diffs.each do |piece|
-        hunk = Diff::LCS::Hunk.new(@old, @new, piece, CONTEXT_LINES, @length_difference)
+        hunk = Diff::LCS::Hunk.new(@old, @new, piece, CONTEXT_LINES, length_difference)
         output << hunk.diff(FORMAT)
         output << "\n"
       end
@@ -48,9 +48,30 @@ module Mutant
     # @api private
     #
     def initialize(old, new)
-      @new, @old = new.lines.map(&:chomp), old.lines.map(&:chomp)
-      @length_difference = @new.size - @old.size
+      @old, @new = self.class.lines(old), self.class.lines(new)
       @diffs = Diff::LCS.diff(@old, @new)
+    end
+
+    # Return length difference
+    #
+    # @return [Fixnum]
+    #
+    # @api private
+    #
+    def length_difference
+      @new.size - @old.size
+    end
+
+    # Break up source into lines
+    #
+    # @param [String] source
+    #
+    # @return [Array<String>]
+    #
+    # @api private
+    #
+    def self.lines(source)
+      source.lines.map { |line| line.chomp }
     end
 
     # Return colorized diff line
