@@ -1,35 +1,31 @@
 module Mutant
+  # Class to create diffs from source code
   class Differ
     include Immutable
 
-    def initialize(old, new)
-      @new, @old = new.lines.map(&:chomp), old.lines.map(&:chomp)
-      @diffs = Diff::LCS.diff(@old, @new)
-    end
-
-    def format
-      :unified
-    end
-
-    def context_lines
-      3
-    end
-
-    def length_difference
-      @new.size - @old.size
-    end
-
+    # Return source diff 
+    #
+    # @return [String]
+    #
+    # @api private
+    #
     def diff
       output = ''
       @diffs.each do |piece|
-        hunk = Diff::LCS::Hunk.new(@old, @new, piece, context_lines, length_difference)
-        output << hunk.diff(format)
+        hunk = Diff::LCS::Hunk.new(@old, @new, piece, CONTEXT_LINES, @length_difference)
+        output << hunk.diff(FORMAT)
         output << "\n"
       end
       output
     end
     memoize :diff
 
+    # Return colorized source diff 
+    #
+    # @return [String]
+    #
+    # @api private
+    #
     def colorized_diff
       diff.lines.map do |line|
         self.class.colorize_line(line)
@@ -37,6 +33,35 @@ module Mutant
     end
     memoize :colorized_diff
 
+  private
+
+    FORMAT = :unified
+    CONTEXT_LINES = 3
+
+    # Initialize differ object
+    #
+    # @param [String] old 
+    # @param [String] new
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def initialize(old, new)
+      @new, @old = new.lines.map(&:chomp), old.lines.map(&:chomp)
+      @length_difference = @new.size - @old.size
+      @diffs = Diff::LCS.diff(@old, @new)
+    end
+
+    # Return colorized diff line
+    #
+    # @param [String] line
+    #
+    # @return [String]
+    #   returns colorized line
+    #
+    # @api private
+    #
     def self.colorize_line(line)
       case line[0].chr
       when '+'

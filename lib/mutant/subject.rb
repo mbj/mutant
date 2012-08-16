@@ -86,6 +86,11 @@ module Mutant
     memoize :original_root
 
     # Reset subject into original state
+    #
+    # @return [self]
+    #
+    # @api private
+    #
     def reset
       Loader.run(original_root)
     end

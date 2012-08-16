@@ -14,9 +14,9 @@ module Mutant
         @io.puts("Subject: #{subject.identification}")
       end
 
-      # Report mutations 
+      # Report mutation
       #
-      # @param [Mutation] mutations
+      # @param [Mutation] mutation
       #
       # @return [self]
       #
@@ -80,6 +80,10 @@ module Mutant
       # @param [String] message
       #
       # @api private
+      #
+      # @return [String]
+      #   returns colorized string if color is enabled
+      #   returns unmodified message otherwise
       #
       def colorize(color, message)
         color = Color::NONE unless color?

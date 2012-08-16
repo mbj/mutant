@@ -4,7 +4,7 @@ module Mutant
     include Immutable, Abstract
     extend MethodObject
 
-    # Check if mutant was killed
+    # Test for kill failure
     #
     # @return [true]
     #   returns true when mutant was killed
@@ -30,6 +30,8 @@ module Mutant
     #
     # @return [String]
     #
+    # @api private
+    #
     def original_source
       mutation.original_source
     end
@@ -38,16 +40,23 @@ module Mutant
     #
     # @return [String]
     #
+    # @api private
+    #
     def mutation_source
       mutation.source
     end
 
   private
 
+    # Return mutation to kill
+    #
+    # @return [Mutation]
+    #
+    # @api private
     attr_reader :mutation
     private :mutation
 
-    # Initialize runner and run the test
+    # Initialize killer object
     #
     # @param [Mutation] mutation
     #

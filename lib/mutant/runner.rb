@@ -4,17 +4,47 @@ module Mutant
     include Immutable
     extend MethodObject
 
+    # Return killers with errors
+    #
+    # @return [Enumerable<Killer>]
+    #
+    # @api private
+    #
     attr_reader :errors
 
+    # Test for failure
+    #
+    # @return [true]
+    #   returns true when there are left mutations
+    #
+    # @return [false]
+    #   returns false othewise
+    #
+    # @api private
+    #
     def fail?
       !errors.empty?
     end
 
   private
 
+    # Return reporter
+    #
+    # @return [Reporter]
+    #
+    # @api private
+    #
     attr_reader :reporter
     private :reporter
 
+    # Initialize runner object
+    #
+    # @param [Hash] options
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
     def initialize(options)
       @killer = options.fetch(:killer) do
         raise ArgumentError, 'Missing :killer in options'
@@ -31,6 +61,12 @@ module Mutant
       run
     end
 
+    # Run mutation killers on subjects
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
     def run
       @subjects = subjects.each do |subject|
         reporter.subject(subject)
@@ -38,6 +74,14 @@ module Mutant
       end
     end
 
+    # Run mutation killers on subject
+    #
+    # @param [Subject] subject
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
     def run_subject(subject)
       subject.each do |mutation|
         reporter.mutation(mutation)
@@ -46,6 +90,14 @@ module Mutant
       subject.reset
     end
 
+    # Run killer on mutation
+    #
+    # @param [Mutation] mutation
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
     def kill(mutation)
       killer = @killer.run(mutation)
       reporter.killer(killer)
