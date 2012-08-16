@@ -14,10 +14,22 @@ module Mutant
         #
         def self.each(scope)
           return to_enum unless block_given?
+          singleton_methods(scope).each do |name|
+            yield new(scope, name)
+          end
+        end
+
+        # Return singleton methods defined on scope
+        #
+        # @param [Class|Module] scope
+        #
+        # @return [Enumerable<Symbol>]
+        #
+        # @api private
+        #
+        def self.singleton_methods(scope)
           scope.singleton_class.public_instance_methods(false).reject do |method|
             method.to_sym == :__class_init__
-          end.each do |name|
-            yield new(scope, name)
           end
         end
 
@@ -43,7 +55,7 @@ module Mutant
           scope.method(method_name)
         end
 
-        # Check if node is matched
+        # Test for node match
         #
         # @param [Rubinius::AST::Node] node
         #
@@ -56,12 +68,45 @@ module Mutant
         # @api private
         #
         def match?(node)
-          node.line  == source_line &&
           node.class == Rubinius::AST::DefineSingleton  &&
-          node.body.name  == method_name && match_receiver?(node)
+          line?(node)                                   && 
+          name?(node)                                   && 
+          receiver?(node)
         end
 
-        # Check if receiver matches
+        # Test for line match
+        #
+        # @param [Rubinius::AST::Node] node
+        #
+        # @return [true]
+        #   returns true if node matches source line
+        #
+        # @return [false]
+        #   returns false otherwise
+        #
+        # @api private
+        #
+        def line?(node)
+          node.line  == source_line
+        end
+
+        # Test for name match
+        #
+        # @param [Rubinius::AST::DefineSingleton] node
+        #
+        # @return [true]
+        #   returns true if node name matches
+        #
+        # @return [false]
+        #   returns false otherwise
+        #
+        # @api private
+        #
+        def name?(node)
+          node.body.name == method_name 
+        end
+
+        # Test for receiver match
         #
         # @param [Rubinius::AST::DefineSingleton] node
         #
@@ -73,19 +118,19 @@ module Mutant
         #
         # @api private
         #
-        def match_receiver?(node)
+        def receiver?(node)
           receiver = node.receiver
           case receiver
           when Rubinius::AST::Self
             true
           when Rubinius::AST::ConstantAccess
-            match_receiver_name?(receiver)
+            receiver_name?(receiver)
           else
             raise 'Can only match receiver on Rubinius::AST::Self or Rubinius::AST::ConstantAccess'
           end
         end
 
-        # Check if reciver name matches context
+        # Test if reciver name matches context
         #
         # @param [Rubinius::AST::Node] node
         #
@@ -97,7 +142,7 @@ module Mutant
         #
         # @api private
         #
-        def match_receiver_name?(node)
+        def receiver_name?(node)
           node.name.to_s == context.unqualified_name
         end
 
