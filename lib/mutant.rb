@@ -39,6 +39,7 @@ require 'mutant/support/method_object'
 
 require 'mutant/random'
 require 'mutant/mutator'
+require 'mutant/mutation'
 require 'mutant/mutator/registry'
 require 'mutant/mutator/literal'
 require 'mutant/mutator/literal/boolean'
