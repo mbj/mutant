@@ -36,11 +36,7 @@ module Mutant
       #
       def killer(killer)
         if killer.fail?
-          @io.puts(colorize(Color::RED, "!!! Uncovered Mutation !!!"))
-          differ = Differ.new(killer.original_source,killer.mutation_source)
-          diff = color? ? differ.colorized_diff : differ.diff
-          @io.puts(diff)
-          @io.puts
+          failure(killer)
         end
 
         self
@@ -58,6 +54,22 @@ module Mutant
       #
       def initialize(io)
         @io = io
+      end
+
+      # Report failure on killer
+      # 
+      # @param [Killer] killer
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def failure(killer)
+        @io.puts(colorize(Color::RED, "!!! Uncovered Mutation !!!"))
+        differ = Differ.new(killer.original_source,killer.mutation_source)
+        diff = color? ? differ.colorized_diff : differ.diff
+        @io.puts(diff)
+        @io.puts
       end
 
       # Test for colored output
