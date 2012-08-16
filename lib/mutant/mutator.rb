@@ -74,9 +74,9 @@ module Mutant
     #
     # @api private
     #
-    def emit_safe(node)
+    def emit(node)
       return self unless new?(node)
-      emit_unsafe(node)
+      emit!(node)
     end
 
     # Maximum amount of tries to generate a new node
@@ -102,7 +102,7 @@ module Mutant
       MAX_TRIES.times do
         node = yield
         if new?(node)
-          emit_unsafe(node)
+          emit!(node)
           return
         end
       end
@@ -118,7 +118,7 @@ module Mutant
     #
     # @api private
     #
-    def emit_unsafe(node)
+    def emit!(node)
       @block.call(node)
 
       self
@@ -158,8 +158,8 @@ module Mutant
     #
     # @api private
     #
-    def emit(node_class, *arguments)
-      emit_safe(new(node_class, *arguments))
+    def emit_node(node_class, *arguments)
+      emit(new(node_class, *arguments))
     end
 
     # Create a new AST node with same class as wrapped node
@@ -201,7 +201,7 @@ module Mutant
     # @api private
     #
     def emit_self(*arguments)
-      emit_safe(new_self(*arguments))
+      emit(new_self(*arguments))
     end
 
     # Emit a new node with wrapping class for each entry in values
@@ -244,7 +244,7 @@ module Mutant
       Mutator.each(node.body) do |mutation|
         node = dup_node
         node.body = mutation
-        emit_unsafe(node)
+        emit(node)
       end
     end
 
@@ -273,7 +273,7 @@ module Mutant
     # @api private
     #
     def emit_nil
-      emit_safe(new_nil)
+      emit(new_nil)
     end
 
     # Return AST representing send

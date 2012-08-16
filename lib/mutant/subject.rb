@@ -1,5 +1,5 @@
 module Mutant
-  # Subject for mutation wraps AST to mutate with its Context 
+  # Subject of mutation
   class Subject
     include Immutable, Enumerable
 
@@ -24,54 +24,43 @@ module Mutant
     # @return [self]
     #   returns self if block given
     #
-    # @return [Enumerator]
+    # @return [Enumerator<Mutation>]
     #   returns eumerator if no block given
     #
     # @api private
     #
-    # FIXME:
-    #   Rubinus <=> Rspec bug
-    #
-    #     Mutator.each(node,&block) 
-    #
-    #   results in rspec expectation mismatch
-    #
     def each
       return to_enum unless block_given?
       Mutator.each(node) do |mutant|
-        yield mutant
+        yield Mutation.new(self, mutant)
       end
 
       self
     end
 
-    # Reset implementation to original
+    # Return subject identicication
     #
-    # This method inserts the original node again.
-    #
-    # @return [self]
+    # @return [String]
     #
     # @api private
     #
-    def reset
-      insert(@node)
-
-      self
+    def identification
+      source_path = context.source_path
+      source_line = node.line
+      "#{source_path}:#{source_line}"
     end
+    memoize :identification
 
-    # Insert AST node under context
+    # Return source representation of ast
     #
-    # @param [Rubinius::AST::Node] node
-    #
-    # @return [self]
+    # @return [Source]
     #
     # @api private
-    #
-    def insert(node)
-      Loader.load(root(node))
-
-      self
+    # 
+    def source
+      @node.to_source
     end
+    memoize :source
 
     # Return root AST for node
     #
@@ -83,6 +72,22 @@ module Mutant
     #
     def root(node)
       context.root(node)
+    end
+
+    # Return root AST node for original AST ndoe
+    #
+    # @return [Rubinius::AST::Node]
+    #
+    # @api private
+    #
+    def original_root
+      root(@node)
+    end
+    memoize :original_root
+
+    # Reset subject into original state
+    def reset
+      Loader.run(original_root)
     end
 
   private

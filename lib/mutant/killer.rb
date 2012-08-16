@@ -2,32 +2,7 @@ module Mutant
   # Abstract runner for mutant killers
   class Killer
     include Immutable, Abstract
-
-    # Run runner
-    #
-    # @api private
-    #
-    # @return [Runner]
-    #
-    def self.run(*args)
-      new(*args)
-    end
-
-    # Return subject of test
-    #
-    # @api private
-    #
-    # @return [Subject]
-    #
-    attr_reader :subject
-
-    # Return mutant tested
-    #
-    # @api private
-    #
-    # @return [Rubnius::AST::Node]
-    #
-    attr_reader :mutant
+    extend MethodObject
 
     # Check if mutant was killed
     #
@@ -43,25 +18,50 @@ module Mutant
       !@killed
     end
 
+    # Return runtime of killer
+    #
+    # @return [Float]
+    #
+    # @api private
+    #
+    attr_reader :runtime
+
+    # Return original source
+    #
+    # @return [String]
+    #
+    def original_source
+      mutation.original_source
+    end
+
+    # Return mutated source
+    #
+    # @return [String]
+    #
+    def mutation_source
+      mutation.source
+    end
+
   private
 
-    private_class_method :new
+    attr_reader :mutation
+    private :mutation
 
     # Initialize runner and run the test
     #
-    # @param [Subject] subject
-    # @param [Rubinius::AST::Node] mutant
+    # @param [Mutation] mutation
     #
     # @return [undefined]
     #
     # @api private
     #
-    def initialize(subject,mutant)
-      @subject,@mutant = subject,mutant
-
-      subject.insert(@mutant)
+    def initialize(mutation)
+      @mutation = mutation
+      @mutation.insert
+      start_time = Time.now
       @killed = run
-      subject.reset
+      end_time = Time.now
+      @runtime = end_time - start_time 
     end
 
     # Run test

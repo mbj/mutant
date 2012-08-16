@@ -18,7 +18,7 @@ describe Mutant, 'method matching' do
     let(:pattern) { 'Foo#bar' }
     let(:defaults) do
       {
-        :constant     => Foo,
+        :scope        => Foo,
         :node_class   => Rubinius::AST::Define,
         :method_name  => :bar,
         :method_arity => 0
@@ -118,7 +118,7 @@ describe Mutant, 'method matching' do
             {
               :method_line => 3,
               :method_name => :baz,
-              :constant => Foo::Bar
+              :scope    => Foo::Bar
             }
           end
 
@@ -140,7 +140,7 @@ describe Mutant, 'method matching' do
             {
               :method_line => 3,
               :method_name => :baz,
-              :constant => Foo::Bar
+              :scope    => Foo::Bar
             }
           end
 
@@ -154,7 +154,7 @@ describe Mutant, 'method matching' do
     let(:pattern) { 'Foo.bar' }
     let(:defaults) do
       {
-        :constant     => Foo,
+        :scope        => Foo,
         :node_class   => Rubinius::AST::DefineSingletonScope,
         :method_arity => 0
       }
@@ -238,7 +238,7 @@ describe Mutant, 'method matching' do
 
         let(:expectation) do
           {
-            :constant     => Bar,
+            :scope        => Bar,
             :method_name  => :baz,
             :method_line  => 4,
             :method_arity => 0

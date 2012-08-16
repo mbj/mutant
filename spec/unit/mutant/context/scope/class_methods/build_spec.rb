@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Mutant::Context::Constant, '.build' do
-  subject { described_class.build(path, constant) }
+describe Mutant::Context::Scope, '.build' do
+  subject { described_class.build(constant, path) }
 
   let(:object)  { described_class }
   let(:context) { mock('Context') }
@@ -23,7 +23,7 @@ describe Mutant::Context::Constant, '.build' do
     let(:constant) { Object.new }
 
     it 'should raise error' do
-      expect { subject }.to raise_error(ArgumentError, 'Can only build constant mutation scope from class or module')
+      expect { subject }.to raise_error(ArgumentError, 'Can only build mutation scope from class or module got: Object')
     end
   end
 end

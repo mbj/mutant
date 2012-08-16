@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe Mutant::Context::Constant, '#unqualified_name' do
+describe Mutant::Context::Scope, '#unqualified_name' do
   subject { object.unqualified_name }
 
-  let(:path)   { mock('Path')                                  }
+  let(:path)   { mock('Path') }
 
   context 'with top level constant name' do
-    let(:object) { described_class.build(path, TestApp) }
+    let(:object) { described_class.build(TestApp, path) }
 
     it 'should return the unqualified name' do
       should eql('TestApp')
@@ -16,7 +16,7 @@ describe Mutant::Context::Constant, '#unqualified_name' do
   end
 
   context 'with scoped constant name' do
-    let(:object) { described_class.build(path, TestApp::Literal) }
+    let(:object) { described_class.build(TestApp::Literal, path) }
 
     it 'should return the unqualified name' do
       should eql('Literal')

@@ -7,7 +7,8 @@ gem 'abstract',  :git => 'https://github.com/mbj/abstract.git'
 
 # Remove git version once original to_source is updated
 #gem 'to_source', :git => 'https://github.com/mbj/to_source'
-gem 'to_source', :git => 'https://github.com/mbj/to_source.git'
+#gem 'to_source', :git => 'https://github.com/mbj/to_source.git'
+gem 'to_source', :path => '../to_source'
 
 group :development do
   gem 'rake',    '~> 0.9.2'

@@ -1,16 +1,17 @@
 require 'spec_helper'
 
 describe Mutant::Killer::Rspec, '.run' do
-  subject { object.run(context, mutant) }
 
-  let(:context)      { mock('Context')      }
-  let(:mutant)       { mock('Mutant')       }
+  subject { object.run(mutation) }
+
+  let(:context)      { mock('Context')  }
+  let(:mutation)     { mock('Mutation') }
 
   let(:object)  { described_class }
 
   before do
-    context.stub(:insert => context)
-    context.stub(:reset => context)
+    mutation.stub(:insert)
+    mutation.stub(:reset)
     RSpec::Core::Runner.stub(:run => exit_status)
   end
 

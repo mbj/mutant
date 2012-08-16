@@ -14,7 +14,7 @@ module Mutant
 
         # Positions of captured regexp groups
         # Freezing fixnums to avoid their singleton classes are patched.
-        CONSTANT_NAME_POSITION = 1.freeze
+        SCOPE_NAME_POSITION = 1.freeze
         SCOPE_SYMBOL_POSITION  = 2.freeze
         METHOD_NAME_POSITION   = 3.freeze
 
@@ -41,7 +41,7 @@ module Mutant
         # @api private
         #
         def matcher
-          matcher_class.new(constant, method_name)
+          matcher_class.new(scope, method_name)
         end
 
       private
@@ -56,26 +56,26 @@ module Mutant
           @match = match
         end
 
-        # Return constant 
+        # Return scope 
         #
         # @return [Class|Module]
         #
         # @api private
         #
-        def constant
-          constant_name.split('::').inject(::Object) do |parent, name|
+        def scope
+          scope_name.split('::').inject(::Object) do |parent, name|
             parent.const_get(name)
           end
         end
 
-        # Return constant name
+        # Return scope name
         #
         # @return [String]
         #
         # @api private
         #
-        def constant_name
-          @match[CONSTANT_NAME_POSITION]
+        def scope_name
+          @match[SCOPE_NAME_POSITION]
         end
 
         # Return method name

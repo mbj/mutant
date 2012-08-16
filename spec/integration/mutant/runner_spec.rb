@@ -8,12 +8,11 @@ describe Mutant, 'runner' do
   end
 
   it 'allows to run mutant over a project' do
-    Mutant::Killer::Rspec.nest do
-      report = Mutant::Runner.run(
-        :pattern => /\ATestApp::/,
-        :killer => Mutant::Killer::Rspec
-      )
-      report.errors.size.should be(18)
-    end
+    runner = Mutant::Runner.run(
+      :pattern => /\ATestApp::/,
+      :killer => Mutant::Killer::Rspec,
+      :reporter => Mutant::Reporter::CLI.new($stdout)
+    )
+    runner.fail?.should be(true)
   end
 end

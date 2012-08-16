@@ -3,25 +3,10 @@ module Mutant
     # Simple runner for rspec tests
     class Rspec < self
 
-      # Return error stream
-      #
-      # @return [StringIO]
-      #
-      # @api private
-      #
-      attr_reader :error_stream
-
-      # Return output stream
-      #
-      # @return [StringIO]
-      #
-      # @api private
-      #
-      attr_reader :output_stream
-
       # Run block in clean rspec environment
       #
-      # @return [self]
+      # @return [Object]
+      #   returns the value of block
       #
       # @api private
       #
@@ -34,11 +19,19 @@ module Mutant
         ::RSpec.instance_variable_set(:@configuration,nil)
 
         yield
-
-        self
       ensure
         ::RSpec.instance_variable_set(:@world,original_world)
         ::RSpec.instance_variable_set(:@configuration,original_configuration)
+      end
+
+      # Return identification
+      #
+      # @return [String]
+      #
+      # @api private
+      # 
+      def identification
+        "rspec:#{mutation.identification}"
       end
 
     private
@@ -65,7 +58,9 @@ module Mutant
       # @api private
       #
       def run
-        !RSpec::Core::Runner.run(command_line_arguments, error_stream, output_stream).zero?
+        self.class.nest do 
+          !RSpec::Core::Runner.run(command_line_arguments, @error_stream, @output_stream).zero?
+        end
       end
 
       # Return command line arguments

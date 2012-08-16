@@ -6,13 +6,32 @@ module Mutant
 
         NODE_CLASS = Rubinius::AST::DefineSingletonScope
 
-        def self.extract(constant)
-          return [] 
-          constant.singleton_class.public_instance_methods(false).reject do |method|
+        # Return matcher enumerable
+        #
+        # @param [Class|Module] scope
+        #
+        # @return [Enumerable<Matcher::Method::Singleton>]
+        #
+        # @api private
+        #
+        def self.each(scope)
+          return to_enum unless block_given?
+          return unless scope.kind_of?(Module)
+          scope.singleton_class.public_instance_methods(false).reject do |method|
             method.to_sym == :__class_init__
           end.map do |name|
-            new(constant, name)
+            new(scope, name)
           end
+        end
+
+        # Return identification
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        def identification
+          "#{scope.name}.#{method_name}"
         end
 
       private
@@ -24,7 +43,7 @@ module Mutant
         # @api private
         #
         def method
-          constant.method(method_name)
+          scope.method(method_name)
         end
 
         # Check for stopping AST walk on branch
@@ -52,7 +71,7 @@ module Mutant
         # @param [Rubinius::AST::DefineSingleton] node
         #
         # @return [true]
-        #   returns true when receiver is self or constant from pattern
+        #   returns true when receiver is self or scope from pattern
         #
         # @return [false]
         #   returns false otherwise
@@ -76,7 +95,7 @@ module Mutant
         # @param [Rubinius::AST::Node] node
         #
         # @return [true]
-        #   returns true when node name matches unqualified constant name
+        #   returns true when node name matches unqualified scope name
         #
         # @return [false]
         #   returns false otherwise

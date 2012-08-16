@@ -11,22 +11,7 @@ module Mutant
   # returns self.
   #
   class Loader
-    private_class_method :new
-
-    # Load an AST into the rubinius VM
-    #
-    # @param [Rubinius::AST::Script] root
-    #   A root AST node to be loaded into the VM
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    def self.load(root)
-      new(root)
-
-      self
-    end
+    extend MethodObject
 
   private
 
@@ -39,8 +24,7 @@ module Mutant
     # @api private
     #
     def initialize(root)
-      @root = root
-      root.file ||= '(mutant)'
+      @root = Mutant.deep_clone(root)
       Rubinius.run_script(compiled_code)
     end
 

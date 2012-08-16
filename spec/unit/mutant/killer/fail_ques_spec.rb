@@ -3,9 +3,14 @@ require 'spec_helper'
 describe Mutant::Killer,'#fail?' do
   subject { object.fail? }
 
-  let(:object)           { class_under_test.run(mutation_subject,mutant)  }
-  let(:mutation_subject) { mock('Subject', :insert => nil, :reset => nil) }
-  let(:mutant)           { mock('Mutant')                                 }
+  let(:object)           { class_under_test.run(mutation) }
+  let(:root)             { mock('Root')                   }
+  let(:mutation)         { mock('Mutation')               }
+
+  before do
+    mutation.stub(:insert)
+    mutation.stub(:reset)
+  end
 
   let(:class_under_test) do
     kill_state = self.kill_state

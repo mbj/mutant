@@ -11,20 +11,18 @@ describe Mutant,'rspec integration' do
 
     Mutant::Matcher::Method.parse('TestApp::Literal#string').each do |subject|
       subject.each do |mutation|
-        Mutant::Killer::Rspec.nest do 
-          runner =  Mutant::Killer::Rspec.run(subject,mutation)
-          runner.fail?.should be(false)
-        end
+        runner =  Mutant::Killer::Rspec.run(mutation)
+        runner.fail?.should be(false)
       end
+      subject.reset
     end
 
     Mutant::Matcher::Method.parse('TestApp::Literal#uncovered_string').each do |subject|
       subject.each do |mutation|
-        Mutant::Killer::Rspec.nest do 
-          runner =  Mutant::Killer::Rspec.run(subject,mutation)
-          runner.fail?.should be(true)
-        end
+        runner =  Mutant::Killer::Rspec.run(mutation)
+        runner.fail?.should be(true)
       end
+      subject.reset
     end
 
   end

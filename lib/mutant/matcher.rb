@@ -11,6 +11,14 @@ module Mutant
     #
     abstract_method :each
 
+    # Return identification
+    #
+    # @return [String
+    #
+    # @api private
+    #
+    abstract_method :identification
+
   private
 
   end

@@ -3,7 +3,7 @@ module Mutant
   class Context
     include Immutable, Abstract
 
-    # Return root ast for mutated node
+    # Return root ast node
     #
     # @param [Rubinius::AST::Node] node
     #
@@ -12,6 +12,14 @@ module Mutant
     # @api private
     #
     abstract_method :root
+
+    # Return source path
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    attr_reader :source_path
 
   private
 

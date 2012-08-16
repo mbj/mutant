@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Mutant::Context::Constant, '#root' do
+describe Mutant::Context::Scope, '#root' do
   subject { object.root(node) }
 
-  let(:object) { described_class.build(path, TestApp::Literal) }
+  let(:object) { described_class.build(TestApp::Literal, path) }
   let(:path)   { mock('Path') }
   let(:node)   { mock('Node') } 
 

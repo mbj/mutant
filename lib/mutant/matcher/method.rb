@@ -35,32 +35,39 @@ module Mutant
         self
       end
 
-      # Return context of matcher
-      #
-      # @return [Context]
-      #   returns the context this matcher matches AST nodes
-      #
-      # @api private
-      #
-      def context
-        Context::Constant.build(source_path, constant)
-      end
+    private
 
       # Initialize method filter
       #
-      # @param [Class|Module] constant
+      # @param [Class|Module] scope
       # @param [Symbol] method_name
       #
       # @return [undefined]
       #
       # @api private
       #
-      def initialize(constant, method_name)
-        raise if constant.kind_of?(String)
-        @constant, @method_name = constant, method_name.to_sym
+      def initialize(scope, method_name)
+        @scope, @method_name = scope, method_name.to_sym
+        @context = Context::Scope.build(@scope, source_path)
       end
 
-    private
+      # Return scope
+      #
+      # @return [Class|Module]
+      #
+      # @api private
+      #
+      attr_reader :scope
+      private :scope
+
+      # Return context
+      #
+      # @return [Context::Scope]
+      #
+      # @api private
+      #
+      attr_reader :context
+      private :context
 
       # Return method name
       #
@@ -70,25 +77,6 @@ module Mutant
       #
       attr_reader :method_name
       private :method_name
-
-      # Return constant
-      #
-      # @return [Class|Module]
-      #
-      # @api private
-      #
-      attr_reader :constant
-      private :constant
-
-      # Return constant name
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def constant_name
-        @constant.name
-      end
 
       # Return method
       #
@@ -186,9 +174,8 @@ module Mutant
       #
       def subject
         node = matched_node
-        if node
-          Subject.new(context, node)
-        end
+        return unless node
+        Subject.new(context, node)
       end
       memoize :subject
     end

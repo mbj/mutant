@@ -6,12 +6,31 @@ module Mutant
 
         NODE_CLASS = Rubinius::AST::Define
 
-        def self.extract(constant)
-          constant.public_instance_methods(false).map do |name|
-            new(constant, name)
+        # Extract instance method matchers from scope
+        #
+        # @param [Class|Module] scope
+        #
+        # @return [Enumerable<Matcher::Method::Instance>]
+        #
+        # @api private
+        #
+        def self.each(scope)
+          return to_enum unless block_given?
+          return unless scope.kind_of?(Module)
+          scope.public_instance_methods(false).map do |name|
+            yield new(scope, name)
           end
         end
 
+        # Return identification
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        def identification
+          "#{scope.name}##{method_name}"
+        end
       private
 
         # Return method instance
@@ -21,7 +40,7 @@ module Mutant
         # @api private
         #
         def method
-          constant.instance_method(method_name)
+          scope.instance_method(method_name)
         end
 
         # Return matched node

@@ -6,7 +6,7 @@ shared_examples_for 'a method match' do
   let(:method_name)       { values.fetch(:method_name)  }
   let(:method_line)       { values.fetch(:method_line)  }
   let(:method_arity)      { values.fetch(:method_arity) }
-  let(:constant)          { values.fetch(:constant)     }
+  let(:scope)             { values.fetch(:scope)        }
   let(:node_class)        { values.fetch(:node_class)   }
                          
   let(:node)              { mutation_subject.node    }
@@ -29,8 +29,8 @@ shared_examples_for 'a method match' do
     node.arguments.required.length.should eql(method_arity)
   end
 
-  it 'should have correct constant in context' do
-    context.send(:constant).should eql(constant)
+  it 'should have correct scope in context' do
+    context.send(:scope).should eql(scope)
   end
 
   it 'should have the correct node class' do
