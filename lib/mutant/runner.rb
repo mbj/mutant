@@ -46,16 +46,11 @@ module Mutant
     # @api private
     #
     def initialize(options)
-      @killer = options.fetch(:killer) do
-        raise ArgumentError, 'Missing :killer in options'
-      end
-
-      @pattern = options.fetch(:pattern) do
-        raise ArgumentError, 'Missing :pattern in options'
-      end
-
+      @killer  = Helper.extract_option(options, :killer)
+      @pattern = Helper.extract_option(options, :pattern) 
       @reporter = options.fetch(:reporter, Reporter::Null)
       @errors = []
+
       run
     end
 
