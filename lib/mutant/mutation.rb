@@ -53,7 +53,7 @@ module Mutant
     # @api private
     #
     def source
-      @node.to_source
+      ToSource.to_source(@node)
     end
     memoize :source
 

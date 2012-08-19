@@ -4,9 +4,6 @@ gemspec
 
 gem 'immutable', :git => 'https://github.com/dkubb/immutable.git', :ref => '4a4b7ddd138a32944fa0ddaff8412490cf9dd875'
 gem 'abstract',  :git => 'https://github.com/mbj/abstract.git'
-
-# Remove git version once original to_source is updated
-#gem 'to_source', :git => 'https://github.com/mbj/to_source'
 gem 'to_source', :git => 'https://github.com/mbj/to_source.git'
 
 group :development do
@@ -19,9 +16,9 @@ group :development do
 end
 
 group :guard do
-  gem 'guard',         '~> 1.2.3'
+  gem 'guard',         '~> 1.3.2'
   gem 'guard-bundler', '~> 1.0.0'
-  gem 'guard-rspec',   '~> 1.2.0'
+  gem 'guard-rspec',   '~> 1.2.1'
 end
 
 group :metrics do
