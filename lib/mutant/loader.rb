@@ -25,16 +25,22 @@ module Mutant
     #
     def initialize(root)
       @root = Helper.deep_clone(root)
-      Rubinius.run_script(compiled_code)
+      Rubinius.run_script(script.compiled_code)
+    end
+
+    # Return code script
+    #
+    # @return [Rubinisu::CompiledCode::Script]
+    #
+    # @api private
+    #
+    def script
+      compiled_code.create_script
     end
 
     # Return compiled code for node
     #
-    # This method actually returns a Rubnius::CompiledMethod
-    # instance. But it is named on the future name of CompiledMethod
-    # that will be renamed to Rubinius::CompiledCode.
-    #
-    # @return [Rubinius::CompiledMethod]
+    # @return [Rubinius::CompiledCode]
     #
     # @api private
     #
