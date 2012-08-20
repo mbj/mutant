@@ -1,18 +1,11 @@
 module Zombie
-  class Loader
-    module MethodObject
-    end
-  end
-
-  class Matcher
-  end
-
   def self.setup
     return if defined?(@done)
     files.each do |path|
       path = "#{File.expand_path(path, root)}.rb"
       ast = File.read(path).to_ast
       zombify(ast, path)
+      ToSource.to_source(ast.body)
     end
     @done = true
   end
@@ -59,7 +52,7 @@ module Zombie
     # For some reason loading is not the same as eval...?
     # eval(root.to_source)
 
-    Mutant::Loader.run(script)
+    ::Mutant::Loader.run(script)
   end
   private_class_method :zombify
 
