@@ -17,6 +17,6 @@ describe Mutant, 'runner' do
     runner.fail?.should be(true)
     runner.errors.size.should be(22)
     output.rewind
-    output.lines.grep(/Mutation/).size.should be(47)
+    output.lines.grep(/Mutation/).size.should be(22)
   end
 end
