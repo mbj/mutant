@@ -24,7 +24,7 @@ module Mutant
     #
     # @api private
     #
-    attr_reader :runtime
+    def runtime; @runtime; end
 
     # Return original source
     #
@@ -53,8 +53,8 @@ module Mutant
     # @return [Mutation]
     #
     # @api private
-    attr_reader :mutation
-    private :mutation
+    #
+    def mutation; @mutation; end
 
     # Initialize killer object
     #

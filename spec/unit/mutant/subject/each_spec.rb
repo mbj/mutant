@@ -3,13 +3,14 @@ require 'spec_helper'
 describe Mutant::Subject, '#each' do
   subject { object.each { |item| yields << item }   }
 
-  let(:object)   { described_class.new(context, ast) }
-  let(:root)     { mock('Root AST')                 }
-  let(:ast)      { mock('AST')                      }
-  let(:context)  { mock('Context', :root => root)   }
-  let(:mutant)   { mock('Mutant')                   }
-  let(:mutation) { mock('Mutation')                 }
-  let(:yields)   { []                               }
+  let(:object)   { described_class.new(matcher, context, ast) }
+  let(:matcher)  { mock('Matcher')                            }
+  let(:root)     { mock('Root AST')                           }
+  let(:ast)      { mock('AST')                                }
+  let(:context)  { mock('Context', :root => root)             }
+  let(:mutant)   { mock('Mutant')                             }
+  let(:mutation) { mock('Mutation')                           }
+  let(:yields)   { []                                         }
 
   before do
     Mutant::Mutator.stub(:each).with(ast).and_yield(mutant).and_return(Mutant::Mutator)

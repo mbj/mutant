@@ -61,16 +61,15 @@ module Mutant
         name_nesting.last
       end
 
-    private
-
       # Return scope wrapped by context
       #
       # @return [::Module|::Class]
       #
       # @api private
       #
-      attr_reader :scope
-      private :scope
+      def scope; @scope; end
+
+    private
 
       # Initialize object
       #

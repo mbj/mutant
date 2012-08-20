@@ -3,6 +3,14 @@ module Mutant
   class Mutation
     include Immutable
 
+    # Return mutation subject
+    #
+    # @return [Subject]
+    #
+    # @api private
+    #
+    def subject; @subject; end
+
     # Return mutated root node
     #
     # @return [Rubinius::AST::Script]
@@ -10,7 +18,7 @@ module Mutant
     # @api private
     #
     def root
-      @subject.root(@node)
+      subject.root(@node)
     end
     memoize :root
 
@@ -32,7 +40,7 @@ module Mutant
     # @api private
     #
     def identification
-      "#{@subject.identification}:#{sha1[0..4]}"
+      "#{subject.identification}:#{sha1[0..4]}"
     end
 
     # Return sha1 sum of source
@@ -64,7 +72,7 @@ module Mutant
     # @api private
     #
     def original_source
-      @subject.source
+      subject.source
     end
 
   private

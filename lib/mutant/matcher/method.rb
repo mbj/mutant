@@ -57,8 +57,7 @@ module Mutant
       #
       # @api private
       #
-      attr_reader :scope
-      private :scope
+      def scope; @scope; end
 
       # Return context
       #
@@ -66,8 +65,7 @@ module Mutant
       #
       # @api private
       #
-      attr_reader :context
-      private :context
+      def context; @context; end
 
       # Return method name
       #
@@ -75,8 +73,7 @@ module Mutant
       #
       # @api private
       #
-      attr_reader :method_name
-      private :method_name
+      def method_name; @method_name; end
 
       # Return method
       #
@@ -147,7 +144,7 @@ module Mutant
       def subject
         node = matched_node
         return unless node
-        Subject.new(context, node)
+        Subject.new(self, context, node)
       end
       memoize :subject
 

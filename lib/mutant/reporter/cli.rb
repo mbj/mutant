@@ -23,7 +23,6 @@ module Mutant
       # @api private
       #
       def mutation(mutation)
-        @io.puts("Mutation: #{mutation.identification}")
       end
 
       # Reporter killer
@@ -37,6 +36,8 @@ module Mutant
       def killer(killer)
         if killer.fail?
           failure(killer)
+        else
+          @io.puts("Killed: #{killer.identification} (%02.2fs)" % killer.runtime)
         end
 
         self

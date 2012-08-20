@@ -9,7 +9,15 @@ module Mutant
     #
     # @api private
     #
-    attr_reader :context
+    def context; @context; end
+
+    # Return matcher
+    #
+    # @return [Matcher]
+    #
+    # @api private
+    #
+    def matcher; @matcher; end
 
     # Return AST node
     #
@@ -17,7 +25,7 @@ module Mutant
     #
     # @api private
     #
-    attr_reader :node
+    def node; @node; end
 
     # Enumerate possible mutations
     #
@@ -47,7 +55,7 @@ module Mutant
     def identification
       source_path = context.source_path
       source_line = node.line
-      "#{source_path}:#{source_line}"
+      "#{matcher.identification}:#{source_path}:#{source_line}"
     end
     memoize :identification
 
@@ -99,7 +107,7 @@ module Mutant
 
     # Initialize subject
     #
-    # @param [Context] context
+    # @param [Matcher] matcher
     #   the context of mutations
     #
     # @param [Rubinius::AST::Node] node
@@ -109,8 +117,8 @@ module Mutant
     #
     # @api private
     #
-    def initialize(context, node)
-      @context, @node = context, node
+    def initialize(matcher, context, node)
+      @matcher, @context, @node = matcher, context, node
     end
   end
 end

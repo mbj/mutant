@@ -10,7 +10,7 @@ module Mutant
     #
     # @api private
     #
-    attr_reader :errors
+    def errors; @errors; end
 
     # Test for failure
     #
@@ -34,8 +34,7 @@ module Mutant
     #
     # @api private
     #
-    attr_reader :reporter
-    private :reporter
+    def reporter; @reporter; end
 
     # Initialize runner object
     #
@@ -118,7 +117,7 @@ module Mutant
     def candidates
       return to_enum(__method__) unless block_given?
       ObjectSpace.each_object(Module) do |candidate|
-        yield candidate if @pattern =~ candidate.name
+        yield candidate if @pattern =~ candidate.name and [::Module,::Class].include?(candidate.class)
       end
     end
 

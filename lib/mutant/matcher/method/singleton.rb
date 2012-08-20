@@ -28,7 +28,7 @@ module Mutant
         # @api private
         #
         def self.singleton_methods(scope)
-          scope.singleton_class.public_instance_methods(false).reject do |method|
+          scope.singleton_class.instance_methods(false).reject do |method|
             method.to_sym == :__class_init__
           end
         end
@@ -54,6 +54,7 @@ module Mutant
         def method
           scope.method(method_name)
         end
+        memoize :method
 
         # Test for node match
         #

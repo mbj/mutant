@@ -15,8 +15,7 @@ module Mutant
           ::RSpec.instance_variable_get(:@world),
           ::RSpec.instance_variable_get(:@configuration)
 
-        ::RSpec.instance_variable_set(:@world,nil)
-        ::RSpec.instance_variable_set(:@configuration,nil)
+        ::RSpec.reset
 
         yield
       ensure
@@ -59,7 +58,16 @@ module Mutant
       #
       def run
         self.class.nest do 
-          !RSpec::Core::Runner.run(command_line_arguments, @error_stream, @output_stream).zero?
+          argv = command_line_arguments
+          fork do 
+            require './spec/spec_helper.rb'
+            if RSpec.world.shared_example_groups.empty?
+              Dir['spec/{support,shared}/**/*.rb'].each { |f| load(f) }
+            end
+            exit ::RSpec::Core::Runner.run(argv, @error_stream, @output_stream)
+          end
+          pid, status = Process.wait2
+          !status.exitstatus.zero?
         end
       end
 

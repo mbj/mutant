@@ -15,7 +15,7 @@ module Mutant
         def self.each(scope)
           return to_enum unless block_given?
           return unless scope.kind_of?(Module)
-          scope.public_instance_methods(false).map do |name|
+          scope.instance_methods(false).map do |name|
             yield new(scope, name)
           end
         end
@@ -59,6 +59,7 @@ module Mutant
         def method
           scope.instance_method(method_name)
         end
+        memoize :method
 
       end
     end

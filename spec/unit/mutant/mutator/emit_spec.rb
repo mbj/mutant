@@ -4,7 +4,7 @@ describe Mutant::Mutator, '#emit' do
   subject { object.send(:emit, node) }
 
   class Block
-    attr_reader :arguments
+    def arguments; @arguments; end
 
     def called?
       defined?(@arguments)

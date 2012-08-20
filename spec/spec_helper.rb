@@ -3,7 +3,7 @@
 require 'rspec'
 
 # require spec support files and shared behavior
-Dir[File.expand_path('../{support,shared}/**/*.rb', __FILE__)].each { |f| require f }
+Dir[File.expand_path('../{support,shared}/**/*.rb', __FILE__)].each { |f| require(f) }
 
 $: << File.join(TestApp.root,'lib')
 

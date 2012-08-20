@@ -55,8 +55,7 @@ module Mutant
     #
     # @api private
     #
-    attr_reader :node
-    private :node
+    def node; @node; end
 
     # Dispatch node generations
     #

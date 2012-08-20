@@ -19,7 +19,9 @@ module Mutant
     #
     # @api private
     #
-    attr_reader :source_path
+    def source_path
+      @source_path
+    end
 
   private
 
