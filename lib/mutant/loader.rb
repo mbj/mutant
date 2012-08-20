@@ -25,17 +25,30 @@ module Mutant
     #
     def initialize(root)
       @root = Helper.deep_clone(root)
-      Rubinius.run_script(script.compiled_code)
+      Rubinius.run_script(compiled_code)
+    end
+
+    # Return compiled code
+    #
+    # @return [Rubinius::CompiledCode]
+    #
+    # @api private
+    #
+    # FIXME: rbx on travis is older than on my devbox.
+    #
+    def compiled_code
+      _script = script
+      _script.respond_to?(:compiled_code) ? _script.compiled_code : _script.compiled_method
     end
 
     # Return code script
     #
-    # @return [Rubinisu::CompiledCode::Script]
+    # @return [Rubinius::CompiledCode::Script]
     #
     # @api private
     #
     def script
-      compiled_code.create_script
+      compiled_code_raw.create_script
     end
 
     # Return compiled code for node
@@ -44,7 +57,7 @@ module Mutant
     #
     # @api private
     #
-    def compiled_code
+    def compiled_code_raw
       compiler.run
     end
 
