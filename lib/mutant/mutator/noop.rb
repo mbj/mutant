@@ -1,6 +1,6 @@
 module Mutant
   class Mutator
-    # Mutator that does do not mutations on ast
+    # Mutator that does not do mutations on ast
     class Noop < self
 
       # Literal references to self do not need to be mutated. 
