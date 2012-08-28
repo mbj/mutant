@@ -1,6 +1,6 @@
 module Mutant
   class Killer
-    # Simple runner for rspec tests
+    # Runner for rspec tests
     class Rspec < self
 
       # Run block in clean rspec environment
@@ -57,17 +57,26 @@ module Mutant
       # @api private
       #
       def run
+        !run_rspec.zero?
+      end
+
+      # Run rspec with some wired compat stuff
+      #
+      # FIXME: This extra stuff needs to be configurable per project
+      #
+      # @return [Fixnum]
+      #   returns the exit status from rspec runner
+      #
+      # @api private
+      #
+      def run_rspec
+        require 'rspec'
         self.class.nest do 
-          argv = command_line_arguments
-          fork do 
-            require './spec/spec_helper.rb'
-            if RSpec.world.shared_example_groups.empty?
-              Dir['spec/{support,shared}/**/*.rb'].each { |f| load(f) }
-            end
-            exit ::RSpec::Core::Runner.run(argv, @error_stream, @output_stream)
+          require './spec/spec_helper.rb'
+          if RSpec.world.shared_example_groups.empty?
+            Dir['spec/{support,shared}/**/*.rb'].each { |f| load(f) }
           end
-          pid, status = Process.wait2
-          !status.exitstatus.zero?
+          ::RSpec::Core::Runner.run(command_line_arguments, @error_stream, @output_stream)
         end
       end
 
@@ -93,6 +102,23 @@ module Mutant
       #
       def filename_pattern
         'spec/unit/**/*_spec.rb'
+      end
+
+      class Forking < self
+        # Run rspec in subprocess
+        #
+        # @return [Fixnum]
+        #   returns the exit status from rspec runner
+        #
+        # @api private
+        #
+        def run_rspec
+          fork do 
+            exit run_rspec
+          end
+          pid, status = Process.wait2
+          status.exitstatus
+        end
       end
     end
   end
