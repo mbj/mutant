@@ -113,7 +113,7 @@ module Mutant
         # @api private
         #
         def run_rspec
-          fork do 
+          fork do
             exit run_rspec
           end
           pid, status = Process.wait2
