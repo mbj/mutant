@@ -42,7 +42,8 @@ describe Mutant::CLI, '#runner_options' do
       {
         :matcher         => Mutant::Matcher::Chain.new([Mutant::Matcher::Method.parse('TestApp::Literal#float')]),
         :mutation_filter => Mutant::Mutation::Filter::ALL,
-        :killer          => Mutant::Killer::Rspec
+        :killer          => Mutant::Killer::Rspec::Forking,
+        :reporter        => Mutant::Reporter::CLI.new($stderr)
       }
     end
 
@@ -54,9 +55,10 @@ describe Mutant::CLI, '#runner_options' do
     
     let(:expected_options) do
       {
-        :matcher         => Mutant::Matcher::Chain.new([Mutant::Matcher::ObjectSpace.new(%r(\ATestApp(::)?\z))]),
+        :matcher         => Mutant::Matcher::Chain.new([Mutant::Matcher::ObjectSpace.new(%r(\ATestApp(\z|::)))]),
         :mutation_filter => Mutant::Mutation::Filter::ALL,
-        :killer          => Mutant::Killer::Rspec
+        :killer          => Mutant::Killer::Rspec::Forking,
+        :reporter        => Mutant::Reporter::CLI.new($stderr)
       }
     end
 
@@ -77,7 +79,8 @@ describe Mutant::CLI, '#runner_options' do
       { 
         :mutation_filter => Mutant::Mutation::Filter::Whitelist.new(filters),
         :matcher         => Mutant::Matcher::Chain.new([Mutant::Matcher::Method.parse('TestApp::Literal#float')]),
-        :killer          => Mutant::Killer::Rspec
+        :killer          => Mutant::Killer::Rspec::Forking,
+        :reporter        => Mutant::Reporter::CLI.new($stderr)
       }
     end
 
