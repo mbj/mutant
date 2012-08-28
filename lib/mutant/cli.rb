@@ -31,7 +31,7 @@ module Mutant
         :mutation_filter => mutation_filter,
         :matcher         => matcher,
         :reporter        => Reporter::CLI.new($stderr),
-        :killer          => Killer::Rspec
+        :killer          => Killer::Rspec::Forking
       }
     end
     memoize :runner_options
