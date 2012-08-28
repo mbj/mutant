@@ -28,15 +28,6 @@ module Mutant
     end
 
     NONE = Class.new(self) do
-      # Initialize null color
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(*)
-      end
-
       # Format null color
       #
       # @param [String] text
@@ -49,6 +40,18 @@ module Mutant
       def format(text)
         text
       end
+
+    private
+
+      # Initialize null color
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def initialize(*)
+      end
+
     end.new.freeze
 
     RED   = Color.new(31)
