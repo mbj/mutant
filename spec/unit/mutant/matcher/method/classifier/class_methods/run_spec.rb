@@ -21,8 +21,8 @@ describe Mutant::Matcher::Method::Classifier, '.run' do
   context 'with invalid notation' do
     let(:input) { 'Foo' }
 
-    it 'should raise error' do
-      expect { subject }.to raise_error(ArgumentError, "Cannot determine subject from #{input.inspect}")
+    it 'should return nil' do
+      should be(nil)
     end
   end
 end
