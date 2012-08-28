@@ -6,7 +6,7 @@ describe Mutant::CLI, '.run' do
   let(:object)   { described_class                                        }
   let(:argv)     { mock('ARGV')                                           }
   let(:options)  { mock('Options')                                        }
-  let(:runner)   { mock('Runner')                                         }
+  let(:runner)   { mock('Runner', :fail? => failure)                      }
   let(:instance) { mock(described_class.name, :runner_options => options) }
 
   before do 
@@ -14,10 +14,25 @@ describe Mutant::CLI, '.run' do
     Mutant::Runner.stub(:run => runner)
   end
 
-  it { should be(runner) }
+  context 'when runner NOT fails' do
+    let(:failure) { false }
 
-  it 'should run with options' do
-    Mutant::Runner.should_receive(:run).with(options).and_return(runner)
-    should be(runner)
+    it { should be(0) }
+
+    it 'should run with options' do
+      Mutant::Runner.should_receive(:run).with(options).and_return(runner)
+      should be(0)
+    end
+  end
+
+  context 'when runner fails' do
+    let(:failure) { true }
+
+    it { should be(1) }
+
+    it 'should run with options' do
+      Mutant::Runner.should_receive(:run).with(options).and_return(runner)
+      should be(1)
+    end
   end
 end
