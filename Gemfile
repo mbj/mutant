@@ -2,23 +2,24 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'immutable', :git => 'https://github.com/dkubb/immutable.git', :ref => '4a4b7ddd138a32944fa0ddaff8412490cf9dd875'
-gem 'abstract',  :git => 'https://github.com/mbj/abstract.git'
-gem 'to_source', :git => 'https://github.com/mbj/to_source.git'
+gem 'immutable',           :git => 'https://github.com/dkubb/immutable.git', :branch => :experimental
+gem 'abstract',            :git => 'https://github.com/mbj/abstract.git'
+gem 'to_source',           :git => 'https://github.com/mbj/to_source.git'
+gem 'descendants_tracker', :git => 'https://github.com/mbj/descendants_tracker.git'
 
 group :development do
   gem 'rake',    '~> 0.9.2'
   gem 'yard',    '~> 0.8.1'
   gem 'rspec',   '~> 2'
-  # Remove this once https://github.com/nex3/rb-inotify/pull/20 is solved.
-  # This patch makes rb-inotify a nice player with listen so it does not poll.
-  gem 'rb-inotify', :git => 'https://github.com/mbj/rb-inotify'
 end
 
 group :guard do
   gem 'guard',         '~> 1.3.2'
   gem 'guard-bundler', '~> 1.0.0'
   gem 'guard-rspec',   '~> 1.2.1'
+  # Remove this once https://github.com/nex3/rb-inotify/pull/20 is solved.
+  # This patch makes rb-inotify a nice player with listen so it does not poll.
+  gem 'rb-inotify', :git => 'https://github.com/mbj/rb-inotify'
 end
 
 group :metrics do
