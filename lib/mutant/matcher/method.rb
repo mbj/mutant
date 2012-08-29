@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Matcher to find AST for method
     class Method < self
-      include Immutable
+      include Immutable, Equalizer.new(:identification)
 
       # Parse a method string into filter
       #
