@@ -19,3 +19,4 @@
 * Fix rubinius to allow setting @vcall_style variable in Rubinius::AST::Send nodes.
 * Add mutations on the conditions of case statements. (Rubinius::AST::When)
 * Move shared mutations into modules. The mutator base class is the wrong location to hold them.
+* Extract equalizer from veritas into own module
