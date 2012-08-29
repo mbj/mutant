@@ -3,6 +3,12 @@ require 'spec_helper'
 describe Mutant::Matcher::Method::Classifier, '.run' do
   subject { described_class.run(input) }
 
+  context 'with explicit toplevel scope' do
+    let(:input)          { '::TestApp::Literal#string' }
+    let(:expected_class) { Mutant::Matcher::Method::Instance }
+
+    it_should_behave_like 'a method filter parse result'
+  end
 
   context 'with instance method notation' do
     let(:input)          { 'TestApp::Literal#string' }

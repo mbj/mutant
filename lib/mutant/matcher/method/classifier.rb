@@ -25,12 +25,16 @@ module Mutant
         # @param [String] input
         #
         # @return [Matcher::Method]
+        #   returns matcher when input is in 
+        #
+        # @return [nil]
+        #   returns nil otherwise
         #
         # @api private
         #
         def self.run(input)
           match = SCOPE_FORMAT.match(input)
-          raise ArgumentError, "Cannot determine subject from #{input.inspect}" unless match
+          return unless match
           new(match).matcher
         end
 
@@ -63,7 +67,7 @@ module Mutant
         # @api private
         #
         def scope
-          scope_name.split('::').inject(::Object) do |parent, name|
+          scope_name.gsub(%r(\A::),'').split('::').inject(::Object) do |parent, name|
             parent.const_get(name)
           end
         end
