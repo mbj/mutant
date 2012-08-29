@@ -1,13 +1,18 @@
 module Zombie
+  # Setup zombie
+  #
+  # @return [self]
+  #
+  # @api private
+  #
   def self.setup
-    return if defined?(@done)
     files.each do |path|
       path = "#{File.expand_path(path, root)}.rb"
       ast = File.read(path).to_ast
       zombify(ast, path)
-      ToSource.to_source(ast.body)
     end
-    @done = true
+
+    self
   end
 
   # Return library root directory
