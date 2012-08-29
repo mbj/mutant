@@ -2,6 +2,8 @@ module Mutant
   class Reporter
     # Reporter that reports in human readable format
     class CLI < self
+      include Equalizer.new(:io)
+
       # Reporter subject
       #
       # @param [Subject] subject
@@ -43,6 +45,14 @@ module Mutant
         self
       end
 
+      # Return IO stream
+      #
+      # @return [IO]
+      #
+      # @api private
+      # 
+      def io; @io; end
+
     private 
 
       # Initialize reporter
@@ -66,9 +76,15 @@ module Mutant
       # @api private
       #
       def failure(killer)
-        @io.puts(colorize(Color::RED, "!!! Uncovered Mutation !!!"))
+        @io.puts(colorize(Color::RED, "!!! Mutant alive: #{killer.identification} !!!"))
         differ = Differ.new(killer.original_source,killer.mutation_source)
         diff = color? ? differ.colorized_diff : differ.diff
+        # FIXME remove this branch before release
+        if diff.empty?
+          killer.send(:mutation).node.ascii_graph
+          killer.send(:mutation).subject.node.ascii_graph
+          raise "Unable to create a diff"
+        end
         @io.puts(diff)
         @io.puts
       end
