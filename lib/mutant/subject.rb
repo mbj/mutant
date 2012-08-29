@@ -120,5 +120,6 @@ module Mutant
     def initialize(matcher, context, node)
       @matcher, @context, @node = matcher, context, node
     end
+
   end
 end
