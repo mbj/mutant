@@ -45,12 +45,23 @@ module Mutant
     # @api private
     #
     def initialize(options)
-      @killer  = Helper.extract_option(options, :killer)
-      @pattern = Helper.extract_option(options, :pattern) 
-      @reporter = options.fetch(:reporter, Reporter::Null)
+      @killer          = Helper.extract_option(options, :killer)
+      @matcher         = Helper.extract_option(options, :matcher) 
+      @reporter        = options.fetch(:reporter,        Reporter::Null)
+      @mutation_filter = options.fetch(:mutation_filter, Mutation::Filter::ALL)
       @errors = []
 
       run
+    end
+
+    # Return subject enumerator
+    #
+    # @return [Enumerator<Subject>]
+    #
+    # @api private
+    #
+    def subjects
+      @matcher.each
     end
 
     # Run mutation killers on subjects
@@ -60,7 +71,7 @@ module Mutant
     # @api private
     #
     def run
-      @subjects = subjects.each do |subject|
+      subjects.each do |subject|
         reporter.subject(subject)
         run_subject(subject)
       end
@@ -76,6 +87,7 @@ module Mutant
     #
     def run_subject(subject)
       subject.each do |mutation|
+        next unless @mutation_filter.match?(mutation)
         reporter.mutation(mutation)
         kill(mutation)
       end
@@ -97,6 +109,8 @@ module Mutant
         @errors << killer
       end
     end
+  end
+end
 
     # Return candiate matcher enumerator
     #
@@ -107,46 +121,3 @@ module Mutant
     def candidate_matchers
       [Matcher::Method::Singleton, Matcher::Method::Instance].each
     end
-
-    # Return candidats enumerator
-    #
-    # @return [Enumerable<Object>]
-    #
-    # @api private
-    #
-    def candidates
-      return to_enum(__method__) unless block_given?
-      ObjectSpace.each_object(Module) do |candidate|
-        yield candidate if @pattern =~ candidate.name and [::Module,::Class].include?(candidate.class)
-      end
-    end
-
-    # Return matcher enumerator
-    #
-    # @return [Enumerable<Matcher>]
-    #
-    # @api private
-    #
-    def matchers(&block)
-      return to_enum(__method__) unless block_given?
-      candidate_matchers.each do |candidate_matcher|
-        candidates.each do |candidate|
-          candidate_matcher.each(candidate,&block)
-        end
-      end
-    end
-
-    # Return subjects enumerator
-    #
-    # @return [Enumerable<Subject>]
-    #
-    # @api private
-    #
-    def subjects(&block)
-      return to_enum(__method__) unless block_given?
-      matchers.each do |matcher|
-        matcher.each(&block)
-      end
-    end
-  end
-end
