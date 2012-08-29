@@ -28,8 +28,15 @@ module Mutant
         # @api private
         #
         def self.singleton_methods(scope)
-          scope.singleton_class.instance_methods(false).reject do |method|
-            method.to_sym == :__class_init__
+          singleton_class = scope.singleton_class
+
+          names = 
+            singleton_class.public_instance_methods(false)   +
+            singleton_class.private_instance_methods(false)  +
+            singleton_class.protected_instance_methods(false)
+
+          names.map(&:to_sym).sort.reject do |name|
+            name.to_sym == :__class_init__
           end
         end
 
