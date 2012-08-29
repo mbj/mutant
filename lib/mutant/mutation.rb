@@ -1,7 +1,7 @@
 module Mutant
   # Represent a mutated node with its subject
   class Mutation
-    include Immutable
+    include Immutable, Equalizer.new(:sha1)
 
     # Return mutation subject
     #
@@ -10,6 +10,14 @@ module Mutant
     # @api private
     #
     def subject; @subject; end
+
+    # Return mutated node
+    #
+    # @return [Subject]
+    #
+    # @api private
+    #
+    def node; @node; end
 
     # Return mutated root node
     #
@@ -40,17 +48,29 @@ module Mutant
     # @api private
     #
     def identification
-      "#{subject.identification}:#{sha1[0..4]}"
+      "#{subject.identification}:#{code}"
     end
+    memoize :identification
 
-    # Return sha1 sum of source
+    # Return mutation code
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    def code
+      sha1[0..4]
+    end
+    memoize :code
+
+    # Return sha1 sum of source and subject identification
     #
     # @return [String]
     #
     # @api private
     #
     def sha1
-      SHA1.hexdigest(source)
+      SHA1.hexdigest(subject.identification + source)
     end
     memoize :sha1
 
