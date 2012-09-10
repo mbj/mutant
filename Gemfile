@@ -3,9 +3,9 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'immutable',           :git => 'https://github.com/dkubb/immutable.git', :branch => :experimental
-gem 'abstract',            :git => 'https://github.com/mbj/abstract.git'
+gem 'descendants_tracker', :git => 'https://github.com/dkubb/descendants_tracker.git'
+gem 'abstract_class',      :git => 'https://github.com/dkubb/abstract_class.git'
 gem 'to_source',           :git => 'https://github.com/mbj/to_source.git'
-gem 'descendants_tracker', :git => 'https://github.com/mbj/descendants_tracker.git'
 
 group :development do
   gem 'rake',    '~> 0.9.2'

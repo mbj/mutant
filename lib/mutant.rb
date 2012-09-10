@@ -1,6 +1,6 @@
 require 'immutable'
 require 'ice_nine'
-require 'abstract'
+require 'abstract_class'
 require 'descendants_tracker'
 require 'securerandom'
 require 'to_source'

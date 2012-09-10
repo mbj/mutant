@@ -1,7 +1,7 @@
 module Mutant
   # Generator for mutations
   class Mutator
-    include Immutable, Abstract
+    include Immutable, AbstractClass
 
     # Enumerate mutations on node
     #

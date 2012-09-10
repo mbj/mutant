@@ -1,7 +1,7 @@
 module Mutant
   # An abstract context where mutations can be appied to.
   class Context
-    include Immutable, Abstract
+    include Immutable, AbstractClass
 
     # Return root ast node
     #

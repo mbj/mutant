@@ -1,6 +1,6 @@
 module Mutant
   class Mutator
-    # Abstract class for mutatiosn where messages are send
+    # Class for mutations where messages are send to objects
     class Call < self
 
       handle(Rubinius::AST::Send)

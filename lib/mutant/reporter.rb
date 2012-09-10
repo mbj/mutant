@@ -1,7 +1,7 @@
 module Mutant
   # Abstract reporter
   class Reporter
-    include Immutable, Abstract
+    include Immutable, AbstractClass
 
     # Report subject
     #

@@ -21,6 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('descendants_tracker',  '~> 0.0.1')
   gem.add_runtime_dependency('backports',            '~> 2.6')
   gem.add_runtime_dependency('immutable',            '~> 0.0.1')
-  gem.add_runtime_dependency('abstract',             '~> 0.0.1')
+  gem.add_runtime_dependency('abstract_class',       '~> 0.0.1')
   gem.add_runtime_dependency('diff-lcs',             '~> 1.1.3')
 end
