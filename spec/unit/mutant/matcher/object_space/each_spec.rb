@@ -25,7 +25,6 @@ describe Mutant::Matcher::ObjectSpace, '#each' do
 
   it_should_behave_like 'an #each method'
 
-
   it 'should yield subjects' do
     expect { subject }.to change { yields }.from([]).to([subject_a, subject_b])
   end

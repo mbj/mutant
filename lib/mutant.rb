@@ -3,20 +3,19 @@ require 'ice_nine'
 require 'abstract_class'
 require 'descendants_tracker'
 require 'securerandom'
+require 'equalizer'
 require 'to_source'
 require 'ice_nine'
 require 'ice_nine/core_ext/object'
 require 'backports'
 require 'diff/lcs'
 require 'diff/lcs/hunk'
-require 'pp'
 
 # Library namespace
 module Mutant
 end
 
 require 'mutant/support/method_object'
-require 'mutant/support/equalizer'
 require 'mutant/helper'
 require 'mutant/random'
 require 'mutant/mutator'

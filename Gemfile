@@ -5,6 +5,7 @@ gemspec
 gem 'immutable',           :git => 'https://github.com/dkubb/immutable.git', :branch => :experimental
 gem 'descendants_tracker', :git => 'https://github.com/dkubb/descendants_tracker.git'
 gem 'abstract_class',      :git => 'https://github.com/dkubb/abstract_class.git'
+gem 'equalizer',           :git => 'https://github.com/dkubb/equalizer.git'
 gem 'to_source',           :git => 'https://github.com/mbj/to_source.git'
 
 group :development do
