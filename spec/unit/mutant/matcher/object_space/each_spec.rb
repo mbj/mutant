@@ -7,8 +7,10 @@ describe Mutant::Matcher::ObjectSpace, '#each' do
   let(:object) { described_class.new(/\ATestApp::Literal(\z|::)/) }
 
   before do
-    Mutant::Matcher::Method::Singleton.stub(:each => [matcher_a])
-    Mutant::Matcher::Method::Instance.stub(:each => [matcher_b])
+    Mutant::Matcher::Method::Singleton.stub(:each).and_yield(matcher_a)
+    Mutant::Matcher::Method::Instance.stub(:each).and_yield(matcher_b)
+    matcher_a.stub(:each).and_yield(subject_a)
+    matcher_b.stub(:each).and_yield(subject_b)
   end
 
 
@@ -18,11 +20,6 @@ describe Mutant::Matcher::ObjectSpace, '#each' do
   let(:subject_a) { mock('Subject A') }
   let(:subject_b) { mock('Subject B') }
   
-  before do
-    matcher_a.stub(:each).and_yield(subject_a).and_return(matcher_a)
-    matcher_b.stub(:each).and_yield(subject_b).and_return(matcher_b)
-  end
-
   it_should_behave_like 'an #each method'
 
   it 'should yield subjects' do

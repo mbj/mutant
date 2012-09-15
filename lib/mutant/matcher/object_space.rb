@@ -94,9 +94,6 @@ module Mutant
       #
       def emit_scope_matches(scope, &block)
         @matchers.each do |matcher|
-          p scope
-          p matcher
-          p matcher.each(scope).to_a
           matcher.each(scope, &block)
         end
       end
