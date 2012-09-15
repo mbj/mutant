@@ -6,8 +6,8 @@ shared_examples_for 'an invalid cli run' do
   end
 end
 
-describe Mutant::CLI, '#runner_options' do
-  subject { object.runner_options }
+describe Mutant::CLI, '#attributes' do
+  subject { object.attributes }
 
   let(:object) { described_class.new(arguments) }
 

@@ -1,5 +1,5 @@
 module Mutant
-  # Comandline adapter or mutant runner
+  # Comandline parser
   class CLI
     include Immutable
 
@@ -16,17 +16,17 @@ module Mutant
     # @api private
     #
     def self.run(*arguments)
-      error = Runner.run(new(*arguments).runner_options).fail?
+      error = Runner.run(new(*arguments).attributes).fail?
       error ? 1 : 0
     end
 
-    # Return options for runner
+    # Return attributes
     #
     # @return [Hash]
     #
     # @api private
     #
-    def runner_options
+    def attributes
       { 
         :mutation_filter => mutation_filter,
         :matcher         => matcher,
@@ -34,12 +34,12 @@ module Mutant
         :killer          => Killer::Rspec::Forking
       }
     end
-    memoize :runner_options
+    memoize :attributes
 
   private
 
     OPTIONS = {
-      '--code' => [:add_filter, Mutation::Filter::Code].freeze
+      '--code' => [:add_filter, Mutation::Filter::Code]
     }.deep_freeze
 
     OPTION_PATTERN = %r(\A-(?:-)?[a-z0-9]+\z).freeze
@@ -67,9 +67,7 @@ module Mutant
     def initialize(arguments)
       @filters, @matchers = [], []
 
-      @arguments = arguments
-
-      @index = 0
+      @arguments, @index = arguments, 0
 
       while @index < @arguments.length
         dispatch
@@ -98,7 +96,7 @@ module Mutant
     def current_option_value
       @arguments.fetch(@index+1)
     rescue IndexError
-      raise Error,"#{current_argument.inspect} is missing an argument"
+      raise Error, "#{current_argument.inspect} is missing an argument"
     end
 
     # Process current argument

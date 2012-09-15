@@ -3,24 +3,24 @@ require 'spec_helper'
 describe Mutant::CLI, '.run' do
   subject { object.run(argv) }
 
-  let(:object)   { described_class                                        }
-  let(:argv)     { mock('ARGV')                                           }
-  let(:options)  { mock('Options')                                        }
-  let(:runner)   { mock('Runner', :fail? => failure)                      }
-  let(:instance) { mock(described_class.name, :runner_options => options) }
+  let(:object)     { described_class                                       }
+  let(:argv)       { mock('ARGV')                                          }
+  let(:attributes) { mock('Options')                                       }
+  let(:runner)     { mock('Runner', :fail? => failure)                     }
+  let(:instance)   { mock(described_class.name, :attributes => attributes) }
 
   before do 
     described_class.stub(:new => instance)
     Mutant::Runner.stub(:run => runner)
   end
 
-  context 'when runner NOT fails' do
+  context 'when runner does NOT fail' do
     let(:failure) { false }
 
     it { should be(0) }
 
-    it 'should run with options' do
-      Mutant::Runner.should_receive(:run).with(options).and_return(runner)
+    it 'should run with attributes' do
+      Mutant::Runner.should_receive(:run).with(attributes).and_return(runner)
       should be(0)
     end
   end
@@ -30,8 +30,8 @@ describe Mutant::CLI, '.run' do
 
     it { should be(1) }
 
-    it 'should run with options' do
-      Mutant::Runner.should_receive(:run).with(options).and_return(runner)
+    it 'should run with attributes' do
+      Mutant::Runner.should_receive(:run).with(attributes).and_return(runner)
       should be(1)
     end
   end

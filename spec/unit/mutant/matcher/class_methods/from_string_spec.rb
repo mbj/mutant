@@ -31,7 +31,7 @@ describe Mutant::Matcher, '.from_string' do
     it_should_behave_like 'an idempotent method'
   end
 
-  pending 'when more than one descendant handles input' do
+  context 'when more than one descendant handles input' do
     let(:matcher_b) { mock('Matcher B') }
 
     before do

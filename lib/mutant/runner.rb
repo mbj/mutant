@@ -1,8 +1,13 @@
 module Mutant
   # Runner that allows to mutate an entire project
   class Runner
-    include Immutable
+    include Immutable, Anima
     extend MethodObject
+
+    attribute :matcher
+    attribute :killer
+    attribute :reporter
+    attribute :mutation_filter
 
     # Return killers with errors
     #
@@ -28,40 +33,23 @@ module Mutant
 
   private
 
-    # Return reporter
+    # Initialize object
     #
-    # @return [Reporter]
-    #
-    # @api private
-    #
-    def reporter; @reporter; end
-
-    # Initialize runner object
-    #
-    # @param [Hash] options
+    # @param [Hash] attributes
     #
     # @return [undefined]
     #
     # @api private
     #
-    def initialize(options)
-      @killer          = Helper.extract_option(options, :killer)
-      @matcher         = Helper.extract_option(options, :matcher) 
-      @reporter        = options.fetch(:reporter,        Reporter::Null)
-      @mutation_filter = options.fetch(:mutation_filter, Mutation::Filter::ALL)
+    def initialize(attributes)
+      attributes[:reporter]        ||= Reporter::Null
+      attributes[:mutation_filter] ||= Mutation::Filter::ALL
+
+      super(attributes)
+
       @errors = []
 
       run
-    end
-
-    # Return subject enumerator
-    #
-    # @return [Enumerator<Subject>]
-    #
-    # @api private
-    #
-    def subjects
-      @matcher.each
     end
 
     # Run mutation killers on subjects
@@ -71,7 +59,7 @@ module Mutant
     # @api private
     #
     def run
-      subjects.each do |subject|
+      matcher.each do |subject|
         reporter.subject(subject)
         run_subject(subject)
       end
@@ -111,13 +99,3 @@ module Mutant
     end
   end
 end
-
-    # Return candiate matcher enumerator
-    #
-    # @return [Enumerable<Class<Matcher>>]
-    #
-    # @api private
-    #
-    def candidate_matchers
-      [Matcher::Method::Singleton, Matcher::Method::Instance].each
-    end

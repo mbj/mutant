@@ -8,6 +8,7 @@ require 'to_source'
 require 'ice_nine'
 require 'ice_nine/core_ext/object'
 require 'backports'
+require 'anima'
 require 'diff/lcs'
 require 'diff/lcs/hunk'
 
