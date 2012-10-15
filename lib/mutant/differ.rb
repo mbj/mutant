@@ -1,7 +1,7 @@
 module Mutant
   # Class to create diffs from source code
   class Differ
-    include Immutable
+    include Adamantium
 
     # Return source diff 
     #

@@ -1,7 +1,7 @@
 module Mutant
   # Comandline parser
   class CLI
-    include Immutable
+    include Adamantium
 
     # Error raised when CLI argv is inalid
     Error = Class.new(RuntimeError)

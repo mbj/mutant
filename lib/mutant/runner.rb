@@ -1,7 +1,7 @@
 module Mutant
   # Runner that allows to mutate an entire project
   class Runner
-    include Immutable, Anima
+    include Adamantium, Anima
     extend MethodObject
 
     attribute :matcher

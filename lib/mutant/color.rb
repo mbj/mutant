@@ -1,7 +1,7 @@
 module Mutant
   # Class to colorize strings
   class Color
-    include Immutable
+    include Adamantium
 
     # Initialize color object
     #

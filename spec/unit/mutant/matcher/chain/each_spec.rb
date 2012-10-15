@@ -18,7 +18,16 @@ describe Mutant::Matcher::Chain, '#each' do
     matcher_b.stub(:each).and_yield(subject_b).and_return(matcher_b)
   end
 
-  it_should_behave_like 'an #each method'
+  # it_should_behave_like 'an #each method'
+  context 'with no block' do
+    subject { object.each }
+
+    it { should be_instance_of(to_enum.class) }
+
+    it 'yields the expected values' do
+      subject.to_a.should eql(object.to_a)
+    end
+  end
 
   let(:yields) { [] }
 

@@ -1,7 +1,7 @@
 module Mutant
   # Abstract runner for mutant killers
   class Killer
-    include Immutable, AbstractClass
+    include Adamantium, AbstractClass
     extend MethodObject
 
     # Test for kill failure

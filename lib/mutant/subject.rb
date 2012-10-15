@@ -1,7 +1,7 @@
 module Mutant
   # Subject of mutation
   class Subject
-    include Immutable, Enumerable
+    include Adamantium, Enumerable
 
     # Return context
     #
