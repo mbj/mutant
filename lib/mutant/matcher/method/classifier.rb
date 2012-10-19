@@ -14,7 +14,7 @@ module Mutant
 
         # Positions of captured regexp groups
         # Freezing fixnums to avoid their singleton classes are patched.
-        SCOPE_NAME_POSITION = 1.freeze
+        SCOPE_NAME_POSITION       = 1.freeze
         SCOPE_SYMBOL_POSITION  = 2.freeze
         METHOD_NAME_POSITION   = 3.freeze
 
@@ -67,7 +67,7 @@ module Mutant
         # @api private
         #
         def scope
-          scope_name.gsub(%r(\A::),'').split('::').inject(::Object) do |parent, name|
+          scope_name.gsub(%r(\A::), '').split('::').inject(::Object) do |parent, name|
             parent.const_get(name)
           end
         end

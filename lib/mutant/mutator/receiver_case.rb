@@ -47,7 +47,7 @@ module Mutant
       #
       def emit_receiver_mutations
         Mutator.each(receiver) do |mutant|
-          emit_self(mutant,when_branches,else_branch)
+          emit_self(mutant, when_branches, else_branch)
         end
       end
 
@@ -58,7 +58,7 @@ module Mutant
       # @api private
       #
       def emit_else_branch_presence_mutation
-        emit_self(receiver,when_branches,nil)
+        emit_self(receiver, when_branches, nil)
       end
 
       # Emit when branch body mutations
@@ -72,7 +72,7 @@ module Mutant
           Mutator.each(branch) do |mutant|
             branches = dup_when_branches
             branches[index]=mutant
-            emit_self(receiver,branches,else_branch)
+            emit_self(receiver, branches, else_branch)
           end
         end
       end
@@ -88,7 +88,7 @@ module Mutant
         when_branches.each_index do |index|
           dup_branches = dup_when_branches
           dup_branches.delete_at(index)
-          emit_self(receiver,dup_branches,else_branch)
+          emit_self(receiver, dup_branches, else_branch)
         end
       end
 

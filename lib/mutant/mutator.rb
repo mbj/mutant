@@ -119,7 +119,6 @@ module Mutant
     #
     def emit!(node)
       @block.call(node)
-
       self
     end
 

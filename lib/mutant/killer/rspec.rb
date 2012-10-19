@@ -19,8 +19,8 @@ module Mutant
 
         yield
       ensure
-        ::RSpec.instance_variable_set(:@world,original_world)
-        ::RSpec.instance_variable_set(:@configuration,original_configuration)
+        ::RSpec.instance_variable_set(:@world, original_world)
+        ::RSpec.instance_variable_set(:@configuration, original_configuration)
       end
 
       # Return identification

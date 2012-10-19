@@ -32,7 +32,7 @@ module Mutant
       # @api private
       #
       def emit_inverted_condition
-        emit_self(invert(condition),if_branch,else_branch)
+        emit_self(invert(condition), if_branch, else_branch)
       end
 
       # Emit deleted else branch
@@ -42,7 +42,7 @@ module Mutant
       # @api private
       #
       def emit_deleted_else_branch
-        emit_self(condition,if_branch,nil)
+        emit_self(condition, if_branch, nil)
       end
 
       # Emit deleted if branch
@@ -54,7 +54,7 @@ module Mutant
       def emit_deleted_if_branch
         body = else_branch
         return unless body
-        emit_self(condition,else_branch,nil)
+        emit_self(condition, else_branch, nil)
       end
 
       # Return ast that returns inverted boolean value
@@ -70,7 +70,7 @@ module Mutant
       #
       def invert(node)
         if Helper.on_18?
-          return new(Rubinius::AST::Not,node)
+          return new(Rubinius::AST::Not, node)
         end
 
         new_send(node,:'!')
@@ -84,7 +84,7 @@ module Mutant
       #
       def emit_condition_mutants
         Mutator.each(condition) do |mutant|
-          emit_self(mutant,if_branch,else_branch)
+          emit_self(mutant, if_branch, else_branch)
         end
       end
 
@@ -96,7 +96,7 @@ module Mutant
       #
       def emit_if_branch_mutants
         Mutator.each(if_branch) do |mutant|
-          emit_self(condition,mutant,else_branch)
+          emit_self(condition, mutant, else_branch)
         end
       end
 
@@ -110,7 +110,7 @@ module Mutant
         body = else_branch
         return unless body
         Mutator.each(body) do |mutant|
-          emit_self(condition,if_branch,mutant)
+          emit_self(condition, if_branch, mutant)
         end
       end
 
