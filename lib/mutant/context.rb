@@ -19,9 +19,7 @@ module Mutant
     #
     # @api private
     #
-    def source_path
-      @source_path
-    end
+    attr_reader :source_path
 
   private
 
@@ -47,7 +45,7 @@ module Mutant
     #
     def script(node)
       Rubinius::AST::Script.new(node).tap do |script|
-        script.file = @source_path
+        script.file = source_path
       end
     end
   end

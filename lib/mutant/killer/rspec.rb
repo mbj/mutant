@@ -30,8 +30,9 @@ module Mutant
       # @api private
       # 
       def identification
-        "rspec:#{mutation.identification}"
+        "rspec:#{mutation.identification}".freeze
       end
+      memoize :identification
 
     private
 
@@ -90,18 +91,6 @@ module Mutant
         %W(
           --fail-fast
         ) + Dir[filename_pattern]
-      end
-
-      # Return rspec filename pattern
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      # TODO: Add an option or be clever and only run affected specs.
-      #
-      def filename_pattern
-        'spec/unit/**/*_spec.rb'
       end
 
       class Forking < self

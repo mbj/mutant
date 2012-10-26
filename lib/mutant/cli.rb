@@ -39,10 +39,14 @@ module Mutant
   private
 
     OPTIONS = {
-      '--code' => [:add_filter, Mutation::Filter::Code]
+      '--code' => [:add_filter, Mutation::Filter::Code],
+      '-I'        => [:add_load_path],
+      '--include' => [:add_load_path],
+      '-r'        => [:require_library],
+      '--require' => [:require_library]
     }.deep_freeze
 
-    OPTION_PATTERN = %r(\A-(?:-)?[a-z0-9]+\z).freeze
+    OPTION_PATTERN = %r(\A-(?:-)?[a-zA-Z0-9]+\z).freeze
 
     # Return option for argument with index
     #
@@ -169,6 +173,28 @@ module Mutant
     #
     def add_filter(klass)
       @filters << klass.new(current_option_value)
+      consume(2)
+    end
+
+    # Add load path
+    #
+    # @api private
+    #
+    # @return [undefined]
+    #
+    def add_load_path
+      $LOAD_PATH << current_option_value
+      consume(2)
+    end
+
+    # Require library
+    #
+    # @api private
+    # 
+    # @return [undefined]
+    #
+    def require_library
+      require(current_option_value)
       consume(2)
     end
 

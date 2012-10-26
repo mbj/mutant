@@ -13,7 +13,7 @@ module Mutant
       # @api private
       #
       def subject(subject)
-        @io.puts("Subject: #{subject.identification}")
+        io.puts("Subject: #{subject.identification}")
       end
 
       # Report mutation
@@ -51,7 +51,7 @@ module Mutant
       #
       # @api private
       # 
-      def io; @io; end
+      attr_reader :io
 
     private 
 

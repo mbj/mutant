@@ -26,7 +26,7 @@ module Mutant
         #
         # @api private
         #
-        def whitelist; @whitelist; end
+        attr_reader :whitelist
 
       private
 

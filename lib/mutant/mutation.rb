@@ -9,15 +9,15 @@ module Mutant
     #
     # @api private
     #
-    def subject; @subject; end
+    attr_reader :subject
 
     # Return mutated node
     #
-    # @return [Subject]
+    # @return [Rubinius::AST::Node]
     #
     # @api private
     #
-    def node; @node; end
+    attr_reader :node
 
     # Return mutated root node
     #
@@ -26,7 +26,7 @@ module Mutant
     # @api private
     #
     def root
-      subject.root(@node)
+      subject.root(node)
     end
     memoize :root
 
@@ -81,7 +81,7 @@ module Mutant
     # @api private
     #
     def source
-      ToSource.to_source(@node)
+      ToSource.to_source(node)
     end
     memoize :source
 

@@ -32,6 +32,14 @@ module Mutant
     end
     private_class_method :handle
 
+    # Return wrapped node
+    #
+    # @return [Rubius::AST::Node]
+    #
+    # @api private
+    #
+    attr_reader :node
+
   private
 
     # Initialize generator
@@ -48,14 +56,6 @@ module Mutant
       IceNine.deep_freeze(@node)
       dispatch
     end
-
-    # Return wrapped node
-    #
-    # @return [Rubius::AST::Node]
-    #
-    # @api private
-    #
-    def node; @node; end
 
     # Dispatch node generations
     #

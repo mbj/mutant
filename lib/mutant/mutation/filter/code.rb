@@ -47,7 +47,7 @@ module Mutant
         #
         # @api private
         #
-        def code; @code; end
+        attr_reader :code
 
       private
 

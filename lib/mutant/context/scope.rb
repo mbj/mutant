@@ -67,7 +67,7 @@ module Mutant
       #
       # @api private
       #
-      def scope; @scope; end
+      attr_reader :scope
 
     private
 
@@ -120,7 +120,7 @@ module Mutant
       # @api private
       #
       def qualified_name
-        @scope.name
+        scope.name
       end
 
       # Return nesting of names of scope
@@ -130,10 +130,9 @@ module Mutant
       # @api private
       #
       def name_nesting
-        @scope.name.split('::')
+        scope.name.split('::')
       end
-
-      memoize :unqualified_name
+      memoize :name_nesting
     end
   end
 end

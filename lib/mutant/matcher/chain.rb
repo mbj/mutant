@@ -17,7 +17,7 @@ module Mutant
       def each(&block)
         return to_enum unless block_given?
 
-        @matchers.each do |matcher|
+        matchers.each do |matcher|
           matcher.each(&block)
         end
 
@@ -30,7 +30,7 @@ module Mutant
       #
       # @api private
       #
-      def matchers; @matchers; end
+      attr_reader :matchers
 
     private
 

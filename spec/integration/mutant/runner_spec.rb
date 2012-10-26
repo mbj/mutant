@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Mutant, 'runner' do
+  before do
+    pending
+  end
+
   around do |example|
     Dir.chdir(TestApp.root) do
       example.run

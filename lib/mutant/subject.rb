@@ -9,7 +9,7 @@ module Mutant
     #
     # @api private
     #
-    def context; @context; end
+    attr_reader :context
 
     # Return matcher
     #
@@ -17,7 +17,7 @@ module Mutant
     #
     # @api private
     #
-    def matcher; @matcher; end
+    attr_reader :matcher
 
     # Return AST node
     #
@@ -25,7 +25,7 @@ module Mutant
     #
     # @api private
     #
-    def node; @node; end
+    attr_reader :node
 
     # Enumerate possible mutations
     #
@@ -66,7 +66,7 @@ module Mutant
     # @api private
     # 
     def source
-      ToSource.to_source(@node)
+      ToSource.to_source(node)
     end
     memoize :source
 
@@ -89,7 +89,7 @@ module Mutant
     # @api private
     #
     def original_root
-      root(@node)
+      root(node)
     end
     memoize :original_root
 

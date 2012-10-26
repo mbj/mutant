@@ -35,6 +35,30 @@ module Mutant
         self
       end
 
+      # Return scope
+      #
+      # @return [Class|Module]
+      #
+      # @api private
+      #
+      attr_reader :scope
+
+      # Return context
+      #
+      # @return [Context::Scope]
+      #
+      # @api private
+      #
+      attr_reader :context
+
+      # Return method name
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      attr_reader :method_name
+
     private
 
       # Initialize method filter
@@ -48,32 +72,8 @@ module Mutant
       #
       def initialize(scope, method_name)
         @scope, @method_name = scope, method_name.to_sym
-        @context = Context::Scope.build(@scope, source_path)
+        @context = Context::Scope.build(scope, source_path)
       end
-
-      # Return scope
-      #
-      # @return [Class|Module]
-      #
-      # @api private
-      #
-      def scope; @scope; end
-
-      # Return context
-      #
-      # @return [Context::Scope]
-      #
-      # @api private
-      #
-      def context; @context; end
-
-      # Return method name
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def method_name; @method_name; end
 
       # Return method
       #

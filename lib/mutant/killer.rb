@@ -24,7 +24,7 @@ module Mutant
     #
     # @api private
     #
-    def runtime; @runtime; end
+    attr_reader :runtime
 
     # Return original source
     #

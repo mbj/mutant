@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe Mutant::Killer::Rspec, '.run' do
 
+  before do
+    pending
+  end
+
   subject { object.run(mutation) }
 
   let(:context)      { mock('Context')  }

@@ -48,6 +48,14 @@ module Mutant
           matcher_class.new(scope, method_name)
         end
 
+        # Return match
+        #
+        # @return [Matche]
+        #
+        # @api private
+        #
+        attr_reader :match
+
       private
 
         # Initialize matcher
@@ -71,6 +79,7 @@ module Mutant
             parent.const_get(name)
           end
         end
+        memoize :scope
 
         # Return scope name
         #
@@ -79,7 +88,7 @@ module Mutant
         # @api private
         #
         def scope_name
-          @match[SCOPE_NAME_POSITION]
+          match[SCOPE_NAME_POSITION]
         end
 
         # Return method name
@@ -89,7 +98,7 @@ module Mutant
         # @api private
         #
         def method_name
-          @match[METHOD_NAME_POSITION].to_sym
+          match[METHOD_NAME_POSITION].to_sym
         end
 
         # Return scope symbol
@@ -99,7 +108,7 @@ module Mutant
         # @api private
         #
         def scope_symbol
-          @match[SCOPE_SYMBOL_POSITION]
+          match[SCOPE_SYMBOL_POSITION]
         end
 
         # Return matcher class

@@ -15,7 +15,7 @@ module Mutant
     #
     # @api private
     #
-    def errors; @errors; end
+    attr_reader :errors
 
     # Test for failure
     #
@@ -61,7 +61,7 @@ module Mutant
     def run
       matcher.each do |subject|
         reporter.subject(subject)
-        run_subject(subject)
+        #run_subject(subject)
       end
     end
 
@@ -75,6 +75,7 @@ module Mutant
     #
     def run_subject(subject)
       subject.each do |mutation|
+        reporter.mutation(mutation)
         next unless @mutation_filter.match?(mutation)
         reporter.mutation(mutation)
         kill(mutation)
