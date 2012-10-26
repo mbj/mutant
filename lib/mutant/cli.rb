@@ -39,7 +39,7 @@ module Mutant
   private
 
     OPTIONS = {
-      '--code' => [:add_filter, Mutation::Filter::Code],
+      '--code'    => [:add_filter, Mutation::Filter::Code],
       '-I'        => [:add_load_path],
       '--include' => [:add_load_path],
       '-r'        => [:require_library],

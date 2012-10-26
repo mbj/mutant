@@ -5,8 +5,11 @@
 require 'spec_helper'
 
 describe Mutant::Mutator, '.each' do
+
   pending 'interpolated string literal (DynamicString)' do
     let(:source) { '"foo#{1}bar"' }
+
+    let(:random_string) { 'this-is-random' }
 
     let(:mutations) do
       mutations = []
