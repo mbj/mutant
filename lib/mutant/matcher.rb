@@ -1,7 +1,7 @@
 module Mutant
   # Abstract matcher to find ASTs to mutate
   class Matcher
-    include Enumerable, AbstractClass, Adamantium
+    include Adamantium::Flat, Enumerable, AbstractClass
     extend DescendantsTracker
 
     # Enumerate subjects

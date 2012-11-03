@@ -5,10 +5,6 @@ module TestApp
       true
     end
 
-    def self.freeze
-      raise
-    end
-
     def string
       'string'
     end

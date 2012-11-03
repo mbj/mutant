@@ -3,7 +3,7 @@ module Mutant
     class Method < self
       # A classifier for input strings
       class Classifier
-        include Adamantium
+        include Adamantium::Flat
 
         TABLE = {
           '.' => Matcher::Method::Singleton,

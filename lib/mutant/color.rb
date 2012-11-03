@@ -1,7 +1,7 @@
 module Mutant
   # Class to colorize strings
   class Color
-    include Adamantium
+    include Adamantium::Flat
 
     # Initialize color object
     #

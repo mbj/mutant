@@ -2,7 +2,7 @@ module Mutant
   class Context
     # Scope context for mutation (Class or Module)
     class Scope < self
-      include Adamantium, AbstractClass
+      include Adamantium::Flat, AbstractClass
 
       # Class context for mutation
       class Class < self

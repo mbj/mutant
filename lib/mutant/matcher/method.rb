@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Matcher to find AST for method
     class Method < self
-      include Adamantium, Equalizer.new(:identification)
+      include Adamantium::Flat, Equalizer.new(:identification)
 
       # Parse a method string into filter
       #

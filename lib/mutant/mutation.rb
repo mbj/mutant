@@ -1,7 +1,7 @@
 module Mutant
   # Represent a mutated node with its subject
   class Mutation
-    include Adamantium, Equalizer.new(:sha1)
+    include Adamantium::Flat, Equalizer.new(:sha1)
 
     # Return mutation subject
     #

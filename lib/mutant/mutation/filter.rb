@@ -2,7 +2,7 @@ module Mutant
   class Mutation
     # Abstract filter for mutations
     class Filter
-      include Adamantium, AbstractClass
+      include Adamantium::Flat, AbstractClass
       extend DescendantsTracker
 
       # Check for match

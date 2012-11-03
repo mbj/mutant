@@ -2,10 +2,10 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'adamantium',          :git => 'https://github.com/mbj/adamantium.git', :branch => :'no-deep-freeze-etc'
+gem 'adamantium',          :git => 'https://github.com/mbj/adamantium.git', :branch => :'configurable-freezers'
 gem 'descendants_tracker', :git => 'https://github.com/dkubb/descendants_tracker.git'
 gem 'abstract_class',      :git => 'https://github.com/dkubb/abstract_class.git'
-gem 'equalizer',           :git => 'https://github.com/mbj/equalizer.git', :branch => :'adamantium-no-deep-freeze'
+gem 'equalizer',           :git => 'https://github.com/dkubb/equalizer.git'
 gem 'anima',               :git => 'https://github.com/mbj/anima.git'
 gem 'to_source',           :git => 'https://github.com/mbj/to_source.git'
 

@@ -2,7 +2,7 @@ module Mutant
   class Mutation
     class Filter
       class Whitelist < self
-        include Adamantium, Equalizer.new(:whitelist)
+        include Adamantium::Flat, Equalizer.new(:whitelist)
 
         # Test for match
         #
