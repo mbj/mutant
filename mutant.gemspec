@@ -23,6 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('adamantium',          '~> 0.0.1')
   gem.add_runtime_dependency('equalizer',           '~> 0.0.1')
   gem.add_runtime_dependency('abstract_class',      '~> 0.0.1')
-  gem.add_runtime_dependency('anima',               '~> 0.0.1')
   gem.add_runtime_dependency('diff-lcs',            '~> 1.1.3')
 end

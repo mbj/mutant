@@ -4,11 +4,6 @@ module Mutant
     include Adamantium::Flat, Anima
     extend MethodObject
 
-    attribute :matcher
-    attribute :killer
-    attribute :reporter
-    attribute :mutation_filter
-
     # Return killers with errors
     #
     # @return [Enumerable<Killer>]
