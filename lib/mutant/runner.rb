@@ -1,7 +1,7 @@
 module Mutant
   # Runner that allows to mutate an entire project
   class Runner
-    include Adamantium::Flat, Anima
+    include Adamantium::Flat
     extend MethodObject
 
     # Return killers with errors
@@ -30,19 +30,14 @@ module Mutant
 
     # Initialize object
     #
-    # @param [Hash] attributes
+    # @param [Config] config
     #
     # @return [undefined]
     #
     # @api private
     #
-    def initialize(attributes)
-      attributes[:reporter]        ||= Reporter::Null
-      attributes[:mutation_filter] ||= Mutation::Filter::ALL
-
-      super(attributes)
-
-      @errors = []
+    def initialize(config)
+      @config, @errors = config, []
 
       run
     end
