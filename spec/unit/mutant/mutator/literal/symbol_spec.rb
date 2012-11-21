@@ -6,7 +6,7 @@ describe Mutant::Mutator::Literal, 'symbol' do
   let(:source) { ':foo' }
 
   let(:mutations) do
-    %w(nil) << ":#{random_string}"
+    %w(nil) << ":s#{random_string}"
   end
 
   before do

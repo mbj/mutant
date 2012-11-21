@@ -101,7 +101,7 @@ module Mutant
     # @api private
     #
     def kill(mutation)
-      killer = config.killer.new(mutation)
+      killer = config.strategy.kill(mutation)
       reporter.killer(killer)
       if killer.fail?
         @errors << killer

@@ -3,9 +3,9 @@ require 'spec_helper'
 describe Mutant::Killer,'#fail?' do
   subject { object.fail? }
 
-  let(:object)           { class_under_test.run(mutation) }
-  let(:root)             { mock('Root')                   }
-  let(:mutation)         { mock('Mutation')               }
+  let(:object)           { class_under_test.new(strategy, mutation) }
+  let(:strategy)         { mock('Strategy')                         }
+  let(:mutation)         { mock('Mutation')                         }
 
   before do
     mutation.stub(:insert)

@@ -1,7 +1,9 @@
 require 'spec_helper'
 
-describe Mutant::Killer,'.run' do
-  subject { class_under_test.run(mutation) }
+describe Mutant::Killer,'.new' do
+  subject { class_under_test.new(strategy,mutation) }
+
+  let(:strategy) { mock('Strategy') }
 
   let(:mutation)         { mock('Mutation')  }
 

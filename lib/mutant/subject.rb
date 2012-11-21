@@ -1,7 +1,7 @@
 module Mutant
   # Subject of a mutation
   class Subject
-    include Adamantium::Flat, Enumerable
+    include Adamantium::Flat, Enumerable, Equalizer.new(:context, :matcher, :node)
 
     # Return context
     #

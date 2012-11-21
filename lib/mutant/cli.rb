@@ -59,21 +59,15 @@ module Mutant
     end
     memoize :filter
 
-    # Return killer
+    # Return stratety
     #
-    # @return [Mutant::Killer]
+    # @return [Strategy]
     #
     # @api private
     #
-    def killer
-      killer = Mutant::Killer::Rspec
-      if @forking
-        Mutant::Killer::Forking.new(killer)
-      else
-        killer
-      end
+    def strategy
+      @strategy || raise(Error, 'no strategy was set!')
     end
-    memoize :killer
 
     # Return reporter
     #
@@ -89,15 +83,32 @@ module Mutant
   private
 
     OPTIONS = {
-      '--code'    => [:add_filter, Mutation::Filter::Code],
-      '-I'        => [:add_load_path],
-      '--include' => [:add_load_path],
-      '-r'        => [:require_library],
-      '--require' => [:require_library],
-      '--fork'    => [:set_forking]
+      '--code'        => [:add_filter,           Mutation::Filter::Code ],
+      '-I'            => [:add_load_path                                ],
+      '--include'     => [:add_load_path                                ],
+      '-r'            => [:require_library                              ],
+      '--require'     => [:require_library                              ],
+     #'--killer-fork' => [:enable_killer_fork                           ],
+      '--rspec-unit'  => [:set_strategy,         Strategy::Rspec::Unit  ],
+      '--rspec-dm2'   => [:set_strategy,         Strategy::Rspec::DM2   ]
     }.deep_freeze
 
-    OPTION_PATTERN = %r(\A-(?:-)?[a-zA-Z0-9]+\z).freeze
+    OPTION_PATTERN = %r(\A-(?:-)?[a-zA-Z0-9\-]+\z).freeze
+
+    # Return selected killer
+    #
+    # @return [Killer]
+    #
+    # @api private
+    #
+    def selected_killer
+      unless @rspec
+        raise Error, "Only rspec is supported currently use --rspec switch"
+      end
+
+      Mutant::Killer::Rspec
+    end
+    memoize :selected_killer
 
     # Return option for argument with index
     #
@@ -128,6 +139,7 @@ module Mutant
         dispatch
       end
 
+      strategy
       matcher
     end
 
@@ -163,7 +175,7 @@ module Mutant
     # @api private
     #
     def dispatch
-      if OPTION_PATTERN.match(current_argument)
+      if OPTION_PATTERN =~ current_argument
         dispatch_option
       else
         dispatch_matcher
@@ -240,7 +252,7 @@ module Mutant
       consume(2)
     end
 
-    # Set forking
+    # Enable rspec
     #
     # @api private
     #
@@ -248,9 +260,35 @@ module Mutant
     #
     # @api private
     #
-    def set_forking
+    def enable_rspec
+      consume(1)
+      @rspec = true
+    end
+
+    # Enable killer forking
+    #
+    # @api private
+    #
+    # @return [self]
+    #
+    # @api private
+    #
+    def enable_killer_fork
       consume(1)
       @forking = true
+    end
+
+    # Set strategy
+    #
+    # @param [Strategy]
+    #
+    # @api private
+    #
+    # @return [undefined]
+    #
+    def set_strategy(strategy)
+      consume(1)
+      @strategy = strategy
     end
 
     # Require library

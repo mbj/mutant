@@ -1,5 +1,5 @@
 module Mutant
-  # Abstract runner for mutant killers
+  # Abstract base class for mutant killers
   class Killer
     include Adamantium::Flat, AbstractClass
     
@@ -44,6 +44,14 @@ module Mutant
     def mutation_source
       mutation.source
     end
+
+    # Return strategy
+    #
+    # @return [Strategy]
+    #
+    # @api private
+    #
+    attr_reader :strategy
 
     # Return name of killer
     #
@@ -94,9 +102,20 @@ module Mutant
     #
     # @api private
     #
-    def initialize(mutation)
-      @mutation = mutation
-      @mutation.insert
+    def initialize(strategy, mutation)
+      @strategy, @mutation = strategy, mutation
+
+      run_with_benchmark
+    end
+
+    # Run with taking the time
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def run_with_benchmark
+      mutation.insert
       start_time = Time.now
       @killed = run
       end_time = Time.now

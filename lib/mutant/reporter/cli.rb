@@ -37,9 +37,9 @@ module Mutant
       #
       def config(config)
         puts 'Mutant configuration:'
-        puts "Matcher: #{config.matcher.inspect}"
-        puts "Filter:  #{config.filter.inspect}"
-        puts "Killer:  #{config.killer.inspect}"
+        puts "Matcher:   #{config.matcher.inspect}"
+        puts "Filter:    #{config.filter.inspect}"
+        puts "Strategy:  #{config.strategy.inspect}"
       end
 
       # Reporter killer

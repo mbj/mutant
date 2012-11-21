@@ -7,6 +7,7 @@ gem 'abstract_class',      :git => 'https://github.com/dkubb/abstract_class.git'
 gem 'equalizer',           :git => 'https://github.com/dkubb/equalizer.git'
 gem 'to_source',           :git => 'https://github.com/mbj/to_source.git'
 gem 'melbourne',           :git => 'https://github.com/mbj/melbourne.git'
+gem 'inflector',           :git => 'https://github.com/mbj/inflector.git'
 
 group :development do
   gem 'rake',    '~> 0.9.2'

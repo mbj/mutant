@@ -91,7 +91,7 @@ module Mutant
       # @api private
       #
       def filename_pattern
-        "test_app/spec/**/*_spec.rb"
+        strategy.filename_pattern(mutation)
       end
     end
   end
