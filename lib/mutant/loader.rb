@@ -38,7 +38,6 @@ module Mutant
       # @api private
       #
       def run
-        puts source
         eval(source, TOPLEVEL_BINDING)
       end
 
