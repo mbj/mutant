@@ -51,13 +51,7 @@ module Zombie
       node.body = Rubinius::AST::ModuleScope.new(scope.line, node.name, scope.body)
     end
 
-    script = Rubinius::AST::Script.new(root)
-    script.file = path
-
-    # For some reason loading is not the same as eval...?
-    # eval(root.to_source)
-
-    ::Mutant::Loader.run(script)
+    ::Mutant::Loader::Eval.run(root)
   end
   private_class_method :zombify
 

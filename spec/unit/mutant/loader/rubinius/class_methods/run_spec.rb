@@ -1,6 +1,10 @@
 require 'spec_helper'
 
-describe Mutant::Loader, '.run' do
+describe Mutant::Loader::Rubinius, '.run' do
+  before do
+    pending
+  end
+
   subject { object.run(node) }
 
   let(:object) { described_class }

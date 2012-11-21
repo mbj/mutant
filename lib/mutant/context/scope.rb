@@ -48,7 +48,7 @@ module Mutant
         root = root_ast
         block = Rubinius::AST::Block.new(1, [node])
         root.body = scope_class.new(1, root.name, block)
-        script(root)
+        root
       end
 
       # Return unqualified name of scope

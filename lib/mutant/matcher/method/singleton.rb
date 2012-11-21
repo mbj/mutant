@@ -61,7 +61,7 @@ module Mutant
         def method
           scope.method(method_name)
         end
-        memoize :method
+        memoize :method, :freezer => :noop
 
         # Test for node match
         #

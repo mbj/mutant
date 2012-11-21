@@ -11,7 +11,7 @@ describe Mutant, 'code loading' do
   let(:node)    { 'def foo; :bar; end'.to_ast                                   }
   let(:root)    { context.root(node)                                            }
  
-  subject       { Mutant::Loader.run(root)                                      }
+  subject       { Mutant::Loader::Eval.run(root)                                }
 
   before { subject }
 

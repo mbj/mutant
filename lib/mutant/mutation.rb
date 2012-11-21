@@ -21,7 +21,7 @@ module Mutant
 
     # Return mutated root node
     #
-    # @return [Rubinius::AST::Script]
+    # @return [Rubinius::AST::Node]
     #
     # @api private
     #
@@ -37,7 +37,7 @@ module Mutant
     # @api private
     #
     def insert
-      Loader.run(root)
+      Loader::Eval.run(root)
       self
     end
 

@@ -75,7 +75,7 @@ module Mutant
         def method
           scope.instance_method(method_name)
         end
-        memoize :method
+        memoize :method, :freezer => :noop
 
       end
     end

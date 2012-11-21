@@ -7,12 +7,8 @@ describe Mutant::Context::Scope, '#root' do
   let(:path)   { mock('Path') }
   let(:node)   { mock('Node') } 
 
-  let(:constant)   { subject.body  }
-  let(:scope)      { constant.body }
+  let(:scope)      { subject.body }
   let(:scope_body) { scope.body    }
-
-  it { should be_a(Rubinius::AST::Script) }
-  its(:file) { should be(path) }
 
   it 'should wrap the ast under constant' do
     scope.should be_kind_of(Rubinius::AST::ClassScope)

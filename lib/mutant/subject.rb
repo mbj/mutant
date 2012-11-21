@@ -100,7 +100,8 @@ module Mutant
     # @api private
     #
     def reset
-      Loader.run(original_root)
+      Loader::Eval.run(original_root)
+      self
     end
 
   private
