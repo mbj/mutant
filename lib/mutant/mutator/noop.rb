@@ -27,6 +27,9 @@ module Mutant
       handle(Rubinius::AST::DynamicString)
       handle(Rubinius::AST::DynamicSymbol)
       handle(Rubinius::AST::DynamicRegex)
+      handle(Rubinius::AST::OpAssignOr19)
+      handle(Rubinius::AST::Or)
+      handle(Rubinius::AST::ConstantAccess)
     
     private
 
