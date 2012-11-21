@@ -66,7 +66,12 @@ module Mutant
     # @api private
     #
     def killer
-      Mutant::Killer::Rspec #::Forking
+      killer = Mutant::Killer::Rspec
+      if @forking
+        Mutant::Killer::Forking.new(killer)
+      else
+        killer
+      end
     end
     memoize :killer
 
@@ -88,7 +93,8 @@ module Mutant
       '-I'        => [:add_load_path],
       '--include' => [:add_load_path],
       '-r'        => [:require_library],
-      '--require' => [:require_library]
+      '--require' => [:require_library],
+      '--fork'    => [:set_forking]
     }.deep_freeze
 
     OPTION_PATTERN = %r(\A-(?:-)?[a-zA-Z0-9]+\z).freeze
@@ -232,6 +238,19 @@ module Mutant
     def add_load_path
       $LOAD_PATH << current_option_value
       consume(2)
+    end
+
+    # Set forking
+    #
+    # @api private
+    #
+    # @return [self]
+    #
+    # @api private
+    #
+    def set_forking
+      consume(1)
+      @forking = true
     end
 
     # Require library

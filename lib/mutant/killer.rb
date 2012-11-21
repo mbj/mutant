@@ -2,8 +2,7 @@ module Mutant
   # Abstract runner for mutant killers
   class Killer
     include Adamantium::Flat, AbstractClass
-    extend MethodObject
-
+    
     # Test for kill failure
     #
     # @return [true]
@@ -44,6 +43,37 @@ module Mutant
     #
     def mutation_source
       mutation.source
+    end
+
+    # Return name of killer
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    def self.type
+      self::TYPE
+    end
+
+    # Return identification
+    #
+    # @return [String]
+    #
+    # @api private
+    # 
+    def identification
+      "#{type}:#{mutation.identification}".freeze
+    end
+    memoize :identification
+
+    # Return mae of killer
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    def type
+      self.class.type
     end
 
   private

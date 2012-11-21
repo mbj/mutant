@@ -2,6 +2,7 @@ module Mutant
   class Killer
     # Runner for rspec tests
     class Rspec < self
+      TYPE = 'rspec'.freeze
 
       # Run block in clean rspec environment
       #
@@ -22,17 +23,6 @@ module Mutant
         ::RSpec.instance_variable_set(:@world, original_world)
         ::RSpec.instance_variable_set(:@configuration, original_configuration)
       end
-
-      # Return identification
-      #
-      # @return [String]
-      #
-      # @api private
-      # 
-      def identification
-        "rspec:#{mutation.identification}".freeze
-      end
-      memoize :identification
 
     private
 
@@ -60,6 +50,7 @@ module Mutant
       def run
         !run_rspec.zero?
       end
+      memoize :run
 
       # Run rspec with some wired compat stuff
       #
@@ -101,24 +92,6 @@ module Mutant
       #
       def filename_pattern
         "test_app/spec/**/*_spec.rb"
-      end
-
-      class Forking < self
-        # Run rspec in subprocess
-        #
-        # @return [Fixnum]
-        #   returns the exit status from rspec runner
-        #
-        # @api private
-        #
-        def run_rspec
-          p :prefork
-          fork do
-            exit run_rspec
-          end
-          pid, status = Process.wait2
-          status.exitstatus
-        end
       end
     end
   end
