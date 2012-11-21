@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Mutant::Matcher::ObjectSpace, '#each' do
+  before do
+    pending "defunct"
+  end
   subject { object.each { |item| yields << item } }
 
   let(:yields) { []                                               }

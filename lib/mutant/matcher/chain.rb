@@ -32,6 +32,22 @@ module Mutant
       #
       attr_reader :matchers
 
+      # Build matcher chain
+      #
+      # @param [Enumerable<Matcher>] matchers
+      #
+      # @return [Matcher]
+      #
+      # @api private
+      #
+      def self.build(matchers)
+        if matchers.length == 1
+          return matchers.first
+        end
+
+        new(matchers)
+      end
+
     private
 
       # Initialize chain matcher

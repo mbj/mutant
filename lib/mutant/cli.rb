@@ -1,10 +1,13 @@
 module Mutant
   # Comandline parser
   class CLI
-    include Adamantium::Flat
+    include Adamantium::Flat, Equalizer.new(:matcher, :filter, :killer)
 
     # Error raised when CLI argv is inalid
     Error = Class.new(RuntimeError)
+
+    EXIT_FAILURE = 1
+    EXIT_SUCCESS = 0
 
     # Run cli with arguments
     #
@@ -16,25 +19,67 @@ module Mutant
     # @api private
     #
     def self.run(*arguments)
-      error = Runner.run(new(*arguments).attributes).fail?
-      error ? 1 : 0
+      error = Runner.run(new(*arguments)).fail?
+      error ? EXIT_FAILURE : EXIT_SUCCESS
+    rescue Error => exception
+      $stderr.puts(exception.message)
+      EXIT_FAILURE
     end
 
-    # Return attributes
+    # Return matcher
     #
-    # @return [Hash]
+    # @return [Mutant::Matcher]
+    #
+    # @raise [CLI::Error]
+    #   raises error when matcher is not given
     #
     # @api private
     #
-    def attributes
-      { 
-        :mutation_filter => mutation_filter,
-        :matcher         => matcher,
-        :reporter        => Reporter::CLI.new($stderr),
-        :killer          => Killer::Rspec::Forking
-      }
+    def matcher
+      if @matchers.empty?
+        raise Error, 'No matchers given'
+      end
+
+      Mutant::Matcher::Chain.build(@matchers)
     end
-    memoize :attributes
+    memoize :matcher
+
+    # Return mutation filter
+    #
+    # @return [Mutant::Matcher]
+    #
+    # @api private
+    #
+    def filter
+      if @filters.empty?
+        Mutation::Filter::ALL
+      else
+        Mutation::Filter::Whitelist.new(@filters)
+      end
+    end
+    memoize :filter
+
+    # Return killer
+    #
+    # @return [Mutant::Killer]
+    #
+    # @api private
+    #
+    def killer
+      Mutant::Killer::Rspec #::Forking
+    end
+    memoize :killer
+
+    # Return reporter
+    #
+    # @return [Mutant::Reporter::CLI]
+    #
+    # @api private
+    #
+    def reporter
+      Mutant::Reporter::CLI.new($stderr)
+    end
+    memoize :reporter
 
   private
 
@@ -76,6 +121,8 @@ module Mutant
       while @index < @arguments.length
         dispatch
       end
+
+      matcher
     end
 
     # Return current argument
@@ -196,37 +243,6 @@ module Mutant
     def require_library
       require(current_option_value)
       consume(2)
-    end
-
-    # Return matcher
-    #
-    # @return [Mutant::Matcher]
-    #
-    # @raise [CLI::Error]
-    #   raises error when matcher is not given
-    #
-    # @api private
-    #
-    def matcher
-      if @matchers.empty?
-        raise Error, 'No matchers given'
-      end
-
-      Mutant::Matcher::Chain.new(@matchers)
-    end
-
-    # Return mutation filter
-    #
-    # @return [Mutant::Matcher]
-    #
-    # @api private
-    #
-    def mutation_filter
-      if @filters.empty?
-        Mutation::Filter::ALL
-      else
-        Mutation::Filter::Whitelist.new(@filters)
-      end
     end
 
   end

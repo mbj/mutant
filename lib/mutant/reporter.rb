@@ -32,5 +32,15 @@ module Mutant
     # @api private
     #
     abstract_method :killer
+
+    # Report config
+    # 
+    # @param [Mutant::Config] config
+    #
+    # @return [self]
+    #
+    # @api private
+    #
+    abstract_method :config
   end
 end

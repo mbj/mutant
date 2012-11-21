@@ -4,42 +4,6 @@ module Mutant
       # Matcher for singleton methods
       class Singleton < self
 
-        # Return matcher enumerable
-        #
-        # @param [Class|Module] scope
-        #
-        # @return [Enumerable<Matcher::Method::Singleton>]
-        #
-        # @api private
-        #
-        def self.each(scope)
-          return to_enum unless block_given?
-          singleton_methods(scope).each do |name|
-            yield new(scope, name)
-          end
-        end
-
-        # Return singleton methods defined on scope
-        #
-        # @param [Class|Module] scope
-        #
-        # @return [Enumerable<Symbol>]
-        #
-        # @api private
-        #
-        def self.singleton_methods(scope)
-          singleton_class = scope.singleton_class
-
-          names = 
-            singleton_class.public_instance_methods(false)   +
-            singleton_class.private_instance_methods(false)  +
-            singleton_class.protected_instance_methods(false)
-
-          names.map(&:to_sym).sort.reject do |name|
-            name.to_sym == :__class_init__
-          end
-        end
-
         # Return identification
         #
         # @return [String]

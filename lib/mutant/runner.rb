@@ -26,6 +26,14 @@ module Mutant
       !errors.empty?
     end
 
+    # Return config
+    #
+    # @return [Mutant::Config]
+    #
+    # @api private
+    #
+    attr_reader :config
+
   private
 
     # Initialize object
@@ -39,7 +47,19 @@ module Mutant
     def initialize(config)
       @config, @errors = config, []
 
+      reporter.config(config)
+
       run
+    end
+
+    # Return reporter
+    #
+    # @return [Reporter]
+    #
+    # @api private
+    #
+    def reporter
+      config.reporter
     end
 
     # Run mutation killers on subjects
@@ -49,9 +69,9 @@ module Mutant
     # @api private
     #
     def run
-      matcher.each do |subject|
+      config.matcher.each do |subject|
         reporter.subject(subject)
-        #run_subject(subject)
+        run_subject(subject)
       end
     end
 
@@ -65,8 +85,7 @@ module Mutant
     #
     def run_subject(subject)
       subject.each do |mutation|
-        reporter.mutation(mutation)
-        next unless @mutation_filter.match?(mutation)
+        next unless config.filter.match?(mutation)
         reporter.mutation(mutation)
         kill(mutation)
       end
@@ -82,7 +101,7 @@ module Mutant
     # @api private
     #
     def kill(mutation)
-      killer = @killer.run(mutation)
+      killer = config.killer.run(mutation)
       reporter.killer(killer)
       if killer.fail?
         @errors << killer

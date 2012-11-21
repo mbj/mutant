@@ -16,7 +16,7 @@ module Mutant
         #
         def dispatch
           emit_nil
-          emit_new { new_self(Random.hex_string.to_sym) }
+          emit_new { new_self(('s'+Random.hex_string).to_sym) }
         end
       end
     end

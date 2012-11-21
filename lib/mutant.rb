@@ -5,6 +5,7 @@ require 'abstract_class'
 require 'descendants_tracker'
 require 'securerandom'
 require 'equalizer'
+require 'digest/sha1'
 require 'to_source'
 require 'ice_nine'
 require 'ice_nine/core_ext/object'
@@ -13,6 +14,31 @@ require 'diff/lcs/hunk'
 
 # Library namespace
 module Mutant
+
+  # Define instance of subclassed superclass as constant
+  #
+  # @param [Class] superclass
+  # @param [Symbol] name
+  #
+  # @return [self]
+  #
+  # @api private
+  #
+  def self.define_singleton_subclass(name, superclass, &block)
+    klass = Class.new(superclass) do
+
+      def inspect; self.class.name; end
+
+      define_singleton_method(:name) do
+        "#{superclass.name}::#{name}".freeze
+      end
+
+    end
+    klass.class_eval(&block)
+    superclass.const_set(name, klass.new)
+    self
+  end
+
 end
 
 require 'mutant/support/method_object'
@@ -53,6 +79,7 @@ require 'mutant/matcher/method'
 require 'mutant/matcher/method/singleton'
 require 'mutant/matcher/method/instance'
 require 'mutant/matcher/method/classifier'
+require 'mutant/matcher/scope_methods'
 require 'mutant/killer'
 require 'mutant/killer/rspec'
 require 'mutant/runner'

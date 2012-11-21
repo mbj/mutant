@@ -4,37 +4,6 @@ module Mutant
       # Matcher for instance methods
       class Instance < self
 
-        # Extract instance method matchers from scope
-        #
-        # @param [Class|Module] scope
-        #
-        # @return [Enumerable<Matcher::Method::Instance>]
-        #
-        # @api private
-        #
-        def self.each(scope)
-          return to_enum(:each, scope) unless block_given?
-          return unless scope.kind_of?(Module)
-
-          instance_method_names(scope).map do |name|
-            yield new(scope, name)
-          end
-        end
-
-        # Return instance methods names of scope
-        #
-        # @param [Class|Module] scope
-        #
-        # @return [Enumerable<Symbol>]
-        #
-        def self.instance_method_names(scope)
-          names = 
-            scope.public_instance_methods(false)  +
-            scope.private_instance_methods(false) + 
-            scope.protected_instance_methods(false)
-
-          names.uniq.map(&:to_sym).sort
-        end
 
         # Return identification
         #

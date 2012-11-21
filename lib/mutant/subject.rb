@@ -1,5 +1,5 @@
 module Mutant
-  # Subject of mutation
+  # Subject of a mutation
   class Subject
     include Adamantium::Flat, Enumerable
 

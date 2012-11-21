@@ -54,7 +54,7 @@ module Mutant
     #
     # @api private
     #
-    def mutation; @mutation; end
+    attr_reader :mutation
 
     # Initialize killer object
     #

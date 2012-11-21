@@ -93,6 +93,16 @@ module Mutant
         ) + Dir[filename_pattern]
       end
 
+      # Return filename pattern
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def filename_pattern
+        "test_app/spec/**/*_spec.rb"
+      end
+
       class Forking < self
         # Run rspec in subprocess
         #
@@ -102,6 +112,7 @@ module Mutant
         # @api private
         #
         def run_rspec
+          p :prefork
           fork do
             exit run_rspec
           end

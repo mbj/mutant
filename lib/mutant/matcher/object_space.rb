@@ -38,8 +38,8 @@ module Mutant
       def each(&block)
         return to_enum unless block_given?
 
-        matchers.each do |matcher|
-          matcher.each(&block)
+        scopes.each do |scope|
+          emit_scope_matches(scope, &block)
         end
 
         self
@@ -64,24 +64,8 @@ module Mutant
       #
       # @api private
       #
-      def initialize(scope_name_pattern)
-        @scope_name_pattern, @matchers = scope_name_pattern, [Method::Singleton, Method::Instance]
-      end
-
-      # Return matcher enumerator
-      #
-      # @return [Enumerable<Matcher>]
-      #
-      # @api private
-      #
-      def matchers(&block)
-        return to_enum(__method__) unless block_given?
-
-        scopes.each do |scope|
-          emit_scope_matches(scope, &block)
-        end
-
-        self
+      def initialize(scope_name_pattern, matchers = [Matcher::ScopeMethods::Singleton, Matcher::ScopeMethods::Instance])
+        @scope_name_pattern, @matchers = scope_name_pattern, @matchers = matchers #[Method::Singleton, Method::Instance]
       end
 
       # Yield matchers for scope
@@ -94,7 +78,7 @@ module Mutant
       #
       def emit_scope_matches(scope, &block)
         @matchers.each do |matcher|
-          matcher.each(scope, &block)
+          matcher.new(scope).each(&block)
         end
       end
 
