@@ -90,6 +90,7 @@ module Mutant
       '--require'     => [:require_library                              ],
      #'--killer-fork' => [:enable_killer_fork                           ],
       '--rspec-unit'  => [:set_strategy,         Strategy::Rspec::Unit  ],
+      '--rspec-full'  => [:set_strategy,         Strategy::Rspec::Full  ],
       '--rspec-dm2'   => [:set_strategy,         Strategy::Rspec::DM2   ]
     }.deep_freeze
 

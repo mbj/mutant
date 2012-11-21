@@ -37,7 +37,13 @@ module Mutant
 
       class Unit < self
         def self.filename_pattern(mutation)
-          'spec/unit/**/*.rb'
+          'spec/unit/**/*_spec.rb'
+        end
+      end
+
+      class Full < self
+        def self.filename_pattern(mutation)
+          'spec/**/*_spec.rb'
         end
       end
     end
