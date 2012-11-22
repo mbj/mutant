@@ -15,7 +15,7 @@ module Mutant
     end
 
     def self.killer
-      Killer::Forking.new(self::KILLER)
+      self::KILLER
     end
 
     class Rspec < self
