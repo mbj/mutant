@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.files            = `git ls-files`.split("\n")
   gem.test_files       = `git ls-files -- spec`.split("\n")
   gem.extra_rdoc_files = %w[TODO]
-  gem.executable       = [ 'mutant' ]
+  gem.executables       = [ 'mutant' ]
 
   gem.add_runtime_dependency('to_source',           '~> 0.1.3')
   gem.add_runtime_dependency('ice_nine',            '~> 0.5.0')
