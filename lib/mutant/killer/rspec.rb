@@ -62,9 +62,7 @@ module Mutant
       # @api private
       #
       def run_rspec
-        self.class.nest do 
-          ::RSpec::Core::Runner.run(command_line_arguments, @error_stream, @output_stream)
-        end
+        ::RSpec::Core::Runner.run(command_line_arguments, @error_stream, @output_stream)
       end
 
       # Return command line arguments
