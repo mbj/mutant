@@ -30,7 +30,7 @@ module Mutant
 
           path = Inflector.underscore(name)
 
-          p "spec/unit/#{path}#{append}/*_spec.rb"
+          "spec/unit/#{path}#{append}/*_spec.rb"
         end
 
       end
