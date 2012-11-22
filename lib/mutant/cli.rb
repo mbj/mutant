@@ -83,15 +83,17 @@ module Mutant
   private
 
     OPTIONS = {
-      '--code'        => [:add_filter,           Mutation::Filter::Code ],
-      '-I'            => [:add_load_path                                ],
-      '--include'     => [:add_load_path                                ],
-      '-r'            => [:require_library                              ],
-      '--require'     => [:require_library                              ],
-     #'--killer-fork' => [:enable_killer_fork                           ],
-      '--rspec-unit'  => [:set_strategy,         Strategy::Rspec::Unit  ],
-      '--rspec-full'  => [:set_strategy,         Strategy::Rspec::Full  ],
-      '--rspec-dm2'   => [:set_strategy,         Strategy::Rspec::DM2   ]
+      '--code'               => [:add_filter,           Mutation::Filter::Code    ],
+      '-I'                   => [:add_load_path                                   ],
+      '--include'            => [:add_load_path                                   ],
+      '-r'                   => [:require_library                                 ],
+      '--require'            => [:require_library                                 ],
+     #'--killer-fork'        => [:enable_killer_fork                              ],
+      '--rspec-unit'         => [:set_strategy,         Strategy::Rspec::Unit     ],
+      '--rspec-full'         => [:set_strategy,         Strategy::Rspec::Full     ],
+      '--rspec-dm2'          => [:set_strategy,         Strategy::Rspec::DM2      ],
+      '--static-fail'        => [:set_strategy,         Strategy::Static::Fail    ],
+      '--static-success'     => [:set_strategy,         Strategy::Static::Success ]
     }.deep_freeze
 
     OPTION_PATTERN = %r(\A-(?:-)?[a-zA-Z0-9\-]+\z).freeze

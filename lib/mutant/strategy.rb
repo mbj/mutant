@@ -18,6 +18,16 @@ module Mutant
       self::KILLER
     end
 
+    class Static < self
+      class Fail < self
+        KILLER = Killer::Static::Fail
+      end
+
+      class Success < self
+        KILLER = Killer::Static::Success
+      end
+    end
+
     class Rspec < self
       KILLER = Killer::Rspec
 
