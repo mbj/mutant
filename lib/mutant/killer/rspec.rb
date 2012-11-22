@@ -62,12 +62,7 @@ module Mutant
       # @api private
       #
       def run_rspec
-        require 'rspec'
         self.class.nest do 
-          require './spec/spec_helper.rb'
-          if RSpec.world.shared_example_groups.empty?
-            Dir['spec/{support,shared}/**/*.rb'].each { |f| load(f) }
-          end
           ::RSpec::Core::Runner.run(command_line_arguments, @error_stream, @output_stream)
         end
       end

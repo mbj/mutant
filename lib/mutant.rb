@@ -12,6 +12,7 @@ require 'ice_nine'
 require 'ice_nine/core_ext/object'
 require 'diff/lcs'
 require 'diff/lcs/hunk'
+require 'rspec'
 
 # Library namespace
 module Mutant

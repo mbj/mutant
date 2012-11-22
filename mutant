@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'mutant'
-require 'mutant/cli'
 
 namespace =
   if File.basename($0) == 'zombie'
