@@ -50,6 +50,8 @@ module Mutant
       reporter.config(config)
 
       run
+
+      reporter.errors(@errors)
     end
 
     # Return reporter

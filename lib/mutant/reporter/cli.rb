@@ -4,6 +4,36 @@ module Mutant
     class CLI < self
       include Equalizer.new(:io)
 
+      class Stats
+        attr_reader :subject
+        attr_reader :mutation
+        attr_reader :kill
+        attr_reader :time
+
+        def initialize
+          @start = Time.now
+          @subject = @mutation = @kill = @time = 0
+        end
+
+        def runtime
+          Time.now - @start
+        end
+
+        def subject
+          @subject +=1
+        end
+
+        def alive
+          @mutation - @kill
+        end
+
+        def killer(killer)
+          @mutation +=1
+          @kill +=1 unless killer.fail?
+          @time += killer.runtime
+        end
+      end
+
       # Reporter subject
       #
       # @param [Subject] subject
@@ -13,6 +43,7 @@ module Mutant
       # @api private
       #
       def subject(subject)
+        stats.subject
         puts("Subject: #{subject.identification}")
       end
 
@@ -51,13 +82,40 @@ module Mutant
       # @api private
       #
       def killer(killer)
-        if killer.fail?
-          failure(killer)
-        else
-          puts("Killed: #{killer.identification} (%02.2fs)" % killer.runtime)
-        end
+        stats.killer(killer)
+
+        color, word =
+          if killer.fail?
+            [Color::RED,   'Alive']
+          else
+            [Color::GREEN, 'Killed']
+          end
+
+        puts(colorize(color, "#{word}: #{killer.identification} (%02.2fs)" % killer.runtime))
 
         self
+      end
+
+      # Report errors
+      #
+      # @param [Enumerable<Killer>]
+      #
+      # @api private
+      #
+      # @return [self]
+      #
+      def errors(errors)
+        errors.each do |error|
+          failure(error)
+        end
+
+        puts
+        puts "subjects:  #{stats.subject}"
+        puts "mutations: #{stats.mutation}"
+        puts "kills:     #{stats.kill}"
+        puts "alive:     #{stats.alive}"
+        puts "mtime:     %02.2fs" % stats.time
+        puts "rtime:     %02.2fs" % stats.runtime
       end
 
       # Return IO stream
@@ -67,6 +125,14 @@ module Mutant
       # @api private
       # 
       attr_reader :io
+
+      # Retun stats
+      #
+      # @return [Stats]
+      #
+      # @api private
+      #
+      attr_reader :stats
 
     private 
 
@@ -80,6 +146,7 @@ module Mutant
       #
       def initialize(io)
         @io = io
+        @stats = Stats.new
       end
 
       # Report failure on killer
@@ -101,7 +168,7 @@ module Mutant
           raise "Unable to create a diff"
         end
         puts(diff)
-        puts
+        puts("Took: (%02.2fs)" % killer.runtime)
       end
 
       # Test for colored output
