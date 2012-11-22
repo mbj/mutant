@@ -126,7 +126,7 @@ module Mutant
       # 
       attr_reader :io
 
-      # Retun stats
+      # Return stats
       #
       # @return [Stats]
       #
