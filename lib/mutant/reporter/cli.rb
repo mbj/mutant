@@ -221,8 +221,6 @@ module Mutant
         diff = color? ? differ.colorized_diff : differ.diff
         # FIXME remove this branch before release
         if diff.empty?
-          killer.send(:mutation).node.ascii_graph
-          killer.send(:mutation).subject.node.ascii_graph
           raise "Unable to create a diff, so ast mutation or to_source has an error!"
         end
         puts(diff)
