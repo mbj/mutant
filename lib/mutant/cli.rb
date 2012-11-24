@@ -94,7 +94,7 @@ module Mutant
       '--rspec-dm2'          => [:set_strategy,         Strategy::Rspec::DM2      ],
       '--static-fail'        => [:set_strategy,         Strategy::Static::Fail    ],
       '--static-success'     => [:set_strategy,         Strategy::Static::Success ]
-    }.deep_freeze
+    }.freeze
 
     OPTION_PATTERN = %r(\A-(?:-)?[a-zA-Z0-9\-]+\z).freeze
 
