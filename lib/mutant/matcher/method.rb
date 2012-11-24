@@ -59,14 +59,6 @@ module Mutant
       #
       attr_reader :method_name
 
-      def self.cache
-        @cache ||= {}
-      end
-
-      def self.ast(file)
-        cache[file] ||= File.read(file).to_ast
-      end
-
     private
 
       # Initialize method filter
@@ -98,7 +90,7 @@ module Mutant
       # @api private
       #
       def ast
-        self.class.ast(source_path)
+        File.read(source_path).to_ast
       end
 
       # Return path to source
@@ -120,7 +112,6 @@ module Mutant
       def source_line
         source_location.last
       end
-      memoize :source_line
 
       # Return source location
       #
@@ -131,7 +122,6 @@ module Mutant
       def source_location
         method.source_location
       end
-      memoize :source_location
 
       # Return matched node
       #
