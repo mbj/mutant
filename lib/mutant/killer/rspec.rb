@@ -4,26 +4,6 @@ module Mutant
     class Rspec < self
       TYPE = 'rspec'.freeze
 
-      # Run block in clean rspec environment
-      #
-      # @return [Object]
-      #   returns the value of block
-      #
-      # @api private
-      #
-      def self.nest
-        original_world, original_configuration = 
-          ::RSpec.instance_variable_get(:@world),
-          ::RSpec.instance_variable_get(:@configuration)
-
-        ::RSpec.reset
-
-        yield
-      ensure
-        ::RSpec.instance_variable_set(:@world, original_world)
-        ::RSpec.instance_variable_set(:@configuration, original_configuration)
-      end
-
     private
 
       # Initialize rspec runner
@@ -53,8 +33,6 @@ module Mutant
       memoize :run
 
       # Run rspec with some wired compat stuff
-      #
-      # FIXME: This extra stuff needs to be configurable per project
       #
       # @return [Fixnum]
       #   returns the exit status from rspec runner

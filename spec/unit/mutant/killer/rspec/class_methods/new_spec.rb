@@ -1,15 +1,12 @@
 require 'spec_helper'
 
-describe Mutant::Killer::Rspec, '.run' do
+describe Mutant::Killer::Rspec, '.new' do
 
-  before do
-    pending
-  end
+  subject { object.new(strategy, mutation) }
 
-  subject { object.run(mutation) }
-
-  let(:context)      { mock('Context')  }
-  let(:mutation)     { mock('Mutation') }
+  let(:strategy) { mock('Strategy', :filename_pattern => 'foo') }
+  let(:context)  { mock('Context')  }
+  let(:mutation) { mock('Mutation') }
 
   let(:object)  { described_class }
 
