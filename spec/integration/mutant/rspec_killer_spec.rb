@@ -17,4 +17,8 @@ describe Mutant,'rspec integration' do
   specify 'fails to kill mutations when they are not covered' do
     Kernel.system("bundle exec mutant -I lib -r test_app --rspec-dm2 ::TestApp::Literal#uncovered_string").should be(false)
   end
+
+  specify 'fails when some mutations when are not covered' do
+    Kernel.system("bundle exec mutant -I lib -r test_app --rspec-dm2 ::TestApp::Literal").should be(false)
+  end
 end
