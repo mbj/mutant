@@ -56,6 +56,8 @@ module Mutant
       # @api private
       #
       def mutation(mutation)
+        colorized_diff(mutation.original_source, mutation.source)
+        self
       end
 
       # Report config
@@ -159,15 +161,7 @@ module Mutant
       #
       def failure(killer)
         puts(colorize(Color::RED, "!!! Mutant alive: #{killer.identification} !!!"))
-        differ = Differ.new(killer.original_source,killer.mutation_source)
-        diff = color? ? differ.colorized_diff : differ.diff
-        # FIXME remove this branch before release
-        if diff.empty?
-          killer.send(:mutation).node.ascii_graph
-          killer.send(:mutation).subject.node.ascii_graph
-          raise "Unable to create a diff"
-        end
-        puts(diff)
+        colorized_diff(killer.original_source, killer.mutated_source)
         puts("Took: (%02.2fs)" % killer.runtime)
       end
 
@@ -211,6 +205,28 @@ module Mutant
       #
       def puts(string="\n")
         io.puts(string)
+      end
+
+      # Write colorized diff
+      #
+      # @param [String] original
+      # @param [String] current
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def colorized_diff(original, current)
+        differ = Differ.new(original, current)
+        diff = color? ? differ.colorized_diff : differ.diff
+        # FIXME remove this branch before release
+        if diff.empty?
+          killer.send(:mutation).node.ascii_graph
+          killer.send(:mutation).subject.node.ascii_graph
+          raise "Unable to create a diff, so ast mutation or to_source has an error!"
+        end
+        puts(diff)
+        self
       end
 
       # Test for output to tty
