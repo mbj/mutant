@@ -1,6 +1,6 @@
 module Mutant
   class Matcher
-    # Matcher to find AST for method
+    # Matcher for subjects that are a specific method
     class Method < self
       include Adamantium::Flat, Equalizer.new(:identification)
 
@@ -122,14 +122,6 @@ module Mutant
       def source_location
         method.source_location
       end
-
-      # Return matched node
-      #
-      # @return [Rubinis::AST::Node]
-      #
-      # @api private
-      #
-      abstract_method :matched_node
 
       # Return subject
       #

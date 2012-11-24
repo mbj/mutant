@@ -8,6 +8,7 @@ describe Mutant, 'method matching' do
   end
 
   before do
+    #eval(body, TOPLEVEL_BINDING, __FILE__, 0)
     eval(body)
     File.stub(:read => body)
   end

@@ -1,9 +1,6 @@
 require 'spec_helper'
 
 describe Mutant,'rspec integration' do
-  before do
-    pending
-  end
 
   around do |example|
     Dir.chdir(TestApp.root) do
@@ -11,23 +8,13 @@ describe Mutant,'rspec integration' do
     end
   end
 
-  specify 'allows to run rspec with mutations' do
+  let(:strategy) { Mutant::Strategy::Rspec::DM2 }
 
-    Mutant::Matcher::Method.parse('TestApp::Literal#string').each do |subject|
-      subject.each do |mutation|
-        runner =  Mutant::Killer::Rspec.run(mutation)
-        runner.fail?.should be(false)
-      end
-      subject.reset
-    end
+  specify 'allows to kill mutations' do
+    Kernel.system("bundle exec mutant -I lib -r test_app --rspec-dm2 ::TestApp::Literal#string").should be(true)
+  end
 
-    Mutant::Matcher::Method.parse('TestApp::Literal#uncovered_string').each do |subject|
-      subject.each do |mutation|
-        runner =  Mutant::Killer::Rspec.run(mutation)
-        runner.fail?.should be(true)
-      end
-      subject.reset
-    end
-
+  specify 'fails to kill mutations when they are not covered' do
+    Kernel.system("bundle exec mutant -I lib -r test_app --rspec-dm2 ::TestApp::Literal#uncovered_string").should be(false)
   end
 end
