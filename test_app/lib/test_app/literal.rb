@@ -5,6 +5,10 @@ module TestApp
       true
     end
 
+    def command(foo)
+      self
+    end
+
     def string
       'string'
     end
