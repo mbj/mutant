@@ -5,13 +5,17 @@ mutant
 [![Dependency Status](https://gemnasium.com/mbj/mutant.png)](https://gemnasium.com/mbj/mutant)
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/mbj/mutant)
 
-Mutant is a mutation testing tool for ruby under rubinius.
+Mutant is a mutation testing tool for ruby that aims to be better than existing mutation testers.
 
 The idea is that if code can be changed and your tests don't notice, either that code isn't being covered or it doesn't do anything.
 
-Mutants idea is based on [heckle](https://github.com/seattlerb/heckle).
-The motivation is from reading the other [mutants code](https://github.com/txus/mutant).
-The idea an concept is from this [gist](https://gist.github.com/1065789).
+It is currently only compatible to MRI and RBX in 1.9 mode. Also it only supports rspec2.
+
+Motivation:
+
+* [heckle](https://github.com/seattlerb/heckle).
+* Other older [mutants code](https://github.com/txus/mutant).
+* A [gist](https://gist.github.com/1065789) showing ideas.
 
 Installation
 ------------
