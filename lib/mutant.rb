@@ -1,7 +1,7 @@
 require 'backports'
 require 'adamantium'
 require 'ice_nine'
-require 'abstract_class'
+require 'abstract_type'
 require 'descendants_tracker'
 require 'securerandom'
 require 'equalizer'
