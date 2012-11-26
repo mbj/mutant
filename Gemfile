@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'abstract_class',      :git => 'https://github.com/dkubb/abstract_class.git'
 gem 'to_source',           :git => 'https://github.com/mbj/to_source.git'
 gem 'melbourne',           :git => 'https://github.com/mbj/melbourne.git'
 gem 'inflector',           :git => 'https://github.com/mbj/inflector.git'
