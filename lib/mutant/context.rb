@@ -1,7 +1,7 @@
 module Mutant
   # An abstract context where mutations can be appied to.
   class Context
-    include Adamantium::Flat, AbstractClass
+    include Adamantium::Flat, AbstractType
 
     # Return root ast node
     #

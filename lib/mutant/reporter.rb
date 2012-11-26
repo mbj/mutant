@@ -1,7 +1,7 @@
 module Mutant
   # Abstract reporter
   class Reporter
-    include Adamantium::Flat, AbstractClass
+    include Adamantium::Flat, AbstractType
 
     # Report subject
     #

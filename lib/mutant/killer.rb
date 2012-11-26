@@ -1,7 +1,7 @@
 module Mutant
   # Abstract base class for mutant killers
   class Killer
-    include Adamantium::Flat, AbstractClass
+    include Adamantium::Flat, AbstractType
     
     # Test for kill failure
     #

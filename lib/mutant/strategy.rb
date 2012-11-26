@@ -1,6 +1,6 @@
 module Mutant
   class Strategy 
-    include AbstractClass
+    include AbstractType
 
     # Kill mutation
     #

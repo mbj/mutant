@@ -3,7 +3,7 @@ module Mutant
     class Literal
       # Abstract literal range mutator
       class Range < self
-        include AbstractClass
+        include AbstractType
 
       private
 

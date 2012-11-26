@@ -2,7 +2,7 @@ module Mutant
   class Context
     # Scope context for mutation (Class or Module)
     class Scope < self
-      include Adamantium::Flat, AbstractClass, Equalizer.new(:scope, :source_path)
+      include Adamantium::Flat, AbstractType, Equalizer.new(:scope, :source_path)
 
       # Class context for mutation
       class Class < self

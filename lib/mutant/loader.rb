@@ -1,7 +1,7 @@
 module Mutant
   # Base class for code loaders
   class Loader
-    include AbstractClass
+    include AbstractType
     extend MethodObject
 
   private

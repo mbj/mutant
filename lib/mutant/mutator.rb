@@ -1,7 +1,7 @@
 module Mutant
   # Generator for mutations
   class Mutator
-    include Adamantium::Flat, AbstractClass
+    include Adamantium::Flat, AbstractType
 
     # Enumerate mutations on node
     #
