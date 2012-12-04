@@ -40,6 +40,7 @@ module Mutant
 
       def self.prepare_world
         ::RSpec.instance_variable_set(:@world, original_world)
+        ::RSpec.reset
         cleanup_world
       end
 
