@@ -30,41 +30,23 @@ module Mutant
 
     class Rspec < self
 
-      def self.original_world
-        @original_world ||=
-          begin
-            require './spec/spec_helper'
-            ::RSpec.world
-          end
-      end
-
-      def self.prepare_world
-        ::RSpec.instance_variable_set(:@world, original_world)
-        ::RSpec.reset
-        cleanup_world
-      end
-
-      def self.cleanup_world
-        ::RSpec::Core::ExampleGroup.children.clear
-        ::RSpec::Core::ExampleGroup.constants.each do |name|
-          if name =~ /^Nested/
-            RSpec::Core::ExampleGroup.send(:remove_const, name)
-          end
-        end
-      end
-
-      KILLER = Killer::Rspec
+      KILLER = Killer::Forking.new(Killer::Rspec)
 
       class DM2 < self
 
         def self.filename_pattern(mutation)
-          name = mutation.subject.context.scope.name
+          subject = mutation.subject
+          name = subject.context.scope.name
+          
+          matcher = subject.matcher
 
-          append = mutation.subject.matcher.kind_of?(Matcher::Method::Singleton) ? '/class_methods' : ''
+          append = matcher.kind_of?(Matcher::Method::Singleton) ? '/class_methods' : ''
 
           path = Inflector.underscore(name)
 
-          "spec/unit/#{path}#{append}/*_spec.rb"
+          base = "spec/unit/#{path}#{append}"
+
+          "#{base}/#{matcher.method_name}_spec.rb"
         end
 
       end

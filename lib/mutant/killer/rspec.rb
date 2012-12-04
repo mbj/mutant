@@ -40,7 +40,6 @@ module Mutant
       # @api private
       #
       def run_rspec
-        strategy.prepare_world
         ::RSpec::Core::Runner.run(command_line_arguments, @error_stream, @output_stream)
       end
 

@@ -2,9 +2,9 @@ module Mutant
   class Killer
 
     class Forked < self
-      def initialize(killer, mutation)
+      def initialize(killer, strategy, mutation)
         @killer = killer
-        super(mutation)
+        super(strategy, mutation)
       end
 
       def type
@@ -13,7 +13,7 @@ module Mutant
 
       def run
         fork do
-          @killer.new(@mutation)
+          @killer.new(strategy, mutation)
         end
 
         status = Process.wait2.last
@@ -26,13 +26,14 @@ module Mutant
 
       attr_reader :killer
 
-      def initialize(strategy)
+      def initialize(killer)
         @killer = killer
       end
 
-      def new(mutation)
-        Forked.new(@killer, mutation)
+      def new(strategy, mutation)
+        Forked.new(killer, strategy, mutation)
       end
+
     end
 
   end
