@@ -161,7 +161,7 @@ module Mutant
       #
       def failure(killer)
         puts(colorize(Color::RED, "!!! Mutant alive: #{killer.identification} !!!"))
-        colorized_diff(killer.original_source, killer.mutated_source)
+        colorized_diff(killer.original_source, killer.mutation_source)
         puts("Took: (%02.2fs)" % killer.runtime)
       end
 
