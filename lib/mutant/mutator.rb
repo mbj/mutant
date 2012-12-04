@@ -135,18 +135,19 @@ module Mutant
     # @api private
     #
     def new?(node)
-      sexp != node.to_sexp
+      source != ToSource.to_source(node)
     end
 
-    # Return s-expressions for node
+    # Return source for node
     #
     # @return [Array]
     #
     # @api private
     #
-    def sexp
-      node.to_sexp
+    def source
+      ToSource.to_source(node)
     end
+    memoize :source
 
     # Emit a new AST node
     #
@@ -301,7 +302,5 @@ module Mutant
     def dup_node
       node.dup
     end
-
-    memoize :sexp
   end
 end
