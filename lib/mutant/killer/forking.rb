@@ -13,7 +13,8 @@ module Mutant
 
       def run
         fork do
-          @killer.new(strategy, mutation)
+          killer = @killer.new(strategy, mutation)
+          Kernel.exit(killer.fail? ? 1 : 0)
         end
 
         status = Process.wait2.last
