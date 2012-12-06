@@ -16,6 +16,7 @@ describe Mutant::Mutator, 'call' do
         it_should_behave_like 'a noop mutator'
       end
     end
+
     context 'with self as receiver' do
 
       context 'implicit' do
@@ -45,20 +46,29 @@ describe Mutant::Mutator, 'call' do
   end
 
   context 'send with arguments' do
+
     context 'with self as receiver' do
       context 'implicit' do
-        let(:source) { 'foo(1)' }
+        let(:source) { 'foo(nil)' }
 
-        it_should_behave_like 'a noop mutator'
+        let(:mutations) do 
+          mutations = []
+          mutations << 'foo()'
+          mutations << 'foo(Object.new)'
+        end
+
+        it_should_behave_like 'a mutator'
       end
 
       context 'explicit' do
-        let(:source) { 'self.foo(1)' }
+        let(:source) { 'self.foo(nil)' }
 
         let(:mutations) do
           mutations = []
           # with implicit receiver (send privately)
-          mutations << 'foo(1)'
+          mutations << 'foo(nil)'
+          mutations << 'self.foo(Object.new)'
+          mutations << 'self.foo()'
         end
 
         it_should_behave_like 'a mutator'

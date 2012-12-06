@@ -1,7 +1,7 @@
 module Mutant
   class Mutator
     # Class for mutations where messages are send to objects
-    class Call < self
+    class Send < self
 
       handle(Rubinius::AST::Send)
 
@@ -87,13 +87,13 @@ module Mutant
         emit_implicit_self_receiver
       end
 
-      class SendWithArguments < Call
+      class SendWithArguments < self
         
         handle(Rubinius::AST::SendWithArguments)
 
       private
 
-        # Emut mutations
+        # Emit mutations
         #
         # @return [undefined]
         #
@@ -101,6 +101,21 @@ module Mutant
         #
         def dispatch
           super
+          emit_argument_mutations
+        end
+
+        # Emit argument mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_argument_mutations
+          Mutator.each(node.arguments) do |mutation|
+            dup = dup_node
+            dup.arguments = mutation
+            emit(dup)
+          end
         end
       end
     end
