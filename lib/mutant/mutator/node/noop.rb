@@ -29,6 +29,7 @@ module Mutant
         handle(Rubinius::AST::Rescue)
         handle(Rubinius::AST::DynamicString)
         handle(Rubinius::AST::DynamicSymbol)
+        handle(Rubinius::AST::File)
         handle(Rubinius::AST::DynamicRegex)
         handle(Rubinius::AST::OpAssignOr19)
         handle(Rubinius::AST::OpAssign1)
