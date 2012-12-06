@@ -1,9 +1,10 @@
 module Mutant
   class Mutator
     class Literal
-      # Abstract mutations on dynamic literals
-      class Dynamic < self
-        include AbstractType
+      # Mutator for nil literals
+      class Nil < self
+
+        handle(Rubinius::AST::NilLiteral)
 
       private
 
@@ -14,7 +15,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_nil
+          emit('Object.new'.to_ast)
         end
       end
     end

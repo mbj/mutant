@@ -27,7 +27,7 @@ module Mutant
           new(self.class::INVERSE_CLASS)
         end
 
-        # Represent mutations of true literal
+        # Mutator for true literals
         class TrueLiteral < self
           INVERSE_CLASS = Rubinius::AST::FalseLiteral
 
@@ -35,7 +35,7 @@ module Mutant
         end
 
 
-        # Represent mutations of false literal
+        # Mutator for false literals
         class FalseLiteral < self
           INVERSE_CLASS = Rubinius::AST::TrueLiteral
 

@@ -1,7 +1,7 @@
 module Mutant
   class Mutator
     class Literal
-      # Represent mutations on string literal
+      # Mutator for string literals
       class String < self
 
         handle(Rubinius::AST::StringLiteral)

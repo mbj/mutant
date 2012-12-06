@@ -1,7 +1,7 @@
 module Mutant
   class Mutator
-      class Literal
-      # Mutator for hash literal AST nodes
+    class Literal
+      # Mutator for hash literals
       class Hash < self
 
         handle(Rubinius::AST::HashLiteral)

@@ -1,7 +1,7 @@
 module Mutant
   class Mutator
     class Literal < self
-      # Represent mutations on symbol literal
+      # Mutator for symbol literals
       class Symbol < self
 
         handle(Rubinius::AST::SymbolLiteral)
