@@ -247,20 +247,20 @@ module Mutant
       end
     end
 
-    # Emit element mutations
+    # Emit body mutations
     #
-    # @param [Array] elements
+    # @param [Array] body
     #
     # @return [undefined]
     #
     # @api private
     #
-    def emit_elements(elements)
-      elements.each_with_index do |element, index|
-        dup_elements = elements.dup
+    def emit_body(body)
+      body.each_with_index do |element, index|
+        dup_body = body.dup
         Mutator.each(element).each do |mutation|
-          dup_elements[index]=mutation
-          emit_self(dup_elements)
+          dup_body[index]=mutation
+          emit_self(dup_body)
         end
       end
     end

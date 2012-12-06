@@ -15,7 +15,7 @@ module Mutant
       #
       def dispatch
         array = node.array
-        emit_elements(array)
+        emit_body(array)
         if array.length > 1
           emit_element_presence(array)
         else

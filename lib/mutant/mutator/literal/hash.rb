@@ -18,7 +18,7 @@ module Mutant
           emit_nil
           emit_values(values)
           emit_element_presence
-          emit_elements(array)
+          emit_body(array)
         end
 
         # Return array of values in literal
