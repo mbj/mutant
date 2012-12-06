@@ -34,22 +34,10 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_receiver_mutations
+          emit_body_mutations(:receiver)
           emit_when_branch_presence_mutations
           emit_else_branch_presence_mutation
           emit_when_branch_mutations
-        end
-
-        # Emit receiver mutation
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def emit_receiver_mutations
-          Mutator.each(receiver) do |mutant|
-            emit_self(mutant, when_branches, else_branch)
-          end
         end
 
         # Emit else branch presence mutation
@@ -114,7 +102,6 @@ module Mutant
         # @api private
         #
         def dup_when_branches
-
           when_branches.dup
         end
 

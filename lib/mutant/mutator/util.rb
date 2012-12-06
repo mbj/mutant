@@ -34,6 +34,8 @@ module Mutant
       # Mutators that mutates an array of inputs
       class Array < self
 
+        handle(::Array)
+
       private
 
         # Emit mutations

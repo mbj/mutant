@@ -15,21 +15,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_argument_mutations
-        end
-
-        # Emit argument mutations
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def emit_argument_mutations
-          Mutator::Util::Array.each(node.array) do |mutation|
-            dup = dup_input
-            dup.array = mutation
-            emit(dup)
-          end
+          emit_body_mutations(:array)
         end
 
       end
