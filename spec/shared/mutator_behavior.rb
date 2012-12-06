@@ -26,11 +26,13 @@ shared_examples_for 'a mutator' do
     end
 
     it 'generates the expected mutations' do
-      subject = self.subject.map(&:to_sexp).to_set
+      generated = self.subject.map(&:to_sexp).to_set
 
-      unless subject == expected_mutations
-        message = "Missing mutations: %s\nUnexpected mutations: %s" %
-         [expected_mutations - subject, subject - expected_mutations ].map(&:to_a).map(&:inspect)
+      missing    = (expected_mutations - generated).to_a
+      unexpected = (generated - generated).to_a
+
+      unless generated == expected_mutations
+        message = "Missing mutations: %s\nUnexpected mutations: %s" % [missing, unexpected].map(&:inspect)
         fail message
       end
     end
