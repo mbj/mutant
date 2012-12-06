@@ -19,7 +19,25 @@ module Mutant
             emit_nil
             emit_values(values)
             emit_element_presence
-            emit_body(array)
+            emit_array
+          end
+
+          # Emit body mutations
+          #
+          # @param [Array] body
+          #
+          # @return [undefined]
+          #
+          # @api private
+          #
+          def emit_array
+            array.each_with_index do |element, index|
+              dup = dup_array
+              Mutator.each(element).each do |mutation|
+                dup[index]=mutation
+                emit_self(dup)
+              end
+            end
           end
 
           # Return array of values in literal

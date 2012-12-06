@@ -15,7 +15,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_mutate_attributes(:body)
+          emit_attribute_mutations(:body)
         end
 
       end
@@ -34,7 +34,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_mutate_attributes(:receiver)
+          emit_attribute_mutations(:receiver)
           emit_when_branch_presence_mutations
           emit_else_branch_presence_mutation
           emit_when_branch_mutations

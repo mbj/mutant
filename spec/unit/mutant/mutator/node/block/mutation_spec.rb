@@ -15,6 +15,7 @@ describe Mutant::Mutator, 'block' do
      ## Remove statement in block
       mutations << [:block, 'self.foo'.to_sexp]
       mutations << [:block, 'self.bar'.to_sexp]
+      mutations << [:block]
     end
 
     it_should_behave_like 'a mutator'
@@ -27,8 +28,7 @@ describe Mutant::Mutator, 'block' do
     let(:mutations) do
       mutations = []
       mutations << [:block, 'foo'.to_sexp]
-      # Empty blocks result in stack verification error
-      mutations << [:block, 'nil'.to_sexp]
+      mutations << [:block]
     end
 
     it_should_behave_like 'a mutator'

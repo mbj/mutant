@@ -16,12 +16,7 @@ module Mutant
         #
         def dispatch
           array = input.array
-          emit_body(array)
-          if array.length > 1
-            emit_element_presence(array)
-          else
-            emit_self([new_nil])
-          end
+          emit_attribute_mutations(:array)
         end
       end
     end

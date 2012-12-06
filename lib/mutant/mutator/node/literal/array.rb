@@ -16,12 +16,10 @@ module Mutant
           # @api private
           #
           def dispatch
-            body = node.body
-            emit_nil
+            emit_attribute_mutations(:body)
             emit_self([])
-            emit_self(body.dup << new_nil)
-            emit_element_presence(body)
-            emit_body(body)
+            emit_nil
+            emit_self(node.body.dup << new_nil)
           end
         end
       end

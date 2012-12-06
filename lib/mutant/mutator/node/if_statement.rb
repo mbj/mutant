@@ -15,9 +15,9 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_mutate_attributes(:condition)
-          emit_mutate_attributes(:body)
-          emit_mutate_attributes(:else) if node.else
+          emit_attribute_mutations(:condition)
+          emit_attribute_mutations(:body)
+          emit_attribute_mutations(:else) if node.else
           emit_inverted_condition 
           emit_deleted_if_branch
           emit_deleted_else_branch

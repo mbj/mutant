@@ -103,53 +103,21 @@ module Mutant
         end
       end
 
-      # Emit element presence mutations
-      #
-      # @param [Array] elements
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def emit_element_presence(elements)
-        elements.each_index do |index|
-          dup_elements = elements.dup
-          dup_elements.delete_at(index)
-          emit_self(dup_elements)
-        end
-      end
-
       # Emit body mutations
       #
+      # @param [Symbol] name
+      #
       # @return [undefined]
       #
       # @api private
       #
-      def emit_mutate_attributes(method)
-        body = node.public_send(method)
+      def emit_attribute_mutations(name)
+        body = node.public_send(name)
 
         Mutator.each(body) do |mutation|
           dup = dup_node
-          dup.public_send(:"#{method}=", mutation)
+          dup.public_send(:"#{name}=", mutation)
           emit(dup)
-        end
-      end
-
-      # Emit body mutations
-      #
-      # @param [Array] body
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def emit_body(body)
-        body.each_with_index do |element, index|
-          dup_body = body.dup
-          Mutator.each(element).each do |mutation|
-            dup_body[index]=mutation
-            emit_self(dup_body)
-          end
         end
       end
 

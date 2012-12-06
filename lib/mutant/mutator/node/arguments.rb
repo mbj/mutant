@@ -15,7 +15,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_mutate_attributes(:array)
+          emit_attribute_mutations(:array)
         end
 
       end
