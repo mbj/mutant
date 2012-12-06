@@ -102,7 +102,7 @@ module Mutant
           #
           def dispatch
             super
-            emit_body_mutations(:arguments)
+            emit_mutate_attributes(:arguments)
           end
 
         end

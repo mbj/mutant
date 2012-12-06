@@ -125,7 +125,7 @@ module Mutant
       #
       # @api private
       #
-      def emit_body_mutations(method = :body)
+      def emit_mutate_attributes(method)
         body = node.public_send(method)
 
         Mutator.each(body) do |mutation|
