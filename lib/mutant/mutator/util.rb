@@ -28,7 +28,7 @@ module Mutant
       #   otherwise
       #
       def new?(generated)
-        node != generated
+        input != generated
       end
 
       # Mutators that mutates an array of inputs
@@ -55,8 +55,8 @@ module Mutant
         # @api private
         #
         def emit_element_mutations
-          node.each_with_index do |element, index|
-            dup = dup_node
+          input.each_with_index do |element, index|
+            dup = dup_input
 
             Mutator.each(element).each do |mutation|
               dup[index]=mutation
@@ -72,8 +72,8 @@ module Mutant
         # @api private
         #
         def emit_element_presence
-          node.each_index do |index|
-            dup = dup_node
+          input.each_index do |index|
+            dup = dup_input
             dup.delete_at(index)
             emit(dup)
           end

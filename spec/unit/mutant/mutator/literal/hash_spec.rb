@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal, 'hash' do
+describe Mutant::Mutator::Node::Literal, 'hash' do
   let(:source) { '{true => true, false => false}' }
 
   let(:mutations) do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal, 'empty array' do
+describe Mutant::Mutator::Node::Literal, 'empty array' do
   let(:source) { '[]' }
 
   let(:mutations) do

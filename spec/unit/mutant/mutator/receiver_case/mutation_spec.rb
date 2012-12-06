@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::ReceiverCase do
+describe Mutant::Mutator::Node::ReceiverCase do
   let(:source) { 'case self.condition; when true; true; when false; false; else raise; end' }
 
   let(:mutations) do

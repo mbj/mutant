@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal, 'float' do
+describe Mutant::Mutator::Node::Literal, 'float' do
   let(:source) { '10.0' }
 
   let(:mutations) do

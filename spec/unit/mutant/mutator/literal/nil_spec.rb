@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal, 'nil' do
+describe Mutant::Mutator::Node::Literal, 'nil' do
   let(:source) { 'nil' }
 
   let(:mutations) do

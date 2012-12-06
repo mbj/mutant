@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Mutant::Mutator, '#emit' do
-  subject { object.send(:emit, node) }
+  subject { object.send(:emit, generated) }
 
   class Block
     def arguments; @arguments; end
@@ -15,9 +15,9 @@ describe Mutant::Mutator, '#emit' do
     end
   end
 
-  let(:object)       { class_under_test.new(wrapped_node, block) }
-  let(:block)        { Block.new                               }
-  let(:wrapped_node) { '"foo"'.to_ast                          }
+  let(:object) { class_under_test.new(input, block) }
+  let(:block)  { Block.new                          }
+  let(:input)  { :nput                              }
 
   let(:class_under_test) do
     Class.new(described_class) do
@@ -27,24 +27,24 @@ describe Mutant::Mutator, '#emit' do
     end
   end
 
-  context 'with node that is not equal to wrapped node' do
-    let(:node) { '"bar"'.to_ast }
+  context 'with generated that is not equal to input' do
+    let(:generated) { :generated }
 
     it 'should call block' do
       subject
       block.should be_called
     end
 
-    it 'should call block with node' do
+    it 'should call block with generated' do
       subject
-      block.arguments.should eql([node])
+      block.arguments.should eql([generated])
     end
   end
 
-  context 'with node that is equal to wrapped node' do
-    let(:node) { '"foo"'.to_ast }
+  context 'with generated object that is equal to input' do
+    let(:generated) { input }
 
-    it 'should call block' do
+    it 'should not call block' do
       subject
       block.should_not be_called
     end

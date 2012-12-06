@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal, 'fixnum' do
+describe Mutant::Mutator::Node::Literal, 'fixnum' do
   let(:random_fixnum) { 5 }
 
   let(:source) { '10' }

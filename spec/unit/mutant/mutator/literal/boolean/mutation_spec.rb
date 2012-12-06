@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal, 'boolean' do
+describe Mutant::Mutator::Node::Literal, 'boolean' do
   context 'true literal' do
     let(:source) { 'true' }
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal, 'symbol' do
+describe Mutant::Mutator::Node::Literal, 'symbol' do
   let(:random_string) { 'bar' }
 
   let(:source) { ':foo' }

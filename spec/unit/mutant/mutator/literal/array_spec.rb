@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Literal, 'array' do
+describe Mutant::Mutator::Node::Literal, 'array' do
   let(:source) { '[true, false]' }
 
   let(:mutations) do
