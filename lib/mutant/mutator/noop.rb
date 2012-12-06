@@ -6,7 +6,6 @@ module Mutant
       # Literal references to self do not need to be mutated. 
       handle(Rubinius::AST::Self)
       # Some unimplemented mutations
-      handle(Rubinius::AST::NilLiteral)
       handle(Rubinius::AST::Return)
       handle(Rubinius::AST::ElementAssignment)
       handle(Rubinius::AST::AttributeAssignment)
