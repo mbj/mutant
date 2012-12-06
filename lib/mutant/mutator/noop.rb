@@ -3,9 +3,10 @@ module Mutant
     # Mutator that does not do mutations on ast
     class Noop < self
 
-      # Literal references to self do not need to be mutated. 
+      # Literal references to self do not need to be mutated?
       handle(Rubinius::AST::Self)
-      # Some unimplemented mutations
+
+      # Currently unhandled node classes. Feel free to contribute your mutator!
       handle(Rubinius::AST::ElementAssignment)
       handle(Rubinius::AST::AttributeAssignment)
       handle(Rubinius::AST::Not)
