@@ -19,18 +19,16 @@ module Mutant
             emit_nil
             emit_values(values)
             emit_element_presence
-            emit_array
+            emit_body
           end
 
           # Emit body mutations
-          #
-          # @param [Array] body
           #
           # @return [undefined]
           #
           # @api private
           #
-          def emit_array
+          def emit_body
             array.each_with_index do |element, index|
               dup = dup_array
               Mutator.each(element).each do |mutation|
