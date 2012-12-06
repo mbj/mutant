@@ -102,22 +102,9 @@ module Mutant
           #
           def dispatch
             super
-            emit_argument_mutations
+            emit_body_mutations(:arguments)
           end
 
-          # Emit argument mutations
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def emit_argument_mutations
-            Mutator.each(node.arguments) do |mutation|
-              dup = dup_node
-              dup.arguments = mutation
-              emit(dup)
-            end
-          end
         end
       end
     end

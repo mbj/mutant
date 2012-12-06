@@ -125,11 +125,13 @@ module Mutant
       #
       # @api private
       #
-      def emit_body_mutations
-        Mutator.each(node.body) do |mutation|
-          node = dup_node
-          node.body = mutation
-          emit(node)
+      def emit_body_mutations(method = :body)
+        body = node.public_send(method)
+
+        Mutator.each(body) do |mutation|
+          dup = dup_node
+          dup.public_send(:"#{method}=", mutation)
+          emit(dup)
         end
       end
 
