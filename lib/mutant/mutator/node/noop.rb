@@ -24,6 +24,7 @@ module Mutant
         handle(Rubinius::AST::InstanceVariableAccess)
         handle(Rubinius::AST::GlobalVariableAssignment)
         handle(Rubinius::AST::GlobalVariableAccess)
+        handle(Rubinius::AST::TopLevelConstant)
         handle(Rubinius::AST::Ensure)
         handle(Rubinius::AST::Rescue)
         handle(Rubinius::AST::DynamicString)
