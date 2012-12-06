@@ -29,7 +29,7 @@ shared_examples_for 'a mutator' do
       generated = self.subject.map(&:to_sexp).to_set
 
       missing    = (expected_mutations - generated).to_a
-      unexpected = (generated - generated).to_a
+      unexpected = (generated - expected_mutations).to_a
 
       unless generated == expected_mutations
         message = "Missing mutations: %s\nUnexpected mutations: %s" % [missing, unexpected].map(&:inspect)
