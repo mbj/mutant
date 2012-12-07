@@ -18,20 +18,6 @@ module Mutant
     def self.deep_clone(object)
       Marshal.load(Marshal.dump(object))
     end
-    
-    # Check for ruby-1.8 mode
-    #
-    # @return [true]
-    #   returns true if running under 1.8 mode
-    #
-    # @return [false]
-    #   returns false otherwise
-    #
-    # @api private
-    #
-    def self.on_18?
-      RUBY_VERSION == '1.8.7'
-    end
 
     # Extract option from options hash
     #
