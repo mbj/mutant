@@ -28,7 +28,7 @@ Credits
 -------
 
 * A [gist](https://gist.github.com/1065789) from [dkubb](https://github.com/dkubb) showing ideas.
-* Older abandoned [mutants](https://github.com/txus/mutant). For motivating me doing this one.
+* Older abandoned [mutant](https://github.com/txus/mutant). For motivating me doing this one.
 * [heckle](https://github.com/seattlerb/heckle). For getting me into mutation testing.
 
 Contributing
