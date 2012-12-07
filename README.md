@@ -27,9 +27,9 @@ mutant -I lib -r virtus --rspec-dm2 ::Virtus
 Credits
 -------
 
-* [heckle](https://github.com/seattlerb/heckle). For getting me into mutation testing.
+* A [gist](https://gist.github.com/1065789) from [dkubb](https://github.com/dkubb) showing ideas.
 * Older abandoned [mutants](https://github.com/txus/mutant). For motivating me doing this one.
-* A dkubbb [gist](https://gist.github.com/1065789) showing ideas.
+* [heckle](https://github.com/seattlerb/heckle). For getting me into mutation testing.
 
 Contributing
 -------------
