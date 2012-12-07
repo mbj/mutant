@@ -59,6 +59,18 @@ module Mutant
       #
       attr_reader :method_name
 
+      # Test if method is public
+      #
+      # @return [true]
+      #   if method is public
+      #
+      # @retur [false]
+      #   otherwise
+      #
+      # @api private
+      #
+      abstract_method :public?
+
     private
 
       # Initialize method filter
@@ -77,7 +89,7 @@ module Mutant
 
       # Return method
       #
-      # @return [UnboundMethod]
+      # @return [UnboundMethod, Method]
       #
       # @api private
       #

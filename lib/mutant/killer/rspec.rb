@@ -52,17 +52,7 @@ module Mutant
       def command_line_arguments
         %W(
           --fail-fast
-        ) + Dir[filename_pattern]
-      end
-
-      # Return filename pattern
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def filename_pattern
-        strategy.filename_pattern(mutation)
+        ) + strategy.spec_files(mutation)
       end
     end
   end

@@ -15,6 +15,20 @@ module Mutant
           "#{scope.name}##{method_name}"
         end
 
+        # Test if method is public
+        #
+        # @return [true]
+        #   if method is public
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def public?
+          scope.public_method_defined?(method_name)
+        end
+
       private
 
         # Check if node is matched

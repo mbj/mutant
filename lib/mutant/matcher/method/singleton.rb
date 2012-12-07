@@ -13,6 +13,22 @@ module Mutant
         def identification
           "#{scope.name}.#{method_name}"
         end
+        memoize :identification
+
+        # Test if method is public
+        #
+        # @return [true]
+        #   if method is public
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def public?
+          scope.singleton_class.public_method_defined?(method_name)
+        end
+
 
       private
 
