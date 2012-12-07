@@ -28,6 +28,7 @@ module Mutant
         def public?
           scope.public_method_defined?(method_name)
         end
+        memoize :public?
 
       private
 

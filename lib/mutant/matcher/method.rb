@@ -85,6 +85,8 @@ module Mutant
       def initialize(scope, method_name)
         @scope, @method_name = scope, method_name.to_sym
         @context = Context::Scope.build(scope, source_path)
+        # FIXME: cache public private should not be needed, loader should not override visibility! (But does currently) :(
+        public?
       end
 
       # Return method

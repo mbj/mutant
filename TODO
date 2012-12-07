@@ -9,3 +9,4 @@
 * Support the numerous Rubinius::AST::SendWithArguments mutations.
 * Fix rubinius to allow setting @vcall_style variable in Rubinius::AST::Send nodes.
 * Aggregate warnings on missing spec files
+* Make sure loader does not change visibility of injected mutants
