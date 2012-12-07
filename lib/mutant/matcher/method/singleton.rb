@@ -33,17 +33,6 @@ module Mutant
 
       private
 
-        # Return method instance
-        #
-        # @return [UnboundMethod]
-        #
-        # @api private
-        #
-        def method
-          scope.method(method_name)
-        end
-        memoize :method, :freezer => :noop
-
         # Test for node match
         #
         # @param [Rubinius::AST::Node] node

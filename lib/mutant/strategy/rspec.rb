@@ -11,7 +11,7 @@ module Mutant
 
         # Return filename pattern
         #
-        # @return [String]
+        # @return [Enumerable<String>]
         #
         # @api private
         #
@@ -25,17 +25,17 @@ module Mutant
 
         # Return file name pattern for mutation
         #
-        # @return [Mutation]
+        # @return [Enumerable<String>]
         #
         # @api private
         #
         def self.spec_files(mutation)
-          Dir['spec/unit/**/*_spec.rb']
+          ['spec/unit']
         end
       end
 
       # Run all integration specs per mutation
-      class Unit < self
+      class Integration < self
 
         # Return file name pattern for mutation
         #

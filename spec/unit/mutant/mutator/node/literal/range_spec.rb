@@ -9,7 +9,7 @@ describe Mutant::Mutator::Node::Literal, 'range' do
       mutations << 'nil'
       mutations << '1...100'
       mutations << '(0.0/0.0)..100'
-      mutations << [:dot2, [:negate, [:call, [:lit, 1.0], :/, [:arglist, [:lit, 0.0]]]], [:lit, 100]]
+      #mutations << [:dot2, [:negate, [:call, [:lit, 1.0], :/, [:arglist, [:lit, 0.0]]]], [:lit, 100]]
       mutations << '1..(1.0/0.0)'
       mutations << '1..(0.0/0.0)'
     end
@@ -25,7 +25,7 @@ describe Mutant::Mutator::Node::Literal, 'range' do
       mutations << 'nil'
       mutations << '1..100'
       mutations << '(0.0/0.0)...100'
-      mutations << [:dot3, [:negate, [:call, [:lit, 1.0], :/, [:arglist, [:lit, 0.0]]]], [:lit, 100]]
+      #mutations << [:dot3, [:negate, [:call, [:lit, 1.0], :/, [:arglist, [:lit, 0.0]]]], [:lit, 100]]
       mutations << '1...(1.0/0.0)'
       mutations << '1...(0.0/0.0)'
     end

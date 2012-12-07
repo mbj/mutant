@@ -63,12 +63,24 @@ module Mutant
         # @api private
         #
         def spec_file
-          matcher.method_name.to_s.
+          method_name.to_s.
+            gsub(/\A\[\]\z/, 'element_reader').
+            gsub(/\A\[\]=\z/, 'element_writer').
             gsub(/\?\z/, '_predicate').
             gsub(/=\z/, '_writer').
             gsub(/!\z/, '_bang') + '_spec.rb'
         end
         memoize :spec_file
+
+        # Return method name
+        #
+        # @return [Symbol]
+        #
+        # @api private
+        #
+        def method_name
+          matcher.method_name
+        end
 
         # Return glob expression
         #
@@ -77,6 +89,8 @@ module Mutant
         # @api private
         #
         def glob_expression
+          return base_path if method_name == :initialize
+
           if mutation.subject.matcher.public?
             "#{base_path}/#{spec_file}"
           else

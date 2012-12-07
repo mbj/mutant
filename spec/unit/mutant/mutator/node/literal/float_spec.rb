@@ -11,8 +11,8 @@ describe Mutant::Mutator::Node::Literal, 'float' do
     mutations << random_float.to_s
     mutations << '0.0/0.0'
     mutations << '1.0/0.0'
-    mutations << [:negate, [:call, [:lit, 1.0], :/, [:arglist, [:lit, 0.0]]]]
-    mutations << [:lit, -10.0]
+    mutations << '-1.0 / 0.0'
+    mutations << '-10.0'
   end
 
   let(:random_float) { 7.123 }

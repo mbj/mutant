@@ -7,27 +7,27 @@ describe Mutant::Mutator::Node::Literal, 'hash' do
     mutations = []
 
     # Literal replaced with nil
-    mutations << [:nil]
+    mutations << 'nil'
 
     # Mutation of each key and value in hash
-    mutations << [:hash, [:false ], [:true ], [:false], [:false]]
-    mutations << [:hash, [:nil   ], [:true ], [:false], [:false]]
-    mutations << [:hash, [:true  ], [:false], [:false], [:false]]
-    mutations << [:hash, [:true  ], [:nil  ], [:false], [:false]]
-    mutations << [:hash, [:true  ], [:true ], [:true ], [:false]]
-    mutations << [:hash, [:true  ], [:true ], [:nil  ], [:false]]
-    mutations << [:hash, [:true  ], [:true ], [:false], [:true ]]
-    mutations << [:hash, [:true  ], [:true ], [:false], [:nil  ]]
+    mutations << '{ false => true  ,  false => false }'
+    mutations << '{ nil   => true  ,  false => false }'
+    mutations << '{ true  => false ,  false => false }'
+    mutations << '{ true  => nil   ,  false => false }'
+    mutations << '{ true  => true  ,  true  => false }'
+    mutations << '{ true  => true  ,  nil   => false }'
+    mutations << '{ true  => true  ,  false => true  }'
+    mutations << '{ true  => true  ,  false => nil   }'
 
     # Remove each key once
-    mutations << [:hash, [:true  ], [:true ]]
-    mutations << [:hash, [:false ], [:false ]]
+    mutations << '{ true => true }' 
+    mutations << '{ false => false }' 
 
     # Empty hash
-    mutations << [:hash]
+    mutations << '{}'
 
     # Extra element
-    mutations << [:hash, [:true  ], [:true ], [:false], [:false ], [:nil], [:nil] ]
+    mutations << '{true => true, false => false, nil => nil}'
   end
 
   it_should_behave_like 'a mutator'

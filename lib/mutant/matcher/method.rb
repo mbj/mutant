@@ -28,12 +28,26 @@ module Mutant
       # 
       def each(&block)
         return to_enum unless block_given?
+
+        unless source_location
+          $stderr.puts "#{method.inspect} does not have source location unable to emit matcher"
+          return self
+        end
+
         subject.tap do |subject|
           yield subject if subject
         end
 
         self
       end
+
+      # Return method
+      #
+      # @return [UnboundMethod, Method]
+      #
+      # @api private
+      #
+      attr_reader :method
 
       # Return scope
       #
@@ -43,21 +57,15 @@ module Mutant
       #
       attr_reader :scope
 
-      # Return context
-      #
-      # @return [Context::Scope]
-      #
-      # @api private
-      #
-      attr_reader :context
-
       # Return method name
       #
       # @return [String]
       #
       # @api private
       #
-      attr_reader :method_name
+      def method_name
+        method.name
+      end
 
       # Test if method is public
       #
@@ -76,26 +84,27 @@ module Mutant
       # Initialize method filter
       #
       # @param [Class|Module] scope
-      # @param [Symbol] method_name
+      # @param [Method, UnboundMethod] method
       #
       # @return [undefined]
       #
       # @api private
       #
-      def initialize(scope, method_name)
-        @scope, @method_name = scope, method_name.to_sym
-        @context = Context::Scope.build(scope, source_path)
+      def initialize(scope, method)
+        @scope, @method = scope, method
         # FIXME: cache public private should not be needed, loader should not override visibility! (But does currently) :(
         public?
       end
 
-      # Return method
+      # Return context
       #
-      # @return [UnboundMethod, Method]
+      # @return [Context::Scope]
       #
       # @api private
       #
-      abstract_method :method
+      def context
+        Context::Scope.build(scope, source_path)
+      end
 
       # Return full ast
       #

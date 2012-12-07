@@ -16,8 +16,8 @@ module Mutant
         #
         def dispatch
           emit_attribute_mutations(:condition)
-          emit_attribute_mutations(:body)
-          emit_attribute_mutations(:else) if node.else
+          emit_attribute_mutations(:body) if node.body.class != Rubinius::AST::NilLiteral
+          emit_attribute_mutations(:else) if node.else.class != Rubinius::AST::NilLiteral
           emit_inverted_condition 
           emit_deleted_if_branch
           emit_deleted_else_branch

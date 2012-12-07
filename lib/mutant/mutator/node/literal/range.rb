@@ -49,7 +49,7 @@ module Mutant
           #
           def emit_finish_mutations
             finish = node.finish
-            emit_self(negative_infinity, finish)
+            #emit_self(negative_infinity, finish)
             emit_self(nan, finish)
           end
 

@@ -15,25 +15,31 @@ shared_examples_for 'a mutator' do
 
     it { should be_instance_of(to_enum.class) }
 
-    let(:expected_mutations)  do
-      mutations.map do |mutation|
-        if mutation.respond_to?(:to_ast)
-          mutation.to_ast.to_sexp
-        else
-          mutation
-        end
-      end.to_set
+    unless instance_methods.include?(:expected_mutations)
+      let(:expected_mutations)  do
+        mutations.map do |mutation|
+          case mutation
+          when String
+            mutation.to_ast
+          when Rubinius::AST::Node
+            mutation
+          else
+            raise
+          end
+        end.map do |node|
+          ToSource.to_source(node)
+        end.to_set
+      end
     end
 
     it 'generates the expected mutations' do
-      generated = self.subject.map(&:to_sexp).to_set
+      generated = self.subject.map { |mutation| ToSource.to_source(mutation) }.to_set
 
       missing    = (expected_mutations - generated).to_a
       unexpected = (generated - expected_mutations).to_a
 
       unless generated == expected_mutations
-        message = "Missing mutations: %s\nUnexpected mutations: %s" % [missing, unexpected].map(&:inspect)
-        fail message
+        fail "Missing mutations:\n%s\nUnexpected mutations:\n%s" % [missing.join("\n----\n"), unexpected.join("\n----\n")]
       end
     end
   end

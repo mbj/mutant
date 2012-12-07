@@ -41,6 +41,8 @@ module Mutant
     self
   end
 
+  PID = Process.pid
+
 end
 
 require 'mutant/support/method_object'
@@ -84,8 +86,8 @@ require 'mutant/matcher/object_space'
 require 'mutant/matcher/method'
 require 'mutant/matcher/method/singleton'
 require 'mutant/matcher/method/instance'
-require 'mutant/matcher/method/classifier'
 require 'mutant/matcher/scope_methods'
+require 'mutant/matcher/method/classifier'
 require 'mutant/killer'
 require 'mutant/killer/static'
 require 'mutant/killer/rspec'

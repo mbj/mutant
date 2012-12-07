@@ -1,5 +1,10 @@
 # v0.2.1 xxx
 
+* [fixed] Crash on unavailable source location
+* [fixed] Incorrect handling of if and unless statements 
+* [fixed] Expand Foo#initialize to spec/unit/foo in rspec dm2 strategy
+* [fixed] Correctly expand [] to element_reader_spec.rb in rspec dm2 strategy
+* [fixed] Correctly expand []= to element_writer_spec.rb in rspec dm2 strategy
 * [fixed] Correctly expand foo= to foo_writer_spec.rb in rspec dm2 strategy
 
 [Compare v0.2.0..v0.2.1](https://github.com/mbj/mutant/compare/v0.2.0...v0.2.1)

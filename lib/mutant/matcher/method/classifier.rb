@@ -6,15 +6,15 @@ module Mutant
         include Adamantium::Flat
 
         TABLE = {
-          '.' => Matcher::Method::Singleton,
-          '#' => Matcher::Method::Instance
+          '.' => Matcher::ScopeMethods::Singleton,
+          '#' => Matcher::ScopeMethods::Instance
         }.freeze
 
         SCOPE_FORMAT = /\A([^#.]+)(\.|#)(.+)\z/.freeze
 
         # Positions of captured regexp groups
         # Freezing fixnums to avoid their singleton classes are patched.
-        SCOPE_NAME_POSITION       = 1.freeze
+        SCOPE_NAME_POSITION    = 1.freeze
         SCOPE_SYMBOL_POSITION  = 2.freeze
         METHOD_NAME_POSITION   = 3.freeze
 
@@ -45,8 +45,22 @@ module Mutant
         # @api private
         #
         def matcher
-          matcher_class.new(scope, method_name)
+          scope_matcher.matcher.new(scope, method)
         end
+        memoize :matcher
+
+        # Return method
+        #
+        # @return [Method, UnboundMethod]
+        #
+        # @api private
+        #
+        def method
+          scope_matcher.methods.detect do |method|
+            method.name == method_name
+          end || raise("Cannot find #{method_name} for #{scope}")
+        end
+        memoize :method, :freezer => :noop
 
         # Return match
         #
@@ -117,9 +131,10 @@ module Mutant
         #
         # @api private
         #
-        def matcher_class
-          TABLE.fetch(scope_symbol)
+        def scope_matcher
+          TABLE.fetch(scope_symbol).new(scope)
         end
+        memoize :scope_matcher
       end
     end
   end

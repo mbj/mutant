@@ -24,11 +24,35 @@ module Mutant
       #
       def each(&block)
         return to_enum unless block_given?
+
         methods.each do |method|
           emit_matches(method, &block)
         end
 
         self
+      end
+
+      # Return methods
+      #
+      # @return [Enumerable<Method, UnboundMethod>]
+      #
+      # @api private
+      #
+      def methods
+        method_names.map do |name|
+          access(name)
+        end
+      end
+      memoize :methods
+
+      # Return method matcher class
+      #
+      # @return [Class:Matcher::Method]
+      #
+      # @api private
+      #
+      def matcher
+        self.class::MATCHER
       end
 
     private
@@ -47,7 +71,7 @@ module Mutant
 
       # Emit matches for method
       #
-      # @param [UnboundMethod] method
+      # @param [UnboundMethod, Method] method
       #
       # @return [undefined]
       #
@@ -59,21 +83,28 @@ module Mutant
         end
       end
 
-
-      abstract_method :methods
-
-      # Return method matcher class
+      # Return method names
       #
-      # @return [Class:Matcher::Method]
+      # @return [Enumerable<Symbol>] 
       #
       # @api private
       #
-      def matcher
-        self.class::MATCHER
-      end
+      abstract_method :method_names
 
       class Singleton < self
         MATCHER = Mutant::Matcher::Method::Singleton
+
+        # Return method for name
+        #
+        # @param [Symbol] method_name
+        #
+        # @return [Method]
+        #
+        # @api private
+        #
+        def access(method_name)
+          scope.method(method_name)
+        end
 
       private
 
@@ -85,7 +116,7 @@ module Mutant
         #
         # @api private
         #
-        def methods
+        def method_names
           singleton_class = scope.singleton_class
 
           names = 
@@ -93,7 +124,7 @@ module Mutant
             singleton_class.private_instance_methods(false)  +
             singleton_class.protected_instance_methods(false)
 
-          names.map(&:to_sym).sort.reject do |name|
+          names.sort.reject do |name|
             name.to_sym == :__class_init__
           end
         end
@@ -101,6 +132,18 @@ module Mutant
 
       class Instance < self
         MATCHER = Mutant::Matcher::Method::Instance
+
+        # Return method for name
+        #
+        # @param [Symbol] method_name
+        #
+        # @return [UnboundMethod]
+        #
+        # @api private
+        #
+        def access(method_name)
+          scope.instance_method(method_name)
+        end
 
       private
 
@@ -110,7 +153,7 @@ module Mutant
         #
         # @return [Enumerable<Symbol>]
         #
-        def methods
+        def method_names
           scope = self.scope
           return [] unless scope.kind_of?(Module)
 
@@ -119,7 +162,7 @@ module Mutant
             scope.private_instance_methods(false) + 
             scope.protected_instance_methods(false)
 
-          names.uniq.map(&:to_sym).sort
+          names.uniq.sort
         end
       end
     end

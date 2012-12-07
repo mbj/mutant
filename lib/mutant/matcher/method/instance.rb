@@ -50,17 +50,6 @@ module Mutant
           node.name  == method_name
         end
 
-        # Return method instance
-        #
-        # @return [UnboundMethod]
-        #
-        # @api private
-        #
-        def method
-          scope.instance_method(method_name)
-        end
-        memoize :method, :freezer => :noop
-
       end
     end
   end

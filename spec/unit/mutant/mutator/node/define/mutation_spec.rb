@@ -17,7 +17,7 @@ describe Mutant::Mutator, 'define' do
       mutations << 'def foo; self.bar; end'
 
       # Remove all statements
-      mutations << [:defn, :foo, [:args], [:scope, [:block]]]
+      mutations << 'def foo; end'
     end
 
     it_should_behave_like 'a mutator'
@@ -38,7 +38,7 @@ describe Mutant::Mutator, 'define' do
       mutations << 'def self.foo; self.baz; end'
 
       # Remove all statements
-      mutations << [:defs, [:self], :foo, [:args], [:scope, [:block]]]
+      mutations << 'def self.foo; end'
     end
 
     it_should_behave_like 'a mutator'

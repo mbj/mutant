@@ -16,6 +16,21 @@ describe Mutant::Strategy::Rspec::ExampleLookup, '#spec_file' do
     it { should be_frozen }
   end
 
+  context 'with element reader method' do
+    let(:method_name) { '[]' }
+    let(:expected_spec_file) { 'element_reader_spec.rb' }
+
+    it_should_behave_like 'Mutant::Strategy::Rspec::ExampleLookup#spec_file'
+  end
+
+  context 'with element writer method' do
+    let(:method_name) { '[]=' }
+
+    let(:expected_spec_file) { 'element_writer_spec.rb' }
+
+    it_should_behave_like 'Mutant::Strategy::Rspec::ExampleLookup#spec_file'
+  end
+
   context 'with writer method' do
     let(:method_name) { 'foo=' }
     let(:expected_spec_file) { 'foo_writer_spec.rb' }

@@ -7,7 +7,7 @@ describe Mutant::Mutator::Node::Literal, 'empty array' do
     mutations = []
 
     # Literal replaced with nil
-    mutations << [:nil]
+    mutations << 'nil'
 
     # Extra element
     mutations << '[nil]'
