@@ -84,8 +84,6 @@ module Mutant
       self.class.type
     end
 
-  private
-
     # Return mutation to kill
     #
     # @return [Mutation]
@@ -93,6 +91,8 @@ module Mutant
     # @api private
     #
     attr_reader :mutation
+
+  private
 
     # Initialize killer object
     #

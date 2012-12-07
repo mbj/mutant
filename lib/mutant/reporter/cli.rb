@@ -26,7 +26,7 @@ module Mutant
       # @api private
       #
       def mutation(mutation)
-        colorized_diff(mutation.original_source, mutation.source)
+        #colorized_diff(mutation.original_source, mutation.source)
         self
       end
 
@@ -64,6 +64,11 @@ module Mutant
           end
 
         puts(colorize(color, "#{word}: #{killer.identification} (%02.2fs)" % killer.runtime))
+
+        if killer.fail?
+          mutation = killer.mutation
+          colorized_diff(mutation.original_source, mutation.source)
+        end
 
         self
       end

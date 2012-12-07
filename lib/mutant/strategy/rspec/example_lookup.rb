@@ -36,7 +36,9 @@ module Mutant
           expression = glob_expression
           files = Dir[expression]
 
-          $stderr.puts("Spec file(s): #{expression.inspect} not found for #{mutation.inspect}")
+          if files.empty?
+            $stderr.puts("Spec file(s): #{expression.inspect} not found for #{mutation.inspect}")
+          end
 
           files
         end
