@@ -1,4 +1,10 @@
-# v0.2.1 xxx
+# v0.2.1 2012-12-07
+
+* [feature] Add a shitload of operator expansions for dm2 strategy
+
+[Compare v0.2.1..v0.2.2](https://github.com/mbj/mutant/compare/v0.2.1...v0.2.2)
+
+# v0.2.1 2012-12-07
 
 * [fixed] Crash on unavailable source location
 * [fixed] Incorrect handling of if and unless statements 

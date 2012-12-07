@@ -56,6 +56,38 @@ module Mutant
           mutation.subject.matcher
         end
 
+        MAPPING = {
+          :'!~' => :nomatch_operator,
+          :'!=' => :inequality_operator,
+          :<=>  => :spaceship_operator,
+          :===  => :case_equality_operator,
+          :[]=  => :element_writer,
+          :[]   => :element_reader,
+          :==   => :equality_operator,
+          :<=   => :less_than_or_equal_to_operator,
+          :>=   => :greater_than_or_equal_to_operator,
+          :=~   => :match_operator,
+          :<<   => :left_shift_operator,
+          :>>   => :right_shift_operator,
+          :**   => :exponentation_operator,
+          :*    => :multiplication_operator,
+          :%    => :modulo_operator,
+          :/    => :division_operator,
+          :|    => :bitwise_or_operator,
+          :^    => :bitwise_xor_operator,
+          :&    => :bitwise_and_operator,
+          :<    => :less_than_operator,
+          :>    => :greater_than_operator,
+          :+    => :addition_operator,
+          :-    => :substraction_operator
+        }
+
+        EXPANSIONS = {
+          /\?\z/ => '_predicate',
+          /=\z/  => '_writer',
+          /!\z/  => '_bang'
+        }
+
         # Return spec file
         #
         # @return [String]
@@ -63,14 +95,33 @@ module Mutant
         # @api private
         #
         def spec_file
-          method_name.to_s.
-            gsub(/\A\[\]\z/, 'element_reader').
-            gsub(/\A\[\]=\z/, 'element_writer').
-            gsub(/\?\z/, '_predicate').
-            gsub(/=\z/, '_writer').
-            gsub(/!\z/, '_bang') + '_spec.rb'
+          "#{mapped_name || expanded_name}_spec.rb"
         end
         memoize :spec_file
+
+        # Return mapped name
+        #
+        # @return [Symbol]
+        #   if name was mapped
+        #
+        # @return [nil]
+        #   otherwise
+        #
+        def mapped_name
+          MAPPING[method_name]
+        end
+
+        # Return expanded name
+        #
+        # @return [Symbol]
+        #
+        # @api private
+        #
+        def expanded_name
+          EXPANSIONS.inject(method_name) do |name, (regexp, expansion)|
+            name.to_s.gsub(regexp, expansion)
+          end.to_sym
+        end
 
         # Return method name
         #
