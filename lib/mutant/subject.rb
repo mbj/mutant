@@ -93,17 +93,6 @@ module Mutant
     end
     memoize :original_root
 
-    # Reset subject into original state
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    def reset
-      Loader::Eval.run(original_root)
-      self
-    end
-
   private
 
     # Initialize subject

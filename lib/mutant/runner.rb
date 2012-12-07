@@ -91,7 +91,6 @@ module Mutant
         reporter.mutation(mutation)
         kill(mutation)
       end
-      subject.reset
     end
 
     # Run killer on mutation
