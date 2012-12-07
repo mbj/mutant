@@ -6,31 +6,30 @@ mutant
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/mbj/mutant)
 
 Mutant is a mutation testing tool for ruby that aims to be better than existing mutation testers.
-
 The idea is that if code can be changed and your tests don't notice, either that code isn't being covered or it doesn't do anything.
 
-It is currently only compatible to MRI and RBX in 1.9 mode. Also it only supports rspec2.
-
-Motivation:
-
-* [heckle](https://github.com/seattlerb/heckle).
-* Other older [mutants code](https://github.com/txus/mutant).
-* A [gist](https://gist.github.com/1065789) showing ideas.
+Mutant does currently only support 1.9 mode under rubinius or mri.
 
 Installation
 ------------
 
-There is no gem release and the code is under development and unusable.
+Install the gem ``mutant`` via your preferred method.
 
 Examples
 --------
 
+```
+cd your_lib
+# Run mutant on virtus (that uses the dm-2 style spec layout)
+mutant -I lib -r virtus --rspec-dm2 ::Virtus
+```
+
 Credits
 -------
 
-* Justin Ko ([justinko] (https://github.com/justinko))
-* Josep M. Bach ([txus](https://github.com/txus))
-* Dan Kubb ([dkubb](https://github.com/dkubb))
+* [heckle](https://github.com/seattlerb/heckle). For getting me into mutation testing.
+* Older abandoned [mutants](https://github.com/txus/mutant). For motivating me doing this one.
+* A dkubbb [gist](https://gist.github.com/1065789) showing ideas.
 
 Contributing
 -------------
