@@ -62,8 +62,8 @@ module Mutant
         #
         def spec_file
           matcher.method_name.to_s.
-            gsub(/\?\z/, 'predicate').
-            gsub(/!\z/, 'bang') + '_spec.rb'
+            gsub(/\?\z/, '_predicate').
+            gsub(/!\z/, '_bang') + '_spec.rb'
         end
         memoize :spec_file
 
