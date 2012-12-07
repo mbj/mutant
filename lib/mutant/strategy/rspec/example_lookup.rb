@@ -37,7 +37,7 @@ module Mutant
           files = Dir[expression]
 
           if files.empty?
-            $stderr.puts("Spec file(s): #{expression.inspect} not found for #{mutation.inspect}")
+            $stderr.puts("Spec file(s): #{expression.inspect} not found for #{mutation.identification}")
           end
 
           files
