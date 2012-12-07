@@ -76,7 +76,7 @@ module Mutant
     # @api private
     #
     def reporter
-      Mutant::Reporter::CLI.new($stderr)
+      Mutant::Reporter::CLI.new($stdout)
     end
     memoize :reporter
 
