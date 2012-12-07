@@ -28,20 +28,10 @@ module Mutant
       # @api private
       #
       def run
-        !run_rspec.zero?
+        mutation.insert
+        !::RSpec::Core::Runner.run(command_line_arguments, @error_stream, @output_stream).zero?
       end
       memoize :run
-
-      # Run rspec with some wired compat stuff
-      #
-      # @return [Fixnum]
-      #   returns the exit status from rspec runner
-      #
-      # @api private
-      #
-      def run_rspec
-        ::RSpec::Core::Runner.run(command_line_arguments, @error_stream, @output_stream)
-      end
 
       # Return command line arguments
       #

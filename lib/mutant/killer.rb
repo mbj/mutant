@@ -115,7 +115,6 @@ module Mutant
     # @api private
     #
     def run_with_benchmark
-      mutation.insert
       start_time = Time.now
       @killed = run
       end_time = Time.now
