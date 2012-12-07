@@ -9,14 +9,7 @@ describe Mutant::Mutator, 'if statement' do
     # mutations of condition
     mutants << 'if condition; true; else false; end'
 
-    # Invert condition
-    if Mutant::Helper.on_18?
-      # Explicitly define ast as 18-mode does swap if and else on parsing when negation condition is 
-      # present in condition.
-      mutants << [:if, [:not, [:call, [:self], :condition, [:arglist]]], [:true], [:false]]
-    else
-      mutants << 'if !self.condition; true; else false; end'
-    end
+    mutants << 'if !self.condition; true; else false; end'
 
     # Deleted else branch
     mutants << 'if self.condition; true end'

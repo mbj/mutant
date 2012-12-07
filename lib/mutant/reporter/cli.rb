@@ -4,36 +4,6 @@ module Mutant
     class CLI < self
       include Equalizer.new(:io)
 
-      class Stats
-        attr_reader :subject
-        attr_reader :mutation
-        attr_reader :kill
-        attr_reader :time
-
-        def initialize
-          @start = Time.now
-          @subject = @mutation = @kill = @time = 0
-        end
-
-        def runtime
-          Time.now - @start
-        end
-
-        def subject
-          @subject +=1
-        end
-
-        def alive
-          @mutation - @kill
-        end
-
-        def killer(killer)
-          @mutation +=1
-          @kill +=1 unless killer.fail?
-          @time += killer.runtime
-        end
-      end
-
       # Reporter subject
       #
       # @param [Subject] subject

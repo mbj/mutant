@@ -23,6 +23,16 @@ module Mutant
     #
     abstract_method :mutation
 
+    # Report notice
+    #
+    # @param [String] notice
+    #
+    # @return [self]
+    #
+    # @api private
+    #
+    abstract_method :notice
+
     # Report killer
     #
     # @param [Killer] killer
