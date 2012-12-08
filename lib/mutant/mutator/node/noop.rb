@@ -37,6 +37,7 @@ module Mutant
         handle(Rubinius::AST::OpAssign1)
         handle(Rubinius::AST::Or)
         handle(Rubinius::AST::ConstantAccess)
+        handle(Rubinius::AST::Yield)
       
       private
 

@@ -104,7 +104,8 @@ module Mutant
           when Rubinius::AST::ConstantAccess
             receiver_name?(receiver)
           else
-            raise 'Can only match receiver on Rubinius::AST::Self or Rubinius::AST::ConstantAccess'
+            $stderr.puts "Unable to find singleton method definition only match receiver on Rubinius::AST::Self or Rubinius::AST::ConstantAccess, got #{receiver.class}"
+            false
           end
         end
 
