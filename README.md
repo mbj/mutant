@@ -6,9 +6,12 @@ mutant
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/mbj/mutant)
 
 Mutant is a mutation testing tool for ruby that aims to be better than existing mutation testers.
-The idea is that if code can be changed and your tests don't notice, either that code isn't being covered or it doesn't do anything.
 
-Mutant does currently only support 1.9 mode under rubinius or mri.
+The idea is that if code can be changed and your tests do not notice, either that code isn't being covered 
+or it doesn't do anything (useful).
+
+Mutant does currently only support 1.9 mode under rubinius or mri. It is a young project but already 
+used in the DataMapper-2.0 project.
 
 Installation
 ------------
@@ -20,9 +23,48 @@ Examples
 
 ```
 cd your_lib
-# Run mutant on virtus (that uses the dm-2 style spec layout)
+# Run mutant on virtus namespace (that uses the dm-2 style spec layout)
 mutant -I lib -r virtus --rspec-dm2 ::Virtus
+# Run mutant on specific virtus class 
+mutant -I lib -r virtus --rspec-dm2 ::Virtus::Attribute
+# Run mutant on specific virtus class method
+mutant -I lib -r virtus --rspec-dm2 ::Virtus::Attribute.build
+# Run mutant on specific virtus instance method
+mutant -I lib -r virtus --rspec-dm2 ::Virtus::Attribute#name
 ```
+
+Strategies
+----------
+
+Mutation testing is slow. To make it fast the selection of the correct set of tests to run is the key.
+Mutant currently has the following buildin strategies
+
+### --rspec-dm2
+
+This strategy is the *fastest* but requires discipline in spec file naming.
+
+The following specs are executed to kill a mutation on:
+```
+Public instance  methods: spec/unit/#{namespace}/#{class_name}/#{method_name}_spec.rb
+Public singleton methods: spec/unit/#{namespace}/#{class_name}/class_methods/#{method_name}_spec.rb
+Public instance  methods: spec/unit/#{namespace}/#{class_name}/
+Public singleton methods: spec/unit/#{namespace}/#{class_name}/class_methods
+```
+
+### --rspec-unit
+
+This strategy executes all specs under ``./spec/unit`` for each mutation.
+
+### --rspec-integration
+
+This strategy executes all specs under ``./spec/integration`` for each mutation.
+
+### --rspec-full
+
+This strategy executes all specs under ``./spec`` for each mutation.
+
+It is also plannned to allow explicit selections on specs to run and to support other test frameworks.
+Custom project specific strategies are also on the roadmap.
 
 Credits
 -------
