@@ -24,7 +24,7 @@ Examples
 --------
 
 ```
-cd your_lib
+cd virtus
 # Run mutant on virtus namespace (that uses the dm-2 style spec layout)
 mutant -I lib -r virtus --rspec-dm2 ::Virtus
 # Run mutant on specific virtus class 
