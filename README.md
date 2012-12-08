@@ -13,6 +13,8 @@ or it doesn't do anything (useful).
 Mutant does currently only support 1.9 mode under rubinius or mri. It is a young project but already 
 used in the DataMapper-2.0 project.
 
+See this [ASCII-Cast](http://ascii.io/a/1707) for mutant in action! (v0.2.1)
+
 Installation
 ------------
 
@@ -37,7 +39,7 @@ Strategies
 ----------
 
 Mutation testing is slow. To make it fast the selection of the correct set of tests to run is the key.
-Mutant currently has the following buildin strategies
+Mutant currently supports the following buildin strategies:
 
 ### --rspec-dm2
 
