@@ -23,7 +23,7 @@ describe Mutant::Mutator::Node::Literal, 'array' do
     mutations << '[]'
 
     # Extra element
-    mutations << '[true, false, nil]'
+    mutations << '[nil, true, false]'
   end
 
   it_should_behave_like 'a mutator'

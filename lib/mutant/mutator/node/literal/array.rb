@@ -19,7 +19,7 @@ module Mutant
             emit_attribute_mutations(:body)
             emit_self([])
             emit_nil
-            emit_self(node.body.dup << new_nil)
+            emit_self([new_nil] + node.body.dup)
           end
         end
       end

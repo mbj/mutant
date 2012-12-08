@@ -27,7 +27,7 @@ describe Mutant::Mutator::Node::Literal, 'hash' do
     mutations << '{}'
 
     # Extra element
-    mutations << '{true => true, false => false, nil => nil}'
+    mutations << '{nil => nil, true => true, false => false}'
   end
 
   it_should_behave_like 'a mutator'
