@@ -1,4 +1,4 @@
-# v0.2.1 2012-12-07
+# v0.2.2 2012-12-07
 
 * [feature] Add a shitload of operator expansions for dm2 strategy
 
