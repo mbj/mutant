@@ -1,3 +1,7 @@
+# v0.2.3 2012-12-08
+
+* [fixed] Prepend extra elements to hash and array instead of append. This fixes unkillable mutators in parallel assignments!
+
 # v0.2.2 2012-12-07
 
 * [feature] Add a shitload of operator expansions for dm2 strategy
