@@ -72,6 +72,20 @@ module Mutant
       input != object
     end
 
+    # Test if generated mutation is allowed
+    #
+    # @param [Object] object
+    #
+    # @return [true]
+    #   if mutation is allowed
+    #
+    # @return [false]
+    #   otherwise
+    #
+    def allow?(object)
+      true
+    end
+
     # Dispatch node generations
     #
     # @return [undefined]
@@ -89,7 +103,7 @@ module Mutant
     # @api private
     #
     def emit(object)
-      return unless new?(object)
+      return unless new?(object) and allow?(object)
 
       emit!(object)
     end

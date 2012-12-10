@@ -116,6 +116,7 @@ module Mutant
 
         Mutator.each(body) do |mutation|
           dup = dup_node
+          yield mutation if block_given?
           dup.public_send(:"#{name}=", mutation)
           emit(dup)
         end

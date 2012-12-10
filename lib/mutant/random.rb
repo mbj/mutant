@@ -1,6 +1,7 @@
 module Mutant
   # Module for generating random values
   module Random
+
     # Return random hex string
     #
     # @return [String]

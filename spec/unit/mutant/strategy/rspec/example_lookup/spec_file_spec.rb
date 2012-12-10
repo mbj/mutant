@@ -17,7 +17,7 @@ describe Mutant::Strategy::Rspec::ExampleLookup, '#spec_file' do
   end
 
   context 'negation operator' do
-    let(:method_name) { :! }
+    let(:method_name) { :'!' }
     let(:expected_spec_file) { 'negation_operator_spec.rb' }
 
     it_should_behave_like 'Mutant::Strategy::Rspec::ExampleLookup#spec_file'
@@ -164,7 +164,7 @@ describe Mutant::Strategy::Rspec::ExampleLookup, '#spec_file' do
   end
 
   context 'with nomatch operator method' do
-    let(:method_name) { :!~ }
+    let(:method_name) { :'!~' }
     let(:expected_spec_file) { 'nomatch_operator_spec.rb' }
 
     it_should_behave_like 'Mutant::Strategy::Rspec::ExampleLookup#spec_file'
@@ -178,7 +178,7 @@ describe Mutant::Strategy::Rspec::ExampleLookup, '#spec_file' do
   end
 
   context 'with inequality operator method' do
-    let(:method_name) { :!= }
+    let(:method_name) { :'!=' }
     let(:expected_spec_file) { 'inequality_operator_spec.rb' }
 
     it_should_behave_like 'Mutant::Strategy::Rspec::ExampleLookup#spec_file'

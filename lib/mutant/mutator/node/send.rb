@@ -8,6 +8,30 @@ module Mutant
 
       private
 
+        # Emit mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def dispatch
+          emit_implicit_self_receiver
+          emit_attribute_mutations(:block) if node.block
+          emit_block_absence_mutation
+        end
+
+        # Emit block absence mutation
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_block_absence_mutation
+          dup = dup_node
+          dup.block = nil
+          emit(dup)
+        end
+
         # Return receiver AST node
         #
         # @return [Rubinius::AST::Node]
@@ -76,16 +100,6 @@ module Mutant
           # TODO: Fix rubinius to allow this as an attr_accessor
           mutant.instance_variable_set(:@vcall_style, true)
           emit(mutant)
-        end
-
-        # Emit mutations
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def dispatch
-          emit_implicit_self_receiver
         end
 
         class SendWithArguments < self

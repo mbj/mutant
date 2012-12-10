@@ -31,6 +31,25 @@ module Mutant
         input != generated
       end
 
+      # Mutators that mutates symbol inputs
+      class Symbol < self
+
+        handle(::Symbol)
+
+      private
+
+        # Emit mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def dispatch
+          emit_new { :"s#{Random.hex_string}" }
+        end
+
+      end
+
       # Mutators that mutates an array of inputs
       class Array < self
 

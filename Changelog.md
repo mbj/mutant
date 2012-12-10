@@ -1,5 +1,7 @@
 # v0.2.4 2012-12-08
 
+* [feature] Mutate block arguments
+* [feature] Recurse into block bodies
 * [fixed] Crash on mutating yield, added a noop for now
 * [fixed] Crash on singleton methods defined on other than constants or self
 
