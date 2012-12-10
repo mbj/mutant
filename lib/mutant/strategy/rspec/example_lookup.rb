@@ -144,8 +144,6 @@ module Mutant
         # @api private
         #
         def glob_expression
-          return base_path if method_name == :initialize
-
           if mutation.subject.matcher.public?
             "#{base_path}/#{spec_file}"
           else
