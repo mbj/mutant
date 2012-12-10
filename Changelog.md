@@ -1,5 +1,6 @@
 # v0.2.4 2012-12-08
 
+* [feature] define block arguments
 * [feature] Mutate block arguments, inklusive pattern args
 * [feature] Recurse into block bodies
 * [fixed] Crash on mutating yield, added a noop for now
