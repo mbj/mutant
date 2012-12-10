@@ -1,5 +1,6 @@
 # v0.2.4 2012-12-08
 
+* [feature] Add --debug flag for showing killer output and mutation
 * [feature] Run noop mutation per subject to guard against initial failing specs
 * [feature] Mutate default into required arguments
 * [feature] Mutate default literals
