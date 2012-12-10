@@ -111,7 +111,7 @@ module Mutant
       reporter.noop(killer)
       unless killer.fail?
         @errors << killer
-        false
+        return false
       end
 
       true
