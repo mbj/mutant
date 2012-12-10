@@ -1,6 +1,10 @@
 # v0.2.4 2012-12-08
 
-* [feature] define block arguments
+* [feature] Run noop mutation per subject to guard against initial failing specs
+* [feature] Mutate default into required arguments
+* [feature] Mutate default literals
+* [feature] Mutate unwinding of pattern args |(a, b), c] => |a, b, c|
+* [feature] Mutate define and block arguments
 * [feature] Mutate block arguments, inklusive pattern args
 * [feature] Recurse into block bodies
 * [fixed] Crash on mutating yield, added a noop for now

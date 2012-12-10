@@ -32,6 +32,16 @@ module Mutant
     end
     private_class_method :handle
 
+    # Return identity of object (for deduplication)
+    #
+    # @param [Object]
+    #
+    # @return [Object]
+    #
+    def self.identity(object)
+      object
+    end
+
     # Return input
     #
     # @return [Object]
@@ -52,12 +62,13 @@ module Mutant
     # @api private
     #
     def initialize(input, block)
-      @input, @block = Helper.deep_clone(input), block
-      IceNine.deep_freeze(@input)
+      @input, @block = IceNine.deep_freeze(input), block
+      @seen = Set.new
+      guard(input)
       dispatch
     end
 
-    # Test if generated object is different from input
+    # Test if generated object is not guarded from emmitting
     #
     # @param [Object] object
     #
@@ -69,7 +80,19 @@ module Mutant
     # @api private
     #
     def new?(object)
-      input != object
+      !@seen.include?(self.class.identity(object))
+    end
+
+    # Add object to guarded values
+    #
+    # @param [Object] object
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def guard(object)
+      @seen << self.class.identity(object)
     end
 
     # Test if generated mutation is allowed
@@ -104,6 +127,8 @@ module Mutant
     #
     def emit(object)
       return unless new?(object) and allow?(object)
+
+      guard(object)
 
       emit!(object)
     end
@@ -160,7 +185,7 @@ module Mutant
     # @api private
     #
     def dup_input
-      input.dup
+      Helper.deep_clone(input)
     end
 
   end

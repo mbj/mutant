@@ -9,10 +9,20 @@ require 'digest/sha1'
 require 'to_source'
 require 'inflector'
 require 'ice_nine'
-require 'ice_nine/core_ext/object'
 require 'diff/lcs'
 require 'diff/lcs/hunk'
 require 'rspec'
+
+module IceNine
+  class Freezer
+    class Rubinius 
+      class AST < IceNine::Freezer::Object
+        class Node < IceNine::Freezer::Object
+        end
+      end
+    end
+  end
+end
 
 # Library namespace
 module Mutant
@@ -74,6 +84,7 @@ require 'mutant/mutator/node/send'
 require 'mutant/mutator/node/arguments'
 require 'mutant/mutator/node/define'
 require 'mutant/mutator/node/return'
+require 'mutant/mutator/node/local_variable_assignment'
 require 'mutant/mutator/node/iter_19'
 require 'mutant/mutator/node/if_statement'
 require 'mutant/mutator/node/receiver_case'

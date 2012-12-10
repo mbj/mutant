@@ -46,6 +46,17 @@ module Mutant
       self
     end
 
+    # Return noop mutation
+    #
+    # @return [Mutation::Noop]
+    #
+    # @api private
+    #
+    def noop
+      Mutation::Noop.new(self)
+    end
+    memoize :noop
+
     # Return subject identicication
     #
     # @return [String]

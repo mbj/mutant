@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator, 'call' do
+describe Mutant::Mutator, 'send' do
   context 'send without arguments' do
     # This could not be reproduced in a test case but happens in the mutant source code?
     context 'block_given?' do

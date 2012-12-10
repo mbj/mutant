@@ -5,35 +5,20 @@ module Mutant
     class Node < self
       include AbstractType
 
+      # Return identity of node
+      #
+      # @param [Rubinius::AST::Node] node
+      #
+      # @return [String]
+      #
+      def self.identity(node)
+        ToSource.to_source(node)
+      end
+
     private
 
       alias_method :node, :input
       alias_method :dup_node, :dup_input
-
-      # Return source of input node
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def source
-        ToSource.to_source(node)
-      end
-      memoize :source
-
-      # Test if generated node is new
-      #
-      # @return [true]
-      #   if generated node is different from input
-      #
-      # @return [false]
-      #   otherwise
-      #
-      # @api private
-      #
-      def new?(node)
-        source != ToSource.to_source(node)
-      end
 
       # Emit a new AST node
       #
@@ -116,8 +101,8 @@ module Mutant
 
         Mutator.each(body) do |mutation|
           dup = dup_node
-          yield mutation if block_given?
           dup.public_send(:"#{name}=", mutation)
+          yield dup if block_given?
           emit(dup)
         end
       end
@@ -156,9 +141,7 @@ module Mutant
       #
       # @api private
       #
-      def dup_node
-        node.dup
-      end
+      alias_method :dup_node, :dup_input
     end
   end
 end

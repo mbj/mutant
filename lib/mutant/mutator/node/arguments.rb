@@ -17,23 +17,24 @@ module Mutant
         def dispatch
           emit_attribute_mutations(:name)
         end
+      end
 
-        # Test if node is new
+      # Mutantor for default arguments
+      class DefaultArguments < self
+        handle(Rubinius::AST::DefaultArguments)
+
+      private
+
+        # Emit mutations
         #
-        # Note: to_source does not handle PatternVariableNodes as entry points
-        #
-        # @param [Rubinius::AST::Node] generated
-        #
-        # @return [true]
-        #   if node is new
-        #
-        # @return [false]
-        #   otherwise
+        # @return [undefined]
         #
         # @api private
         #
-        def new?(generated)
-          node.name != generated.name
+        def dispatch
+          emit_attribute_mutations(:arguments) do |argument|
+            argument.names = argument.arguments.map(&:name)
+          end
         end
       end
 
@@ -53,9 +54,7 @@ module Mutant
         def dispatch
           Mutator.each(node.arguments.body) do |mutation|
             dup = dup_node
-            dup_args = dup.arguments.dup
-            dup_args.body = mutation
-            dup.arguments = dup_args
+            dup.arguments.body = mutation
             emit(dup)
           end
         end
@@ -90,7 +89,51 @@ module Mutant
         #
         def dispatch
           expand_pattern_args
-          emit_attribute_mutations(:required)
+          emit_default_mutations
+          emit_required_defaults_mutation
+          emit_attribute_mutations(:required) do |mutation|
+            mutation.names = mutation.optional + mutation.required
+          end
+        end
+
+        # Emit default mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_default_mutations
+          return unless node.defaults
+          emit_attribute_mutations(:defaults) do |mutation|
+            mutation.optional = mutation.defaults.names
+            mutation.names = mutation.required + mutation.optional
+            if mutation.defaults.names.empty?
+              mutation.defaults = nil
+            end
+          end 
+        end
+
+        # Emit required defaults mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_required_defaults_mutation
+          return unless node.defaults
+          arguments = node.defaults.arguments
+          arguments.each_index do |index|
+            names = arguments.take(index+1).map(&:name)
+            dup = dup_node
+            defaults = dup.defaults
+            defaults.arguments = defaults.arguments.drop(names.size)
+            names.each { |name| dup.optional.delete(name) }
+            dup.required.concat(names)
+            if dup.optional.empty?
+              dup.defaults = nil
+            end
+            emit(dup)
+          end
         end
 
         # Emit pattern args expansions
@@ -102,13 +145,12 @@ module Mutant
         def expand_pattern_args
           node.required.each_with_index do |argument, index|
             next unless argument.kind_of?(Rubinius::AST::PatternArguments)
-            required = node.required.dup
+            dup = dup_node
+            required = dup.required
             required.delete_at(index)
             argument.arguments.body.reverse.each do |node|
               required.insert(index, node.name)
             end
-            dup = dup_node
-            dup.required = required
             dup.names |= required
             emit(dup)
           end

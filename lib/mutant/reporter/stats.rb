@@ -10,7 +10,7 @@ module Mutant
       #
       # @api private
       #
-      attr_reader :subject
+      attr_reader :subjects
 
       # Return mutation count
       #
@@ -18,7 +18,15 @@ module Mutant
       #
       # @api private
       #
-      attr_reader :mutation
+      attr_reader :mutations
+
+      # Return skip count
+      #
+      # @return [Fixnum]
+      #
+      # @api private
+      #
+      attr_reader :noop_fails
 
       # Return kill count
       #
@@ -26,7 +34,7 @@ module Mutant
       #
       # @api private
       #
-      attr_reader :kill
+      attr_reader :kills
 
       # Return mutation runtime
       #
@@ -38,7 +46,7 @@ module Mutant
 
       def initialize
         @start = Time.now
-        @subject = @mutation = @kill = @time = 0
+        @noop_fails = @subjects = @mutations = @kills = @time = 0
       end
 
       def runtime
@@ -46,19 +54,27 @@ module Mutant
       end
 
       def subject
-        @subject +=1
+        @subjects +=1
+        self
       end
 
       def alive
-        @mutation - @kill
+        @mutations - @kills
+      end
+
+      def noop_fail(killer)
+        @noop_fails += 1
+        @time += killer.runtime
+        self
       end
 
       def killer(killer)
-        @mutation +=1
-        @kill +=1 unless killer.fail?
+        @mutations +=1
+        @kills +=1 unless killer.fail?
         @time += killer.runtime
+        self
       end
-    end
 
+    end
   end
 end

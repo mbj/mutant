@@ -109,5 +109,31 @@ module Mutant
     def initialize(subject, node)
       @subject, @node = subject, node
     end
+
+    class Noop < self
+
+      # Initialihe object
+      #
+      # @param [Subject] subject
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def initialize(subject)
+        super(subject, subject.node)
+      end
+
+      # Return identification
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def identification
+        "noop:#{super}"
+      end
+      memoize :identification
+    end
   end
 end

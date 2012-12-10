@@ -1,6 +1,46 @@
 module Mutant
   class Strategy 
-    include AbstractType
+    include AbstractType, Adamantium::Flat, Equalizer.new
+
+    # Return config
+    #
+    # @return [Config]
+    #
+    # @api private
+    #
+    attr_reader :config
+
+    # Initialize object
+    #
+    # @param [Config] config
+    #
+    # @return [undefined
+    #
+    # @api private
+    #
+    def initialize(config)
+      @config = config
+    end
+
+    # Return output stream
+    #
+    # @return [IO]
+    #
+    # @api private
+    #
+    def output_stream
+      config.reporter.output_stream
+    end
+
+    # Return error stream
+    #
+    # @return [IO]
+    #
+    # @api private
+    #
+    def error_stream
+      config.reporter.error_stream
+    end
 
     # Kill mutation
     #
@@ -10,7 +50,7 @@ module Mutant
     #
     # @api private
     #
-    def self.kill(mutation)
+    def kill(mutation)
       killer.new(self, mutation)
     end
 
@@ -20,12 +60,13 @@ module Mutant
     #
     # @api private
     #
-    def self.killer
-      self::KILLER
+    def killer
+      self.class::KILLER
     end
 
     # Static strategies
     class Static < self
+      include Equalizer.new
 
       # Always fail to kill strategy
       class Fail < self

@@ -52,5 +52,33 @@ module Mutant
     # @api private
     #
     abstract_method :config
+
+    # Return output stream
+    #
+    # @return [IO]
+    #
+    # @api private
+    #
+    abstract_method :output_stream
+
+    # Return error stream
+    #
+    # @return [IO]
+    #
+    # @api private
+    #
+    abstract_method :error_stream
+
+  private
+
+    # Initialize reporter
+    #
+    # @param [Config] config
+    #
+    # @api private
+    #
+    def initialize(config)
+      @config = config
+    end
   end
 end

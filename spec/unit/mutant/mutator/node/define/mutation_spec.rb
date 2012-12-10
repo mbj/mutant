@@ -48,6 +48,25 @@ describe Mutant::Mutator, 'define' do
       mutations << 'def foo(a, b); Object.new; end'
     end
 
+    it_should_behave_like 'a mutator'
+  end
+
+  context 'default argument' do
+    let(:source) { 'def foo(a = "literal"); end' }
+
+    before do
+      Mutant::Random.stub(:hex_string => 'random')
+    end
+
+    let(:mutations) do 
+      mutations = []
+      mutations << 'def foo(a); end'
+      mutations << 'def foo(); end'
+      mutations << 'def foo(a = "random"); end'
+      mutations << 'def foo(a = nil); end'
+      mutations << 'def foo(a = "literal"); Object.new; end'
+      mutations << 'def foo(srandom = "literal"); nil; end'
+    end
 
     it_should_behave_like 'a mutator'
   end

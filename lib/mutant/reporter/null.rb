@@ -1,7 +1,8 @@
 module Mutant
   class Reporter
-    # Null reporter
-    Null = Class.new(self) do
+
+    class Null < self
+
       # Report subject
       #
       # @param [Subject] subject
@@ -37,6 +38,7 @@ module Mutant
       def killer(*)
         self
       end
-    end.new.freeze
+    end
+
   end
 end

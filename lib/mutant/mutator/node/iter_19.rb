@@ -15,7 +15,8 @@ module Mutant
         def dispatch
           emit_attribute_mutations(:body)
           emit_attribute_mutations(:arguments) do |mutation|
-            mutation.names = mutation.required
+            arguments = mutation.arguments
+            arguments.names = arguments.required + arguments.optional
           end if node.arguments
         end
 

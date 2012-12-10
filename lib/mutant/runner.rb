@@ -86,6 +86,7 @@ module Mutant
     # @api private
     #
     def run_subject(subject)
+      return unless noop(subject)
       subject.each do |mutation|
         next unless config.filter.match?(mutation)
         reporter.mutation(mutation)
@@ -93,20 +94,58 @@ module Mutant
       end
     end
 
+    # Test for noop mutation
+    #
+    # @param [Subject] subject
+    #
+    # @return [true]
+    #   if noop mutation is okay
+    #
+    # @return [false]
+    #   otherwise
+    #
+    # @api private
+    #
+    def noop(subject)
+      killer = killer(subject.noop)
+      reporter.noop(killer)
+      unless killer.fail?
+        @errors << killer
+        false
+      end
+
+      true
+    end
+
     # Run killer on mutation
     #
     # @param [Mutation] mutation
     #
-    # @return [undefined]
+    # @return [true]
+    #   if killer was unsuccessful
+    #
+    # @return [false]
+    #   otherwise
     #
     # @api private
     #
     def kill(mutation)
-      killer = config.strategy.kill(mutation)
+      killer = killer(mutation)
       reporter.killer(killer)
+
       if killer.fail?
         @errors << killer
       end
+    end
+
+    # Return killer for mutation
+    #
+    # @return [Killer]
+    #
+    # @api private
+    #
+    def killer(mutation)
+      config.strategy.kill(mutation)
     end
   end
 end

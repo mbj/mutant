@@ -29,7 +29,7 @@ module Mutant
       #
       def run
         mutation.insert
-        !::RSpec::Core::Runner.run(command_line_arguments, @error_stream, @output_stream).zero?
+        !::RSpec::Core::Runner.run(command_line_arguments, strategy.error_stream, strategy.output_stream).zero?
       end
       memoize :run
 

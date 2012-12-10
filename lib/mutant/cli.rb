@@ -1,7 +1,7 @@
 module Mutant
   # Comandline parser
   class CLI
-    include Adamantium::Flat, Equalizer.new(:matcher, :filter, :killer)
+    include Adamantium::Flat, Equalizer.new(:matcher, :filter, :strategy, :reporter)
 
     # Error raised when CLI argv is inalid
     Error = Class.new(RuntimeError)
@@ -44,6 +44,20 @@ module Mutant
     end
     memoize :matcher
 
+    # Test for running in debug mode
+    #
+    # @return [true]
+    #   if debug mode is active
+    #
+    # @return [false]
+    #   otherwise
+    #
+    # @api private
+    #
+    def debug?
+      !!@debug
+    end
+
     # Return mutation filter
     #
     # @return [Mutant::Matcher]
@@ -67,7 +81,9 @@ module Mutant
     #
     def strategy
       @strategy || raise(Error, 'no strategy was set!')
+      @strategy.new(self)
     end
+    memoize :strategy
 
     # Return reporter
     #
@@ -76,7 +92,7 @@ module Mutant
     # @api private
     #
     def reporter
-      Mutant::Reporter::CLI.new($stdout)
+      Mutant::Reporter::CLI.new(self)
     end
     memoize :reporter
 
@@ -88,7 +104,8 @@ module Mutant
       '--include'            => [:add_load_path                                   ],
       '-r'                   => [:require_library                                 ],
       '--require'            => [:require_library                                 ],
-     #'--killer-fork'        => [:enable_killer_fork                              ],
+      '--debug'              => [:set_debug                                       ],
+      '-d'                   => [:set_debug                                       ],
       '--rspec-unit'         => [:set_strategy,         Strategy::Rspec::Unit     ],
       '--rspec-full'         => [:set_strategy,         Strategy::Rspec::Full     ],
       '--rspec-dm2'          => [:set_strategy,         Strategy::Rspec::DM2      ],
@@ -97,33 +114,6 @@ module Mutant
     }.freeze
 
     OPTION_PATTERN = %r(\A-(?:-)?[a-zA-Z0-9\-]+\z).freeze
-
-    # Return selected killer
-    #
-    # @return [Killer]
-    #
-    # @api private
-    #
-    def selected_killer
-      unless @rspec
-        raise Error, "Only rspec is supported currently use --rspec switch"
-      end
-
-      Mutant::Killer::Rspec
-    end
-    memoize :selected_killer
-
-    # Return option for argument with index
-    #
-    # @param [Fixnum] index
-    #
-    # @return [String]
-    #
-    # @api private
-    #
-    def option(index)
-      @arguments.fetch(index+1)
-    end
 
     # Initialize CLI 
     #
@@ -144,6 +134,18 @@ module Mutant
 
       strategy
       matcher
+    end
+
+    # Return option for argument with index
+    #
+    # @param [Fixnum] index
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    def option(index)
+      @arguments.fetch(index+1)
     end
 
     # Return current argument
@@ -268,17 +270,15 @@ module Mutant
       @rspec = true
     end
 
-    # Enable killer forking
+    # Set debug mode
     #
     # @api private
     #
-    # @return [self]
+    # @return [undefined]
     #
-    # @api private
-    #
-    def enable_killer_fork
+    def set_debug
       consume(1)
-      @forking = true
+      @debug = true
     end
 
     # Set strategy
@@ -304,6 +304,5 @@ module Mutant
       require(current_option_value)
       consume(2)
     end
-
   end
 end

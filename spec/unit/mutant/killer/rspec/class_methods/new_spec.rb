@@ -4,7 +4,7 @@ describe Mutant::Killer::Rspec, '.new' do
 
   subject { object.new(strategy, mutation) }
 
-  let(:strategy) { mock('Strategy', :spec_files => ['foo']) }
+  let(:strategy) { mock('Strategy', :spec_files => ['foo'], :error_stream => $stderr, :output_stream => $stdout) }
   let(:context)  { mock('Context')  }
   let(:mutation) { mock('Mutation') }
 

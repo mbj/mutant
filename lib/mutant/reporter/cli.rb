@@ -17,6 +17,26 @@ module Mutant
         puts("Subject: #{subject.identification}")
       end
 
+      # Return error stream
+      #
+      # @return [IO]
+      #
+      # @api private
+      #
+      def error_stream
+        @config.debug? ? io : StringIO.new
+      end
+
+      # Return output stream
+      #
+      # @return [IO]
+      #
+      # @api private
+      #
+      def output_stream
+        @config.debug? ? io : StringIO.new
+      end
+
       # Report mutation
       #
       # @param [Mutation] mutation
@@ -26,7 +46,10 @@ module Mutant
       # @api private
       #
       def mutation(mutation)
-        #colorized_diff(mutation.original_source, mutation.source)
+        if @config.debug?
+          colorized_diff(mutation)
+        end
+
         self
       end
 
@@ -43,6 +66,32 @@ module Mutant
         puts "Matcher:   #{config.matcher.inspect}"
         puts "Filter:    #{config.filter.inspect}"
         puts "Strategy:  #{config.strategy.inspect}"
+      end
+
+      # Report noop
+      #
+      # @param [Killer] killer
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def noop(killer)
+        color, word =
+          if killer.fail?
+            [Color::GREEN, 'Alive']
+          else
+            [Color::RED,   'Killed']
+          end
+
+        puts(colorize(color, "#{word}: #{killer.identification} (%02.2fs)" % killer.runtime))
+
+        unless killer.fail?
+          puts(killer.mutation.source)
+          stats.noop_fail(killer)
+        end
+
+        self
       end
 
       # Reporter killer
@@ -66,8 +115,7 @@ module Mutant
         puts(colorize(color, "#{word}: #{killer.identification} (%02.2fs)" % killer.runtime))
 
         if killer.fail?
-          mutation = killer.mutation
-          colorized_diff(mutation.original_source, mutation.source)
+          colorized_diff(killer.mutation)
         end
 
         self
@@ -87,12 +135,13 @@ module Mutant
         end
 
         puts
-        puts "subjects:  #{stats.subject}"
-        puts "mutations: #{stats.mutation}"
-        puts "kills:     #{stats.kill}"
-        puts "alive:     #{stats.alive}"
-        puts "mtime:     %02.2fs" % stats.time
-        puts "rtime:     %02.2fs" % stats.runtime
+        puts "subjects:   #{stats.subjects}"
+        puts "mutations:  #{stats.mutations}"
+        puts "noop_fails: #{stats.noop_fails}"
+        puts "kills:      #{stats.kills}"
+        puts "alive:      #{stats.alive}"
+        puts "mtime:      %02.2fs" % stats.time
+        puts "rtime:      %02.2fs" % stats.runtime
       end
 
       # Return IO stream
@@ -121,8 +170,9 @@ module Mutant
       #
       # @api private
       #
-      def initialize(io)
-        @io = io
+      def initialize(config)
+        super
+        @io = $stdout
         @stats = Stats.new
       end
 
@@ -136,7 +186,7 @@ module Mutant
       #
       def failure(killer)
         puts(colorize(Color::RED, "!!! Mutant alive: #{killer.identification} !!!"))
-        colorized_diff(killer.original_source, killer.mutation_source)
+        colorized_diff(killer.mutation)
         puts("Took: (%02.2fs)" % killer.runtime)
       end
 
@@ -187,17 +237,25 @@ module Mutant
       # @param [String] original
       # @param [String] current
       #
-      # @return [self]
+      # @return [undefined]
       #
       # @api private
       #
-      def colorized_diff(original, current)
+      def colorized_diff(mutation)
+        if mutation.kind_of?(Mutation::Noop)
+          io.mutation.original_source
+          return
+        end
+
+        original, current = mutation.original_source, mutation.source
         differ = Differ.new(original, current)
         diff = color? ? differ.colorized_diff : differ.diff
+
         # FIXME remove this branch before release
         if diff.empty?
           raise "Unable to create a diff, so ast mutation or to_source has an error!"
         end
+
         puts(diff)
         self
       end

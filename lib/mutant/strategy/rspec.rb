@@ -15,7 +15,7 @@ module Mutant
         #
         # @api private
         #
-        def self.spec_files(mutation)
+        def spec_files(mutation)
           ExampleLookup.run(mutation)
         end
       end
@@ -29,7 +29,7 @@ module Mutant
         #
         # @api private
         #
-        def self.spec_files(mutation)
+        def spec_files(mutation)
           ['spec/unit']
         end
       end
@@ -43,14 +43,14 @@ module Mutant
         #
         # @api private
         #
-        def self.spec_files(mutation)
+        def spec_files(mutation)
           Dir['spec/integration/**/*_spec.rb']
         end
       end
 
       # Run all specs per mutation
       class Full < self
-        def self.spec_files(mutation)
+        def spec_files(mutation)
           Dir['spec/**/*_spec.rb']
         end
       end
