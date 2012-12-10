@@ -16,6 +16,7 @@ module Mutant
         handle(Rubinius::AST::And)
         handle(Rubinius::AST::Defined)
         handle(Rubinius::AST::Super)
+        handle(Rubinius::AST::Next)
         handle(Rubinius::AST::Match3)
         handle(Rubinius::AST::ZSuper)
         handle(Rubinius::AST::MultipleAssignment)
