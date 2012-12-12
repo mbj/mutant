@@ -98,7 +98,7 @@ module Mutant
 
       # Yield scope if name matches pattern
       #
-      # @param [::Module,::Class]
+      # @param [::Module,::Class] scope
       #
       # @return [undefined]
       #

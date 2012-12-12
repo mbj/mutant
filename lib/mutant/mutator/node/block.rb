@@ -16,28 +16,15 @@ module Mutant
         #
         def dispatch
           array = input.array
-          emit_attribute_mutations(:array)
-        end
-
-        # Test if node is new
-        #
-        # FIXME: Remove this hack and make sure empty bodies are not generated
-        #
-        # @param [Rubinius::AST::Node]
-        #
-        # @return [true]
-        #   if node is new
-        #
-        # @return [false]
-        #   otherwise
-        #
-        def new?(node)
-          if node.array.empty?
-            node.array << new_nil
+          emit_attribute_mutations(:array) do |mutation|
+            array = mutation.array
+            # Do not generate empty bodies
+            if array.empty?
+              array << new_nil
+            end
           end
-
-          super
         end
+
       end
     end
   end

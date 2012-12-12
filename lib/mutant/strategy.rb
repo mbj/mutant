@@ -44,7 +44,7 @@ module Mutant
 
     # Kill mutation
     #
-    # @param [Mutation]
+    # @param [Mutation] mutation
     #
     # @return [Killer]
     #

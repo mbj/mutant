@@ -11,13 +11,28 @@ module Mutant
       #
       # @return [String]
       #
+      # @api private
+      #
       def self.identity(node)
         ToSource.to_source(node)
       end
 
-    private
+      private
 
+      # Return mutated node
+      #
+      # @return [Rubinius::AST::Node]
+      #
+      # @api private
+      #
       alias_method :node, :input
+
+      # Return duplicated node
+      #
+      # @return [Rubinius::AST::Node]
+      #
+      # @api private
+      #
       alias_method :dup_node, :dup_input
 
       # Emit a new AST node

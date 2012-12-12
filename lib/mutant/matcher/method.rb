@@ -72,7 +72,7 @@ module Mutant
       # @return [true]
       #   if method is public
       #
-      # @retur [false]
+      # @return [false]
       #   otherwise
       #
       # @api private

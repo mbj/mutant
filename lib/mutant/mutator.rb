@@ -12,9 +12,9 @@ module Mutant
     #
     # @api private
     #
-    def self.each(node, &block)
-      return to_enum(__method__, node) unless block_given?
-      Registry.lookup(node.class).new(node, block)
+    def self.each(input, &block)
+      return to_enum(__method__, input) unless block_given?
+      Registry.lookup(input.class).new(input, block)
 
       self
     end
@@ -34,9 +34,11 @@ module Mutant
 
     # Return identity of object (for deduplication)
     #
-    # @param [Object]
+    # @param [Object] object
     #
     # @return [Object]
+    #
+    # @api private
     #
     def self.identity(object)
       object
@@ -104,6 +106,8 @@ module Mutant
     #
     # @return [false]
     #   otherwise
+    #
+    # @api private
     #
     def allow?(object)
       true

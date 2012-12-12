@@ -6,7 +6,7 @@ module Mutant
 
         # Test for match
         #
-        # @param [Mutation]
+        # @param [Mutation] mutation
         #
         # @return [true]
         #   returns true if mutation matches whitelist

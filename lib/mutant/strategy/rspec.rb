@@ -50,6 +50,13 @@ module Mutant
 
       # Run all specs per mutation
       class Full < self
+
+        # Return spec files
+        #
+        # @return [Enumerable<String>]
+        #
+        # @api private
+        #
         def spec_files(mutation)
           Dir['spec/**/*_spec.rb']
         end

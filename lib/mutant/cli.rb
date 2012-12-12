@@ -235,7 +235,7 @@ module Mutant
 
     # Add mutation filter
     #
-    # @param [Class<Mutant::Filter>]
+    # @param [Class<Mutant::Filter>] klass
     #
     # @return [undefined]
     #
@@ -283,7 +283,7 @@ module Mutant
 
     # Set strategy
     #
-    # @param [Strategy]
+    # @param [Strategy] strategy
     #
     # @api private
     #

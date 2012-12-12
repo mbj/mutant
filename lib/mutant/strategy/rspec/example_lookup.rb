@@ -8,7 +8,7 @@ module Mutant
 
         # Perform example lookup
         #
-        # @param [Mutation]
+        # @param [Mutation] mutation
         #
         # @return [Enumerable<String>]
         #
@@ -110,6 +110,8 @@ module Mutant
         #
         # @return [nil]
         #   otherwise
+        #
+        # @api private
         #
         def mapped_name
           MAPPING[method_name]

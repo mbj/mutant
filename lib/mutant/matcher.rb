@@ -43,6 +43,8 @@ module Mutant
     # @return [nil]
     #   returns nil otherwise
     #
+    # @api private
+    #
     def self.from_string(input)
       descendants.each do |descendant|
         matcher = descendant.parse(input)

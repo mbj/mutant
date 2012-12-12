@@ -5,7 +5,13 @@ module Mutant
 
       # Run ulitity mutator
       #
-      # @param [Object]
+      # @param [Object] object
+      #
+      # @return [Enumerator<Object>]
+      #   if no block given
+      #
+      # @return [self]
+      #   otherwise
       #
       # @api private
       #
@@ -26,6 +32,8 @@ module Mutant
       #
       # @return [false]
       #   otherwise
+      #
+      # @api private
       #
       def new?(generated)
         input != generated

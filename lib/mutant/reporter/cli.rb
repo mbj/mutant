@@ -123,7 +123,7 @@ module Mutant
 
       # Report errors
       #
-      # @param [Enumerable<Killer>]
+      # @param [Enumerable<Killer>] errors
       #
       # @api private
       #
@@ -164,7 +164,7 @@ module Mutant
 
       # Initialize reporter
       #
-      # @param [IO] io
+      # @param [Config] config
       #
       # @return [undefined]
       #
@@ -234,8 +234,7 @@ module Mutant
 
       # Write colorized diff
       #
-      # @param [String] original
-      # @param [String] current
+      # @param [Mutation] mutation
       #
       # @return [undefined]
       #

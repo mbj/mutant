@@ -153,6 +153,8 @@ module Mutant
         #
         # @return [Enumerable<Symbol>]
         #
+        # @api private
+        #
         def method_names
           scope = self.scope
           return [] unless scope.kind_of?(Module)
