@@ -84,7 +84,7 @@ module Mutant
             [Color::RED,   'Killed']
           end
 
-        puts(colorize(color, "#{word}: #{killer.identification} (%02.2fs)" % killer.runtime))
+        print_killer(color, word, killer)
 
         unless killer.fail?
           puts(killer.mutation.source)
@@ -112,7 +112,7 @@ module Mutant
             [Color::GREEN, 'Killed']
           end
 
-        puts(colorize(color, "#{word}: #{killer.identification} (%02.2fs)" % killer.runtime))
+        print_killer(color, word, killer)
 
         if killer.fail?
           colorized_diff(killer.mutation)
@@ -257,6 +257,20 @@ module Mutant
 
         puts(diff)
         self
+      end
+
+      # Print killer
+      #
+      # @param [Color] color
+      # @param [String] word
+      # @param [Killer] killer
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def print_killer(color, word, killer)
+        puts(colorize(color, "#{word}: #{killer.identification} (%02.2fs)" % killer.runtime))
       end
 
       # Test for output to tty

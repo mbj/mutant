@@ -11,6 +11,7 @@ LargeClass:
   max_methods: 10
   exclude: 
   - "Mutant::Matcher::Method" # 13 methods
+  - "Mutant::Reporter::CLI" # 16 methods TODO Reduce!
   enabled: true
   max_instance_variables: 3
 UncommunicativeMethodName:
@@ -40,7 +41,8 @@ IrresponsibleModule:
   exclude: []
   enabled: true
 UncommunicativeModuleName:
-  accept: []
+  accept: 
+  - Mutant::Strategy::Rspec::DM2
   exclude: []
   enabled: true
   reject:
