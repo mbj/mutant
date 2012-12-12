@@ -1,4 +1,4 @@
-# v0.2.5 xxxx
+# v0.2.5 2012-12-12
 
 * [feature] Add --debug flag for showing killer output and mutation
 * [feature] Run noop mutation per subject to guard against initial failing specs
