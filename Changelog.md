@@ -1,3 +1,7 @@
+# v0.2.4 2012-12-12
+
+* [fixed] Correctly vendor inflector
+
 # v0.2.3 2012-12-08
 
 * [fixed] Prepend extra elements to hash and array instead of append. This fixes unkillable mutators in parallel assignments!
