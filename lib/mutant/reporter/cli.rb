@@ -243,7 +243,7 @@ module Mutant
       #
       def colorized_diff(mutation)
         if mutation.kind_of?(Mutation::Noop)
-          io.mutation.original_source
+          puts mutation.original_source
           return
         end
 
