@@ -1,4 +1,4 @@
-# v0.2.4 2012-12-08
+# v0.2.5 xxxx
 
 * [feature] Add --debug flag for showing killer output and mutation
 * [feature] Run noop mutation per subject to guard against initial failing specs
@@ -11,13 +11,19 @@
 * [fixed] Crash on mutating yield, added a noop for now
 * [fixed] Crash on singleton methods defined on other than constants or self
 
-[Compare v0.2.3..v0.2.4](https://github.com/mbj/mutant/compare/v0.2.1...v0.2.2)
+[Compare v0.2.4..v0.2.5](https://github.com/mbj/mutant/compare/v0.2.4...v0.2.5)
+
+# v0.2.4 2012-12-12
+
+* [fixed] Correctly vendor inflector
+
+[Compare v0.2.3..v0.2.4](https://github.com/mbj/mutant/compare/v0.2.3...v0.2.4)
 
 # v0.2.3 2012-12-08
 
 * [fixed] Prepend extra elements to hash and array instead of append. This fixes unkillable mutators in parallel assignments!
 
-[Compare v0.2.2..v0.2.3](https://github.com/mbj/mutant/compare/v0.2.1...v0.2.2)
+[Compare v0.2.2..v0.2.3](https://github.com/mbj/mutant/compare/v0.2.2...v0.2.3)
 
 # v0.2.2 2012-12-07
 
