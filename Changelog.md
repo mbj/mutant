@@ -8,6 +8,8 @@
 * [feature] Mutate define and block arguments
 * [feature] Mutate block arguments, inklusive pattern args
 * [feature] Recurse into block bodies
+* [change] Unvendor inflector use mbj-inflector from rubygems
+* [fixed] Insert mutations at correct constant scope
 * [fixed] Crash on mutating yield, added a noop for now
 * [fixed] Crash on singleton methods defined on other than constants or self
 

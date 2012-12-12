@@ -2,41 +2,7 @@ module Mutant
   class Context
     # Scope context for mutation (Class or Module)
     class Scope < self
-      include Adamantium::Flat, AbstractType, Equalizer.new(:scope, :source_path)
-
-      # Class context for mutation
-      class Class < self
-        SCOPE_CLASS = Rubinius::AST::ClassScope
-        KEYWORD     = 'class'.freeze
-      end
-
-      # Module context for mutation
-      class Module < self
-        SCOPE_CLASS = Rubinius::AST::ModuleScope
-        KEYWORD     = 'module'.freeze
-      end
-
-      TABLE = {
-        ::Module => Module,
-        ::Class => Class
-      }.freeze
-
-      # Build scope context from class or module
-      #
-      # @param [String] source_path
-      #
-      # @param [::Class|::Module] scope
-      #
-      # @return [Context::Scope]
-      #
-      # @api private
-      #
-      def self.build(scope, source_path)
-        scope_class = scope.class
-        klass = TABLE.fetch(scope_class) do
-          raise ArgumentError, "Can only build mutation scope from class or module got: #{scope_class.inspect}"
-        end.new(scope, source_path)
-      end
+      include Adamantium::Flat, Equalizer.new(:scope, :source_path)
 
       # Return AST wrapping mutated node
       #
@@ -45,11 +11,50 @@ module Mutant
       # @api private
       #
       def root(node)
-        root = root_ast
-        block = Rubinius::AST::Block.new(1, [node])
-        root.body = scope_class.new(1, root.name, block)
-        root
+        nesting.reverse.inject(node) do |current, scope|
+          self.class.wrap(scope, current)
+        end
       end
+
+      # Wrap node into ast node
+      #
+      # @param [Class, Module] scope 
+      # @param [Rubinius::AST::Node] node
+      #
+      # @return [Rubinius::AST::Class]
+      #   if scope is of kind Class
+      #
+      # @return [Rubinius::AST::Module]
+      #   if scope is of kind module
+      #
+      # @api private
+      #
+      def self.wrap(scope, node)
+        name = scope.name.split('::').last
+        case scope
+        when ::Class
+          ::Rubinius::AST::Class.new(0, name.to_sym, nil, node)
+        when ::Module
+          ::Rubinius::AST::Module.new(0, name.to_sym, node)
+        else
+          raise "Cannot wrap scope: #{scope.inspect}"
+        end
+      end
+
+      # Return nesting
+      #
+      # @return [Enumerable<Class,Module>]
+      #
+      # @api private
+      #
+      def nesting
+        const = ::Object
+        name_nesting.each_with_object([]) do |name, nesting|
+          const = const.const_get(name)
+          nesting << const
+        end
+      end
+      memoize :nesting
 
       # Return unqualified name of scope
       #

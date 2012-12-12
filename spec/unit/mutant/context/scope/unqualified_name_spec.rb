@@ -6,7 +6,7 @@ describe Mutant::Context::Scope, '#unqualified_name' do
   let(:path)   { mock('Path') }
 
   context 'with top level constant name' do
-    let(:object) { described_class.build(TestApp, path) }
+    let(:object) { described_class.new(TestApp, path) }
 
     it 'should return the unqualified name' do
       should eql('TestApp')
@@ -16,7 +16,7 @@ describe Mutant::Context::Scope, '#unqualified_name' do
   end
 
   context 'with scoped constant name' do
-    let(:object) { described_class.build(TestApp::Literal, path) }
+    let(:object) { described_class.new(TestApp::Literal, path) }
 
     it 'should return the unqualified name' do
       should eql('Literal')

@@ -8,6 +8,7 @@ group :guard do
   gem 'guard',         '~> 1.5.4'
   gem 'guard-bundler', '~> 1.0.0'
   gem 'guard-rspec',   '~> 2.1.1'
+  gem 'rb-inotify', :git => 'https://github.com/mbj/rb-inotify'
 end
 
 group :benchmarks do

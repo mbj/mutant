@@ -3,20 +3,32 @@ require 'spec_helper'
 describe Mutant::Context::Scope, '#root' do
   subject { object.root(node) }
 
-  let(:object) { described_class.build(TestApp::Literal, path) }
+  let(:object) { described_class.new(TestApp::Literal, path) }
   let(:path)   { mock('Path') }
-  let(:node)   { mock('Node') } 
+  let(:node)   { ':node'.to_ast } 
 
   let(:scope)      { subject.body }
   let(:scope_body) { scope.body    }
 
-  it 'should wrap the ast under constant' do
-    scope.should be_kind_of(Rubinius::AST::ClassScope)
+  let(:expected_source) do
+    ToSource.to_source(<<-RUBY.to_ast)
+      module TestApp
+        class Literal
+          :node
+        end
+      end
+    RUBY
   end
 
-  it 'should place the ast under scope inside of block' do
-    scope_body.should be_a(Rubinius::AST::Block)
-    scope_body.array.should eql([node])
-    scope_body.array.first.should be(node)
+  let(:generated_source) do
+    ToSource.to_source(subject)
+  end
+
+  let(:round_tripped_source) do
+    ToSource.to_source(expected_source.to_ast)
+  end
+
+  it 'should create correct source' do
+    generated_source.should eql(expected_source)
   end
 end

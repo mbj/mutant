@@ -103,7 +103,7 @@ module Mutant
       # @api private
       #
       def context
-        Context::Scope.build(scope, source_path)
+        Context::Scope.new(scope, source_path)
       end
 
       # Return full ast
