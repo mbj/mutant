@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |gem|
   gem.name        = 'mutant'
-  gem.version     = '0.2.5'
+  gem.version     = '0.2.6'
   gem.authors     = [ 'Markus Schirp' ]
   gem.email       = [ 'mbj@seonic.net' ]
   gem.description = 'Mutation testing for ruby under rubinius'
@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.extra_rdoc_files = %w[TODO]
   gem.executables       = [ 'mutant' ]
 
-  gem.add_runtime_dependency('to_source',           '~> 0.2.4')
+  gem.add_runtime_dependency('to_source',           '~> 0.2.5')
   gem.add_runtime_dependency('ice_nine',            '~> 0.5.0')
   gem.add_runtime_dependency('descendants_tracker', '~> 0.0.1')
   gem.add_runtime_dependency('backports',           '~> 2.6')
