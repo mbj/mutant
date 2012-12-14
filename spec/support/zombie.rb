@@ -51,7 +51,7 @@ module Zombie
       node.body = Rubinius::AST::ModuleScope.new(scope.line, node.name, scope.body)
     end
 
-    ::Mutant::Loader::Eval.run(root)
+    ::Mutant::Loader::Eval.run(root, path, 1)
   end
   private_class_method :zombify
 

@@ -37,7 +37,7 @@ module Mutant
     # @api private
     #
     def insert
-      Loader::Eval.run(root)
+      Loader::Eval.run(root, subject.source_path, subject.source_line)
       self
     end
 

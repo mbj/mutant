@@ -17,13 +17,15 @@ module Mutant
     # Initialize and insert mutation into vm
     #
     # @param [Rubinius::AST::Script] root
+    # @param [String] file
+    # @param [Fixnum] line
     #
     # @return [undefined]
     #
     # @api private
     #
-    def initialize(root)
-      @root = Helper.deep_clone(root)
+    def initialize(root, file, line)
+      @root, @file, @line = root, file, line
       run
     end
 
@@ -38,7 +40,7 @@ module Mutant
       # @api private
       #
       def run
-        eval(source, TOPLEVEL_BINDING)
+        eval(source, TOPLEVEL_BINDING, @file, @line)
       end
 
       # Return source

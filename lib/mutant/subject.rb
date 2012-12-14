@@ -57,6 +57,26 @@ module Mutant
     end
     memoize :noop
 
+    # Return source path
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    def source_path
+      context.source_path
+    end
+
+    # Return source line
+    #
+    # @return [Fixnum]
+    #
+    # @api private
+    #
+    def source_line
+      node.line
+    end
+
     # Return subject identicication
     #
     # @return [String]
@@ -64,8 +84,6 @@ module Mutant
     # @api private
     #
     def identification
-      source_path = context.source_path
-      source_line = node.line
       "#{matcher.identification}:#{source_path}:#{source_line}"
     end
     memoize :identification
