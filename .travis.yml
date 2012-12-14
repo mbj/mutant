@@ -1,5 +1,3 @@
-before_install:
-  - gem install mbj-inflector
 language: ruby
 script: 'bundle exec rake spec'
 rvm:
