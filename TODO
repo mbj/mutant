@@ -1,13 +1,27 @@
-* Test mutant with zombie.
-* Allow matches on attr_reader with literal name argument(s)?
-* Allow matches on define_method with literal name argument?
-* Add some kind of a "do not touch me object" that raises on all messages.
-  It can be used to make sure each literal value is touched.
-* Replace nil or add "do not touch me object" to literal mutations.
-* Add support remaining dynamic literals
-* Mutate options on Regexp literals
-* Support the numerous Rubinius::AST::SendWithArguments mutations.
-* Fix rubinius to allow setting @vcall_style variable in Rubinius::AST::Send nodes.
-* Aggregate warnings on missing spec files
-* Make sure loader does not change visibility of injected mutants
-* Collect emmited mutants per subtree and do not emit the same subtree twice. 
+Code:
+  * Test mutant with dynamically created zombie.
+  * Replace nil or add "do not touch me object" to literal mutations.
+  * Fix ugly code within default parameters
+
+AST:
+  * Fix the rubinius AST to allow setting @vcall_style variable in Rubinius::AST::Send nodes.
+
+Mutations:
+  * Add some kind of a "do not touch me object" that raises on all messages.
+    It can be used to make sure each literal value is touched.
+  * Mutate options on Regexp literals
+  * Make sure loader does not change visibility of injected mutants
+  * Add mutations for dynamic regexp symbol and string literals
+
+Killers:
+  * Aggregate warnings on missing spec files
+  * Add a general master <=> killer IPC interface. So different strategies of isolation 
+    (fork, vs jruby runtime creation) will work without big impact.
+
+Matcher:
+  * Allow matches on attr_reader with literal name argument(s)?
+  * Allow matches on define_method with literal name argument?
+
+jruby-support:
+  * Hook melbourne via ffi
+  * Create a runtime per mutation to kill mutations in isolation
