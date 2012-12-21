@@ -12,6 +12,7 @@ Mutations:
   * Mutate options on Regexp literals
   * Make sure loader does not change visibility of injected mutants
   * Add mutations for dynamic regexp symbol and string literals
+  * Mutate method chaining with omissions or reorderin
 
 Killers:
   * Aggregate warnings on missing spec files
