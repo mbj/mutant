@@ -1,3 +1,9 @@
+# v0.2.7 2012-12-21
+
+* [fixed] Use latest adamantium and ice_nine
+
+[Compare v0.2.6..v0.2.7](https://github.com/mbj/mutant/compare/v0.2.6...v0.2.7)
+
 # v0.2.6 2012-12-14
 
 * [fixed] Correctly set file and line of injected mutants
