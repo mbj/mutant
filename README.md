@@ -83,6 +83,11 @@ This strategy executes all specs under ``./spec`` for each mutation.
 It is also plannned to allow explicit selections on specs to run and to support other test frameworks.
 Custom project specific strategies are also on the roadmap.
 
+Alternatives
+------------
+
+* [heckle](https://github.com/seattlerb/heckle)
+
 Credits
 -------
 
