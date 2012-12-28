@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.require_paths    = [ 'lib' ]
   gem.files            = `git ls-files`.split("\n")
   gem.test_files       = `git ls-files -- spec`.split("\n")
-  gem.extra_rdoc_files = %w[TODO]
+  gem.extra_rdoc_files = %w[TODO LICENSE]
   gem.executables       = [ 'mutant' ]
 
   gem.add_runtime_dependency('to_source',           '~> 0.2.5')
