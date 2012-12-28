@@ -8,12 +8,25 @@ mutant
 Mutant is a mutation testing tool for ruby that aims to be better than existing mutation testers.
 
 The idea is that if code can be changed and your tests do not notice, either that code isn't being covered 
-or it doesn't do anything (useful).
+or it does not have a speced side effect.
 
-Mutant does currently only support 1.9 mode under rubinius or mri. It is a young project but already 
-used in the DataMapper-2.0 project.
+Mutant does currently only support 1.9 mode under Rubinius or MRI. Support for JRuby is planned. 
+
+Also it is easy to write a mutation killer for other test/spec frameworks than rspec2. 
+Just create your own Mutant::Killer subclass, and make sure I get a PR!
 
 See this [ASCII-Cast](http://ascii.io/a/1707) for mutant in action! (v0.2.1)
+
+Using Mutant
+------------
+
+The following projects adopted mutant.
+
+* [dm-mapper](https://github.com/datamapper/dm-mapper)
+* [virtus](https://github.com/solnic/virtus)
+* various small/minor stuff under https://github.com/mbj
+
+Feel free to ping me to add your project to the list!
 
 Installation
 ------------
@@ -22,6 +35,8 @@ Install the gem ``mutant`` via your preferred method.
 
 Examples
 --------
+
+CLI will be simplified in the next releases, but currently stick with this:
 
 ```
 cd virtus
@@ -39,7 +54,7 @@ Strategies
 ----------
 
 Mutation testing is slow. To make it fast the selection of the correct set of tests to run is the key.
-Mutant currently supports the following buildin strategies:
+Mutant currently supports the following buildin strategies for selecting tests/specs.
 
 ### --rspec-dm2
 
@@ -89,23 +104,4 @@ Contributing
 License
 -------
 
-Copyright (c) 2012 Markus Schirp
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+See LICENSE file.
