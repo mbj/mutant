@@ -97,10 +97,10 @@ module Mutant
       #
       # @api private
       #
-      def emit_attribute_mutations(name)
+      def emit_attribute_mutations(name, mutator = Mutator)
         value = node.public_send(name)
 
-        Mutator.each(value) do |mutation|
+        mutator.each(value) do |mutation|
           dup = dup_node
           dup.public_send(:"#{name}=", mutation)
           yield dup if block_given?

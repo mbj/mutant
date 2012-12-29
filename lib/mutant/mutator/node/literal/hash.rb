@@ -29,13 +29,7 @@ module Mutant
           # @api private
           #
           def emit_body
-            array.each_with_index do |element, index|
-              dup = dup_array
-              Mutator.each(element).each do |mutation|
-                dup[index]=mutation
-                emit_self(dup)
-              end
-            end
+            emit_attribute_mutations(:array, Mutator::Util::Array::Element)
           end
 
           # Return array of values in literal

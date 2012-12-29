@@ -182,6 +182,18 @@ module Mutant
       self
     end
 
+    # Run input with mutator
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def run(mutator)
+      mutator.each(input) do |mutation|
+        emit(mutation)
+      end
+    end
+
     # Shortcut to create a new unfrozen duplicate of input
     #
     # @return [Object]

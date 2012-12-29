@@ -63,6 +63,49 @@ module Mutant
 
         handle(::Array)
 
+        class Presence < Util
+
+        private
+
+          # Emit element presence mutations
+          #
+          # @return [undefined]
+          #
+          # @api private
+          #
+          def dispatch
+            input.each_index do |index|
+              dup = dup_input
+              dup.delete_at(index)
+              emit(dup)
+            end
+          end
+
+        end
+
+        class Element < Util
+
+        private
+
+          # Emit mutations
+          # 
+          # @return [undefined]
+          #
+          # @api private
+          #
+          def dispatch
+            input.each_with_index do |element, index|
+              dup = dup_input
+
+              Mutator.each(element).each do |mutation|
+                dup[index]=mutation
+                emit(dup)
+              end
+            end
+          end
+
+        end
+
       private
 
         # Emit mutations
@@ -72,40 +115,9 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_element_presence
-          emit_element_mutations
+          run(Element)
+          run(Presence)
           emit([])
-        end
-
-        # Emit element mutations
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def emit_element_mutations
-          input.each_with_index do |element, index|
-            dup = dup_input
-
-            Mutator.each(element).each do |mutation|
-              dup[index]=mutation
-              emit(dup)
-            end
-          end
-        end
-
-        # Emit element presence mutations
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def emit_element_presence
-          input.each_index do |index|
-            dup = dup_input
-            dup.delete_at(index)
-            emit(dup)
-          end
         end
 
       end
