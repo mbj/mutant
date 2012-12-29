@@ -1,6 +1,5 @@
 Code:
   * Test mutant with dynamically created zombie.
-  * Replace nil or add "do not touch me object" to literal mutations.
   * Fix ugly code within default parameters
 
 AST:
@@ -9,10 +8,13 @@ AST:
 Mutations:
   * Add some kind of a "do not touch me object" that raises on all messages.
     It can be used to make sure each literal value is touched.
+  * Replace nil or add "do not touch me object" to literal mutations.
   * Mutate options on Regexp literals
-  * Make sure loader does not change visibility of injected mutants
   * Add mutations for dynamic regexp symbol and string literals
-  * Mutate method chaining with omissions or reorderin
+  * Mutate "def foo; bar; end" to "def foo; self; end"?
+
+Loader:
+  * Make sure loader does not change visibility of injected mutants
 
 Killers:
   * Aggregate warnings on missing spec files
