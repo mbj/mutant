@@ -152,7 +152,20 @@ module Mutant
           #
           def dispatch
             super
+            emit_call_remove_mutation
             emit_attribute_mutations(:arguments)
+          end
+
+          # Emit transfomr call mutation
+          #
+          # @return [undefined]
+          #
+          # @api private
+          #
+          def emit_call_remove_mutation
+            array = node.arguments.array
+            return unless array.length == 1
+            emit(array.first)
           end
 
         end

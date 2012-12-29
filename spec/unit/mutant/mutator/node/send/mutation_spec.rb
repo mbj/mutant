@@ -42,6 +42,7 @@ describe Mutant::Mutator, 'send' do
       let(:mutations) do 
         mutations = []
         mutations << 'foo()'
+        mutations << 'nil'
         mutations << 'foo(Object.new)'
       end
 

@@ -1,6 +1,7 @@
 # v0.2.8 2012-12-29
 
-* [feature] Mutate method call receivers "foo.bar" => "foo"
+* [feature] Mutate unary calls ```coerce(object)``` => ```object```
+* [feature] Mutate method call receivers ```foo.bar``` => ```foo```
 
 [Compare v0.2.7..v0.2.8](https://github.com/mbj/mutant/compare/v0.2.7...v0.2.8)
 
@@ -22,7 +23,7 @@
 * [feature] Run noop mutation per subject to guard against initial failing specs
 * [feature] Mutate default into required arguments
 * [feature] Mutate default literals
-* [feature] Mutate unwinding of pattern args |(a, b), c] => |a, b, c|
+* [feature] Mutate unwinding of pattern args ```|(a, b), c|``` => ```|a, b, c|```
 * [feature] Mutate define and block arguments
 * [feature] Mutate block arguments, inklusive pattern args
 * [feature] Recurse into block bodies
