@@ -1,3 +1,9 @@
+# v0.2.8 2012-12-29
+
+* [feature] Mutate method call receivers "foo.bar" => "foo"
+
+[Compare v0.2.7..v0.2.8](https://github.com/mbj/mutant/compare/v0.2.7...v0.2.8)
+
 # v0.2.7 2012-12-21
 
 * [fixed] Use latest adamantium and ice_nine

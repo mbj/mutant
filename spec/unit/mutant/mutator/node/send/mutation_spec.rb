@@ -2,23 +2,7 @@ require 'spec_helper'
 
 describe Mutant::Mutator, 'send' do
   context 'send without arguments' do
-    # This could not be reproduced in a test case but happens in the mutant source code?
-    context 'block_given?' do
-      context 'implicit self' do
-        let(:source) { 'block_given?' }
-
-        it_should_behave_like 'a noop mutator'
-      end
-      
-      context 'explicit self' do
-        let(:source) { 'self.block_given?' }
-
-        it_should_behave_like 'a noop mutator'
-      end
-    end
-
     context 'with self as receiver' do
-
       context 'implicit' do
         let(:source) { 'foo' }
 
@@ -39,9 +23,14 @@ describe Mutant::Mutator, 'send' do
     end
 
     context 'to some object' do
-      let(:source) { '1.foo' }
+      let(:source) { 'foo.bar' }
 
-      it_should_behave_like 'a noop mutator'
+      let(:mutations) do
+        mutations = []
+        mutations << 'foo'
+      end
+
+      it_should_behave_like 'a mutator'
     end
   end
 

@@ -15,9 +15,47 @@ module Mutant
         # @api private
         #
         def dispatch
+          emit_receiver
           emit_implicit_self_receiver
-          emit_attribute_mutations(:block) if node.block
+          emit_receiver_mutations
+          emit_block_mutations
           emit_block_absence_mutation
+        end
+
+        # Emit receiver 
+        #
+        # @return [undefined]
+        #
+        # @api pirvate
+        #
+        def emit_receiver
+          unless self?
+            emit(receiver)
+          end
+        end
+
+        # Emit block mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_block_mutations
+          if node.block
+            emit_attribute_mutations(:block) 
+          end
+        end
+
+        # Emit receiver mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_receiver_mutations
+          unless self?
+            emit_attribute_mutations(:receiver) 
+          end
         end
 
         # Emit block absence mutation

@@ -45,13 +45,14 @@ shared_examples_for 'a mutator' do
     end
 
     it 'generates the expected mutations' do
-      generated = self.subject.map { |mutation| ToSource.to_source(mutation) }.to_set
+      generated  = self.subject.map { |mutation| ToSource.to_source(mutation) }.to_set
 
       missing    = (expected_mutations - generated).to_a
       unexpected = (generated - expected_mutations).to_a
 
       unless generated == expected_mutations
-        fail "Missing mutations:\n%s\nUnexpected mutations:\n%s" % [missing.join("\n----\n"), unexpected.join("\n----\n")]
+        message ="Missing mutations:\n%s\nUnexpected mutations:\n%s" % [missing.join("\n----\n"), unexpected.join("\n----\n")]
+        fail message
       end
     end
   end
