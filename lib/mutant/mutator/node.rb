@@ -17,7 +17,7 @@ module Mutant
         ToSource.to_source(node)
       end
 
-      private
+    private
 
       # Return mutated node
       #
@@ -89,20 +89,6 @@ module Mutant
         emit(new_self(*arguments))
       end
 
-      # Emit a new node with wrapping class for each entry in values
-      #
-      # @param [Array] values
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def emit_values(values)
-        values.each do |value|
-          emit_self(value)
-        end
-      end
-
       # Emit body mutations
       #
       # @param [Symbol] name
@@ -112,9 +98,9 @@ module Mutant
       # @api private
       #
       def emit_attribute_mutations(name)
-        body = node.public_send(name)
+        value = node.public_send(name)
 
-        Mutator.each(body) do |mutation|
+        Mutator.each(value) do |mutation|
           dup = dup_node
           dup.public_send(:"#{name}=", mutation)
           yield dup if block_given?

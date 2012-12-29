@@ -19,6 +19,20 @@ module Mutant
           new(Rubinius::AST::FloatLiteral, value)
         end
 
+        # Emit a new node with wrapping class for each entry in values
+        #
+        # @param [Array] values
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_values(values)
+          values.each do |value|
+            emit_self(value)
+          end
+        end
+
         # Return AST representing NaN
         #
         # @return [Rubinius::Node::AST]
