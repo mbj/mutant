@@ -143,6 +143,7 @@ module Mutant
       # @api private
       #
       alias_method :dup_node, :dup_input
+
     end
   end
 end

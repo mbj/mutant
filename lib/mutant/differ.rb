@@ -48,8 +48,20 @@ module Mutant
     # @api private
     #
     def initialize(old, new)
-      @old, @new = self.class.lines(old), self.class.lines(new)
+      @old, @new = lines(old), lines(new)
       @diffs = Diff::LCS.diff(@old, @new)
+    end
+
+    # Break up sorce into lines
+    #
+    # @param [String] source
+    #
+    # @return [Array<String>]
+    #
+    # @api private
+    #
+    def lines(source)
+      self.class.lines(source)
     end
 
     # Return length difference

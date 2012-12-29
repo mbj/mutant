@@ -132,5 +132,6 @@ module Mutant
     # @api private
     #
     abstract_method :run
+
   end
 end

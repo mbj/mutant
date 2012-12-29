@@ -26,7 +26,7 @@ module Mutant
         #
         # @return [undefined]
         #
-        # @api pirvate
+        # @api private
         #
         def emit_receiver
           unless self?

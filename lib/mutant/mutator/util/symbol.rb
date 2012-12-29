@@ -1,11 +1,11 @@
 module Mutant
   class Mutator
-    class Node
+    class Util
 
-      # Mutator for arguments
-      class Arguments < self
+      # Mutators that mutates symbol inputs
+      class Symbol < self
 
-        handle(Rubinius::AST::ActualArguments)
+        handle(::Symbol)
 
       private
 
@@ -16,7 +16,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_attribute_mutations(:array)
+          emit_new { :"s#{Random.hex_string}" }
         end
 
       end

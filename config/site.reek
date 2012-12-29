@@ -10,8 +10,9 @@ UncommunicativeParameterName:
 LargeClass:
   max_methods: 10
   exclude: 
-  - "Mutant::Matcher::Method" # 13 methods
+  #- "Mutant::Matcher::Method" # 13 methods
   - "Mutant::Reporter::CLI" # 16 methods TODO Reduce!
+  - "Mutant::CLI" # 19 methods and 7 ivars, TODO Reduce!
   enabled: true
   max_instance_variables: 3
 UncommunicativeMethodName:
@@ -50,7 +51,8 @@ UncommunicativeModuleName:
   - !ruby/regexp /[0-9]$/
 NestedIterators:
   ignore_iterators: []
-  exclude: []
+  exclude: 
+  - Mutant#self.define_singleton_subclass
   enabled: true
   max_allowed_nesting: 1
 LongMethod:

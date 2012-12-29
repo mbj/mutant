@@ -189,9 +189,7 @@ module Mutant
     # @api private
     #
     def run(mutator)
-      mutator.each(input) do |mutation|
-        emit(mutation)
-      end
+      mutator.new(input, method(:emit))
     end
 
     # Shortcut to create a new unfrozen duplicate of input

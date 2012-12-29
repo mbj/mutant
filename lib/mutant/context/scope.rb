@@ -30,12 +30,12 @@ module Mutant
       # @api private
       #
       def self.wrap(scope, node)
-        name = scope.name.split('::').last
+        name = scope.name.split('::').last.to_sym
         case scope
         when ::Class
-          ::Rubinius::AST::Class.new(0, name.to_sym, nil, node)
+          ::Rubinius::AST::Class.new(0, name, nil, node)
         when ::Module
-          ::Rubinius::AST::Module.new(0, name.to_sym, node)
+          ::Rubinius::AST::Module.new(0, name, node)
         else
           raise "Cannot wrap scope: #{scope.inspect}"
         end

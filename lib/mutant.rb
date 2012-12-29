@@ -13,12 +13,14 @@ require 'diff/lcs'
 require 'diff/lcs/hunk'
 require 'rspec'
 
-module IceNine
-  class Freezer
-    class Rubinius 
-      class AST < IceNine::Freezer::Object
-        class Node < IceNine::Freezer::Object
-        end
+# Patch ice none to freeze nodes correctly
+class IceNine::Freezer
+  # Rubinius namsepace
+  class Rubinius 
+    # AST namespace
+    class AST < IceNine::Freezer::Object
+      # Node configuration
+      class Node < IceNine::Freezer::Object
       end
     end
   end
@@ -51,8 +53,6 @@ module Mutant
     self
   end
 
-  PID = Process.pid
-
 end
 
 require 'mutant/support/method_object'
@@ -65,6 +65,8 @@ require 'mutant/mutation/filter/code'
 require 'mutant/mutation/filter/whitelist'
 require 'mutant/mutator/registry'
 require 'mutant/mutator/util'
+require 'mutant/mutator/util/array'
+require 'mutant/mutator/util/symbol'
 require 'mutant/mutator/node'
 require 'mutant/mutator/node/literal'
 require 'mutant/mutator/node/literal/boolean'
@@ -81,8 +83,15 @@ require 'mutant/mutator/node/literal/nil'
 require 'mutant/mutator/node/block'
 require 'mutant/mutator/node/noop'
 require 'mutant/mutator/node/send'
-require 'mutant/mutator/node/arguments'
 require 'mutant/mutator/node/define'
+require 'mutant/mutator/node/formal_arguments_19'
+require 'mutant/mutator/node/formal_arguments_19/default_mutations'
+require 'mutant/mutator/node/formal_arguments_19/require_defaults'
+require 'mutant/mutator/node/formal_arguments_19/pattern_argument_expansion'
+require 'mutant/mutator/node/actual_arguments'
+require 'mutant/mutator/node/pattern_arguments'
+require 'mutant/mutator/node/pattern_variable'
+require 'mutant/mutator/node/default_arguments'
 require 'mutant/mutator/node/return'
 require 'mutant/mutator/node/local_variable_assignment'
 require 'mutant/mutator/node/iter_19'

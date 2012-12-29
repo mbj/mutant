@@ -55,6 +55,20 @@ module Mutant
         self.class::MATCHER
       end
 
+      # Return method names
+      #
+      # @param [Object] object
+      #
+      # @return [Enumerable<Symbol>]
+      #
+      # @api private
+      #
+      def self.method_names(object)
+        object.public_instance_methods(false)   +
+        object.private_instance_methods(false)  +
+        object.protected_instance_methods(false)
+      end
+
     private
 
       # Initialize object
@@ -118,11 +132,7 @@ module Mutant
         #
         def method_names
           singleton_class = scope.singleton_class
-
-          names = 
-            singleton_class.public_instance_methods(false)   +
-            singleton_class.private_instance_methods(false)  +
-            singleton_class.protected_instance_methods(false)
+          names = self.class.method_names(singleton_class)
 
           names.sort.reject do |name|
             name.to_sym == :__class_init__
@@ -158,12 +168,7 @@ module Mutant
         def method_names
           scope = self.scope
           return [] unless scope.kind_of?(Module)
-
-          names = 
-            scope.public_instance_methods(false)  +
-            scope.private_instance_methods(false) + 
-            scope.protected_instance_methods(false)
-
+          names = self.class.method_names(scope)
           names.uniq.sort
         end
       end

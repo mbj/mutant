@@ -1,11 +1,10 @@
 module Mutant
   class Mutator
     class Node
+      # Mutator for pattern variable
+      class PatternVariable < self
 
-      # Mutator for arguments
-      class Arguments < self
-
-        handle(Rubinius::AST::ActualArguments)
+        handle(Rubinius::AST::PatternVariable)
 
       private
 
@@ -16,9 +15,8 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_attribute_mutations(:array)
+          emit_attribute_mutations(:name)
         end
-
       end
     end
   end
