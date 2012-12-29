@@ -6,6 +6,24 @@ module Mutant
 
         handle(Rubinius::AST::Send)
 
+        # Test if node corresponds to "self.class"
+        #
+        # @param [Rubinius::AST::Node] node
+        #
+        # @return [true]
+        #   if node equals to self.class
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def self.self_class?(node)
+          node.kind_of?(Rubinius::AST::Send) && 
+          node.name == :class                && 
+          node.receiver.kind_of?(Rubinius::AST::Self)
+        end
+
       private
 
         # Emit mutations
@@ -15,7 +33,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_receiver
+          emit_receiver 
           emit_implicit_self_receiver
           emit_receiver_mutations
           emit_block_mutations
@@ -53,7 +71,9 @@ module Mutant
         # @api private
         #
         def emit_receiver_mutations
-          unless to_self? or self_class?
+          util = self.class
+
+          unless to_self? or util.self_class?(receiver) 
             emit_attribute_mutations(:receiver) 
           end
         end
@@ -104,22 +124,6 @@ module Mutant
           receiver.kind_of?(Rubinius::AST::Self)
         end
 
-        # Check if receiver is self.class
-        #
-        # @return [true]
-        #   if receiver is a "self.class" construct
-        #
-        # @return [false]
-        #   otherwise
-        #
-        # @api private
-        #   
-        def self_class?
-          receiver.kind_of?(Rubinius::AST::Send) && 
-          receiver.name == :class                && 
-          receiver.receiver.kind_of?(Rubinius::AST::Self)
-        end
-
         # Emit mutation that replaces explicit send to self with implicit send to self
         # 
         # @example:
@@ -146,7 +150,8 @@ module Mutant
         # @api private
         #
         def emit_implicit_self_receiver
-          return unless to_self?
+          return unless to_self? 
+          return if self.class.self_class?(node)
           mutant = dup_node
           mutant.privately = true
           # TODO: Fix rubinius to allow this as an attr_accessor

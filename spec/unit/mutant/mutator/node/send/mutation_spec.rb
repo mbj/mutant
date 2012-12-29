@@ -33,6 +33,12 @@ describe Mutant::Mutator, 'send' do
       it_should_behave_like 'a mutator'
     end
 
+    context 'to self.class' do
+      let(:source) { 'self.class' }
+
+      it_should_behave_like 'a noop mutator'
+    end
+
     context 'to self.class.foo' do
       let(:source) { 'self.class.foo' }
 
