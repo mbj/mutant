@@ -130,8 +130,6 @@ module Mutant
         # @api private
         #
         def emit_implicit_self_receiver
-          # FIXME: Edge case that is currently not very well undestood
-          return if name == :block_given?
           return unless self?
           mutant = dup_node
           mutant.privately = true
