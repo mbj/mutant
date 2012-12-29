@@ -16,7 +16,21 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_new { :"s#{Random.hex_string}" }
+          emit_new { :"s#{Random.hex_string}" } unless ignore?
+        end
+
+        # Test if symbol is ignored
+        #
+        # @return [true]
+        #   if symbol begins with an underscore
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @pai private
+        #
+        def ignore?
+          input.to_s[0] == '_'
         end
 
       end

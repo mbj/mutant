@@ -12,6 +12,11 @@ Mutations:
   * Mutate options on Regexp literals
   * Add mutations for dynamic regexp symbol and string literals
   * Mutate "def foo; bar; end" to "def foo; self; end"?
+  * Emit negative and positive mutations 
+   
+    Example of a negative mutation:
+      Mutations on local variables and arguments prefixed with an underscore would be emitted as
+      negative mutations that must be alive.
 
 Loader:
   * Make sure loader does not change visibility of injected mutants

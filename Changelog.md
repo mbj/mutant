@@ -1,5 +1,6 @@
 # v0.2.8 2012-12-29
 
+* [feature] Do not mutate argument or local variable names beginning with an underscore
 * [feature] Mutate unary calls ```coerce(object)``` => ```object```
 * [feature] Mutate method call receivers ```foo.bar``` => ```foo```
 
