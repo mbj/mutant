@@ -29,7 +29,7 @@ module Mutant
         # @api private
         #
         def emit_receiver
-          unless self?
+          unless to_self?
             emit(receiver)
           end
         end
@@ -53,7 +53,7 @@ module Mutant
         # @api private
         #
         def emit_receiver_mutations
-          unless self?
+          unless to_self? or self_class?
             emit_attribute_mutations(:receiver) 
           end
         end
@@ -93,15 +93,31 @@ module Mutant
         # Check if receiver is self
         #
         # @return [true]
-        #   returns true when receiver is a Rubinius::AST::Self node
+        #   if receiver is a Rubinius::AST::Self node
         #
         # @return [false]
         #   return false otherwise
         #
         # @api private
         #
-        def self?
+        def to_self?
           receiver.kind_of?(Rubinius::AST::Self)
+        end
+
+        # Check if receiver is self.class
+        #
+        # @return [true]
+        #   if receiver is a "self.class" construct
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #   
+        def self_class?
+          receiver.kind_of?(Rubinius::AST::Send) && 
+          receiver.name == :class                && 
+          receiver.receiver.kind_of?(Rubinius::AST::Self)
         end
 
         # Emit mutation that replaces explicit send to self with implicit send to self
@@ -130,7 +146,7 @@ module Mutant
         # @api private
         #
         def emit_implicit_self_receiver
-          return unless self?
+          return unless to_self?
           mutant = dup_node
           mutant.privately = true
           # TODO: Fix rubinius to allow this as an attr_accessor

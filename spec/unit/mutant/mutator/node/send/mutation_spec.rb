@@ -32,6 +32,17 @@ describe Mutant::Mutator, 'send' do
 
       it_should_behave_like 'a mutator'
     end
+
+    context 'to self.class.foo' do
+      let(:source) { 'self.class.foo' }
+
+      let(:mutations) do
+        mutations = []
+        mutations << 'self.class'
+      end
+
+      it_should_behave_like 'a mutator'
+    end
   end
 
   context 'send with arguments' do
