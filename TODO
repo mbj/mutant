@@ -13,6 +13,7 @@ Mutations:
   * Add mutations for dynamic regexp symbol and string literals
   * Mutate "def foo; bar; end" to "def foo; self; end"?
   * Emit negative and positive mutations 
+  * Mutate Block catch "def foo(&block)" and block pass "foo(&block)"
    
     Example of a negative mutation:
       Mutations on local variables and arguments prefixed with an underscore would be emitted as
