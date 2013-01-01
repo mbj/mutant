@@ -1,3 +1,10 @@
+# v0.2.9 2013-01-01
+
+* [feature] Mutate instance and global variable assignments
+* [feature] Mutate super calls
+
+[Compare v0.2.8..v0.2.9](https://github.com/mbj/mutant/compare/v0.2.8...v0.2.9)
+
 # v0.2.8 2012-12-29
 
 * [feature] Do not mutate argument or local variable names beginning with an underscore
