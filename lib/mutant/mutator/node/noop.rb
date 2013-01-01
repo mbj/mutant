@@ -7,7 +7,6 @@ module Mutant
         # Literal references to self do not need to be mutated?
         handle(Rubinius::AST::Self)
 
-
         # Currently unhandled node classes. Feel free to contribute your mutator!
         handle(Rubinius::AST::While)
         handle(Rubinius::AST::ElementAssignment)
