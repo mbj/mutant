@@ -15,6 +15,7 @@ Mutations:
   * Emit negative and positive mutations 
   * Mutate Block catch "def foo(&block)" and block pass "foo(&block)"
   * Mutate super arguments just like send arguments
+  * Add timeout to terminate infinite loops
    
     Example of a negative mutation:
       Mutations on local variables and arguments prefixed with an underscore would be emitted as
