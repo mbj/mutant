@@ -1,4 +1,4 @@
-# v0.2.9 2013-01-01
+# v0.2.9 2013-01-02
 
 * [feature] Mutate instance and global variable assignments
 * [feature] Mutate super calls
