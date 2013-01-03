@@ -35,6 +35,7 @@ module Mutant
         handle(Rubinius::AST::OpAssignOr19)
         handle(Rubinius::AST::BlockPass19)
         handle(Rubinius::AST::OpAssign1)
+        handle(Rubinius::AST::OpAssign2)
         handle(Rubinius::AST::ConstantAccess)
         handle(Rubinius::AST::Yield)
         handle(Rubinius::AST::Begin)
