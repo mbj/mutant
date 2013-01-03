@@ -29,80 +29,10 @@ end
 
 # Library namespace
 module Mutant
-
-  # The list of ruby kewords from http://ruby-doc.org/docs/keywords/1.9/
-  KEYWORDS = %w(
-    BEGIN END __ENCODING__ __END__ __FILE__
-    __LINE__ alias and begin break case class
-    def define do else elsif end ensure false
-    for if in module next nil not or redo
-    rescue retry return self super then true
-    undef unless until when while yield
-  ).map(&:to_sym).to_set.freeze
-
-  BINARY_METHOD_OPERATOR_EXPANSIONS = {
-    :<=>  => :spaceship_operator,
-    :===  => :case_equality_operator,
-    :[]=  => :element_writer,
-    :[]   => :element_reader,
-    :<=   => :less_than_or_equal_to_operator,
-    :>=   => :greater_than_or_equal_to_operator,
-    :==   => :equality_operator,
-    :'!~' => :nomatch_operator,
-    :'!=' => :inequality_operator,
-    :=~   => :match_operator,
-    :<<   => :left_shift_operator,
-    :>>   => :right_shift_operator,
-    :**   => :exponentation_operator,
-    :*    => :multiplication_operator,
-    :%    => :modulo_operator,
-    :/    => :division_operator,
-    :|    => :bitwise_or_operator,
-    :^    => :bitwise_xor_operator,
-    :&    => :bitwise_and_operator,
-    :<    => :less_than_operator,
-    :>    => :greater_than_operator,
-    :+    => :addition_operator,
-    :-    => :substraction_operator
-  }.freeze
-
-  UNARY_METHOD_OPERATOR_EXPANSIONS = {
-    :~@   => :unary_match_operator,
-    :+@   => :unary_addition_operator,
-    :-@   => :unary_substraction_operator,
-    :'!'  => :negation_operator
-  }.freeze
-
-  BINARY_METHOD_OPERATORS = BINARY_METHOD_OPERATOR_EXPANSIONS.keys.to_set.freeze
-
-  OPERATOR_EXPANSIONS = BINARY_METHOD_OPERATOR_EXPANSIONS.merge(UNARY_METHOD_OPERATOR_EXPANSIONS).freeze
-
-  # Define instance of subclassed superclass as constant
-  #
-  # @param [Class] superclass
-  # @param [Symbol] name
-  #
-  # @return [self]
-  #
-  # @api private
-  #
-  def self.define_singleton_subclass(name, superclass, &block)
-    klass = Class.new(superclass) do
-
-      def inspect; self.class.name; end
-
-      define_singleton_method(:name) do
-        "#{superclass.name}::#{name}".freeze
-      end
-
-    end
-    klass.class_eval(&block)
-    superclass.const_set(name, klass.new)
-    self
-  end
-
 end
 
+require 'mutant/singleton_methods'
+require 'mutant/constants'
 require 'mutant/support/method_object'
 require 'mutant/helper'
 require 'mutant/random'
