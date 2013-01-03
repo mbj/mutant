@@ -16,6 +16,10 @@ module Mutant
         Classifier.run(input)
       end
 
+      # Methods within rbx kernel directory are precompiled and their source 
+      # cannot be accessed via reading source location
+      BLACKLIST = %r(\Akernel/).freeze
+
       # Enumerate matches
       #
       # @return [Enumerable]
@@ -29,10 +33,7 @@ module Mutant
       def each(&block)
         return to_enum unless block_given?
 
-        unless source_location
-          $stderr.puts "#{method.inspect} does not have source location unable to emit matcher"
-          return self
-        end
+        return self if skip?
 
         subject.tap do |subject|
           yield subject if subject
@@ -94,6 +95,26 @@ module Mutant
         @scope, @method = scope, method
         # FIXME: cache public private should not be needed, loader should not override visibility! (But does currently) :(
         public?
+      end
+
+      # Test if method is skipped
+      #
+      # @return [true]
+      #   true and print warning if location must be filtered
+      #
+      # @return [false]
+      #   otherwise
+      #
+      # @api private
+      #
+      def skip?
+        location = source_location
+        if location.nil? or BLACKLIST.match(location.first)
+          $stderr.puts "#{method.inspect} does not have valid source location so mutant is unable to emit matcher"
+          return true
+        end
+
+        false
       end
 
       # Return context
