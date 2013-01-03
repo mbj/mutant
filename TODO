@@ -2,6 +2,7 @@ Code:
   * Test mutant with dynamically created zombie.
   * Fix ugly code within default parameter mutations
   * Break up lib/mutant/mutator/node/send.rb in class specific files
+  * Log all warnings throug reporter, so remove random $stderr.puts calls
 
 AST:
   * Fix the rubinius AST to allow setting @vcall_style variable in Rubinius::AST::Send nodes.
