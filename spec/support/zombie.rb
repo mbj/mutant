@@ -122,7 +122,7 @@ module Zombie
   #  Yeah looks very ugly but im currently to exited to do a cleanup.
   #
   def self.files
-    block = File.read("lib/mutant.rb").to_ast
+    block = File.read('lib/mutant.rb').to_ast
     files = block.array.select do |node|
       node.class          == Rubinius::AST::SendWithArguments &&
       node.receiver.class == Rubinius::AST::Self              &&
