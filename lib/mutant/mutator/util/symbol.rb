@@ -27,7 +27,7 @@ module Mutant
         # @return [false]
         #   otherwise
         #
-        # @pai private
+        # @api private
         #
         def ignore?
           input.to_s[0] == '_'
