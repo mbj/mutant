@@ -102,6 +102,24 @@ describe Mutant::Mutator, 'send' do
       end
     end
 
+    context 'binary operator methods' do
+      Mutant::BINARY_METHOD_OPERATORS.each do |operator|
+        let(:source) { "true #{operator} false" }
+
+        let(:mutations) do 
+          mutations = []
+          mutations << "((false) #{operator} (false))"
+          mutations << "((nil) #{operator} (false))"
+          mutations << "((true) #{operator} (true))"
+          mutations << "((true) #{operator} (nil))"
+          mutations << 'true'
+          mutations << 'false'
+        end
+
+        it_should_behave_like 'a mutator'
+      end
+    end
+
     context 'two arguments' do
       let(:source) { 'foo(nil, nil)' }
 

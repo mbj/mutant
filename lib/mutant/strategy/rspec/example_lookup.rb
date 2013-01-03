@@ -56,36 +56,6 @@ module Mutant
           mutation.subject.matcher
         end
 
-        MAPPING = {
-          :<=>  => :spaceship_operator,
-          :===  => :case_equality_operator,
-          :[]=  => :element_writer,
-          :[]   => :element_reader,
-          :<=   => :less_than_or_equal_to_operator,
-          :>=   => :greater_than_or_equal_to_operator,
-          :~@   => :unary_match_operator,
-          :+@   => :unary_addition_operator,
-          :-@   => :unary_substraction_operator,
-          :==   => :equality_operator,
-          :'!~' => :nomatch_operator,
-          :'!=' => :inequality_operator,
-          :=~   => :match_operator,
-          :<<   => :left_shift_operator,
-          :>>   => :right_shift_operator,
-          :**   => :exponentation_operator,
-          :*    => :multiplication_operator,
-          :%    => :modulo_operator,
-          :/    => :division_operator,
-          :|    => :bitwise_or_operator,
-          :'!'  => :negation_operator,
-          :^    => :bitwise_xor_operator,
-          :&    => :bitwise_and_operator,
-          :<    => :less_than_operator,
-          :>    => :greater_than_operator,
-          :+    => :addition_operator,
-          :-    => :substraction_operator
-        }
-
         EXPANSIONS = {
           /\?\z/ => '_predicate',
           /=\z/  => '_writer',
@@ -114,7 +84,7 @@ module Mutant
         # @api private
         #
         def mapped_name
-          MAPPING[method_name]
+          OPERATOR_EXPANSIONS[method_name]
         end
 
         # Return expanded name

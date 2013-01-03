@@ -1,3 +1,10 @@
+# v0.2.11 2013-01-03
+
+* [change] Handle binary operator methods in dedicated mutator
+* [fixed] Do not crash when mutating binary operator method
+
+[Compare v0.2.10..v0.2.11](https://github.com/mbj/mutant/compare/v0.2.10...v0.2.11)
+
 # v0.2.10 2013-01-03
 
 * [fixed] Do not mutate receivers away when message name is a keyword
