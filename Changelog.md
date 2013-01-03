@@ -1,3 +1,7 @@
+# v0.2.12 2013-01-03
+
+* [fixed] Do not crash when trying to load methods from precompiled ruby under rbx
+
 # v0.2.11 2013-01-03
 
 * [change] Handle binary operator methods in dedicated mutator
