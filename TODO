@@ -31,6 +31,10 @@ Killers:
   * Add a general master <=> killer IPC interface. So different strategies of isolation 
     (fork, vs jruby runtime creation) will work without big impact.
 
+Strategy:
+  * Provide "expicit files to kill with" strategy
+  * Automatically load ./spec/spec_helper.rb for rspec strategies (No need to specify -I and -r anymore)
+
 Matcher:
   * Allow matches on attr_reader with literal name argument(s)?
   * Allow matches on define_method with literal name argument?
