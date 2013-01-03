@@ -106,7 +106,7 @@ module Mutant
       abstract_method :method_names
 
       class Singleton < self
-        MATCHER = Mutant::Matcher::Method::Singleton
+        MATCHER = Matcher::Method::Singleton
 
         # Return method for name
         #
@@ -141,7 +141,7 @@ module Mutant
       end
 
       class Instance < self
-        MATCHER = Mutant::Matcher::Method::Instance
+        MATCHER = Matcher::Method::Instance
 
         # Return method for name
         #
