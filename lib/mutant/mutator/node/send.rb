@@ -18,9 +18,9 @@ module Mutant
         #
         # @api private
         #
-        def self.self_class?(node)
+        def self.keyword_name?(node)
           node.kind_of?(Rubinius::AST::Send) && 
-          node.name == :class                && 
+          Mutant::KEYWORDS.include?(node.name) && 
           node.receiver.kind_of?(Rubinius::AST::Self)
         end
 
@@ -73,7 +73,7 @@ module Mutant
         def emit_receiver_mutations
           util = self.class
 
-          unless to_self? or util.self_class?(receiver) 
+          unless to_self? or util.keyword_name?(receiver) 
             emit_attribute_mutations(:receiver) 
           end
         end
@@ -151,7 +151,7 @@ module Mutant
         #
         def emit_implicit_self_receiver
           return unless to_self? 
-          return if self.class.self_class?(node)
+          return if self.class.keyword_name?(node)
           mutant = dup_node
           mutant.privately = true
           # TODO: Fix rubinius to allow this as an attr_accessor

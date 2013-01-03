@@ -1,4 +1,5 @@
 require 'backports'
+require 'set'
 require 'adamantium'
 require 'ice_nine'
 require 'abstract_type'
@@ -28,6 +29,16 @@ end
 
 # Library namespace
 module Mutant
+
+  # The list of ruby kewords from http://ruby-doc.org/docs/keywords/1.9/
+  KEYWORDS = IceNine.deep_freeze(%W(
+    BEGIN END __ENCODING__ __END__ __FILE__
+    __LINE__ alias and begin break case class
+    def define do else elsif end ensure false
+    for if in module next nil not or redo
+    rescue retry return self super then true
+    undef unless until when while yield
+  ).map(&:to_sym).to_set)
 
   # Define instance of subclassed superclass as constant
   #

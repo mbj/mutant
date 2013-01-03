@@ -1,3 +1,9 @@
+# v0.2.10 2013-01-03
+
+* [fixed] Do not mutate receivers away when message name is a keyword
+
+[Compare v0.2.9..v0.2.10](https://github.com/mbj/mutant/compare/v0.2.9...v0.2.10)
+
 # v0.2.9 2013-01-02
 
 * [feature] Mutate instance and global variable assignments

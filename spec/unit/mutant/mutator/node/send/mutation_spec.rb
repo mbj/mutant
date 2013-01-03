@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+# FIXME: This spec needs to be structured better!
 describe Mutant::Mutator, 'send' do
   context 'send without arguments' do
     context 'with self as receiver' do
@@ -20,6 +21,15 @@ describe Mutant::Mutator, 'send' do
 
         it_should_behave_like 'a mutator'
       end
+
+      context 'explicit with keyword message name' do
+        Mutant::KEYWORDS.each do |keyword|
+          context "with keyword: #{keyword}" do
+            let(:source) { "self.#{keyword}" }
+            it_should_behave_like 'a noop mutator'
+          end
+        end
+      end
     end
 
     context 'to some object' do
@@ -31,12 +41,6 @@ describe Mutant::Mutator, 'send' do
       end
 
       it_should_behave_like 'a mutator'
-    end
-
-    context 'to self.class' do
-      let(:source) { 'self.class' }
-
-      it_should_behave_like 'a noop mutator'
     end
 
     context 'to self.class.foo' do
@@ -64,6 +68,38 @@ describe Mutant::Mutator, 'send' do
       end
 
       it_should_behave_like 'a mutator'
+    end
+
+    context 'with explicit self as receiver' do
+      let(:source) { 'self.foo(nil)' }
+
+      let(:mutations) do 
+        mutations = []
+        mutations << 'self.foo'
+        mutations << 'foo(nil)'
+        mutations << 'nil'
+        mutations << 'self.foo(Object.new)'
+      end
+
+      it_should_behave_like 'a mutator'
+    end
+
+    context 'to some object with keyword in method name' do
+      Mutant::KEYWORDS.each do |keyword|
+        context "with keyword #{keyword}" do
+          let(:source) { "foo.#{keyword}(nil)" }
+
+          let(:mutations) do 
+            mutations = []
+            mutations << "foo.#{keyword}"
+            mutations << "foo"
+            mutations << 'nil'
+            mutations << "foo.#{keyword}(Object.new)"
+          end
+
+          it_should_behave_like 'a mutator'
+        end
+      end
     end
 
     context 'two arguments' do
