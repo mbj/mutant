@@ -2,6 +2,8 @@
 
 * [fixed] Do not crash when trying to load methods from precompiled ruby under rbx
 
+[Compare v0.2.10..v0.2.12](https://github.com/mbj/mutant/compare/v0.2.11...v0.2.12)
+
 # v0.2.11 2013-01-03
 
 * [change] Handle binary operator methods in dedicated mutator
