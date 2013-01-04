@@ -59,7 +59,8 @@ module Mutant
           # @api private
           #
           def values
-            [[], [new_nil, new_nil] + dup_array]
+            nil_node = new_nil
+            [[], [nil_node, nil_node] + dup_array]
           end
 
           # Emit element presence mutations

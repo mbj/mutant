@@ -2,10 +2,10 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutator for while expressions
-      class While < self
+      # Mutator for Rubinius::AST::When nodes
+      class When < self
 
-        handle(Rubinius::AST::While)
+        handle(Rubinius::AST::When)
 
       private
 
@@ -16,7 +16,6 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_attribute_mutations(:condition)
           emit_attribute_mutations(:body)
         end
 

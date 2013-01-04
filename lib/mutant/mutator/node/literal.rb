@@ -40,7 +40,8 @@ module Mutant
         # @api private
         #
         def nan
-          new_send(new_float(0), :/, new_float(0))
+          zero_float = new_float(0)
+          new_send_with_arguments(zero_float, :/, zero_float)
         end
 
         # Return AST representing negative infinity
@@ -60,7 +61,7 @@ module Mutant
         # @api private
         #
         def infinity
-          new_send(new_float(1), :/, new_float(0))
+          new_send_with_arguments(new_float(1), :/, new_float(0))
         end
       end
     end

@@ -2,7 +2,7 @@ module Mutant
   class Mutator
     class Node
       # Mutator for Rubinius::AST::If nodes
-      class IfStatement < self
+      class If < self
 
         handle(Rubinius::AST::If)
 
@@ -16,11 +16,27 @@ module Mutant
         #
         def dispatch
           emit_attribute_mutations(:condition)
-          emit_attribute_mutations(:body) if node.body.class != Rubinius::AST::NilLiteral
-          emit_attribute_mutations(:else) if node.else.class != Rubinius::AST::NilLiteral
+          emit_attribute_mutations(:body) unless nil_literal?(:body)
+          emit_attribute_mutations(:else) unless nil_literal?(:else)
           emit_inverted_condition 
           emit_deleted_if_branch
           emit_deleted_else_branch
+        end
+
+        # Test if attribute is non nil literal
+        #
+        # @param [Symbol] name
+        #
+        # @return [true]
+        #   if attribute value a nil literal
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def nil_literal?(name)
+          node.public_send(name).kind_of?(Rubinius::AST::NilLiteral)
         end
 
         # Emit inverted condition
@@ -53,9 +69,8 @@ module Mutant
         # @api private
         #
         def emit_deleted_if_branch
-          body = else_branch
-          return unless body
-          emit_self(condition, else_branch, nil)
+          body = else_branch || return
+          emit_self(condition, body, nil)
         end
 
         # Return if_branch of node

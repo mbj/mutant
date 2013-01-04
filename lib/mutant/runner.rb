@@ -47,11 +47,10 @@ module Mutant
     def initialize(config)
       @config, @errors = config, []
 
-      reporter.config(config)
-
+      util_reporter = reporter
+      util_reporter.config(config)
       run
-
-      reporter.errors(@errors)
+      util_reporter.errors(@errors)
     end
 
     # Return reporter

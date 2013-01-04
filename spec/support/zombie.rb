@@ -26,6 +26,39 @@ module Zombie
   end
   private_class_method :root
 
+  class DummySubject
+
+    # Return line
+    #
+    # @return [Fixnum]
+    #
+    # @api private
+    #
+    attr_reader :source_line
+
+    # Return path
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    attr_reader :source_path
+
+  private
+
+    # Initialize object
+    #
+    # @param [String] path
+    # @param [Fixnum] line
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def initialize(path, line)
+      @source_path, @source_line = path, line
+    end
+  end
 
   # Replace Mutant with Zombie namespace
   #
@@ -51,7 +84,7 @@ module Zombie
       node.body = Rubinius::AST::ModuleScope.new(scope.line, node.name, scope.body)
     end
 
-    ::Mutant::Loader::Eval.run(root, path, 1)
+    ::Mutant::Loader::Eval.run(root, DummySubject.new(path, 1))
   end
   private_class_method :zombify
 

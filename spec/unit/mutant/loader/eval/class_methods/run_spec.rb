@@ -2,15 +2,14 @@ require 'spec_helper'
 
 describe Mutant::Loader::Eval, '.run' do
 
-  subject { object.run(node, file, line) }
+  subject { object.run(node, mutation_subject) }
 
-  let(:object) { described_class }
-  let(:file)   { 'test.rb'       }
-  let(:line)   { 1               }
+  let(:object)           { described_class                                             }
+  let(:mutation_subject) { mock('Subject', :source_path => path, :source_line => line) }
+  let(:path)             { 'test.rb'                                                   }
+  let(:line)             { 1                                                           }
 
   let(:source) do
-    # This test case will blow up when not executed
-    # under toplevel binding.
     <<-RUBY
       class SomeNamespace
         class Bar

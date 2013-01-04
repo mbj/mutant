@@ -37,7 +37,7 @@ module Mutant
     # @api private
     #
     def insert
-      Loader::Eval.run(root, subject.source_path, subject.source_line)
+      Loader::Eval.run(root, subject)
       self
     end
 
@@ -110,9 +110,10 @@ module Mutant
       @subject, @node = subject, node
     end
 
+    # Noop mutation
     class Noop < self
 
-      # Initialihe object
+      # Initialize object
       #
       # @param [Subject] subject
       #

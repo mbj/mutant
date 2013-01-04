@@ -1,6 +1,8 @@
 module Mutant
   class Mutation
     class Filter
+
+      # Whiltelist filter
       class Whitelist < self
         include Adamantium::Flat, Equalizer.new(:whitelist)
 

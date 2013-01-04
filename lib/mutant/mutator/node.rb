@@ -118,22 +118,31 @@ module Mutant
         emit(new_nil)
       end
 
+      # Return new Rubiinius::AST::SendWithArguments node
+      #
+      # @param [Rubnius::AST::Node] receiver
+      # @param [Symbol] name
+      # @param [Object] arguments
+      #
+      # @return [Rubinius::AST::SendWithArguments]
+      #
+      # @api private
+      #
+      def new_send_with_arguments(receiver, name, arguments)
+        new(Rubinius::AST::SendWithArguments, receiver, name, arguments)
+      end
+
       # Return AST representing send
       #
       # @param [Rubinius::AST::Node] receiver
       # @param [Symbol] name
-      # @param [Rubinius::AST::Node] arguments
       #
-      # @return [Rubnius::AST::SendWithArguments]
+      # @return [Rubnius::AST::Send]
       #
       # @api private
       #
-      def new_send(receiver, name, arguments=nil)
-        if arguments
-          new(Rubinius::AST::SendWithArguments, receiver, name, arguments)
-        else
-          new(Rubinius::AST::Send, receiver, name)
-        end
+      def new_send(receiver, name)
+        new(Rubinius::AST::Send, receiver, name)
       end
 
       # Return duplicated (unfrozen) node each call

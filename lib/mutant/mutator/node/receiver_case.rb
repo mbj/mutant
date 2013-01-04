@@ -1,24 +1,6 @@
 module Mutant
   class Mutator
     class Node
-      # Mutator for Rubinius::AST::When nodes
-      class When < self
-
-        handle(Rubinius::AST::When)
-
-      private
-
-        # Emit mutations
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def dispatch
-          emit_attribute_mutations(:body)
-        end
-
-      end
 
       # Mutator for Rubinius::AST::ReceiverCase nodes
       class ReceiverCase < self
@@ -57,7 +39,7 @@ module Mutant
         # @api private
         #
         def emit_when_branch_mutations
-          when_branches.each_with_index do |branch,index|
+          when_branches.each_with_index do |branch, index|
             Mutator.each(branch) do |mutant|
               branches = dup_when_branches
               branches[index]=mutant

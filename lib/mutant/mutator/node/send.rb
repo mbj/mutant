@@ -1,17 +1,18 @@
 module Mutant
   class Mutator
     class Node
-      # Class for mutations where messages are send to objects
+
+      # Namespace for send mutators
       class Send < self
 
         handle(Rubinius::AST::Send)
 
-        # Test if node corresponds to "self.class"
+        # Test if node name is a keyword
         #
         # @param [Rubinius::AST::Node] node
         #
         # @return [true]
-        #   if node equals to self.class
+        #   if node name equals a ruby keyword
         #
         # @return [false]
         #   otherwise
@@ -19,9 +20,7 @@ module Mutant
         # @api private
         #
         def self.keyword_name?(node)
-          node.kind_of?(Rubinius::AST::Send) && 
-          Mutant::KEYWORDS.include?(node.name) && 
-          node.receiver.kind_of?(Rubinius::AST::Self)
+          Mutant::KEYWORDS.include?(node.name) 
         end
 
       private
@@ -59,9 +58,7 @@ module Mutant
         # @api private
         #
         def emit_block_mutations
-          if node.block
-            emit_attribute_mutations(:block) 
-          end
+          emit_attribute_mutations(:block) if node.block
         end
 
         # Emit receiver mutations
@@ -71,11 +68,7 @@ module Mutant
         # @api private
         #
         def emit_receiver_mutations
-          util = self.class
-
-          unless to_self? or util.keyword_name?(receiver) 
-            emit_attribute_mutations(:receiver) 
-          end
+          emit_attribute_mutations(:receiver) 
         end
 
         # Emit block absence mutation
@@ -150,118 +143,13 @@ module Mutant
         # @api private
         #
         def emit_implicit_self_receiver
-          return unless to_self? 
-          return if self.class.keyword_name?(node)
+          if to_self? and self.class.keyword_name?(node)
+            return
+          end
+
           mutant = dup_node
           mutant.privately = true
-          # TODO: Fix rubinius to allow this as an attr_accessor
-          mutant.instance_variable_set(:@vcall_style, true)
           emit(mutant)
-        end
-
-        class SendWithArguments < self
-          
-          handle(Rubinius::AST::SendWithArguments)
-
-          class BinaryOperatorMethod < Node
-
-          private
-
-            # Emit mutations
-            #
-            # @return [undefined]
-            #
-            # @api private
-            #
-            def dispatch
-              emit_left_mutations
-              emit_right_mutations
-            end
-
-            # Emit left mutations
-            #
-            # @return [undefined]
-            #
-            # @api private
-            #
-            def emit_left_mutations
-              emit_attribute_mutations(:receiver)
-            end
-
-            # Emit right mutations
-            #
-            # @return [undefined]
-            #
-            # @api private
-            #
-            def emit_right_mutations
-              right = node.arguments.array.first
-              Mutator.each(right).each do |mutated|
-                dup = dup_node
-                dup.arguments.array[0] = mutated
-                emit(dup)
-              end
-            end
-
-          end
-
-        private
-
-          # Emit mutations
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def dispatch
-            super
-            emit_call_remove_mutation
-            emit_argument_mutations
-          end
-
-          # Test if message is a binary operator
-          #
-          # @return [true]
-          #   if message is a binary operator
-          #
-          # @return [false]
-          #   otherwise
-          #
-          # @api private
-          #
-          def binary_operator?
-            Mutant::BINARY_METHOD_OPERATORS.include?(node.name)
-          end
-
-          # Emit argument mutations
-          #
-          # @api private
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def emit_argument_mutations
-            if binary_operator?
-              run(BinaryOperatorMethod)
-              return
-            end
-
-            emit_attribute_mutations(:arguments)
-          end
-
-          # Emit transfomr call mutation
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def emit_call_remove_mutation
-            array = node.arguments.array
-            return unless array.length == 1
-            emit(array.first)
-          end
-
         end
       end
     end

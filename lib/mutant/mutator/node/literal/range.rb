@@ -27,7 +27,8 @@ module Mutant
           # @api private
           #
           def inverse
-            new(inverse_class,node.start, node.finish)
+            node = self.node
+            new(inverse_class, node.start, node.finish)
           end
 
           # Emit range specific mutants

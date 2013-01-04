@@ -116,10 +116,12 @@ module Mutant
         # @api private
         #
         def glob_expression
+          base = base_path
+
           if mutation.subject.matcher.public?
-            "#{base_path}/#{spec_file}"
+            "#{base}/#{spec_file}"
           else
-            "#{base_path}/*_spec.rb"
+            "#{base}/*_spec.rb"
           end
         end
 

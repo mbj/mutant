@@ -7,6 +7,7 @@ module Mutant
 
         handle(::Array)
 
+        # Element presence mutator
         class Presence < Util
 
         private
@@ -27,6 +28,7 @@ module Mutant
 
         end
 
+        # Array element mutator
         class Element < Util
 
         private
@@ -40,7 +42,6 @@ module Mutant
           def dispatch
             input.each_with_index do |element, index|
               dup = dup_input
-
               Mutator.each(element).each do |mutation|
                 dup[index]=mutation
                 emit(dup)

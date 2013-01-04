@@ -1,6 +1,7 @@
 module Mutant
   class Reporter
 
+    # Null reporter
     class Null < self
 
       # Report subject

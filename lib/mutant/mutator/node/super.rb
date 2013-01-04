@@ -2,6 +2,7 @@ module Mutant
   class Mutator
     class Node
 
+      # Mutator for super without parantheses
       class ZSuper < self
 
         handle(Rubinius::AST::ZSuper)
@@ -18,6 +19,7 @@ module Mutant
 
       end
 
+      # Mutator for super with parantheses
       class Super < self
         handle(Rubinius::AST::Super)
 
