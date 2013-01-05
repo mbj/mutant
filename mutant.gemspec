@@ -5,8 +5,8 @@ Gem::Specification.new do |gem|
   gem.version     = '0.2.12'
   gem.authors     = [ 'Markus Schirp' ]
   gem.email       = [ 'mbj@seonic.net' ]
-  gem.description = 'Mutation testing for ruby under rubinius'
-  gem.summary     = gem.description
+  gem.description = 'Mutation testing for ruby'
+  gem.summary     = 'Mutation testing tool for ruby under MRI and Rubinius'
   gem.homepage    = 'https://github.com/mbj/mutant'
 
   gem.require_paths    = [ 'lib' ]
