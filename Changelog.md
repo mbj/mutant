@@ -1,3 +1,7 @@
+# v0.2.13 2013-01-05
+
+* [fixed] Capture failures that occur in the window between mutation insertion and spec run as kills
+
 # v0.2.12 2013-01-03
 
 * [fixed] Do not crash when trying to load methods from precompiled ruby under rbx

@@ -41,8 +41,12 @@ module Mutant
       #
       def run
         fork do
-          killer = @killer.new(strategy, mutation)
-          Kernel.exit(killer.fail? ? 1 : 0)
+          begin
+            killer = @killer.new(strategy, mutation)
+            Kernel.exit(killer.fail? ? 1 : 0)
+          rescue
+            Kernel.exit(1)
+          end
         end
 
         status = Process.wait2.last
