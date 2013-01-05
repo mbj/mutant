@@ -28,11 +28,12 @@ Loader:
   * Make sure loader does not change visibility of injected mutants
 
 Killers:
-  * Aggregate warnings on missing spec files
+  * Move test framework specific stuff to strategy
   * Add a general master <=> killer IPC interface. So different strategies of isolation 
     (fork, vs jruby runtime creation) will work without big impact.
 
 Strategy:
+  * Aggregate warnings on missing spec files
   * Provide "expicit files to kill with" strategy
   * Automatically load ./spec/spec_helper.rb for rspec strategies (No need to specify -I and -r anymore)
 
