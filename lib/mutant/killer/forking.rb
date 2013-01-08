@@ -44,7 +44,7 @@ module Mutant
           begin
             killer = @killer.new(strategy, mutation)
             Kernel.exit(killer.fail? ? 1 : 0)
-          rescue
+          rescue StandardError
             Kernel.exit(1)
           end
         end
