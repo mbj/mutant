@@ -65,7 +65,7 @@ The following specs are executed to kill a mutation on:
 Public instance  methods: spec/unit/#{namespace}/#{class_name}/#{method_name}_spec.rb
 Public singleton methods: spec/unit/#{namespace}/#{class_name}/class_methods/#{method_name}_spec.rb
 Private instance  methods: spec/unit/#{namespace}/#{class_name}/*_spec.rb
-Privvate singleton methods: spec/unit/#{namespace}/#{class_name}/class_methods/*_spec.rb
+Private singleton methods: spec/unit/#{namespace}/#{class_name}/class_methods/*_spec.rb
 ```
 
 ### --rspec-unit
