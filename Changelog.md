@@ -1,12 +1,18 @@
-# v0.2.13 2013-01-05
+# v0.2.14 2013-01-09
+
+* [change] Do not emit mutation to { nil => nil } for hash literals
+
+# v0.2.13 2013-01-09
 
 * [fixed] Capture failures that occur in the window between mutation insertion and spec run as kills
+
+[Compare v0.2.12..v0.2.13](https://github.com/mbj/mutant/compare/v0.2.12...v0.2.13)
 
 # v0.2.12 2013-01-03
 
 * [fixed] Do not crash when trying to load methods from precompiled ruby under rbx
 
-[Compare v0.2.10..v0.2.12](https://github.com/mbj/mutant/compare/v0.2.11...v0.2.12)
+[Compare v0.2.11..v0.2.12](https://github.com/mbj/mutant/compare/v0.2.11...v0.2.12)
 
 # v0.2.11 2013-01-03
 
