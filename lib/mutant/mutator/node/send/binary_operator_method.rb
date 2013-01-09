@@ -17,6 +17,7 @@ module Mutant
           def dispatch
             emit_left_mutations
             emit_right_mutations
+            emit(right)
           end
 
           # Emit left mutations
@@ -29,6 +30,16 @@ module Mutant
             emit_attribute_mutations(:receiver)
           end
 
+          # Return right
+          #
+          # @return [Rubinius::AST::Node]
+          #
+          # @api private
+          #
+          def right
+            node.arguments.array.first
+          end
+
           # Emit right mutations
           #
           # @return [undefined]
@@ -36,7 +47,6 @@ module Mutant
           # @api private
           #
           def emit_right_mutations
-            right = node.arguments.array.first
             Mutator.each(right).each do |mutated|
               dup = dup_node
               dup.arguments.array[0] = mutated

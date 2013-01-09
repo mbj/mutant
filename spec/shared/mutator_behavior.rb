@@ -51,8 +51,7 @@ shared_examples_for 'a mutator' do
       unexpected = (generated - expected_mutations).to_a
 
       unless generated == expected_mutations
-        message ="Missing mutations:\n%s\nUnexpected mutations:\n%s" % [missing.join("\n----\n"), unexpected.join("\n----\n")]
-        fail message
+        fail "Missing mutations:\n%s\nUnexpected mutations:\n%s" % [missing.join("\n----\n"), unexpected.join("\n----\n")]
       end
     end
   end

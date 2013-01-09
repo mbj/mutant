@@ -55,6 +55,66 @@ describe Mutant::Mutator, 'send' do
     end
   end
 
+  context 'with block' do
+    let(:source) { 'foo() { a; b }' }
+
+    let(:mutations) do 
+      mutations = []
+      mutations << 'foo() { a }'
+      mutations << 'foo() { b }'
+      mutations << 'foo() { }'
+      mutations << 'foo'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
+  context 'with block args' do
+
+    let(:source) { 'foo { |a, b| }' }
+
+    before do
+      Mutant::Random.stub(:hex_string => :random)
+    end
+
+    let(:mutations) do 
+      mutations = []
+      mutations << 'foo'
+      mutations << 'foo { |a, b| Object.new }'
+      mutations << 'foo { |a, srandom| }'
+      mutations << 'foo { |srandom, b| }'
+      mutations << 'foo { |a| }'
+      mutations << 'foo { |b| }'
+      mutations << 'foo { || }'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
+  context 'with block pattern args' do
+
+    before do
+      Mutant::Random.stub(:hex_string => :random)
+    end
+
+    let(:source) { 'foo { |(a, b), c| }' }
+
+    let(:mutations) do 
+      mutations = []
+      mutations << 'foo { || }'
+      mutations << 'foo { |a, b, c| }'
+      mutations << 'foo { |(a, b), c| Object.new }'
+      mutations << 'foo { |(a, b)| }'
+      mutations << 'foo { |c| }'
+      mutations << 'foo { |(srandom, b), c| }'
+      mutations << 'foo { |(a, srandom), c| }'
+      mutations << 'foo { |(a, b), srandom| }'
+      mutations << 'foo'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
   context 'send with arguments' do
 
     context 'one argument' do
@@ -62,7 +122,7 @@ describe Mutant::Mutator, 'send' do
 
       let(:mutations) do 
         mutations = []
-        mutations << 'foo()'
+        mutations << 'foo'
         mutations << 'nil'
         mutations << 'foo(Object.new)'
       end
@@ -129,66 +189,6 @@ describe Mutant::Mutator, 'send' do
         mutations << 'foo(nil)'
         mutations << 'foo(Object.new, nil)'
         mutations << 'foo(nil, Object.new)'
-      end
-
-      it_should_behave_like 'a mutator'
-    end
-
-    context 'with block' do
-      let(:source) { 'foo() { a; b }' }
-
-      let(:mutations) do 
-        mutations = []
-        mutations << 'foo() { a }'
-        mutations << 'foo() { b }'
-        mutations << 'foo() { }'
-        mutations << 'foo'
-      end
-
-      it_should_behave_like 'a mutator'
-    end
-
-    context 'with block args' do
-
-      let(:source) { 'foo { |a, b| }' }
-
-      before do
-        Mutant::Random.stub(:hex_string => :random)
-      end
-
-      let(:mutations) do 
-        mutations = []
-        mutations << 'foo'
-        mutations << 'foo() { |a, b| Object.new }'
-        mutations << 'foo() { |a, srandom| }'
-        mutations << 'foo() { |srandom, b| }'
-        mutations << 'foo() { |a| }'
-        mutations << 'foo() { |b| }'
-        mutations << 'foo() { || }'
-      end
-
-      it_should_behave_like 'a mutator'
-    end
-
-    context 'with block pattern args' do
-
-      before do
-        Mutant::Random.stub(:hex_string => :random)
-      end
-
-      let(:source) { 'foo { |(a, b), c| }' }
-
-      let(:mutations) do 
-        mutations = []
-        mutations << 'foo() { || }'
-        mutations << 'foo() { |a, b, c| }'
-        mutations << 'foo() { |(a, b), c| Object.new }'
-        mutations << 'foo() { |(a, b)| }'
-        mutations << 'foo() { |c| }'
-        mutations << 'foo() { |(srandom, b), c| }'
-        mutations << 'foo() { |(a, srandom), c| }'
-        mutations << 'foo() { |(a, b), srandom| }'
-        mutations << 'foo'
       end
 
       it_should_behave_like 'a mutator'

@@ -51,7 +51,7 @@ module Mutant
         # @api private
         #
         def negative_infinity
-          new(Rubinius::AST::Negate, infinity)
+          new_send_with_arguments(new_float(-1), :/, new_float(0))
         end
 
         # Return AST representing infinity

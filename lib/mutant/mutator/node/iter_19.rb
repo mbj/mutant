@@ -17,6 +17,7 @@ module Mutant
           emit_attribute_mutations(:arguments) do |mutation|
             arguments = mutation.arguments
             arguments.names = arguments.required + arguments.optional
+            mutation
           end if node.arguments
         end
 

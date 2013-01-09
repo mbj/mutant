@@ -7,22 +7,6 @@ module Mutant
 
         handle(Rubinius::AST::Send)
 
-        # Test if node name is a keyword
-        #
-        # @param [Rubinius::AST::Node] node
-        #
-        # @return [true]
-        #   if node name equals a ruby keyword
-        #
-        # @return [false]
-        #   otherwise
-        #
-        # @api private
-        #
-        def self.keyword_name?(node)
-          Mutant::KEYWORDS.include?(node.name) 
-        end
-
       private
 
         # Emit mutations
@@ -143,7 +127,7 @@ module Mutant
         # @api private
         #
         def emit_implicit_self_receiver
-          if to_self? and self.class.keyword_name?(node)
+          unless to_self? and !Mutant::KEYWORDS.include?(node.name)
             return
           end
 

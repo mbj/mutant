@@ -16,6 +16,7 @@ module Mutant
         def dispatch
           emit_attribute_mutations(:arguments) do |argument|
             argument.names = argument.arguments.map(&:name)
+            argument
           end
         end
       end

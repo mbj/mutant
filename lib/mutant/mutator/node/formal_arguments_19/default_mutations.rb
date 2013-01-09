@@ -22,6 +22,7 @@ module Mutant
               if mutation.defaults.names.empty?
                 mutation.defaults = nil
               end
+              mutation
             end 
           end
 

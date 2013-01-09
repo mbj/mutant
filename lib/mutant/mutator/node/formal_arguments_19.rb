@@ -32,6 +32,7 @@ module Mutant
         def emit_required_mutations
           emit_attribute_mutations(:required) do |mutation|
             mutation.names = mutation.optional + mutation.required
+            mutation
           end
         end
       end

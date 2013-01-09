@@ -18,7 +18,13 @@ module Mutant
           #
           def dispatch
             super
-            emit_call_remove_mutation
+
+            if binary_operator?
+              run(BinaryOperatorMethod)
+              return
+            end
+
+            emit_send_remove_mutation
             emit_argument_mutations
           end
 
@@ -45,21 +51,24 @@ module Mutant
           # @api private
           #
           def emit_argument_mutations
-            if binary_operator?
-              run(BinaryOperatorMethod)
-              return
+            emit_attribute_mutations(:arguments) do |mutation|
+              if mutation.arguments.array.empty?
+                mutation = new_send(receiver, node.name)
+                mutation.privately = node.privately
+                mutation
+              else
+                mutation
+              end
             end
-
-            emit_attribute_mutations(:arguments)
           end
 
-          # Emit transfomr call mutation
+          # Emit send remove mutation
           #
           # @return [undefined]
           #
           # @api private
           #
-          def emit_call_remove_mutation
+          def emit_send_remove_mutation
             array = node.arguments.array
             return unless array.length == 1
             emit(array.first)

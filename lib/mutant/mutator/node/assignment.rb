@@ -19,6 +19,7 @@ module Mutant
           def dispatch
             emit_attribute_mutations(:name) do |mutation|
               mutation.name = "#{self.class::PREFIX}#{mutation.name}".to_sym
+              mutation
             end
             emit_attribute_mutations(:value)
           end

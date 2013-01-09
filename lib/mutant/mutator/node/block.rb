@@ -22,6 +22,7 @@ module Mutant
             if array.empty?
               array << new_nil
             end
+            mutation
           end
         end
 
