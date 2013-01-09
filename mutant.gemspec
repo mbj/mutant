@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |gem|
   gem.name        = 'mutant'
-  gem.version     = '0.2.13'
+  gem.version     = '0.2.14'
   gem.authors     = [ 'Markus Schirp' ]
   gem.email       = [ 'mbj@seonic.net' ]
   gem.description = 'Mutation testing for ruby'

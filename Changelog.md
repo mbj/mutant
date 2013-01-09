@@ -2,6 +2,8 @@
 
 * [change] Do not emit mutation to { nil => nil } for hash literals
 
+[Compare v0.2.13..v0.2.14](https://github.com/mbj/mutant/compare/v0.2.13...v0.2.14)
+
 # v0.2.13 2013-01-09
 
 * [fixed] Capture failures that occur in the window between mutation insertion and spec run as kills
