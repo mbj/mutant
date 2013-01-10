@@ -1,3 +1,9 @@
+# v0.2.15 2013-01-10
+
+* [change] Do not mutate super to super() anymore. This needs a context check in future.
+
+[Compare v0.2.14..v0.2.15](https://github.com/mbj/mutant/compare/v0.2.14...v0.2.15)
+
 # v0.2.14 2013-01-09
 
 * [change] Do not emit mutation to { nil => nil } for hash literals

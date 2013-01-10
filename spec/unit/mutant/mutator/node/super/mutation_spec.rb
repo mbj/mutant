@@ -5,12 +5,7 @@ describe Mutant::Mutator, 'super' do
   context 'with no arguments' do
     let(:source) { 'super' }
 
-    let(:mutations) do
-      mutations = []
-      mutations << 'super()'
-    end
-
-    it_should_behave_like 'a mutator'
+    it_should_behave_like 'a noop mutator'
   end
 
   context 'with explicit empty arguments' do

@@ -2,23 +2,6 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutator for super without parantheses
-      class ZSuper < self
-
-        handle(Rubinius::AST::ZSuper)
-
-        # Emit mutations
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def dispatch
-          emit_node(Rubinius::AST::Super, new(Rubinius::AST::ActualArguments))
-        end
-
-      end
-
       # Mutator for super with parantheses
       class Super < self
         handle(Rubinius::AST::Super)

@@ -8,6 +8,7 @@ module Mutant
         handle(Rubinius::AST::Self)
 
         # Currently unhandled node classes. Feel free to contribute your mutator!
+        handle(Rubinius::AST::ZSuper)
         handle(Rubinius::AST::ElementAssignment)
         handle(Rubinius::AST::AttributeAssignment)
         handle(Rubinius::AST::Not)
