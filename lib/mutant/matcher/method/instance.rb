@@ -3,7 +3,7 @@ module Mutant
     class Method < self
       # Matcher for instance methods
       class Instance < self
-
+        SUBJECT_CLASS = Subject::Method::Instance
 
         # Return identification
         #
@@ -14,21 +14,6 @@ module Mutant
         def identification
           "#{scope.name}##{method_name}"
         end
-
-        # Test if method is public
-        #
-        # @return [true]
-        #   if method is public
-        #
-        # @return [false]
-        #   otherwise
-        #
-        # @api private
-        #
-        def public?
-          scope.public_method_defined?(method_name)
-        end
-        memoize :public?
 
       private
 

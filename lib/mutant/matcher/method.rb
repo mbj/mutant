@@ -35,9 +35,8 @@ module Mutant
 
         return self if skip?
 
-        subject.tap do |subject|
-          yield subject if subject
-        end
+        util = subject
+        yield util if util
 
         self
       end
@@ -67,18 +66,6 @@ module Mutant
       def method_name
         method.name
       end
-
-      # Test if method is public
-      #
-      # @return [true]
-      #   if method is public
-      #
-      # @return [false]
-      #   otherwise
-      #
-      # @api private
-      #
-      abstract_method :public?
 
     private
 
@@ -180,7 +167,7 @@ module Mutant
       def subject
         node = matched_node
         return unless node
-        Subject.new(self, context, node)
+        self.cass::SUBJECT_CLASS.new(context, self)
       end
       memoize :subject
 
