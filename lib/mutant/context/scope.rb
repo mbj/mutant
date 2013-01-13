@@ -16,6 +16,16 @@ module Mutant
         end
       end
 
+      # Return identification
+      #
+      # @return [String]
+      #
+      # @ai private
+      #
+      def identification
+        scope.name
+      end
+
       # Wrap node into ast node
       #
       # @param [Class, Module] scope 

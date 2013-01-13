@@ -21,6 +21,14 @@ module Mutant
     #
     attr_reader :source_path
 
+    # Return identification
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    abstract_method :identification
+
   private
 
     # Initialize context
