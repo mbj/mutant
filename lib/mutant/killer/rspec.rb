@@ -42,7 +42,7 @@ module Mutant
       def command_line_arguments
         %W(
           --fail-fast
-        ) + strategy.spec_files(mutation)
+        ) + strategy.spec_files(mutation.subject)
       end
     end
   end
