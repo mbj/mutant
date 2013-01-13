@@ -2,8 +2,12 @@ require 'spec_helper'
 
 describe Mutant::Subject, '#node' do
   subject { object.node }
-  let(:object)  { described_class.new(matcher, context, node) }
-  let(:matcher) { mock('Matcher') }
+
+  let(:class_under_test) do
+    Class.new(described_class)
+  end
+
+  let(:object)  { class_under_test.new(context, node) }
   let(:node)    { mock('Node')    }
   let(:context) { mock('Context') }
 
