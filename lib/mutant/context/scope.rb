@@ -98,26 +98,6 @@ module Mutant
         @scope = scope
       end
 
-      # Return scope AST class
-      #
-      # @return [Rubinius::AST::Node]
-      #
-      # @api private
-      #
-      def scope_class
-        self.class::SCOPE_CLASS
-      end
-
-      # Return keyword
-      #
-      # @return [Rubinius::AST::Node]
-      #
-      # @api private
-      #
-      def keyword
-        self.class::KEYWORD
-      end
-
       # Return new root ast
       #
       # @return [Rubinius::AST::Node]
