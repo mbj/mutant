@@ -80,7 +80,7 @@ module Mutant
     # @api private
     #
     def strategy
-      @strategy || raise(Error, 'no strategy was set!')
+      @strategy || raise(Error, 'No strategy was set!')
       @strategy.new(self)
     end
     memoize :strategy
