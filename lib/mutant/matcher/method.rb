@@ -80,8 +80,6 @@ module Mutant
       #
       def initialize(scope, method)
         @scope, @method = scope, method
-        # FIXME: cache public private should not be needed, loader should not override visibility! (But does currently) :(
-        public?
       end
 
       # Test if method is skipped
@@ -167,7 +165,7 @@ module Mutant
       def subject
         node = matched_node
         return unless node
-        self.cass::SUBJECT_CLASS.new(context, self)
+        self.class::SUBJECT_CLASS.new(context, node)
       end
       memoize :subject
 
