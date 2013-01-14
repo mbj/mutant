@@ -76,7 +76,7 @@ module Mutant
     # @api private
     #
     def identification
-      "#{context.identification}#{subtype}:#{source_path}:#{source_line}"
+      "#{subtype}:#{source_path}:#{source_line}"
     end
     memoize :identification
 

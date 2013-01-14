@@ -42,7 +42,7 @@ module Mutant
         # @api private
         #
         def subtype
-          "#{context.name}##{node.name}"
+          "#{context.identification}##{node.name}"
         end
 
       end

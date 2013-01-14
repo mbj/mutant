@@ -10,7 +10,7 @@ describe Mutant, 'method matching' do
   this_example = 'Mutant method matching'
 
   shared_examples_for this_example do
-    subject { p Mutant::Matcher::Method.parse(pattern).to_a }
+    subject { Mutant::Matcher::Method.parse(pattern).to_a }
 
     let(:values) { defaults.merge(expectation) }
 
