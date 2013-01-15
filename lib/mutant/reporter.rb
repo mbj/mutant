@@ -1,7 +1,18 @@
 module Mutant
   # Abstract reporter
   class Reporter
-    include Adamantium::Flat, AbstractType
+    include Adamantium::Flat, AbstractType, Equalizer.new(:stats)
+
+    # Initialize reporter
+    #
+    # @param [Config] config
+    #
+    # @api private
+    #
+    def initialize(config)
+      @stats = Stats.new
+      @config = config
+    end
 
     # Report subject
     #
@@ -11,7 +22,10 @@ module Mutant
     #
     # @api private
     #
-    abstract_method :subject
+    def subject(subject)
+      stats.count_subject
+      self
+    end
 
     # Report mutation
     #
@@ -21,17 +35,9 @@ module Mutant
     #
     # @api private
     #
-    abstract_method :mutation
-
-    # Report notice
-    #
-    # @param [String] notice
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    abstract_method :notice
+    def mutation(mutation)
+      self
+    end
 
     # Report killer
     #
@@ -41,44 +47,55 @@ module Mutant
     #
     # @api private
     #
-    abstract_method :killer
+    def report_killer(killer)
+      stats.count_killer(killer)
 
-    # Report config
-    # 
-    # @param [Mutant::Config] config
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    abstract_method :config
-
-    # Return output stream
-    #
-    # @return [IO]
-    #
-    # @api private
-    #
-    abstract_method :output_stream
-
-    # Return error stream
-    #
-    # @return [IO]
-    #
-    # @api private
-    #
-    abstract_method :error_stream
-
-  private
-
-    # Initialize reporter
-    #
-    # @param [Config] config
-    #
-    # @api private
-    #
-    def initialize(config)
-      @config = config
+      self
     end
+
+    # Test for running in debug mode
+    #
+    # @return [true]
+    #   if running in debug mode
+    #
+    # @return [false]
+    #   otherwise
+    #
+    # @api private
+    #
+    def debug?
+      config.debug?
+    end
+
+    # Return stats
+    #
+    # @return [Reporter::Stats]
+    #
+    # @api private
+    #
+    attr_reader :stats
+
+    # Return config
+    #
+    # @return [Config]
+    #
+    # @api private
+    #
+    attr_reader :config
+
+    # Test if errors are present
+    #
+    # @return [true]
+    #   if errors are present
+    #
+    # @return [false]
+    #   otherwise
+    #
+    # @api private
+    #
+    def errors?
+      stats.errors?
+    end
+
   end
 end

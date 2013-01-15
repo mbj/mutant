@@ -2,9 +2,21 @@ module Mutant
   class Reporter
     # Reporter that reports in human readable format
     class CLI < self
-      include Equalizer.new(:io)
 
-      # Reporter subject
+      # Initialize reporter
+      #
+      # @param [Config] config
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def initialize(config)
+        super
+        @io = $stdout
+      end
+
+      # Reporte subject
       #
       # @param [Subject] subject
       #
@@ -13,7 +25,7 @@ module Mutant
       # @api private
       #
       def subject(subject)
-        stats.subject
+        super
         puts("Subject: #{subject.identification}")
       end
 
@@ -24,7 +36,7 @@ module Mutant
       # @api private
       #
       def error_stream
-        @config.debug? ? io : StringIO.new
+        debug? ? io : StringIO.new
       end
 
       # Return output stream
@@ -34,7 +46,7 @@ module Mutant
       # @api private
       #
       def output_stream
-        @config.debug? ? io : StringIO.new
+        debug? ? io : StringIO.new
       end
 
       # Report mutation
@@ -46,7 +58,9 @@ module Mutant
       # @api private
       #
       def mutation(mutation)
-        if @config.debug?
+        super
+
+        if debug?
           colorized_diff(mutation)
         end
 
@@ -61,96 +75,37 @@ module Mutant
       #
       # @api private
       #
-      def config(config)
-        puts 'Mutant configuration:'
-        puts "Matcher:   #{config.matcher.inspect}"
-        puts "Filter:    #{config.filter.inspect}"
-        puts "Strategy:  #{config.strategy.inspect}"
+      def print_config
+        message = []
+        message << 'Mutant configuration:'
+        message << "Matcher:   #{config.matcher.inspect}"
+        message << "Filter:    #{config.filter.inspect}"
+        message << "Strategy:  #{config.strategy.inspect}"
+        puts message.join("\n")
       end
 
-      # Report noop
-      #
-      # @param [Killer] killer
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def noop(killer)
-        color, word =
-          if killer.fail?
-            [Color::GREEN, 'Alive']
-          else
-            [Color::RED,   'Killed']
-          end
+     ## Reporter killer
+     ##
+     ## @param [Killer] killer
+     ##
+     ## @return [self]
+     ##
+     ## @api private
+     ##
+     #def killer(killer)
+     #  super
 
-        print_killer(color, word, killer)
+     #  status = killer.killed? ? 'Killed' : 'Alive'
+     #  color  = killer.success? ? Color::GREEN : Color::RED
 
-        unless killer.fail?
-          puts(killer.mutation.source)
-          stats.noop_fail(killer)
-        end
+     #  puts(colorize(color, "#{status}: #{killer.identification} (%02.2fs)" % killer.runtime))
 
-        self
-      end
+     #  unless killer.success?
+     #    colorized_diff(killer.mutation)
+     #  end
 
-      # Reporter killer
-      #
-      # @param [Killer] killer
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def killer(killer)
-        stats.killer(killer)
-
-        color, word =
-          if killer.fail?
-            [Color::RED,   'Alive']
-          else
-            [Color::GREEN, 'Killed']
-          end
-
-        print_killer(color, word, killer)
-
-        if killer.fail?
-          colorized_diff(killer.mutation)
-        end
-
-        self
-      end
-
-      # Report errors
-      #
-      # @param [Enumerable<Killer>] errors
-      #
-      # @api private
-      #
-      # @return [self]
-      #
-      def errors(errors)
-        errors.each do |error|
-          failure(error)
-        end
-
-        puts
-        puts "subjects:   #{stats.subjects}"
-        puts "mutations:  #{stats.mutations}"
-        puts "noop_fails: #{stats.noop_fails}"
-        puts "kills:      #{stats.kills}"
-        puts "alive:      #{stats.alive}"
-        puts "mtime:      %02.2fs" % stats.time
-        puts "rtime:      %02.2fs" % stats.runtime
-      end
-
-      # Return IO stream
-      #
-      # @return [IO]
-      #
-      # @api private
-      # 
-      attr_reader :io
+     #  self
+     #end
 
       # Return stats
       #
@@ -162,33 +117,13 @@ module Mutant
 
     private 
 
-      # Initialize reporter
+      # Return IO stream
       #
-      # @param [Config] config
-      #
-      # @return [undefined]
+      # @return [IO]
       #
       # @api private
-      #
-      def initialize(config)
-        super
-        @io = $stdout
-        @stats = Stats.new
-      end
-
-      # Report failure on killer
       # 
-      # @param [Killer] killer
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def failure(killer)
-        puts(colorize(Color::RED, "!!! Mutant alive: #{killer.identification} !!!"))
-        colorized_diff(killer.mutation)
-        puts("Took: (%02.2fs)" % killer.runtime)
-      end
+      attr_reader :io
 
       # Test for colored output
       #
@@ -241,7 +176,7 @@ module Mutant
       # @api private
       #
       def colorized_diff(mutation)
-        if mutation.kind_of?(Mutation::Noop)
+        if mutation.kind_of?(Mutation::Neutral)
           puts mutation.original_source
           return
         end
@@ -252,25 +187,11 @@ module Mutant
 
         # FIXME remove this branch before release
         if diff.empty?
-          raise "Unable to create a diff, so ast mutation or to_source has an error!"
+          raise 'Unable to create a diff, so ast mutation or to_source has an error!'
         end
 
         puts(diff)
         self
-      end
-
-      # Print killer
-      #
-      # @param [Color] color
-      # @param [String] word
-      # @param [Killer] killer
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def print_killer(color, word, killer)
-        puts(colorize(color, "#{word}: #{killer.identification} (%02.2fs)" % killer.runtime))
       end
 
       # Test for output to tty
@@ -287,6 +208,7 @@ module Mutant
         @io.respond_to?(:tty?) && @io.tty?
       end
       memoize :tty?
+
     end
   end
 end

@@ -20,14 +20,14 @@ describe Mutant::Killer::Rspec, '.new' do
   context 'when run exits zero' do
     let(:exit_status) { 0 }
 
-    its(:fail?) { should be(true)  }
+    its(:killed?) { should be(false)  }
     it { should be_a(described_class) }
   end
 
   context 'when run exits nonzero' do
     let(:exit_status) { 1 }
 
-    its(:fail?) { should be(false)   }
+    its(:killed?) { should be(true)   }
     it { should be_a(described_class) }
   end
 end

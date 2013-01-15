@@ -4,14 +4,6 @@ module Mutant
     include Adamantium::Flat
     extend MethodObject
 
-    # Return killers with errors
-    #
-    # @return [Enumerable<Killer>]
-    #
-    # @api private
-    #
-    attr_reader :errors
-
     # Test for failure
     #
     # @return [true]
@@ -23,7 +15,7 @@ module Mutant
     # @api private
     #
     def fail?
-      !errors.empty?
+      reporter.errors?
     end
 
     # Return config
@@ -45,12 +37,18 @@ module Mutant
     # @api private
     #
     def initialize(config)
-      @config, @errors = config, []
-
-      util_reporter = reporter
-      util_reporter.config(config)
+      @config = config
       run
-      util_reporter.errors(@errors)
+    end
+
+    # Return strategy
+    #
+    # @return [Strategy]
+    #
+    # @api private
+    #
+    def strategy
+      config.strategy
     end
 
     # Return reporter
@@ -70,10 +68,14 @@ module Mutant
     # @api private
     #
     def run
+      reporter.print_config
+      util = strategy
+      util.setup
       config.matcher.each do |subject|
         reporter.subject(subject)
         run_subject(subject)
       end
+      util.teardown
     end
 
     # Run mutation killers on subject
@@ -85,7 +87,7 @@ module Mutant
     # @api private
     #
     def run_subject(subject)
-      return unless noop(subject)
+      return unless test_noop(subject)
       subject.each do |mutation|
         next unless config.filter.match?(mutation)
         reporter.mutation(mutation)
@@ -93,26 +95,22 @@ module Mutant
       end
     end
 
-    # Test for noop mutation
-    #
-    # @param [Subject] subject
+    # Test noop mutation
     #
     # @return [true]
-    #   if noop mutation is okay
+    #   if noop mutation is alive
     #
     # @return [false]
     #   otherwise
     #
     # @api private
     #
-    def noop(subject)
-      killer = killer(subject.noop)
-      reporter.noop(killer)
-      unless killer.fail?
-        @errors << killer
+    def test_noop(subject)
+      noop = subject.noop
+      unless kill(noop)
+        reporter.noop(noop)
         return false
       end
-
       true
     end
 
@@ -121,7 +119,7 @@ module Mutant
     # @param [Mutation] mutation
     #
     # @return [true]
-    #   if killer was unsuccessful
+    #   if killer was successful
     #
     # @return [false]
     #   otherwise
@@ -130,11 +128,8 @@ module Mutant
     #
     def kill(mutation)
       killer = killer(mutation)
-      reporter.killer(killer)
-
-      if killer.fail?
-        @errors << killer
-      end
+      reporter.report_killer(killer)
+      killer.success?
     end
 
     # Return killer for mutation
@@ -144,7 +139,7 @@ module Mutant
     # @api private
     #
     def killer(mutation)
-      config.strategy.kill(mutation)
+      strategy.kill(mutation)
     end
   end
 end

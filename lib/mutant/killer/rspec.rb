@@ -2,20 +2,10 @@ module Mutant
   class Killer
     # Runner for rspec tests
     class Rspec < self
+
       TYPE = 'rspec'.freeze
 
     private
-
-      # Initialize rspec runner
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(*)
-        @error_stream, @output_stream = StringIO.new, StringIO.new
-        super
-      end
 
       # Run rspec test
       #

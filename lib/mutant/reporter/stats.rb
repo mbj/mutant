@@ -4,45 +4,48 @@ module Mutant
     # Stats gathered while reporter is running
     class Stats
 
-      # Return subject count
-      #
-      # @return [Fixnum]
-      #
-      # @api private
-      #
-      attr_reader :subjects
+      # A counter with fail counts
+      class Counter
+        include Equalizer.new(:count, :fails)
 
-      # Return mutation count
-      #
-      # @return [Fixnum]
-      #
-      # @api private
-      #
-      attr_reader :mutations
+        attr_reader :count
 
-      # Return skip count
-      #
-      # @return [Fixnum]
-      #
-      # @api private
-      #
-      attr_reader :noop_fails
+        # Return fail count
+        #
+        # @return [Fixnum]
+        #
+        # @api private
+        #
+        attr_reader :fails
 
-      # Return kill count
-      #
-      # @return [Fixnum]
-      #
-      # @api private
-      #
-      attr_reader :kills
+        # Initialize object
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def initialize
+          @count = @fails = 0
+        end
 
-      # Return mutation runtime
-      #
-      # @return [Float]
-      #
-      # @api private
-      #
-      attr_reader :time
+        # Count killer
+        #
+        # @param [Killer] killer
+        #
+        # @return [self]
+        #
+        # @api private
+        #
+        def handle(killer)
+          @count += 1
+          unless killer.success?
+            @fails += 1
+          end
+          self
+        end
+      end
+
+      include Equalizer.new(:start, :counts, :killers)
 
       # Initialize object
       #
@@ -51,19 +54,38 @@ module Mutant
       # @api private
       #
       def initialize
-        @start = Time.now
-        @noop_fails = @subjects = @mutations = @kills = @time = 0
+        @start = start
+        @counts = Hash.new(0)
+        @killers  = {}
       end
 
-      # Return runtime in seconds
+    protected
+
+      # Return counts 
       #
-      # @return [Float]
+      # @return [Hash]
       #
       # @api private
       #
-      def runtime
-        Time.now - @start
-      end
+      attr_reader :counts
+
+      # Return start time
+      #
+      # @return [Time]
+      #
+      # @api private
+      #
+      attr_reader :start
+
+      # Return killers 
+      #
+      # @return [Hash]
+      #
+      # @api private
+      #
+      attr_reader :killers
+
+    public
 
       # Count subject
       #
@@ -71,33 +93,8 @@ module Mutant
       #
       # @api private
       #
-      def subject
-        @subjects +=1
-        self
-      end
-
-      # Return number of mutants alive
-      #
-      # @return [Fixnum]
-      #
-      # @api private
-      #
-      def alive
-        @mutations - @kills
-      end
-
-      # Count noop mutation fail
-      #
-      # @param [Killer] killer
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def noop_fail(killer)
-        @noop_fails += 1
-        @time += killer.runtime
-        self
+      def count_subject
+        @counts[:subject] += 1
       end
 
       # Count killer
@@ -108,11 +105,35 @@ module Mutant
       #
       # @api private
       #
-      def killer(killer)
-        @mutations +=1
-        @kills +=1 unless killer.fail?
-        @time += killer.runtime
+      def count_killer(killer)
+        counter = @killers[killer.mutation.class] ||= Counter.new
+        counter.handle(killer)
         self
+      end
+
+      # Test for errors 
+      #
+      # @return [true]
+      #   if there are errors
+      #
+      # @return [false]
+      #   otherwise
+      #
+      def errors?
+        @killers.values.inject(0) do |count, counter|
+          p counter, count
+          count += counter.fails
+        end.nonzero?
+      end
+
+      # Return runtime in seconds
+      #
+      # @return [Float]
+      #
+      # @api private
+      #
+      def runtime
+        Time.now - @start
       end
 
     end

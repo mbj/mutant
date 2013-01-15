@@ -24,24 +24,24 @@ module Mutant
       @config = config
     end
 
-    # Return output stream
+    # Perform setup
     #
-    # @return [IO]
+    # @return [self]
     #
     # @api private
     #
-    def output_stream
-      config.reporter.output_stream
+    def setup
+      self
     end
 
-    # Return error stream
+    # Perform teardown
     #
-    # @return [IO]
+    # @return [self]
     #
     # @api private
     #
-    def error_stream
-      config.reporter.error_stream
+    def teardown
+      self
     end
 
     # Kill mutation
@@ -64,22 +64,6 @@ module Mutant
     #
     def killer
       self.class::KILLER
-    end
-
-    # Static strategies
-    class Static < self
-      include Equalizer.new
-
-      # Always fail to kill strategy
-      class Fail < self
-        KILLER = Killer::Static::Fail
-      end
-
-      # Always succeed to kill strategy
-      class Success < self
-        KILLER = Killer::Static::Success
-      end
-
     end
   end
 end

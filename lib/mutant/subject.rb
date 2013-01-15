@@ -32,7 +32,7 @@ module Mutant
     def each
       return to_enum unless block_given?
       Mutator.each(node) do |mutant|
-        yield Mutation.new(self, mutant)
+        yield Mutation::Evil.new(self, mutant)
       end
 
       self
@@ -45,7 +45,7 @@ module Mutant
     # @api private
     #
     def noop
-      Mutation::Noop.new(self)
+      Mutation::Neutral.new(self, node)
     end
     memoize :noop
 

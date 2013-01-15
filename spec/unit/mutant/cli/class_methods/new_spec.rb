@@ -16,6 +16,11 @@ end
 describe Mutant::CLI, '.new' do
 
   let(:object) { described_class }
+  let(:time)   { Time.now }
+
+  before do
+    Time.stub(:now => time)
+  end
 
   # Defaults
   let(:expected_filter)   { Mutant::Mutation::Filter::ALL      }

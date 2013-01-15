@@ -1,20 +1,35 @@
 module Mutant
   # Abstract base class for mutant killers
   class Killer
-    include Adamantium::Flat, AbstractType
+    include Adamantium::Flat, AbstractType, Equalizer.new(:strategy, :mutation, :killed?)
     
     # Test for kill failure
     #
     # @return [true]
-    #   returns true when mutant was killed
+    #   when mutant was killed
     #
     # @return [false]
-    #   returns false otherwise
+    #   otherwise
     #
     # @api private
     #
-    def fail?
-      !@killed
+    def success?
+      mutation.success?(self)
+    end
+    memoize :success?
+
+    # Test if mutant was killed
+    #
+    # @return [true]
+    #   if mutant was killed
+    #
+    # @return [false]
+    #   otherwise
+    #
+    # @api private
+    #
+    def killed?
+      @killed
     end
 
     # Return runtime of killer
@@ -25,14 +40,14 @@ module Mutant
     #
     attr_reader :runtime
 
-    # Return original source
+    # Return configuration
     #
-    # @return [String]
+    # @return [Configuration]
     #
     # @api private
     #
-    def original_source
-      mutation.original_source
+    def configuration
+      strategy.configuration
     end
 
     # Return mutated source
@@ -45,14 +60,6 @@ module Mutant
       mutation.source
     end
 
-    # Return strategy
-    #
-    # @return [Strategy]
-    #
-    # @api private
-    #
-    attr_reader :strategy
-
     # Return name of killer
     #
     # @return [String]
@@ -62,6 +69,14 @@ module Mutant
     def self.type
       self::TYPE
     end
+
+    # Return strategy
+    #
+    # @return [Strategy]
+    #
+    # @api private
+    #
+    attr_reader :strategy
 
     # Return identification
     #

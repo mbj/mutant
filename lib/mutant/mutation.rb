@@ -1,7 +1,20 @@
 module Mutant
   # Represent a mutated node with its subject
   class Mutation
-    include Adamantium::Flat, Equalizer.new(:sha1)
+    include AbstractType, Adamantium::Flat, Equalizer.new(:sha1)
+
+    # Initialize mutation object
+    #
+    # @param [Subject] subject
+    # @param [Rubinius::Node::AST] node
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def initialize(subject, node)
+      @subject, @node = subject, node
+    end
 
     # Return mutation subject
     #
@@ -29,6 +42,20 @@ module Mutant
       subject.root(node)
     end
     memoize :root
+
+    # Test if killer is successful
+    #
+    # @param [Killer] killer
+    #
+    # @return [true]
+    #   if killer is successful
+    #
+    # @return [false]
+    #   otherwise
+    #
+    # @api private
+    #
+    abstract_method :success?
 
     # Insert mutated node
     #
@@ -95,46 +122,5 @@ module Mutant
       subject.source
     end
 
-  private
-
-    # Initialize mutation object
-    #
-    # @param [Subject] subject
-    # @param [Rubinius::Node::AST] node
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def initialize(subject, node)
-      @subject, @node = subject, node
-    end
-
-    # Noop mutation
-    class Noop < self
-
-      # Initialize object
-      #
-      # @param [Subject] subject
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(subject)
-        super(subject, subject.node)
-      end
-
-      # Return identification
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def identification
-        "noop:#{super}"
-      end
-      memoize :identification
-    end
   end
 end
