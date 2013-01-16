@@ -120,9 +120,8 @@ module Mutant
       #   otherwise
       #
       def errors?
-        @killers.values.inject(0) do |count, counter|
-          p counter, count
-          count += counter.fails
+        @killers.values.inject(0) do |fails, counter|
+          fails += counter.fails
         end.nonzero?
       end
 
