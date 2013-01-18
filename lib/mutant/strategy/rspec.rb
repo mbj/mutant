@@ -6,6 +6,17 @@ module Mutant
 
       KILLER = Killer::Forking.new(Killer::Rspec)
 
+      # Setup rspec strategy
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def setup
+        require('./spec/spec_helper.rb')
+        self
+      end
+
       # Run all unit specs per mutation
       class Unit < self
 
