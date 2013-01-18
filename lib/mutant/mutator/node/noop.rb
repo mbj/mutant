@@ -33,6 +33,7 @@ module Mutant
         handle(Rubinius::AST::DynamicSymbol)
         handle(Rubinius::AST::DynamicRegex)
         handle(Rubinius::AST::File)
+        handle(Rubinius::AST::NthRef)
         handle(Rubinius::AST::OpAssignOr19)
         handle(Rubinius::AST::BlockPass19)
         handle(Rubinius::AST::OpAssign1)
