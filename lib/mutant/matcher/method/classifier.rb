@@ -13,10 +13,9 @@ module Mutant
         SCOPE_FORMAT = /\A([^#.]+)(\.|#)(.+)\z/.freeze
 
         # Positions of captured regexp groups
-        # Freezing fixnums to avoid their singleton classes are patched.
-        SCOPE_NAME_POSITION    = 1.freeze
-        SCOPE_SYMBOL_POSITION  = 2.freeze
-        METHOD_NAME_POSITION   = 3.freeze
+        SCOPE_NAME_POSITION    = 1
+        SCOPE_SYMBOL_POSITION  = 2
+        METHOD_NAME_POSITION   = 3
 
         private_class_method :new
 
