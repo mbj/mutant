@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |gem|
   gem.name        = 'mutant'
-  gem.version     = '0.2.15'
+  gem.version     = '0.2.16'
   gem.authors     = [ 'Markus Schirp' ]
   gem.email       = [ 'mbj@seonic.net' ]
   gem.description = 'Mutation testing for ruby'
@@ -18,8 +18,8 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('to_source',           '~> 0.2.14')
   gem.add_runtime_dependency('ice_nine',            '~> 0.6.0')
   gem.add_runtime_dependency('descendants_tracker', '~> 0.0.1')
-  gem.add_runtime_dependency('backports',           '~> 2.6')
-  gem.add_runtime_dependency('adamantium',          '~> 0.0.4')
+  gem.add_runtime_dependency('backports',           '~> 2.7.0')
+  gem.add_runtime_dependency('adamantium',          '~> 0.0.5')
   gem.add_runtime_dependency('mbj-inflector',       '~> 0.0.1')
   gem.add_runtime_dependency('equalizer',           '~> 0.0.1')
   gem.add_runtime_dependency('abstract_type',       '~> 0.0.2')

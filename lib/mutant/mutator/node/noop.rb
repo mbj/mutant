@@ -40,6 +40,7 @@ module Mutant
           OpAssignOr19
           BlockPass19
           OpAssign1
+          NthRef
           OpAssign2
           SplatValue
           ConstantAccess

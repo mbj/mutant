@@ -1,3 +1,7 @@
+# v0.2.16 2013-01-20
+
+* [fixed] Handle Rubinius::AST::NthRef as noop
+
 # v0.2.15 2013-01-10
 
 * [change] Do not mutate super to super() anymore. This needs a context check in future.
