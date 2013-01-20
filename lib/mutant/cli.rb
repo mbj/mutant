@@ -100,10 +100,6 @@ module Mutant
 
     OPTIONS = {
       '--code'               => [:add_filter,           Mutation::Filter::Code    ],
-      '-I'                   => [:add_load_path                                   ],
-      '--include'            => [:add_load_path                                   ],
-      '-r'                   => [:require_library                                 ],
-      '--require'            => [:require_library                                 ],
       '--debug'              => [:set_debug                                       ],
       '-d'                   => [:set_debug                                       ],
       '--rspec-unit'         => [:set_strategy,         Strategy::Rspec::Unit     ],
@@ -246,30 +242,6 @@ module Mutant
       consume(2)
     end
 
-    # Add load path
-    #
-    # @api private
-    #
-    # @return [undefined]
-    #
-    def add_load_path
-      $LOAD_PATH << current_option_value
-      consume(2)
-    end
-
-    # Enable rspec
-    #
-    # @api private
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    def enable_rspec
-      consume(1)
-      @rspec = true
-    end
-
     # Set debug mode
     #
     # @api private
@@ -292,17 +264,6 @@ module Mutant
     def set_strategy(strategy)
       consume(1)
       @strategy = strategy
-    end
-
-    # Require library
-    #
-    # @api private
-    # 
-    # @return [undefined]
-    #
-    def require_library
-      require(current_option_value)
-      consume(2)
     end
   end
 end
