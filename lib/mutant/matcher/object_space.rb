@@ -84,7 +84,7 @@ module Mutant
       # @api private
       #
       def emit_scope(scope)
-        if [::Module, ::Class].include?(scope.class) and @scope_name_pattern =~ scope.name 
+        if [::Module, ::Class].include?(scope.class) and scope_name_pattern =~ scope.name 
           yield scope 
         end
       end
