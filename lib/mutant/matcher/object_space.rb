@@ -51,7 +51,7 @@ module Mutant
       #
       # @api private
       #
-      def scope_name_pattern; @scope_name_pattern; end
+      attr_reader :scope_name_pattern
 
     private
 
