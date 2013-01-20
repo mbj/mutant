@@ -4,27 +4,6 @@ module Mutant
     class ObjectSpace < self
       include Equalizer.new(:scope_name_pattern)
 
-      PATTERN = %r(\A::(.+)\z)
-
-      # Parse matcher
-      #
-      # @param [String] input
-      #
-      # @return [Matcher::ObjectSpace]
-      #   returns object space matcher if successful
-      #
-      # @return [nil]
-      #   returns nil otherwise
-      #
-      # @api private
-      #
-      def self.parse(input)
-        match = PATTERN.match(input)
-        return unless match
-
-        new(%r(\A#{Regexp.escape(match[1])}(\z|::)))
-      end
-
       # Enumerate subjects
       #
       # @return [Enumerator<Subject>]
