@@ -60,26 +60,23 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with code filter and missing argument' do
-    let(:arguments) { %w(--rspec-unit --code) }
-
+    let(:arguments)        { %w(--rspec-unit --code)           }
     let(:expected_message) { '"--code" is missing an argument' } 
 
     it_should_behave_like 'an invalid cli run'
   end
 
   context 'with explicit method matcher' do
-    let(:arguments) { %w(--rspec-unit TestApp::Literal#float) }
-
-    let(:expected_matcher) { Mutant::Matcher::Method.parse('TestApp::Literal#float') }
+    let(:arguments)        { %w(--rspec-unit TestApp::Literal#float)                       }
+    let(:expected_matcher) { Mutant::CLI::Classifier::Method.new('TestApp::Literal#float') }
 
     it_should_behave_like 'a cli parser'
 
   end
 
   context 'with namespace matcher' do
-    let(:arguments) { %w(--rspec-unit ::TestApp) }
-    
-    let(:expected_matcher) { Mutant::Matcher::ObjectSpace.new(%r(\ATestApp(\z|::))) }
+    let(:arguments)        { %w(--rspec-unit ::TestApp*)                          }
+    let(:expected_matcher) { Mutant::CLI::Classifier::Namespace.new('::TestApp*') }
 
     it_should_behave_like 'a cli parser'
   end
@@ -94,8 +91,8 @@ describe Mutant::CLI, '.new' do
       ]
     end
 
-    let(:expected_matcher) { Mutant::Matcher::Method.parse('TestApp::Literal#float') }
-    let(:expected_filter)  { Mutant::Mutation::Filter::Whitelist.new(filters)        }
+    let(:expected_matcher) { Mutant::CLI::Classifier::Method.new('TestApp::Literal#float') }
+    let(:expected_filter)  { Mutant::Mutation::Filter::Whitelist.new(filters)              }
 
     it_should_behave_like 'a cli parser'
   end

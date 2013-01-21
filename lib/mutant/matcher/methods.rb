@@ -2,15 +2,27 @@ module Mutant
   class Matcher
     # Abstract base class for matcher that returns method subjects extracted from scope 
     class Methods < self
-      include AbstractType
+      include AbstractType, Equalizer.new(:scope)
 
       # Return scope
       #
-      # @return [Class,Model]
+      # @return [Class, Model]
       #
       # @api private
       #
       attr_reader :scope
+
+      # Initialize object
+      #
+      # @param [Class,Module] scope
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def initialize(scope)
+        @scope = scope
+      end
 
       # Enumerate subjects
       #
@@ -32,6 +44,16 @@ module Mutant
         self
       end
 
+      # Return method matcher class
+      #
+      # @return [Class:Matcher::Method]
+      #
+      # @api private
+      #
+      def matcher
+        self.class::MATCHER
+      end
+
       # Return methods
       #
       # @return [Enumerable<Method, UnboundMethod>]
@@ -45,15 +67,7 @@ module Mutant
       end
       memoize :methods
 
-      # Return method matcher class
-      #
-      # @return [Class:Matcher::Method]
-      #
-      # @api private
-      #
-      def matcher
-        self.class::MATCHER
-      end
+    private
 
       # Return method names
       #
@@ -67,20 +81,6 @@ module Mutant
         object.public_instance_methods(false)   +
         object.private_instance_methods(false)  +
         object.protected_instance_methods(false)
-      end
-
-    private
-
-      # Initialize object
-      #
-      # @param [Class,Module] scope
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(scope)
-        @scope = scope
       end
 
       # Emit matches for method

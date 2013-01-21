@@ -55,7 +55,7 @@ module Mutant
       # @api private
       #
       def pattern
-        %r(\A#{Regexp.escape(namespace_name)}(?:::)?\z)
+        %r(\A#{Regexp.escape(namespace.name)}(?:::)?\z)
       end
       memoize :pattern
 
@@ -69,7 +69,7 @@ module Mutant
       #
       def emit_scope_matches(scope, &block)
         MATCHERS.each do |matcher|
-          matcher.new(scope).each(&block)
+          matcher.each(scope, &block)
         end
       end
 
@@ -82,7 +82,7 @@ module Mutant
       def scopes(&block)
         return to_enum(__method__) unless block_given?
 
-        ::ObjectSpace.each_object(Module) do |scope|
+        ::ObjectSpace.each_object(Module).each do |scope|
           emit_scope(scope, &block)
         end
       end
@@ -96,7 +96,7 @@ module Mutant
       # @api private
       #
       def emit_scope(scope)
-        if [::Module, ::Class].include?(scope.class) and pattern =~ scope.name 
+        if pattern =~ scope.name 
           yield scope 
         end
       end

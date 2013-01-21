@@ -1,6 +1,6 @@
 module Mutant
   class Matcher
-    class Method < self
+    class Method 
       # Matcher for instance methods
       class Instance < self
         SUBJECT_CLASS = Subject::Method::Instance
@@ -14,6 +14,7 @@ module Mutant
         def identification
           "#{scope.name}##{method_name}"
         end
+        memoize :identification
 
       private
 
@@ -30,7 +31,7 @@ module Mutant
         # @api private
         #
         def match?(node)
-          node.line  == source_line &&
+          node.line  == source_line  &&
           node.class == Rubinius::AST::Define  &&
           node.name  == method_name
         end

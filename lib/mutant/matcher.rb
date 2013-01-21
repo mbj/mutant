@@ -6,6 +6,25 @@ module Mutant
 
     # Enumerate subjects
     #
+    # @param [Object] input
+    #
+    # @return [self]
+    #   if block given
+    #
+    # @return [Enumerator<Subject>]
+    #
+    # @api private
+    #
+    def self.each(input, &block)
+      return to_enum(__method__, input) unless block_given?
+
+      new(input).each(&block)
+
+      self
+    end
+
+    # Enumerate subjects
+    #
     # @api private
     #
     # @return [self]
