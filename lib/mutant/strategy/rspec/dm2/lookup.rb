@@ -42,7 +42,7 @@ module Mutant
           # @api private
           #
           def self.run(subject)
-            new(subject).spec_files
+            build(subject).spec_files
           end
 
           REGISTRY = {}

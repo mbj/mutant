@@ -67,7 +67,7 @@ module Mutant
         self
       end
 
-      # Report config
+      # Report start
       #
       # @param [Mutant::Config] config
       #
@@ -75,13 +75,24 @@ module Mutant
       #
       # @api private
       #
-      def print_config
+      def start(config)
         message = []
         message << 'Mutant configuration:'
         message << "Matcher:   #{config.matcher.inspect}"
         message << "Filter:    #{config.filter.inspect}"
         message << "Strategy:  #{config.strategy.inspect}"
         puts message.join("\n")
+        super
+      end
+
+      # Report stop
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def stop
+        super
       end
 
       # Report killer

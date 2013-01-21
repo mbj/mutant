@@ -76,6 +76,16 @@ module Mutant
         name_nesting.last
       end
 
+      # Return name
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def name
+        scope.name
+      end
+
       # Return scope wrapped by context
       #
       # @return [::Module|::Class]
@@ -105,17 +115,7 @@ module Mutant
       # @api private
       #
       def root_ast
-        "#{keyword} #{qualified_name}; end".to_ast
-      end
-
-      # Return qualified name of scope
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def qualified_name
-        scope.name
+        "#{keyword} #{name}; end".to_ast
       end
 
       # Return nesting of names of scope

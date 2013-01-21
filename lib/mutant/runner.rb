@@ -68,7 +68,7 @@ module Mutant
     # @api private
     #
     def run
-      reporter.print_config
+      reporter.start(config)
       util = strategy
       util.setup
       config.matcher.each do |subject|
@@ -76,7 +76,7 @@ module Mutant
         run_subject(subject)
       end
       util.teardown
-      reporter.print_stats
+      reporter.stop
     end
 
     # Run mutation killers on subject

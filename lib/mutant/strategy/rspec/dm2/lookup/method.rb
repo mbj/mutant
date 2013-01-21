@@ -25,7 +25,7 @@ module Mutant
             # @api private
             #
             def base_path
-              "spec/unit/#{Inflector.underscore(subject.context_name)}"
+              "spec/unit/#{Inflector.underscore(subject.context.name)}"
             end
 
             # Return method name
@@ -35,7 +35,7 @@ module Mutant
             # @api private
             #
             def method_name
-              subject.method_name
+              subject.name
             end
 
             # Test if method is public
@@ -58,7 +58,7 @@ module Mutant
             # @api private
             #
             def expanded_name
-              MethodExpansion.run(subject.method_name)
+              MethodExpansion.run(method_name)
             end
 
             # Return glob expression

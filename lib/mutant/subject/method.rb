@@ -15,6 +15,28 @@ module Mutant
       #
       abstract_method :public?
 
+      # Return method name
+      #
+      # @return [Symbol]
+      #
+      # @api private
+      #
+      def name
+        node.name
+      end
+
+    private
+
+      # Return scope
+      #
+      # @return [Class, Module]
+      #
+      # @api private
+      #
+      def scope
+        context.scope
+      end
+
       # Instance method subjects
       class Instance < self
 
@@ -29,7 +51,7 @@ module Mutant
         # @api private
         #
         def public?
-          scope.public_method_defined?(method_name)
+          scope.public_method_defined?(name)
         end
         memoize :public?
 
@@ -42,7 +64,7 @@ module Mutant
         # @api private
         #
         def subtype
-          "#{context.identification}##{node.name}"
+          "#{context.identification}##{name}"
         end
 
       end
@@ -61,7 +83,7 @@ module Mutant
         # @api private
         #
         def public?
-          scope.singleton_class.public_method_defined?(method_name)
+          scope.singleton_class.public_method_defined?(name)
         end
         memoize :public?
 

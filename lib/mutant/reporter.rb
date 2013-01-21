@@ -58,7 +58,7 @@ module Mutant
     #
     # @api private
     #
-    def subject(subject)
+    def subject(_subject)
       stats.count_subject
       self
     end
@@ -71,7 +71,7 @@ module Mutant
     #
     # @api private
     #
-    def mutation(mutation)
+    def mutation(_mutation)
       self
     end
 
@@ -85,7 +85,6 @@ module Mutant
     #
     def report_killer(killer)
       stats.count_killer(killer)
-
       self
     end
 

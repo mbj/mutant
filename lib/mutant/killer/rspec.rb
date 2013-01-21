@@ -10,16 +10,16 @@ module Mutant
       # Run rspec test
       #
       # @return [true]
-      #   returns true when test is NOT successful and the mutant was killed
+      #   when test is NOT successful and the mutant was killed
       #
       # @return [false]
-      #   returns false otherwise
+      #   otherwise
       #
       # @api private
       #
       def run
         mutation.insert
-        !::RSpec::Core::Runner.run(command_line_arguments, strategy.error_stream, strategy.output_stream).zero?
+        !!::RSpec::Core::Runner.run(command_line_arguments, strategy.error_stream, strategy.output_stream).nonzero?
       end
       memoize :run
 

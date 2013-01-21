@@ -6,12 +6,14 @@ module Mutant
 
         # Return filename pattern
         #
+        # @param [Subject] subject
+        #
         # @return [Enumerable<String>]
         #
         # @api private
         #
-        def spec_files(mutation)
-          ExampleLookup.run(mutation)
+        def spec_files(subject)
+          Lookup.run(subject)
         end
 
       end
