@@ -84,36 +84,28 @@ module Mutant
         puts message.join("\n")
       end
 
-     ## Reporter killer
-     ##
-     ## @param [Killer] killer
-     ##
-     ## @return [self]
-     ##
-     ## @api private
-     ##
-     #def killer(killer)
-     #  super
-
-     #  status = killer.killed? ? 'Killed' : 'Alive'
-     #  color  = killer.success? ? Color::GREEN : Color::RED
-
-     #  puts(colorize(color, "#{status}: #{killer.identification} (%02.2fs)" % killer.runtime))
-
-     #  unless killer.success?
-     #    colorized_diff(killer.mutation)
-     #  end
-
-     #  self
-     #end
-
-      # Return stats
+      # Report killer
       #
-      # @return [Stats]
+      # @param [Killer] killer
+      #
+      # @return [self]
       #
       # @api private
       #
-      attr_reader :stats
+      def report_killer(killer)
+        super
+
+        status = killer.killed? ? 'Killed' : 'Alive'
+        color  = killer.success? ? Color::GREEN : Color::RED
+
+        puts(colorize(color, "#{status}: #{killer.identification} (%02.2fs)" % killer.runtime))
+
+        unless killer.success?
+          colorized_diff(killer.mutation)
+        end
+
+        self
+      end
 
     private 
 
@@ -185,7 +177,6 @@ module Mutant
         differ = Differ.new(original, current)
         diff = color? ? differ.colorized_diff : differ.diff
 
-        # FIXME remove this branch before release
         if diff.empty?
           raise 'Unable to create a diff, so ast mutation or to_source has an error!'
         end

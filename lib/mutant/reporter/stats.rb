@@ -120,7 +120,7 @@ module Mutant
       #   otherwise
       #
       def errors?
-        @killers.values.inject(0) do |fails, counter|
+        !!@killers.values.inject(0) do |fails, counter|
           fails + counter.fails
         end.nonzero?
       end

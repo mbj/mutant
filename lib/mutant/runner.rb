@@ -15,7 +15,7 @@ module Mutant
     # @api private
     #
     def fail?
-      reporter.errors?
+      !reporter.empty? && reporter.errors?
     end
 
     # Return config
@@ -76,6 +76,7 @@ module Mutant
         run_subject(subject)
       end
       util.teardown
+      reporter.print_stats
     end
 
     # Run mutation killers on subject
