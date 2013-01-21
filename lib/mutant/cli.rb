@@ -9,6 +9,19 @@ module Mutant
     EXIT_FAILURE = 1
     EXIT_SUCCESS = 0
 
+    OPTIONS = {
+      '--code'               => [:add_filter,           Mutation::Filter::Code    ],
+      '--debug'              => [:set_debug                                       ],
+      '-d'                   => [:set_debug                                       ],
+      '--rspec-unit'         => [:set_strategy,         Strategy::Rspec::Unit     ],
+      '--rspec-full'         => [:set_strategy,         Strategy::Rspec::Full     ],
+      '--rspec-dm2'          => [:set_strategy,         Strategy::Rspec::DM2      ],
+      '--static-fail'        => [:set_strategy,         Strategy::Static::Fail    ],
+      '--static-success'     => [:set_strategy,         Strategy::Static::Success ]
+    }.freeze
+
+    OPTION_PATTERN = %r(\A-(?:-)?[a-zA-Z0-9\-]+\z).freeze
+
     # Run cli with arguments
     #
     # @param [Array<String>] arguments
@@ -97,19 +110,6 @@ module Mutant
     memoize :reporter
 
   private
-
-    OPTIONS = {
-      '--code'               => [:add_filter,           Mutation::Filter::Code    ],
-      '--debug'              => [:set_debug                                       ],
-      '-d'                   => [:set_debug                                       ],
-      '--rspec-unit'         => [:set_strategy,         Strategy::Rspec::Unit     ],
-      '--rspec-full'         => [:set_strategy,         Strategy::Rspec::Full     ],
-      '--rspec-dm2'          => [:set_strategy,         Strategy::Rspec::DM2      ],
-      '--static-fail'        => [:set_strategy,         Strategy::Static::Fail    ],
-      '--static-success'     => [:set_strategy,         Strategy::Static::Success ]
-    }.freeze
-
-    OPTION_PATTERN = %r(\A-(?:-)?[a-zA-Z0-9\-]+\z).freeze
 
     # Initialize CLI 
     #
@@ -204,15 +204,8 @@ module Mutant
     #
     def dispatch_matcher
       argument = current_argument
-      matcher = Mutant::Matcher.from_string(argument)
-
-      unless matcher
-        raise Error, "Invalid matcher syntax: #{argument.inspect}"
-      end
-
-      @matchers << matcher
-
       consume(1)
+      @matchers << Classifier.build(argument)
     end
 
     # Process option argument

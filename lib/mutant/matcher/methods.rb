@@ -1,7 +1,7 @@
 module Mutant
   class Matcher
-    # Abstract base class for matcher that returns subjects extracted from scope methods
-    class ScopeMethods < self
+    # Abstract base class for matcher that returns method subjects extracted from scope 
+    class Methods < self
       include AbstractType
 
       # Return scope

@@ -1,16 +1,16 @@
 module Mutant
   class Matcher
-    # Matcher against object space
-    class ObjectSpace < self
-      include Equalizer.new(:scope_name_pattern)
+    # Matcher for specific namespace
+    class Namespace < self
+      include Equalizer.new(:pattern)
 
       # Enumerate subjects
       #
-      # @return [Enumerator<Subject>]
-      #   returns subject enumerator when no block given
-      #
       # @return [self]
-      #   returns self otherwise
+      #   if block given
+      #
+      # @return [Enumerator<Subject>]
+      #   otherwise
       #
       # @api private
       #
@@ -24,28 +24,40 @@ module Mutant
         self
       end
 
-      # Return scope name pattern
+      # Return namespace
       #
-      # @return [Regexp]
+      # @return [Class::Module]
       #
       # @api private
       #
-      attr_reader :scope_name_pattern
+      attr_reader :namespace
+
+      MATCHERS = [Matcher::Methods::Singleton, Matcher::Methods::Instance]
 
     private
 
       # Initialize object space matcher 
       #
-      # @param [Regexp] scope_name_pattern
-      # @param [Enumerable<#each(scope)>] matchers
+      # @param [Class, Module] namespace
       #
       # @return [undefined]
       #
       # @api private
       #
-      def initialize(scope_name_pattern, matchers = [Matcher::ScopeMethods::Singleton, Matcher::ScopeMethods::Instance])
-        @scope_name_pattern, @matchers = scope_name_pattern, @matchers = matchers #[Method::Singleton, Method::Instance]
+      def initialize(namespace)
+        @namespace = namespace
       end
+
+      # Return pattern
+      #
+      # @return [Regexp]
+      #
+      # @api private
+      #
+      def pattern
+        %r(\A#{Regexp.escape(namespace_name)}(?:::)?\z)
+      end
+      memoize :pattern
 
       # Yield matchers for scope
       #
@@ -56,7 +68,7 @@ module Mutant
       # @api private
       #
       def emit_scope_matches(scope, &block)
-        @matchers.each do |matcher|
+        MATCHERS.each do |matcher|
           matcher.new(scope).each(&block)
         end
       end
@@ -84,7 +96,7 @@ module Mutant
       # @api private
       #
       def emit_scope(scope)
-        if [::Module, ::Class].include?(scope.class) and scope_name_pattern =~ scope.name 
+        if [::Module, ::Class].include?(scope.class) and pattern =~ scope.name 
           yield scope 
         end
       end

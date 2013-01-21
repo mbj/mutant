@@ -4,18 +4,6 @@ module Mutant
     class Method < self
       include Adamantium::Flat, Equalizer.new(:identification)
 
-      # Parse a method string into filter
-      #
-      # @param [String] input
-      #
-      # @return [Matcher::Method]
-      #
-      # @api private
-      #
-      def self.parse(input)
-        Classifier.run(input)
-      end
-
       # Methods within rbx kernel directory are precompiled and their source 
       # cannot be accessed via reading source location
       BLACKLIST = %r(\Akernel/).freeze
