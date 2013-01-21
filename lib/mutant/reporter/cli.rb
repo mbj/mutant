@@ -98,7 +98,7 @@ module Mutant
         status = killer.killed? ? 'Killed' : 'Alive'
         color  = killer.success? ? Color::GREEN : Color::RED
 
-        puts(colorize(color, "#{status}: #{killer.identification} (%02.2fs)" % killer.runtime))
+        puts(colorize(color, "%s: %s (%02.2fs)" % [status, killer.identification, killer.runtime]))
 
         unless killer.success?
           colorized_diff(killer.mutation)
