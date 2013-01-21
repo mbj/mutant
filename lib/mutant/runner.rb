@@ -1,7 +1,7 @@
 module Mutant
   # Runner that allows to mutate an entire project
   class Runner
-    include Adamantium::Flat
+    include Adamantium::Flat, Equalizer.new(:config)
     extend MethodObject
 
     # Test for failure
