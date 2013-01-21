@@ -14,6 +14,42 @@ module Mutant
       @config = config
     end
 
+    # Test for success
+    #
+    # @return [true]
+    #   if there are subjects and no errors
+    #
+    # @return [false]
+    #   otherwise
+    #
+    # @api private
+    #
+    def success?
+      stats.success?
+    end
+
+    # Report start
+    #
+    # @param [Config] config
+    #
+    # @return [self]
+    #
+    # @api private
+    #
+    def start(_config)
+      self
+    end
+
+    # Report stop
+    #
+    # @return [self]
+    #
+    # @api private
+    #
+    def stop
+      self
+    end
+
     # Report subject
     #
     # @param [Subject] subject

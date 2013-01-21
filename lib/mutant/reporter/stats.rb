@@ -97,6 +97,18 @@ module Mutant
         @counts[:subject] += 1
       end
 
+      # Test for success?
+      #
+      # @return [true]
+      #   if there are subjects and no errors
+      #
+      # @return [false]
+      #   otherwise
+      #
+      def success?
+        @counts[:subject].nonzero? && !errors?
+      end
+
       # Count killer
       #
       # @param [Killer] killer

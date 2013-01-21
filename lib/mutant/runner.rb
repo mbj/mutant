@@ -4,18 +4,18 @@ module Mutant
     include Adamantium::Flat, Equalizer.new(:config)
     extend MethodObject
 
-    # Test for failure
+    # Test for succcess
     #
     # @return [true]
-    #   returns true when there are left mutations
+    #   when there are subjects and no failures
     #
     # @return [false]
-    #   returns false othewise
+    #   otherwise
     #
     # @api private
     #
-    def fail?
-      !reporter.empty? && reporter.errors?
+    def success?
+      reporter.success?
     end
 
     # Return config
