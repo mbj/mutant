@@ -25,7 +25,7 @@ module Mutant
             # @api private
             #
             def base_path
-              "spec/unit/#{Inflector.underscore(subject.context.name)}"
+              "spec/unit/#{Inflecto.underscore(subject.context.name)}"
             end
 
             # Return method name
