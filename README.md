@@ -72,7 +72,7 @@ Private singleton methods: spec/unit/#{namespace}/#{class_name}/class_methods/*_
 
 Symbolic operator like method are expanded. So for example ```Foo#<<``` is expanded to:
 ```
-pec/unit/foo/left_shift_operator_spec.rb
+sspec/unit/foo/left_shift_operator_spec.rb
 ````
 
 The full list of expansion can be found here:
