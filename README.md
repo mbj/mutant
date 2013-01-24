@@ -68,6 +68,17 @@ Private instance  methods: spec/unit/#{namespace}/#{class_name}/*_spec.rb
 Private singleton methods: spec/unit/#{namespace}/#{class_name}/class_methods/*_spec.rb
 ```
 
+#### Expansions:
+
+Symbolic operator like method are expanded. So for example ```Foo#<<``` is expanded to:
+```
+spec/unit/foo/left_shift_operator_spec.rb
+````
+
+The full list of expansion can be found here:
+
+https://github.com/mbj/mutant/blob/master/lib/mutant/constants.rb
+
 ### --rspec-unit
 
 This strategy executes all specs under ``./spec/unit`` for each mutation.

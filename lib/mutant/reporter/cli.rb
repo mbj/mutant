@@ -270,7 +270,7 @@ module Mutant
       # @api private
       #
       def print_killer(color, word, killer)
-        puts(colorize(color, "#{word}: #{killer.identification} (%02.2fs)" % killer.runtime))
+        puts(colorize(color, "%s: %s (%02.2fs)" % [word, killer.identification, killer.runtime]))
       end
 
       # Test for output to tty
