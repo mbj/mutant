@@ -143,7 +143,7 @@ module Mutant
         # @api private
         #
         def base_path
-          "spec/unit/#{Inflector.underscore(mutation.subject.context.scope.name)}#{scope_append}"
+          "spec/unit/#{Inflecto.underscore(mutation.subject.context.scope.name)}#{scope_append}"
         end
         memoize :base_path
 
