@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('to_source',           '~> 0.2.17')
   gem.add_runtime_dependency('ice_nine',            '~> 0.6.0')
   gem.add_runtime_dependency('descendants_tracker', '~> 0.0.1')
-  gem.add_runtime_dependency('backports',           '~> 2.7.0')
+  gem.add_runtime_dependency('backports',           '~> 2.7.1')
   gem.add_runtime_dependency('adamantium',          '~> 0.0.5')
   gem.add_runtime_dependency('inflecto',            '~> 0.0.2')
   gem.add_runtime_dependency('equalizer',           '~> 0.0.1')
