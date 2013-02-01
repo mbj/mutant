@@ -2,11 +2,41 @@ module Mutant
   # Abstract base class for mutant killers
   class Killer
     include Adamantium::Flat, AbstractType, Equalizer.new(:strategy, :mutation, :killed?)
+
+    # Return strategy
+    #
+    # @return [Strategy]
+    #
+    # @api private
+    #
+    attr_reader :strategy
+
+    # Return mutation to kill
+    #
+    # @return [Mutation]
+    #
+    # @api private
+    #
+    attr_reader :mutation
+
+    # Initialize killer object
+    #
+    # @param [Strategy] strategy
+    # @param [Mutation] mutation
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def initialize(strategy, mutation)
+      @strategy, @mutation = strategy, mutation
+      run_with_benchmark
+    end
     
     # Test for kill failure
     #
     # @return [true]
-    #   when mutant was killed
+    #   when killer succeeded
     #
     # @return [false]
     #   otherwise
@@ -40,16 +70,6 @@ module Mutant
     #
     attr_reader :runtime
 
-    # Return configuration
-    #
-    # @return [Configuration]
-    #
-    # @api private
-    #
-    def configuration
-      strategy.configuration
-    end
-
     # Return mutated source
     #
     # @return [String]
@@ -60,68 +80,7 @@ module Mutant
       mutation.source
     end
 
-    # Return name of killer
-    #
-    # @return [String]
-    #
-    # @api private
-    #
-    def self.type
-      self::TYPE
-    end
-
-    # Return strategy
-    #
-    # @return [Strategy]
-    #
-    # @api private
-    #
-    attr_reader :strategy
-
-    # Return identification
-    #
-    # @return [String]
-    #
-    # @api private
-    # 
-    def identification
-      "#{type}:#{mutation.identification}".freeze
-    end
-    memoize :identification
-
-    # Return mae of killer
-    #
-    # @return [String]
-    #
-    # @api private
-    #
-    def type
-      self.class.type
-    end
-
-    # Return mutation to kill
-    #
-    # @return [Mutation]
-    #
-    # @api private
-    #
-    attr_reader :mutation
-
   private
-
-    # Initialize killer object
-    #
-    # @param [Mutation] mutation
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def initialize(strategy, mutation)
-      @strategy, @mutation = strategy, mutation
-
-      run_with_benchmark
-    end
 
     # Run with taking the time
     #
@@ -136,13 +95,13 @@ module Mutant
       @runtime = end_time - start_time 
     end
 
-    # Run test
+    # Run killer
     #
     # @return [true]
-    #   returns true when mutant was killed
+    #   when mutant was killed
     #
     # @return [false]
-    #   returns false otherwise
+    #   otherwise
     #
     # @api private
     #

@@ -3,14 +3,12 @@ module Mutant
     # Runner for rspec tests
     class Rspec < self
 
-      TYPE = 'rspec'.freeze
-
     private
 
       # Run rspec test
       #
       # @return [true]
-      #   when test is NOT successful and the mutant was killed
+      #   when test is NOT successful 
       #
       # @return [false]
       #   otherwise
@@ -21,7 +19,6 @@ module Mutant
         mutation.insert
         !!::RSpec::Core::Runner.run(command_line_arguments, strategy.error_stream, strategy.output_stream).nonzero?
       end
-      memoize :run
 
       # Return command line arguments
       #
@@ -34,6 +31,7 @@ module Mutant
           --fail-fast
         ) + strategy.spec_files(mutation.subject)
       end
+
     end
   end
 end

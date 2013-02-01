@@ -17,16 +17,6 @@ module Mutant
         super(strategy, mutation)
       end
 
-      # Return killer type
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def type
-        @killer.type
-      end
-
     private
 
       # Run killer
