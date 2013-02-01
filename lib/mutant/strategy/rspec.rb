@@ -61,6 +61,20 @@ module Mutant
           Dir['spec/**/*_spec.rb']
         end
       end
+
+      # Run model/controller specs per mutation
+      class Rails < self
+
+        # Return spec files
+        #
+        # @return [Enumerable<String>]
+        #
+        # @api private
+        #
+        def spec_files(mutation)
+          Dir['spec/models/*_spec.rb', 'spec/controllers/*_spec.rb']
+        end
+      end
     end
   end
 end
