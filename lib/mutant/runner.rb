@@ -1,22 +1,7 @@
 module Mutant
   # Runner that allows to mutate an entire project
   class Runner
-    include Adamantium::Flat, Equalizer.new(:config)
-    extend MethodObject
-
-    # Test for succcess
-    #
-    # @return [true]
-    #   when there are subjects and no failures
-    #
-    # @return [false]
-    #   otherwise
-    #
-    # @api private
-    #
-    def success?
-      reporter.success?
-    end
+    include Adamantium::Flat, AbstractType
 
     # Return config
     #
@@ -25,8 +10,6 @@ module Mutant
     # @api private
     #
     attr_reader :config
-
-  private
 
     # Initialize object
     #
@@ -41,106 +24,15 @@ module Mutant
       run
     end
 
-    # Return strategy
-    #
-    # @return [Strategy]
-    #
-    # @api private
-    #
-    def strategy
-      config.strategy
-    end
+  private
 
-    # Return reporter
-    #
-    # @return [Reporter]
-    #
-    # @api private
-    #
-    def reporter
-      config.reporter
-    end
-
-    # Run mutation killers on subjects
+    # Perform operation
     #
     # @return [undefined]
     #
     # @api private
     #
-    def run
-      reporter.start(config)
-      util = strategy
-      util.setup
-      config.matcher.each do |subject|
-        reporter.subject(subject)
-        run_subject(subject)
-      end
-      util.teardown
-      reporter.stop
-    end
+    abstract_method :run
 
-    # Run mutation killers on subject
-    #
-    # @param [Subject] subject
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def run_subject(subject)
-      return unless test_noop(subject)
-      subject.each do |mutation|
-        next unless config.filter.match?(mutation)
-        reporter.mutation(mutation)
-        kill(mutation)
-      end
-    end
-
-    # Test noop mutation
-    #
-    # @return [true]
-    #   if noop mutation is alive
-    #
-    # @return [false]
-    #   otherwise
-    #
-    # @api private
-    #
-    def test_noop(subject)
-      noop = subject.noop
-      unless kill(noop)
-        reporter.noop(noop)
-        return false
-      end
-      true
-    end
-
-    # Run killer on mutation
-    #
-    # @param [Mutation] mutation
-    #
-    # @return [true]
-    #   if killer was successful
-    #
-    # @return [false]
-    #   otherwise
-    #
-    # @api private
-    #
-    def kill(mutation)
-      killer = killer(mutation)
-      reporter.report_killer(killer)
-      killer.success?
-    end
-
-    # Return killer for mutation
-    #
-    # @return [Killer]
-    #
-    # @api private
-    #
-    def killer(mutation)
-      strategy.kill(mutation)
-    end
   end
 end
