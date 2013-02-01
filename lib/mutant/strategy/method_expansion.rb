@@ -40,8 +40,8 @@ module Mutant
       # @api private
       #
       def self.expand(name)
-        METHOD_NAME_EXPANSIONS.inject(name) do |name, (regexp, expansion)|
-          name.to_s.gsub(regexp, expansion)
+        METHOD_NAME_EXPANSIONS.inject(name.to_s) do |name, find_replace|
+          name.gsub(*find_replace)
         end.to_sym
       end
       private_class_method :expand
