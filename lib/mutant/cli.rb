@@ -108,6 +108,7 @@ module Mutant
       '-d'                   => [:set_debug                                       ],
       '--rspec-unit'         => [:set_strategy,         Strategy::Rspec::Unit     ],
       '--rspec-rails'        => [:set_strategy,         Strategy::Rspec::Rails    ],
+      '--rspec-rails-dm2'    => [:set_strategy,         Strategy::Rspec::RailsDM2 ],
       '--rspec-full'         => [:set_strategy,         Strategy::Rspec::Full     ],
       '--rspec-dm2'          => [:set_strategy,         Strategy::Rspec::DM2      ],
       '--static-fail'        => [:set_strategy,         Strategy::Static::Fail    ],

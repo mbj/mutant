@@ -16,7 +16,7 @@ module Mutant
         # @api private
         #
         def spec_files(mutation)
-          ExampleLookup.run(mutation)
+          DM2Lookup.run(mutation)
         end
       end
 
@@ -62,7 +62,7 @@ module Mutant
         end
       end
 
-      # Run model/controller specs per mutation
+      # Run related model/controller spec file per mutation
       class Rails < self
 
         # Return spec files
@@ -72,7 +72,21 @@ module Mutant
         # @api private
         #
         def spec_files(mutation)
-          Dir['spec/models/*_spec.rb', 'spec/controllers/*_spec.rb']
+          RailsLookup.run(mutation)
+        end
+      end
+
+      # Run related model/controller specs DM2-style
+      class RailsDM2 < self
+
+        # Return spec files
+        #
+        # @return [Enumerable<String>]
+        #
+        # @api private
+        #
+        def spec_files(mutation)
+          RailsDM2Lookup.run(mutation)
         end
       end
     end
