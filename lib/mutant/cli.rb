@@ -32,7 +32,9 @@ module Mutant
     # @api private
     #
     def self.run(*arguments)
-      Runner.run(new(*arguments)).success? ? EXIT_SUCCESS : EXIT_FAILURE
+      config = new(*arguments)
+      runner = Runner::Config.run(config)
+      runner.success? ? EXIT_SUCCESS : EXIT_FAILURE
     rescue Error => exception
       $stderr.puts(exception.message)
       EXIT_FAILURE

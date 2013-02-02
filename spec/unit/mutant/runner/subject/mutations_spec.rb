@@ -1,16 +1,17 @@
 require 'spec_helper'
 
 describe Mutant::Runner::Subject, '#mutations' do
-  let(:object) { described_class.new(config, mutation_subject) }
+  let(:object) { described_class.run(config, mutation_subject) }
 
   subject { object.mutations }
 
-  let(:config)           { mock('Config')  }
+  let(:config)           { mock('Config')   }
   let(:mutation)         { mock('Mutation') }
   let(:mutation_subject) { [mutation] }
 
   class DummyRunner
     include Composition.new(:config, :mutation)
+    def self.run(*args); new(*args); end
   end
 
   before do
@@ -18,4 +19,6 @@ describe Mutant::Runner::Subject, '#mutations' do
   end
 
   it { should eql([DummyRunner.new(config, mutation)]) }
+
+  it_should_behave_like 'an idempotent method'
 end

@@ -11,7 +11,7 @@ describe Mutant::CLI, '.run' do
 
   before do 
     described_class.stub(:new => instance)
-    Mutant::Runner.stub(:run => runner)
+    Mutant::Runner::Config.stub(:run => runner)
   end
 
   context 'when runner is successful' do
@@ -20,7 +20,7 @@ describe Mutant::CLI, '.run' do
     it { should be(0) }
 
     it 'should run with attributes' do
-      Mutant::Runner.should_receive(:run).with(instance).and_return(runner)
+      Mutant::Runner::Config.should_receive(:run).with(instance).and_return(runner)
       should be(0)
     end
   end
@@ -31,7 +31,7 @@ describe Mutant::CLI, '.run' do
     it { should be(1) }
 
     it 'should run with attributes' do
-      Mutant::Runner.should_receive(:run).with(instance).and_return(runner)
+      Mutant::Runner::Config.should_receive(:run).with(instance).and_return(runner)
       should be(1)
     end
   end

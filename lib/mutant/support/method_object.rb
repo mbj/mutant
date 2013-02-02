@@ -1,6 +1,7 @@
 module Mutant
   # A mixing to create method object semantics
   module MethodObject
+
     # Hook called when descendant is extended
     #
     # @param [Module|Class] descendant
@@ -27,5 +28,6 @@ module Mutant
     def run(*args)
       new(*args)
     end
+
   end
 end

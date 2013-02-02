@@ -2,6 +2,7 @@ module Mutant
   # Runner that allows to mutate an entire project
   class Runner
     include Adamantium::Flat, AbstractType
+    extend MethodObject
 
     # Return config
     #
