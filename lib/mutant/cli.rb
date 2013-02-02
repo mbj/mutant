@@ -1,26 +1,8 @@
 module Mutant
+
   # Comandline parser
-  class CLI
+  class CLI < CLIParser
     include Adamantium::Flat, Equalizer.new(:matcher, :filter, :strategy, :reporter)
-
-    # Error raised when CLI argv is inalid
-    Error = Class.new(RuntimeError)
-
-    EXIT_FAILURE = 1
-    EXIT_SUCCESS = 0
-
-    OPTIONS = {
-      '--code'               => [:add_filter,           Mutation::Filter::Code    ],
-      '--debug'              => [:set_debug                                       ],
-      '-d'                   => [:set_debug                                       ],
-      '--rspec-unit'         => [:set_strategy,         Strategy::Rspec::Unit     ],
-      '--rspec-full'         => [:set_strategy,         Strategy::Rspec::Full     ],
-      '--rspec-dm2'          => [:set_strategy,         Strategy::Rspec::DM2      ],
-      '--static-fail'        => [:set_strategy,         Strategy::Static::Fail    ],
-      '--static-success'     => [:set_strategy,         Strategy::Static::Success ]
-    }.freeze
-
-    OPTION_PATTERN = %r(\A-(?:-)?[a-zA-Z0-9\-]+\z).freeze
 
     # Run cli with arguments
     #
@@ -40,23 +22,29 @@ module Mutant
       EXIT_FAILURE
     end
 
-    # Return matcher
+    OPTIONS = {
+      '--code'       => [:add_filter,   Mutation::Filter::Code ],
+      '--debug'      => [:set_debug                            ],
+      '-d'           => [:set_debug                            ],
+      '--rspec-unit' => [:set_strategy, Strategy::Rspec::Unit  ],
+      '--rspec-full' => [:set_strategy, Strategy::Rspec::Full  ],
+      '--rspec-dm2'  => [:set_strategy, Strategy::Rspec::DM2   ]
+    }.freeze
+
+    # Initialize objecct
     #
-    # @return [Mutant::Matcher]
+    # @param [Array<String>]
     #
-    # @raise [CLI::Error]
-    #   raises error when matcher is not given
+    # @return [undefined]
     #
     # @api private
     #
-    def matcher
-      if @matchers.empty?
-        raise Error, 'No matchers given'
-      end
-
-      Mutant::Matcher::Chain.build(@matchers)
+    def initialize(arguments)
+      @filters, @matchers = [], []
+      super(arguments)
+      strategy
+      matcher
     end
-    memoize :matcher
 
     # Test for running in debug mode
     #
@@ -112,77 +100,23 @@ module Mutant
 
   private
 
-    # Initialize CLI 
+    # Return matcher
     #
-    # @param [Array<String>] arguments
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def initialize(arguments)
-      @filters, @matchers = [], []
-
-      @arguments, @index = arguments, 0
-
-      while @index < @arguments.length
-        dispatch
-      end
-
-      strategy
-      matcher
-    end
-
-    # Return option for argument with index
-    #
-    # @param [Fixnum] index
-    #
-    # @return [String]
-    #
-    # @api private
-    #
-    def option(index)
-      @arguments.fetch(index+1)
-    end
-
-    # Return current argument
-    #
-    # @return [String]
-    #
-    # @api private
-    #
-    def current_argument
-      @arguments.fetch(@index)
-    end
-
-    # Return current option value
-    #
-    # @return [String]
+    # @return [Mutant::Matcher]
     #
     # @raise [CLI::Error]
-    #   raises error when option is missing
+    #   raises error when matcher is not given
     #
     # @api private
     #
-    def current_option_value
-      @arguments.fetch(@index+1)
-    rescue IndexError
-      raise Error, "#{current_argument.inspect} is missing an argument"
-    end
-
-    # Process current argument
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def dispatch
-      if OPTION_PATTERN =~ current_argument
-        dispatch_option
-      else
-        dispatch_matcher
+    def matcher
+      if @matchers.empty?
+        raise Error, 'No matchers given'
       end
+
+      Mutant::Matcher::Chain.build(@matchers)
     end
+    memoize :matcher
 
     # Move processed argument by amount
     #

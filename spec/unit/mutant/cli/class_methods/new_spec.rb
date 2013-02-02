@@ -2,7 +2,7 @@ require 'spec_helper'
 
 shared_examples_for 'an invalid cli run' do
   it 'should raise error' do
-    expect { subject }.to raise_error(described_class::Error, expected_message) 
+    expect { subject }.to raise_error(Mutant::CLIParser::Error, expected_message) 
   end
 end
 
