@@ -34,6 +34,9 @@ module Mutant
       # @api private
       #
       def run
+        @mutations = @subject.map do |mutation|
+          Mutation.new(config, mutation)
+        end
       end
 
     end
