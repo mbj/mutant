@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Mutant::Context, '#root' do
-  subject { object.root(mock) }
+  subject { object.root }
 
   let(:object) { described_class.allocate }
 
