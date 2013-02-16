@@ -30,7 +30,6 @@ group :guard do
 end
 
 group :metrics do
-  gem 'backports', '~> 2.7.0'
   gem 'flay',      '~> 1.4.3'
   gem 'flog',      '~> 2.5.3'
   gem 'reek',      '~> 1.2.13', :git => 'https://github.com/troessner/reek.git', :ref => 'ef77fcecaa21c9ebcbe4d9a79d41b0e70196bf18'
