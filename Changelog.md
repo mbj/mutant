@@ -1,3 +1,7 @@
+# v0.2.17 2013-01-20
+
+* [change] Update dependencies
+
 # v0.2.16 2013-01-20
 
 * [fixed] Handle Rubinius::AST::NthRef as noop
