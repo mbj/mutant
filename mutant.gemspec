@@ -22,6 +22,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('adamantium',          '~> 0.0.6')
   gem.add_runtime_dependency('equalizer',           '~> 0.0.4')
   gem.add_runtime_dependency('inflecto',            '~> 0.0.2')
-  gem.add_runtime_dependency('abstract_type',       '~> 0.0.3')
+  gem.add_runtime_dependency('abstract_type',       '~> 0.0.4')
   gem.add_runtime_dependency('diff-lcs',            '~> 1.1.3')
 end
