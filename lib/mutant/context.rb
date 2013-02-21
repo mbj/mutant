@@ -5,7 +5,9 @@ module Mutant
 
     # Return root ast node
     #
-    # @return [Rubinis::AST::Script]
+    # @param [Rubnius::AST::Node] node
+    #
+    # @return [Rubinis::AST::Node]
     #
     # @api private
     #
@@ -18,6 +20,14 @@ module Mutant
     # @api private
     #
     attr_reader :source_path
+
+    # Return identification
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    abstract_method :identification
 
   private
 

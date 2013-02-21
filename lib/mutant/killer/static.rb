@@ -19,13 +19,11 @@ module Mutant
 
       # Killer that is always successful
       class Success < self
-        TYPE = 'success'.freeze
         RESULT = true
       end
 
       # Killer that always fails
       class Fail < self
-        TYPE = 'fail'.freeze
         RESULT = false
       end
     end

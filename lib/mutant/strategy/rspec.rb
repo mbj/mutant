@@ -6,18 +6,15 @@ module Mutant
 
       KILLER = Killer::Forking.new(Killer::Rspec)
 
-      # DM2-style strategy
-      class DM2 < self
-
-        # Return filename pattern
-        #
-        # @return [Enumerable<String>]
-        #
-        # @api private
-        #
-        def spec_files(mutation)
-          ExampleLookup.run(mutation)
-        end
+      # Setup rspec strategy
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def setup
+        require('./spec/spec_helper.rb')
+        self
       end
 
       # Run all unit specs per mutation
@@ -30,7 +27,7 @@ module Mutant
         # @api private
         #
         def spec_files(mutation)
-          ['spec/unit']
+          Dir['spec/unit/**/*_spec.rb']
         end
       end
 

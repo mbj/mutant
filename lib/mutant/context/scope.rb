@@ -16,6 +16,16 @@ module Mutant
         end
       end
 
+      # Return identification
+      #
+      # @return [String]
+      #
+      # @ai private
+      #
+      def identification
+        scope.name
+      end
+
       # Wrap node into ast node
       #
       # @param [Class, Module] scope 
@@ -66,6 +76,16 @@ module Mutant
         name_nesting.last
       end
 
+      # Return name
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def name
+        scope.name
+      end
+
       # Return scope wrapped by context
       #
       # @return [::Module|::Class]
@@ -88,26 +108,6 @@ module Mutant
         @scope = scope
       end
 
-      # Return scope AST class
-      #
-      # @return [Rubinius::AST::Node]
-      #
-      # @api private
-      #
-      def scope_class
-        self.class::SCOPE_CLASS
-      end
-
-      # Return keyword
-      #
-      # @return [Rubinius::AST::Node]
-      #
-      # @api private
-      #
-      def keyword
-        self.class::KEYWORD
-      end
-
       # Return new root ast
       #
       # @return [Rubinius::AST::Node]
@@ -115,17 +115,7 @@ module Mutant
       # @api private
       #
       def root_ast
-        "#{keyword} #{qualified_name}; end".to_ast
-      end
-
-      # Return qualified name of scope
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def qualified_name
-        scope.name
+        "#{keyword} #{name}; end".to_ast
       end
 
       # Return nesting of names of scope

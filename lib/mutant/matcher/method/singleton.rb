@@ -3,6 +3,7 @@ module Mutant
     class Method
       # Matcher for singleton methods
       class Singleton < self
+        SUBJECT_CLASS = Subject::Method::Singleton
 
         # Return identification
         #
@@ -14,22 +15,6 @@ module Mutant
           "#{scope.name}.#{method_name}"
         end
         memoize :identification
-
-        # Test if method is public
-        #
-        # @return [true]
-        #   if method is public
-        #
-        # @return [false]
-        #   otherwise
-        #
-        # @api private
-        #
-        def public?
-          scope.singleton_class.public_method_defined?(method_name)
-        end
-        memoize :public?
-
 
       private
 
@@ -104,7 +89,7 @@ module Mutant
           when Rubinius::AST::ConstantAccess
             receiver_name?(receiver)
           else
-            $stderr.puts "Unable to find singleton method definition only match receiver on Rubinius::AST::Self or Rubinius::AST::ConstantAccess, got #{receiver.class}"
+            $stderr.puts "Unable to find singleton method definition can only match receiver on Rubinius::AST::Self or Rubinius::AST::ConstantAccess, got #{receiver.class}"
             false
           end
         end

@@ -8,41 +8,48 @@ module Mutant
         handle(Rubinius::AST::Self)
 
         # Currently unhandled node classes. Feel free to contribute your mutator!
-        handle(Rubinius::AST::ZSuper)
-        handle(Rubinius::AST::ElementAssignment)
-        handle(Rubinius::AST::AttributeAssignment)
-        handle(Rubinius::AST::Not)
-        handle(Rubinius::AST::And)
-        handle(Rubinius::AST::Or)
-        handle(Rubinius::AST::Defined)
-        handle(Rubinius::AST::Super)
-        handle(Rubinius::AST::Next)
-        handle(Rubinius::AST::Break)
-        handle(Rubinius::AST::Match3)
-        handle(Rubinius::AST::ZSuper)
-        handle(Rubinius::AST::MultipleAssignment)
-        handle(Rubinius::AST::ScopedConstant)
-        handle(Rubinius::AST::LocalVariableAccess)
-        handle(Rubinius::AST::InstanceVariableAccess)
-        handle(Rubinius::AST::GlobalVariableAccess)
-        handle(Rubinius::AST::ClassVariableAccess)
-        handle(Rubinius::AST::ToplevelConstant)
-        handle(Rubinius::AST::Ensure)
-        handle(Rubinius::AST::Rescue)
-        handle(Rubinius::AST::DynamicString)
-        handle(Rubinius::AST::DynamicSymbol)
-        handle(Rubinius::AST::DynamicRegex)
-        handle(Rubinius::AST::File)
-        handle(Rubinius::AST::NthRef)
-        handle(Rubinius::AST::OpAssignOr19)
-        handle(Rubinius::AST::BlockPass19)
-        handle(Rubinius::AST::OpAssign1)
-        handle(Rubinius::AST::OpAssign2)
-        handle(Rubinius::AST::SplatValue)
-        handle(Rubinius::AST::ConstantAccess)
-        handle(Rubinius::AST::Yield)
-        handle(Rubinius::AST::Begin)
-        handle(Rubinius::AST::Rescue)
+        #
+        # FIXME: This list is mixed with some 1.8 only nodes that should be extracted
+        # 
+        %w(
+          ZSuper
+          ElementAssignment
+          AttributeAssignment
+          Not
+          And
+          Or
+          Defined
+          Super
+          Next
+          Break
+          Match3
+          ZSuper
+          MultipleAssignment
+          ScopedConstant
+          LocalVariableAccess
+          InstanceVariableAccess
+          GlobalVariableAccess
+          ClassVariableAccess
+          ToplevelConstant
+          Ensure
+          Rescue
+          DynamicString
+          DynamicSymbol
+          DynamicRegex
+          File
+          OpAssignOr19
+          BlockPass19
+          OpAssign1
+          NthRef
+          OpAssign2
+          SplatValue
+          ConstantAccess
+          Yield
+          Begin
+          Rescue
+        ).each do |name|
+          handle(Rubinius::AST.const_get(name))
+        end
       
       private
 

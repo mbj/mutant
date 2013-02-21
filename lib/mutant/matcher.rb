@@ -1,14 +1,37 @@
 module Mutant
-  # Abstract matcher to find ASTs to mutate
+  # Abstract matcher to find subjects to mutate
   class Matcher
     include Adamantium::Flat, Enumerable, AbstractType
     extend DescendantsTracker
 
     # Enumerate subjects
     #
+    # @param [Object] input
+    #
+    # @return [self]
+    #   if block given
+    #
+    # @return [Enumerator<Subject>]
+    #
     # @api private
     #
-    # @return [undefined]
+    def self.each(input, &block)
+      return to_enum(__method__, input) unless block_given?
+
+      new(input).each(&block)
+
+      self
+    end
+
+    # Enumerate subjects
+    #
+    # @api private
+    #
+    # @return [self]
+    #   if block given
+    #
+    # @return [Enumerabe<Subject>]
+    #   otherwise
     #
     abstract_method :each
 
@@ -19,39 +42,5 @@ module Mutant
     # @api private
     #
     abstract_method :identification
-
-    # Return matcher
-    #
-    # @param [String] input
-    #
-    # @return [nil]
-    #   returns nil as default implementation
-    #
-    # @api private
-    #
-    def self.parse(input)
-      nil
-    end
-
-    # Return match from string
-    #
-    # @param [String] input
-    #
-    # @return [Matcher]
-    #   returns matcher input if successful
-    #
-    # @return [nil]
-    #   returns nil otherwise
-    #
-    # @api private
-    #
-    def self.from_string(input)
-      descendants.each do |descendant|
-        matcher = descendant.parse(input)
-        return matcher if matcher
-      end
-
-      nil
-    end
   end
 end

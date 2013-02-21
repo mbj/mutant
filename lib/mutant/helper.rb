@@ -19,20 +19,5 @@ module Mutant
       Marshal.load(Marshal.dump(object))
     end
 
-    # Extract option from options hash
-    #
-    # @param [Hash] options
-    # @param [Object] key
-    #
-    # @return [Object] value
-    # 
-    # @api private
-    #
-    def self.extract_option(options, key)
-      options.fetch(key) do
-        raise ArgumentError,"Missing #{key.inspect} in options"
-      end
-    end
-
   end
 end

@@ -1,7 +1,7 @@
 module Mutant
   # Subject of a mutation
   class Subject
-    include Adamantium::Flat, Enumerable, Equalizer.new(:context, :matcher, :node)
+    include AbstractType, Adamantium::Flat, Enumerable, Equalizer.new(:context, :node)
 
     # Return context
     #
@@ -10,14 +10,6 @@ module Mutant
     # @api private
     #
     attr_reader :context
-
-    # Return matcher
-    #
-    # @return [Matcher]
-    #
-    # @api private
-    #
-    attr_reader :matcher
 
     # Return AST node
     #
@@ -40,7 +32,7 @@ module Mutant
     def each
       return to_enum unless block_given?
       Mutator.each(node) do |mutant|
-        yield Mutation.new(self, mutant)
+        yield Mutation::Evil.new(self, mutant)
       end
 
       self
@@ -53,7 +45,7 @@ module Mutant
     # @api private
     #
     def noop
-      Mutation::Noop.new(self)
+      Mutation::Neutral.new(self, node)
     end
     memoize :noop
 
@@ -84,7 +76,7 @@ module Mutant
     # @api private
     #
     def identification
-      "#{matcher.identification}:#{source_path}:#{source_line}"
+      "#{subtype}:#{source_path}:#{source_line}"
     end
     memoize :identification
 
@@ -126,19 +118,27 @@ module Mutant
 
     # Initialize subject
     #
-    # @param [Matcher] matcher
-    #   the context of mutations
+    # @param [Mutant::Context] context
     #
     # @param [Rubinius::AST::Node] node
-    #   the node to be mutated
+    #   the original node to be mutated
     #
     # @return [unkown]
     #
     # @api private
     #
-    def initialize(matcher, context, node)
-      @matcher, @context, @node = matcher, context, node
+    def initialize(context, node)
+      @context, @node = context, node
     end
+
+    # Return subtype identifier
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    abstract_method :subtype
+    private :subtype
 
   end
 end

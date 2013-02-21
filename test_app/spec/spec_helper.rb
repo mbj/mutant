@@ -1,6 +1,9 @@
 # encoding: utf-8
 
 require 'rspec'
+
+$: << File.join(File.dirname(__FILE__), 'lib')
+
 require 'test_app'
 
 # require spec support files and shared behavior

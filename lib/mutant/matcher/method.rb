@@ -4,18 +4,6 @@ module Mutant
     class Method < self
       include Adamantium::Flat, Equalizer.new(:identification)
 
-      # Parse a method string into filter
-      #
-      # @param [String] input
-      #
-      # @return [Matcher::Method]
-      #
-      # @api private
-      #
-      def self.parse(input)
-        Classifier.run(input)
-      end
-
       # Methods within rbx kernel directory are precompiled and their source 
       # cannot be accessed via reading source location
       BLACKLIST = /\Akernel\//.freeze
@@ -35,9 +23,8 @@ module Mutant
 
         return self if skip?
 
-        subject.tap do |subject|
-          yield subject if subject
-        end
+        util = subject
+        yield util if util
 
         self
       end
@@ -68,18 +55,6 @@ module Mutant
         method.name
       end
 
-      # Test if method is public
-      #
-      # @return [true]
-      #   if method is public
-      #
-      # @return [false]
-      #   otherwise
-      #
-      # @api private
-      #
-      abstract_method :public?
-
     private
 
       # Initialize method filter
@@ -93,8 +68,6 @@ module Mutant
       #
       def initialize(scope, method)
         @scope, @method = scope, method
-        # FIXME: cache public private should not be needed, loader should not override visibility! (But does currently) :(
-        public?
       end
 
       # Test if method is skipped
@@ -180,7 +153,7 @@ module Mutant
       def subject
         node = matched_node
         return unless node
-        Subject.new(self, context, node)
+        self.class::SUBJECT_CLASS.new(context, node)
       end
       memoize :subject
 

@@ -10,6 +10,12 @@ module Mutant
     undef unless until when while yield
   ).map(&:to_sym).to_set.freeze
 
+  METHOD_NAME_EXPANSIONS = {
+    /\?\z/ => '_predicate',
+    /=\z/  => '_writer',
+    /!\z/  => '_bang'
+  }.freeze
+
   BINARY_METHOD_OPERATOR_EXPANSIONS = {
     :<=>  => :spaceship_operator,
     :===  => :case_equality_operator,
