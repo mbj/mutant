@@ -132,9 +132,9 @@ module Mutant
       #   otherwise
       #
       def errors?
-        !!@killers.values.inject(0) do |fails, counter|
-          fails + counter.fails
-        end.nonzero?
+        @killers.values.any? do |_, counter|
+          counter.nonzero?
+        end
       end
 
       # Return runtime in seconds
