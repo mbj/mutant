@@ -132,7 +132,7 @@ module Mutant
       #   otherwise
       #
       def errors?
-        @killers.values.any? do |_, counter|
+        @killers.values.any? do |counter|
           counter.nonzero?
         end
       end
