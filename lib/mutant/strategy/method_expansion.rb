@@ -31,6 +31,8 @@ module Mutant
       end
       private_class_method :map
 
+      REGEXP = /#{Regexp.union(*METHOD_POSTFIX_EXPANSIONS.keys)}\z/.freeze
+
       # Return expanded name
       #
       # @param [Symbol] name
@@ -40,9 +42,7 @@ module Mutant
       # @api private
       #
       def self.expand(name)
-        METHOD_NAME_EXPANSIONS.inject(name.to_s) do |name, find_replace|
-          name.gsub(*find_replace)
-        end.to_sym
+        name.to_s.gsub(REGEXP, METHOD_POSTFIX_EXPANSIONS).to_sym
       end
       private_class_method :expand
 
