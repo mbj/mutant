@@ -1,5 +1,9 @@
 # v0.2.17 2013-01-20
 
+* [change][dm2] Kill mutations in #initialize from class methods.
+
+# v0.2.17 2013-01-20
+
 * [change] Update dependencies
 
 # v0.2.16 2013-01-20

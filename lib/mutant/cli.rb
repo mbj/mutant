@@ -14,7 +14,7 @@ module Mutant
     # @api private
     #
     def self.run(*arguments)
-      config = new(*arguments)
+      config = new(*arguments).config
       runner = Runner::Config.run(config)
       runner.success? ? EXIT_SUCCESS : EXIT_FAILURE
     rescue Error => exception
@@ -45,6 +45,25 @@ module Mutant
       strategy
       matcher
     end
+
+    # Return config
+    #
+    # @return [Config]
+    #
+    # @api private
+    #
+    def config
+      Config.new(
+        :debug    => debug?,
+        :matcher  => matcher,
+        :filter   => filter,
+        :strategy => strategy,
+        :reporter => reporter
+      )
+    end
+    memoize :config
+
+  private
 
     # Test for running in debug mode
     #
@@ -97,8 +116,6 @@ module Mutant
       Mutant::Reporter::CLI.new(self)
     end
     memoize :reporter
-
-  private
 
     # Return matcher
     #

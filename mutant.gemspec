@@ -25,4 +25,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('abstract_type',       '~> 0.0.4')
   gem.add_runtime_dependency('rspec-core',          '~> 2.13.0')
   gem.add_runtime_dependency('diff-lcs',            '~> 1.2.1')
+  gem.add_runtime_dependency('anima',               '~> 0.0.5')
 end

@@ -1,5 +1,6 @@
 module Mutant
   class Runner
+    # Runner for config
     class Config < self
 
       # Return subject runners

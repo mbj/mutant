@@ -14,6 +14,7 @@ require 'composition'
 require 'diff/lcs'
 require 'diff/lcs/hunk'
 require 'rspec'
+require 'anima'
 
 # Patch ice none to freeze nodes correctly
 class IceNine::Freezer
@@ -83,6 +84,7 @@ require 'mutant/mutator/node/return'
 require 'mutant/mutator/node/iter_19'
 require 'mutant/mutator/node/if'
 require 'mutant/mutator/node/receiver_case'
+require 'mutant/config' 
 require 'mutant/loader' 
 require 'mutant/context'
 require 'mutant/context/scope'
