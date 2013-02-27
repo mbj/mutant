@@ -31,7 +31,7 @@ Feel free to ping me to add your project to the list!
 Installation
 ------------
 
-Install the gem ``mutant`` via your preferred method.
+Install the gem `mutant` via your preferred method.
 
 Examples
 --------
@@ -98,6 +98,17 @@ Alternatives
 ------------
 
 * [heckle](https://github.com/seattlerb/heckle)
+
+Support
+-------
+
+I'm very happy to receive/answer feedback/questions and critism.
+
+Your options:
+
+* Github Issue https://github.com/mutant/issues
+* Ping me on https://twitter.com/_m_b_j_ 
+* #datamapper channel on freenode, I hang around on CET daytimes. (nick mbj)
 
 Credits
 -------
