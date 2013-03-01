@@ -40,10 +40,6 @@ group :metrics do
     gem 'yard-spellcheck', '~> 0.1.5'
   end
 
-  platforms :mri_19, :rbx do
-    gem 'mutant', '~> 0.2.20'
-  end
-
   platforms :mri_19 do
     gem 'simplecov', '~> 0.7.1'
   end
