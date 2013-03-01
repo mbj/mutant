@@ -3,3 +3,5 @@
 /tmp
 /coverage
 /test_app/.rbx
+/.bundle
+/vendor
