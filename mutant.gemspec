@@ -24,4 +24,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('inflecto',            '~> 0.0.2')
   gem.add_runtime_dependency('abstract_type',       '~> 0.0.3')
   gem.add_runtime_dependency('diff-lcs',            '~> 1.2.1')
+  gem.add_runtime_dependency('rspec',               '~> 2.13.0')
 end
