@@ -1,10 +1,20 @@
+# v0.2.20 2013-03-1
+
+* [change] Update dependencies
+
+[Compare v0.2.17..v0.2.20](https://github.com/mbj/mutant/compare/v0.2.17...v0.2.20)
+
 # v0.2.17 2013-01-20
 
 * [change] Update dependencies
 
+[Compare v0.2.16..v0.2.17](https://github.com/mbj/mutant/compare/v0.2.16...v0.2.17)
+
 # v0.2.16 2013-01-20
 
 * [fixed] Handle Rubinius::AST::NthRef as noop
+
+[Compare v0.2.15..v0.2.16](https://github.com/mbj/mutant/compare/v0.2.15...v0.2.16)
 
 # v0.2.15 2013-01-10
 
