@@ -17,7 +17,7 @@ module Mutant
         # @api private
         #
         def match?(mutation)
-          !!@regexp.match =~ mutation.identification
+          !!(@regexp =~ mutation.identification)
         end
 
       private
