@@ -20,8 +20,9 @@ See this [ASCII-Cast](http://ascii.io/a/1707) for mutant in action! (v0.2.1)
 Using Mutant
 ------------
 
-The following projects adopted mutant.
+The following projects adopted mutant, and aim 100% mutation coverage:
 
+* [veritas](https://github.com/dkubb/veritas)
 * [dm-mapper](https://github.com/datamapper/dm-mapper)
 * [virtus](https://github.com/solnic/virtus)
 * various small/minor stuff under https://github.com/mbj
