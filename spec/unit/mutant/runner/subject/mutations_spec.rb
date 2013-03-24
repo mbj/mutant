@@ -10,7 +10,7 @@ describe Mutant::Runner::Subject, '#mutations' do
   let(:mutation_subject) { [mutation] }
 
   class DummyRunner
-    include Composition.new(:config, :mutation)
+    include Concord.new(:config, :mutation)
     def self.run(*args); new(*args); end
   end
 

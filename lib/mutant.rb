@@ -10,11 +10,11 @@ require 'digest/sha1'
 require 'inflecto'
 require 'to_source'
 require 'ice_nine'
-require 'composition'
 require 'diff/lcs'
 require 'diff/lcs/hunk'
 require 'rspec'
 require 'anima'
+require 'concord'
 
 # Patch ice none to freeze nodes correctly
 class IceNine::Freezer
