@@ -21,6 +21,8 @@ module Mutant
           emit_inverted_condition 
           emit_deleted_if_branch
           emit_deleted_else_branch
+          emit_true_if_branch
+          emit_false_if_branch
         end
 
         # Test if attribute is non nil literal
@@ -71,6 +73,26 @@ module Mutant
         def emit_deleted_if_branch
           body = else_branch || return
           emit_self(condition, body, nil)
+        end
+
+        # Emit true if branch
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_true_if_branch
+          emit_self(new(Rubinius::AST::TrueLiteral), if_branch, else_branch)
+        end
+
+        # Emit false if branch
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_false_if_branch
+          emit_self(new(Rubinius::AST::FalseLiteral), if_branch, else_branch)
         end
 
         # Return if_branch of node
