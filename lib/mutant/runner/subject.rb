@@ -2,18 +2,19 @@ module Mutant
   class Runner
     # Subject specific runner
     class Subject < self
+      include Concord.new(:config, :subject)
 
-      # Return mutation runners
+      # Return subject
       #
-      # @return [Enumerable<Runner::Mutation>]
+      # @return [Subject]
       #
       # @api private
       #
-      attr_reader :mutations
+      attr_reader :subject
 
       # Initialize object
       #
-      # @param [Configuration] config
+      # @param [Config] config
       # @param [Subject] subject
       #
       # @return [undefined]
@@ -25,6 +26,39 @@ module Mutant
         super(config)
       end
 
+      # Return mutation runners
+      #
+      # @return [Enumerable<Runner::Mutation>]
+      #
+      # @api private
+      #
+      attr_reader :mutations
+
+      # Return failed mutations
+      #
+      # @return [Enumerable<Mutation>]
+      #
+      # @api private
+      #
+      def failed_mutations
+        mutations.select(&:failed?)
+      end
+      memoize :failed_mutations
+
+      # Test if subject was processed successful
+      #
+      # @return [true]
+      #   if successful
+      #
+      # @return [false]
+      #   otherwise
+      #
+      # @api private
+      #
+      def success?
+        failed_mutations.empty?
+      end
+
     private
 
       # Perform operation
@@ -34,8 +68,8 @@ module Mutant
       # @api private
       #
       def run
-        @mutations = @subject.map do |mutation|
-          Mutation.new(config, mutation)
+        @mutations = subject.map do |mutation|
+          Mutation.run(config, mutation)
         end
       end
 

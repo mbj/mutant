@@ -25,6 +25,32 @@ module Mutant
       run
     end
 
+    # Test if runner failed
+    #
+    # @return [true]
+    #   if failed
+    #
+    # @return [false]
+    #   otherwise
+    #
+    # @api private
+    #
+    def failed?
+      !success?
+    end
+
+    # Test if runner is successful
+    #
+    # @return [true]
+    #   if successful
+    #
+    # @return [false]
+    #   otherwise
+    #
+    # @api private
+    #  
+    abstract_method :success?
+
   private
 
     # Perform operation

@@ -4,5 +4,24 @@ module Mutant
     include Adamantium::Flat, Anima.new(
       :debug, :strategy, :matcher, :filter, :reporter
     )
+
+    # Enumerate subjects
+    #
+    # @api private
+    #
+    # @return [self]
+    #   if block given
+    #
+    # @return [Enumerator<Subject>]
+    #   otherwise
+    #
+    # @api private
+    #
+    def subjects(&block)
+      return to_enum(__method__) unless block_given?
+      matcher.each(&block)
+      self
+    end
+
   end
 end

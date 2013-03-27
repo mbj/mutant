@@ -5,9 +5,10 @@ describe Mutant::Runner::Config, '#subjects' do
 
   subject { object.subjects }
 
-  let(:config)           { mock('Config', :subjects => [mutation_subject]) }
-  let(:mutation_subject) { mock('Mutation subject')                        }
-  let(:subject_runner)   { mock('Subject runner')                          }
+  let(:config)           { mock('Config', :subjects => [mutation_subject], :strategy => strategy) }
+  let(:strategy)         { mock('Strategy')                                                       }
+  let(:mutation_subject) { mock('Mutation subject')                                               }
+  let(:subject_runner)   { mock('Subject runner')                                                 }
 
   class DummySubjectRunner
     include Concord.new(:config, :mutation)
@@ -15,6 +16,8 @@ describe Mutant::Runner::Config, '#subjects' do
   end
 
   before do
+    strategy.stub(:setup)
+    strategy.stub(:teardown)
     stub_const('Mutant::Runner::Subject', DummySubjectRunner)
   end
 

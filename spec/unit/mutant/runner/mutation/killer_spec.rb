@@ -16,7 +16,7 @@ describe Mutant::Runner::Mutation, '#killer' do
   end
 
   it 'should call configuration to identify strategy' do
-    config.should_receive(:strategy).with(mutation).and_return(strategy)
+    config.should_receive(:strategy).with().and_return(strategy)
     should be(killer)
   end
 

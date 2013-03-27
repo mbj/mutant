@@ -2,18 +2,19 @@ module Mutant
   class Runner
     # Mutation runner
     class Mutation < self
+      include Concord.new(:config, :mutation)
 
-      # Return killer instance
+      # Return mutation
       #
-      # @return [Killer]
+      # @return [Mutation]
       #
       # @api private
       #
-      attr_reader :killer
+      attr_reader :mutation
 
       # Initialize object
       #
-      # @param [Configuration] config
+      # @param [Config] config
       # @param [Mutation] mutation
       #
       # @return [undefined]
@@ -25,6 +26,28 @@ module Mutant
         super(config)
       end
 
+      # Return killer instance
+      #
+      # @return [Killer]
+      #
+      # @api private
+      #
+      attr_reader :killer
+
+      # Test if mutation was handeled successfully
+      #
+      # @return [true]
+      #   if successful
+      #
+      # @return [false]
+      #   otherwise
+      #
+      # @api private
+      #
+      def success?
+        mutation.success?(killer)
+      end
+
     private
 
       # Perform operation
@@ -34,7 +57,7 @@ module Mutant
       # @api private
       #
       def run
-        @killer = config.strategy(@mutation).kill(@mutation)
+        @killer = config.strategy.kill(mutation)
       end
 
     end
