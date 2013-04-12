@@ -5,9 +5,9 @@ describe Mutant::Runner::Subject, '#mutations' do
 
   subject { object.mutations }
 
-  let(:config)           { mock('Config')   }
-  let(:mutation)         { mock('Mutation') }
-  let(:mutation_subject) { [mutation] }
+  let(:config)           { mock('Config')                            }
+  let(:mutation)         { mock('Mutation')                          }
+  let(:mutation_subject) { mock('Subject', :mutations => [mutation]) }
 
   class DummyRunner
     include Concord.new(:config, :mutation)
