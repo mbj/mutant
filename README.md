@@ -22,7 +22,8 @@ Using Mutant
 
 The following projects adopted mutant, and aim 100% mutation coverage:
 
-* [veritas](https://github.com/dkubb/veritas)
+* [axiom](https://github.com/dkubb/axiom)
+* [axiom-types](https://github.com/dkubb/axiom-types)
 * [dm-mapper](https://github.com/datamapper/dm-mapper)
 * [virtus](https://github.com/solnic/virtus)
 * various small/minor stuff under https://github.com/mbj
