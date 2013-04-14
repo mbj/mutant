@@ -37,10 +37,6 @@ group :metrics do
   gem 'yardstick',       '~> 0.9.5'
   gem 'yard-spellcheck', '~> 0.1.5'
 
-  platforms :mri_19, :rbx do
-    gem 'mutant', '~> 0.2.20'
-  end
-
   platforms :rbx do
     gem 'pelusa', '~> 0.2.2'
   end
