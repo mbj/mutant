@@ -26,6 +26,12 @@ describe Mutant::Mutator, 'if statement' do
       # mutations of else body
       mutants << 'if self.condition; true;  else true;  end' 
       mutants << 'if self.condition; true;  else nil;   end' 
+
+      # mutation of condition to always be true
+      mutants << 'if true; true; else false; end'
+
+      # mutation of condition to always be false
+      mutants << 'if false; true; else false; end'
     end
 
     it_should_behave_like 'a mutator'
@@ -40,6 +46,8 @@ describe Mutant::Mutator, 'if statement' do
       mutants << 'if condition; true; end'
       mutants << 'unless condition; false; end'
       mutants << 'unless condition; nil; end'
+      mutants << 'unless true; true; end'
+      mutants << 'unless false; true; end'
     end
 
     it_should_behave_like 'a mutator'
@@ -53,6 +61,8 @@ describe Mutant::Mutator, 'if statement' do
       mutants << 'if !condition; true; end'
       mutants << 'if condition; false; end'
       mutants << 'if condition; nil; end'
+      mutants << 'if true; true; end'
+      mutants << 'if false; true; end'
     end
 
     it_should_behave_like 'a mutator'
