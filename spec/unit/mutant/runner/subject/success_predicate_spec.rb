@@ -5,11 +5,11 @@ describe Mutant::Runner::Subject, '#success?' do
 
   let(:object) { described_class.run(config, mutation_subject) }
 
-  let(:mutation_subject) { mock('Subject', :mutations => mutations) }
-  let(:config)           { mock('Config')                           }
-  let(:mutation_a)       { mock('Mutation A', :fails? => false)     }
-  let(:mutation_b)       { mock('Mutation B', :fails? => false)     }
-  let(:mutations)        { [mutation_a, mutation_b]                 }
+  let(:mutation_subject) { mock('Subject', :map => mutations)    }
+  let(:config)           { mock('Config')                        }
+  let(:mutation_a)       { mock('Mutation A', :failed? => false) }
+  let(:mutation_b)       { mock('Mutation B', :failed? => false) }
+  let(:mutations)        { [mutation_a, mutation_b]              }
 
   class DummyMutationRunner
     include Concord.new(:config, :mutation)
@@ -19,7 +19,7 @@ describe Mutant::Runner::Subject, '#success?' do
     end
 
     def failed?
-      @mutation.fails?
+      @mutation.failed?
     end
   end
 
@@ -36,7 +36,7 @@ describe Mutant::Runner::Subject, '#success?' do
 
   context 'with failing evil mutations' do
     before do
-      mutation_a.stub(:fails? => true)
+      mutation_a.stub(:failed? => true)
     end
 
     it { should be(false) }

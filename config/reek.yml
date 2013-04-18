@@ -1,0 +1,196 @@
+---
+Attribute:
+  enabled: true
+  exclude:
+  - Mutant::CLI::Classifier
+  - Mutant::Context
+  - Mutant::Context::Scope
+  - Mutant::Killer
+  - Mutant::Killer::Forking
+  - Mutant::Matcher::Chain
+  - Mutant::Matcher::Method
+  - Mutant::Matcher::Methods
+  - Mutant::Matcher::Namespace
+  - Mutant::Mutation
+  - Mutant::Mutation::Filter::Code
+  - Mutant::Mutation::Filter::Whitelist
+  - Mutant::Mutator
+  - Mutant::Reporter
+  - Mutant::Reporter::CLI
+  - Mutant::Reporter::Stats
+  - Mutant::Reporter::Stats::Counter
+  - Mutant::Runner
+  - Mutant::Runner::Config
+  - Mutant::Runner::Mutation
+  - Mutant::Runner::Subject
+  - Mutant::Strategy
+  - Mutant::Strategy::Rspec::DM2::Lookup
+  - Mutant::Subject
+BooleanParameter:
+  enabled: true
+  exclude: []
+ClassVariable:
+  enabled: true
+  exclude: []
+ControlParameter:
+  enabled: true
+  exclude: []
+DataClump:
+  enabled: true
+  exclude: []
+  max_copies: 2
+  min_clump_size: 2
+DuplicateMethodCall:
+  enabled: true
+  exclude:
+  - Mutant::CLI::Classifier::Method#method
+  - Mutant::Killer#run_with_benchmark
+  - Mutant::Mutator::Node::FormalArguments19::DefaultMutations#dispatch
+  - Mutant::Mutator::Node::FormalArguments19::RequireDefaults#dispatch
+  - Mutant::Mutator::Node::Literal::Hash#emit_element_presence
+  - Mutant::Mutator::Node::Send::WithArguments#emit_argument_mutations
+  - Mutant::Reporter::CLI#colorized_diff
+  - Mutant::Reporter::CLI#report_killer
+  - Mutant::Runner::Config#run
+  max_calls: 1
+  allow_calls: []
+FeatureEnvy:
+  enabled: true
+  exclude:
+  - Mutant::Matcher::Method::Instance#match?
+  - Mutant::Matcher::Namespace#emit_scope_matches
+  - Mutant::Mutation::Evil#success?
+  - Mutant::Mutation::Neutral#success?
+  - Mutant::Mutator::Node::DefaultArguments#dispatch
+  - Mutant::Mutator::Node::FormalArguments19#emit_required_mutations
+  - Mutant::Mutator::Node::FormalArguments19::DefaultMutations#dispatch
+  - Mutant::Mutator::Node::FormalArguments19::RequireDefaults#dispatch
+  - Mutant::Mutator::Node::PatternArguments#allow?
+  - Mutant::Reporter::CLI#report_killer
+  - Mutant::Reporter::CLI#start
+IrresponsibleModule:
+  enabled: true
+  exclude:
+  - Mutant::Matcher::Methods::Instance
+  - Mutant::Mutator::Node::Define
+  - Mutant::Mutator::Node::DefineSingleton
+  - Mutant::Strategy::Rspec::DM2::Lookup::Method
+  - Mutant::Strategy::Rspec::DM2::Lookup::Method::Instance
+  - Mutant::Strategy::Rspec::DM2::Lookup::Method::Singleton
+LongParameterList:
+  enabled: true
+  exclude:
+  - Mutant::Mutator::Node#new_send_with_arguments
+  max_params: 2
+  overrides:
+    initialize:
+      max_params: 3
+LongYieldList:
+  enabled: true
+  exclude: []
+  max_params: 2
+NestedIterators:
+  enabled: true
+  exclude:
+  - Mutant#self.define_singleton_subclass
+  - Mutant::Mutator::Node::FormalArguments19::PatternArgumentExpansion#dispatch
+  - Mutant::Mutator::Node::FormalArguments19::RequireDefaults#dispatch
+  - Mutant::Mutator::Node::ReceiverCase#emit_when_branch_mutations
+  - Mutant::Mutator::Util::Array::Element#dispatch
+  max_allowed_nesting: 1
+  ignore_iterators: []
+NilCheck:
+  enabled: true
+  exclude:
+  - Mutant::Matcher::Method#skip?
+RepeatedConditional:
+  enabled: true
+  exclude:
+  - Mutant::Reporter::CLI
+  max_ifs: 1
+TooManyInstanceVariables:
+  enabled: true
+  exclude:
+  - Mutant::CLI
+  - Mutant::Killer
+  max_instance_variables: 3
+TooManyMethods:
+  enabled: true
+  exclude:
+  - Mutant::CLI
+  - Mutant::Matcher::Method
+  - Mutant::Reporter::CLI
+  max_methods: 10
+TooManyStatements:
+  enabled: true
+  exclude:
+  - Mutant#self.define_singleton_subclass
+  - Mutant::CLI#self.run
+  - Mutant::Differ#diff
+  - Mutant::Killer::Forked#run
+  - Mutant::Mutator::Node#emit_attribute_mutations
+  - Mutant::Mutator::Node::FormalArguments19::DefaultMutations#dispatch
+  - Mutant::Mutator::Node::FormalArguments19::PatternArgumentExpansion#dispatch
+  - Mutant::Mutator::Node::FormalArguments19::RequireDefaults#dispatch
+  - Mutant::Mutator::Node::If#dispatch
+  - Mutant::Reporter::CLI#colorized_diff
+  - Mutant::Reporter::CLI#report_killer
+  - Mutant::Reporter::CLI#start
+  - each
+  max_statements: 5
+UncommunicativeMethodName:
+  enabled: true
+  exclude:
+  - Mutant::Mutation#sha1
+  reject:
+  - !ruby/regexp /^[a-z]$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+  accept: []
+UncommunicativeModuleName:
+  enabled: true
+  exclude:
+  - Mutant::Mutator::Node::FormalArguments19
+  - Mutant::Mutator::Node::Iter19
+  - Mutant::Strategy::Rspec::DM2
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+  accept: []
+UncommunicativeParameterName:
+  enabled: true
+  exclude: []
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+  accept: []
+UncommunicativeVariableName:
+  enabled: true
+  exclude: []
+  reject:
+  - !ruby/regexp /^.$/
+  - !ruby/regexp /[0-9]$/
+  - !ruby/regexp /[A-Z]/
+  accept: []
+UnusedParameters:
+  enabled: true
+  exclude:
+  - Mutant::Mutation::Filter#match?
+  - Mutant::Mutation::Filter#self.handle
+  - Mutant::Mutator#allow?
+  - Mutant::Strategy::Rspec::Full#spec_files
+  - Mutant::Strategy::Rspec::Integration#spec_files
+  - Mutant::Strategy::Rspec::Unit#spec_files
+UtilityFunction:
+  enabled: true
+  exclude:
+  - Mutant::Matcher::Namespace#emit_scope_matches
+  - Mutant::Mutation::Evil#success?
+  - Mutant::Mutation::Neutral#success?
+  - Mutant::Mutator::Node::PatternArguments#allow?
+  - Mutant::Strategy::Rspec::DM2#spec_files
+  - Mutant::Strategy::Rspec::Full#spec_files
+  - Mutant::Strategy::Rspec::Integration#spec_files
+  - Mutant::Strategy::Rspec::Unit#spec_files
+  max_helper_calls: 0

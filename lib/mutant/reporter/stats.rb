@@ -8,6 +8,12 @@ module Mutant
       class Counter
         include Equalizer.new(:count, :fails)
 
+        # Return count
+        #
+        # @return [Fixnum]
+        #
+        # @api private
+        #
         attr_reader :count
 
         # Return fail count
@@ -105,6 +111,8 @@ module Mutant
       # @return [false]
       #   otherwise
       #
+      # @api private
+      #
       def success?
         @counts[:subject].nonzero? && !errors?
       end
@@ -130,6 +138,8 @@ module Mutant
       #
       # @return [false]
       #   otherwise
+      #
+      # @api private
       #
       def errors?
         @killers.values.any? do |counter|
