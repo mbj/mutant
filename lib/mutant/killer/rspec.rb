@@ -18,6 +18,7 @@ module Mutant
       def run
         mutation.insert
         # TODO: replace with real streams from configuration
+        require 'stringio'
         null = StringIO.new
         !::RSpec::Core::Runner.run(command_line_arguments, null, null).zero?
       end
