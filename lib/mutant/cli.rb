@@ -157,7 +157,8 @@ module Mutant
     def dispatch_matcher
       argument = current_argument
       consume(1)
-      @matchers << Classifier.build(argument)
+      matcher = Classifier.build(argument)
+      @matchers << matcher if matcher
     end
 
     # Process option argument
