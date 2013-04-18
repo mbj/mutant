@@ -70,7 +70,7 @@ describe Mutant::Mutator, 'define' do
       Mutant::Random.stub(:hex_string => 'random')
     end
 
-    let(:mutations) do 
+    let(:mutations) do
       mutations = []
       mutations << 'def foo(a); end'
       mutations << 'def foo(); end'
@@ -90,9 +90,9 @@ describe Mutant::Mutator, 'define' do
       mutations = []
 
       # Body presence mutations
-      mutations << 'def self.foo; bar; self.baz; end' 
-      mutations << 'def self.foo; self.bar; baz; end' 
-     
+      mutations << 'def self.foo; bar; self.baz; end'
+      mutations << 'def self.foo; self.bar; baz; end'
+
       # Body presence mutations
       mutations << 'def self.foo; self.bar; end'
       mutations << 'def self.foo; self.baz; end'

@@ -16,7 +16,7 @@ describe Mutant::Mutator, 'send' do
         let(:mutations) do
           mutations = []
           # with implicit receiver (send privately)
-          mutations << 'foo' 
+          mutations << 'foo'
         end
 
         it_should_behave_like 'a mutator'
@@ -58,7 +58,7 @@ describe Mutant::Mutator, 'send' do
   context 'with block' do
     let(:source) { 'foo() { a; b }' }
 
-    let(:mutations) do 
+    let(:mutations) do
       mutations = []
       mutations << 'foo() { a }'
       mutations << 'foo() { b }'
@@ -77,7 +77,7 @@ describe Mutant::Mutator, 'send' do
       Mutant::Random.stub(:hex_string => :random)
     end
 
-    let(:mutations) do 
+    let(:mutations) do
       mutations = []
       mutations << 'foo'
       mutations << 'foo { |a, b| Object.new }'
@@ -99,7 +99,7 @@ describe Mutant::Mutator, 'send' do
 
     let(:source) { 'foo { |(a, b), c| }' }
 
-    let(:mutations) do 
+    let(:mutations) do
       mutations = []
       mutations << 'foo { || }'
       mutations << 'foo { |a, b, c| }'
@@ -120,7 +120,7 @@ describe Mutant::Mutator, 'send' do
     context 'one argument' do
       let(:source) { 'foo(nil)' }
 
-      let(:mutations) do 
+      let(:mutations) do
         mutations = []
         mutations << 'foo'
         mutations << 'nil'
@@ -133,7 +133,7 @@ describe Mutant::Mutator, 'send' do
     context 'with explicit self as receiver' do
       let(:source) { 'self.foo(nil)' }
 
-      let(:mutations) do 
+      let(:mutations) do
         mutations = []
         mutations << 'self.foo'
         mutations << 'foo(nil)'
@@ -149,7 +149,7 @@ describe Mutant::Mutator, 'send' do
         context "with keyword #{keyword}" do
           let(:source) { "foo.#{keyword}(nil)" }
 
-          let(:mutations) do 
+          let(:mutations) do
             mutations = []
             mutations << "foo.#{keyword}"
             mutations << "foo"
@@ -166,7 +166,7 @@ describe Mutant::Mutator, 'send' do
       Mutant::BINARY_METHOD_OPERATORS.each do |operator|
         let(:source) { "true #{operator} false" }
 
-        let(:mutations) do 
+        let(:mutations) do
           mutations = []
           mutations << "((false) #{operator} (false))"
           mutations << "((nil) #{operator} (false))"
@@ -183,7 +183,7 @@ describe Mutant::Mutator, 'send' do
     context 'two arguments' do
       let(:source) { 'foo(nil, nil)' }
 
-      let(:mutations) do 
+      let(:mutations) do
         mutations = []
         mutations << 'foo()'
         mutations << 'foo(nil)'

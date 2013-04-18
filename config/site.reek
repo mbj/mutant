@@ -9,14 +9,14 @@ UncommunicativeParameterName:
   - !ruby/regexp /[A-Z]/
 LargeClass:
   max_methods: 10
-  exclude: 
+  exclude:
   - "Mutant::Reporter::CLI" # 16 methods TODO Reduce!
   - "Mutant::Reporter::Stats" # 6 ivars TODO Reduce!
   - "Mutant::CLI" # 19 methods and 7 ivars, TODO Reduce!
   enabled: true
   max_instance_variables: 3
 UncommunicativeMethodName:
-  accept: 
+  accept:
   - sha1
   exclude: []
   enabled: true
@@ -26,7 +26,7 @@ UncommunicativeMethodName:
   - !ruby/regexp /[A-Z]/
 LongParameterList:
   max_params: 2
-  exclude: 
+  exclude:
   - "Mutant::Mutator::Node#new_send_with_arguments" # 3 params
   - "Mutant::Context::Constant#initialize" # 3 params
   - "Mutant::Subject#initialize" # 3 params
@@ -45,7 +45,7 @@ IrresponsibleModule:
   exclude: []
   enabled: true
 UncommunicativeModuleName:
-  accept: 
+  accept:
   - Mutant::Mutator::Node::Iter19
   - Mutant::Strategy::Rspec::DM2
   exclude: []
@@ -55,7 +55,7 @@ UncommunicativeModuleName:
   - !ruby/regexp /[0-9]$/
 NestedIterators:
   ignore_iterators: []
-  exclude: 
+  exclude:
   - Mutant#self.define_singleton_subclass
   - Mutant::Mutator::Util::Array::Element#dispatch
   - Mutant::Mutator::Node::ReceiverCase#emit_when_branch_mutation
@@ -67,7 +67,7 @@ LongMethod:
   enabled: true
 Duplication:
   allow_calls: []
-  exclude: 
+  exclude:
   - Mutant::Mutator::Node::Literal::Hash#emit_element_presence
   enabled: true
   max_calls: 1

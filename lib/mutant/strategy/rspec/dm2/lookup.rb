@@ -3,7 +3,7 @@ module Mutant
     class Rspec
       class DM2
 
-        # Example lookup for the rspec dm2 
+        # Example lookup for the rspec dm2
         class Lookup
           include AbstractType, Adamantium::Flat, Equalizer.new(:subject)
 
@@ -64,7 +64,7 @@ module Mutant
           #
           # @param [Subjecŧ] subject
           #
-          # @return [Lookup] 
+          # @return [Lookup]
           #
           # @api private
           #

@@ -20,8 +20,8 @@ describe Mutant::Mutator::Node::Literal, 'hash' do
     mutations << '{ true  => true  ,  false => nil   }'
 
     # Remove each key once
-    mutations << '{ true => true }' 
-    mutations << '{ false => false }' 
+    mutations << '{ true => true }'
+    mutations << '{ false => false }'
 
     # Empty hash
     mutations << '{}'

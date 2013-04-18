@@ -32,7 +32,7 @@ module Mutant
       # @api private
       #
       def self.build(notation)
-        descendants.each do |descendant| 
+        descendants.each do |descendant|
           filter = descendant.handle(notation)
           return filter if filter
         end

@@ -10,7 +10,7 @@ module Mutant
         # Currently unhandled node classes. Feel free to contribute your mutator!
         #
         # FIXME: This list is mixed with some 1.8 only nodes that should be extracted
-        # 
+        #
         %w(
           ZSuper
           ElementAssignment
@@ -50,7 +50,7 @@ module Mutant
         ).each do |name|
           handle(Rubinius::AST.const_get(name))
         end
-      
+
       private
 
         # Emit mutations

@@ -70,7 +70,7 @@ module Mutant
       end
 
       # Singleton method subjects
-      class Singleton < self 
+      class Singleton < self
 
         # Test if method is public
         #

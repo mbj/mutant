@@ -85,7 +85,7 @@ module Mutant
     # @return [Source]
     #
     # @api private
-    # 
+    #
     def source
       ToSource.to_source(node)
     end

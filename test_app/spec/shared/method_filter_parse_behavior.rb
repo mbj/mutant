@@ -12,5 +12,3 @@ shared_examples_for 'a method filter parse result' do
     subject
   end
 end
-
-

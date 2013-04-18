@@ -16,14 +16,14 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_receiver 
+          emit_receiver
           emit_implicit_self_receiver
           emit_receiver_mutations
           emit_block_mutations
           emit_block_absence_mutation
         end
 
-        # Emit receiver 
+        # Emit receiver
         #
         # @return [undefined]
         #
@@ -52,7 +52,7 @@ module Mutant
         # @api private
         #
         def emit_receiver_mutations
-          emit_attribute_mutations(:receiver) 
+          emit_attribute_mutations(:receiver)
         end
 
         # Emit block absence mutation
@@ -102,11 +102,11 @@ module Mutant
         end
 
         # Emit mutation that replaces explicit send to self with implicit send to self
-        # 
+        #
         # @example:
         #
         #   # This class does use Foo#a with explicitly specifing the receiver self.
-        #   # But an implicit (privately) call should be used as there is no need for 
+        #   # But an implicit (privately) call should be used as there is no need for
         #   # specifing en explicit receiver.
         #
         #   class Foo         # Mutation

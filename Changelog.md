@@ -122,7 +122,7 @@
 # v0.2.1 2012-12-07
 
 * [fixed] Crash on unavailable source location
-* [fixed] Incorrect handling of if and unless statements 
+* [fixed] Incorrect handling of if and unless statements
 * [fixed] Expand Foo#initialize to spec/unit/foo in rspec dm2 strategy
 * [fixed] Correctly expand [] to element_reader_spec.rb in rspec dm2 strategy
 * [fixed] Correctly expand []= to element_writer_spec.rb in rspec dm2 strategy

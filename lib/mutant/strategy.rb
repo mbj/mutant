@@ -1,7 +1,7 @@
 module Mutant
 
   # Abstract base class for killing strategies
-  class Strategy 
+  class Strategy
     include AbstractType, Adamantium::Flat, Equalizer.new
 
     # Return config

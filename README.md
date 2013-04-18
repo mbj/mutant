@@ -7,12 +7,12 @@ mutant
 
 Mutant is a mutation testing tool for ruby that aims to be better than existing mutation testers.
 
-The idea is that if code can be changed and your tests do not notice, either that code isn't being covered 
+The idea is that if code can be changed and your tests do not notice, either that code isn't being covered
 or it does not have a speced side effect.
 
-Mutant does currently only support 1.9 mode under Rubinius or MRI. Support for JRuby is planned. 
+Mutant does currently only support 1.9 mode under Rubinius or MRI. Support for JRuby is planned.
 
-Also it is easy to write a mutation killer for other test/spec frameworks than rspec2. 
+Also it is easy to write a mutation killer for other test/spec frameworks than rspec2.
 Just create your own Mutant::Killer subclass, and make sure I get a PR!
 
 See this [ASCII-Cast](http://ascii.io/a/1707) for mutant in action! (v0.2.1)
@@ -45,7 +45,7 @@ CLI will be simplified in the next releases, but currently stick with this:
 cd virtus
 # Run mutant on virtus namespace (that uses the dm-2 style spec layout)
 mutant -I lib -r virtus --rspec-dm2 ::Virtus
-# Run mutant on specific virtus class 
+# Run mutant on specific virtus class
 mutant -I lib -r virtus --rspec-dm2 ::Virtus::Attribute
 # Run mutant on specific virtus class method
 mutant -I lib -r virtus --rspec-dm2 ::Virtus::Attribute.build
@@ -110,7 +110,7 @@ I'm very happy to receive/answer feedback/questions and critism.
 Your options:
 
 * Github Issue https://github.com/mutant/issues
-* Ping me on https://twitter.com/_m_b_j_ 
+* Ping me on https://twitter.com/_m_b_j_
 * #datamapper channel on freenode, I hang around on CET daytimes. (nick mbj)
 
 Credits

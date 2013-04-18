@@ -36,7 +36,7 @@ module Mutant
 
     private
 
-      # Initialize object space matcher 
+      # Initialize object space matcher
       #
       # @param [Class, Module] namespace
       #
@@ -96,8 +96,8 @@ module Mutant
       # @api private
       #
       def emit_scope(scope)
-        if pattern =~ scope.name 
-          yield scope 
+        if pattern =~ scope.name
+          yield scope
         end
       end
     end

@@ -149,7 +149,7 @@ module Mutant
     end
 
     # Process matcher argument
-    # 
+    #
     # @return [undefined]
     #
     # @api private

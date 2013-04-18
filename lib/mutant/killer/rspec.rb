@@ -8,7 +8,7 @@ module Mutant
       # Run rspec test
       #
       # @return [true]
-      #   when test is NOT successful 
+      #   when test is NOT successful
       #
       # @return [false]
       #   otherwise

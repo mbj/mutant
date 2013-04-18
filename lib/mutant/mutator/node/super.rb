@@ -18,7 +18,7 @@ module Mutant
           emit_node(Rubinius::AST::ZSuper)
           emit_without_block
           emit_attribute_mutations(:block) if node.block
-          emit_attribute_mutations(:arguments) 
+          emit_attribute_mutations(:arguments)
         end
 
         # Emit without block mutation

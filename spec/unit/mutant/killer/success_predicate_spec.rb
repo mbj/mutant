@@ -12,7 +12,7 @@ describe Mutant::Killer, '#success?' do
     kill_state.stub(:freeze => kill_state, :dup => kill_state)
   end
 
-  let(:class_under_test) do 
+  let(:class_under_test) do
     Class.new(described_class) do
       def run
       end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Strategy::MethodExpansion, '.run' do 
+describe Mutant::Strategy::MethodExpansion, '.run' do
   subject { object.run(name) }
 
   let(:object) { described_class }

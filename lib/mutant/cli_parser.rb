@@ -1,8 +1,8 @@
 module Mutant
   # Base class for cli parsers
   #
-  # I hate base classes for reusable functionallity. 
-  # But could not come up with a nice composition/instantiation 
+  # I hate base classes for reusable functionallity.
+  # But could not come up with a nice composition/instantiation
   # solution.
   #
   class CLIParser
@@ -15,7 +15,7 @@ module Mutant
 
     OPTION_PATTERN = %r(\A-(?:-)?[a-zA-Z0-9\-]+\z).freeze
 
-    # Initialize CLI 
+    # Initialize CLI
     #
     # @param [Array<String>] arguments
     #

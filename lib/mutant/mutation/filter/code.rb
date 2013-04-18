@@ -1,6 +1,6 @@
 module Mutant
   class Mutation
-    class Filter 
+    class Filter
       # Mutation filter that filters on mutation codes
       class Code < self
         include Equalizer.new(:code)
@@ -36,7 +36,7 @@ module Mutant
         # @api private
         #
         def self.handle(notation)
-          match = PATTERN.match(notation) 
+          match = PATTERN.match(notation)
           return unless match
           new(match[1])
         end

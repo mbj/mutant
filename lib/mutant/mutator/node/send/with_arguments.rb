@@ -5,7 +5,7 @@ module Mutant
 
         # Mutator for send with arguments
         class WithArguments < self
-          
+
           handle(Rubinius::AST::SendWithArguments)
 
         private

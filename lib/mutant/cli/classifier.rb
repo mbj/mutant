@@ -11,7 +11,7 @@ module Mutant
 
       SINGLETON_PATTERN   = %r(\A(#{SCOPE_PATTERN})\z).freeze
 
-      # Return constant 
+      # Return constant
       #
       # @param [String] location
       #

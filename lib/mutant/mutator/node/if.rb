@@ -18,7 +18,7 @@ module Mutant
           emit_attribute_mutations(:condition)
           emit_attribute_mutations(:body) unless nil_literal?(:body)
           emit_attribute_mutations(:else) unless nil_literal?(:else)
-          emit_inverted_condition 
+          emit_inverted_condition
           emit_deleted_if_branch
           emit_deleted_else_branch
           emit_true_if_branch
@@ -43,7 +43,7 @@ module Mutant
 
         # Emit inverted condition
         #
-        # Especially the same like swap branches but more universal as it also 
+        # Especially the same like swap branches but more universal as it also
         # covers the case there is no else branch
         #
         # @return [undefined]

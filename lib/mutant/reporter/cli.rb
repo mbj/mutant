@@ -118,14 +118,14 @@ module Mutant
         self
       end
 
-    private 
+    private
 
       # Return IO stream
       #
       # @return [IO]
       #
       # @api private
-      # 
+      #
       attr_reader :io
 
       # Test for colored output
@@ -200,7 +200,7 @@ module Mutant
       #
       # @return [true]
       #   returns true if output is a tty
-      # 
+      #
       # @return [false]
       #   returns false otherwise
       #

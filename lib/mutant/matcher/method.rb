@@ -4,7 +4,7 @@ module Mutant
     class Method < self
       include Adamantium::Flat, Equalizer.new(:identification)
 
-      # Methods within rbx kernel directory are precompiled and their source 
+      # Methods within rbx kernel directory are precompiled and their source
       # cannot be accessed via reading source location
       BLACKLIST = /\Akernel\//.freeze
 
@@ -17,7 +17,7 @@ module Mutant
       #   returns self when block given
       #
       # @api private
-      # 
+      #
       def each(&block)
         return to_enum unless block_given?
 

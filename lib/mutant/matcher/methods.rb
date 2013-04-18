@@ -1,6 +1,6 @@
 module Mutant
   class Matcher
-    # Abstract base class for matcher that returns method subjects extracted from scope 
+    # Abstract base class for matcher that returns method subjects extracted from scope
     class Methods < self
       include AbstractType, Equalizer.new(:scope)
 
@@ -29,7 +29,7 @@ module Mutant
       # @return [self]
       #   if block given
       #
-      # @return [Enumerator<Subject>] 
+      # @return [Enumerator<Subject>]
       #   otherwise
       #
       # @api private
@@ -99,7 +99,7 @@ module Mutant
 
       # Return method names
       #
-      # @return [Enumerable<Symbol>] 
+      # @return [Enumerable<Symbol>]
       #
       # @api private
       #

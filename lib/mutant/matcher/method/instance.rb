@@ -1,6 +1,6 @@
 module Mutant
   class Matcher
-    class Method 
+    class Method
       # Matcher for instance methods
       class Instance < self
         SUBJECT_CLASS = Subject::Method::Instance

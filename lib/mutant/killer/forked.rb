@@ -21,7 +21,7 @@ module Mutant
 
       # Run killer
       #
-      # @return [true] 
+      # @return [true]
       #   if mutant was killed
       #
       # @return [false]

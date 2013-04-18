@@ -32,7 +32,7 @@ module Mutant
       @strategy, @mutation = strategy, mutation
       run_with_benchmark
     end
-    
+
     # Test for kill failure
     #
     # @return [true]
@@ -92,7 +92,7 @@ module Mutant
       start_time = Time.now
       @killed = run
       end_time = Time.now
-      @runtime = end_time - start_time 
+      @runtime = end_time - start_time
     end
 
     # Run killer

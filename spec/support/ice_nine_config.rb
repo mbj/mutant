@@ -6,4 +6,3 @@ module IceNine
     end
   end
 end
-

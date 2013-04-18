@@ -15,11 +15,11 @@ Mutations:
   * Mutate options on Regexp literals
   * Add mutations for dynamic regexp symbol and string literals
   * Mutate "def foo; bar; end" to "def foo; self; end"?
-  * Emit negative and positive mutations 
+  * Emit negative and positive mutations
   * Mutate Block catch "def foo(&block)" and block pass "foo(&block)"
   * Mutate super arguments just like send arguments
   * Add timeout to terminate infinite loops
-   
+
     Example of a negative mutation:
       Mutations on local variables and arguments prefixed with an underscore would be emitted as
       negative mutations that must be alive.
@@ -29,7 +29,7 @@ Loader:
 
 Killers:
   * Move test framework specific stuff to strategy
-  * Add a general master <=> killer IPC interface. So different strategies of isolation 
+  * Add a general master <=> killer IPC interface. So different strategies of isolation
     (fork, vs jruby runtime creation) will work without big impact.
 
 Strategy:

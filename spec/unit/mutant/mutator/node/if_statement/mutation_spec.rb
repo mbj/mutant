@@ -20,12 +20,12 @@ describe Mutant::Mutator, 'if statement' do
       mutants << 'if self.condition; false end'
 
       # mutations of body
-      mutants << 'if self.condition; false; else false; end' 
-      mutants << 'if self.condition; nil;   else false; end' 
+      mutants << 'if self.condition; false; else false; end'
+      mutants << 'if self.condition; nil;   else false; end'
 
       # mutations of else body
-      mutants << 'if self.condition; true;  else true;  end' 
-      mutants << 'if self.condition; true;  else nil;   end' 
+      mutants << 'if self.condition; true;  else true;  end'
+      mutants << 'if self.condition; true;  else nil;   end'
 
       # mutation of condition to always be true
       mutants << 'if true; true; else false; end'

@@ -61,7 +61,7 @@ module Mutant
 
     protected
 
-      # Return counts 
+      # Return counts
       #
       # @return [Hash]
       #
@@ -77,7 +77,7 @@ module Mutant
       #
       attr_reader :start
 
-      # Return killers 
+      # Return killers
       #
       # @return [Hash]
       #
@@ -123,7 +123,7 @@ module Mutant
         self
       end
 
-      # Test for errors 
+      # Test for errors
       #
       # @return [true]
       #   if there are errors

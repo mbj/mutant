@@ -3,7 +3,7 @@ module Mutant
   class Differ
     include Adamantium::Flat
 
-    # Return source diff 
+    # Return source diff
     #
     # @return [String]
     #
@@ -20,7 +20,7 @@ module Mutant
     end
     memoize :diff
 
-    # Return colorized source diff 
+    # Return colorized source diff
     #
     # @return [String]
     #
@@ -40,7 +40,7 @@ module Mutant
 
     # Initialize differ object
     #
-    # @param [String] old 
+    # @param [String] old
     # @param [String] new
     #
     # @return [undefined]
@@ -109,4 +109,3 @@ module Mutant
     end
   end
 end
-

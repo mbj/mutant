@@ -23,7 +23,7 @@ module Mutant
                 mutation.defaults = nil
               end
               mutation
-            end 
+            end
           end
 
         end

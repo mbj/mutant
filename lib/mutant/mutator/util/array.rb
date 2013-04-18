@@ -34,7 +34,7 @@ module Mutant
         private
 
           # Emit mutations
-          # 
+          #
           # @return [undefined]
           #
           # @api private
@@ -54,7 +54,7 @@ module Mutant
       private
 
         # Emit mutations
-        # 
+        #
         # @return [undefined]
         #
         # @api private

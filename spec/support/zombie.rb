@@ -151,7 +151,7 @@ module Zombie
   #
   # @api private
   #
-  # FIXME: 
+  # FIXME:
   #  Yeah looks very ugly but im currently to exited to do a cleanup.
   #
   def self.files

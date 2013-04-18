@@ -8,7 +8,7 @@ shared_examples_for 'a method match' do
   let(:method_arity)      { values.fetch(:method_arity) }
   let(:scope)             { values.fetch(:scope)        }
   let(:node_class)        { values.fetch(:node_class)   }
-                         
+
   let(:node)              { mutation_subject.node    }
   let(:context)           { mutation_subject.context }
   let(:mutation_subject)  { subject.first   }

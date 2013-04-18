@@ -8,7 +8,7 @@ module Rspec
   # @api private
   #
   def self.nest
-    original_world, original_configuration = 
+    original_world, original_configuration =
       ::RSpec.instance_variable_get(:@world),
       ::RSpec.instance_variable_get(:@configuration)
 

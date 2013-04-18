@@ -28,7 +28,7 @@ module Mutant
 
       # Wrap node into ast node
       #
-      # @param [Class, Module] scope 
+      # @param [Class, Module] scope
       # @param [Rubinius::AST::Node] node
       #
       # @return [Rubinius::AST::Class]

@@ -48,7 +48,7 @@ module Mutant
     #   otherwise
     #
     # @api private
-    #  
+    #
     abstract_method :success?
 
   private
