@@ -97,7 +97,7 @@ module Mutant
     # @api private
     #
     def sha1
-      Digest::SHA1.hexdigest(subject.identification + source)
+      Digest::SHA1.hexdigest(subject.identification + 0.chr + source)
     end
     memoize :sha1
 
