@@ -26,7 +26,7 @@ module Mutant
         # @api private
         #
         def namespace
-          Classifier.const_lookup(match.to_s)
+          Classifier.constant_lookup(match[1].to_s)
         end
       end
     end
