@@ -2,7 +2,9 @@ module Mutant
   class Matcher
     # Matcher for specific namespace
     class Namespace < self
-      include Equalizer.new(:pattern)
+      include Concord.new(:namespace)
+
+      MATCHERS = [Matcher::Methods::Singleton, Matcher::Methods::Instance]
 
       # Enumerate subjects
       #
@@ -24,29 +26,7 @@ module Mutant
         self
       end
 
-      # Return namespace
-      #
-      # @return [Class::Module]
-      #
-      # @api private
-      #
-      attr_reader :namespace
-
-      MATCHERS = [Matcher::Methods::Singleton, Matcher::Methods::Instance]
-
     private
-
-      # Initialize object space matcher
-      #
-      # @param [Class, Module] namespace
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(namespace)
-        @namespace = namespace
-      end
 
       # Return pattern
       #
@@ -55,13 +35,13 @@ module Mutant
       # @api private
       #
       def pattern
-        %r(\A#{Regexp.escape(namespace.name)}(?:::)?\z)
+        %r(\A#{Regexp.escape(namespace.name)}(?:::)?)
       end
       memoize :pattern
 
       # Yield matchers for scope
       #
-      # @param [::Class,::Module] scope
+      # @param [Class,Module] scope
       #
       # @return [undefined]
       #
