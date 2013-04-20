@@ -2,10 +2,10 @@ Code:
   * Test mutant with dynamically created zombie.
   * Fix ugly code within default parameter mutations
   * Break up lib/mutant/mutator/node/send.rb in class specific files
-  * Log all warnings throug reporter, so remove random $stderr.puts calls
+  * Log all warnings through reporter, so remove random $stderr.puts calls
 
 AST:
-  * Fix the rubinius AST to allow setting @vcall_style variable in Rubinius::AST::Send nodes.
+  * Use whitequarcks parser and the to be writte unparser. This fixes all RBX AST issues.
 
 Mutations:
   * Add binary operator specific mutations (YAY, finally reached this point)
@@ -32,15 +32,17 @@ Killers:
   * Add a general master <=> killer IPC interface. So different strategies of isolation
     (fork, vs jruby runtime creation) will work without big impact.
 
+Kill:
+  * Introduce mutant Kill that acts as a DTO between killer and runner. (Simplifies reporting)
+
 Strategy:
   * Aggregate warnings on missing spec files
   * Provide "expicit files to kill with" strategy
-  * Automatically load ./spec/spec_helper.rb for rspec strategies (No need to specify -I and -r anymore)
 
 Matcher:
   * Allow matches on attr_reader with literal name argument(s)?
   * Allow matches on define_method with literal name argument?
 
 jruby-support:
-  * Hook melbourne via ffi
+  * Use whitequarck parser
   * Create a runtime per mutation to kill mutations in isolation
