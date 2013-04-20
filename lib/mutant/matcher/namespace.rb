@@ -1,13 +1,9 @@
 module Mutant
   class Matcher
+
     # Matcher for specific namespace
     class Namespace < self
       include Concord.new(:namespace)
-
-      MATCHERS = [
-        Matcher::Methods::Singleton, 
-        Matcher::Methods::Instance
-      ].freeze
 
       # Enumerate subjects
       #
@@ -23,7 +19,7 @@ module Mutant
         return to_enum unless block_given?
 
         scopes.each do |scope|
-          emit_scope_matches(scope, &block)
+          Scope.each(scope, &block)
         end
 
         self
@@ -41,20 +37,6 @@ module Mutant
         %r(\A#{Regexp.escape(namespace.name)}(?:::)?)
       end
       memoize :pattern
-
-      # Yield matchers for scope
-      #
-      # @param [Class,Module] scope
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def emit_scope_matches(scope, &block)
-        MATCHERS.each do |matcher|
-          matcher.each(scope, &block)
-        end
-      end
 
       # Return scope enumerator
       #
@@ -83,6 +65,7 @@ module Mutant
           yield scope
         end
       end
+
     end
   end
 end
