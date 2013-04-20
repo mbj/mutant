@@ -2,69 +2,30 @@ module Mutant
   class Reporter
     # Reporter that reports in human readable format
     class CLI < self
+      include Concord.new(:io)
 
-      # Initialize reporter
+    private
+
+      # Report subject
       #
-      # @param [Config] config
+      # @param [Subject] _subject
       #
       # @return [undefined]
       #
       # @api private
       #
-      def initialize(config)
-        super
-        @io = $stdout
-      end
-
-      # Reporte subject
-      #
-      # @param [Subject] subject
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def subject(subject)
-        super
-        puts("Subject: #{subject.identification}")
-      end
-
-      # Return error stream
-      #
-      # @return [IO]
-      #
-      # @api private
-      #
-      def error_stream
-        debug? ? io : StringIO.new
-      end
-
-      # Return output stream
-      #
-      # @return [IO]
-      #
-      # @api private
-      #
-      def output_stream
-        debug? ? io : StringIO.new
+      def subject(_subject)
       end
 
       # Report mutation
       #
-      # @param [Mutation] mutation
+      # @param [Mutation] _mutation
       #
-      # @return [self]
+      # @return [undefined]
       #
       # @api private
       #
-      def mutation(mutation)
-        super
-
-        if debug?
-          colorized_diff(mutation)
-        end
-
-        self
+      def mutation(_mutation)
       end
 
       # Report start
@@ -75,24 +36,13 @@ module Mutant
       #
       # @api private
       #
-      def start(config)
+      def config(config)
         message = []
         message << 'Mutant configuration:'
-        message << "Matcher:   #{config.matcher.inspect}"
-        message << "Filter:    #{config.filter.inspect}"
+        message << "Matcher:   #{config.matcher.inspect }"
+        message << "Filter:    #{config.filter.inspect  }"
         message << "Strategy:  #{config.strategy.inspect}"
         puts message.join("\n")
-        super
-      end
-
-      # Report stop
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def stop
-        super
       end
 
       # Report killer
@@ -103,9 +53,7 @@ module Mutant
       #
       # @api private
       #
-      def report_killer(killer)
-        super
-
+      def killer(killer)
         status = killer.killed? ? 'Killed' : 'Alive'
         color  = killer.success? ? Color::GREEN : Color::RED
 
@@ -119,14 +67,6 @@ module Mutant
       end
 
     private
-
-      # Return IO stream
-      #
-      # @return [IO]
-      #
-      # @api private
-      #
-      attr_reader :io
 
       # Test for colored output
       #
@@ -189,7 +129,7 @@ module Mutant
         diff = color? ? differ.colorized_diff : differ.diff
 
         if diff.empty?
-          raise 'Unable to create a diff, so ast mutation or to_source has an error!'
+          raise 'Unable to create a diff, so ast mutant or to_source does something strange!!'
         end
 
         puts(diff)

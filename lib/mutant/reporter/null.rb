@@ -4,42 +4,18 @@ module Mutant
     # Null reporter
     class Null < self
 
-      # Report subject
+      # Report object
       #
-      # @param [Subject] subject
+      # @param [Object] _object
       #
       # @return [self]
       #
       # @api private
       #
-      def subject(*)
+      def report(_object)
         self
       end
 
-      # Report mutation
-      #
-      # @param [Mutation] mutation
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def mutation(*)
-        self
-      end
-
-      # Report killer
-      #
-      # @param [Killer] killer
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def killer(*)
-        self
-      end
     end
-
   end
 end
