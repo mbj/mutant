@@ -3,16 +3,24 @@ require 'spec_helper'
 describe Mutant::Runner::Mutation, '#killer' do
   let(:object) { described_class.run(config, mutation) }
 
-  let(:config)   { mock('Config')   }
+  let(:config) do
+    mock(
+      'Config', 
+      :reporter => reporter, 
+      :strategy => strategy
+    )
+  end
+
+  let(:reporter) { mock('Reporter') }
   let(:mutation) { mock('Mutation') }
   let(:strategy) { mock('Strategy') }
   let(:killer)   { mock('Killer')   }
 
   subject { object.killer }
-
+  
   before do
-    config.stub(:strategy => strategy)
-    strategy.stub(:kill     => killer)
+    reporter.stub(:report => reporter)
+    strategy.stub(:kill => killer)
   end
 
   it 'should call configuration to identify strategy' do

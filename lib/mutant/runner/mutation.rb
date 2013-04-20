@@ -4,13 +4,13 @@ module Mutant
     class Mutation < self
       include Concord.new(:config, :mutation)
 
-      # Return mutation
+      # Return killer instance
       #
-      # @return [Mutation]
+      # @return [Killer]
       #
       # @api private
       #
-      attr_reader :mutation
+      attr_reader :killer
 
       # Initialize object
       #
@@ -25,14 +25,6 @@ module Mutant
         @mutation = mutation
         super(config)
       end
-
-      # Return killer instance
-      #
-      # @return [Killer]
-      #
-      # @api private
-      #
-      attr_reader :killer
 
       # Test if mutation was handeled successfully
       #
@@ -58,6 +50,7 @@ module Mutant
       #
       def run
         @killer = config.strategy.kill(mutation)
+        report(@killer)
       end
 
     end

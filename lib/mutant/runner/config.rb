@@ -1,6 +1,6 @@
 module Mutant
   class Runner
-    # Runner for config
+    # Runner for object config
     class Config < self
 
       # Return subject runners
@@ -37,6 +37,16 @@ module Mutant
       end
       memoize :success?
 
+      # Return strategy
+      #
+      # @return [Strategy]
+      #
+      # @api private
+      #
+      def strategy
+        config.strategy
+      end
+
     private
 
       # Run config
@@ -46,10 +56,10 @@ module Mutant
       # @api private
       #
       def run
-        strategy = config.strategy
+        strategy = self.strategy
         strategy.setup
         @subjects = config.subjects.map do |subject|
-          Subject.run(config, subject)
+          Subject.run(self, subject)
         end
         strategy.teardown
       end

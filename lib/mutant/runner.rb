@@ -1,7 +1,7 @@
 module Mutant
-  # Runner that allows to mutate an entire project
+  # Runner baseclass
   class Runner
-    include Adamantium::Flat, AbstractType
+    include Adamantium::Flat, AbstractType, Equalizer.new(:config)
     extend MethodObject
 
     # Return config
@@ -51,6 +51,16 @@ module Mutant
     #
     abstract_method :success?
 
+    # Return reporter
+    #
+    # @return [Reporter]
+    #
+    # @api private
+    #
+    def reporter
+      config.reporter
+    end
+
   private
 
     # Perform operation
@@ -60,6 +70,18 @@ module Mutant
     # @api private
     #
     abstract_method :run
+
+    # Return reporter
+    #
+    # @param [Object] object
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def report(object)
+      reporter.report(object)
+    end
 
   end
 end
