@@ -4,7 +4,10 @@ module Mutant
     class Namespace < self
       include Concord.new(:namespace)
 
-      MATCHERS = [Matcher::Methods::Singleton, Matcher::Methods::Instance]
+      MATCHERS = [
+        Matcher::Methods::Singleton, 
+        Matcher::Methods::Instance
+      ].freeze
 
       # Enumerate subjects
       #
@@ -69,7 +72,7 @@ module Mutant
 
       # Yield scope if name matches pattern
       #
-      # @param [::Module,::Class] scope
+      # @param [Module,Class] scope
       #
       # @return [undefined]
       #
