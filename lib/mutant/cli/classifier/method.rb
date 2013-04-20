@@ -38,7 +38,7 @@ module Mutant
         def method
           scope_matcher.methods.detect do |method|
             method.name == method_name
-          end || raise("Cannot find #{method_name} for #{scope}")
+          end or raise("Cannot find #{method_name} for #{scope}")
         end
         memoize :method, :freezer => :noop
 
