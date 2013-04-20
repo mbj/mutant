@@ -23,7 +23,6 @@ module Mutant
         # @api private
         #
         def matcher
-          # TODO: Honor law of demeter
           scope_matcher.matcher.new(scope, method)
         end
         memoize :matcher
@@ -37,7 +36,6 @@ module Mutant
         # @api private
         #
         def method
-          # TODO: Honor law of demeter
           scope_matcher.methods.detect do |method|
             method.name == method_name
           end || raise("Cannot find #{method_name} for #{scope}")
