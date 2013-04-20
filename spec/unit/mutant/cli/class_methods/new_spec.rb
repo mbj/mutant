@@ -7,6 +7,7 @@ shared_examples_for 'an invalid cli run' do
 end
 
 shared_examples_for 'a cli parser' do
+  subject { cli.config }
   its(:filter)   { should eql(expected_filter)                }
   its(:strategy) { should eql(expected_strategy.new(subject)) }
   its(:reporter) { should eql(expected_reporter)              }
@@ -25,9 +26,11 @@ describe Mutant::CLI, '.new' do
   # Defaults
   let(:expected_filter)   { Mutant::Mutation::Filter::ALL      }
   let(:expected_strategy) { Mutant::Strategy::Rspec::Unit      }
-  let(:expected_reporter) { Mutant::Reporter::CLI.new($stderr) }
+  let(:expected_reporter) { Mutant::Reporter::CLI.new($stdout) }
 
-  subject { object.new(arguments) }
+  let(:cli) { object.new(arguments) }
+
+  subject { cli }
 
   context 'with unknown flag' do
     let(:arguments) { %w(--invalid) }
@@ -71,7 +74,6 @@ describe Mutant::CLI, '.new' do
     let(:expected_matcher) { Mutant::CLI::Classifier::Method.new('TestApp::Literal#float') }
 
     it_should_behave_like 'a cli parser'
-
   end
 
   context 'with namespace matcher' do

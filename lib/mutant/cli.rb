@@ -2,7 +2,7 @@ module Mutant
 
   # Comandline parser
   class CLI < CLIParser
-    include Adamantium::Flat, Equalizer.new(:matcher, :filter, :strategy, :reporter)
+    include Adamantium::Flat, Equalizer.new(:config)
 
     # Run cli with arguments
     #
@@ -113,7 +113,7 @@ module Mutant
     # @api private
     #
     def reporter
-      Mutant::Reporter::CLI.new(self)
+      Mutant::Reporter::CLI.new($stdout)
     end
     memoize :reporter
 
