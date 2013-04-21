@@ -141,7 +141,7 @@ module Mutant
         puts "Subjects:  #{subjects}"
         puts "Mutations: #{mutations}"
         puts "Kills:     #{kills}"
-        puts 'Runtime:   %0.2fs' % runner.runtime
+        puts 'Runtime:   %0.2fs' % runtime
         puts 'Killtime:  %0.2fs' % killtime
         puts 'Overhead:  %0.2f%%' % overhead
         puts 'Coverage:  %0.2f%%' % coverage
