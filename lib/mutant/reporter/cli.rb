@@ -73,9 +73,7 @@ module Mutant
       #
       def subject_results(runner)
         mutations = runner.mutations
-        if mutations.any?
-          puts # There is an open line
-        end
+        puts if mutations.any?
         time      = mutations.map(&:runtime).inject(0, :+)
         mutations = mutations.length
         fails     = runner.failed_mutations
