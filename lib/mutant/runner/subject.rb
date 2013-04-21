@@ -68,9 +68,11 @@ module Mutant
       # @api private
       #
       def run
+        report(subject)
         @mutations = subject.map do |mutation|
           Mutation.run(config, mutation)
         end
+        report(self)
       end
 
     end

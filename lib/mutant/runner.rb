@@ -22,8 +22,21 @@ module Mutant
     #
     def initialize(config)
       @config = config
+      @start = Time.now
       run
+      @end = Time.now
     end
+
+    # Return runtime
+    #
+    # @return [Float]
+    #
+    # @api private
+    #
+    def runtime
+      @end - @start 
+    end
+    memoize :runtime
 
     # Test if runner failed
     #

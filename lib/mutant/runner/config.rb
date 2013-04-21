@@ -56,12 +56,15 @@ module Mutant
       # @api private
       #
       def run
+        report(config)
         strategy = self.strategy
         strategy.setup
         @subjects = config.subjects.map do |subject|
           Subject.run(self, subject)
         end
         strategy.teardown
+        @end = Time.now
+        report(self)
       end
 
     end

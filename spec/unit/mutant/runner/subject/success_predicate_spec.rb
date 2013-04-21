@@ -5,11 +5,16 @@ describe Mutant::Runner::Subject, '#success?' do
 
   let(:object) { described_class.run(config, mutation_subject) }
 
+  let(:reporter)         { mock('Reporter')                      }
   let(:mutation_subject) { mock('Subject', :map => mutations)    }
-  let(:config)           { mock('Config')                        }
+  let(:config)           { mock('Config', :reporter => reporter) }
   let(:mutation_a)       { mock('Mutation A', :failed? => false) }
   let(:mutation_b)       { mock('Mutation B', :failed? => false) }
   let(:mutations)        { [mutation_a, mutation_b]              }
+
+  before do
+    reporter.stub(:report => reporter)
+  end
 
   class DummyMutationRunner
     include Concord.new(:config, :mutation)

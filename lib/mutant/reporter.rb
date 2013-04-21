@@ -1,11 +1,7 @@
 module Mutant
-  # Abstract reporter
+  # Abstract base class for reporters
   class Reporter
     include Adamantium::Flat, AbstractType
-
-    ACTIONS = {
-      Subject => :subject,
-    }.freeze
 
     # Report object
     #
@@ -15,14 +11,7 @@ module Mutant
     #
     # @api private
     #
-    def report(object)
-      klass = object.class
-      method = self.class::ACTIONS.fetch(klass) do
-        raise "No reporter for: #{klass}"
-      end
-      send(method, object)
-      self
-    end
+    abstract_method :report
 
   end
 end
