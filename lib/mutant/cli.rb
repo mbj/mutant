@@ -113,7 +113,7 @@ module Mutant
     # @api private
     #
     def reporter
-      Mutant::Reporter::CLI.new($stdout)
+      Reporter::CLI.new($stdout)
     end
     memoize :reporter
 
@@ -131,7 +131,7 @@ module Mutant
         raise Error, 'No matchers given'
       end
 
-      Mutant::Matcher::Chain.build(@matchers)
+      Matcher::Chain.build(@matchers)
     end
     memoize :matcher
 
