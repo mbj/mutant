@@ -5,8 +5,6 @@ module Mutant
       # Namespace classifier
       class Namespace < self
 
-        REGEXP = %r(\A(#{SCOPE_PATTERN})\*\z).freeze
-
       private
 
         # Return matcher
@@ -16,7 +14,7 @@ module Mutant
         # @api private
         #
         def matcher
-          Matcher::Namespace.new(namespace)
+          self.class::MATCHER.new(namespace)
         end
 
         # Return namespace
@@ -27,6 +25,20 @@ module Mutant
         #
         def namespace
           Classifier.constant_lookup(match[1].to_s)
+        end
+
+        # Recursive namespace classifier
+        class Recursive < self
+          REGEXP = %r(\A(#{SCOPE_PATTERN})\*\z).freeze
+          MATCHER = Matcher::Namespace
+          register
+        end
+
+        # Recursive namespace classifier
+        class Flat < self
+          REGEXP = %r(\A(#{SCOPE_PATTERN})\z).freeze
+          MATCHER = Matcher::Scope
+          register
         end
       end
     end

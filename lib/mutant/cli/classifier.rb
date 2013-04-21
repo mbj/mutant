@@ -3,13 +3,25 @@ module Mutant
     # A classifier for input strings
     class Classifier < Matcher
       include AbstractType, Adamantium::Flat, Equalizer.new(:identification)
-      extend DescendantsTracker
 
       SCOPE_NAME_PATTERN  = /[A-Za-z][A-Za-z_0-9]*/.freeze
       METHOD_NAME_PATTERN = /[_A-Za-z][A-Za-z0-9_]*[!?=]?/.freeze
       SCOPE_PATTERN       = /(?:::)?#{SCOPE_NAME_PATTERN}(?:::#{SCOPE_NAME_PATTERN})*/.freeze
 
       SINGLETON_PATTERN   = %r(\A(#{SCOPE_PATTERN})\z).freeze
+
+      REGISTRY = []
+
+      # Register classifier
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def self.register
+        REGISTRY << self
+      end
+      private_class_method :register
 
       # Return constant
       #
@@ -38,7 +50,7 @@ module Mutant
       # @api private
       #
       def self.build(input)
-        classifiers = descendants.map do |descendant|
+        classifiers = REGISTRY.map do |descendant|
           descendant.run(input)
         end.compact
 

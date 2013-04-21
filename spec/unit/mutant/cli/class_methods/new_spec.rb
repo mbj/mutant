@@ -77,8 +77,8 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with namespace matcher' do
-    let(:arguments)        { %w(--rspec-unit ::TestApp*)                          }
-    let(:expected_matcher) { Mutant::CLI::Classifier::Namespace.new('::TestApp*') }
+    let(:arguments)        { %w(--rspec-unit ::TestApp*)                                     }
+    let(:expected_matcher) { Mutant::CLI::Classifier::Namespace::Recursive.new('::TestApp*') }
 
     it_should_behave_like 'a cli parser'
   end
