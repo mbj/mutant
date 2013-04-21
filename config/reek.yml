@@ -43,6 +43,7 @@ DataClump:
 DuplicateMethodCall:
   enabled: true
   exclude:
+  - Mutant::Runner#initializ # Time.new
   - Mutant::CLI::Classifier::Method#method
   - Mutant::Killer#run_with_benchmark
   - Mutant::Mutator::Node::FormalArguments19::DefaultMutations#dispatch
@@ -66,8 +67,7 @@ FeatureEnvy:
   - Mutant::Mutator::Node::FormalArguments19::DefaultMutations#dispatch
   - Mutant::Mutator::Node::FormalArguments19::RequireDefaults#dispatch
   - Mutant::Mutator::Node::PatternArguments#allow?
-  - Mutant::Reporter::CLI#report_killer
-  - Mutant::Reporter::CLI#start
+  - Mutant::Reporter::CLI#subject_results
 IrresponsibleModule:
   enabled: true
   exclude:
@@ -136,6 +136,8 @@ TooManyStatements:
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI#report_killer
   - Mutant::Reporter::CLI#start
+  - Mutant::Reporter::CLI#config_results
+  - Mutant::Reporter::CLI#subject_results
   - each
   max_statements: 5
 UncommunicativeMethodName:
@@ -185,6 +187,7 @@ UnusedParameters:
 UtilityFunction:
   enabled: true
   exclude:
+  - Mutant::CLI#reporter
   - Mutant::Matcher::Namespace#emit_scope_matches
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?

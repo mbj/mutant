@@ -103,12 +103,10 @@ module Mutant
       # @api private
       #
       def config(config)
-        message = []
-        message << 'Mutant configuration:'
-        message << "Matcher:   #{config.matcher.inspect }"
-        message << "Filter:    #{config.filter.inspect  }"
-        message << "Strategy:  #{config.strategy.inspect}"
-        puts message.join("\n")
+        puts 'Mutant configuration:'
+        puts "Matcher:   #{config.matcher.inspect }"
+        puts "Filter:    #{config.filter.inspect  }"
+        puts "Strategy:  #{config.strategy.inspect}"
       end
 
       # Report configuration results
@@ -173,6 +171,7 @@ module Mutant
       # @api private
       #
       def char(char, color)
+        io = self.io
         io.write(colorize(color, char))
         io.flush
       end

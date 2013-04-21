@@ -55,14 +55,24 @@ module Mutant
       #
       # @api private
       #
-      def run
-        report(config)
+      def run_subjects
         strategy = self.strategy
         strategy.setup
         @subjects = config.subjects.map do |subject|
           Subject.run(self, subject)
         end
         strategy.teardown
+      end
+
+      # Run with strategy management
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def run
+        report(config)
+        run_subjects
         @end = Time.now
         report(self)
       end
