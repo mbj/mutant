@@ -1,5 +1,5 @@
 language: ruby
-script: 'bundle exec rake spec'
+script: 'bundle exec rake ci'
 rvm:
   - 1.8.7
   - 1.9.2
