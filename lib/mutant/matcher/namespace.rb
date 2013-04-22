@@ -17,7 +17,7 @@ module Mutant
       #
       def each(&block)
         return to_enum unless block_given?
-
+        
         scopes.each do |scope|
           Scope.each(scope, &block)
         end

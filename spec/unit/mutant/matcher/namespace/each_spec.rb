@@ -17,7 +17,19 @@ describe Mutant::Matcher::Namespace, '#each' do
     ObjectSpace.stub(:each_object => [singleton_a, singleton_b])
   end
 
-  it_should_behave_like 'an #each method'
+  context 'with no block' do
+    subject { object.each }
+
+    it { should be_instance_of(to_enum.class) }
+
+    if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
+      pending 'FIX RBX rspec? BUG HERE'
+    else
+      it 'yields the expected values' do
+        subject.to_a.should eql(object.to_a)
+      end
+    end
+  end
 
   it 'should yield subjects' do
     expect { subject }.to change { yields }.from([]).to([subject_a, subject_b])
