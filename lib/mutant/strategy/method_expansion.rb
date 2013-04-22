@@ -42,7 +42,7 @@ module Mutant
       # @api private
       #
       def self.expand(name)
-        name.to_s.sub(REGEXP, METHOD_POSTFIX_EXPANSIONS).to_sym
+        name.to_s.gsub(REGEXP, METHOD_POSTFIX_EXPANSIONS).to_sym
       end
       private_class_method :expand
 
