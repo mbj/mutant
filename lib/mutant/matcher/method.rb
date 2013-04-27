@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Matcher for subjects that are a specific method
     class Method < self
-      include Adamantium::Flat, Equalizer.new(:identification)
+      include Adamantium::Flat, Concord.new(:scope, :method)
 
       # Methods within rbx kernel directory are precompiled and their source
       # cannot be accessed via reading source location
@@ -29,46 +29,7 @@ module Mutant
         self
       end
 
-      # Return method
-      #
-      # @return [UnboundMethod, Method]
-      #
-      # @api private
-      #
-      attr_reader :method
-
-      # Return scope
-      #
-      # @return [Class|Module]
-      #
-      # @api private
-      #
-      attr_reader :scope
-
-      # Return method name
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def method_name
-        method.name
-      end
-
     private
-
-      # Initialize method filter
-      #
-      # @param [Class|Module] scope
-      # @param [Method, UnboundMethod] method
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(scope, method)
-        @scope, @method = scope, method
-      end
 
       # Test if method is skipped
       #
@@ -88,6 +49,16 @@ module Mutant
         end
 
         false
+      end
+
+      # Return method name
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def method_name
+        method.name
       end
 
       # Return context
@@ -171,6 +142,7 @@ module Mutant
         end
         last_match
       end
+
     end
   end
 end
