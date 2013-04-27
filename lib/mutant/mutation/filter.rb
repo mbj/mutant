@@ -54,7 +54,7 @@ module Mutant
       end
 
       # Mutation filter matching all mutations
-      Mutant.define_singleton_subclass('ALL', self) do
+      Mutant.singleton_subclass_instance('ALL', self) do
 
         # Test for match
         #

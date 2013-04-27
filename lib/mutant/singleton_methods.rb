@@ -10,7 +10,7 @@ module Mutant
   #
   # @api private
   #
-  def self.define_singleton_subclass(name, superclass, &block)
+  def self.singleton_subclass_instance(name, superclass, &block)
     klass = Class.new(superclass) do
 
       def inspect; self.class.name; end
