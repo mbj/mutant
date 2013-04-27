@@ -24,7 +24,7 @@ module Mutant
         # @api private
         #
         def matcher
-          scope_matcher.matcher.new(scope, method)
+          methods_matcher.matcher.new(scope, method)
         end
         memoize :matcher
 
@@ -37,9 +37,9 @@ module Mutant
         # @api private
         #
         def method
-          scope_matcher.methods.detect do |method|
+          methods_matcher.methods.detect do |method|
             method.name == method_name
-          end or raise("Cannot find method #{method_name} for #{scope}")
+          end or raise("Cannot find method #{identification}")
         end
         memoize :method, :freezer => :noop
 
@@ -89,10 +89,10 @@ module Mutant
         #
         # @api private
         #
-        def scope_matcher
+        def methods_matcher
           TABLE.fetch(scope_symbol).new(scope)
         end
-        memoize :scope_matcher
+        memoize :methods_matcher
 
       end
     end
