@@ -2,27 +2,7 @@ module Mutant
   class Matcher
     # Abstract base class for matcher that returns method subjects extracted from scope
     class Methods < self
-      include AbstractType, Equalizer.new(:scope)
-
-      # Return scope
-      #
-      # @return [Class, Model]
-      #
-      # @api private
-      #
-      attr_reader :scope
-
-      # Initialize object
-      #
-      # @param [Class,Module] scope
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(scope)
-        @scope = scope
-      end
+      include AbstractType, Concord.new(:scope)
 
       # Enumerate subjects
       #
@@ -44,6 +24,8 @@ module Mutant
         self
       end
 
+    private
+
       # Return method matcher class
       #
       # @return [Class:Matcher::Method]
@@ -52,35 +34,6 @@ module Mutant
       #
       def matcher
         self.class::MATCHER
-      end
-
-      # Return methods
-      #
-      # @return [Enumerable<Method, UnboundMethod>]
-      #
-      # @api private
-      #
-      def methods
-        method_names.map do |name|
-          access(name)
-        end
-      end
-      memoize :methods
-
-    private
-
-      # Return method names
-      #
-      # @param [Object] object
-      #
-      # @return [Enumerable<Symbol>]
-      #
-      # @api private
-      #
-      def self.method_names(object)
-        object.public_instance_methods(false)   +
-        object.private_instance_methods(false)  +
-        object.protected_instance_methods(false)
       end
 
       # Emit matches for method
@@ -97,13 +50,36 @@ module Mutant
         end
       end
 
-      # Return method names
+      # Return methods
+      #
+      # @return [Enumerable<Method, UnboundMethod>]
+      #
+      # @api private
+      #
+      def methods
+        candidates.each_with_object([]) do |name, methods|
+          method = access(name)
+          methods << method if method.owner == scope
+        end
+      end
+      memoize :methods
+
+      # Return candidate names
+      #
+      # @param [Object] object
       #
       # @return [Enumerable<Symbol>]
       #
       # @api private
       #
-      abstract_method :method_names
+      def candidates
+        object = self.scope
+        names = 
+          object.public_instance_methods(false)   +
+          object.private_instance_methods(false)  +
+          object.protected_instance_methods(false)
+        names.sort
+      end
 
       class Singleton < self
         MATCHER = Matcher::Method::Singleton
@@ -132,9 +108,7 @@ module Mutant
         #
         def method_names
           singleton_class = scope.singleton_class
-          names = self.class.method_names(singleton_class)
-
-          names.sort.reject do |name|
+          candidate_names.sort.reject do |name|
             name.to_sym == :__class_init__
           end
         end
@@ -168,8 +142,7 @@ module Mutant
         def method_names
           scope = self.scope
           return [] unless scope.kind_of?(Module)
-          names = self.class.method_names(scope)
-          names.uniq.sort
+          candidate_names.sort
         end
       end
     end
