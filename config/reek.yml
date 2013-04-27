@@ -68,6 +68,7 @@ FeatureEnvy:
   - Mutant::Mutator::Node::FormalArguments19::RequireDefaults#dispatch
   - Mutant::Mutator::Node::PatternArguments#allow?
   - Mutant::Reporter::CLI#subject_results
+  - Mutant::Matcher::Methods#candidate_names
 IrresponsibleModule:
   enabled: true
   exclude:
