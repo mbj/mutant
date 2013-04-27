@@ -31,8 +31,8 @@ module Mutant
         # @api private
         #
         def match?(node)
-          node.line  == source_line  &&
-          node.class == Rubinius::AST::Define  &&
+          node.line  == source_line           &&
+          node.class == Rubinius::AST::Define &&
           node.name  == method_name
         end
 
