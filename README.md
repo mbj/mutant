@@ -17,8 +17,8 @@ Just create your own Mutant::Killer subclass, and make sure I get a PR!
 
 See this [ASCII-Cast](http://ascii.io/a/1707) for mutant in action! (v0.2.1)
 
-Using Mutant
-------------
+Projects using Mutant
+---------------------
 
 The following projects adopted mutant, and aim 100% mutation coverage:
 
