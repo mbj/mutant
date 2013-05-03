@@ -25,6 +25,7 @@ The following projects adopted mutant, and aim 100% mutation coverage:
 * [axiom](https://github.com/dkubb/axiom)
 * [axiom-types](https://github.com/dkubb/axiom-types)
 * [dm-mapper](https://github.com/datamapper/dm-mapper)
+* [event_bus](https://github.com/kevinrutherford/event_bus)
 * [virtus](https://github.com/solnic/virtus)
 * [quacky](https://github.com/benmoss/quacky)
 * various small/minor stuff under https://github.com/mbj
