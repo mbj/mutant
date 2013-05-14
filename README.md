@@ -28,6 +28,7 @@ The following projects adopted mutant, and aim 100% mutation coverage:
 * [event_bus](https://github.com/kevinrutherford/event_bus)
 * [virtus](https://github.com/solnic/virtus)
 * [quacky](https://github.com/benmoss/quacky)
+* [substation](https://github.com/snusnu/substation)
 * various small/minor stuff under https://github.com/mbj
 
 Feel free to ping me to add your project to the list!
