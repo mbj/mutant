@@ -2,7 +2,7 @@ require 'spec_helper'
 
 shared_examples_for 'an invalid cli run' do
   it 'should raise error' do
-    expect { subject }.to raise_error(Mutant::CLIParser::Error, expected_message)
+    expect { subject }.to raise_error(Mutant::CLI::Error, expected_message)
   end
 end
 
@@ -35,7 +35,7 @@ describe Mutant::CLI, '.new' do
   context 'with unknown flag' do
     let(:arguments) { %w(--invalid) }
 
-    let(:expected_message) { 'Unknown option: "--invalid"' }
+    let(:expected_message) { 'invalid option: --invalid' }
 
     it_should_behave_like 'an invalid cli run'
   end
@@ -43,7 +43,7 @@ describe Mutant::CLI, '.new' do
   context 'with unknown option' do
     let(:arguments) { %w(--invalid Foo) }
 
-    let(:expected_message) { 'Unknown option: "--invalid"' }
+    let(:expected_message) { 'invalid option: --invalid' }
 
     it_should_behave_like 'an invalid cli run'
   end
@@ -63,8 +63,8 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with code filter and missing argument' do
-    let(:arguments)        { %w(--rspec-unit --code)           }
-    let(:expected_message) { '"--code" is missing an argument' }
+    let(:arguments)        { %w(--rspec-unit --code)    }
+    let(:expected_message) { 'missing argument: --code' }
 
     it_should_behave_like 'an invalid cli run'
   end
