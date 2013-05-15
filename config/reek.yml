@@ -43,7 +43,8 @@ DataClump:
 DuplicateMethodCall:
   enabled: true
   exclude:
-  - Mutant::Runner#initializ # Time.new
+  - Mutant::Runner#initialize # Time.new
+  - Mutant::CLI#parse
   - Mutant::CLI::Classifier::Method#method
   - Mutant::Killer#run_with_benchmark
   - Mutant::Mutator::Node::FormalArguments19::DefaultMutations#dispatch
@@ -69,6 +70,7 @@ FeatureEnvy:
   - Mutant::Mutator::Node::PatternArguments#allow?
   - Mutant::Reporter::CLI#subject_results
   - Mutant::Matcher::Methods#candidate_names
+  - Mutant::CLI#parse
 IrresponsibleModule:
   enabled: true
   exclude:
@@ -93,11 +95,12 @@ LongYieldList:
 NestedIterators:
   enabled: true
   exclude:
-  - Mutant#self.define_singleton_subclass
+  - Mutant#self.singleton_subclass_instance
   - Mutant::Mutator::Node::FormalArguments19::PatternArgumentExpansion#dispatch
   - Mutant::Mutator::Node::FormalArguments19::RequireDefaults#dispatch
   - Mutant::Mutator::Node::ReceiverCase#emit_when_branch_mutations
   - Mutant::Mutator::Util::Array::Element#dispatch
+  - Mutant::CLI#parse
   max_allowed_nesting: 1
   ignore_iterators: []
 NilCheck:
@@ -125,7 +128,7 @@ TooManyMethods:
 TooManyStatements:
   enabled: true
   exclude:
-  - Mutant#self.define_singleton_subclass
+  - Mutant#self.singleton_subclass_instance
   - Mutant::CLI#self.run
   - Mutant::Differ#diff
   - Mutant::Killer::Forked#run
@@ -139,7 +142,7 @@ TooManyStatements:
   - Mutant::Reporter::CLI#start
   - Mutant::Reporter::CLI#config_results
   - Mutant::Reporter::CLI#subject_results
-  - each
+  - Mutant::CLI#parse
   max_statements: 5
 UncommunicativeMethodName:
   enabled: true
