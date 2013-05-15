@@ -1,8 +1,16 @@
+require 'optparse'
+
 module Mutant
 
   # Comandline parser
-  class CLI < CLIParser
+  class CLI
     include Adamantium::Flat, Equalizer.new(:config)
+
+    # Error raised when CLI argv is inalid
+    Error = Class.new(RuntimeError)
+
+    EXIT_FAILURE = 1
+    EXIT_SUCCESS = 0
 
     # Run cli with arguments
     #
@@ -13,23 +21,14 @@ module Mutant
     #
     # @api private
     #
-    def self.run(*arguments)
-      config = new(*arguments).config
+    def self.run(arguments)
+      config = new(arguments).config
       runner = Runner::Config.run(config)
       runner.success? ? EXIT_SUCCESS : EXIT_FAILURE
     rescue Error => exception
       $stderr.puts(exception.message)
       EXIT_FAILURE
     end
-
-    OPTIONS = {
-      '--code'       => [:add_filter,   Mutation::Filter::Code ],
-      '--debug'      => [:set_debug                            ],
-      '-d'           => [:set_debug                            ],
-      '--rspec-unit' => [:set_strategy, Strategy::Rspec::Unit  ],
-      '--rspec-full' => [:set_strategy, Strategy::Rspec::Full  ],
-      '--rspec-dm2'  => [:set_strategy, Strategy::Rspec::DM2   ]
-    }.freeze
 
     # Initialize objecct
     #
@@ -39,9 +38,10 @@ module Mutant
     #
     # @api private
     #
-    def initialize(arguments)
+    def initialize(arguments=[])
       @filters, @matchers = [], []
-      super(arguments)
+
+      parse(arguments)
       strategy
       matcher
     end
@@ -135,57 +135,18 @@ module Mutant
     end
     memoize :matcher
 
-    # Move processed argument by amount
-    #
-    # @param [Fixnum] amount
-    #   the amount of arguments to be consumed
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def consume(amount)
-      @index += amount
-    end
-
-    # Process matcher argument
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def dispatch_matcher
-      argument = current_argument
-      consume(1)
-      matcher = Classifier.build(argument)
-      @matchers << matcher if matcher
-    end
-
-    # Process option argument
-    #
-    # @return [Undefined]
-    #
-    # @api private
-    #
-    def dispatch_option
-      argument = current_argument
-      arguments = *OPTIONS.fetch(argument) do
-        raise Error, "Unknown option: #{argument.inspect}"
-      end
-      send(*arguments)
-    end
-
     # Add mutation filter
     #
     # @param [Class<Mutant::Filter>] klass
     #
+    # @param [String] filter
+    #
     # @return [undefined]
     #
     # @api private
     #
-    def add_filter(klass)
-      @filters << klass.new(current_option_value)
-      consume(2)
+    def add_filter(klass,filter)
+      @filters << klass.new(filter)
     end
 
     # Set debug mode
@@ -195,7 +156,6 @@ module Mutant
     # @return [undefined]
     #
     def set_debug
-      consume(1)
       @debug = true
     end
 
@@ -208,8 +168,65 @@ module Mutant
     # @return [undefined]
     #
     def set_strategy(strategy)
-      consume(1)
       @strategy = strategy
+    end
+
+    # Parses the command-line options.
+    #
+    # @param [Array<String>] arguments
+    #   Command-line options and arguments to be parsed.
+    #
+    # @raise [Error]
+    #   An error occurred while parsing the options.
+    #
+    # @api private
+    #
+    def parse(arguments)
+      opts = OptionParser.new do |opts|
+        opts.banner = 'usage: mutant STRATEGY [options] MATCHERS ...'
+
+        opts.separator ''
+        opts.separator 'Strategies:'
+
+        opts.on('--rspec-unit','executes all specs under ./spec/unit') do
+          set_strategy Strategy::Rspec::Unit
+        end
+
+        opts.on('--rspec-full','executes all specs under ./spec') do
+          set_strategy Strategy::Rspec::Full
+        end
+
+        opts.on('--rspec-dm2','executes spec/unit/namespace/class/method_spec.rb') do
+          set_strategy Strategy::Rspec::DM2
+        end
+
+        opts.separator ''
+        opts.separator 'Options:'
+
+        opts.on('--code FILTER','Adds a code filter') do |filter|
+          add_filter Mutation::Filter::Code, filter
+        end
+
+        opts.on('-d','--debug','Enable debugging output') do
+          set_debug
+        end
+
+        opts.on_tail('-h','--help','Show this message') do
+          puts opts
+          exit
+        end
+      end
+
+      matchers = begin
+                   opts.parse!(arguments)
+                 rescue OptionParser::ParseError => e
+                   raise(Error,e.message,e.backtrace)
+                 end
+
+      matchers.each do |pattern|
+        matcher = Classifier.build(pattern)
+        @matchers << matcher if matcher
+      end
     end
   end
 end
