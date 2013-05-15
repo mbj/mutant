@@ -219,8 +219,8 @@ module Mutant
 
       matchers = begin
                    opts.parse!(arguments)
-                 rescue OptionParser::ParseError => e
-                   raise(Error,e.message,e.backtrace)
+                 rescue OptionParser::ParseError => error
+                   raise(Error, error.message, error.backtrace)
                  end
 
       matchers.each do |pattern|
