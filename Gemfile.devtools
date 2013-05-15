@@ -3,7 +3,7 @@
 group :development do
   gem 'rake',  '~> 10.0.4'
   gem 'rspec', '~> 2.13.0'
-  gem 'yard',  '~> 0.8.6'
+  gem 'yard',  '~> 0.8.6.1'
 end
 
 group :yard do
@@ -11,12 +11,12 @@ group :yard do
 end
 
 group :guard do
-  gem 'guard',         '~> 1.7.0'
+  gem 'guard',         '~> 1.8.0'
   gem 'guard-bundler', '~> 1.0.0'
-  gem 'guard-rspec',   '~> 2.5.3'
+  gem 'guard-rspec',   '~> 2.5.4'
 
   # file system change event handling
-  gem 'listen',     '~> 0.7.3'
+  gem 'listen',     '~> 1.0.2'
   gem 'rb-fchange', '~> 0.0.6', :require => false
   gem 'rb-fsevent', '~> 0.9.3', :require => false
   gem 'rb-inotify', '~> 0.9.0', :require => false
@@ -29,13 +29,16 @@ end
 
 group :metrics do
   gem 'backports',       '~> 3.3', '>= 3.3.0'
-  gem 'coveralls',       '~> 0.6.5'
+  gem 'coveralls',       '~> 0.6.6'
   gem 'flay',            '~> 2.2.0'
-  gem 'flog',            '~> 3.2.3'
+  gem 'flog',            '~> 4.0.0'
   gem 'reek',            '~> 1.3.1', :git => 'https://github.com/troessner/reek.git'
   gem 'simplecov',       '~> 0.7.1'
   gem 'yardstick',       '~> 0.9.6'
-  gem 'yard-spellcheck', '~> 0.1.5'
+
+  platforms :ruby_19 do
+    gem 'yard-spellcheck', '~> 0.1.5'
+  end
 
   platforms :rbx do
     gem 'pelusa', '~> 0.2.2'
