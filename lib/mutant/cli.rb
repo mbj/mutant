@@ -188,30 +188,30 @@ module Mutant
         opts.separator ''
         opts.separator 'Strategies:'
 
-        opts.on('--rspec-unit','executes all specs under ./spec/unit') do
+        opts.on('--rspec-unit', 'executes all specs under ./spec/unit') do
           set_strategy Strategy::Rspec::Unit
         end
 
-        opts.on('--rspec-full','executes all specs under ./spec') do
+        opts.on('--rspec-full', 'executes all specs under ./spec') do
           set_strategy Strategy::Rspec::Full
         end
 
-        opts.on('--rspec-dm2','executes spec/unit/namespace/class/method_spec.rb') do
+        opts.on('--rspec-dm2', 'executes spec/unit/namespace/class/method_spec.rb') do
           set_strategy Strategy::Rspec::DM2
         end
 
         opts.separator ''
         opts.separator 'Options:'
 
-        opts.on('--code FILTER','Adds a code filter') do |filter|
+        opts.on('--code FILTER', 'Adds a code filter') do |filter|
           add_filter Mutation::Filter::Code, filter
         end
 
-        opts.on('-d','--debug','Enable debugging output') do
+        opts.on('-d','--debug', 'Enable debugging output') do
           set_debug
         end
 
-        opts.on_tail('-h','--help','Show this message') do
+        opts.on_tail('-h', '--help', 'Show this message') do
           puts opts
           exit
         end
