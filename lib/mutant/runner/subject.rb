@@ -2,7 +2,7 @@ module Mutant
   class Runner
     # Subject specific runner
     class Subject < self
-      include Concord.new(:config, :subject)
+      include Concord::Public.new(:config, :subject)
 
       # Return subject
       #

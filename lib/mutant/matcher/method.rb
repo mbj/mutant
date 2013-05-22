@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Matcher for subjects that are a specific method
     class Method < self
-      include Adamantium::Flat, Concord.new(:scope, :method)
+      include Adamantium::Flat, Concord::Public.new(:scope, :method)
 
       # Methods within rbx kernel directory are precompiled and their source
       # cannot be accessed via reading source location

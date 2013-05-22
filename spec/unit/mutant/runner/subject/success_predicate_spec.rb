@@ -17,7 +17,7 @@ describe Mutant::Runner::Subject, '#success?' do
   end
 
   class DummyMutationRunner
-    include Concord.new(:config, :mutation)
+    include Concord::Public.new(:config, :mutation)
 
     def self.run(*args)
       new(*args)

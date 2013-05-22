@@ -2,7 +2,7 @@ module Mutant
   class Reporter
     # Reporter that reports in human readable format
     class CLI < self
-      include Concord.new(:io)
+      include Concord::Public.new(:io)
 
       ACTIONS = {
         Config          => :config,

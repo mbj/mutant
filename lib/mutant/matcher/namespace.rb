@@ -3,7 +3,7 @@ module Mutant
 
     # Matcher for specific namespace
     class Namespace < self
-      include Concord.new(:namespace)
+      include Concord::Public.new(:namespace)
 
       # Enumerate subjects
       #

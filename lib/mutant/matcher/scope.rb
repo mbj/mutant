@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Matcher for specific namespace
     class Scope < self
-      include Concord.new(:scope)
+      include Concord::Public.new(:scope)
 
       MATCHERS = [
         Matcher::Methods::Singleton, 

@@ -21,7 +21,7 @@ describe Mutant::Runner::Config, '#success?' do
   let(:subject_b) { mock('Subject B', :fails? => false) }
 
   class DummySubjectRunner
-    include Concord.new(:config, :subject)
+    include Concord::Public.new(:config, :subject)
 
     def self.run(*args)
       new(*args)

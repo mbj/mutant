@@ -2,7 +2,7 @@ module Mutant
   class Runner
     # Mutation runner
     class Mutation < self
-      include Concord.new(:config, :mutation)
+      include Concord::Public.new(:config, :mutation)
 
       # Return killer instance
       #
