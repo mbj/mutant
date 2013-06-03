@@ -17,19 +17,6 @@ require 'rspec'
 require 'anima'
 require 'concord'
 
-# Patch ice none to freeze nodes correctly
-class IceNine::Freezer
-  # Rubinius namsepace
-  class Rubinius
-    # AST namespace
-    class AST < IceNine::Freezer::Object
-      # Node configuration
-      class Node < IceNine::Freezer::Object
-      end
-    end
-  end
-end
-
 # Library namespace
 module Mutant
 end
