@@ -20,9 +20,9 @@ module Mutant
         # @api private
         #
         def dispatch
-          # noop
         end
-      end
-    end
-  end
-end
+
+      end # # Noop
+    end # Node
+  end # Mutator
+end # Mutant
