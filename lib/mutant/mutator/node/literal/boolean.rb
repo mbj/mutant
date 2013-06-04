@@ -15,7 +15,7 @@ module Mutant
           #
           def dispatch
             emit_nil
-            emit(s(inverse))
+            emit(s(self.class::INVERSE_TYPE))
           end
 
           # Mutator for true literals
