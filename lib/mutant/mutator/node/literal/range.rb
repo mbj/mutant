@@ -2,6 +2,7 @@ module Mutant
   class Mutator
     class Node
       class Literal
+
         # Abstract literal range mutator
         class Range < self
           include AbstractType
@@ -22,7 +23,7 @@ module Mutant
 
           # Return inverse node
           #
-          # @return [Rubinius::AST::Node]
+          # @return [Parser::AST::Node]
           #
           # @api private
           #
@@ -68,7 +69,7 @@ module Mutant
 
           # Return inverse AST node class
           #
-          # @return [Class:Rubinius::AST::Node]
+          # @return [Class:Parser::AST::Node]
           #
           # @api private
           #
@@ -78,18 +79,19 @@ module Mutant
 
           # Mutator for range exclude literals
           class Exclude < self
-            INVERSE_CLASS = Rubinius::AST::Range
-            handle(Rubinius::AST::RangeExclude)
-
-          end
+            INVERSE_TYPE = :irange
+            handle(:erange)
+          end # Exclude
 
           # Mutator for range include literals
           class Include < self
-            INVERSE_CLASS = Rubinius::AST::RangeExclude
-            handle(Rubinius::AST::Range)
-          end
-        end
-      end
-    end
-  end
-end
+            INVERSE_TYPE = :erange
+            handle(:irange)
+          end # Include
+
+        end # Range
+
+      end # Literal
+    end # Node
+  end # Mutator
+end # Mutant

@@ -5,7 +5,7 @@ module Mutant
         # Mutator for float literals
         class Float < self
 
-          handle(Rubinius::AST::FloatLiteral)
+          handle(:float)
 
         private
 
@@ -41,8 +41,9 @@ module Mutant
           def values
             [0.0, 1.0] << -node.value
           end
-        end
-      end
-    end
-  end
-end
+
+        end # Float
+      end # Literal
+    end # Node
+  end # Mutator
+end # Mutant

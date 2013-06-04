@@ -6,7 +6,7 @@ module Mutant
     # Initialize mutation object
     #
     # @param [Subject] subject
-    # @param [Rubinius::Node::AST] node
+    # @param [Parser::Node::AST] node
     #
     # @return [undefined]
     #
@@ -26,7 +26,7 @@ module Mutant
 
     # Return mutated node
     #
-    # @return [Rubinius::AST::Node]
+    # @return [Parser::AST::Node]
     #
     # @api private
     #
@@ -34,7 +34,7 @@ module Mutant
 
     # Return mutated root node
     #
-    # @return [Rubinius::AST::Node]
+    # @return [Parser::AST::Node]
     #
     # @api private
     #
@@ -122,5 +122,5 @@ module Mutant
       subject.source
     end
 
-  end
-end
+  end # Mutation
+end # Mutant

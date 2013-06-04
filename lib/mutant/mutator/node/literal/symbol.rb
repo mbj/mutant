@@ -5,7 +5,7 @@ module Mutant
         # Mutator for symbol literals
         class Symbol < self
 
-          handle(Rubinius::AST::SymbolLiteral)
+          handle(:sym)
 
         private
 
@@ -19,8 +19,9 @@ module Mutant
             emit_nil
             emit_new { new_self(('s'+Random.hex_string).to_sym) }
           end
-        end
-      end
-    end
-  end
-end
+
+        end # Symbol
+      end # Literal
+    end # Node
+  end # Mutator
+end # Mutant

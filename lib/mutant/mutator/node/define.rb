@@ -3,8 +3,7 @@ module Mutant
     class Node
       class Define < self
 
-        handle(Rubinius::AST::Define)
-        handle(Rubinius::AST::DefineSingletonScope)
+        handle(:define)
 
       private
 
@@ -18,24 +17,8 @@ module Mutant
           emit_attribute_mutations(:body)
           emit_attribute_mutations(:arguments)
         end
-      end
 
-      class DefineSingleton < self
-
-        handle(Rubinius::AST::DefineSingleton)
-
-      private
-
-        # Emit mutations
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def dispatch
-          emit_attribute_mutations(:body)
-        end
-      end
-    end
-  end
-end
+      end # Define
+    end # Node
+  end # Mutator
+end # Mutant

@@ -5,7 +5,7 @@ module Mutant
       # Mutator for while expressions
       class While < self
 
-        handle(Rubinius::AST::While)
+        handle(:while)
 
       private
 
@@ -20,7 +20,7 @@ module Mutant
           emit_attribute_mutations(:body)
         end
 
-      end
-    end
-  end
-end
+      end # While
+    end # Node
+  end # Mutator
+end # Mutant

@@ -5,7 +5,7 @@ module Mutant
         # Mutator for hash literals
         class Hash < self
 
-          handle(Rubinius::AST::HashLiteral)
+          handle(:hash)
 
         private
 
@@ -76,8 +76,9 @@ module Mutant
               emit_self(contents)
             end
           end
-        end
-      end
-    end
-  end
-end
+
+        end # Hash
+      end # Literal
+    end # Node
+  end # Mutator
+end # Mutant

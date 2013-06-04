@@ -16,7 +16,7 @@ module Mutant
 
     # Initialize and insert mutation into vm
     #
-    # @param [Rubinius::AST::Script] root
+    # @param [Parser::AST::Node] root
     # @param [Subject] subject
     #
     # @return [undefined]
@@ -52,7 +52,7 @@ module Mutant
       def source
         ToSource.to_source(@root)
       end
-    end
+    end # Eval
 
-  end
-end
+  end # Loader
+end # Mutant

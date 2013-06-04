@@ -5,7 +5,7 @@ module Mutant
       # Namespace for send mutators
       class Send < self
 
-        handle(Rubinius::AST::Send)
+        handle(:send)
 
       private
 
@@ -69,7 +69,7 @@ module Mutant
 
         # Return receiver AST node
         #
-        # @return [Rubinius::AST::Node]
+        # @return [Parser::AST::Node]
         #
         # @api private
         #
@@ -135,7 +135,8 @@ module Mutant
           mutant.privately = true
           emit(mutant)
         end
-      end
-    end
-  end
-end
+
+      end # Send
+    end # Node
+  end # Mutator
+end # Mutant

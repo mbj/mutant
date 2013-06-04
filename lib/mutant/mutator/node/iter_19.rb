@@ -2,9 +2,9 @@ module Mutant
   class Mutator
     class Node
       # Emitter for mutations on 19 blocks
-      class Iter19 < self
+      class Block < self
 
-        handle(Rubinius::AST::Iter19)
+        handle(:block)
 
         # Emit mutants
         #
@@ -21,7 +21,7 @@ module Mutant
           end if node.arguments
         end
 
-      end
-    end
-  end
-end
+      end # Block
+    end # Node
+  end # Mutator
+end # Mutant

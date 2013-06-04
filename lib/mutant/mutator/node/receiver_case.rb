@@ -2,10 +2,10 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutator for Rubinius::AST::ReceiverCase nodes
+      # Mutator for case nodes
       class ReceiverCase < self
 
-        handle(Rubinius::AST::ReceiverCase)
+        handle(:case)
 
       private
 
@@ -99,7 +99,7 @@ module Mutant
 
         # Return receiver
         #
-        # @return [Rubinius::AST::Node]
+        # @return [Parser::AST::Node]
         #
         # @api private
         #
@@ -109,14 +109,15 @@ module Mutant
 
         # Return else branch
         #
-        # @return [Rubinius::AST::Node]
+        # @return [Parser::AST::Node]
         #
         # @api private
         #
         def else_branch
           node.else
         end
-      end
-    end
-  end
-end
+
+      end # ReceiverCase
+    end # Node
+  end # Mutator
+end # Mutant

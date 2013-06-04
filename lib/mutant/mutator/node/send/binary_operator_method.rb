@@ -32,7 +32,7 @@ module Mutant
 
           # Return right
           #
-          # @return [Rubinius::AST::Node]
+          # @return [Parser::AST::Node]
           #
           # @api private
           #
@@ -53,9 +53,10 @@ module Mutant
               emit(dup)
             end
           end
-        end
 
-      end
-    end
-  end
-end
+        end # BinaryOperatorMethod
+
+      end # Send
+    end # Node
+  end # Mutator
+end # Mutant

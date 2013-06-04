@@ -11,12 +11,12 @@ module Mutant
         #
         # @param [#to_f] value
         #
-        # @return [Rubinius::Node::FloatLiteral]
+        # @return [Parser::Node::FloatLiteral]
         #
         # @api private
         #
         def new_float(value)
-          new(Rubinius::AST::FloatLiteral, value)
+          new(Parser::AST::FloatLiteral, value)
         end
 
         # Emit a new node with wrapping class for each entry in values
@@ -35,7 +35,7 @@ module Mutant
 
         # Return AST representing NaN
         #
-        # @return [Rubinius::Node::AST]
+        # @return [Parser::AST::Node]
         #
         # @api private
         #
@@ -46,7 +46,7 @@ module Mutant
 
         # Return AST representing negative infinity
         #
-        # @return [Rubinius::Node::AST]
+        # @return [Parser::AST::Node]
         #
         # @api private
         #
@@ -56,14 +56,15 @@ module Mutant
 
         # Return AST representing infinity
         #
-        # @return [Rubinius::Node::AST]
+        # @return [Parser::AST::Node]
         #
         # @api private
         #
         def infinity
           new_send_with_arguments(new_float(1), :/, new_float(0))
         end
-      end
-    end
-  end
-end
+
+      end # Literal
+    end # Node
+  end # Mutator
+end # Mutant

@@ -4,7 +4,7 @@ module Mutant
       # Mutator on AST blocks
       class Block < self
 
-        handle(Rubinius::AST::Block)
+        handle(:block)
 
       private
 
@@ -26,7 +26,7 @@ module Mutant
           end
         end
 
-      end
-    end
-  end
-end
+      end # Block
+    end # Node
+  end # Mutator
+end # Mutant

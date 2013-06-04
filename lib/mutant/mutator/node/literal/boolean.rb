@@ -15,35 +15,27 @@ module Mutant
           #
           def dispatch
             emit_nil
-            emit(inverse)
-          end
-
-          # Return inverse
-          #
-          # @return [Rubinius::AST::Node]
-          #
-          # @api private
-          #
-          def inverse
-            new(self.class::INVERSE_CLASS)
+            emit(s(inverse))
           end
 
           # Mutator for true literals
           class TrueLiteral < self
-            INVERSE_CLASS = Rubinius::AST::FalseLiteral
+            INVERSE_TYPE = :false
 
-            handle(Rubinius::AST::TrueLiteral)
+            handle(:true)
           end
 
 
           # Mutator for false literals
           class FalseLiteral < self
-            INVERSE_CLASS = Rubinius::AST::TrueLiteral
+            INVERSE_TYPE = :true
 
-            handle(Rubinius::AST::FalseLiteral)
+            handle(:false)
           end
-        end
-      end
-    end
-  end
-end
+
+        end # Boolean
+
+      end # Literal
+    end # Node
+  end # Mutatork
+end # Mutant

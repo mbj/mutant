@@ -20,7 +20,7 @@ module Mutant
 
         # Test for node match
         #
-        # @param [Rubinius::AST::Node] node
+        # @param [Parser::AST::Node] node
         #
         # @return [true]
         #   returns true if node matches method
@@ -39,7 +39,7 @@ module Mutant
 
         # Test for line match
         #
-        # @param [Rubinius::AST::Node] node
+        # @param [Parser::AST::Node] node
         #
         # @return [true]
         #   returns true if node matches source line
@@ -55,7 +55,7 @@ module Mutant
 
         # Test for name match
         #
-        # @param [Rubinius::AST::DefineSingleton] node
+        # @param [Parser::AST::Node] node
         #
         # @return [true]
         #   returns true if node name matches
@@ -71,7 +71,7 @@ module Mutant
 
         # Test for receiver match
         #
-        # @param [Rubinius::AST::DefineSingleton] node
+        # @param [Parser::AST::Node] node
         #
         # @return [true]
         #   returns true when receiver is self or scope from pattern
@@ -96,7 +96,7 @@ module Mutant
 
         # Test if reciver name matches context
         #
-        # @param [Rubinius::AST::Node] node
+        # @param [Parser::AST::Node] node
         #
         # @return [true]
         #   returns true when node name matches unqualified scope name
@@ -110,7 +110,7 @@ module Mutant
           node.name.to_s == context.unqualified_name
         end
 
-      end
-    end
-  end
-end
+      end # Singleton
+    end # Method
+  end # Matcher
+end # Mutant

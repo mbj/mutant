@@ -6,7 +6,7 @@ module Mutant
 
       # Return AST wrapping mutated node
       #
-      # @return [Rubinius::AST::Script]
+      # @return [Parser::AST::Node]
       #
       # @api private
       #
@@ -29,12 +29,12 @@ module Mutant
       # Wrap node into ast node
       #
       # @param [Class, Module] scope
-      # @param [Rubinius::AST::Node] node
+      # @param [Parser::AST::Node] node
       #
-      # @return [Rubinius::AST::Class]
+      # @return [Parser::AST::Class]
       #   if scope is of kind Class
       #
-      # @return [Rubinius::AST::Module]
+      # @return [Parser::AST::Module]
       #   if scope is of kind module
       #
       # @api private
@@ -110,7 +110,7 @@ module Mutant
 
       # Return new root ast
       #
-      # @return [Rubinius::AST::Node]
+      # @return [Parser::AST::Node]
       #
       # @api private
       #
@@ -128,6 +128,7 @@ module Mutant
         scope.name.split('::')
       end
       memoize :name_nesting
-    end
-  end
-end
+
+    end # Scope
+  end # Context
+end # Mutant

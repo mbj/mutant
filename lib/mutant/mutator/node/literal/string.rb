@@ -5,7 +5,7 @@ module Mutant
         # Mutator for string literals
         class String < self
 
-          handle(Rubinius::AST::StringLiteral)
+          handle(:str)
 
         private
 
@@ -19,8 +19,9 @@ module Mutant
             emit_nil
             emit_new { new_self(Random.hex_string) }
           end
-        end
-      end
-    end
-  end
-end
+
+        end # String
+      end # Literal
+    end # Node
+  end # Mutator
+end # Mutant

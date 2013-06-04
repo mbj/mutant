@@ -5,7 +5,7 @@ module Mutant
         # Mutator for nil literals
         class Nil < self
 
-          handle(Rubinius::AST::NilLiteral)
+          handle(:nil)
 
         private
 
@@ -18,8 +18,9 @@ module Mutant
           def dispatch
             emit('Object.new'.to_ast)
           end
-        end
-      end
-    end
-  end
-end
+
+        end # Nil
+      end # Literal
+    end # Node
+  end # Mutator
+end # Mutant

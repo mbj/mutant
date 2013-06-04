@@ -4,7 +4,8 @@ module Mutant
 
       # Mutator for super with parantheses
       class Super < self
-        handle(Rubinius::AST::Super)
+
+        handle(:super)
 
       private
 
@@ -15,7 +16,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_node(Rubinius::AST::ZSuper)
+          emit_node(:zsuper)
           emit_without_block
           emit_attribute_mutations(:block) if node.block
           emit_attribute_mutations(:arguments)
@@ -32,7 +33,8 @@ module Mutant
           dup.block = nil
           emit(dup)
         end
-      end
-    end
-  end
-end
+
+      end # Super
+    end # Node
+  end # Mutator
+end # Mutant

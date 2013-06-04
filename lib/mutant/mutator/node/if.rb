@@ -1,14 +1,14 @@
 module Mutant
   class Mutator
     class Node
-      # Mutator for Rubinius::AST::If nodes
+      # Mutator for if nodes
       class If < self
 
-        handle(Rubinius::AST::If)
+        handle(:if)
 
       private
 
-        # Emit mutations on Rubinius::AST::If nodes
+        # Emit mutations 
         #
         # @return [undefined]
         #
@@ -97,7 +97,7 @@ module Mutant
 
         # Return if_branch of node
         #
-        # @return [Rubinius::AST::Node]
+        # @return [Parser::AST::Node]
         #
         # @api private
         #
@@ -107,7 +107,7 @@ module Mutant
 
         # Return condition of node
         #
-        # @return [Rubinius::AST::Node]
+        # @return [Parser::AST::Node]
         #
         # @api private
         #
@@ -117,14 +117,15 @@ module Mutant
 
         # Return else body of node
         #
-        # @return [Rubinius::AST::Node]
+        # @return [Parser::AST::Node]
         #
         # @api private
         #
         def else_branch
           node.else
         end
-      end
-    end
-  end
-end
+
+      end # If
+    end # Node
+  end # Mutator
+end # Mutant

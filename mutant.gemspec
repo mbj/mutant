@@ -15,8 +15,6 @@ Gem::Specification.new do |gem|
   gem.extra_rdoc_files = %w[TODO LICENSE]
   gem.executables       = [ 'mutant' ]
 
-  gem.add_runtime_dependency('backports',           [ '~> 3.0', '>= 3.0.3' ])
-
   gem.add_runtime_dependency('parser',              '~> 2.0.beta3')
   gem.add_runtime_dependency('unparser',            '~> 0.0.1')
   gem.add_runtime_dependency('ice_nine',            '~> 0.7.0')

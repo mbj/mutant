@@ -20,7 +20,7 @@ module Mutant
 
         # Check if node is matched
         #
-        # @param [Rubinius::AST::Node] node
+        # @param [Parser::AST::Node] node
         #
         # @return [true]
         #   returns true if node matches method
@@ -36,7 +36,7 @@ module Mutant
           node.name  == method_name
         end
 
-      end
-    end
-  end
-end
+      end # Instance
+    end # Method
+  end # Matcher
+end # Mutant

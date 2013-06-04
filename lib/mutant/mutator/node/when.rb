@@ -2,10 +2,10 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutator for Rubinius::AST::When nodes
+      # Mutator for when nodes
       class When < self
 
-        handle(Rubinius::AST::When)
+        handle(:when)
 
       private
 
@@ -19,7 +19,7 @@ module Mutant
           emit_attribute_mutations(:body)
         end
 
-      end
-    end
-  end
-end
+      end # When
+    end # Node
+  end # Mutator
+end # Mutant

@@ -5,7 +5,7 @@ module Mutant
         # Mutator for regexp literals
         class Regex < self
 
-          handle(Rubinius::AST::RegexLiteral)
+          handle(:regexp)
 
         private
 
@@ -22,7 +22,7 @@ module Mutant
             emit_new { new_self(Random.hex_string) }
           end
 
-          # Return new Rubinius::AST::Regex
+          # Return new regexp node
           #
           # @param [String] source
           #
@@ -36,8 +36,9 @@ module Mutant
           def new_self(source,options=nil)
             super(source,options || node.options)
           end
-        end
-      end
-    end
-  end
-end
+
+        end # Regex
+      end # Literal
+    end # Node
+  end # Mutator
+end # Mutant

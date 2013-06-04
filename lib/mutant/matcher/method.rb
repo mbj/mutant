@@ -73,7 +73,7 @@ module Mutant
 
       # Return full ast
       #
-      # @return [Rubinius::AST::Node]
+      # @return [Parser::AST::Node]
       #
       # @api private
       #
@@ -143,6 +143,6 @@ module Mutant
         last_match
       end
 
-    end
-  end
-end
+    end # Method
+  end # Matcher
+end # Mutant

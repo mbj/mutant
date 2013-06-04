@@ -5,7 +5,7 @@ module Mutant
         # Mutator for array literals
         class Array < self
 
-          handle(Rubinius::AST::ArrayLiteral)
+          handle(:array)
 
         private
 
@@ -21,8 +21,9 @@ module Mutant
             emit_nil
             emit_self([new_nil] + node.body.dup)
           end
-        end
-      end
-    end
-  end
-end
+
+        end # Array
+      end # Literal 
+    end # Node
+  end # Mutator
+end # Mutant

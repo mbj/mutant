@@ -7,7 +7,7 @@ module Mutant
 
       # Return identity of node
       #
-      # @param [Rubinius::AST::Node] node
+      # @param [Parser::AST::Node] node
       #
       # @return [String]
       #
@@ -21,7 +21,7 @@ module Mutant
 
       # Return mutated node
       #
-      # @return [Rubinius::AST::Node]
+      # @return [Parser::AST::Node]
       #
       # @api private
       #
@@ -29,7 +29,7 @@ module Mutant
 
       # Return duplicated node
       #
-      # @return [Rubinius::AST::Node]
+      # @return [Parser::AST::Node]
       #
       # @api private
       #
@@ -39,7 +39,7 @@ module Mutant
       #
       # @param [Rubinis::AST::Node:Class] node_class
       #
-      # @return [Rubinius::AST::Node]
+      # @return [Parser::AST::Node]
       #
       # @api private
       #
@@ -49,7 +49,7 @@ module Mutant
 
       # Create a new AST node with same class as wrapped node
       #
-      # @return [Rubinius::AST::Node]
+      # @return [Parser::AST::Node]
       #
       # @api private
       #
@@ -59,7 +59,7 @@ module Mutant
 
       # Create a new AST node with Rubnius::AST::NilLiteral class
       #
-      # @return [Rubinius::AST::Node]
+      # @return [Parse::AST::Node]
       #
       # @api private
       #
@@ -155,6 +155,6 @@ module Mutant
       #
       alias_method :dup_node, :dup_input
 
-    end
-  end
-end
+    end # Node
+  end # Mutator
+end # Mutant

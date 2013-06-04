@@ -5,7 +5,7 @@ module Mutant
         # Mutator for fixnum literals
         class Fixnum < self
 
-          handle(Rubinius::AST::FixnumLiteral)
+          handle(:int)
 
         private
 
@@ -30,8 +30,9 @@ module Mutant
           def values
             [0, 1, -node.value]
           end
-        end
-      end
-    end
-  end
-end
+
+        end # Fixnuma
+      end # Literal
+    end # Node
+  end # Mutator
+end # Mutant

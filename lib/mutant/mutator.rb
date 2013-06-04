@@ -21,14 +21,14 @@ module Mutant
 
     # Register node class handler
     #
-    # @param [Class:Rubinius::AST::Node] node_class
-    #
     # @return [undefined]
     #
     # @api private
     #
-    def self.handle(node_class)
-      Registry.register(node_class,self)
+    def self.handle(*types)
+      types.each do |type|
+        Registry.register(type, self)
+      enScriptd
     end
     private_class_method :handle
 
@@ -171,7 +171,7 @@ module Mutant
 
     # Call block with node
     #
-    # @param [Rubinius::AST::Node] node
+    # @param [Parser::AST::Node] node
     #
     # @return [self]
     #
@@ -202,5 +202,5 @@ module Mutant
       Helper.deep_clone(input)
     end
 
-  end
-end
+  end # Mutator
+end # Mutant

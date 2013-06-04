@@ -13,7 +13,7 @@ module Mutant
 
     # Return AST node
     #
-    # @return [Rubinius::AST::Node]
+    # @return [Parser::AST::Node]
     #
     # @api private
     #
@@ -93,9 +93,9 @@ module Mutant
 
     # Return root AST for node
     #
-    # @param [Rubinius::AST::Node] node
+    # @param [Parser::AST::Node] node
     #
-    # @return [Rubinius::AST::Node]
+    # @return [Parser::AST::Node]
     #
     # @api private
     #
@@ -105,7 +105,7 @@ module Mutant
 
     # Return root AST node for original AST ndoe
     #
-    # @return [Rubinius::AST::Node]
+    # @return [Parser::AST::Node]
     #
     # @api private
     #
@@ -120,7 +120,7 @@ module Mutant
     #
     # @param [Mutant::Context] context
     #
-    # @param [Rubinius::AST::Node] node
+    # @param [Parser::AST::Node] node
     #   the original node to be mutated
     #
     # @return [unkown]
@@ -140,5 +140,5 @@ module Mutant
     abstract_method :subtype
     private :subtype
 
-  end
-end
+  end # Subject
+end # Mutant

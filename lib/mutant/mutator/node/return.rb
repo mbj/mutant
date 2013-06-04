@@ -4,10 +4,9 @@ module Mutant
       # Mutator for return statements
       class Return < self
 
-        handle(Rubinius::AST::Return)
+        handle(:return)
 
       private
-
 
         # Emit mutants
         #
@@ -24,8 +23,7 @@ module Mutant
           end
         end
 
-      end
-    end
-  end
-
-end
+      end # Return
+    end # Node
+  end # Mutator
+end # Mutant

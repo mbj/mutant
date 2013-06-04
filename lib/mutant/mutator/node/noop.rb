@@ -5,51 +5,11 @@ module Mutant
       class Noop < self
 
         # Literal references to self do not need to be mutated?
-        handle(Rubinius::AST::Self)
-
-        # Currently unhandled node classes. Feel free to contribute your mutator!
-        #
-        # FIXME: This list is mixed with some 1.8 only nodes that should be extracted
-        #
-        %w(
-          ZSuper
-          ElementAssignment
-          AttributeAssignment
-          Not
-          And
-          Or
-          Defined
-          Super
-          Next
-          Break
-          Match3
-          ZSuper
-          MultipleAssignment
-          ScopedConstant
-          LocalVariableAccess
-          InstanceVariableAccess
-          GlobalVariableAccess
-          ClassVariableAccess
-          ToplevelConstant
-          Ensure
-          Rescue
-          DynamicString
-          DynamicSymbol
-          DynamicRegex
-          File
-          OpAssignOr19
-          BlockPass19
-          OpAssign1
-          NthRef
-          OpAssign2
-          SplatValue
-          ConstantAccess
-          Yield
-          Begin
-          Rescue
-        ).each do |name|
-          handle(Rubinius::AST.const_get(name))
-        end
+        handle(
+          :self, :zsuper, :not, :or, :and, :defined,
+          :next, :break, :match, :gvar, :cvar, :ensure, :rescue, 
+          :dstr, :dsym, :yield, :begin, :rescue
+        )
 
       private
 

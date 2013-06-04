@@ -27,29 +27,29 @@ module Mutant
           # Mutator for local variable assignments
           class Local < self
             PREFIX = ''.freeze
-            handle(Rubinius::AST::LocalVariableAssignment)
-          end
+            handle(:lvar)
+          end # Local
 
           # Mutator for instance variable assignments
           class Instance < self
             PREFIX = '@'.freeze
-            handle(Rubinius::AST::InstanceVariableAssignment)
-          end
+            handle(:ivar)
+          end # Instance
 
           # Mutator for class variable assignments
           class Class < self
             PREFIX = '@@'.freeze
-            handle(Rubinius::AST::ClassVariableAssignment)
-          end
+            handle(:cvar)
+          end # Class
 
           # Mutator for global variable assignments
           class Global < self
             PREFIX = '$'.freeze
-            handle(Rubinius::AST::GlobalVariableAssignment)
-          end
+            handle(:gvar)
+          end # Global
 
-        end
-      end
-    end
-  end
-end
+        end # Access
+      end # Variable
+    end # Node
+  end # Mutator
+end # Mutant
