@@ -41,8 +41,8 @@ module Mutant
           #
           def dispatch
             input.each_with_index do |element, index|
-              dup = dup_input
               Mutator.each(element).each do |mutation|
+                dup = dup_input
                 dup[index]=mutation
                 emit(dup)
               end
@@ -65,7 +65,7 @@ module Mutant
           emit([])
         end
 
-      end
-    end
-  end
-end
+      end # Array
+    end # Node
+  end # Mutant
+end # Mutator
