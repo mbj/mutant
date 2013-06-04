@@ -78,7 +78,7 @@ module Mutant
       # @api private
       #
       def ast
-        File.read(source_path).to_ast
+        Parser::CurrentRuby.parse(File.read(source_path))
       end
 
       # Return path to source
@@ -128,19 +128,47 @@ module Mutant
       end
       memoize :subject
 
+      class Finder
+        def self.run(root, &predicate)
+          new(root, predicate).match
+        end
+
+        private_class_method :new
+
+        attr_reader :match
+
+      private
+
+        def initialize(root, predicate)
+          @root, @predicate = root, predicate
+          test(root)
+        end
+
+        def test(node)
+          if @predicate.call(node)
+            @match = node 
+          end
+
+          node.children.each do |child|
+            test(child) if child.kind_of?(Parser::AST::Node)
+          end
+        end
+      end
+
       # Return matched node
       #
-      # @return [Rubinus::AST::Node]
+      # @return [Parser::AST::Node]
+      #   if node could be found
+      #
+      # @return [nil]
+      #   otherwise
       #
       # @api private
       #
       def matched_node
-        last_match = nil
-        ast.walk do |predicate, node|
-          last_match = node if match?(node)
-          predicate
+        Finder.run(ast) do |node|
+          match?(node)
         end
-        last_match
       end
 
     end # Method

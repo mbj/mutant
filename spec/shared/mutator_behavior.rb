@@ -5,7 +5,7 @@ shared_examples_for 'a mutator' do
   let(:object)        { described_class }
 
   unless instance_methods.map(&:to_s).include?('node')
-    let(:node)          { source.to_ast   }
+    let(:node)          { parse(source) }
   end
 
   it_should_behave_like 'a command method'

@@ -3,6 +3,7 @@ module Mutant
     # Scope context for mutation (Class or Module)
     class Scope < self
       include Adamantium::Flat, Equalizer.new(:scope, :source_path)
+      extend NodeHelpers
 
       # Return AST wrapping mutated node
       #
@@ -40,12 +41,12 @@ module Mutant
       # @api private
       #
       def self.wrap(scope, node)
-        name = scope.name.split('::').last.to_sym
+        name = s(:const, nil, scope.name.split('::').last.to_sym)
         case scope
         when ::Class
-          ::Rubinius::AST::Class.new(0, name, nil, node)
+          s(:class, name, nil, node)
         when ::Module
-          ::Rubinius::AST::Module.new(0, name, node)
+          s(:module, name, node)
         else
           raise "Cannot wrap scope: #{scope.inspect}"
         end

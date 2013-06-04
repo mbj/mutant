@@ -14,16 +14,16 @@ describe Mutant::Matcher::Method::Instance, '#each' do
 
   subject { object.each { |subject| yields << subject } }
 
-  let(:node_class)   { Rubinius::AST::Define }
-  let(:method_name)  { :bar                  }
-  let(:method_arity) { 0                     }
+  let(:type)         { :def }
+  let(:method_name)  { :bar }
+  let(:method_arity) { 0    }
 
   def name
-    node.name
+    node.children[0]
   end
 
   def arguments
-    node.arguments
+    node.children[1]
   end
 
   context 'when method is defined once' do

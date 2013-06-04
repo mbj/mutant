@@ -14,15 +14,15 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
 
   subject { object.each { |subject| yields << subject } }
 
-  let(:node_class)   { Rubinius::AST::DefineSingleton }
-  let(:method_arity) { 0                              }
+  let(:type)         { :defs }
+  let(:method_arity) { 0     }
 
   def name
-    node.body.name
+    node.children[1]
   end
 
   def arguments
-    node.body.arguments
+    node.children[2]
   end
 
   context 'on singleton methods' do

@@ -16,6 +16,10 @@ module Mutant
         end
         memoize :identification
 
+        RECEIVER_INDEX = 0
+        NAME_INDEX     = 1
+        CONST_NAME_INDEX = 1
+
       private
 
         # Test for node match
@@ -31,9 +35,8 @@ module Mutant
         # @api private
         #
         def match?(node)
-          node.class == Rubinius::AST::DefineSingleton  &&
-          line?(node)                                   &&
-          name?(node)                                   &&
+          line?(node) &&
+          name?(node) &&
           receiver?(node)
         end
 
@@ -50,7 +53,8 @@ module Mutant
         # @api private
         #
         def line?(node)
-          node.line  == source_line
+          expression = node.location.expression || return
+          expression.line == source_line
         end
 
         # Test for name match
@@ -66,7 +70,7 @@ module Mutant
         # @api private
         #
         def name?(node)
-          node.body.name == method_name
+          node.children[NAME_INDEX] == method_name
         end
 
         # Test for receiver match
@@ -82,11 +86,11 @@ module Mutant
         # @api private
         #
         def receiver?(node)
-          receiver = node.receiver
-          case receiver
-          when Rubinius::AST::Self
+          receiver = node.children[RECEIVER_INDEX]
+          case receiver.type
+          when :self
             true
-          when Rubinius::AST::ConstantAccess
+          when :const
             receiver_name?(receiver)
           else
             $stderr.puts "Unable to find singleton method definition can only match receiver on Rubinius::AST::Self or Rubinius::AST::ConstantAccess, got #{receiver.class}"
@@ -107,7 +111,8 @@ module Mutant
         # @api private
         #
         def receiver_name?(node)
-          node.name.to_s == context.unqualified_name
+          name = node.children[CONST_NAME_INDEX]
+          name.to_s == context.unqualified_name
         end
 
       end # Singleton

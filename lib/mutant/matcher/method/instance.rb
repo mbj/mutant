@@ -16,6 +16,8 @@ module Mutant
         end
         memoize :identification
 
+        NAME_INDEX = 0
+
       private
 
         # Check if node is matched
@@ -31,9 +33,11 @@ module Mutant
         # @api private
         #
         def match?(node)
-          node.line  == source_line           &&
-          node.class == Rubinius::AST::Define &&
-          node.name  == method_name
+          location                  = node.location       || return
+          expression                = location.expression || return
+          expression.line           == source_line &&
+          node.type                 == :def        &&
+          node.children[NAME_INDEX] == method_name
         end
 
       end # Instance

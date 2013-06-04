@@ -9,22 +9,20 @@ describe Mutant::Mutator, 'block' do
       mutations = []
 
       # Mutation of each statement in block
-      mutations << "foo\nself.bar".to_ast
-      mutations << "self.foo\nbar".to_ast
+      mutations << "foo\nself.bar"
+      mutations << "self.foo\nbar"
 
       # Remove statement in block
-      mutations << Rubinius::AST::Block.new(1, ['self.foo'.to_ast])
-      mutations << Rubinius::AST::Block.new(1, ['self.bar'.to_ast])
-      mutations << Rubinius::AST::Block.new(1, ['nil'.to_ast])
+      mutations << 'self.foo'
+      mutations << 'self.bar'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
   end
 
-
-
   context 'with one statement' do
-    let(:node) { Rubinius::AST::Block.new(1, ['self.foo'.to_ast]) }
+    let(:node) { 'self.foo' }
 
     let(:mutations) do
       mutations = []

@@ -18,18 +18,18 @@ shared_examples_for 'a method matcher' do
   end
 
   it 'should have correct line number' do
-    (node.line - base).should eql(method_line)
+    (node.location.expression.line - base).should eql(method_line)
   end
 
   it 'should have correct arity' do
-    arguments.required.length.should eql(method_arity)
+    arguments.children.length.should eql(method_arity)
   end
 
   it 'should have correct scope in context' do
     context.send(:scope).should eql(scope)
   end
 
-  it 'should have the correct node class' do
-    node.should be_a(node_class)
+  it 'should have the correct node type' do
+    node.type.should be(type)
   end
 end

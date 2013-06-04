@@ -50,7 +50,7 @@ module Mutant
       # @api private
       #
       def source
-        ToSource.to_source(@root)
+        Unparser.unparse(@root)
       end
     end # Eval
 

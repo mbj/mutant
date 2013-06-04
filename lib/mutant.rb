@@ -8,6 +8,7 @@ require 'equalizer'
 require 'digest/sha1'
 require 'inflecto'
 require 'parser'
+require 'parser/current'
 require 'unparser'
 require 'ice_nine'
 require 'diff/lcs'
@@ -20,6 +21,7 @@ require 'concord'
 module Mutant
 end
 
+require 'mutant/node_helpers'
 require 'mutant/singleton_methods'
 require 'mutant/constants'
 require 'mutant/support/method_object'

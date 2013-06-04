@@ -5,13 +5,13 @@ describe Mutant::Context::Scope, '#root' do
 
   let(:object) { described_class.new(TestApp::Literal, path) }
   let(:path)   { mock('Path') }
-  let(:node)   { ':node'.to_ast }
+  let(:node)   { parse(':node') }
 
   let(:scope)      { subject.body }
   let(:scope_body) { scope.body    }
 
   let(:expected_source) do
-    ToSource.to_source(<<-RUBY.to_ast)
+    generate(parse(<<-RUBY))
       module TestApp
         class Literal
           :node
@@ -21,11 +21,11 @@ describe Mutant::Context::Scope, '#root' do
   end
 
   let(:generated_source) do
-    ToSource.to_source(subject)
+    Unparser.unparse(subject)
   end
 
   let(:round_tripped_source) do
-    ToSource.to_source(expected_source.to_ast)
+    Unparser.unparse(parse(expected_source))
   end
 
   it 'should create correct source' do

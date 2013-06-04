@@ -26,7 +26,7 @@ describe Mutant::Loader::Eval, '.run' do
   end
 
   let(:node) do
-    source.to_ast
+    parse(source)
   end
 
   it 'should load nodes into vm' do
@@ -36,6 +36,6 @@ describe Mutant::Loader::Eval, '.run' do
 
   it 'should set file and line correctly' do
     subject
-    ::SomeNamespace::Bar.instance_method(:some_method).source_location.should eql(['test.rb', 3])
+    ::SomeNamespace::Bar.instance_method(:some_method).source_location.should eql(['test.rb', 4])
   end
 end
