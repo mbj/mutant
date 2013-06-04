@@ -29,10 +29,10 @@ shared_examples_for 'a mutator' do
         mutations.map do |mutation|
           case mutation
           when String
-            ast = parse(mutation)
-            assert_transitive(ast)
-            ast
-          when Rubinius::AST::Node
+            node = parse(mutation)
+            assert_transitive(node)
+            node
+          when Parser::AST::Node
             assert_transitive(mutation)
             mutation
           else

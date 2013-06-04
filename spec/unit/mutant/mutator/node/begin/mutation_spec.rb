@@ -3,18 +3,20 @@ require 'spec_helper'
 describe Mutant::Mutator, 'block' do
 
   context 'with more than one statement' do
-    let(:source) { "self.foo\nself.bar" }
+    let(:source) { "true\nfalse" }
 
     let(:mutations) do
       mutations = []
 
       # Mutation of each statement in block
-      mutations << "foo\nself.bar"
-      mutations << "self.foo\nbar"
+      mutations << "true\ntrue"
+      mutations << "false\nfalse"
+      mutations << "nil\nfalse"
+      mutations << "true\nnil"
 
       # Remove statement in block
-      mutations << 'self.foo'
-      mutations << 'self.bar'
+      mutations << s(:begin, s(:true))
+      mutations << s(:begin, s(:false))
       mutations << 'nil'
     end
 
@@ -22,12 +24,12 @@ describe Mutant::Mutator, 'block' do
   end
 
   context 'with one statement' do
-    let(:node) { 'self.foo' }
+    let(:source) { 'true' }
 
     let(:mutations) do
       mutations = []
-      mutations << Rubinius::AST::Block.new(1, ['foo'.to_ast])
-      mutations << Rubinius::AST::Block.new(1, ['nil'.to_ast])
+      mutations << s(:false)
+      mutations << s(:nil)
     end
 
     it_should_behave_like 'a mutator'
