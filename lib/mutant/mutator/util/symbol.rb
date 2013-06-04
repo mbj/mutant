@@ -2,7 +2,7 @@ module Mutant
   class Mutator
     class Util
 
-      # Mutators that mutates symbol inputs
+      # Utility symbol mutator
       class Symbol < self
 
         handle(::Symbol)

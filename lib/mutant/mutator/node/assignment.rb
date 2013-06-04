@@ -1,55 +1,60 @@
 module Mutant
   class Mutator
     class Node
-
-      # Abstract base class for assignment mutators
       class Assignment < self
 
-      private
-
-        # Abstract base class for variable assignments
         class Variable < self
+          NAME_INDEX  = 0
+          VALUE_INDEX = 1
 
-          # Emit mutants
+        private
+
+          # Perform dispatch
           #
           # @return [undefined]
           #
           # @api private
           #
           def dispatch
-            emit_attribute_mutations(:name) do |mutation|
-              mutation.name = "#{self.class::PREFIX}#{mutation.name}".to_sym
-              mutation
-            end
-            emit_attribute_mutations(:value)
+            emit_name_mutations
+            mutate_child(VALUE_INDEX)
           end
 
-          # Mutator for local variable assignments
-          class Local < self
-            PREFIX = ''.freeze
-            handle(:lvar)
-          end # Local
+          # Emit name mutations
+          #
+          # @return [undefined]
+          #
+          # @api private
+          #
+          def emit_name_mutations
+            name = children[NAME_INDEX]
+            Mutator::Util::Symbol.each(name) do |name|
+              emit_child_update(NAME_INDEX, "#{self.class::PREFIX}#{name}")
+            end
+          end
 
-          # Mutator for instance variable assignments
-          class Instance < self
-            PREFIX = '@'.freeze
-            handle(:ivar)
-          end # Instance
-
-          # Mutator for class variable assignments
-          class Class < self
-            PREFIX = '@@'.freeze
-            handle(:cvar)
-          end # Class
-
-          # Mutator for global variable assignments
           class Global < self
             PREFIX = '$'.freeze
-            handle(:gvar)
+            handle(:gvasgn)
           end # Global
 
-        end # Access
-      end # Variable
+          class Class < self
+            PREFIX = '@@'.freeze
+            handle(:cvasgn)
+          end # Class
+
+          class Instance < self
+            PREFIX = '@'.freeze
+            handle(:ivasgn)
+          end # Instance
+
+          class Local < self
+            PREFIX = ''.freeze
+            handle(:lvasgn)
+          end # Local
+
+        end # Variable
+      end # Assignment
     end # Node
   end # Mutator
 end # Mutant

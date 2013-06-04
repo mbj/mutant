@@ -16,9 +16,9 @@ shared_examples_for 'a mutator' do
     it { should be_instance_of(to_enum.class) }
 
     def assert_transitive(ast)
-      generated = ToSource.to_source(ast)
-      parsed    = generated.to_ast
-      again     = ToSource.to_source(parsed)
+      generated = generate(ast)
+      parsed    = parse(generated)
+      again     = generate(parsed)
       unless generated == again
         fail "Untransitive:\n%s\n---\n%s" % [generated, again]
       end
@@ -29,7 +29,7 @@ shared_examples_for 'a mutator' do
         mutations.map do |mutation|
           case mutation
           when String
-            ast = mutation.to_ast
+            ast = parse(mutation)
             assert_transitive(ast)
             ast
           when Rubinius::AST::Node
@@ -39,13 +39,13 @@ shared_examples_for 'a mutator' do
             raise
           end
         end.map do |node|
-          ToSource.to_source(node)
+          generate(node)
         end.to_set
       end
     end
 
     it 'generates the expected mutations' do
-      generated  = self.subject.map { |mutation| ToSource.to_source(mutation) }.to_set
+      generated  = self.subject.map { |mutation| generate(mutation) }.to_set
 
       missing    = (expected_mutations - generated).to_a
       unexpected = (generated - expected_mutations).to_a

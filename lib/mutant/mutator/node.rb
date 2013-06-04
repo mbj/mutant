@@ -3,7 +3,7 @@ module Mutant
   class Mutator
     # Abstract base class for node mutators
     class Node < self
-      include AbstractType
+      include AbstractType, NodeHelpers
 
       # Return identity of node
       #
@@ -14,7 +14,7 @@ module Mutant
       # @api private
       #
       def self.identity(node)
-        ToSource.to_source(node)
+        Unparser.unparse(node)
       end
 
     private
@@ -35,79 +35,55 @@ module Mutant
       #
       alias_method :dup_node, :dup_input
 
-      # Emit a new AST node
+      # Return children
       #
-      # @param [Rubinis::AST::Node:Class] node_class
-      #
-      # @return [Parser::AST::Node]
+      # @return [Array<Parser::AST::Node>]
       #
       # @api private
       #
-      def emit_node(node_class, *arguments)
-        emit(new(node_class, *arguments))
+      def children
+        node.children
       end
 
-      # Create a new AST node with same class as wrapped node
+      # Dispatch on child index
       #
-      # @return [Parser::AST::Node]
+      # @param [Fixnum] index
+      #
+      # @return [undefined]
       #
       # @api private
       #
-      def new_self(*arguments)
-        new(node.class, *arguments)
+      def mutate_child(index, mutator = Mutator)
+        children = node.children
+        child = children[index]
+        mutator.each(child) do |mutation|
+          emit_child_update(index, mutation)
+        end
       end
 
-      # Create a new AST node with Rubnius::AST::NilLiteral class
+      # Emit updated child
       #
-      # @return [Parse::AST::Node]
+      # @param [Fixnum] index
+      # @param [Object] update
       #
-      # @api private
-      #
-      def new_nil
-        new(Rubinius::AST::NilLiteral)
-      end
-
-      # Create a new AST node with the same line as wrapped node
-      #
-      # @param [Class:Rubinius::AST::Node] node_class
-      #
-      # @return [Rubinius::AST::Node]
+      # @return [undefined]
       #
       # @api private
       #
-      def new(node_class, *arguments)
-        node_class.new(node.line, *arguments)
+      def emit_child_update(index, update)
+        new_children = children.dup
+        new_children[index]=update
+        emit_self(new_children)
       end
 
       # Emit a new AST node with same class as wrapped node
       #
-      # @return [undefined]
+      # @param [Array<Parser::AST::Node>] children
       #
       # @api private
       #
-      def emit_self(*arguments)
-        emit(new_self(*arguments))
-      end
-
-      # Emit body mutations
-      #
-      # @param [Symbol] name
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def emit_attribute_mutations(name, mutator = Mutator)
-        value = node.public_send(name)
-
-        mutator.each(value) do |mutation|
-          dup = dup_node
-          dup.public_send(:"#{name}=", mutation)
-          if block_given?
-            dup = yield(dup)
-          end
-          emit(dup)
-        end
+      def emit_self(children)
+        emit(Parser::AST::Node.new(node.type, children))
       end
 
       # Emit a new AST node with NilLiteral class
@@ -117,43 +93,8 @@ module Mutant
       # @api private
       #
       def emit_nil
-        emit(new_nil)
+        emit(s(:nil))
       end
-
-      # Return new Rubiinius::AST::SendWithArguments node
-      #
-      # @param [Rubnius::AST::Node] receiver
-      # @param [Symbol] name
-      # @param [Object] arguments
-      #
-      # @return [Rubinius::AST::SendWithArguments]
-      #
-      # @api private
-      #
-      def new_send_with_arguments(receiver, name, arguments)
-        new(Rubinius::AST::SendWithArguments, receiver, name, arguments)
-      end
-
-      # Return AST representing send
-      #
-      # @param [Rubinius::AST::Node] receiver
-      # @param [Symbol] name
-      #
-      # @return [Rubnius::AST::Send]
-      #
-      # @api private
-      #
-      def new_send(receiver, name)
-        new(Rubinius::AST::Send, receiver, name)
-      end
-
-      # Return duplicated (unfrozen) node each call
-      #
-      # @return [Rubinius::AST::Node]
-      #
-      # @api private
-      #
-      alias_method :dup_node, :dup_input
 
     end # Node
   end # Mutator

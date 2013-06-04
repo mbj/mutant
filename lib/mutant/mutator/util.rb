@@ -23,6 +23,8 @@ module Mutant
         self
       end
 
+    private
+
       # Test if mutation is new
       #
       # @param [Object] generated
@@ -38,6 +40,7 @@ module Mutant
       def new?(generated)
         input != generated
       end
-    end
-  end
-end
+
+    end # Util
+  end # Mutator
+end # Mutant
