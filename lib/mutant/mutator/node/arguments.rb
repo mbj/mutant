@@ -1,14 +1,13 @@
 module Mutant
   class Mutator
     class Node
-      # Mutator for begin nodes
-      class Begin < self
+      class Arguments < self
 
-        handle(:begin)
+        handle(:args)
 
       private
 
-        # Emit mutants
+        # Perform dispatch
         #
         # @return [undefined]
         #
@@ -18,7 +17,7 @@ module Mutant
           emit_children_mutations
         end
 
-      end # Block
+      end # Arguments
     end # Node
   end # Mutator
 end # Mutant

@@ -35,6 +35,18 @@ module Mutant
       #
       alias_method :dup_node, :dup_input
 
+      # Emit children mutations
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def emit_children_mutations
+        Mutator::Util::Array.each(children) do |children|
+          emit_self(children)
+        end
+      end
+
       # Return children
       #
       # @return [Array<Parser::AST::Node>]
