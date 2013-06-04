@@ -1,11 +1,11 @@
 shared_examples_for 'a mutator' do
   subject { object.each(node) { |item| yields << item } }
 
-  let(:yields)        { []              }
-  let(:object)        { described_class }
+  let(:yields) { []              }
+  let(:object) { described_class }
 
   unless instance_methods.map(&:to_s).include?('node')
-    let(:node)          { parse(source) }
+    let(:node) { parse(source) }
   end
 
   it_should_behave_like 'a command method'

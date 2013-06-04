@@ -5,16 +5,16 @@ module Mutant
 
     # Run mutator on input
     #
-    # @param [Object] input
+    # @param [Parser::AST::Node] node
     # @param [#call] block
     #
     # @return [self]
     #
     # @api private
     #
-    def self.each(input, &block)
-      return to_enum(__method__, input) unless block_given?
-      Registry.lookup(input.class).new(input, block)
+    def self.each(node, &block)
+      return to_enum(__method__, node) unless block_given?
+      Registry.lookup(node).new(node, block)
 
       self
     end

@@ -27,9 +27,9 @@ module Mutant
         self
       end
 
-      # Lookup mutator class for AST node class
+      # Lookup mutator class for node 
       #
-      # @param [Class] ast_class
+      # @param [Parser::AST::Node] node
       #
       # @return [Class]
       #
@@ -38,9 +38,10 @@ module Mutant
       #
       # @api private
       #
-      def self.lookup(ast_class)
-        registry.fetch(ast_class) do
-          raise ArgumentError,"No mutator to handle: #{ast_class.inspect}"
+      def self.lookup(node)
+        type = node.type
+        registry.fetch(type) do
+          raise ArgumentError,"No mutator to handle: #{type.inspect}"
         end
       end
     end
