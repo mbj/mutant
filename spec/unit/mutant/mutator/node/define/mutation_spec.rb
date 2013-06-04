@@ -1,20 +1,22 @@
 require 'spec_helper'
 
-describe Mutant::Mutator, 'define' do
+describe Mutant::Mutator, 'def' do
 
   context 'with no arguments' do
-    let(:source) { 'def foo; self.bar; self.baz; end' }
+    let(:source) { 'def foo; true; false; end' }
 
     let(:mutations) do
       mutations = []
 
       # Mutation of each statement in block
-      mutations << 'def foo; bar; self.baz; end'
-      mutations << 'def foo; self.bar; baz; end'
+      mutations << 'def foo; true; true; end'
+      mutations << 'def foo; false; false; end'
+      mutations << 'def foo; true; nil; end'
+      mutations << 'def foo; nil; false; end'
 
       # Remove statement in block
-      mutations << 'def foo; self.baz; end'
-      mutations << 'def foo; self.bar; end'
+      mutations << 'def foo; true; end'
+      mutations << 'def foo; false; end'
 
       # Remove all statements
       mutations << 'def foo; end'
@@ -45,18 +47,18 @@ describe Mutant::Mutator, 'define' do
       mutations << 'def foo(a, srandom); nil; end'
 
       # Mutation of body
-      mutations << 'def foo(a, b); Object.new; end'
+      mutations << 'def foo(a, b); ::Object.new; end'
     end
 
     it_should_behave_like 'a mutator'
   end
 
-  context 'with arguments beginning with an underscore' do
+  context 'with argument beginning in an underscore' do
     let(:source) { 'def foo(_unused); end' }
 
     let(:mutations) do
       mutations = []
-      mutations << 'def foo(_unused); Object.new; end'
+      mutations << 'def foo(_unused); ::Object.new; end'
       mutations << 'def foo; end'
     end
 
@@ -64,7 +66,7 @@ describe Mutant::Mutator, 'define' do
   end
 
   context 'default argument' do
-    let(:source) { 'def foo(a = "literal"); end' }
+    let(:source) { 'def foo(a = true); end' }
 
     before do
       Mutant::Random.stub(:hex_string => 'random')
@@ -74,28 +76,30 @@ describe Mutant::Mutator, 'define' do
       mutations = []
       mutations << 'def foo(a); end'
       mutations << 'def foo(); end'
-      mutations << 'def foo(a = "random"); end'
+      mutations << 'def foo(a = false); end'
       mutations << 'def foo(a = nil); end'
-      mutations << 'def foo(a = "literal"); Object.new; end'
-      mutations << 'def foo(srandom = "literal"); nil; end'
+      mutations << 'def foo(a = true); ::Object.new; end'
+      mutations << 'def foo(srandom = true); nil; end'
     end
 
     it_should_behave_like 'a mutator'
   end
 
   context 'define on singleton' do
-    let(:source) { 'def self.foo; self.bar; self.baz; end' }
+    let(:source) { 'def self.foo; true; false; end' }
 
     let(:mutations) do
       mutations = []
 
       # Body presence mutations
-      mutations << 'def self.foo; bar; self.baz; end'
-      mutations << 'def self.foo; self.bar; baz; end'
+      mutations << 'def self.foo; false; false; end'
+      mutations << 'def self.foo; true; true; end'
+      mutations << 'def self.foo; true; nil; end'
+      mutations << 'def self.foo; nil; false; end'
 
       # Body presence mutations
-      mutations << 'def self.foo; self.bar; end'
-      mutations << 'def self.foo; self.baz; end'
+      mutations << 'def self.foo; true; end'
+      mutations << 'def self.foo; false; end'
 
       # Remove all statements
       mutations << 'def self.foo; end'
@@ -127,7 +131,7 @@ describe Mutant::Mutator, 'define' do
       mutations << 'def self.foo(a, srandom); nil; end'
 
       # Mutation of body
-      mutations << 'def self.foo(a, b); Object.new; end'
+      mutations << 'def self.foo(a, b); ::Object.new; end'
     end
 
     it_should_behave_like 'a mutator'
