@@ -28,7 +28,7 @@ module Mutant
     def self.handle(*types)
       types.each do |type|
         Registry.register(type, self)
-      enScriptd
+      end
     end
     private_class_method :handle
 
