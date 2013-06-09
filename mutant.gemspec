@@ -4,7 +4,8 @@ Gem::Specification.new do |gem|
   gem.name        = 'mutant'
   gem.version     = '0.3.0'
   gem.authors     = [ 'Markus Schirp' ]
-  gem.email       = [ 'mbj@schir-dsp.com' ]
+  gem.email       = [ 'mbj@schirp-dso.com' ]
+
   gem.description = 'Mutation testing for ruby'
   gem.summary     = 'Mutation testing tool for ruby under MRI and Rubinius'
   gem.homepage    = 'https://github.com/mbj/mutant'
