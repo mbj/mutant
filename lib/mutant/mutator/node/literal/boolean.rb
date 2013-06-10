@@ -5,7 +5,14 @@ module Mutant
         # Abstract mutator for boolean literals
         class Boolean < self
 
+          handle :true, :false
+
         private
+
+          MAP = {
+            :true  => :false,
+            :false => :true
+          }.freeze
 
           # Emit mutants
           #
@@ -15,26 +22,10 @@ module Mutant
           #
           def dispatch
             emit_nil
-            emit(s(self.class::INVERSE_TYPE))
-          end
-
-          # Mutator for true literals
-          class TrueLiteral < self
-            INVERSE_TYPE = :false
-
-            handle(:true)
-          end
-
-
-          # Mutator for false literals
-          class FalseLiteral < self
-            INVERSE_TYPE = :true
-
-            handle(:false)
+            emit(s(MAP.fetch(node.type)))
           end
 
         end # Boolean
-
       end # Literal
     end # Node
   end # Mutatork
