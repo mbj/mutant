@@ -43,7 +43,7 @@ module Mutant
       #
       def emit_children_mutations
         Mutator::Util::Array.each(children) do |children|
-          emit_self(children)
+          emit_self(*children)
         end
       end
 
@@ -85,7 +85,7 @@ module Mutant
       def emit_child_update(index, update)
         new_children = children.dup
         new_children[index]=update
-        emit_self(new_children)
+        emit_self(*new_children)
       end
 
       # Emit a new AST node with same class as wrapped node
@@ -94,8 +94,8 @@ module Mutant
       #
       # @api private
       #
-      def emit_self(children)
-        emit(Parser::AST::Node.new(node.type, children))
+      def emit_self(*children)
+        emit(new_self(*children))
       end
 
       # Emit a new AST node with NilLiteral class
@@ -106,6 +106,16 @@ module Mutant
       #
       def emit_nil
         emit(s(:nil))
+      end
+
+      # Return new self typed child
+      #
+      # @return [Parser::AST::Node]
+      #
+      # @api private
+      #
+      def new_self(*children)
+        Parser::AST::Node.new(node.type, children)
       end
 
     end # Node

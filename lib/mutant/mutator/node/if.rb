@@ -6,123 +6,88 @@ module Mutant
 
         handle(:if)
 
+        CONDITION_INDEX   = 0
+        IF_BRANCH_INDEX   = 1
+        ELSE_BRANCH_INDEX = 2
+
       private
 
-        # Emit mutations 
+        # Emit mutations
         #
         # @return [undefined]
         #
         # @api private
         #
         def dispatch
-          emit_attribute_mutations(:condition)
-          emit_attribute_mutations(:body) unless nil_literal?(:body)
-          emit_attribute_mutations(:else) unless nil_literal?(:else)
-          emit_inverted_condition
-          emit_deleted_if_branch
-          emit_deleted_else_branch
-          emit_true_if_branch
-          emit_false_if_branch
+          mutate_condition
+          mutate_if_branch
+          mutate_else_branch
         end
 
-        # Test if attribute is non nil literal
-        #
-        # @param [Symbol] name
-        #
-        # @return [true]
-        #   if attribute value a nil literal
-        #
-        # @return [false]
-        #   otherwise
-        #
-        # @api private
-        #
-        def nil_literal?(name)
-          node.public_send(name).kind_of?(Rubinius::AST::NilLiteral)
-        end
-
-        # Emit inverted condition
-        #
-        # Especially the same like swap branches but more universal as it also
-        # covers the case there is no else branch
+        # Emit conditon mutations
         #
         # @return [undefined]
         #
         # @api private
         #
-        def emit_inverted_condition
-          emit_self(new_send(condition, :'!'), if_branch, else_branch)
+        def mutate_condition
+          mutate_child(CONDITION_INDEX)
+          emit_self(s(:send, condition, :!), if_branch, else_branch)
+          emit_self(s(:true),  if_branch, else_branch)
+          emit_self(s(:false), if_branch, else_branch)
         end
 
-        # Emit deleted else branch
+        # Emit if branch mutations
         #
         # @return [undefined]
         #
         # @api private
         #
-        def emit_deleted_else_branch
-          emit_self(condition, if_branch, nil)
+        def mutate_if_branch
+          mutate_child(IF_BRANCH_INDEX) if if_branch
+          emit_self(condition, else_branch, nil)
+          emit_self(condition, if_branch,   nil)
         end
 
-        # Emit deleted if branch
+        # Emit else branch mutations
         #
         # @return [undefined]
         #
         # @api private
         #
-        def emit_deleted_if_branch
-          body = else_branch || return
-          emit_self(condition, body, nil)
+        def mutate_else_branch
+          mutate_child(ELSE_BRANCH_INDEX)
+          emit_self(condition, s(:nil), else_branch)
         end
 
-        # Emit true if branch
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def emit_true_if_branch
-          emit_self(new(Rubinius::AST::TrueLiteral), if_branch, else_branch)
-        end
-
-        # Emit false if branch
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def emit_false_if_branch
-          emit_self(new(Rubinius::AST::FalseLiteral), if_branch, else_branch)
-        end
-
-        # Return if_branch of node
-        #
-        # @return [Parser::AST::Node]
-        #
-        # @api private
-        #
-        def if_branch
-          node.body
-        end
-
-        # Return condition of node
+        # Return condition node
         #
         # @return [Parser::AST::Node]
         #
         # @api private
         #
         def condition
-          node.condition
+          children[CONDITION_INDEX]
         end
 
-        # Return else body of node
+        # Return if branch
+        #
+        # @return [Parser::AST::Node]
+        #
+        # @api private
+        #
+        def if_branch
+          children[IF_BRANCH_INDEX]
+        end
+
+        # Return else branch
         #
         # @return [Parser::AST::Node]
         #
         # @api private
         #
         def else_branch
-          node.else
+          children[ELSE_BRANCH_INDEX]
         end
 
       end # If

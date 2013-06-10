@@ -7,18 +7,6 @@ module Mutant
 
       private
 
-        # Return new float literal
-        #
-        # @param [#to_f] value
-        #
-        # @return [Parser::Node::FloatLiteral]
-        #
-        # @api private
-        #
-        def new_float(value)
-          new(Parser::AST::FloatLiteral, value)
-        end
-
         # Emit a new node with wrapping class for each entry in values
         #
         # @param [Array] values
