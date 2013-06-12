@@ -118,6 +118,20 @@ module Mutant
         Parser::AST::Node.new(node.type, children)
       end
 
+      # Emit values
+      #
+      # @param [Array<Object>] values
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def emit_values(values)
+        values.each do |value|
+          emit_self(value)
+        end
+      end
+
     end # Node
   end # Mutator
 end # Mutant

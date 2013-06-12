@@ -28,7 +28,7 @@ module Mutant
           # @api private
           #
           def values
-            [0, 1, -node.value]
+            [0, 1, -first_child]
           end
 
         end # Fixnuma
