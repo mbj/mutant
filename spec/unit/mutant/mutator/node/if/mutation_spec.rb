@@ -22,7 +22,7 @@ describe Mutant::Mutator, 'if' do
       # Deleted else branch
       mutants << 'if :condition; true end'
 
-      # Deleted if branch resuting in unless
+      # Deleted if branch resuting in unless rendering
       mutants << 'unless :condition; false; end'
 
       # Deleted if branch with promoting else branch to if branch
@@ -40,36 +40,36 @@ describe Mutant::Mutator, 'if' do
     it_should_behave_like 'a mutator'
   end
 
-  context 'unless with one branch' do
-    let(:source) { 'unless :condition; true; end' }
+  context 'if with one branch' do
+    let(:source) { 'if condition; true; end' }
 
     let(:mutations) do
       mutants = []
-      mutants << 'unless !:condition; true; end'
-      mutants << 'unless :srandom; true; end'
-      mutants << 'unless nil; true; end'
-      mutants << 'if :condition; true; end'
-      mutants << 'unless :condition; false; end'
-      mutants << 'unless :condition; nil; end'
-      mutants << 'unless true; true; end'
-      mutants << 'unless false; true; end'
+      mutants << 'if !condition; true;  end'
+      mutants << 'if condition;  false; end'
+      mutants << 'if condition;  nil;   end'
+      mutants << 'if true;       true;  end'
+      mutants << 'if false;      true;  end'
     end
 
     it_should_behave_like 'a mutator'
   end
 
- #context 'if with one branch' do
- #  let(:source) { 'if condition; true; end' }
+  context 'unless with one branch' do
+    let(:source) { 'unless :condition; true; end' }
 
- #  let(:mutations) do
- #    mutants = []
- #    mutants << 'if !condition; true; end'
- #    mutants << 'if condition; false; end'
- #    mutants << 'if condition; nil; end'
- #    mutants << 'if true; true; end'
- #    mutants << 'if false; true; end'
- #  end
+    let(:mutations) do
+      mutants = []
+      mutants << 'unless !:condition; true;  end'
+      mutants << 'unless :srandom;    true;  end'
+      mutants << 'unless nil;         true;  end'
+      mutants << 'unless :condition;  false; end'
+      mutants << 'unless :condition;  nil;   end'
+      mutants << 'unless true;        true;  end'
+      mutants << 'unless false;       true;  end'
+      mutants << 'if     :condition;  true;  end'
+    end
 
- #  it_should_behave_like 'a mutator'
- #end
+    it_should_behave_like 'a mutator'
+  end
 end

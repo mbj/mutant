@@ -44,9 +44,11 @@ module Mutant
         # @api private
         #
         def mutate_if_branch
-          mutate_child(IF_BRANCH_INDEX) if if_branch
-          emit_self(condition, else_branch, nil)
-          emit_self(condition, if_branch,   nil)
+          emit_self(condition, else_branch, nil) if else_branch
+          if if_branch
+            emit_self(condition, if_branch,   nil)
+            mutate_child(IF_BRANCH_INDEX)
+          end
         end
 
         # Emit else branch mutations
@@ -56,8 +58,10 @@ module Mutant
         # @api private
         #
         def mutate_else_branch
-          mutate_child(ELSE_BRANCH_INDEX)
-          emit_self(condition, s(:nil), else_branch)
+          if else_branch
+            mutate_child(ELSE_BRANCH_INDEX)
+            emit_self(condition, nil, else_branch)
+          end
         end
 
         # Return condition node
