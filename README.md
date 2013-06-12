@@ -111,7 +111,7 @@ I'm very happy to receive/answer feedback/questions and critism.
 
 Your options:
 
-* Github Issue https://github.com/mutant/issues
+* GitHub Issues https://github.com/mbj/mutant/issues
 * Ping me on https://twitter.com/_m_b_j_
 * #datamapper channel on freenode, I hang around on CET daytimes. (nick mbj)
 
