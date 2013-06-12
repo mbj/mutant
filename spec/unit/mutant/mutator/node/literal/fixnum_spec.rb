@@ -6,7 +6,7 @@ describe Mutant::Mutator::Node::Literal, 'fixnum' do
   let(:source) { '10' }
 
   let(:mutations) do
-    %W(nil 0 1 #{random_fixnum} -10)
+    %W(nil 0 1 #{random_fixnum} -10 9 11)
   end
 
   before do
