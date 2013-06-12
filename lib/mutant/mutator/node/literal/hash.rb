@@ -17,66 +17,35 @@ module Mutant
           #
           def dispatch
             emit_nil
-            emit_values(values)
-            emit_element_presence
-            emit_body
-          end
-
-          # Emit body mutations
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def emit_body
-            emit_attribute_mutations(:array, Mutator::Util::Array::Element)
-          end
-
-          # Return array of values in literal
-          #
-          # @return [Array]
-          #
-          # @api private
-          #
-          def array
-            node.array
-          end
-
-          # Return duplicate of array values in literal
-          #
-          # @return [Array]
-          #
-          # @api private
-          #
-          def dup_array
-            array.dup
-          end
-
-          # Return values to mutate against
-          #
-          # @return [Array]
-          #
-          # @api private
-          #
-          def values
-            [[]]
-          end
-
-          # Emit element presence mutations
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def emit_element_presence
-            0.step(array.length-1, 2) do |index|
-              contents = dup_array
-              contents.delete_at(index)
-              contents.delete_at(index)
-              emit_self(contents)
+            emit_self
+            children.each_index do |index|
+              mutate_child(index)
+              dup_children = children.dup
+              dup_children.delete_at(index)
+              emit_self(*dup_children)
             end
           end
 
+          class Pair < Node
+
+            handle(:pair)
+
+            KEY_INDEX, VALUE_INDEX = 0, 1
+
+          private
+
+            # Perform dispatch
+            #
+            # @return [undefined]
+            #
+            # @api private
+            #
+            def dispatch
+              mutate_child(KEY_INDEX)
+              mutate_child(VALUE_INDEX)
+            end
+
+          end # Pair
         end # Hash
       end # Literal
     end # Node
