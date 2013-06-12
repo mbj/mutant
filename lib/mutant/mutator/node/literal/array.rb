@@ -16,14 +16,19 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit_attribute_mutations(:body)
-            emit_self([])
             emit_nil
-            emit_self([new_nil] + node.body.dup)
+            emit_self
+            children.each_index do |index|
+              dup_children = children.dup
+              dup_children.delete_at(index)
+              emit_self(*dup_children)
+              mutate_child(index)
+            end
+            emit_self(s(:nil), *children)
           end
 
         end # Array
-      end # Literal 
+      end # Literal
     end # Node
   end # Mutator
 end # Mutant
