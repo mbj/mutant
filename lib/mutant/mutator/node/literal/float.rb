@@ -20,6 +20,12 @@ module Mutant
             emit_new { new_self(Random.float) }
           end
 
+          SPECIAL = [
+            NodeHelpers::NAN,
+            NodeHelpers::NEGATIVE_INFINITY,
+            NodeHelpers::INFINITY
+          ].freeze
+
           # Emit special cases
           #
           # @return [undefined]
@@ -27,7 +33,7 @@ module Mutant
           # @api private
           #
           def emit_special_cases
-            [infinity, negative_infinity, nan].each do |value|
+            SPECIAL.each do |value|
               emit(value)
             end
           end
@@ -39,7 +45,7 @@ module Mutant
           # @api private
           #
           def values
-            [0.0, 1.0] << -node.value
+            [0.0, 1.0, -children.first]
           end
 
         end # Float
