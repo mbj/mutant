@@ -6,7 +6,7 @@ module Mutant
   class CLI
     include Adamantium::Flat, Equalizer.new(:config)
 
-    # Error raised when CLI argv is inalid
+    # Error raised when CLI argv is invalid
     Error = Class.new(RuntimeError)
 
     EXIT_FAILURE = 1
