@@ -109,16 +109,6 @@ module Mutant
         @scope = scope
       end
 
-      # Return new root ast
-      #
-      # @return [Parser::AST::Node]
-      #
-      # @api private
-      #
-      def root_ast
-        "#{keyword} #{name}; end".to_ast
-      end
-
       # Return nesting of names of scope
       #
       # @return [Array<String>]
