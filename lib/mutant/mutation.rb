@@ -1,36 +1,7 @@
 module Mutant
   # Represent a mutated node with its subject
   class Mutation
-    include AbstractType, Adamantium::Flat, Equalizer.new(:sha1)
-
-    # Initialize mutation object
-    #
-    # @param [Subject] subject
-    # @param [Parser::Node::AST] node
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def initialize(subject, node)
-      @subject, @node = subject, node
-    end
-
-    # Return mutation subject
-    #
-    # @return [Subject]
-    #
-    # @api private
-    #
-    attr_reader :subject
-
-    # Return mutated node
-    #
-    # @return [Parser::AST::Node]
-    #
-    # @api private
-    #
-    attr_reader :node
+    include AbstractType, Adamantium::Flat, Concord::Public.new(:subject, :node)
 
     # Return mutated root node
     #
