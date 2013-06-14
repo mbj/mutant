@@ -7,6 +7,8 @@ module Mutant
 
         handle(:while)
 
+        CONDITION_INDEX, BODY_INDEX = 0, 1
+
       private
 
         # Emit mutations
@@ -16,8 +18,8 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_attribute_mutations(:condition)
-          emit_attribute_mutations(:body)
+          mutate_child(CONDITION_INDEX)
+          mutate_child(BODY_INDEX)
         end
 
       end # While
