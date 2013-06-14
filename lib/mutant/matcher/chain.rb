@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # A chain of matchers
     class Chain < self
-      include Equalizer.new(:matchers)
+      include Concord::Public.new(:matchers)
 
       # Enumerate subjects
       #
@@ -24,14 +24,6 @@ module Mutant
         self
       end
 
-      # Return the chain of matchers
-      #
-      # @return [Enumerable<Chain>]
-      #
-      # @api private
-      #
-      attr_reader :matchers
-
       # Build matcher chain
       #
       # @param [Enumerable<Matcher>] matchers
@@ -46,20 +38,6 @@ module Mutant
         end
 
         new(matchers)
-      end
-
-    private
-
-      # Initialize chain matcher
-      #
-      # @param [Enumerable<Matcher>] matchers
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(matchers)
-        @matchers = matchers
       end
 
     end # Chain
