@@ -3,7 +3,7 @@ module Mutant
     class Filter
       # Mutation filter that filters on mutation codes
       class Code < self
-        include Equalizer.new(:code)
+        include Concord::Public.new(:code)
 
         # Test for match
         #
@@ -41,27 +41,6 @@ module Mutant
           new(match[1])
         end
 
-        # Return code
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        attr_reader :code
-
-      private
-
-        # Initialize code filter
-        #
-        # @param [String] code
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def initialize(code)
-          @code = code
-        end
       end # Code
     end # Filter
   end # Mutation
