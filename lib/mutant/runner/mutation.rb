@@ -53,6 +53,6 @@ module Mutant
         report(@killer)
       end
 
-    end
-  end
-end
+    end # Mutation
+  end # Runner
+end # Mutant

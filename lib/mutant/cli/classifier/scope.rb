@@ -29,7 +29,7 @@ module Mutant
           Classifier.constant_lookup(match[1].to_s)
         end
 
-      end
-    end
-  end
-end
+      end # Scope
+    end # Classifier
+  end # CLI
+end # Mutant

@@ -5,7 +5,7 @@ module Mutant
       include Concord::Public.new(:scope)
 
       MATCHERS = [
-        Matcher::Methods::Singleton, 
+        Matcher::Methods::Singleton,
         Matcher::Methods::Instance
       ].freeze
 
@@ -29,6 +29,6 @@ module Mutant
         self
       end
 
-    end
-  end
-end
+    end # Scope
+  end # Matcher
+end # Mutant

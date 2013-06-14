@@ -77,6 +77,6 @@ module Mutant
         report(self)
       end
 
-    end
-  end
-end
+    end # Config
+  end # Runner
+end # Mutant

@@ -136,6 +136,6 @@ module Mutant
       #
       abstract_method :matcher
 
-    end
-  end
-end
+    end # Classifier
+  end # CLI
+end # Mutant

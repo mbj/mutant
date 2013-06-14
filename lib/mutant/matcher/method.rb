@@ -146,7 +146,7 @@ module Mutant
 
         def test(node)
           if @predicate.call(node)
-            @match = node 
+            @match = node
           end
 
           node.children.each do |child|

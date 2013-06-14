@@ -19,7 +19,7 @@ module Mutant
       # @return [Symbol]
       #   if found
       #
-      # @raise [RuntimeError] 
+      # @raise [RuntimeError]
       #   otherwise
       #
       # @api private
@@ -65,7 +65,7 @@ module Mutant
 
       # Report subject results
       #
-      # @param [Subject] 
+      # @param [Subject]
       #
       # @return [undefined]
       #
@@ -259,6 +259,6 @@ module Mutant
       end
       memoize :tty?
 
-    end
-  end
-end
+    end # CLI
+  end # Reporter
+end # Mutant

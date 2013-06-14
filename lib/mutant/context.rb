@@ -42,5 +42,5 @@ module Mutant
     def initialize(source_path)
       @source_path = source_path
     end
-  end
-end
+  end # Context
+end # Mutant

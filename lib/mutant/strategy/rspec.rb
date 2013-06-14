@@ -29,7 +29,7 @@ module Mutant
         def spec_files(mutation)
           Dir['spec/unit/**/*_spec.rb']
         end
-      end
+      end # Unit
 
       # Run all integration specs per mutation
       class Integration < self
@@ -43,7 +43,7 @@ module Mutant
         def spec_files(mutation)
           Dir['spec/integration/**/*_spec.rb']
         end
-      end
+      end # Integration
 
       # Run all specs per mutation
       class Full < self
@@ -57,7 +57,8 @@ module Mutant
         def spec_files(mutation)
           Dir['spec/**/*_spec.rb']
         end
-      end
-    end
-  end
-end
+      end # Full
+
+    end # Rspec
+  end # Strategy
+end # Mutant

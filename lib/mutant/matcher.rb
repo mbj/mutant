@@ -42,5 +42,6 @@ module Mutant
     # @api private
     #
     abstract_method :identification
-  end
-end
+
+  end # Matcher
+end # Mutant

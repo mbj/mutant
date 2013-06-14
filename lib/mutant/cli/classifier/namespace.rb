@@ -32,15 +32,16 @@ module Mutant
           REGEXP = %r(\A(#{SCOPE_PATTERN})\*\z).freeze
           MATCHER = Matcher::Namespace
           register
-        end
+        end # Recursive
 
         # Recursive namespace classifier
         class Flat < self
           REGEXP = %r(\A(#{SCOPE_PATTERN})\z).freeze
           MATCHER = Matcher::Scope
           register
-        end
-      end
-    end
-  end
-end
+        end # Flat
+
+      end # Namespace
+    end # Classifier
+  end # CLI
+end # Mutant

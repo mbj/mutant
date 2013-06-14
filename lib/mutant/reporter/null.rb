@@ -16,6 +16,6 @@ module Mutant
         self
       end
 
-    end
-  end
-end
+    end # Null
+  end # Reporter
+end # Mutant

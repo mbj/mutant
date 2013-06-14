@@ -72,8 +72,8 @@ module Mutant
             REGISTRY.fetch(subject.class).new(subject)
           end
 
-        end
-      end
-    end
-  end
-end
+        end # Lookup
+      end # DM2
+    end # Rspec
+  end # Strategy
+end # Mutant

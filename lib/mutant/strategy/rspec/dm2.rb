@@ -16,7 +16,7 @@ module Mutant
           Lookup.run(subject)
         end
 
-      end
-    end
-  end
-end
+      end # DM2
+    end # Rspec
+  end # Strategy
+end # Mutant

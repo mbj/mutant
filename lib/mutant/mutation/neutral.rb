@@ -30,6 +30,6 @@ module Mutant
         !killer.killed?
       end
 
-    end
-  end
-end
+    end # Neutral
+  end # Mutation
+end # Mutant

@@ -26,7 +26,7 @@ module Mutant
             end
           end
 
-        end
+        end # Presence
 
         # Array element mutator
         class Element < Util
@@ -49,7 +49,7 @@ module Mutant
             end
           end
 
-        end
+        end # Element
 
       private
 

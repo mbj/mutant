@@ -20,12 +20,13 @@ module Mutant
       # Killer that is always successful
       class Success < self
         RESULT = true
-      end
+      end # Success
 
       # Killer that always fails
       class Fail < self
         RESULT = false
-      end
-    end
-  end
-end
+      end # Fail
+
+    end # Static
+  end # Killer
+end # Mutant

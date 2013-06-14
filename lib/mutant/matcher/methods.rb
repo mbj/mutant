@@ -74,7 +74,7 @@ module Mutant
       #
       def candidate_names
         object = candidate_scope
-        names = 
+        names =
           object.public_instance_methods(false)   +
           object.private_instance_methods(false)  +
           object.protected_instance_methods(false)
@@ -117,7 +117,7 @@ module Mutant
         end
         memoize :candidate_scope, :freezer => :noop
 
-      end
+      end # Singleton
 
       class Instance < self
         MATCHER = Matcher::Method::Instance
@@ -139,14 +139,15 @@ module Mutant
         # Return candidate scope
         #
         # @return [Class, Module]
-        # 
+        #
         # @api private
         #
         def candidate_scope
           scope
         end
 
-      end
-    end
-  end
-end
+      end # Instance
+
+    end # Methods
+  end # Matcher
+end # Mutant

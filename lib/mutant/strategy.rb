@@ -65,5 +65,6 @@ module Mutant
     def killer
       self.class::KILLER
     end
-  end
-end
+
+  end # Strategy
+end # Mutant

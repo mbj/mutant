@@ -35,6 +35,6 @@ module Mutant
         ) + strategy.spec_files(mutation.subject)
       end
 
-    end
-  end
-end
+    end # Rspec
+  end # Killer
+end # Mutant

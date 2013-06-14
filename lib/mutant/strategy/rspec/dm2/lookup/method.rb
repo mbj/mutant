@@ -109,7 +109,8 @@ module Mutant
 
                 super
               end
-            end
+
+            end # Instance
 
             class Singleton < self
               handle(Subject::Method::Singleton)
@@ -125,11 +126,12 @@ module Mutant
               def base_path
                 "#{super}/class_methods"
               end
-            end
 
-          end
-        end
-      end
-    end
-  end
-end
+            end # Singleton
+
+          end # Method
+        end # Lookup
+      end # DM2
+    end # Rspec
+  end # Strategy
+end # Mutant

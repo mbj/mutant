@@ -33,7 +33,8 @@ module Mutant
         def initialize(regexp)
           @regexp = regexp
         end
-      end
-    end
-  end
-end
+
+      end # Regexp
+    end # Filter
+  end # Mutation
+end # Mutant

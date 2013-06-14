@@ -62,7 +62,7 @@ module Mutant
         def initialize(code)
           @code = code
         end
-      end
-    end
-  end
-end
+      end # Code
+    end # Filter
+  end # Mutation
+end # Mutant

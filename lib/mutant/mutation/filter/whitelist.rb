@@ -43,7 +43,8 @@ module Mutant
         def initialize(whitelist)
           @whitelist = whitelist
         end
-      end
-    end
-  end
-end
+
+      end # Whitelist
+    end # Filter
+  end # Mutation
+end # Mutant

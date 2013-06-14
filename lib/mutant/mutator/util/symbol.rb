@@ -16,7 +16,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_new { :"s#{Random.hex_string}" } 
+          emit_new { :"s#{Random.hex_string}" }
         end
 
       end # Symbol

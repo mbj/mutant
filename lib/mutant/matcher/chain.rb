@@ -61,6 +61,7 @@ module Mutant
       def initialize(matchers)
         @matchers = matchers
       end
-    end
-  end
-end
+
+    end # Chain
+  end # Matcher
+end # Mutant

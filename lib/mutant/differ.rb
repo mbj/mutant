@@ -107,5 +107,6 @@ module Mutant
         Color::NONE
       end.format(line)
     end
-  end
-end
+
+  end # Differ
+end # Mutant

@@ -46,6 +46,6 @@ module Mutant
       end
       private_class_method :expand
 
-    end
-  end
-end
+    end # MethodExpansion
+  end # Strategy
+end # Mutant

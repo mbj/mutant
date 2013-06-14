@@ -43,6 +43,6 @@ module Mutant
         status.exitstatus.zero?
       end
 
-    end
-  end
-end
+    end # Forked
+  end # Killer
+end # Mutant

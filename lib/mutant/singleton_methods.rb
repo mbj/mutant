@@ -25,4 +25,4 @@ module Mutant
     self
   end
 
-end
+end # Mutant

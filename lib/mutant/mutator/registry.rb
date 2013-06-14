@@ -27,7 +27,7 @@ module Mutant
         self
       end
 
-      # Lookup mutator class for node 
+      # Lookup mutator class for node
       #
       # @param [Parser::AST::Node] node
       #
@@ -44,6 +44,7 @@ module Mutant
           raise ArgumentError,"No mutator to handle: #{type.inspect}"
         end
       end
-    end
-  end
-end
+
+    end # Registry
+  end # Mutator
+end # Mutant

@@ -17,8 +17,9 @@ module Mutant
           def dispatch
             emit_nil
           end
-        end
-      end
-    end
-  end
-end
+
+        end # Dynamic
+      end # Literal
+    end # Node
+  end # Mutator
+end # Mutant

@@ -31,5 +31,6 @@ module Mutant
     def self.float
       ::Random.rand
     end
-  end
-end
+
+  end # Random
+end # Mutant

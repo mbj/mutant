@@ -107,5 +107,5 @@ module Mutant
     #
     abstract_method :run
 
-  end
-end
+  end # Killer
+end # Mutant

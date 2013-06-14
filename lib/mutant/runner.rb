@@ -34,7 +34,7 @@ module Mutant
     # @api private
     #
     def runtime
-      @end - @start 
+      @end - @start
     end
     memoize :runtime
 
@@ -96,5 +96,5 @@ module Mutant
       reporter.report(object)
     end
 
-  end
-end
+  end # Runner
+end # Mutant

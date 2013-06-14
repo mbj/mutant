@@ -94,7 +94,7 @@ module Mutant
         end
         memoize :methods_matcher
 
-      end
-    end
-  end
-end
+      end # Method
+    end # Classifier
+  end # CLI
+end # Mutant

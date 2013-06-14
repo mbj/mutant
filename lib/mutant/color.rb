@@ -57,5 +57,5 @@ module Mutant
     RED   = Color.new(31)
     GREEN = Color.new(32)
     BLUE  = Color.new(34)
-  end
-end
+  end # Color
+end # Mutant

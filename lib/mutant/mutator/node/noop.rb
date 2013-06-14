@@ -7,7 +7,7 @@ module Mutant
         # Literal references to self do not need to be mutated?
         handle(
           :self, :zsuper, :not, :or, :and, :defined,
-          :next, :break, :match, :gvar, :cvar, :ensure, :rescue, 
+          :next, :break, :match, :gvar, :cvar, :ensure, :rescue,
           :dstr, :dsym, :yield, :begin, :rescue, :gvasgn
         )
 
@@ -22,7 +22,7 @@ module Mutant
         def dispatch
         end
 
-      end # # Noop
+      end # Noop
     end # Node
   end # Mutator
 end # Mutant

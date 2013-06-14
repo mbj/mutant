@@ -19,5 +19,5 @@ module Mutant
       Marshal.load(Marshal.dump(object))
     end
 
-  end
-end
+  end # Helper
+end # Mutant

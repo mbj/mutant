@@ -76,6 +76,6 @@ module Mutant
         report(self)
       end
 
-    end
-  end
-end
+    end # Subject
+  end # Runner
+end # Mutant

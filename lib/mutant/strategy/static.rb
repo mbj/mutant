@@ -6,13 +6,13 @@ module Mutant
       # Always fail to kill strategy
       class Fail < self
         KILLER = Killer::Static::Fail
-      end
+      end # Fail
 
       # Always succeed to kill strategy
       class Success < self
         KILLER = Killer::Static::Success
-      end
+      end # Success
 
-    end
-  end
-end
+    end # Static
+  end # Strategy
+end # Mutant

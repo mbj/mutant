@@ -23,5 +23,5 @@ module Mutant
       self
     end
 
-  end
-end
+  end # Config
+end # Mutant

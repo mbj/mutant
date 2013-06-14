@@ -29,5 +29,5 @@ module Mutant
       new(*args)
     end
 
-  end
-end
+  end # MethodObject
+end # Mutant

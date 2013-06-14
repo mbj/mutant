@@ -228,5 +228,6 @@ module Mutant
         @matchers << matcher if matcher
       end
     end
-  end
-end
+
+  end # CLI
+end # Mutant

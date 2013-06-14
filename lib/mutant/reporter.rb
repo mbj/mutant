@@ -13,5 +13,5 @@ module Mutant
     #
     abstract_method :report
 
-  end
-end
+  end # Reporter
+end # Mutant

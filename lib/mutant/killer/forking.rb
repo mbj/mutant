@@ -39,6 +39,6 @@ module Mutant
         Forked.new(killer, strategy, mutation)
       end
 
-    end
-  end
-end
+    end # Forking
+  end # Killer
+end # Mutant
