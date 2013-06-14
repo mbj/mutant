@@ -3,6 +3,7 @@ module Mutant
     class Filter
       # Mutaiton filter filtering in regexp match on mutation identification
       class Regexp < self
+        include Concord::Public.new(:regexp)
 
         # Test for match
         #
@@ -17,21 +18,7 @@ module Mutant
         # @api private
         #
         def match?(mutation)
-          !!(@regexp =~ mutation.identification)
-        end
-
-      private
-
-        # Initialize regexp filter
-        #
-        # @param [Regexp] regexp
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def initialize(regexp)
-          @regexp = regexp
+          !!(regexp =~ mutation.identification)
         end
 
       end # Regexp
