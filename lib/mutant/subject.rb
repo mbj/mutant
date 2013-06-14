@@ -66,7 +66,7 @@ module Mutant
     # @api private
     #
     def source_line
-      node.line
+      node.location.expression.line
     end
 
     # Return subject identicication

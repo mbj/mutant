@@ -15,6 +15,8 @@ module Mutant
       #
       abstract_method :public?
 
+      NAME_INDEX = 0
+
       # Return method name
       #
       # @return [Symbol]
@@ -22,7 +24,7 @@ module Mutant
       # @api private
       #
       def name
-        node.name
+        node.children[NAME_INDEX]
       end
 
     private
@@ -67,7 +69,7 @@ module Mutant
           "#{context.identification}##{name}"
         end
 
-      end
+      end # Instance
 
       # Singleton method subjects
       class Singleton < self
@@ -98,7 +100,9 @@ module Mutant
         def subtype
           "#{context.identification}.#{node.body.name}"
         end
-      end
-    end
-  end
-end
+
+      end # Singleton
+
+    end # Method
+  end # Subject
+end # Mutant
