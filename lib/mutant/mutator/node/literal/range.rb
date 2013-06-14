@@ -7,6 +7,15 @@ module Mutant
         class Range < self
           include AbstractType
 
+          MAP = {
+            :irange => :erange,
+            :erange => :irange
+          }.freeze
+
+          START_INDEX, END_INDEX = 0, 1
+
+          handle(*MAP.keys)
+
         private
 
           # Emit mutants
@@ -17,8 +26,9 @@ module Mutant
           #
           def dispatch
             emit_nil
-            emit(inverse)
-            emit_range
+            emit_inverse
+            emit_start_mutations
+            emit_end_mutations
           end
 
           # Return inverse node
@@ -27,20 +37,8 @@ module Mutant
           #
           # @api private
           #
-          def inverse
-            node = self.node
-            new(inverse_class, node.start, node.finish)
-          end
-
-          # Emit range specific mutants
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def emit_range
-            emit_finish_mutations
-            emit_start_mutations
+          def emit_inverse
+            emit(s(MAP.fetch(node.type), *children))
           end
 
           # Emit range start mutations
@@ -49,10 +47,10 @@ module Mutant
           #
           # @api private
           #
-          def emit_finish_mutations
-            finish = node.finish
+          def emit_end_mutations
+            end_ = children[END_INDEX]
             #emit_self(negative_infinity, finish)
-            emit_self(nan, finish)
+            emit_self(NAN, end_)
           end
 
           # Emit start mutations
@@ -62,35 +60,12 @@ module Mutant
           # @api private
           #
           def emit_start_mutations
-            start = node.start
-            emit_self(start, infinity)
-            emit_self(start, nan)
+            start = children[START_INDEX]
+            emit_self(start, INFINITY)
+            emit_self(start, NAN)
           end
-
-          # Return inverse AST node class
-          #
-          # @return [Class:Parser::AST::Node]
-          #
-          # @api private
-          #
-          def inverse_class
-            self.class::INVERSE_CLASS
-          end
-
-          # Mutator for range exclude literals
-          class Exclude < self
-            INVERSE_TYPE = :irange
-            handle(:erange)
-          end # Exclude
-
-          # Mutator for range include literals
-          class Include < self
-            INVERSE_TYPE = :erange
-            handle(:irange)
-          end # Include
 
         end # Range
-
       end # Literal
     end # Node
   end # Mutator

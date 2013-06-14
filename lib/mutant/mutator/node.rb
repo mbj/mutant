@@ -73,6 +73,20 @@ module Mutant
         end
       end
 
+      # Emit delete child mutation
+      #
+      # @param [Fixnum] index
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def delete_child(index)
+        dup_children = children.dup
+        dup_children.delete_at(index)
+        emit_self(*dup_children)
+      end
+
       # Emit updated child
       #
       # @param [Fixnum] index

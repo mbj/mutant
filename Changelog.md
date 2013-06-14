@@ -116,7 +116,9 @@ Feature:
 
 # v0.2.6 2012-12-14
 
-* [fixed] Correctly set file and line of injected mutants
+Bugfix:
+
+* Correctly set file and line of injected mutants
 
 [Compare v0.2.5..v0.2.6](https://github.com/mbj/mutant/compare/v0.2.5...v0.2.6)
 

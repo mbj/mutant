@@ -7,6 +7,13 @@ module Mutant
 
           handle(:regexp)
 
+          EMPTY_STRING = ''.freeze
+
+          # No input can ever be matched with this
+          NULL_REGEXP_SOURCE = 'a\A'.freeze
+
+          SOURCE_INDEX, OPTIONS_INDEX = 0, 1
+
         private
 
           # Emit mutants
@@ -17,24 +24,16 @@ module Mutant
           #
           def dispatch
             emit_nil
-            emit_self('') # match all
-            emit_self('a\A') # match nothing
-            emit_new { new_self(Random.hex_string) }
+            emit_self(s(:str, EMPTY_STRING), options)
+            emit_self(s(:str, NULL_REGEXP_SOURCE), options)
           end
 
-          # Return new regexp node
-          #
-          # @param [String] source
-          #
-          # @param [Integer] options
-          #   options of regexp, defaults to mutation subject node options
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def new_self(source,options=nil)
-            super(source,options || node.options)
+          def options
+            children[OPTIONS_INDEX]
+          end
+
+          def source
+            children[SOURCE_INDEX]
           end
 
         end # Regex
