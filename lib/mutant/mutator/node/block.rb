@@ -6,6 +6,10 @@ module Mutant
 
         handle(:block)
 
+        SEND_INDEX, ARGUMENTS_INDEX, BODY_INDEX = 0, 1, 2
+
+      private
+
         # Emit mutants
         #
         # @return [undefined]
@@ -13,12 +17,10 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_attribute_mutations(:body)
-          emit_attribute_mutations(:arguments) do |mutation|
-            arguments = mutation.arguments
-            arguments.names = arguments.required + arguments.optional
-            mutation
-          end if node.arguments
+          emit(children[SEND_INDEX])
+          mutate_child(SEND_INDEX)
+          mutate_child(ARGUMENTS_INDEX)
+          mutate_child(BODY_INDEX)
         end
 
       end # Block
