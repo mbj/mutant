@@ -7,7 +7,8 @@ module Mutant
 
         handle(:send)
 
-        RECEIVER_INDEX, SELECTOR_INDEX, ARGUMENTS_INDEX = 0, 1, 2..-1
+        RECEIVER_INDEX, SELECTOR_INDEX = 0, 1
+        ARGUMENTS_INDEX                = 2..-1.freeze
 
       private
 
