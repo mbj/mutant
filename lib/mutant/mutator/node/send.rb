@@ -19,9 +19,27 @@ module Mutant
         # @api private
         #
         def dispatch
+          if binary_operator?
+            run(Binary)
+            return
+          end
           emit(receiver) if receiver
           mutate_receiver
           mutate_arguments
+        end
+
+        # Test for binary operator
+        #
+        # @return [true]
+        #   if send is a binary operator
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def binary_operator?
+          arguments.one? && BINARY_METHOD_OPERATORS.include?(selector)
         end
 
         # Mutate arguments
