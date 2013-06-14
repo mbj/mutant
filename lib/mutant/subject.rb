@@ -1,23 +1,7 @@
 module Mutant
   # Subject of a mutation
   class Subject
-    include AbstractType, Adamantium::Flat, Enumerable, Equalizer.new(:context, :node)
-
-    # Return context
-    #
-    # @return [Context]
-    #
-    # @api private
-    #
-    attr_reader :context
-
-    # Return AST node
-    #
-    # @return [Parser::AST::Node]
-    #
-    # @api private
-    #
-    attr_reader :node
+    include AbstractType, Adamantium::Flat, Enumerable, Concord::Public.new(:context, :node)
 
     # Enumerate possible mutations
     #
@@ -115,21 +99,6 @@ module Mutant
     memoize :original_root
 
   private
-
-    # Initialize subject
-    #
-    # @param [Mutant::Context] context
-    #
-    # @param [Parser::AST::Node] node
-    #   the original node to be mutated
-    #
-    # @return [unkown]
-    #
-    # @api private
-    #
-    def initialize(context, node)
-      @context, @node = context, node
-    end
 
     # Return subtype identifier
     #
