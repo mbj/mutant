@@ -3,7 +3,7 @@ module Mutant
   class Mutator
     # Abstract base class for node mutators
     class Node < self
-      include AbstractType, NodeHelpers
+      include AbstractType, NodeHelpers, Unparser::Constants
 
       # Return identity of node
       #

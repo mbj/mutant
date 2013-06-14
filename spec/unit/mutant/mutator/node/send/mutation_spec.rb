@@ -2,31 +2,35 @@ require 'spec_helper'
 
 # FIXME: This spec needs to be structured better!
 describe Mutant::Mutator, 'send' do
+
   context 'send without arguments' do
-    context 'with self as receiver' do
+
+    context 'with self as' do
       context 'implicit' do
         let(:source) { 'foo' }
 
         it_should_behave_like 'a noop mutator'
       end
 
-      context 'explict' do
+      context 'explict receiver' do
         let(:source) { 'self.foo' }
 
         let(:mutations) do
           mutations = []
-          # with implicit receiver (send privately)
           mutations << 'foo'
+          mutations << 'self'
         end
 
         it_should_behave_like 'a mutator'
       end
 
-      context 'explicit with keyword message name' do
-        Mutant::KEYWORDS.each do |keyword|
+      context 'explicit receiver with keyword message name' do
+        Unparser::Constants::KEYWORDS.each do |keyword|
           context "with keyword: #{keyword}" do
             let(:source) { "self.#{keyword}" }
-            it_should_behave_like 'a noop mutator'
+            let(:mutations) do
+              ['self']
+            end
           end
         end
       end
@@ -145,7 +149,7 @@ describe Mutant::Mutator, 'send' do
     end
 
     context 'to some object with keyword in method name' do
-      Mutant::KEYWORDS.each do |keyword|
+      Unparser::Constants::KEYWORDS.each do |keyword|
         context "with keyword #{keyword}" do
           let(:source) { "foo.#{keyword}(nil)" }
 
