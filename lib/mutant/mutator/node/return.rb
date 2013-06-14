@@ -6,6 +6,8 @@ module Mutant
 
         handle(:return)
 
+        VALUE_INDEX = 0
+
       private
 
         # Emit mutants
@@ -15,9 +17,10 @@ module Mutant
         # @api private
         #
         def dispatch
-          value = node.value
+          value = children.first
           if value
             emit(value)
+            mutate_child(VALUE_INDEX)
           else
             emit_nil
           end
