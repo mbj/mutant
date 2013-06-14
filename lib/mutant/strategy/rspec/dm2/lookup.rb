@@ -5,15 +5,7 @@ module Mutant
 
         # Example lookup for the rspec dm2
         class Lookup
-          include AbstractType, Adamantium::Flat, Equalizer.new(:subject)
-
-          # Return subject
-          #
-          # @return [Subject]
-          #
-          # @api private
-          #
-          attr_reader :subject
+          include AbstractType, Adamantium::Flat, Concord::Public.new(:subject)
 
           # Return glob expression
           #
@@ -22,16 +14,6 @@ module Mutant
           # @api private
           #
           abstract_method :spec_files
-
-          # Initalize object
-          #
-          # @param [Mutation] mutation
-          #
-          # @api private
-          #
-          def initialize(subject)
-            @subject = subject
-          end
 
           # Perform example lookup
           #

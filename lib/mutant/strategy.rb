@@ -2,27 +2,7 @@ module Mutant
 
   # Abstract base class for killing strategies
   class Strategy
-    include AbstractType, Adamantium::Flat, Equalizer.new
-
-    # Return config
-    #
-    # @return [Config]
-    #
-    # @api private
-    #
-    attr_reader :config
-
-    # Initialize object
-    #
-    # @param [Config] config
-    #
-    # @return [undefined
-    #
-    # @api private
-    #
-    def initialize(config)
-      @config = config
-    end
+    include AbstractType, Adamantium::Flat, Concord::Public.new(:config)
 
     # Perform setup
     #
