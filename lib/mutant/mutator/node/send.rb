@@ -7,6 +7,8 @@ module Mutant
 
         handle(:send)
 
+        RECEIVER_INDEX, SELECTOR_INDEX, ARGUMENTS_INDEX = 0, 1, 2..-1
+
       private
 
         # Emit mutations
@@ -16,7 +18,84 @@ module Mutant
         # @api private
         #
         def dispatch
+          emit(receiver) if receiver
+          mutate_receiver
+          mutate_arguments
         end
+
+        # Mutate arguments
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def mutate_arguments
+          return if arguments.empty?
+          if arguments.one?
+            emit(arguments.first)
+          end
+          emit_self(receiver, selector)
+          children.each_index do |index|
+            next if index <= SELECTOR_INDEX
+            mutate_child(index)
+            delete_child(index)
+          end
+        end
+
+        # Emit receiver mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def mutate_receiver
+          return unless receiver
+          emit_implicit_self
+          mutate_child(RECEIVER_INDEX)
+        end
+
+        # Emit implicit self mutation
+        #
+        # @return [undefined]
+        #
+        # @api rpivate
+        #
+        def emit_implicit_self
+          if receiver.type == :self and !KEYWORDS.include?(selector)
+            emit_child_update(RECEIVER_INDEX, nil)
+          end
+        end
+
+        # Return receiver
+        #
+        # @return [Parser::Node::AST]
+        #
+        # @api private
+        #
+        def receiver
+          children[RECEIVER_INDEX]
+        end
+
+        # Return selector
+        #
+        # @return [Symbol]
+        #
+        # @api private
+        #
+        def selector
+          children[SELECTOR_INDEX]
+        end
+
+        # Return arguments
+        #
+        # @return [Array<Parser::AST::Node>]
+        #
+        # @api private
+        #
+        def arguments
+          children[ARGUMENTS_INDEX]
+        end
+        memoize :arguments
 
       end # Send
     end # Node

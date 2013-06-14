@@ -3,38 +3,38 @@ require 'spec_helper'
 # FIXME: This spec needs to be structured better!
 describe Mutant::Mutator, 'send' do
 
-  context 'send without arguments' do
+  context 'with self as' do
+    context 'implicit' do
+      let(:source) { 'foo' }
 
-    context 'with self as' do
-      context 'implicit' do
-        let(:source) { 'foo' }
+      it_should_behave_like 'a noop mutator'
+    end
 
-        it_should_behave_like 'a noop mutator'
+    context 'explict receiver' do
+      let(:source) { 'self.foo' }
+
+      let(:mutations) do
+        mutations = []
+        mutations << 'foo'
+        mutations << 'self'
       end
 
-      context 'explict receiver' do
-        let(:source) { 'self.foo' }
+      it_should_behave_like 'a mutator'
+    end
 
-        let(:mutations) do
-          mutations = []
-          mutations << 'foo'
-          mutations << 'self'
-        end
-
-        it_should_behave_like 'a mutator'
-      end
-
-      context 'explicit receiver with keyword message name' do
-        Unparser::Constants::KEYWORDS.each do |keyword|
-          context "with keyword: #{keyword}" do
-            let(:source) { "self.#{keyword}" }
-            let(:mutations) do
-              ['self']
-            end
+    context 'explicit receiver with keyword message name' do
+      Unparser::Constants::KEYWORDS.each do |keyword|
+        context "with keyword: #{keyword}" do
+          let(:source) { "self.#{keyword}" }
+          let(:mutations) do
+            ['self']
           end
         end
       end
     end
+  end
+
+  context 'without arguments' do
 
     context 'to some object' do
       let(:source) { 'foo.bar' }
@@ -53,73 +53,14 @@ describe Mutant::Mutator, 'send' do
       let(:mutations) do
         mutations = []
         mutations << 'self.class'
+        mutations << 'self.foo'
       end
 
       it_should_behave_like 'a mutator'
     end
   end
 
-  context 'with block' do
-    let(:source) { 'foo() { a; b }' }
-
-    let(:mutations) do
-      mutations = []
-      mutations << 'foo() { a }'
-      mutations << 'foo() { b }'
-      mutations << 'foo() { }'
-      mutations << 'foo'
-    end
-
-    it_should_behave_like 'a mutator'
-  end
-
-  context 'with block args' do
-
-    let(:source) { 'foo { |a, b| }' }
-
-    before do
-      Mutant::Random.stub(:hex_string => :random)
-    end
-
-    let(:mutations) do
-      mutations = []
-      mutations << 'foo'
-      mutations << 'foo { |a, b| Object.new }'
-      mutations << 'foo { |a, srandom| }'
-      mutations << 'foo { |srandom, b| }'
-      mutations << 'foo { |a| }'
-      mutations << 'foo { |b| }'
-      mutations << 'foo { || }'
-    end
-
-    it_should_behave_like 'a mutator'
-  end
-
-  context 'with block pattern args' do
-
-    before do
-      Mutant::Random.stub(:hex_string => :random)
-    end
-
-    let(:source) { 'foo { |(a, b), c| }' }
-
-    let(:mutations) do
-      mutations = []
-      mutations << 'foo { || }'
-      mutations << 'foo { |a, b, c| }'
-      mutations << 'foo { |(a, b), c| Object.new }'
-      mutations << 'foo { |(a, b)| }'
-      mutations << 'foo { |c| }'
-      mutations << 'foo { |(srandom, b), c| }'
-      mutations << 'foo { |(a, srandom), c| }'
-      mutations << 'foo { |(a, b), srandom| }'
-      mutations << 'foo'
-    end
-
-    it_should_behave_like 'a mutator'
-  end
-
-  context 'send with arguments' do
+  context 'with arguments' do
 
     context 'one argument' do
       let(:source) { 'foo(nil)' }
@@ -128,7 +69,7 @@ describe Mutant::Mutator, 'send' do
         mutations = []
         mutations << 'foo'
         mutations << 'nil'
-        mutations << 'foo(Object.new)'
+        mutations << 'foo(::Object.new)'
       end
 
       it_should_behave_like 'a mutator'
@@ -139,10 +80,11 @@ describe Mutant::Mutator, 'send' do
 
       let(:mutations) do
         mutations = []
+        mutations << 'self'
         mutations << 'self.foo'
         mutations << 'foo(nil)'
         mutations << 'nil'
-        mutations << 'self.foo(Object.new)'
+        mutations << 'self.foo(::Object.new)'
       end
 
       it_should_behave_like 'a mutator'
@@ -156,14 +98,28 @@ describe Mutant::Mutator, 'send' do
           let(:mutations) do
             mutations = []
             mutations << "foo.#{keyword}"
-            mutations << "foo"
+            mutations << 'foo'
             mutations << 'nil'
-            mutations << "foo.#{keyword}(Object.new)"
+            mutations << "foo.#{keyword}(::Object.new)"
           end
 
           it_should_behave_like 'a mutator'
         end
       end
+    end
+
+    context 'two arguments' do
+      let(:source) { 'foo(nil, nil)' }
+
+      let(:mutations) do
+        mutations = []
+        mutations << 'foo()'
+        mutations << 'foo(nil)'
+        mutations << 'foo(::Object.new, nil)'
+        mutations << 'foo(nil, ::Object.new)'
+      end
+
+      it_should_behave_like 'a mutator'
     end
 
     context 'binary operator methods' do
@@ -183,20 +139,5 @@ describe Mutant::Mutator, 'send' do
         it_should_behave_like 'a mutator'
       end
     end
-
-    context 'two arguments' do
-      let(:source) { 'foo(nil, nil)' }
-
-      let(:mutations) do
-        mutations = []
-        mutations << 'foo()'
-        mutations << 'foo(nil)'
-        mutations << 'foo(Object.new, nil)'
-        mutations << 'foo(nil, Object.new)'
-      end
-
-      it_should_behave_like 'a mutator'
-    end
-
   end
 end
