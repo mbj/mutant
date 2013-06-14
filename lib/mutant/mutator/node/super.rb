@@ -7,6 +7,9 @@ module Mutant
 
         handle(:super)
 
+        Z_SUPER = NodeHelpers.s(:zsuper)
+        EMPTY_SUPER = NodeHelpers.s(:super)
+
       private
 
         # Emit mutations
@@ -16,22 +19,12 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_node(:zsuper)
-          emit_without_block
-          emit_attribute_mutations(:block) if node.block
-          emit_attribute_mutations(:arguments)
-        end
-
-        # Emit without block mutation
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def emit_without_block
-          dup = dup_node
-          dup.block = nil
-          emit(dup)
+          emit(Z_SUPER)
+          emit(EMPTY_SUPER)
+          children.each_index do |index|
+            mutate_child(index)
+            delete_child(index)
+          end
         end
 
       end # Super
