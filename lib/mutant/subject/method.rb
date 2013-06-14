@@ -15,18 +15,6 @@ module Mutant
       #
       abstract_method :public?
 
-      NAME_INDEX = 0
-
-      # Return method name
-      #
-      # @return [Symbol]
-      #
-      # @api private
-      #
-      def name
-        node.children[NAME_INDEX]
-      end
-
     private
 
       # Return scope
@@ -39,8 +27,31 @@ module Mutant
         context.scope
       end
 
+      # Return method name
+      #
+      # @return [Symbol]
+      #
+      # @api private
+      #
+      def name
+        node.children[self.class::NAME_INDEX]
+      end
+
+      # Return subtype identifier
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def subtype
+        "#{context.identification}#{self.class::SYMBOL}#{name}"
+      end
+
       # Instance method subjects
       class Instance < self
+
+        NAME_INDEX = 0
+        SYMBOL = '#'.freeze
 
         # Test if method is public
         #
@@ -59,20 +70,13 @@ module Mutant
 
       private
 
-        # Return subtype identifier
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def subtype
-          "#{context.identification}##{name}"
-        end
-
       end # Instance
 
       # Singleton method subjects
       class Singleton < self
+
+        NAME_INDEX = 1
+        SYMBOL = '.'.freeze
 
         # Test if method is public
         #
@@ -88,18 +92,6 @@ module Mutant
           scope.singleton_class.public_method_defined?(name)
         end
         memoize :public?
-
-      private
-
-        # Return subtype identifier
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def subtype
-          "#{context.identification}.#{node.body.name}"
-        end
 
       end # Singleton
 
