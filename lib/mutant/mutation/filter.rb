@@ -42,14 +42,14 @@ module Mutant
 
       # Return filter for handle
       #
-      # @param [String] notation
+      # @param [String] _notation
       #
       # @return [nil]
       #   returns nil
       #
       # @api private
       #
-      def self.handle(notation)
+      def self.handle(_notation)
         nil
       end
 
@@ -58,14 +58,14 @@ module Mutant
 
         # Test for match
         #
-        # @pram [Mutation] mutation
+        # @pram [Mutation] _mutation
         #
         # @return [true]
         #   returns true
         #
         # @api private
         #
-        def match?(mutation)
+        def match?(_mutation)
           true
         end
 
