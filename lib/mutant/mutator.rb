@@ -97,22 +97,6 @@ module Mutant
       @seen << self.class.identity(object)
     end
 
-    # Test if generated mutation is allowed
-    #
-    # @param [Object] object
-    #
-    # @return [true]
-    #   if mutation is allowed
-    #
-    # @return [false]
-    #   otherwise
-    #
-    # @api private
-    #
-    def allow?(object)
-      true
-    end
-
     # Dispatch node generations
     #
     # @return [undefined]
@@ -130,7 +114,7 @@ module Mutant
     # @api private
     #
     def emit(object)
-      return unless new?(object) and allow?(object)
+      return unless new?(object)
 
       guard(object)
 
