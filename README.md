@@ -5,14 +5,17 @@ mutant
 [![Dependency Status](https://gemnasium.com/mbj/mutant.png)](https://gemnasium.com/mbj/mutant)
 [![Code Climate](https://codeclimate.com/github/mbj/mutant.png)](https://codeclimate.com/github/mbj/mutant)
 
-Mutant is a mutation testing tool for ruby that aims to be better than existing mutation testers.
+Mutant is a mutation testing tool for ruby. It aims to be better than existing mutation testers.
 
 The idea is that if code can be changed and your tests do not notice, either that code isn't being covered
 or it does not have a speced side effect.
 
-Mutant does currently only support 1.9 mode under Rubinius or MRI. Support for JRuby is planned.
+Mutant does support MRI and RBX gte 19-mode. Support for jruby is planned. It can possibly work under any ruby
+einge that supports POSIX-fork(2) emantics.
 
-Also it is easy to write a mutation killer for other test/spec frameworks than rspec2.
+Only rspec2 is supported currently. This is subjected to change.
+
+It is easy to write a mutation killer for other test/spec frameworks than rspec2.
 Just create your own Mutant::Killer subclass, and make sure I get a PR!
 
 See this [ASCII-Cast](http://ascii.io/a/1707) for mutant in action! (v0.2.1)
@@ -24,7 +27,8 @@ The following projects adopted mutant, and aim 100% mutation coverage:
 
 * [axiom](https://github.com/dkubb/axiom)
 * [axiom-types](https://github.com/dkubb/axiom-types)
-* [dm-mapper](https://github.com/datamapper/dm-mapper)
+* [rom-mapper](https://github.com/rom/rom-mapper)
+* [rom-session](https://github.com/rom/rom-session)
 * [event_bus](https://github.com/kevinrutherford/event_bus)
 * [virtus](https://github.com/solnic/virtus)
 * [quacky](https://github.com/benmoss/quacky)
@@ -113,7 +117,7 @@ Your options:
 
 * GitHub Issues https://github.com/mbj/mutant/issues
 * Ping me on https://twitter.com/_m_b_j_
-* #datamapper channel on freenode, I hang around on CET daytimes. (nick mbj)
+* #rom-rb channel on freenode, I hang around on CET daytimes. (nick mbj)
 
 Credits
 -------
