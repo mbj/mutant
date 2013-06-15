@@ -73,11 +73,10 @@ module Mutant
       # @api private
       #
       def candidate_names
-        object = candidate_scope
         names =
-          object.public_instance_methods(false)   +
-          object.private_instance_methods(false)  +
-          object.protected_instance_methods(false)
+          candidate_scope.public_instance_methods(false)   +
+          candidate_scope.private_instance_methods(false)  +
+          candidate_scope.protected_instance_methods(false)
         names.sort
       end
 
