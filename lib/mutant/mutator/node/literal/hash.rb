@@ -26,6 +26,7 @@ module Mutant
             end
           end
 
+          # Mutator for hash pairs
           class Pair < Node
 
             handle(:pair)

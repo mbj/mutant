@@ -1,6 +1,7 @@
 module Mutant
   class Mutator
     class Node
+      # Mutator for multiple assignment left hand side nodes
       class MLHS < self
 
         handle(:mlhs)

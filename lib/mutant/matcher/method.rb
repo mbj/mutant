@@ -128,6 +128,7 @@ module Mutant
       end
       memoize :subject
 
+      # Visitor to find last match inside AST
       class Finder
 
         # Run finder

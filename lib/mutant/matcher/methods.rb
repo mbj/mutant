@@ -89,6 +89,7 @@ module Mutant
       #
       abstract_method :candidate_scope
 
+      # Matcher for singleton methods
       class Singleton < self
         MATCHER = Matcher::Method::Singleton
 
@@ -119,6 +120,7 @@ module Mutant
 
       end # Singleton
 
+      # Matcher for instance methods
       class Instance < self
         MATCHER = Matcher::Method::Instance
 

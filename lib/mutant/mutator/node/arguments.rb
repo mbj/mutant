@@ -1,6 +1,7 @@
 module Mutant
   class Mutator
     class Node
+      # Mutator for arguments node
       class Arguments < self
 
         handle(:args)

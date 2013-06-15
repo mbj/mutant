@@ -3,6 +3,8 @@ module Mutant
     class Rspec
       class DM2
         class Lookup
+
+          # Base class for dm2 style method lookup
           class Method < self
 
             # Return spec files
@@ -91,6 +93,7 @@ module Mutant
               "#{base_path}/*_spec.rb"
             end
 
+            # Instance method dm2 style method lookup
             class Instance < self
               handle(Subject::Method::Instance)
 
@@ -112,6 +115,7 @@ module Mutant
 
             end # Instance
 
+            # Singleton method dm2 style method lookup
             class Singleton < self
               handle(Subject::Method::Singleton)
 
