@@ -27,17 +27,15 @@ module Mutant
         # @param [Parser::AST::Node] node
         #
         # @return [true]
-        #   returns true if node matches method
+        #   if node matches method
         #
         # @return [false]
-        #   returns false if node NOT matches method
+        #   otherwise
         #
         # @api private
         #
         def match?(node)
-          line?(node) &&
-          name?(node) &&
-          receiver?(node)
+          line?(node) && name?(node) && receiver?(node)
         end
 
         # Test for line match
@@ -45,15 +43,16 @@ module Mutant
         # @param [Parser::AST::Node] node
         #
         # @return [true]
-        #   returns true if node matches source line
+        #   if node matches source line
         #
         # @return [false]
-        #   returns false otherwise
+        #   otherwise
         #
         # @api private
         #
         def line?(node)
-          expression = node.location.expression || return
+          expression = node.location.expression
+          return false unless expression
           expression.line == source_line
         end
 
@@ -62,10 +61,10 @@ module Mutant
         # @param [Parser::AST::Node] node
         #
         # @return [true]
-        #   returns true if node name matches
+        #   if node name matches
         #
         # @return [false]
-        #   returns false otherwise
+        #   otherwise
         #
         # @api private
         #
@@ -78,10 +77,10 @@ module Mutant
         # @param [Parser::AST::Node] node
         #
         # @return [true]
-        #   returns true when receiver is self or scope from pattern
+        #   when receiver matches
         #
         # @return [false]
-        #   returns false otherwise
+        #   otherwise
         #
         # @api private
         #
@@ -93,7 +92,7 @@ module Mutant
           when :const
             receiver_name?(receiver)
           else
-            $stderr.puts "Unable to find singleton method definition can only match receiver on Rubinius::AST::Self or Rubinius::AST::ConstantAccess, got #{receiver.class}"
+            $stderr.puts "Can only match self or const, got #{receiver.type}, unable to match receiver of defs node"
             false
           end
         end
@@ -103,10 +102,10 @@ module Mutant
         # @param [Parser::AST::Node] node
         #
         # @return [true]
-        #   returns true when node name matches unqualified scope name
+        #   if node name matches unqualified scope name
         #
         # @return [false]
-        #   returns false otherwise
+        #   otherwise
         #
         # @api private
         #
