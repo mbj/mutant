@@ -77,7 +77,7 @@ module Mutant
         #
         # @return [undefined]
         #
-        # @api rpivate
+        # @api private
         #
         def emit_implicit_self
           if receiver.type == :self and !KEYWORDS.include?(selector)

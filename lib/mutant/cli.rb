@@ -170,13 +170,15 @@ module Mutant
       @strategy = strategy
     end
 
-    # Parses the command-line options.
+    # Parse the command-line options
     #
     # @param [Array<String>] arguments
     #   Command-line options and arguments to be parsed.
     #
     # @raise [Error]
     #   An error occurred while parsing the options.
+    #
+    # @return [undefined]
     #
     # @api private
     #

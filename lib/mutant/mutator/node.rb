@@ -106,6 +106,8 @@ module Mutant
       #
       # @param [Array<Parser::AST::Node>] children
       #
+      # @return [undefined]
+      #
       # @api private
       #
       def emit_self(*children)

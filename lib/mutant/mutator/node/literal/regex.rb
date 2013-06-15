@@ -28,10 +28,22 @@ module Mutant
             emit_self(s(:str, NULL_REGEXP_SOURCE), options)
           end
 
+          # Return options
+          #
+          # @return [Parser::AST::Node]
+          #
+          # @api private
+          #
           def options
             children[OPTIONS_INDEX]
           end
 
+          # Return source
+          #
+          # @return [Parser::AST::Node]
+          #
+          # @api private
+          #
           def source
             children[SOURCE_INDEX]
           end
