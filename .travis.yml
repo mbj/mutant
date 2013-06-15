@@ -7,6 +7,7 @@ rvm:
   - ruby-head
   - rbx-19mode
   - ruby-head
+  - jruby-19mode
 matrix:
   allow_failures:
   - jruby-19mode # No fork(2) support, workaround planned
