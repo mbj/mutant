@@ -1,11 +1,22 @@
 module Mutant
   class Mutator
     class Node
+      # Mutator base class for assignments
       class Assignment < self
 
+        # Mutator for variable assignment
         class Variable < self
           NAME_INDEX  = 0
           VALUE_INDEX = 1
+
+          MAP = IceNine.deep_freeze(
+            :gvasgn => '$',
+            :cvasgn => '@@',
+            :ivasgn => '@',
+            :lvasgn => ''
+          )
+
+          handle *MAP.keys
 
         private
 
@@ -29,29 +40,9 @@ module Mutant
           def emit_name_mutations
             name = children[NAME_INDEX]
             Mutator::Util::Symbol.each(name) do |name|
-              emit_child_update(NAME_INDEX, "#{self.class::PREFIX}#{name}")
+              emit_child_update(NAME_INDEX, "#{MAP.fetch(node.type)}#{name}")
             end
           end
-
-          class Global < self
-            PREFIX = '$'.freeze
-            handle(:gvasgn)
-          end # Global
-
-          class Class < self
-            PREFIX = '@@'.freeze
-            handle(:cvasgn)
-          end # Class
-
-          class Instance < self
-            PREFIX = '@'.freeze
-            handle(:ivasgn)
-          end # Instance
-
-          class Local < self
-            PREFIX = ''.freeze
-            handle(:lvasgn)
-          end # Local
 
         end # Variable
       end # Assignment
