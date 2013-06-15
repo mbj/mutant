@@ -12,7 +12,7 @@ module Mutant
         #
         # @api private
         #
-        def spec_files(subject)
+        def self.spec_files(subject)
           Lookup.run(subject)
         end
 

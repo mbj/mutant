@@ -102,7 +102,6 @@ module Mutant
     #
     def strategy
       @strategy or raise(Error, 'No strategy was set!')
-      @strategy.new(self)
     end
     memoize :strategy
 

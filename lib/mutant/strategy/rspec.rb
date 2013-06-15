@@ -12,7 +12,7 @@ module Mutant
       #
       # @api private
       #
-      def setup
+      def self.setup
         require('./spec/spec_helper.rb')
         self
       end
@@ -26,7 +26,7 @@ module Mutant
         #
         # @api private
         #
-        def spec_files(mutation)
+        def self.spec_files(mutation)
           Dir['spec/unit/**/*_spec.rb']
         end
       end # Unit
@@ -40,7 +40,7 @@ module Mutant
         #
         # @api private
         #
-        def spec_files(mutation)
+        def self.spec_files(mutation)
           Dir['spec/integration/**/*_spec.rb']
         end
       end # Integration
@@ -54,7 +54,7 @@ module Mutant
         #
         # @api private
         #
-        def spec_files(mutation)
+        def self.spec_files(mutation)
           Dir['spec/**/*_spec.rb']
         end
       end # Full

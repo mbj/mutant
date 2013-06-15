@@ -2,7 +2,7 @@ module Mutant
 
   # Abstract base class for killing strategies
   class Strategy
-    include AbstractType, Adamantium::Flat, Concord::Public.new(:config)
+    include AbstractType, Adamantium::Flat
 
     # Perform setup
     #
@@ -10,7 +10,7 @@ module Mutant
     #
     # @api private
     #
-    def setup
+    def self.setup
       self
     end
 
@@ -20,7 +20,7 @@ module Mutant
     #
     # @api private
     #
-    def teardown
+    def self.teardown
       self
     end
 
@@ -32,7 +32,7 @@ module Mutant
     #
     # @api private
     #
-    def kill(mutation)
+    def self.kill(mutation)
       killer.new(self, mutation)
     end
 
@@ -42,8 +42,8 @@ module Mutant
     #
     # @api private
     #
-    def killer
-      self.class::KILLER
+    def self.killer
+      self::KILLER
     end
 
   end # Strategy

@@ -8,10 +8,10 @@ end
 
 shared_examples_for 'a cli parser' do
   subject { cli.config }
-  its(:filter)   { should eql(expected_filter)                }
-  its(:strategy) { should eql(expected_strategy.new(subject)) }
-  its(:reporter) { should eql(expected_reporter)              }
-  its(:matcher)  { should eql(expected_matcher)               }
+  its(:filter)   { should eql(expected_filter)   }
+  its(:strategy) { should eql(expected_strategy) }
+  its(:reporter) { should eql(expected_reporter) }
+  its(:matcher)  { should eql(expected_matcher)  }
 end
 
 describe Mutant::CLI, '.new' do

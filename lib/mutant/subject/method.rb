@@ -15,6 +15,16 @@ module Mutant
       #
       abstract_method :public?
 
+      # Return method name
+      #
+      # @return [Symbol]
+      #
+      # @api private
+      #
+      def name
+        node.children[self.class::NAME_INDEX]
+      end
+
     private
 
       # Return scope
@@ -25,16 +35,6 @@ module Mutant
       #
       def scope
         context.scope
-      end
-
-      # Return method name
-      #
-      # @return [Symbol]
-      #
-      # @api private
-      #
-      def name
-        node.children[self.class::NAME_INDEX]
       end
 
       # Return subtype identifier
