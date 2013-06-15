@@ -65,7 +65,7 @@ module Mutant
 
       # Report subject results
       #
-      # @param [Subject]
+      # @param [Subject] runner
       #
       # @return [undefined]
       #
