@@ -31,14 +31,26 @@ module Mutant
         def emit_branch_mutations
           children.each_with_index.drop(1).each do |child, index|
             next unless child
-            mutate_child(index)
-            dup_children = children.dup
-            dup_children.delete_at(index)
-            if dup_children.last.type == :when
-              dup_children << nil
-            end
-            emit_self(*dup_children)
+            mutate_index(index)
           end
+        end
+
+        # Perform mutations of child index
+        #
+        # @param [Fixnum] index
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def mutate_index(index)
+          mutate_child(index)
+          dup_children = children.dup
+          dup_children.delete_at(index)
+          if dup_children.last.type == :when
+            dup_children << nil
+          end
+          emit_self(*dup_children)
         end
 
       end # Case

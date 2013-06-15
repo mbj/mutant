@@ -25,6 +25,7 @@ module Mutant
           end
           emit(receiver) if receiver
           mutate_receiver
+          emit_argument_propagation
           mutate_arguments
         end
 
@@ -50,15 +51,23 @@ module Mutant
         #
         def mutate_arguments
           return if arguments.empty?
-          if arguments.one?
-            emit(arguments.first)
-          end
           emit_self(receiver, selector)
           children.each_index do |index|
             next if index <= SELECTOR_INDEX
             mutate_child(index)
             delete_child(index)
           end
+        end
+
+        # Emit argument propagation
+        #
+        # @return[undefined]
+        #
+        # @api private
+        #
+        def emit_argument_propagation
+          return unless arguments.one?
+          emit(arguments.first)
         end
 
         # Emit receiver mutations

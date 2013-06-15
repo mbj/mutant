@@ -18,6 +18,16 @@ module Mutant
           def dispatch
             emit_nil
             emit_self
+            mutate_body
+          end
+
+          # Mutate body
+          #
+          # @return [undefined]
+          #
+          # @api private
+          #
+          def mutate_body
             children.each_index do |index|
               dup_children = children.dup
               dup_children.delete_at(index)

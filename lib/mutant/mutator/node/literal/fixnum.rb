@@ -28,8 +28,17 @@ module Mutant
           # @api private
           #
           def values
-            value = children.first
             [0, 1, -value, value+1, value-1]
+          end
+
+          # Return value
+          #
+          # @return [Object]
+          #
+          # @api private
+          #
+          def value
+            children.first
           end
 
         end # Fixnuma

@@ -26,12 +26,23 @@ module Mutant
         # @api private
         #
         def emit_mlhs_expansion
-          mlhs = children.each_with_index.select { |child, index| child.type == :mlhs }
-          mlhs.each do |child, index|
+          mlhs_childs_with_index.each do |child, index|
             dup_children = children.dup
             dup_children.delete_at(index)
             dup_children.insert(index, *child.children)
             emit_self(*dup_children)
+          end
+        end
+
+        # Return mlhs childs
+        #
+        # @return [Enumerable<Parser::AST::Node, Fixnum>]
+        #
+        # @api private
+        #
+        def mlhs_childs_with_index
+          children.each_with_index.select do |child, index|
+            child.type == :mlhs
           end
         end
 
