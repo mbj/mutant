@@ -61,7 +61,7 @@ module Mutant
 
         # Emit argument propagation
         #
-        # @return[undefined]
+        # @return [undefined]
         #
         # @api private
         #
