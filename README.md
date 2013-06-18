@@ -100,7 +100,7 @@ This strategy executes all specs under ``./spec/integration`` for each mutation.
 
 This strategy executes all specs under ``./spec`` for each mutation.
 
-It is also plannned to allow explicit selections on the specs to be run, as well as support for other test frameworks.
+In the future, we plan on allowing explicit selections on the specs to be run, as well as support for other test frameworks.
 Custom project specific strategies are also on the roadmap.
 
 Alternatives
