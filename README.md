@@ -10,10 +10,10 @@ Mutant is a mutation testing tool for ruby. It aims to be better than existing m
 The idea is that if code can be changed and your tests do not notice, either that code isn't being covered
 or it does not have a speced side effect.
 
-Mutant does support MRI and RBX gte 19-mode. Support for jruby is planned. It can possibly work under any ruby
-einge that supports POSIX-fork(2) emantics.
+Mutant supports MRI and RBX gte 19-mode, while support for jruby is planned. It should also work under any ruby
+engine that supports POSIX-fork(2) semantics.
 
-Only rspec2 is supported currently. This is subjected to change.
+Only rspec2 is supported currently. This is subject to change.
 
 It is easy to write a mutation killer for other test/spec frameworks than rspec2.
 Just create your own Mutant::Killer subclass, and make sure I get a PR!
@@ -62,8 +62,8 @@ mutant -I lib -r virtus --rspec-dm2 ::Virtus::Attribute#name
 Strategies
 ----------
 
-Mutation testing is slow. To make it fast the selection of the correct set of tests to run is the key.
-Mutant currently supports the following buildin strategies for selecting tests/specs.
+Mutation testing is slow. The key to making it fast is selecting the correct set of tests to run.
+Mutant currently supports the following built-in strategies for selecting tests/specs.
 
 ### --rspec-dm2
 
@@ -79,12 +79,12 @@ Private singleton methods: spec/unit/#{namespace}/#{class_name}/class_methods/*_
 
 #### Expansions:
 
-Symbolic operator like method are expanded. So for example ```Foo#<<``` is expanded to:
+Symbolic operator-like methods are expanded, e.g. ```Foo#<<``` is expanded to:
 ```
 spec/unit/foo/left_shift_operator_spec.rb
 ````
 
-The full list of expansion can be found here:
+The full list of expansions can be found here:
 
 https://github.com/mbj/mutant/blob/master/lib/mutant/constants.rb
 
@@ -100,7 +100,7 @@ This strategy executes all specs under ``./spec/integration`` for each mutation.
 
 This strategy executes all specs under ``./spec`` for each mutation.
 
-It is also plannned to allow explicit selections on specs to run and to support other test frameworks.
+In the future, we plan on allowing explicit selections on the specs to be run, as well as support for other test frameworks.
 Custom project specific strategies are also on the roadmap.
 
 Alternatives
