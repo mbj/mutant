@@ -1,3 +1,43 @@
+class Subject
+
+  include Equalizer.new(:source)
+
+  Undefined = Object.new.freeze
+
+  attr_reader :source
+
+  def self.coerce(input)
+    case input
+    when Parser::AST::Node
+      new(input)
+    when String
+      new(Parser::CurrentRuby.parse(input))
+    else
+      raise
+    end
+  end
+
+  def to_s
+    "#{@node.inspect}\n#{@source}"
+  end
+
+  def initialize(node)
+    source = Unparser.unparse(node)
+    @node, @source = node, source
+  end
+
+  def assert_transitive!
+    generated = Unparser.generate(@node)
+    parsed    = Parser::CurrentRuby.parse(generated)
+    again     = Unparser.generate(parsed)
+    unless generated == again
+      # mostly an unparser bug!
+      fail "Untransitive:\n%s\n---\n%s" % [generated, again]
+    end
+    self
+  end
+end
+
 shared_examples_for 'a mutator' do
   subject { object.each(node) { |item| yields << item } }
 
@@ -15,44 +55,34 @@ shared_examples_for 'a mutator' do
 
     it { should be_instance_of(to_enum.class) }
 
-    def assert_transitive(ast)
-      generated = generate(ast)
-      parsed    = parse(generated)
-      again     = generate(parsed)
-      unless generated == again
-        fail "Untransitive:\n%s\n---\n%s" % [generated, again]
+    let(:expected_mutations) do
+      mutations.map do |mutation|
+        Subject.coerce(mutation)
       end
     end
 
-    unless instance_methods.include?(:expected_mutations)
-      let(:expected_mutations)  do
-        mutations.map do |mutation|
-          case mutation
-          when String
-            node = parse(mutation)
-            assert_transitive(node)
-            node
-          when Parser::AST::Node
-            assert_transitive(mutation)
-            mutation
-          else
-            raise
-          end
-        end.map do |node|
-          generate(node)
-        end.to_set
-      end
+    let(:generated_mutations) do
     end
 
     it 'generates the expected mutations' do
-      generated  = self.subject.map { |mutation| generate(mutation) }.to_set
+      generated  = subject.map { |node| Subject.new(node) }
 
-      missing    = (expected_mutations - generated).to_a
-      unexpected = (generated - expected_mutations).to_a
+      missing    = expected_mutations - generated
+      unexpected = generated - expected_mutations
 
-      unless generated == expected_mutations
-        fail "Missing mutations:\n%s\nUnexpected mutations:\n%s" % [missing.join("\n----\n"), unexpected.join("\n----\n")]
+      message = []
+
+      unless missing.empty?
+        message << "Missing mutations (%i):" % missing.length
+        message.concat(missing)
       end
+
+      unless unexpected.empty?
+        message << "Unexpected mutatiosn (%i):" % unexpected.length
+        message.concat(unexpected)
+      end
+
+      fail message.join("\n-----\n") unless missing.empty? and unexpected.empty?
     end
   end
 end
