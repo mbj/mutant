@@ -6,7 +6,7 @@ module Mutant
 
         handle(:block)
 
-        SEND_INDEX, ARGUMENTS_INDEX, BODY_INDEX = 0, 1, 2
+        children :send, :arguments, :body
 
       private
 
@@ -17,10 +17,13 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit(children[SEND_INDEX])
-          mutate_child(SEND_INDEX)
-          mutate_child(ARGUMENTS_INDEX)
-          mutate_child(BODY_INDEX)
+          emit(send)
+          emit_arguments_mutations
+          if body
+            emit_body_mutations
+          else
+            emit_body(NEW_OBJECT)
+          end
         end
 
       end # Block

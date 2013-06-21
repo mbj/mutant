@@ -8,7 +8,7 @@ describe Mutant::Mutator, 'block' do
       mutations = []
       mutations << 'foo { a }'
       mutations << 'foo { b }'
-      mutations << 'foo { nil }'
+      mutations << 'foo {}'
       mutations << 'foo'
     end
 
