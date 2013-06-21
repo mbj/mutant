@@ -9,7 +9,6 @@ module Mutant
         UNDERSCORE = '_'.freeze
 
         children :name
-        NAME_INDEX = 0
 
       private
 
@@ -32,7 +31,7 @@ module Mutant
         #
         def emit_name_mutation
           Mutator::Util::Symbol.each(name) do |name|
-            emit_child_update(NAME_INDEX, name)
+            emit_name(name)
           end
         end
 
@@ -55,7 +54,7 @@ module Mutant
 
           handle(:optarg)
 
-          DEFAULT_INDEX = 1
+          children :name, :default
 
         private
 
@@ -79,16 +78,6 @@ module Mutant
           #
           def emit_required_mutation
             emit(s(:arg, name))
-          end
-
-          # Emit default mutations
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def emit_default_mutations
-            mutate_child(DEFAULT_INDEX)
           end
 
         end # Optional
