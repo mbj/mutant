@@ -7,8 +7,9 @@ module Mutant
 
         handle(:send)
 
-        RECEIVER_INDEX, SELECTOR_INDEX = 0, 1
-        ARGUMENTS_INDEX                = 2..-1.freeze
+        children :receiver, :selector
+
+        alias_method :arguments, :remaining_children
 
       private
 
@@ -23,6 +24,16 @@ module Mutant
             run(Binary)
             return
           end
+          normal_dispatch
+        end
+
+        # Perform normal, non special case dispatch
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def normal_dispatch
           emit(receiver) if receiver
           mutate_receiver
           emit_argument_propagation
@@ -52,8 +63,7 @@ module Mutant
         def mutate_arguments
           return if arguments.empty?
           emit_self(receiver, selector)
-          children.each_index do |index|
-            next if index <= SELECTOR_INDEX
+          remaining_children_with_index.each do |node, index|
             mutate_child(index)
             delete_child(index)
           end
@@ -79,7 +89,7 @@ module Mutant
         def mutate_receiver
           return unless receiver
           emit_implicit_self
-          mutate_child(RECEIVER_INDEX)
+          emit_receiver_mutations
         end
 
         # Emit implicit self mutation
@@ -90,40 +100,9 @@ module Mutant
         #
         def emit_implicit_self
           if receiver.type == :self and !KEYWORDS.include?(selector)
-            emit_child_update(RECEIVER_INDEX, nil)
+            emit_receiver(nil)
           end
         end
-
-        # Return receiver
-        #
-        # @return [Parser::Node::AST]
-        #
-        # @api private
-        #
-        def receiver
-          children[RECEIVER_INDEX]
-        end
-
-        # Return selector
-        #
-        # @return [Symbol]
-        #
-        # @api private
-        #
-        def selector
-          children[SELECTOR_INDEX]
-        end
-
-        # Return arguments
-        #
-        # @return [Array<Parser::AST::Node>]
-        #
-        # @api private
-        #
-        def arguments
-          children[ARGUMENTS_INDEX]
-        end
-        memoize :arguments
 
       end # Send
     end # Node

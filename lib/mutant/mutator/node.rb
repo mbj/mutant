@@ -43,15 +43,19 @@ module Mutant
 
       # Define remaining children
       #
-      # @param [Fixnum] from_index
+      # @param [Array<Symbol>] names
       #
       # @return [undefined]
       #
       # @api private
       #
-      def self.define_remaining_children(from_index)
+      def self.define_remaining_children(names)
+        define_method(:remaining_children_with_index) do
+          children.each_with_index.drop(names.length)
+        end
+
         define_method(:remaining_children) do
-          children[from_index..-1]
+          children.drop(names.length)
         end
       end
       private_class_method :define_remaining_children
@@ -66,7 +70,7 @@ module Mutant
         names.each_with_index do |name, index|
           define_named_child(name, index)
         end
-        define_remaining_children(names.length)
+        define_remaining_children(names)
       end
       private_class_method :children
 

@@ -6,7 +6,7 @@ module Mutant
         # Mutator for sends that correspond to a binary operator
         class Binary < self
 
-          RIGHT_INDEX = SELECTOR_INDEX+1
+          children :left, :operator, :right
 
         private
 
@@ -17,10 +17,10 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit(receiver)
-            mutate_child(RECEIVER_INDEX) # left
-            mutate_child(RIGHT_INDEX)
-            emit(arguments.first)
+            emit(left)
+            emit_left_mutations
+            emit(right)
+            emit_right_mutations
           end
 
         end # Binary
