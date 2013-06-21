@@ -82,7 +82,7 @@ shared_examples_for 'a mutator' do
         message.concat(unexpected)
       end
 
-      fail message.join("\n-----\n") if messages.any?
+      fail message.join("\n-----\n") if message.any?
     end
   end
 end
