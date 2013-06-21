@@ -64,6 +64,7 @@ module Mutant
             # @api private
             #
             def print_stats
+              p coverage
               status('(%02d/%02d) %3d%% - %0.02fs', amount_kills, amount_mutations, coverage, time)
             end
 
@@ -116,7 +117,8 @@ module Mutant
             # @api private
             #
             def coverage
-              coverage  = amount_kills.to_f / amount_mutations * 100
+              return 0 if amount_mutations.zero?
+              Rational(amount_kills, amount_mutations) * 100
             end
 
             # Detailed subject printer

@@ -151,7 +151,8 @@ module Mutant
             # @api private
             #
             def coverage
-              amount_kills / amount_mutations * 100
+              return 0 if amount_mutations.zero?
+              Rational(amount_kills, amount_mutations) * 100
             end
 
             # Return amount of alive mutations
