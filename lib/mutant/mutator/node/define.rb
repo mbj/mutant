@@ -13,30 +13,32 @@ module Mutant
         # @api private
         #
         def dispatch
-          util = self.class
-          mutate_child(util::ARGUMENTS_INDEX)
-          mutate_child(util::BODY_INDEX)
+          emit_arguments_mutations
+          if body
+            emit_body_mutations
+          else
+            emit_body(NEW_OBJECT)
+          end
         end
 
-        # Mutator for instance level defines
+        # Mutator for instance method defines
         class Instance < self
 
-          handle(:def)
+          handle :def
 
-          ARGUMENTS_INDEX = 1
-          BODY_INDEX      = 2
+          children :name, :arguments, :body
 
         end # Instance
 
-        # Mutator for singleton level defines
+        # Mutator for singleton method defines
         class Singleton < self
 
-          handle(:defs)
+          handle :defs
 
-          ARGUMENTS_INDEX = 2
-          BODY_INDEX      = 3
+          children :subject, :name, :arguments, :body
 
         end # Singelton
+
       end # Define
     end # Node
   end # Mutator

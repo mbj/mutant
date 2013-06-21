@@ -26,7 +26,7 @@ describe Mutant::Mutator, 'def' do
   end
 
   context 'with arguments' do
-    let(:source) { 'def foo(a, b); nil; end' }
+    let(:source) { 'def foo(a, b); end' }
 
     before do
       Mutant::Random.stub(:hex_string => 'random')
@@ -36,15 +36,15 @@ describe Mutant::Mutator, 'def' do
       mutations = []
 
       # Deletion of each argument
-      mutations << 'def foo(a); nil; end'
-      mutations << 'def foo(b); nil; end'
+      mutations << 'def foo(a); end'
+      mutations << 'def foo(b); end'
 
       # Deletion of all arguments
-      mutations << 'def foo; nil; end'
+      mutations << 'def foo; end'
 
       # Rename each argument
-      mutations << 'def foo(srandom, b); nil; end'
-      mutations << 'def foo(a, srandom); nil; end'
+      mutations << 'def foo(srandom, b); end'
+      mutations << 'def foo(a, srandom); end'
 
       # Mutation of body
       mutations << 'def foo(a, b); ::Object.new; end'
@@ -78,8 +78,8 @@ describe Mutant::Mutator, 'def' do
       mutations << 'def foo(); end'
       mutations << 'def foo(a = false); end'
       mutations << 'def foo(a = nil); end'
+      mutations << 'def foo(srandom = true); end'
       mutations << 'def foo(a = true); ::Object.new; end'
-      mutations << 'def foo(srandom = true); nil; end'
     end
 
     it_should_behave_like 'a mutator'
