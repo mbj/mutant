@@ -78,7 +78,7 @@ shared_examples_for 'a mutator' do
       end
 
       unless unexpected.empty?
-        message << "Unexpected mutatiosn (%i):" % unexpected.length
+        message << "Unexpected mutations (%i):" % unexpected.length
         message.concat(unexpected)
       end
 
