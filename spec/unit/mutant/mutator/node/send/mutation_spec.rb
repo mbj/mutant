@@ -3,6 +3,15 @@ require 'spec_helper'
 # FIXME: This spec needs to be structured better!
 describe Mutant::Mutator, 'send' do
 
+  context 'with only a block arg' do
+    let(:source) { 'foo(&bar)' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'foo'
+    end
+  end
+
   context 'with self as' do
     context 'implicit' do
       let(:source) { 'foo' }
