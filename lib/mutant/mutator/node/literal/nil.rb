@@ -16,7 +16,7 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit(s(:send, s(:const, s(:cbase), :Object), :new))
+            emit(NEW_OBJECT)
           end
 
         end # Nil

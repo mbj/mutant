@@ -174,7 +174,7 @@ module Mutant
       # @api private
       #
       def emit_nil
-        emit(s(:nil))
+        emit(N_NIL)
       end
 
       # Return new self typed child
