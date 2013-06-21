@@ -189,44 +189,56 @@ module Mutant
         opts.separator ''
         opts.separator 'Strategies:'
 
-        opts.on('--rspec-unit', 'executes all specs under ./spec/unit') do
-          set_strategy Strategy::Rspec::Unit
-        end
-
-        opts.on('--rspec-full', 'executes all specs under ./spec') do
-          set_strategy Strategy::Rspec::Full
-        end
-
-        opts.on('--rspec-dm2', 'executes spec/unit/namespace/class/method_spec.rb') do
-          set_strategy Strategy::Rspec::DM2
-        end
-
-        opts.separator ''
-        opts.separator 'Options:'
-
-        opts.on('--code FILTER', 'Adds a code filter') do |filter|
-          add_filter Mutation::Filter::Code, filter
-        end
-
-        opts.on('-d','--debug', 'Enable debugging output') do
-          set_debug
-        end
-
-        opts.on_tail('-h', '--help', 'Show this message') do
-          puts opts
-          exit
-        end
+        add_strategies(opts)
+        add_options(opts)
       end
 
-      matchers = begin
-                   opts.parse!(arguments)
-                 rescue OptionParser::ParseError => error
-                   raise(Error, error.message, error.backtrace)
-                 end
+      matchers =
+        begin
+          opts.parse!(arguments)
+        rescue OptionParser::ParseError => error
+          raise(Error, error.message, error.backtrace)
+        end
 
       matchers.each do |pattern|
         matcher = Classifier.build(pattern)
         @matchers << matcher if matcher
+      end
+    end
+
+    # Add strategies
+    #
+    # @param [Object]
+    #
+    # @api private
+    #
+    def add_strategies(opts)
+      opts.on('--rspec-unit', 'executes all specs under ./spec/unit') do
+        set_strategy Strategy::Rspec::Unit
+      end.on('--rspec-full', 'executes all specs under ./spec') do
+        set_strategy Strategy::Rspec::Full
+      end.on('--rspec-dm2', 'executes spec/unit/namespace/class/method_spec.rb') do
+        set_strategy Strategy::Rspec::DM2
+      end
+    end
+
+    # Add options
+    #
+    # @param [Object]
+    #
+    # @api private
+    #
+    def add_options(opts)
+      opts.separator ''
+      opts.separator 'Options:'
+
+      opts.on('--code FILTER', 'Adds a code filter') do |filter|
+        add_filter Mutation::Filter::Code, filter
+      end.on('-d','--debug', 'Enable debugging output') do
+        set_debug
+      end.on_tail('-h', '--help', 'Show this message') do
+        puts opts
+        exit
       end
     end
 
