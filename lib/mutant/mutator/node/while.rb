@@ -9,6 +9,8 @@ module Mutant
 
         CONDITION_INDEX, BODY_INDEX = 0, 1
 
+        children :condition, :body
+
       private
 
         # Emit mutations
@@ -18,8 +20,8 @@ module Mutant
         # @api private
         #
         def dispatch
-          mutate_child(CONDITION_INDEX)
-          mutate_child(BODY_INDEX)
+          emit_condition_mutations
+          emit_body_mutations
         end
 
       end # While
