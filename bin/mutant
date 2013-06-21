@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+trap('INT') do |status|
+  exit! 128+status
+end
+
 require 'mutant'
 
 namespace =
