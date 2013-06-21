@@ -29,7 +29,7 @@ module Mutant
         # @api private
         #
         def emit_branch_mutations
-          children.each_with_index.drop(1).each do |child, index|
+          remaining_children_with_index.each do |child, index|
             next unless child
             mutate_index(index)
           end
