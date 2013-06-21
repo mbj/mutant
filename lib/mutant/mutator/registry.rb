@@ -15,15 +15,16 @@ module Mutant
 
       # Register mutator class for AST node class
       #
-      # @param [Class] ast_class
+      # @param [Symbol] type
       # @param [Class] mutator_class
       #
       # @api private
       #
       # @return [self]
       #
-      def self.register(ast_class,mutator_class)
-        registry[ast_class]=mutator_class
+      def self.register(type, mutator_class)
+        raise "duplicate type registration: #{type}" if registry.key?(type)
+        registry[type]=mutator_class
         self
       end
 
