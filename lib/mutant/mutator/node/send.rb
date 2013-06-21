@@ -9,8 +9,6 @@ module Mutant
 
         children :receiver, :selector
 
-        alias_method :arguments, :remaining_children
-
       private
 
         # Emit mutations
@@ -26,6 +24,14 @@ module Mutant
           end
           normal_dispatch
         end
+
+        # Return arguments
+        #
+        # @return [Enumerable<Parser::AST::Node>]
+        #
+        # @api private
+        #
+        alias_method :arguments, :remaining_children
 
         # Perform normal, non special case dispatch
         #
