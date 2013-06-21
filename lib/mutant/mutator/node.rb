@@ -28,7 +28,7 @@ module Mutant
       #
       def self.define_named_child(name, index)
         define_method("#{name}") do
-          children[index]
+          children.at(index)
         end
 
         define_method("emit_#{name}_mutations") do
