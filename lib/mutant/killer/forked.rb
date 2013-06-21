@@ -33,9 +33,9 @@ module Mutant
         fork do
           begin
             killer = @killer.new(strategy, mutation)
-            Kernel.exit(killer.success? ? 0 : 1)
+            exit(killer.success? ? CLI::EXIT_SUCCESS : CLI::EXIT_FAILURE)
           rescue
-            Kernel.exit(1)
+            exit(CLI::EXIT_FAILURE)
           end
         end
 

@@ -40,7 +40,7 @@ module Mutant
       # @api private
       #
       def run
-        Kernel.eval(source, TOPLEVEL_BINDING, @subject.source_path, @subject.source_line)
+        eval(source, TOPLEVEL_BINDING, @subject.source_path, @subject.source_line)
       end
 
       # Return source
