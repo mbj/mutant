@@ -12,7 +12,7 @@ module Mutant
             :erange => :irange
           }.freeze
 
-          START_INDEX, END_INDEX = 0, 1
+          children :start, :_end
 
           handle(*MAP.keys)
 
@@ -48,9 +48,8 @@ module Mutant
           # @api private
           #
           def emit_end_mutations
-            end_ = children[END_INDEX]
             #emit_self(negative_infinity, finish)
-            emit_self(NAN, end_)
+            emit_self(NAN, _end)
           end
 
           # Emit start mutations
@@ -60,7 +59,6 @@ module Mutant
           # @api private
           #
           def emit_start_mutations
-            start = children[START_INDEX]
             emit_self(start, INFINITY)
             emit_self(start, NAN)
           end
