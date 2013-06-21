@@ -5,12 +5,18 @@ module Mutant
       class Noop < self
 
         # Literal references to self do not need to be mutated?
+        handle(:self)
+
+        # These nodes still need a mutator, your contribution is that close!
         handle(
-          :self, :zsuper, :not, :or, :and, :defined,
-          :next, :break, :match, :gvar, :cvar, :ensure, :rescue,
-          :dstr, :dsym, :yield, :begin, :rescue, :gvasgn,
-          :lvar, :splat, :const, :blockarg, :block_pass,
-          :ivar, :restarg
+          :zsuper, :not, :or, :and, :defined,
+          :next, :break, :match, :gvar, :cvar, :ensure,
+          :dstr, :dsym, :yield, :rescue, :redo, :defined?,
+          :lvar, :splat, :const, :blockarg, :block_pass, :op_asgn, :regopt,
+          :ivar, :restarg, :casgn, :masgn, :resbody, :retry, :arg_expr,
+          :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :cbase, :empty,
+          :alias, :for, :xstr, :back_ref, :nth_ref, :class, :sclass, :match_with_lvasgn,
+          :match_current_line
         )
 
       private
