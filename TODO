@@ -3,6 +3,7 @@ Code:
   * Fix ugly code within default parameter mutations
   * Break up lib/mutant/mutator/node/send.rb in class specific files
   * Log all warnings through reporter, so remove random $stderr.puts calls
+  * Use rational to represent percent values
 
 AST:
   * Use whitequarcks parser and the to be writte unparser. This fixes all RBX AST issues.
