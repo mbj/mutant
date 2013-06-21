@@ -17,6 +17,59 @@ module Mutant
         Unparser.unparse(node)
       end
 
+      # Define named child
+      #
+      # @param [Symbol] name
+      # @param [Fixnum] index
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def self.define_named_child(name, index)
+        define_method("#{name}") do
+          children[index]
+        end
+
+        define_method("emit_#{name}_mutations") do
+          mutate_child(index)
+        end
+
+        define_method("emit_#{name}") do |node|
+          emit_child_update(index, node)
+        end
+      end
+      private_class_method :define_named_child
+
+      # Define remaining children
+      #
+      # @param [Fixnum] from_index
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def self.define_remaining_children(from_index)
+        define_method(:remaining_children) do
+          children[from_index..-1]
+        end
+      end
+      private_class_method :define_remaining_children
+
+      # Create name helpers
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def self.children(*names)
+        names.each_with_index do |name, index|
+          define_named_child(name, index)
+        end
+        define_remaining_children(names.length)
+      end
+      private_class_method :children
+
     private
 
       # Return mutated node
