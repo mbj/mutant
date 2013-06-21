@@ -83,6 +83,8 @@ module Mutant
         #
         def emit_argument_propagation
           return unless arguments.one?
+          node = arguments.first
+          return if  node.type == :block_pass
           emit(arguments.first)
         end
 
