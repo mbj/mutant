@@ -7,6 +7,8 @@ module Mutant
         handle(:arg)
 
         UNDERSCORE = '_'.freeze
+
+        children :name
         NAME_INDEX = 0
 
       private
@@ -33,17 +35,6 @@ module Mutant
             emit_child_update(NAME_INDEX, name)
           end
         end
-
-        # Return name
-        #
-        # @return [Symbol]
-        #
-        # @api private
-        #
-        def name
-          children[NAME_INDEX]
-        end
-        protected :name
 
         # Test if argument mutation is skipped
         #
