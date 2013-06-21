@@ -131,7 +131,8 @@ module Mutant
             # @api private
             #
             def overhead
-              (runtime - killtime) / runtime * 100
+              return if runtime.zero?
+              Rational(runtime - killtime, runtime) * 100
             end
 
             # Return runtime
