@@ -12,7 +12,7 @@ module Mutant
           # No input can ever be matched with this
           NULL_REGEXP_SOURCE = 'a\A'.freeze
 
-          SOURCE_INDEX, OPTIONS_INDEX = 0, 1
+          children :source, :options
 
         private
 
@@ -26,26 +26,6 @@ module Mutant
             emit_nil
             emit_self(s(:str, EMPTY_STRING), options)
             emit_self(s(:str, NULL_REGEXP_SOURCE), options)
-          end
-
-          # Return options
-          #
-          # @return [Parser::AST::Node]
-          #
-          # @api private
-          #
-          def options
-            children[OPTIONS_INDEX]
-          end
-
-          # Return source
-          #
-          # @return [Parser::AST::Node]
-          #
-          # @api private
-          #
-          def source
-            children[SOURCE_INDEX]
           end
 
         end # Regex
