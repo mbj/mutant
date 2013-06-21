@@ -10,6 +10,7 @@ rvm:
 matrix:
   allow_failures:
     - rvm: jruby-19mode # No fork(2) support, workaround planned
+    - rvm: ruby-head # Broken at this time
 notifications:
   irc:
     channels:
