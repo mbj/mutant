@@ -76,11 +76,10 @@ TooManyMethods:
 TooManyStatements:
   enabled: true
   exclude:
-  - Mutant#self.singleton_subclass_instance
   - Mutant::CLI#parse
   - Mutant::Reporter::CLI#colorized_diff
-  - Mutant::Reporter::CLI#config_results
-  - Mutant::Reporter::CLI#subject_results
+  - Mutant::Reporter::CLI::Printer::Config#run
+  - Mutant#self.singleton_subclass_instance
   max_statements: 6
 UncommunicativeMethodName:
   enabled: true

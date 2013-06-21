@@ -4,6 +4,8 @@ module Mutant
     class CLI < self
       include Concord::Public.new(:io)
 
+      NL = "\n".freeze
+
       ACTIONS = {
         Config          => :config,
         Subject         => :subject,
@@ -62,7 +64,6 @@ module Mutant
         puts
         puts(subject.identification)
       end
-
       # Report subject results
       #
       # @param [Subject] runner
@@ -72,15 +73,7 @@ module Mutant
       # @api private
       #
       def subject_results(runner)
-        mutations = runner.mutations
-        puts if mutations.any?
-        time      = mutations.map(&:runtime).inject(0, :+)
-        mutations = mutations.length
-        fails     = runner.failed_mutations
-        fails     = fails.length
-        kills     = mutations - fails
-        coverage  = kills.to_f / mutations * 100
-        puts('(%02d/%02d) %3d%% - %0.02fs' % [kills, mutations, coverage, time])
+        Printer::Subject.run(io, runner)
       end
 
       # Report mutation
@@ -120,27 +113,7 @@ module Mutant
       # @api private
       #
       def config_results(runner)
-        message   = []
-        subjects  = runner.subjects
-        mutations = subjects.map(&:mutations).flatten
-        killtime  = mutations.map(&:runtime).inject(0, :+)
-        kills     = mutations.select(&:success?)
-
-        subjects  = subjects.length
-        mutations = mutations.length
-        kills     = kills.length
-        coverage  = kills.to_f / mutations * 100
-        runtime   = runner.runtime
-
-        overhead  = (runtime - killtime) / runtime * 100
-
-        puts "Subjects:  #{subjects}"
-        puts "Mutations: #{mutations}"
-        puts "Kills:     #{kills}"
-        puts 'Runtime:   %0.2fs' % runtime
-        puts 'Killtime:  %0.2fs' % killtime
-        puts 'Overhead:  %0.2f%%' % overhead
-        puts 'Coverage:  %0.2f%%' % coverage
+        Printer::Config.run(io, runner)
       end
 
 
@@ -214,7 +187,7 @@ module Mutant
       #
       # @api private
       #
-      def puts(string="\n")
+      def puts(string=NL)
         io.puts(string)
       end
 
@@ -227,11 +200,6 @@ module Mutant
       # @api private
       #
       def colorized_diff(mutation)
-        if mutation.kind_of?(Mutation::Neutral)
-          puts mutation.original_source
-          return
-        end
-
         original, current = mutation.original_source, mutation.source
         differ = Differ.new(original, current)
         diff = color? ? differ.colorized_diff : differ.diff

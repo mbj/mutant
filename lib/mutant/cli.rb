@@ -185,7 +185,6 @@ module Mutant
     def parse(arguments)
       opts = OptionParser.new do |opts|
         opts.banner = 'usage: mutant STRATEGY [options] MATCHERS ...'
-
         opts.separator ''
         opts.separator 'Strategies:'
 
@@ -200,7 +199,17 @@ module Mutant
           raise(Error, error.message, error.backtrace)
         end
 
-      matchers.each do |pattern|
+      parse_matchers(matchers)
+    end
+
+    # Parse matchers
+    #
+    # @param [Enumerable<String>] patterns
+    #
+    # @api private
+    #
+    def parse_matchers(patterns)
+      patterns.each do |pattern|
         matcher = Classifier.build(pattern)
         @matchers << matcher if matcher
       end
