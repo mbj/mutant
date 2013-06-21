@@ -7,7 +7,7 @@ module Mutant
 
         handle(:case)
 
-        CONDITION_INDEX = 0
+        children :condition
 
       private
 
@@ -18,7 +18,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          mutate_child(CONDITION_INDEX)
+          emit_condition_mutations
           emit_branch_mutations
         end
 
