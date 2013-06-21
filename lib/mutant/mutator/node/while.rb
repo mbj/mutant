@@ -7,8 +7,6 @@ module Mutant
 
         handle(:while)
 
-        CONDITION_INDEX, BODY_INDEX = 0, 1
-
         children :condition, :body
 
       private
