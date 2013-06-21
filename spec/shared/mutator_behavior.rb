@@ -73,12 +73,12 @@ shared_examples_for 'a mutator' do
       message = []
 
       unless missing.empty?
-        message << "Missing mutations (%i):" % missing.length
+        message << 'Missing mutations (%i):' % missing.length
         message.concat(missing)
       end
 
       unless unexpected.empty?
-        message << "Unexpected mutations (%i):" % unexpected.length
+        message << 'Unexpected mutations (%i):' % unexpected.length
         message.concat(unexpected)
       end
 
