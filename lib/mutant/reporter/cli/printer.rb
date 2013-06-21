@@ -2,197 +2,163 @@ module Mutant
   class Reporter
     class CLI
 
-      # CLI printer base class
+      # CLI runner status printer base class
       class Printer
-        include AbstractType, Adamantium::Flat, Concord.new(:output, :runner)
+        include AbstractType, Adamantium::Flat, Concord.new(:object, :output)
 
-        def self.run(*args)
-          new(*args).run
+        REGISTRY = {}
+
+        # Registre handler for class
+        #
+        # @param [Class] klass
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def self.handle(klass)
+          REGISTRY[klass] = self
         end
 
-      private
+        # Finalize CLI reporter
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def self.finalize
+          REGISTRY.freeze
+        end
 
-        def puts(string = NL)
-          output.puts(string)
+        # Run printer
+        #
+        # @return [self]
+        #
+        # @api private
+        #
+        def self.run(*args)
+          new(*args).run
+          self
+        end
+
+        # Visit object
+        #
+        # @param [Object] object
+        # @param [IO] output
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def self.visit(object, output)
+          printer = REGISTRY.fetch(object.class)
+          printer.run(object, output)
         end
 
         abstract_method :run
 
-        # Config results printer
-        class Config < self
+      private
 
-          # Run printer
-          #
-          # @return [self]
-          #
-          # @api private
-          #
-          def run
-            puts "Subjects:  #{subjects.length}"
-            puts "Mutations: #{amount_mutations}"
-            puts "Kills:     #{amount_kills}"
-            puts 'Runtime:   %0.2fs' % runtime
-            puts 'Killtime:  %0.2fs' % killtime
-            puts 'Overhead:  %0.2f%%' % overhead
-            puts 'Coverage:  %0.2f%%' % coverage
-            self
-          end
 
-        private
+        # Return status color
+        #
+        # @return [Color]
+        #
+        # @api private
+        #
+        def color
+          success? ? Color::GREEN : Color::RED
+        end
 
-          # Return subjects
-          #
-          # @return [Array<Subject>]
-          #
-          # @api private
-          #
-          def subjects
-            runner.subjects
-          end
+        # Print an info line to output
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def info(string, *arguments)
+          puts(sprintf(string, *arguments))
+        end
 
-          # Return mutations
-          #
-          # @return [Array<Mutation>]
-          #
-          # @api private
-          #
-          def mutations
-            subjects.map(&:mutations).flatten
-          end
-          memoize :mutations
+        # Print a status line to output
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def status(string, *arguments)
+          puts(colorize(color, sprintf(string, *arguments)))
+        end
 
-          # Return amount of mutations
-          #
-          # @return [Fixnum]
-          #
-          # @api private
-          #
-          def amount_mutations
-            mutations.length
-          end
+        # Print a line to output
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def puts(string = NL)
+          output.puts(string)
+        end
 
-          # Return amount of time in killers
-          #
-          # @return [Float]
-          #
-          # @api private
-          #
-          def killtime
-            mutations.map(&:runtime).inject(0, :+)
-          end
-          memoize :killtime
+        # Test if runner was successful
+        #
+        # @return [true]
+        #   if runner is successful
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def success?
+          object.success?
+        end
 
-          # Return amount of kills
-          #
-          # @return [Fixnum]
-          #
-          # @api private
-          #
-          def amount_kills
-            mutations.select(&:success?).length
-          end
+        # Test for colored output
+        #
+        # @return [true]
+        #   returns true if output is colored
+        #
+        # @return [false]
+        #   returns false otherwise
+        #
+        # @api private
+        #
+        def color?
+          tty?
+        end
 
-          # Return mutant overhead
-          #
-          # @return [Float]
-          #
-          # @api private
-          #
-          def overhead
-            (runtime - killtime) / runtime * 100
-          end
+        # Colorize message
+        #
+        # @param [Color] color
+        # @param [String] message
+        #
+        # @api private
+        #
+        # @return [String]
+        #   returns colorized string if color is enabled
+        #   returns unmodified message otherwise
+        #
+        def colorize(color, message)
+          color = Color::NONE unless tty?
+          color.format(message)
+        end
 
-          # Return runtime
-          #
-          # @return [Float]
-          #
-          # @api private
-          #
-          def runtime
-            runner.runtime
-          end
+        # Test for output to tty
+        #
+        # @return [true]
+        #   returns true if output is a tty
+        #
+        # @return [false]
+        #   returns false otherwise
+        #
+        # @api private
+        #
+        def tty?
+          output.respond_to?(:tty?) && output.tty?
+        end
+        memoize :tty?
 
-          # Return coverage
-          #
-          # @return [Float]
-          #
-          # @api private
-          #
-          def coverage
-            amount_kills / amount_mutations * 100
-          end
-        end # Config
-
-        # Subject results printer
-        class Subject < self
-
-          # Run printer
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def run
-            puts
-            puts('(%02d/%02d) %3d%% - %0.02fs' % [amount_kills, amount_mutations, coverage, time])
-            self
-          end
-
-        private
-
-          # Return mutation time on subject
-          #
-          # @return [Float]
-          #
-          # @api private
-          #
-          def time
-            mutations.map(&:runtime).inject(0, :+)
-          end
-
-          # Return kills
-          #
-          # @return [Fixnum]
-          #
-          # @api private
-          #
-          def amount_kills
-            fails = runner.failed_mutations
-            fails = fails.length
-            amount_mutations - fails
-          end
-
-          # Return amount of mutations
-          #
-          # @return [Array<Mutation>]
-          #
-          # @api private
-          #
-          def amount_mutations
-            mutations.length
-          end
-
-          # Return mutations
-          #
-          # @return [Array<Mutation>]
-          #
-          # @api private
-          #
-          def mutations
-            runner.mutations
-          end
-
-          # Return suject coverage
-          #
-          # @return [Float]
-          #
-          # @api private
-          #
-          def coverage
-            coverage  = amount_kills.to_f / amount_mutations * 100
-          end
-
-        end # Subject
       end # Printer
     end # CLI
   end # Reporter

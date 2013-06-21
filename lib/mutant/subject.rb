@@ -66,12 +66,12 @@ module Mutant
 
     # Return source representation of ast
     #
-    # @return [Source]
+    # @return [String]
     #
     # @api private
     #
     def source
-      ToSource.to_source(node)
+      Unparser.unparse(node)
     end
     memoize :source
 

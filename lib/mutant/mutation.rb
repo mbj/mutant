@@ -79,7 +79,7 @@ module Mutant
     # @api private
     #
     def source
-      ToSource.to_source(node)
+      Unparser.unparse(node)
     end
     memoize :source
 
