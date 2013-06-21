@@ -19,7 +19,7 @@ module Mutant
           def dispatch
             emit(left)
             emit_left_mutations
-            emit(right)
+            emit(right) unless right.type == :splat
             emit_right_mutations
           end
 

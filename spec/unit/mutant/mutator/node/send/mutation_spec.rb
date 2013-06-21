@@ -12,6 +12,17 @@ describe Mutant::Mutator, 'send' do
     end
   end
 
+  context 'single splat arg splat' do
+    let(:source) { 'foo[*bar]' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'foo'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
   context 'with self as' do
     context 'implicit' do
       let(:source) { 'foo' }

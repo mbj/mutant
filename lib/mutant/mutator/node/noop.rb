@@ -9,12 +9,8 @@ module Mutant
           :self, :zsuper, :not, :or, :and, :defined,
           :next, :break, :match, :gvar, :cvar, :ensure, :rescue,
           :dstr, :dsym, :yield, :begin, :rescue, :gvasgn,
-          :lvar,
-          :const,
-          :blockarg,
-          :block_pass,
-          :ivar,
-          :restarg
+          :lvar, :splat, :const, :blockarg, :block_pass,
+          :ivar, :restarg
         )
 
       private
