@@ -42,4 +42,22 @@ module Mutant
   BINARY_METHOD_OPERATORS = BINARY_METHOD_OPERATOR_EXPANSIONS.keys.to_set.freeze
 
   OPERATOR_EXPANSIONS = BINARY_METHOD_OPERATOR_EXPANSIONS.merge(UNARY_METHOD_OPERATOR_EXPANSIONS).freeze
-end # Mutant
+
+  # Hopefully all types parser does generate
+  NODE_TYPES = [
+    :lvasgn, :ivasgn, :cvasgn, :gvasgn,
+    :casgn, :masgn, :mlhs, :break, :rescue,
+    :ensure, :resbody, :begin, :retry, :arg_expr,
+    :args, :blockarg, :optarg, :kwrestarg, :kwoptarg,
+    :kwarg, :restarg, :arg, :block_pass, :or, :and,
+    :next, :undef, :if, :module, :cbase, :block, :send,
+    :zsuper, :super, :empty, :alias, :for, :redo,
+    :return, :splat, :not, :defined?, :op_asgn, :self,
+    :true, :false, :nil, :dstr, :dsym, :regexp,
+    :regopt, :int, :str, :float, :sym, :pair, :hash, :array,
+    :xstr, :dyn_str_body, :dyn_regexp_body, :dyn_xstr_body,
+    :def, :defs, :case, :when, :ivar, :lvar, :cvar, :gvar,
+    :back_ref, :const, :nth_ref, :class, :sclass, :yield,
+    :match_with_lvasgn, :match_current_line, :irange, :erange
+  ].to_set.freeze
+end # Mutant,

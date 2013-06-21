@@ -5,14 +5,14 @@ module Mutant
         # Abstract mutator for boolean literals
         class Boolean < self
 
-          handle :true, :false
-
         private
 
           MAP = {
             :true  => :false,
             :false => :true
           }.freeze
+
+          handle(*MAP.keys)
 
           # Emit mutants
           #
