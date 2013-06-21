@@ -1,6 +1,7 @@
 module Mutant
   class Mutator
     class Node
+
       # Mutator for begin nodes
       class Begin < self
 
@@ -15,7 +16,15 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_children_mutations
+          Util::Array.each(children) do |children|
+            if children.length > 1
+              emit_self(*children)
+            end
+          end
+          children.each do |child|
+            emit(child)
+          end
+          emit(nil)
         end
 
       end # Block
