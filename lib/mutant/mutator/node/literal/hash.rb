@@ -41,7 +41,7 @@ module Mutant
 
             handle(:pair)
 
-            KEY_INDEX, VALUE_INDEX = 0, 1
+            children :key, :value
 
           private
 
@@ -52,8 +52,8 @@ module Mutant
             # @api private
             #
             def dispatch
-              mutate_child(KEY_INDEX)
-              mutate_child(VALUE_INDEX)
+              emit_key_mutations
+              emit_value_mutations
             end
 
           end # Pair
