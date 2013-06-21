@@ -6,9 +6,7 @@ module Mutant
 
         handle(:if)
 
-        CONDITION_INDEX   = 0
-        IF_BRANCH_INDEX   = 1
-        ELSE_BRANCH_INDEX = 2
+        children :condition, :if_branch, :else_branch
 
       private
 
@@ -31,7 +29,7 @@ module Mutant
         # @api private
         #
         def mutate_condition
-          mutate_child(CONDITION_INDEX)
+          emit_condition_mutations
           emit_self(s(:send, condition, :!), if_branch, else_branch)
           emit_self(s(:true),  if_branch, else_branch)
           emit_self(s(:false), if_branch, else_branch)
@@ -46,8 +44,8 @@ module Mutant
         def mutate_if_branch
           emit_self(condition, else_branch, nil) if else_branch
           if if_branch
+            emit_if_branch_mutations
             emit_self(condition, if_branch,   nil)
-            mutate_child(IF_BRANCH_INDEX)
           end
         end
 
@@ -59,39 +57,9 @@ module Mutant
         #
         def mutate_else_branch
           if else_branch
-            mutate_child(ELSE_BRANCH_INDEX)
+            emit_else_branch_mutations
             emit_self(condition, nil, else_branch)
           end
-        end
-
-        # Return condition node
-        #
-        # @return [Parser::AST::Node]
-        #
-        # @api private
-        #
-        def condition
-          children[CONDITION_INDEX]
-        end
-
-        # Return if branch
-        #
-        # @return [Parser::AST::Node]
-        #
-        # @api private
-        #
-        def if_branch
-          children[IF_BRANCH_INDEX]
-        end
-
-        # Return else branch
-        #
-        # @return [Parser::AST::Node]
-        #
-        # @api private
-        #
-        def else_branch
-          children[ELSE_BRANCH_INDEX]
         end
 
       end # If
