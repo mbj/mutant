@@ -6,8 +6,8 @@ module Mutant
 
         # Mutator for variable assignment
         class Variable < self
-          NAME_INDEX  = 0
-          VALUE_INDEX = 1
+
+          children :name, :value
 
           MAP = IceNine.deep_freeze(
             :gvasgn => '$',
@@ -27,8 +27,8 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit_name_mutations
-            mutate_child(VALUE_INDEX)
+            mutate_name
+            emit_value_mutations
           end
 
           # Emit name mutations
@@ -37,10 +37,10 @@ module Mutant
           #
           # @api private
           #
-          def emit_name_mutations
-            name = children[NAME_INDEX]
+          def mutate_name
+            prefix = MAP.fetch(node.type)
             Mutator::Util::Symbol.each(name) do |name|
-              emit_child_update(NAME_INDEX, "#{MAP.fetch(node.type)}#{name}")
+              emit_name("#{prefix}#{name}")
             end
           end
 
