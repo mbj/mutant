@@ -3,6 +3,18 @@ require 'spec_helper'
 # FIXME: This spec needs to be structured better!
 describe Mutant::Mutator, 'send' do
 
+  context 'index assign' do
+    let(:source) { 'foo[bar]=baz' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'foo'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
+
   context 'with only a splat arg' do
     let(:source) { 'foo(*bar)' }
 

@@ -19,6 +19,7 @@ module Mutant
             info(object.identification)
           end
 
+          # Prunter for subject runners
           class Runner < self
 
             handle(Mutant::Runner::Subject)
@@ -64,7 +65,6 @@ module Mutant
             # @api private
             #
             def print_stats
-              p coverage
               status('(%02d/%02d) %3d%% - %0.02fs', amount_kills, amount_mutations, coverage, time)
             end
 

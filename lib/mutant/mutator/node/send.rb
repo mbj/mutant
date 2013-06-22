@@ -9,15 +9,70 @@ module Mutant
 
         children :receiver, :selector
 
+        INDEX_REFERENCE = :[]
+        INDEX_ASSIGN    = :[]=
+        ASSIGN_SUFFIX   = :'='
+
+        # Base mutator for index operations
+        class Index < self
+
+          # Mutator for index references
+          class Reference < self
+
+            # Perform dispatch
+            #
+            # @return [undefined]
+            #
+            # @api private
+            #
+            def dispatch
+              emit(receiver)
+            end
+
+          end # Reference
+
+          # Mutator for index assignments
+          class Assign < self
+
+            # Perform dispatch
+            #
+            # @return [undefined]
+            #
+            # @api private
+            #
+            def dispatch
+              emit(receiver)
+            end
+
+          end # Assign
+        end # Index
+
       private
 
-        # Emit mutations
+        # Perform dispatch
         #
         # @return [undefined]
         #
         # @api private
         #
         def dispatch
+          case selector
+          when INDEX_REFERENCE
+            run(Index::Reference)
+          when INDEX_ASSIGN
+            run(Index::Assign)
+          else
+            non_index_dispatch
+          end
+        end
+
+        # Perform non index dispatch
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def non_index_dispatch
           if binary_operator?
             run(Binary)
             return
