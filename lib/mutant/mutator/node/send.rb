@@ -75,6 +75,8 @@ module Mutant
           end
         end
 
+        NO_PROPAGATE = [ :splat, :block_pass ].to_set
+
         # Emit argument propagation
         #
         # @return [undefined]
@@ -84,7 +86,7 @@ module Mutant
         def emit_argument_propagation
           return unless arguments.one?
           node = arguments.first
-          return if  node.type == :block_pass
+          return if NO_PROPAGATE.include?(node.type)
           emit(arguments.first)
         end
 
