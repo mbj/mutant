@@ -124,6 +124,12 @@ module Mutant
             # Detailed subject printer
             class Details < self
 
+              # Run subject details printer
+              #
+              # @return [undefined]
+              #
+              # @api private
+              #
               def run
                 puts(subject.identification)
                 object.failed_mutations.each do |mutation|

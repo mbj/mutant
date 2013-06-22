@@ -206,6 +206,8 @@ module Mutant
     #
     # @param [Enumerable<String>] patterns
     #
+    # @return [undefined]
+    #
     # @api private
     #
     def parse_matchers(patterns)
@@ -218,6 +220,8 @@ module Mutant
     # Add strategies
     #
     # @param [Object]
+    #
+    # @return [undefined]
     #
     # @api private
     #
@@ -234,6 +238,8 @@ module Mutant
     # Add options
     #
     # @param [Object]
+    #
+    # @return [undefined]
     #
     # @api private
     #
