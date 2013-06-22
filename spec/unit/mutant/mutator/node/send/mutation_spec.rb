@@ -173,10 +173,10 @@ describe Mutant::Mutator, 'send' do
 
         let(:mutations) do
           mutations = []
-          mutations << "((false) #{operator} (false))"
-          mutations << "((nil) #{operator} (false))"
-          mutations << "((true) #{operator} (true))"
-          mutations << "((true) #{operator} (nil))"
+          mutations << "false #{operator} false"
+          mutations << "nil   #{operator} false"
+          mutations << "true  #{operator} true"
+          mutations << "true  #{operator} nil"
           mutations << 'true'
           mutations << 'false'
         end
