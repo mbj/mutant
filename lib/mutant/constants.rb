@@ -57,6 +57,7 @@ module Mutant
     :regopt, :int, :str, :float, :sym, :pair, :hash, :array,
     :xstr, :def, :defs, :case, :when, :ivar, :lvar, :cvar, :gvar,
     :back_ref, :const, :nth_ref, :class, :sclass, :yield,
-    :match_with_lvasgn, :match_current_line, :irange, :erange
+    :match_with_lvasgn, :match_current_line, :irange, :erange,
+    :or_asgn
   ].to_set.freeze
 end # Mutant,
