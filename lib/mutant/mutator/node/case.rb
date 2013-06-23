@@ -31,7 +31,7 @@ module Mutant
         #
         def emit_when_mutations
           indices = children.each_index.drop(1).take(children.length-2)
-          one = indices.length == 1
+          one = indices.one?
           indices.each do |index|
             mutate_child(index)
             delete_child(index) unless one
