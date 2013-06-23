@@ -30,11 +30,14 @@ module Mutant
 
     # Insert mutated node
     #
+    # FIXME: Cache subject visibility in a better way! Ideally dont mutate it.
+    #
     # @return [self]
     #
     # @api private
     #
     def insert
+      subject.public?
       Loader::Eval.run(root, subject)
       self
     end
