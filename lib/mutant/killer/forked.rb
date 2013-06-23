@@ -31,12 +31,8 @@ module Mutant
       #
       def run
         fork do
-          begin
-            killer = @killer.new(strategy, mutation)
-            exit(killer.success? ? CLI::EXIT_SUCCESS : CLI::EXIT_FAILURE)
-          rescue
-            exit(CLI::EXIT_FAILURE)
-          end
+          killer = @killer.new(strategy, mutation)
+          exit(killer.success? ? CLI::EXIT_SUCCESS : CLI::EXIT_FAILURE)
         end
 
         status = Process.wait2.last
