@@ -5,7 +5,7 @@ describe Mutant::Runner::Config, '#subjects' do
 
   subject { object.subjects }
 
-  let(:config) do 
+  let(:config) do
     mock(
       'Config',
       :subjects => [mutation_subject],

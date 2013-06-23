@@ -145,4 +145,3 @@ module Mutant
     end # CLI
   end # Reporter
 end # Mutant
-

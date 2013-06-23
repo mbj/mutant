@@ -6,7 +6,7 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
 
   let(:yields) { [] }
 
-  let(:namespace) do 
+  let(:namespace) do
     klass = self.class
   end
 

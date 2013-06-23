@@ -5,8 +5,8 @@ describe Mutant::Runner::Mutation, '#killer' do
 
   let(:config) do
     mock(
-      'Config', 
-      :reporter => reporter, 
+      'Config',
+      :reporter => reporter,
       :strategy => strategy
     )
   end
@@ -17,7 +17,7 @@ describe Mutant::Runner::Mutation, '#killer' do
   let(:killer)   { mock('Killer')   }
 
   subject { object.killer }
-  
+
   before do
     reporter.stub(:report => reporter)
     strategy.stub(:kill => killer)

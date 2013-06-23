@@ -6,7 +6,7 @@ describe Mutant::Matcher::Method::Instance, '#each' do
 
   let(:yields) { [] }
 
-  let(:namespace) do 
+  let(:namespace) do
     klass = self.class
   end
 
@@ -56,7 +56,7 @@ describe Mutant::Matcher::Method::Instance, '#each' do
       class self::Foo
         def bar; end; def bar(arg); end
       end
-    
+
       let(:method_line)  { 2 }
       let(:method_arity) { 1 }
 
