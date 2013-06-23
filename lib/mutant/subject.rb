@@ -53,7 +53,7 @@ module Mutant
       node.location.expression.line
     end
 
-    # Return subject identicication
+    # Return subject identification
     #
     # @return [String]
     #
