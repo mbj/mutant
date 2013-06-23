@@ -19,39 +19,38 @@ module Mutant
         #
         def dispatch
           emit_condition_mutations
-          emit_branch_mutations
+          emit_when_mutations
+          emit_else_mutations
         end
 
-        # Emit presence mutations
+        # Emit when mutations
         #
         # @return [undefined]
         #
         # @api private
         #
-        def emit_branch_mutations
-          remaining_children_with_index.each do |child, index|
-            next unless child
-            mutate_index(index)
+        def emit_when_mutations
+          indices = children.each_index.drop(1).take(children.length-2)
+          one = indices.length > 1
+          indices.each do |index|
+            mutate_child(index)
+            delete_child(index) if one
           end
         end
 
-        # Perform mutations of child index
-        #
-        # @param [Fixnum] index
+        # Emit else mutations
         #
         # @return [undefined]
         #
         # @api private
         #
-        def mutate_index(index)
-          mutate_child(index)
-          dup_children = children.dup
-          dup_children.delete_at(index)
-          return if dup_children.none? { |child| child.type == :when }
-          if dup_children.last.type == :when
-            dup_children << nil
+        def emit_else_mutations
+          else_branch = children.last
+          else_index = children.length - 1
+          if else_branch
+            mutate_child(else_index)
+            emit_child_update(else_index, nil)
           end
-          emit_self(*dup_children)
         end
 
       end # Case
