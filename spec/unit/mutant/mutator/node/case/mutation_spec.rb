@@ -3,12 +3,6 @@ require 'spec_helper'
 describe Mutant::Mutator::Node::Case do
   let(:random_string) { 'random' }
 
-  let(:source) { ':foo' }
-
-  let(:mutations) do
-    %w(nil) << ":s#{random_string}"
-  end
-
   before do
     Mutant::Random.stub(:hex_string => random_string)
   end
