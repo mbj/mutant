@@ -1,3 +1,4 @@
+require 'benchmark'
 require 'set'
 require 'adamantium'
 require 'ice_nine'
