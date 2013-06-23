@@ -219,4 +219,101 @@ describe Mutant::Mutator::Node::Case do
 
     it_should_behave_like 'a mutator'
   end
+
+  context 'with one when branch' do
+    let(:source) do
+      <<-RUBY
+        case :condition
+        when :foo
+          :foo
+        else
+          :else
+        end
+      RUBY
+    end
+
+    let(:mutations) do
+      mutations = []
+
+      # Presence of branches
+      mutations << <<-RUBY
+        case :condition
+        when :foo
+          :foo
+        end
+      RUBY
+
+      # Mutations of condition
+      mutations << <<-RUBY
+        case nil
+        when :foo
+          :foo
+        else
+          :else
+        end
+      RUBY
+      mutations << <<-RUBY
+        case :srandom
+        when :foo
+          :foo
+        else
+          :else
+        end
+      RUBY
+
+      # Mutations of branch bodies
+      mutations << <<-RUBY
+        case :condition
+        when :foo
+          nil
+        else
+          :else
+        end
+      RUBY
+      mutations << <<-RUBY
+        case :condition
+        when :foo
+          :srandom
+        else
+          :else
+        end
+      RUBY
+      mutations << <<-RUBY
+        case :condition
+        when :foo
+          :foo
+        else
+          :srandom
+        end
+      RUBY
+      mutations << <<-RUBY
+        case :condition
+        when :foo
+          :foo
+        else
+          nil
+        end
+      RUBY
+
+      # Mutations of when conditions
+      mutations << <<-RUBY
+        case :condition
+        when :srandom
+          :foo
+        else
+          :else
+        end
+      RUBY
+      mutations << <<-RUBY
+        case :condition
+        when nil
+          :foo
+        else
+          :else
+        end
+      RUBY
+    end
+
+    it_should_behave_like 'a mutator'
+  end
 end

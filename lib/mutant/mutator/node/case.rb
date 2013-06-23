@@ -47,6 +47,7 @@ module Mutant
           mutate_child(index)
           dup_children = children.dup
           dup_children.delete_at(index)
+          return if dup_children.none? { |child| child.type == :when }
           if dup_children.last.type == :when
             dup_children << nil
           end
