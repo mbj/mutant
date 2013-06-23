@@ -65,6 +65,7 @@ shared_examples_for 'a mutator' do
     end
 
     it 'generates the expected mutations' do
+
       generated  = subject.map { |node| Subject.new(node) }
 
       missing    = expected_mutations - generated
@@ -82,7 +83,7 @@ shared_examples_for 'a mutator' do
         message.concat(unexpected)
       end
 
-      fail message.join("\n-----\n") if message.any?
+      fail "Original:\n#{generate(node)}\n-----\n#{message.join("\n-----\n")}" if message.any?
     end
   end
 end
