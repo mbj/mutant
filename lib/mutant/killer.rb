@@ -89,10 +89,10 @@ module Mutant
     # @api private
     #
     def run_with_benchmark
-      start_time = Time.now
-      @killed = run
-      end_time = Time.now
-      @runtime = end_time - start_time
+      times = Benchmark.measure do
+        @killed = run
+      end
+      @runtime = times.real
     end
 
     # Run killer
