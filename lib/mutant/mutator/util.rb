@@ -6,6 +6,7 @@ module Mutant
       # Run ulitity mutator
       #
       # @param [Object] object
+      # @param [Object] parent
       #
       # @return [Enumerator<Object>]
       #   if no block given
@@ -15,10 +16,10 @@ module Mutant
       #
       # @api private
       #
-      def self.each(object, &block)
-        return to_enum(__method__, object) unless block_given?
+      def self.each(object, parent, &block)
+        return to_enum(__method__, object, parent) unless block_given?
 
-        new(object, block)
+        new(object, parent, block)
 
         self
       end

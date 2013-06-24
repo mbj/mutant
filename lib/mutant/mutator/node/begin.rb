@@ -16,7 +16,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          Util::Array.each(children) do |children|
+          Util::Array.each(children, self) do |children|
             if children.length > 1
               emit_self(*children)
             end
@@ -24,7 +24,21 @@ module Mutant
           children.each do |child|
             emit(child)
           end
-          emit(nil)
+          emit(nil) unless parent_send?
+        end
+
+        # Test if parent input is a send
+        #
+        # @return [true]
+        #   if parent input is a send node
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def parent_send?
+          parent && parent.input.type == :send
         end
 
       end # Block

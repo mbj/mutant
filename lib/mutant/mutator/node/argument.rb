@@ -30,7 +30,7 @@ module Mutant
         # @api private
         #
         def emit_name_mutation
-          Mutator::Util::Symbol.each(name) do |name|
+          Mutator::Util::Symbol.each(name, self) do |name|
             emit_name(name)
           end
         end

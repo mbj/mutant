@@ -6,7 +6,7 @@ module Mutant
     '!' => '_bang'
   }.freeze
 
-  BINARY_METHOD_OPERATOR_EXPANSIONS = {
+  OPERATOR_EXPANSIONS = {
     :<=>  => :spaceship_operator,
     :===  => :case_equality_operator,
     :[]=  => :element_writer,
@@ -29,19 +29,20 @@ module Mutant
     :<    => :less_than_operator,
     :>    => :greater_than_operator,
     :+    => :addition_operator,
-    :-    => :substraction_operator
-  }.freeze
-
-  UNARY_METHOD_OPERATOR_EXPANSIONS = {
+    :-    => :substraction_operator,
     :~@   => :unary_match_operator,
     :+@   => :unary_addition_operator,
     :-@   => :unary_substraction_operator,
     :'!'  => :negation_operator
   }.freeze
 
-  BINARY_METHOD_OPERATORS = BINARY_METHOD_OPERATOR_EXPANSIONS.keys.to_set.freeze
+  INDEX_OPERATORS = [ :[], :[]= ].freeze
 
-  OPERATOR_EXPANSIONS = BINARY_METHOD_OPERATOR_EXPANSIONS.merge(UNARY_METHOD_OPERATOR_EXPANSIONS).freeze
+  UNARY_METHOD_OPERATORS = [
+    :~@, :+@, :-@, :'!'
+  ].freeze
+
+  BINARY_METHOD_OPERATORS = (OPERATOR_EXPANSIONS.keys - (INDEX_OPERATORS + UNARY_METHOD_OPERATORS)).to_set.freeze
 
   # Hopefully all types parser does generate
   NODE_TYPES = [

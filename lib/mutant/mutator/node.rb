@@ -99,7 +99,7 @@ module Mutant
       # @api private
       #
       def emit_children_mutations
-        Mutator::Util::Array.each(children) do |children|
+        Mutator::Util::Array.each(children, self) do |children|
           emit_self(*children)
         end
       end
@@ -125,7 +125,7 @@ module Mutant
       def mutate_child(index, mutator = Mutator)
         children = node.children
         child = children[index]
-        mutator.each(child) do |mutation|
+        mutator.each(child, self) do |mutation|
           emit_child_update(index, mutation)
         end
       end

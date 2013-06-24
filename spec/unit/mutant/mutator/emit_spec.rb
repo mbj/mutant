@@ -15,9 +15,10 @@ describe Mutant::Mutator, '#emit' do
     end
   end
 
-  let(:object) { class_under_test.new(input, block) }
-  let(:block)  { Block.new                          }
-  let(:input)  { :nput                              }
+  let(:object) { class_under_test.new(input, parent, block) }
+  let(:block)  { Block.new                                  }
+  let(:input)  { :input                                     }
+  let(:parent) { :parent                                    }
 
   let(:class_under_test) do
     Class.new(described_class) do

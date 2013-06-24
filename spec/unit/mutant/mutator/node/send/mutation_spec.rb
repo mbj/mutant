@@ -168,20 +168,45 @@ describe Mutant::Mutator, 'send' do
     end
 
     context 'binary operator methods' do
-      Mutant::BINARY_METHOD_OPERATORS.each do |operator|
-        let(:source) { "true #{operator} false" }
+      context 'nested' do
+        let(:source) { '(left - right) / foo' }
 
         let(:mutations) do
           mutations = []
-          mutations << "false #{operator} false"
-          mutations << "nil   #{operator} false"
-          mutations << "true  #{operator} true"
-          mutations << "true  #{operator} nil"
-          mutations << 'true'
-          mutations << 'false'
+          mutations << 'foo'
+          mutations << 'left - right'
         end
 
         it_should_behave_like 'a mutator'
+      end
+
+      Mutant::BINARY_METHOD_OPERATORS.each do |operator|
+        context 'on literal scalar arguments' do
+          let(:source) { "true #{operator} false" }
+
+          let(:mutations) do
+            mutations = []
+            mutations << "false #{operator} false"
+            mutations << "nil   #{operator} false"
+            mutations << "true  #{operator} true"
+            mutations << "true  #{operator} nil"
+            mutations << 'true'
+            mutations << 'false'
+          end
+
+          it_should_behave_like 'a mutator'
+        end
+
+        context 'on non literal scalar arguments' do
+          let(:source) { "left #{operator} right" }
+          let(:mutations) do
+            mutations = []
+            mutations << 'left'
+            mutations << 'right'
+          end
+
+          it_should_behave_like 'a mutator'
+        end
       end
     end
   end

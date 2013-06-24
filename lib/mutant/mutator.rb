@@ -12,9 +12,9 @@ module Mutant
     #
     # @api private
     #
-    def self.each(node, &block)
-      return to_enum(__method__, node) unless block_given?
-      Registry.lookup(node).new(node, block)
+    def self.each(node, parent=nil, &block)
+      return to_enum(__method__, node, parent) unless block_given?
+      Registry.lookup(node).new(node, parent, block)
 
       self
     end
@@ -52,19 +52,28 @@ module Mutant
     #
     attr_reader :input
 
+    # Return input
+    #
+    # @return [Object]
+    #
+    # @api private
+    #
+    attr_reader :parent
+
   private
 
     # Initialize object
     #
     # @param [Object] input
+    # @param [Object] parent
     # @param [#call(node)] block
     #
     # @return [undefined]
     #
     # @api private
     #
-    def initialize(input, block)
-      @input, @block = IceNine.deep_freeze(input), block
+    def initialize(input, parent, block)
+      @input, @parent, @block = input, parent, block
       @seen = Set.new
       guard(input)
       dispatch
@@ -173,7 +182,7 @@ module Mutant
     # @api private
     #
     def run(mutator)
-      mutator.new(input, method(:emit))
+      mutator.new(input, self, method(:emit))
     end
 
     # Shortcut to create a new unfrozen duplicate of input
