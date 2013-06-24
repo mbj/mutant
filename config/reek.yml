@@ -58,14 +58,13 @@ RepeatedConditional:
   exclude:
   - Mutant::Mutator
   - Mutant::Reporter::CLI
-  - Mutant::Mutator::Node::Send
-  - Mutant::Mutator::Node::If
   max_ifs: 1
 TooManyInstanceVariables:
   enabled: true
   exclude:
   - Mutant::CLI     # 4 vars
   - Mutant::Killer  # 4 vars
+  - Mutant::Mutator # 4 vars
   max_instance_variables: 3
 TooManyMethods:
   enabled: true
