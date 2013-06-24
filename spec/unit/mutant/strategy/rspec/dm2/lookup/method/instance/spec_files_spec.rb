@@ -42,8 +42,8 @@ describe Mutant::Strategy::Rspec::DM2::Lookup::Method::Instance, '#spec_files' d
     end
 
     context 'initialize' do
-      let(:method_name)              { :initialize                                                       }
-      let(:expected_glob_expression) { 'spec/unit/foo/*_spec.rb spec/unit/foo/class_methods/new_spec.rb' }
+      let(:method_name)              { :initialize                                                         }
+      let(:expected_glob_expression) { '{spec/unit/foo/*_spec.rb,spec/unit/foo/class_methods/new_spec.rb}' }
 
       it_should_behave_like this_example_group
     end

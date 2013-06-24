@@ -106,11 +106,12 @@ module Mutant
               # @api private
               #
               def glob_expression
+                glob_expression = super
                 if method_name == :initialize and !public?
-                  return "#{private_glob_expression} #{base_path}/class_methods/new_spec.rb"
+                  "{#{glob_expression},#{base_path}/class_methods/new_spec.rb}"
+                else
+                  glob_expression
                 end
-
-                super
               end
 
             end # Instance
