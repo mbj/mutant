@@ -20,7 +20,12 @@ module Mutant
         # TODO: replace with real streams from configuration
         require 'stringio'
         null = StringIO.new
-        !::RSpec::Core::Runner.run(command_line_arguments, null, null).zero?
+        args = command_line_arguments
+        begin
+          !::RSpec::Core::Runner.run(args, null, null).zero?
+        rescue StandardError
+          true
+        end
       end
 
       # Return command line arguments
