@@ -36,7 +36,7 @@ module Mutant
         end
 
         status = Process.wait2(pid).last
-        status.exitstatus.zero?
+        status.exited? && status.success?
       end
 
     end # Forked
