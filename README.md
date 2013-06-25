@@ -27,8 +27,8 @@ The following projects adopted mutant, and aim 100% mutation coverage:
 
 * [axiom](https://github.com/dkubb/axiom)
 * [axiom-types](https://github.com/dkubb/axiom-types)
-* [rom-mapper](https://github.com/rom/rom-mapper)
-* [rom-session](https://github.com/rom/rom-session)
+* [rom-mapper](https://github.com/rom-rb/rom-mapper)
+* [rom-session](https://github.com/rom-rb/rom-session)
 * [event_bus](https://github.com/kevinrutherford/event_bus)
 * [virtus](https://github.com/solnic/virtus)
 * [quacky](https://github.com/benmoss/quacky)
