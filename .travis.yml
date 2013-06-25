@@ -10,7 +10,7 @@ rvm:
 matrix:
   allow_failures:
     - rvm: jruby-19mode # No fork(2) support, workaround planned
-    - rvm: ruby-head # Broken at this time
+    - rvm: ruby-head # Broken at this time, bundler issue on travis
     - rvm: rbx-19mode # Broken at this time, yard/yardstick issue
 notifications:
   irc:
