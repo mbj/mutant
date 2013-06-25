@@ -173,7 +173,7 @@ module Mutant
 
       # Emit a new AST node with NilLiteral class
       #
-      # @return [Rubinius::AST::NilLiteral]
+      # @return [undefined]
       #
       # @api private
       #
