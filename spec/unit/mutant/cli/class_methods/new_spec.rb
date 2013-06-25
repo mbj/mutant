@@ -8,6 +8,7 @@ end
 
 shared_examples_for 'a cli parser' do
   subject { cli.config }
+
   its(:filter)   { should eql(expected_filter)   }
   its(:strategy) { should eql(expected_strategy) }
   its(:reporter) { should eql(expected_reporter) }
@@ -15,9 +16,8 @@ shared_examples_for 'a cli parser' do
 end
 
 describe Mutant::CLI, '.new' do
-
   let(:object) { described_class }
-  let(:time)   { Time.now }
+  let(:time)   { Time.now        }
 
   before do
     Time.stub(:now => time)

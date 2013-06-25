@@ -5,7 +5,7 @@ shared_examples_for 'a method matcher' do
 
   let(:node)              { mutation_subject.node    }
   let(:context)           { mutation_subject.context }
-  let(:mutation_subject)  { yields.first   }
+  let(:mutation_subject)  { yields.first             }
 
   it 'should return one subject' do
     yields.size.should be(1)

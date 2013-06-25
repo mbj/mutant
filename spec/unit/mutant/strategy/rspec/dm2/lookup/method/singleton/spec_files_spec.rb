@@ -27,14 +27,14 @@ describe Mutant::Strategy::Rspec::DM2::Lookup::Method::Singleton, '#spec_files' 
   end
 
   context 'with public method' do
-    let(:is_public) { true }
+    let(:is_public)                { true                                                }
     let(:expected_glob_expression) { 'spec/unit/foo/class_methods/expanded_name_spec.rb' }
 
     it_should_behave_like this_example_group
   end
 
   context 'with nonpublic method' do
-    let(:is_public) { false }
+    let(:is_public)                { false                                   }
     let(:expected_glob_expression) { 'spec/unit/foo/class_methods/*_spec.rb' }
 
     it_should_behave_like this_example_group

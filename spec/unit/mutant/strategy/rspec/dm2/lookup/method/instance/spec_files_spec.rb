@@ -26,7 +26,7 @@ describe Mutant::Strategy::Rspec::DM2::Lookup::Method::Instance, '#spec_files' d
   end
 
   context 'with public method' do
-    let(:is_public) { true }
+    let(:is_public)                { true                                  }
     let(:expected_glob_expression) { 'spec/unit/foo/expanded_name_spec.rb' }
 
     it_should_behave_like this_example_group

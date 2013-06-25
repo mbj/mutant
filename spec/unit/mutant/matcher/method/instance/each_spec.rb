@@ -69,7 +69,7 @@ describe Mutant::Matcher::Method::Instance, '#each' do
         def self.bar; end; def bar(arg); end
       end
 
-      let(:method_line) { 2 }
+      let(:method_line)  { 2 }
       let(:method_arity) { 1 }
 
       it_should_behave_like 'a method matcher'
@@ -86,8 +86,8 @@ describe Mutant::Matcher::Method::Instance, '#each' do
           end
         end
 
-        let(:method_line) { 3 }
-        let(:method_name) { :baz }
+        let(:method_line) { 3                    }
+        let(:method_name) { :baz                 }
         let(:scope)       { self.class::Foo::Bar }
 
         it_should_behave_like 'a method matcher'
@@ -101,8 +101,8 @@ describe Mutant::Matcher::Method::Instance, '#each' do
           end
         end
 
-        let(:method_line) { 3 }
-        let(:method_name) { :baz }
+        let(:method_line) { 3                    }
+        let(:method_name) { :baz                 }
         let(:scope)       { self.class::Foo::Bar }
 
         it_should_behave_like 'a method matcher'

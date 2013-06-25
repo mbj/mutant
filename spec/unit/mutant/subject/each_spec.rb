@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Mutant::Subject, '#each' do
-  subject { object.each { |item| yields << item }   }
+  subject { object.each { |item| yields << item } }
 
   let(:class_under_test) do
     Class.new(described_class)

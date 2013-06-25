@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Mutant::Matcher::Method::Singleton, '#each' do
   let(:object) { described_class.new(scope, method) }
-  let(:method) { scope.method(method_name) }
+  let(:method) { scope.method(method_name)          }
 
   let(:yields) { [] }
 
@@ -63,8 +63,8 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
           def Foo.bar; end
         end
 
-        let(:method_name) { :bar }
-        let(:method_line) { 3    }
+        let(:method_name) { :bar                       }
+        let(:method_line) { 3                          }
         let(:scope)       { self.class::Namespace::Foo }
 
         it_should_behave_like 'a method matcher'

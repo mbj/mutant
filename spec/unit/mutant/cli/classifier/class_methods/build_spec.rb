@@ -13,7 +13,7 @@ describe Mutant::CLI::Classifier, '.build' do
 
   context 'with explicit toplevel scope' do
 
-    let(:input)           { '::TestApp::Literal#string' }
+    let(:input)           { '::TestApp::Literal#string'     }
     let(:expected_class)  { Mutant::CLI::Classifier::Method }
 
     it_should_behave_like this_spec
@@ -21,14 +21,14 @@ describe Mutant::CLI::Classifier, '.build' do
 
   context 'with instance method notation' do
 
-    let(:input)           { 'TestApp::Literal#string' }
+    let(:input)           { 'TestApp::Literal#string'       }
     let(:expected_class)  { Mutant::CLI::Classifier::Method }
 
     it_should_behave_like this_spec
   end
 
   context 'with singleton method notation' do
-    let(:input)           { 'TestApp::Literal.string' }
+    let(:input)           { 'TestApp::Literal.string'       }
     let(:expected_class)  { Mutant::CLI::Classifier::Method }
 
     it_should_behave_like this_spec

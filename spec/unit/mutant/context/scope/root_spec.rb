@@ -4,11 +4,11 @@ describe Mutant::Context::Scope, '#root' do
   subject { object.root(node) }
 
   let(:object) { described_class.new(TestApp::Literal, path) }
-  let(:path)   { mock('Path') }
-  let(:node)   { parse(':node') }
+  let(:path)   { mock('Path')                                }
+  let(:node)   { parse(':node')                              }
 
   let(:scope)      { subject.body }
-  let(:scope_body) { scope.body    }
+  let(:scope_body) { scope.body   }
 
   let(:expected_source) do
     generate(parse(<<-RUBY))
