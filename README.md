@@ -10,8 +10,8 @@ Mutant is a mutation testing tool for ruby. It aims to be better than existing m
 The idea is that if code can be changed and your tests do not notice, either that code isn't being covered
 or it does not have a speced side effect.
 
-Mutant supports MRI and RBX gte 19-mode (1.9.3!), while support for jruby is planned. It should also work under any ruby
-engine that supports POSIX-fork(2) semantics.
+Mutant supports MRI and RBX 1.9 and 2.0, while support for jruby is planned. It should also work under
+any ruby engine that supports POSIX-fork(2) semantics.
 
 Only rspec2 is supported currently. This is subject to change.
 
