@@ -16,8 +16,8 @@ module Mutant
         end
         memoize :identification
 
-        RECEIVER_INDEX = 0
-        NAME_INDEX     = 1
+        RECEIVER_INDEX   = 0
+        NAME_INDEX       = 1
         CONST_NAME_INDEX = 1
 
       private

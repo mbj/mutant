@@ -4,7 +4,9 @@ describe Mutant::Matcher::Namespace, '#each' do
   subject { object.each { |item| yields << item } }
 
   let(:yields) { []                                    }
-  let(:object) { described_class.new(TestApp::Literal) }
+  let(:object) { described_class.new(cache, TestApp::Literal) }
+
+  let(:cache) { Mutant::Cache.new }
 
   let(:singleton_a) { mock('SingletonA', :name => 'TestApp::Literal') }
   let(:singleton_b) { mock('SingletonB', :name => 'TestApp::Foo')     }
@@ -12,8 +14,8 @@ describe Mutant::Matcher::Namespace, '#each' do
   let(:subject_b)   { mock('SubjectB')                                }
 
   before do
-    Mutant::Matcher::Methods::Singleton.stub(:each).with(singleton_a).and_yield(subject_a)
-    Mutant::Matcher::Methods::Instance.stub(:each).with(singleton_a).and_yield(subject_b)
+    Mutant::Matcher::Methods::Singleton.stub(:each).with(cache, singleton_a).and_yield(subject_a)
+    Mutant::Matcher::Methods::Instance.stub(:each).with(cache, singleton_a).and_yield(subject_b)
     ObjectSpace.stub(:each_object => [singleton_a, singleton_b])
   end
 

@@ -6,6 +6,10 @@ $: << File.join(TestApp.root,'lib')
 
 require 'test_app'
 
+module Fixtures
+  AST_CACHE = Mutant::Cache.new
+end
+
 module ParserHelper
   def generate(node)
     Unparser.unparse(node)

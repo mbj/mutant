@@ -24,7 +24,7 @@ module Mutant
         # @api private
         #
         def matcher
-          methods_matcher.matcher.new(scope, method)
+          methods_matcher.matcher.new(cache, scope, method)
         end
         memoize :matcher
 
@@ -90,7 +90,7 @@ module Mutant
         # @api private
         #
         def methods_matcher
-          TABLE.fetch(scope_symbol).new(scope)
+          TABLE.fetch(scope_symbol).new(cache, scope)
         end
         memoize :methods_matcher
 

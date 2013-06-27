@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Matcher for subjects that are a specific method
     class Method < self
-      include Adamantium::Flat, Concord::Public.new(:scope, :method)
+      include Adamantium::Flat, Concord::Public.new(:cache, :scope, :method)
 
       # Methods within rbx kernel directory are precompiled and their source
       # cannot be accessed via reading source location
@@ -18,13 +18,12 @@ module Mutant
       #
       # @api private
       #
-      def each(&block)
+      def each
         return to_enum unless block_given?
 
-        return self if skip?
-
-        util = subject
-        yield util if util
+        unless skip?
+          yield subject if subject
+        end
 
         self
       end
@@ -78,7 +77,7 @@ module Mutant
       # @api private
       #
       def ast
-        Parser::CurrentRuby.parse(File.read(source_path))
+        cache.parse(source_path)
       end
 
       # Return path to source
@@ -127,72 +126,6 @@ module Mutant
         self.class::SUBJECT_CLASS.new(context, node)
       end
       memoize :subject
-
-      # Visitor to find last match inside AST
-      class Finder
-
-        # Run finder
-        #
-        # @param [Parser::AST::Node]
-        #
-        # @return [Parser::AST::Node]
-        #   if found
-        #
-        # @return [nil]
-        #   otherwise
-        #
-        # @api private
-        #
-        #
-        def self.run(root, &predicate)
-          new(root, predicate).match
-        end
-
-        private_class_method :new
-
-        # Return match
-        #
-        # @return [Parser::AST::Node]
-        #
-        # @api private
-        #
-        attr_reader :match
-
-      private
-
-        # Initialize object
-        #
-        # @param [Parer::AST::Node]
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        #
-        def initialize(root, predicate)
-          @root, @predicate = root, predicate
-          visit(root)
-        end
-
-        # Visit node
-        #
-        # @param [Parser::AST::Node] node
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def visit(node)
-          if @predicate.call(node)
-            @match = node
-          end
-
-          node.children.each do |child|
-            visit(child) if child.kind_of?(Parser::AST::Node)
-          end
-        end
-
-      end # Finder
 
       # Return matched node
       #

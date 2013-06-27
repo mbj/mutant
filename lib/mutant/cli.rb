@@ -41,6 +41,8 @@ module Mutant
     def initialize(arguments=[])
       @filters, @matchers = [], []
 
+      @cache = Mutant::Cache.new
+
       parse(arguments)
       strategy
       matcher
@@ -54,6 +56,7 @@ module Mutant
     #
     def config
       Config.new(
+        :cache    => @cache,
         :debug    => debug?,
         :matcher  => matcher,
         :filter   => filter,
@@ -212,7 +215,7 @@ module Mutant
     #
     def parse_matchers(patterns)
       patterns.each do |pattern|
-        matcher = Classifier.build(pattern)
+        matcher = Classifier.build(@cache, pattern)
         @matchers << matcher if matcher
       end
     end

@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe Mutant::Matcher::Method::Singleton, '#each' do
-  let(:object) { described_class.new(scope, method) }
-  let(:method) { scope.method(method_name)          }
+  let(:object) { described_class.new(cache, scope, method) }
+  let(:method) { scope.method(method_name)                 }
+  let(:cache)  { Fixtures::AST_CACHE                       }
 
   let(:yields) { [] }
 

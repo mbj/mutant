@@ -1,7 +1,6 @@
 shared_examples_for 'a method matcher' do
-  before do
-    subject
-  end
+
+  before { subject }
 
   let(:node)              { mutation_subject.node    }
   let(:context)           { mutation_subject.context }

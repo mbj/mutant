@@ -14,7 +14,7 @@ module Mutant
         # @api private
         #
         def matcher
-          self.class::MATCHER.new(namespace)
+          self.class::MATCHER.new(cache, namespace)
         end
 
         # Return namespace

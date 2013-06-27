@@ -15,10 +15,10 @@ module Mutant
     #
     # @api private
     #
-    def self.each(input, &block)
-      return to_enum(__method__, input) unless block_given?
+    def self.each(cache, input, &block)
+      return to_enum(__method__, cache, input) unless block_given?
 
-      new(input).each(&block)
+      new(cache, input).each(&block)
 
       self
     end

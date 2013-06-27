@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Abstract base class for matcher that returns method subjects extracted from scope
     class Methods < self
-      include AbstractType, Concord::Public.new(:scope)
+      include AbstractType, Concord::Public.new(:cache, :scope)
 
       # Enumerate subjects
       #
@@ -59,7 +59,7 @@ module Mutant
       # @api private
       #
       def emit_matches(method)
-        matcher.new(scope, method).each do |subject|
+        matcher.new(cache, scope, method).each do |subject|
           yield subject
         end
       end

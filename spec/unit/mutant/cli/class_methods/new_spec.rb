@@ -70,15 +70,15 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with explicit method matcher' do
-    let(:arguments)        { %w(--rspec-unit TestApp::Literal#float)                       }
-    let(:expected_matcher) { Mutant::CLI::Classifier::Method.new('TestApp::Literal#float') }
+    let(:arguments)        { %w(--rspec-unit TestApp::Literal#float)                                          }
+    let(:expected_matcher) { Mutant::CLI::Classifier::Method.new(Mutant::Cache.new, 'TestApp::Literal#float') }
 
     it_should_behave_like 'a cli parser'
   end
 
   context 'with namespace matcher' do
     let(:arguments)        { %w(--rspec-unit ::TestApp*)                                     }
-    let(:expected_matcher) { Mutant::CLI::Classifier::Namespace::Recursive.new('::TestApp*') }
+    let(:expected_matcher) { Mutant::CLI::Classifier::Namespace::Recursive.new(Mutant::Cache.new, '::TestApp*') }
 
     it_should_behave_like 'a cli parser'
   end
@@ -93,7 +93,7 @@ describe Mutant::CLI, '.new' do
       ]
     end
 
-    let(:expected_matcher) { Mutant::CLI::Classifier::Method.new('TestApp::Literal#float') }
+    let(:expected_matcher) { Mutant::CLI::Classifier::Method.new(Mutant::Cache.new, 'TestApp::Literal#float') }
     let(:expected_filter)  { Mutant::Mutation::Filter::Whitelist.new(filters)              }
 
     it_should_behave_like 'a cli parser'

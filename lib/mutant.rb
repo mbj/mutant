@@ -22,6 +22,7 @@ require 'concord'
 module Mutant
 end
 
+require 'mutant/cache'
 require 'mutant/node_helpers'
 require 'mutant/singleton_methods'
 require 'mutant/constants'
@@ -77,6 +78,7 @@ require 'mutant/subject/method'
 require 'mutant/matcher'
 require 'mutant/matcher/chain'
 require 'mutant/matcher/method'
+require 'mutant/matcher/method/finder'
 require 'mutant/matcher/method/singleton'
 require 'mutant/matcher/method/instance'
 require 'mutant/matcher/methods'

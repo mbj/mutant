@@ -3,7 +3,7 @@ module Mutant
 
     # Matcher for specific namespace
     class Namespace < self
-      include Concord::Public.new(:namespace)
+      include Concord::Public.new(:cache, :namespace)
 
       # Enumerate subjects
       #
@@ -19,7 +19,7 @@ module Mutant
         return to_enum unless block_given?
 
         scopes.each do |scope|
-          Scope.each(scope, &block)
+          Scope.each(cache, scope, &block)
         end
 
         self
