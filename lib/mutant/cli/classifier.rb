@@ -35,7 +35,7 @@ module Mutant
       # @api private
       #
       def self.constant_lookup(location)
-        location.gsub(%r(\A::), '').split('::').inject(::Object) do |parent, name|
+        location.gsub(%r(\A::), '').split('::').inject(Object) do |parent, name|
           parent.const_get(name)
         end
       end
