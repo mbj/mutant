@@ -44,6 +44,8 @@ module Mutant
 
   BINARY_METHOD_OPERATORS = (OPERATOR_EXPANSIONS.keys - (INDEX_OPERATORS + UNARY_METHOD_OPERATORS)).to_set.freeze
 
+  OPERATOR_METHODS = OPERATOR_EXPANSIONS.keys + INDEX_OPERATORS + UNARY_METHOD_OPERATORS
+
   # Hopefully all types parser does generate
   NODE_TYPES = [
     :lvasgn, :ivasgn, :cvasgn, :gvasgn,
