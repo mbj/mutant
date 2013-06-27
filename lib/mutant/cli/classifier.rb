@@ -7,7 +7,7 @@ module Mutant
       include Equalizer.new(:identifier)
 
       SCOPE_NAME_PATTERN  = /[A-Za-z][A-Za-z_0-9]*/.freeze
-      OPERATOR_PATTERN    = Regexp.union(*OPERATOR_METHODS.map(&:to_s))
+      OPERATOR_PATTERN    = Regexp.union(*OPERATOR_METHODS.map(&:to_s)).freeze
       METHOD_NAME_PATTERN = /([_A-Za-z][A-Za-z0-9_]*[!?=]?|#{OPERATOR_PATTERN})/.freeze
       SCOPE_PATTERN       = /(?:::)?#{SCOPE_NAME_PATTERN}(?:::#{SCOPE_NAME_PATTERN})*/.freeze
 
