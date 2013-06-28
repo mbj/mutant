@@ -7,8 +7,10 @@ module Mutant
     # * Relies dynamic require, zombifier does not know how to recurse here (racc)
     # * Unparser bug (optparse)
     # * Toplevel reference/cbase nodes in code (rspec)
+    # * Creates useless toplevel modules that get vendored under ::Zombie (set)
     #
     STOP = %w(
+      set
       rspec
       diff/lcs
       parser
