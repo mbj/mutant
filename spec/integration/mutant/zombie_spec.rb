@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Mutant, 'as a zombie' do
-  pending 'allows to create zombie from mutant' do
-    Zombie.setup
-    Zombie::Runner
+  specify 'it allows to create zombie from mutant' do
+    Mutant::Zombifier.run('mutant')
+    Zombie.constants.should include(:Mutant)
   end
 end
