@@ -9,8 +9,8 @@ require 'mutant'
 namespace =
   if File.basename($0) == 'zombie'
     $stderr.puts('Detected zombie environment...')
-    require File.expand_path('../../spec/support/zombie.rb', __FILE__)
-    Zombie.setup
+    Mutant::Zombifier.zombify
+    Zombie::Mutant
   else
     Mutant
   end
