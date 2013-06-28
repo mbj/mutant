@@ -30,7 +30,10 @@ module Mutant
 
     # Insert mutated node
     #
-    # FIXME: Cache subject visibility in a better way! Ideally dont mutate it.
+    # FIXME:
+    #   Cache subject visibility in a better way! Ideally dont mutate it implicitly.
+    #   Also subject.public? should NOT be a public interface it is a detail of method
+    #   mutations.
     #
     # @return [self]
     #
