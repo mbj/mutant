@@ -50,9 +50,7 @@ NestedIterators:
   max_allowed_nesting: 1
   ignore_iterators: []
 NilCheck:
-  enabled: true
-  exclude:
-  - Mutant::Matcher::Method#skip?
+  enabled: false
 RepeatedConditional:
   enabled: true
   exclude:
