@@ -118,6 +118,8 @@ module Mutant
       # @raise [RuntimeError]
       #   if file cannot be found
       #
+      # @api private
+      #
       def self.find(logical_name)
         return if STOP.include?(logical_name)
         CACHE.fetch(logical_name) do
