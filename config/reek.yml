@@ -77,6 +77,7 @@ TooManyStatements:
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI::Printer::Config::Runner#run
   - Mutant#self.singleton_subclass_instance
+  - Mutant::Zombifier::File#self.find_uncached
   max_statements: 6
 UncommunicativeMethodName:
   enabled: true
