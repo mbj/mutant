@@ -16,7 +16,7 @@ module Mutant
           :ivar, :restarg, :casgn, :masgn, :resbody, :retry, :arg_expr,
           :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :cbase, :empty,
           :alias, :for, :xstr, :back_ref, :nth_ref, :class, :sclass, :match_with_lvasgn,
-          :match_current_line, :or_asgn
+          :match_current_line, :or_asgn, :kwbegin
         )
 
       private

@@ -61,6 +61,6 @@ module Mutant
     :xstr, :def, :defs, :case, :when, :ivar, :lvar, :cvar, :gvar,
     :back_ref, :const, :nth_ref, :class, :sclass, :yield,
     :match_with_lvasgn, :match_current_line, :irange, :erange,
-    :or_asgn
+    :or_asgn, :kwbegin
   ].to_set.freeze
 end # Mutant,
