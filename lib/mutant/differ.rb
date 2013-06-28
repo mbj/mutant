@@ -3,6 +3,9 @@ module Mutant
   class Differ
     include Adamantium::Flat
 
+    FORMAT = :unified
+    CONTEXT_LINES = 3
+
     # Return source diff
     #
     # @return [String]
@@ -34,9 +37,6 @@ module Mutant
     memoize :colorized_diff
 
   private
-
-    FORMAT = :unified
-    CONTEXT_LINES = 3
 
     # Initialize differ object
     #
