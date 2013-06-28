@@ -2,6 +2,17 @@ require 'spec_helper'
 
 describe Mutant::Mutator, 'def' do
 
+  context 'empty' do
+    let(:source) { 'def foo; end' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'def foo; ::Object.new; end'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
   context 'with no arguments' do
     let(:source) { 'def foo; true; false; end' }
 
