@@ -3,6 +3,8 @@ module Mutant
   class Killer
     include Adamantium::Flat, AbstractType, Equalizer.new(:strategy, :mutation, :killed?)
 
+    TIMEOUT_THRESHOLD = 5
+
     # Return strategy
     #
     # @return [Strategy]
@@ -90,7 +92,11 @@ module Mutant
     #
     def run_with_benchmark
       times = Benchmark.measure do
-        @killed = run
+        @killed = begin
+          Timeout.timeout(TIMEOUT_THRESHOLD) { run }
+        rescue Timeout::Error
+          true
+        end
       end
       @runtime = times.real
     end
