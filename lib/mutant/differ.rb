@@ -49,6 +49,19 @@ module Mutant
       new(lines(old), lines(new))
     end
 
+    # Break up source into lines
+    #
+    # @param [String] source
+    #
+    # @return [Array<String>]
+    #
+    # @api private
+    #
+    def self.lines(source)
+      source.lines.map { |line| line.chomp }
+    end
+    private_class_method :lines
+
   private
 
     # Return diffs
@@ -71,29 +84,6 @@ module Mutant
     def max_length
       old.length > new.length ? old.length : new.length
     end
-
-    # Return length difference
-    #
-    # @return [Fixnum]
-    #
-    # @api private
-    #
-    def length_difference
-      new.size - old.size
-    end
-
-    # Break up source into lines
-    #
-    # @param [String] source
-    #
-    # @return [Array<String>]
-    #
-    # @api private
-    #
-    def self.lines(source)
-      source.lines.map { |line| line.chomp }
-    end
-    private_class_method :lines
 
     # Return colorized diff line
     #
