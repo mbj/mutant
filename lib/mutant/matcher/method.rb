@@ -22,7 +22,11 @@ module Mutant
         return to_enum unless block_given?
 
         unless skip?
-          yield subject if subject
+          if subject
+            yield subject
+          else
+            $stderr.puts "Cannot find definition of: #{identification} in #{source_location.join(':')}"
+          end
         end
 
         self
