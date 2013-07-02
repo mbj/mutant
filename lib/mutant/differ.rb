@@ -1,10 +1,7 @@
 module Mutant
   # Class to create diffs from source code
   class Differ
-    include Adamantium::Flat
-
-    FORMAT = :unified
-    CONTEXT_LINES = 3
+    include Adamantium::Flat, Concord.new(:old, :new)
 
     # Return source diff
     #
@@ -14,12 +11,15 @@ module Mutant
     #
     def diff
       output = ''
-      @diffs.each do |piece|
-        hunk = Diff::LCS::Hunk.new(@old, @new, piece, CONTEXT_LINES, length_difference)
-        output << hunk.diff(FORMAT)
+      case diffs.length
+      when 0
+        nil
+      when 1
+        output = Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0).diff(:unified)
         output << "\n"
+      else
+        raise 'Mutation resulted in more than one diff, should not happen!'
       end
-      output
     end
     memoize :diff
 
@@ -36,32 +36,40 @@ module Mutant
     end
     memoize :colorized_diff
 
-  private
-
-    # Initialize differ object
+    # Return new object
     #
     # @param [String] old
     # @param [String] new
     #
-    # @return [undefined]
+    # @return [Differ]
     #
     # @api private
     #
-    def initialize(old, new)
-      @old, @new = lines(old), lines(new)
-      @diffs = Diff::LCS.diff(@old, @new)
+    def self.new(old, new)
+      super(lines(old), lines(new))
     end
 
-    # Break up sorce into lines
+  private
+
+    # Return diffs
     #
-    # @param [String] source
-    #
-    # @return [Array<String>]
+    # @return [Array<Array>]
     #
     # @api private
     #
-    def lines(source)
-      self.class.lines(source)
+    def diffs
+      Diff::LCS.diff(old, new)
+    end
+    memoize :diffs
+
+    # Return max length
+    #
+    # @return [Fixnum]
+    #
+    # @api private
+    #
+    def max_length
+      old.length > new.length ? old.length : new.length
     end
 
     # Return length difference
@@ -71,7 +79,7 @@ module Mutant
     # @api private
     #
     def length_difference
-      @new.size - @old.size
+      new.size - old.size
     end
 
     # Break up source into lines
@@ -85,6 +93,7 @@ module Mutant
     def self.lines(source)
       source.lines.map { |line| line.chomp }
     end
+    private_class_method :lines
 
     # Return colorized diff line
     #
