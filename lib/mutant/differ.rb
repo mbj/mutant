@@ -82,7 +82,7 @@ module Mutant
     # @api private
     #
     def max_length
-      old.length > new.length ? old.length : new.length
+      [old, new].map(&:length).max
     end
 
     # Return colorized diff line
