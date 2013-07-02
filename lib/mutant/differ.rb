@@ -45,8 +45,8 @@ module Mutant
     #
     # @api private
     #
-    def self.new(old, new)
-      super(lines(old), lines(new))
+    def self.build(old, new)
+      new(lines(old), lines(new))
     end
 
   private

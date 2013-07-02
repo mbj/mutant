@@ -38,7 +38,7 @@ module Mutant
           #
           def colorized_diff
             original, current = mutation.original_source, mutation.source
-            differ = Differ.new(original, current)
+            differ = Differ.build(original, current)
             diff = color? ? differ.colorized_diff : differ.diff
 
             if diff.empty?
