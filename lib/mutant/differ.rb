@@ -95,13 +95,11 @@ module Mutant
     # @api private
     #
     def self.colorize_line(line)
-      case line[0].chr
+      case line[0]
       when '+'
         Color::GREEN
       when '-'
         Color::RED
-      when '@'
-        line[1].chr == '@' ? Color::BLUE : Color::NONE
       else
         Color::NONE
       end.format(line)
