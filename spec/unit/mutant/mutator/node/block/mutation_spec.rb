@@ -9,6 +9,7 @@ describe Mutant::Mutator, 'block' do
       mutations << 'foo { a }'
       mutations << 'foo { b }'
       mutations << 'foo {}'
+      mutations << 'foo { raise }'
       mutations << 'foo'
     end
 
@@ -26,7 +27,7 @@ describe Mutant::Mutator, 'block' do
     let(:mutations) do
       mutations = []
       mutations << 'foo'
-      mutations << 'foo { |a, b| ::Object.new }'
+      mutations << 'foo { |a, b| raise }'
       mutations << 'foo { |a, srandom| }'
       mutations << 'foo { |srandom, b| }'
       mutations << 'foo { |a| }'
@@ -49,7 +50,7 @@ describe Mutant::Mutator, 'block' do
       mutations = []
       mutations << 'foo { || }'
       mutations << 'foo { |a, b, c| }'
-      mutations << 'foo { |(a, b), c| ::Object.new }'
+      mutations << 'foo { |(a, b), c| raise }'
       mutations << 'foo { |(a), c| }'
       mutations << 'foo { |(b), c| }'
       mutations << 'foo { |(a, b)| }'

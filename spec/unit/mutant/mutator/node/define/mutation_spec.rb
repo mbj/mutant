@@ -7,7 +7,7 @@ describe Mutant::Mutator, 'def' do
 
     let(:mutations) do
       mutations = []
-      mutations << 'def foo; ::Object.new; end'
+      mutations << 'def foo; raise; end'
     end
 
     it_should_behave_like 'a mutator'
@@ -31,6 +31,8 @@ describe Mutant::Mutator, 'def' do
 
       # Remove all statements
       mutations << 'def foo; end'
+
+      mutations << 'def foo; raise; end'
     end
 
     it_should_behave_like 'a mutator'
@@ -58,7 +60,7 @@ describe Mutant::Mutator, 'def' do
       mutations << 'def foo(a, srandom); end'
 
       # Mutation of body
-      mutations << 'def foo(a, b); ::Object.new; end'
+      mutations << 'def foo(a, b); raise; end'
     end
 
     it_should_behave_like 'a mutator'
@@ -69,7 +71,7 @@ describe Mutant::Mutator, 'def' do
 
     let(:mutations) do
       mutations = []
-      mutations << 'def foo(_unused); ::Object.new; end'
+      mutations << 'def foo(_unused); raise; end'
       mutations << 'def foo; end'
     end
 
@@ -90,7 +92,7 @@ describe Mutant::Mutator, 'def' do
       mutations << 'def foo(a = false); end'
       mutations << 'def foo(a = nil); end'
       mutations << 'def foo(srandom = true); end'
-      mutations << 'def foo(a = true); ::Object.new; end'
+      mutations << 'def foo(a = true); raise; end'
     end
 
     it_should_behave_like 'a mutator'
@@ -114,6 +116,8 @@ describe Mutant::Mutator, 'def' do
 
       # Remove all statements
       mutations << 'def self.foo; end'
+
+      mutations << 'def self.foo; raise; end'
     end
 
     it_should_behave_like 'a mutator'
@@ -125,24 +129,24 @@ describe Mutant::Mutator, 'def' do
       Mutant::Random.stub(:hex_string => 'random')
     end
 
-    let(:source) { 'def self.foo(a, b); nil; end' }
+    let(:source) { 'def self.foo(a, b); end' }
 
     let(:mutations) do
       mutations = []
 
       # Deletion of each argument
-      mutations << 'def self.foo(a); nil; end'
-      mutations << 'def self.foo(b); nil; end'
+      mutations << 'def self.foo(a); end'
+      mutations << 'def self.foo(b); end'
 
       # Deletion of all arguments
-      mutations << 'def self.foo; nil; end'
+      mutations << 'def self.foo; end'
 
       # Rename each argument
-      mutations << 'def self.foo(srandom, b); nil; end'
-      mutations << 'def self.foo(a, srandom); nil; end'
+      mutations << 'def self.foo(srandom, b); end'
+      mutations << 'def self.foo(a, srandom); end'
 
       # Mutation of body
-      mutations << 'def self.foo(a, b); ::Object.new; end'
+      mutations << 'def self.foo(a, b); raise; end'
     end
 
     it_should_behave_like 'a mutator'

@@ -21,9 +21,8 @@ module Mutant
           emit_arguments_mutations
           if body
             emit_body_mutations
-          else
-            emit_body(NEW_OBJECT)
           end
+          emit_body(RAISE)
         end
 
       end # Block

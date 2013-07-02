@@ -21,6 +21,8 @@ module Mutant
     INFINITY          = s(:send, s(:float,  1.0), :/, s(:args, s(:float, 0.0)))
     NEW_OBJECT        = s(:send, s(:const, s(:cbase), :Object), :new)
 
+    RAISE             = s(:send, nil, :raise)
+
     N_NIL             = s(:nil)
     N_EMPTY           = s(:empty)
 
