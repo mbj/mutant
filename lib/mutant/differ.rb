@@ -18,7 +18,7 @@ module Mutant
         output = Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0).diff(:unified)
         output << "\n"
       else
-        raise 'Mutation resulted in more than one diff, should not happen!'
+        abort 'Mutation resulted in more than one diff, should not happen! PLS report a bug!'
       end
     end
     memoize :diff
