@@ -192,7 +192,7 @@ module Mutant
     # @api private
     #
     def dup_input
-      Helper.deep_clone(input)
+      input.dup
     end
 
   end # Mutator
