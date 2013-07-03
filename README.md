@@ -42,8 +42,10 @@ Installation
 
 Install the gem `mutant` via your preferred method.
 
+The 0.2 series is stable but has outdated dependencies. The 0.3 series is in beta phase currently.
+
 ```ruby
-gem install mutant -v<version>.beta<n>
+gem install mutant -v0.3.0.beta8
 ```
 
 Examples
