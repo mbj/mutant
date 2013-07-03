@@ -56,13 +56,13 @@ CLI will be simplified in the next releases, but currently stick with this:
 ```
 cd virtus
 # Run mutant on virtus namespace (that uses the dm-2 style spec layout)
-mutant -I lib -r virtus --rspec-dm2 ::Virtus
+mutant --rspec-dm2 ::Virtus
 # Run mutant on specific virtus class
-mutant -I lib -r virtus --rspec-dm2 ::Virtus::Attribute
+mutant --rspec-dm2 ::Virtus::Attribute
 # Run mutant on specific virtus class method
-mutant -I lib -r virtus --rspec-dm2 ::Virtus::Attribute.build
+mutant --rspec-dm2 ::Virtus::Attribute.build
 # Run mutant on specific virtus instance method
-mutant -I lib -r virtus --rspec-dm2 ::Virtus::Attribute#name
+mutant --rspec-dm2 ::Virtus::Attribute#name
 ```
 
 Strategies
