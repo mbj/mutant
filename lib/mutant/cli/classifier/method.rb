@@ -28,6 +28,16 @@ module Mutant
         end
         memoize :matcher
 
+        # Return identification
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        def identification
+          match.to_s
+        end
+
       private
 
         # Return method
