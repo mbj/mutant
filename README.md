@@ -42,6 +42,10 @@ Installation
 
 Install the gem `mutant` via your preferred method.
 
+```ruby
+gem install mutant -v<version>.beta<n>
+```
+
 Examples
 --------
 
