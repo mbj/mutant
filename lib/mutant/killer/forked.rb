@@ -32,7 +32,7 @@ module Mutant
       def run
         pid = fork do
           killer = @killer.new(strategy, mutation)
-          exit(killer.success? ? CLI::EXIT_SUCCESS : CLI::EXIT_FAILURE)
+          exit(killer.killed? ? CLI::EXIT_SUCCESS : CLI::EXIT_FAILURE)
         end
 
         status = Process.wait2(pid).last
