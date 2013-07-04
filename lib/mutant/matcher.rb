@@ -11,16 +11,29 @@ module Mutant
     # @return [self]
     #   if block given
     #
-    # @return [Enumerator<Subject>]
+    # @return [Enumerable<Subject>]
     #
     # @api private
     #
     def self.each(cache, input, &block)
       return to_enum(__method__, cache, input) unless block_given?
 
-      new(cache, input).each(&block)
+      build(cache, input).each(&block)
 
       self
+    end
+
+    # Default matcher build implementation
+    #
+    # @param [Cache] cache
+    # @param [Object] input
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def self.build(*arguments)
+      new(*arguments)
     end
 
     # Enumerate subjects

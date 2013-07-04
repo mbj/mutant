@@ -3,6 +3,15 @@ module Mutant
     # Neutral mutation
     class Neutral < self
 
+      SYMBOL = 'neutral'
+
+      # Noop mutation, special case of neutral
+      class Noop < self
+
+        SYMBOL = 'noop'
+
+      end
+
       # Return identification
       #
       # @return [String]
@@ -10,7 +19,7 @@ module Mutant
       # @api private
       #
       def identification
-        "noop:#{super}"
+        "#{self.class::SYMBOL}:#{super}"
       end
       memoize :identification
 

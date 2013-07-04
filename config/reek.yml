@@ -35,7 +35,8 @@ IrresponsibleModule:
   exclude: []
 LongParameterList:
   enabled: true
-  exclude: []
+  exclude:
+  - Mutant::Matcher::Method::Instance#self.build?
   max_params: 2
 LongYieldList:
   enabled: true

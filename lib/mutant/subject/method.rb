@@ -27,6 +27,18 @@ module Mutant
 
     private
 
+      # Return mutations
+      #
+      # @return [Enumerable<Mutation>]
+      #
+      # @api private
+      #
+      def mutations
+        Mutator.each(node).map do |mutant|
+          Mutation::Evil.new(self, mutant)
+        end
+      end
+
       # Return scope
       #
       # @return [Class, Module]
@@ -46,54 +58,6 @@ module Mutant
       def subtype
         "#{context.identification}#{self.class::SYMBOL}#{name}"
       end
-
-      # Instance method subjects
-      class Instance < self
-
-        NAME_INDEX = 0
-        SYMBOL = '#'.freeze
-
-        # Test if method is public
-        #
-        # @return [true]
-        #   if method is public
-        #
-        # @return [false]
-        #   otherwise
-        #
-        # @api private
-        #
-        def public?
-          scope.public_method_defined?(name)
-        end
-        memoize :public?
-
-      private
-
-      end # Instance
-
-      # Singleton method subjects
-      class Singleton < self
-
-        NAME_INDEX = 1
-        SYMBOL = '.'.freeze
-
-        # Test if method is public
-        #
-        # @return [true]
-        #   if method is public
-        #
-        # @return [false]
-        #   otherwise
-        #
-        # @api private
-        #
-        def public?
-          scope.singleton_class.public_method_defined?(name)
-        end
-        memoize :public?
-
-      end # Singleton
 
     end # Method
   end # Subject

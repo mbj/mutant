@@ -24,7 +24,7 @@ module Mutant
         # @api private
         #
         def matcher
-          methods_matcher.matcher.new(cache, scope, method)
+          methods_matcher.matcher.build(cache, scope, method)
         end
         memoize :matcher
 

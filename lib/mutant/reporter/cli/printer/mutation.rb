@@ -5,6 +5,29 @@ module Mutant
         # Mutation printer
         class Mutation < self
 
+          handle(Runner::Mutation)
+
+          # Build printer
+          #
+          # @param [Runner::Mutation] runner
+          # @param [IO] output
+          #
+          # @return [Printer::Mutation]
+          #
+          # @api private
+          #
+          def self.build(runner, output)
+            mutation = runner.mutation
+            case mutation
+            when Mutant::Mutation::Neutral::Noop
+              Noop
+            when Mutant::Mutation::Evil, Mutant::Mutation::Neutral
+              Diff
+            else
+              raise "Unknown mutation: #{mutation}"
+            end.new(runner, output)
+          end
+
           # Run mutation printer
           #
           # @return [undefined]
@@ -13,7 +36,7 @@ module Mutant
           #
           def run
             status(mutation.identification)
-            puts(colorized_diff)
+            puts(details)
           end
 
         private
@@ -28,25 +51,45 @@ module Mutant
             object.mutation
           end
 
-          # Return colorized diff
-          #
-          # @param [Mutation] mutation
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def colorized_diff
-            original, current = mutation.original_source, mutation.source
-            differ = Differ.build(original, current)
-            diff = color? ? differ.colorized_diff : differ.diff
+          # Reporter for noop mutations
+          class Noop < self
 
-            if diff.empty?
-              raise 'Unable to create a diff, so ast mutant or unparser does something strange!!'
+            MESSAGE =
+              "Parsed subject AST:\n" \
+              "%s\n"                  \
+              "Unparsed source:\n"    \
+              "%s\n"
+
+          private
+
+            # Return details
+            #
+            # @return [String]
+            #
+            # @api private
+            #
+            def details
+              sprintf(MESSAGE, mutation.subject.node.inspect, mutation.original_source)
             end
 
-            diff
-          end
+          end # Noop
+
+          # Reporter for neutral and evil mutations
+          class Diff < self
+
+            # Return diff
+            #
+            # @return [String]
+            #
+            # @api private
+            #
+            def details
+              original, current = mutation.original_source, mutation.source
+              differ = Differ.build(original, current)
+              color? ? differ.colorized_diff : differ.diff
+            end
+
+          end # Evil
 
         end # Mutantion
       end # Printer

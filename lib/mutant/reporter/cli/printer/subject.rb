@@ -133,7 +133,7 @@ module Mutant
               def run
                 puts(subject.identification)
                 object.failed_mutations.each do |mutation|
-                  Mutation.run(mutation, output)
+                  visit(mutation)
                 end
                 print_stats
               end

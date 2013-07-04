@@ -15,8 +15,11 @@ module Mutant
     #
     def each
       return to_enum unless block_given?
-      Mutator.each(node) do |mutant|
-        yield Mutation::Evil.new(self, mutant)
+
+      yield noop_mutation
+
+      mutations.each do |mutation|
+        yield mutation
       end
 
       self
@@ -108,6 +111,16 @@ module Mutant
     #
     abstract_method :subtype
     private :subtype
+
+    # Return neutral mutation
+    #
+    # @return [Mutation::Neutral]
+    #
+    # @api private
+    #
+    def noop_mutation
+      Mutation::Neutral::Noop.new(self, node)
+    end
 
   end # Subject
 end # Mutant

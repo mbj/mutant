@@ -10,7 +10,7 @@ module Mutant
 
       # Enumerate matches
       #
-      # @return [Enumerable]
+      # @return [Enumerable<Subject>]
       #   returns enumerable when no block given
       #
       # @return [self]

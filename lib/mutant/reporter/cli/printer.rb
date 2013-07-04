@@ -30,6 +30,16 @@ module Mutant
           REGISTRY.freeze
         end
 
+        # Build printer
+        #
+        # @return [Printer]
+        #
+        # @api private
+        #
+        def self.build(*args)
+          new(*args)
+        end
+
         # Run printer
         #
         # @return [self]
@@ -37,7 +47,7 @@ module Mutant
         # @api private
         #
         def self.run(*args)
-          new(*args).run
+          build(*args).run
           self
         end
 
@@ -59,7 +69,6 @@ module Mutant
 
       private
 
-
         # Return status color
         #
         # @return [Color]
@@ -68,6 +77,18 @@ module Mutant
         #
         def color
           success? ? Color::GREEN : Color::RED
+        end
+
+        # Visit object
+        #
+        # @param [Object] object
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def visit(object)
+          self.class.visit(object, output)
         end
 
         # Print an info line to output

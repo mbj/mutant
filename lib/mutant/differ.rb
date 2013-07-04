@@ -6,6 +6,10 @@ module Mutant
     # Return source diff
     #
     # @return [String]
+    #   if there is a diff
+    #
+    # @return [nil]
+    #   otherwise
     #
     # @api private
     #
@@ -26,10 +30,15 @@ module Mutant
     # Return colorized source diff
     #
     # @return [String]
+    #   if there is a diff
+    #
+    # @return [nil]
+    #   otherwise
     #
     # @api private
     #
     def colorized_diff
+      return unless diff
       diff.lines.map do |line|
         self.class.colorize_line(line)
       end.join

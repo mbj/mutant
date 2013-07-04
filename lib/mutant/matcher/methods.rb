@@ -59,7 +59,7 @@ module Mutant
       # @api private
       #
       def emit_matches(method)
-        matcher.new(cache, scope, method).each do |subject|
+        matcher.build(cache, scope, method).each do |subject|
           yield subject
         end
       end
