@@ -1,13 +1,12 @@
 module Mutant
   class Mutator
     class Node
-      # Mutator that does not do mutations on ast
-      class Noop < self
+      # Generic mutator
+      class Generic < self
 
-        # Literal references to self do not need to be mutated?
         handle(:self)
 
-        # These nodes still need a mutator, your contribution is that close!
+        # These nodes still need a dedicated mutator, your contribution is that close!
         handle(
           :zsuper, :not, :or, :and, :defined,
           :next, :break, :match, :gvar, :cvar, :ensure,
@@ -28,6 +27,9 @@ module Mutant
         # @api private
         #
         def dispatch
+          children.each_index do |index|
+            mutate_child(index) if children.at(index)
+          end
         end
 
       end # Noop
