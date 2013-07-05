@@ -123,8 +123,7 @@ module Mutant
       # @api private
       #
       def mutate_child(index, mutator = Mutator)
-        children = node.children
-        child = children[index]
+        child = children.at(index)
         mutator.each(child, self) do |mutation|
           emit_child_update(index, mutation)
         end
@@ -147,15 +146,15 @@ module Mutant
       # Emit updated child
       #
       # @param [Fixnum] index
-      # @param [Object] update
+      # @param [Parser::AST::Node] node
       #
       # @return [undefined]
       #
       # @api private
       #
-      def emit_child_update(index, update)
+      def emit_child_update(index, node)
         new_children = children.dup
-        new_children[index]=update
+        new_children[index]=node
         emit_self(*new_children)
       end
 
