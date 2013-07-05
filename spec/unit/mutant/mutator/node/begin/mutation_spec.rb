@@ -24,9 +24,6 @@ describe Mutant::Mutator, 'begin' do
     # Remove statement in block
     mutations << 'true'
     mutations << 'false'
-
-    # Replace block with empty
-    mutations << ''
   end
 
   it_should_behave_like 'a mutator'
