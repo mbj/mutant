@@ -27,10 +27,9 @@ module Mutant
         # @api private
         #
         def dispatch
-          children.each_index do |index|
-            if children.at(index).kind_of?(Parser::AST::Node)
-              mutate_child(index)
-            end
+          children.each_with_index do |child, index|
+            next unless child.kind_of?(Parser::AST::Node)
+            mutate_child(index)
           end
         end
 
