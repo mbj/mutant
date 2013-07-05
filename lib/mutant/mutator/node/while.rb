@@ -20,6 +20,7 @@ module Mutant
         def dispatch
           emit_condition_mutations
           emit_body_mutations
+          emit_body(nil)
         end
 
       end # While
