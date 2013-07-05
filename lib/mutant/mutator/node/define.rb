@@ -15,6 +15,7 @@ module Mutant
         def dispatch
           emit_arguments_mutations
           emit_body(RAISE)
+          emit_body(nil)
           emit_body_mutations if body
         end
 

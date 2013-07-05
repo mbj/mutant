@@ -24,7 +24,6 @@ module Mutant
           children.each do |child|
             emit(child)
           end
-          emit(nil) unless parent_send?
         end
 
         # Test if parent input is a send

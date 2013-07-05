@@ -22,6 +22,7 @@ module Mutant
           if body
             emit_body_mutations
           end
+          emit_body(nil)
           emit_body(RAISE)
         end
 
