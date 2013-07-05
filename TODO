@@ -4,6 +4,7 @@ Code:
   * Log all warnings through reporter, so remove random $stderr.puts calls
 
 Mutations:
+  * Add true masgn mutations
   * Add binary operator specific mutations (YAY, finally reached this point)
   * Add some kind of a "do not touch me object" that raises on all messages.
     It can be used to make sure each literal value is touched.
