@@ -28,7 +28,7 @@ module Mutant
           #
           def dispatch
             mutate_name
-            emit_value_mutations
+            emit_value_mutations if value # mlhs!
           end
 
           # Emit name mutations
