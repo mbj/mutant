@@ -22,7 +22,8 @@ module Mutant
         output = Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0).diff(:unified)
         output << "\n"
       else
-        abort 'Mutation resulted in more than one diff, should not happen! PLS report a bug!'
+        $stderr.puts 'Mutation resulted in more than one diff, should not happen! PLS report a bug!'
+        nil
       end
     end
     memoize :diff
