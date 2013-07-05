@@ -59,6 +59,7 @@ module Mutant
 
         # Matcher for memoized instance methods
         class Memoized < self
+          SUBJECT_CLASS = Subject::Method::Instance::Memoized
 
         private
 

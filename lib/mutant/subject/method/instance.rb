@@ -26,6 +26,7 @@ module Mutant
 
         # Mutator for memoized instance methods
         class Memoized < self
+          include NodeHelpers
 
         private
 
@@ -39,6 +40,16 @@ module Mutant
             Mutator.each(node).map do |mutant|
               Mutation::Evil.new(self, memoizer_node(mutant))
             end
+          end
+
+          # Return neutral mutation
+          #
+          # @return [Mutation::Neutral]
+          #
+          # @api private
+          #
+          def noop_mutation
+            Mutation::Neutral::Noop.new(self, memoizer_node(node))
           end
 
           # Return memoizer node for mutant

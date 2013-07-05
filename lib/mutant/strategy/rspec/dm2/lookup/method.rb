@@ -96,6 +96,7 @@ module Mutant
             # Instance method dm2 style method lookup
             class Instance < self
               handle(Subject::Method::Instance)
+              handle(Subject::Method::Instance::Memoized)
 
             private
 
