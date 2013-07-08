@@ -21,9 +21,6 @@ describe Mutant::Mutator::Node::Literal, 'array' do
 
     # Empty array
     mutations << '[]'
-
-    # Extra element
-    mutations << '[nil, true, false]'
   end
 
   it_should_behave_like 'a mutator'

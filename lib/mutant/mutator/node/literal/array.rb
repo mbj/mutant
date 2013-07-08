@@ -34,7 +34,6 @@ module Mutant
               emit_self(*dup_children)
               mutate_child(index)
             end
-            emit_self(s(:nil), *children)
           end
 
         end # Array
