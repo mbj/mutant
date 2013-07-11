@@ -3,17 +3,18 @@
 group :development do
   gem 'rake',  '~> 10.1.0'
   gem 'rspec', '~> 2.13.0'
-  gem 'yard',  '~> 0.8.6.1'
+  gem 'yard',  '~> 0.8.6.2'
 end
 
 group :yard do
-  gem 'kramdown', '~> 1.0.1'
+  gem 'kramdown', '~> 1.1.0'
 end
 
 group :guard do
   gem 'guard',         '~> 1.8.1'
   gem 'guard-bundler', '~> 1.0.0'
   gem 'guard-rspec',   '~> 3.0.2'
+  gem 'guard-rubocop', '~> 0.2.0'
 
   # file system change event handling
   gem 'listen',     '~> 1.2.2'
@@ -28,16 +29,21 @@ group :guard do
 end
 
 group :metrics do
-  gem 'backports', '~> 3.3', '>= 3.3.2'
   gem 'coveralls', '~> 0.6.7'
   gem 'flay',      '~> 2.3.0'
   gem 'flog',      '~> 4.1.0'
   gem 'reek',      '~> 1.3.1', :git => 'https://github.com/troessner/reek.git'
+  gem 'rubocop',   '~> 0.9.1'
   gem 'simplecov', '~> 0.7.1'
   gem 'yardstick', '~> 0.9.6'
 
-  platforms :ruby_19 do
+  platforms :ruby_19, :ruby_20 do
+    gem 'mutant',          '~> 0.3.0.beta13'
     gem 'yard-spellcheck', '~> 0.1.5'
+  end
+
+  platforms :ruby_19 do
+    gem 'json', '~> 1.8.0'
   end
 
   platforms :rbx do
