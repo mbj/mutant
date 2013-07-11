@@ -1,0 +1,4 @@
+---
+test:
+  override:
+    - bundle exec rake ci
