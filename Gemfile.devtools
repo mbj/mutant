@@ -37,11 +37,6 @@ group :metrics do
   gem 'simplecov', '~> 0.7.1'
   gem 'yardstick', '~> 0.9.6'
 
-  platforms :ruby_19, :ruby_20 do
-    gem 'mutant',          '~> 0.3.0.beta13'
-    gem 'yard-spellcheck', '~> 0.1.5'
-  end
-
   platforms :ruby_19 do
     gem 'json', '~> 1.8.0'
   end
