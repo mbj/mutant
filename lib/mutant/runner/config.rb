@@ -59,7 +59,7 @@ module Mutant
         strategy = self.strategy
         strategy.setup
         @subjects = config.subjects.map do |subject|
-          Subject.run(self, subject)
+          Subject.run(config, subject)
         end
         strategy.teardown
       end

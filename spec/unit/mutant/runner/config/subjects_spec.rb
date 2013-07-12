@@ -32,7 +32,7 @@ describe Mutant::Runner::Config, '#subjects' do
     stub_const('Mutant::Runner::Subject', DummySubjectRunner)
   end
 
-  it { should eql([DummySubjectRunner.new(object, mutation_subject)]) }
+  it { should eql([DummySubjectRunner.new(config, mutation_subject)]) }
 
   it_should_behave_like 'an idempotent method'
 end
