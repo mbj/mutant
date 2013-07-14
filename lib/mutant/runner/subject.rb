@@ -4,13 +4,7 @@ module Mutant
     class Subject < self
       include Concord::Public.new(:config, :subject)
 
-      # Return subject
-      #
-      # @return [Subject]
-      #
-      # @api private
-      #
-      attr_reader :subject
+      register Mutant::Subject
 
       # Initialize object
       #
@@ -41,7 +35,7 @@ module Mutant
       # @api private
       #
       def failed_mutations
-        mutations.select(&:failed?)
+        mutations.reject(&:success?)
       end
       memoize :failed_mutations
 
@@ -70,9 +64,7 @@ module Mutant
       def run
         subject = self.subject
         report(subject)
-        @mutations = subject.map do |mutation|
-          Mutation.run(config, mutation)
-        end
+        @mutations = dispatch(subject.mutations)
         report(self)
       end
 

@@ -56,12 +56,13 @@ module Mutant
     #
     def config
       Config.new(
-        :cache    => @cache,
-        :debug    => debug?,
-        :matcher  => matcher,
-        :filter   => filter,
-        :strategy => strategy,
-        :reporter => reporter
+        :cache     => @cache,
+        :debug     => debug?,
+        :matcher   => matcher,
+        :filter    => filter,
+        :fail_fast => !!@fail_fast,
+        :strategy  => strategy,
+        :reporter  => reporter
       )
     end
     memoize :config
@@ -149,6 +150,16 @@ module Mutant
     #
     def add_filter(klass,filter)
       @filters << klass.new(filter)
+    end
+
+    # Set fail fast
+    #
+    # @api private
+    #
+    # @return [undefined]
+    #
+    def set_fail_fast
+      @fail_fast = true
     end
 
     # Set debug mode
@@ -252,6 +263,8 @@ module Mutant
 
       opts.on('--code FILTER', 'Adds a code filter') do |filter|
         add_filter Mutation::Filter::Code, filter
+      end.on('--fail-fast', 'Fail fast') do
+        set_fail_fast
       end.on('-d','--debug', 'Enable debugging output') do
         set_debug
       end.on_tail('-h', '--help', 'Show this message') do

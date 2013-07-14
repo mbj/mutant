@@ -6,15 +6,18 @@ describe Mutant::Runner::Mutation, '#killer' do
   let(:config) do
     double(
       'Config',
-      :reporter => reporter,
-      :strategy => strategy
+      :fail_fast => fail_fast,
+      :reporter  => reporter,
+      :strategy  => strategy
     )
   end
 
-  let(:reporter) { double('Reporter') }
-  let(:mutation) { double('Mutation') }
-  let(:strategy) { double('Strategy') }
-  let(:killer)   { double('Killer')   }
+  let(:reporter)  { double('Reporter')                             }
+  let(:mutation)  { double('Mutation', :class => Mutant::Mutation) }
+  let(:strategy)  { double('Strategy')                             }
+  let(:killer)    { double('Killer', :success? => success)         }
+  let(:fail_fast) { false                                          }
+  let(:success)   { false                                          }
 
   subject { object.killer }
 

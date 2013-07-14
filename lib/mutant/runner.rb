@@ -1,8 +1,57 @@
 module Mutant
   # Runner baseclass
   class Runner
-    include Adamantium::Flat, AbstractType, Equalizer.new(:config)
-    extend MethodObject
+    include Adamantium::Flat, AbstractType
+
+    REGISTRY = {}
+
+    # Register handler
+    #
+    # @param [Class] klass
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def self.register(klass)
+      REGISTRY[klass]=self
+    end
+    private_class_method :register
+
+    # Lookup runner
+    #
+    # @param [Class] klass
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def self.lookup(klass)
+      current = klass
+      while current
+        handler = REGISTRY.fetch(current) do
+          current = current.superclass; nil
+        end
+        return handler if handler
+      end
+
+      raise ArgumentError, "No handler for: #{klass}"
+    end
+    private_class_method :lookup
+
+    # Run runner for object
+    #
+    # @param [Config] config
+    # @param [Object] object
+    #
+    # @return [Runner]
+    #
+    # @api private
+    #
+    def self.run(config, object)
+      handler = lookup(object.class)
+      handler.new(config, object)
+    end
 
     # Return config
     #
@@ -27,6 +76,18 @@ module Mutant
       @end = Time.now
     end
 
+    # Test if runner should stop
+    #
+    # @return [true]
+    #   if runner should stop
+    #
+    # @return [false]
+    #   otherwise
+    #
+    def stop?
+      !!@stop
+    end
+
     # Return runtime
     #
     # @return [Float]
@@ -34,22 +95,17 @@ module Mutant
     # @api private
     #
     def runtime
-      @end - @start
+      (@end || Time.now) - @start
     end
-    memoize :runtime
 
-    # Test if runner failed
+    # Return reporter
     #
-    # @return [true]
-    #   if failed
-    #
-    # @return [false]
-    #   otherwise
+    # @return [Reporter]
     #
     # @api private
     #
-    def failed?
-      !success?
+    def reporter
+      config.reporter
     end
 
     # Test if runner is successful
@@ -63,16 +119,6 @@ module Mutant
     # @api private
     #
     abstract_method :success?
-
-    # Return reporter
-    #
-    # @return [Reporter]
-    #
-    # @api private
-    #
-    def reporter
-      config.reporter
-    end
 
   private
 
@@ -94,6 +140,37 @@ module Mutant
     #
     def report(object)
       reporter.report(object)
+    end
+
+    # Perform dispatch
+    #
+    # @return [Enumerable<Runner>]
+    #
+    # @api private
+    #
+    def dispatch(input)
+      collection = []
+      input.each do |object|
+        runner = visit(object)
+        collection << runner
+        if runner.stop?
+          @stop = true
+          break
+        end
+      end
+      collection
+    end
+
+    # Visit object
+    #
+    # @param [Object] object
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def visit(object)
+      Runner.run(config, object)
     end
 
   end # Runner

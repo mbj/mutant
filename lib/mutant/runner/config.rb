@@ -3,6 +3,22 @@ module Mutant
     # Runner for object config
     class Config < self
 
+      register Mutant::Config
+
+      # Run runner for object
+      #
+      # @param [Config] config
+      # @param [Object] object
+      #
+      # @return [Runner]
+      #
+      # @api private
+      #
+      def self.run(config)
+        handler = lookup(config.class)
+        handler.new(config)
+      end
+
       # Return subject runners
       #
       # @return [Enumerable<Runner::Subject>]
@@ -18,7 +34,7 @@ module Mutant
       # @api private
       #
       def failed_subjects
-        subjects.select(&:failed?)
+        subjects.reject(&:success?)
       end
       memoize :failed_subjects
 
@@ -58,9 +74,7 @@ module Mutant
       def run_subjects
         strategy = self.strategy
         strategy.setup
-        @subjects = config.subjects.map do |subject|
-          Subject.run(config, subject)
-        end
+        @subjects = dispatch(config.subjects)
         strategy.teardown
       end
 

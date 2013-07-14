@@ -3,47 +3,49 @@ require 'spec_helper'
 describe Mutant::Runner::Subject, '#success?' do
   subject { object.success? }
 
-  let(:object) { described_class.run(config, mutation_subject) }
+  let(:object) { described_class.new(config, mutation_subject) }
+
+  let(:mutation_subject) {
+    double(
+      'Subject',
+      :class     => Mutant::Subject,
+      :mutations => [mutation_a, mutation_b]
+    )
+  }
 
   let(:reporter)         { double('Reporter')                      }
-  let(:mutation_subject) { double('Subject', :map => mutations)    }
   let(:config)           { double('Config', :reporter => reporter) }
-  let(:mutation_a)       { double('Mutation A', :failed? => false) }
-  let(:mutation_b)       { double('Mutation B', :failed? => false) }
-  let(:mutations)        { [mutation_a, mutation_b]                }
+  let(:mutation_a)       { double('Mutation A')                    }
+  let(:mutation_b)       { double('Mutation B')                    }
+
+  let(:runner_a)         { double('Runner A', :success? => success_a, :stop? => stop_a) }
+  let(:runner_b)         { double('Runner B', :success? => success_b, :stop? => stop_b) }
 
   before do
     reporter.stub(:report => reporter)
+    Mutant::Runner.stub(:run).with(config, mutation_a).and_return(runner_a)
+    Mutant::Runner.stub(:run).with(config, mutation_b).and_return(runner_b)
   end
 
-  class DummyMutationRunner
-    include Concord::Public.new(:config, :mutation)
-
-    def self.run(*args)
-      new(*args)
-    end
-
-    def failed?
-      @mutation.failed?
-    end
-  end
-
-  before do
-    stub_const('Mutant::Runner::Mutation', DummyMutationRunner)
-  end
-
-  context 'without evil failed mutations' do
-    it { should be(true) }
-  end
-
-  context 'with failing noop mutation' do
-  end
-
-  context 'with failing evil mutations' do
-    before do
-      mutation_a.stub(:failed? => true)
-    end
+  context 'with failing mutations' do
+    let(:stop_a)    { false }
+    let(:stop_b)    { false }
+    let(:success_a) { false }
+    let(:success_b) { true  }
 
     it { should be(false) }
+
+    it_should_behave_like 'an idempotent method'
+  end
+
+  context 'without failing mutations' do
+    let(:stop_a)    { false }
+    let(:stop_b)    { false }
+    let(:success_a) { true  }
+    let(:success_b) { true  }
+
+    it { should be(true) }
+
+    it_should_behave_like 'an idempotent method'
   end
 end

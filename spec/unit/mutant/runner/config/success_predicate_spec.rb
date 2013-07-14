@@ -3,50 +3,45 @@ require 'spec_helper'
 describe Mutant::Runner::Config, '#success?' do
   subject { object.success? }
 
-  let(:object) { described_class.run(config) }
+  let(:object) { described_class.new(config) }
 
   let(:config) do
     double(
       'Config',
       :reporter => reporter,
       :strategy => strategy,
-      :subjects => subjects
+      :subjects => [subject_a, subject_b]
     )
   end
 
-  let(:reporter)  { double('Reporter')                    }
-  let(:strategy)  { double('Strategy')                    }
-  let(:subjects)  { [subject_a, subject_b]                }
-  let(:subject_a) { double('Subject A', :fails? => false) }
-  let(:subject_b) { double('Subject B', :fails? => false) }
-
-  class DummySubjectRunner
-    include Concord::Public.new(:config, :subject)
-
-    def self.run(*args)
-      new(*args)
-    end
-
-    def failed?
-      @subject.fails?
-    end
-  end
+  let(:reporter)  { double('Reporter')                                           }
+  let(:strategy)  { double('Strategy')                                           }
+  let(:subject_a) { double('Subject A')                                          }
+  let(:subject_b) { double('Subject B')                                          }
+  let(:runner_a)  { double('Runner A', :stop? => stop_a, :success? => success_a) }
+  let(:runner_b)  { double('Runner B', :stop? => stop_b, :success? => success_b) }
 
   before do
-    stub_const('Mutant::Runner::Subject', DummySubjectRunner)
     reporter.stub(:report => reporter)
     strategy.stub(:setup)
     strategy.stub(:teardown)
+    Mutant::Runner.stub(:run).with(config, subject_a).and_return(runner_a)
+    Mutant::Runner.stub(:run).with(config, subject_b).and_return(runner_b)
   end
 
   context 'without failed subjects' do
+    let(:stop_a)    { false }
+    let(:stop_b)    { false }
+    let(:success_a) { true  }
+    let(:success_b) { true  }
     it { should be(true) }
   end
 
   context 'with failing subjects' do
-    before do
-      subject_a.stub(:fails? => true)
-    end
+    let(:stop_a)    { false }
+    let(:stop_b)    { false }
+    let(:success_a) { false }
+    let(:success_b) { true  }
 
     it { should be(false) }
   end

@@ -3,38 +3,18 @@ module Mutant
   class Subject
     include AbstractType, Adamantium::Flat, Enumerable, Concord::Public.new(:context, :node)
 
-    # Enumerate possible mutations
+    # Return mutations
     #
-    # @return [self]
-    #   returns self if block given
-    #
-    # @return [Enumerator<Mutation>]
-    #   returns eumerator if no block given
+    # @return [Enumerable<Mutation>]
     #
     # @api private
     #
-    def each
-      return to_enum unless block_given?
-
-      yield noop_mutation
-
-      mutations.each do |mutation|
-        yield mutation
-      end
-
-      self
+    def mutations
+      mutations = []
+      generate_mutations(mutations)
+      mutations
     end
-
-    # Return noop mutation
-    #
-    # @return [Mutation::Noop]
-    #
-    # @api private
-    #
-    def noop
-      Mutation::Neutral.new(self, node)
-    end
-    memoize :noop
+    memoize :mutations
 
     # Return source path
     #
@@ -121,6 +101,16 @@ module Mutant
     def noop_mutation
       Mutation::Neutral::Noop.new(self, node)
     end
+
+    # Generate mutations
+    #
+    # @param [#<<] emitter
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    abstract_method :generate_mutations
 
   end # Subject
 end # Mutant

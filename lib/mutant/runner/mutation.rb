@@ -4,6 +4,8 @@ module Mutant
     class Mutation < self
       include Concord::Public.new(:config, :mutation)
 
+      register Mutant::Mutation
+
       # Return killer instance
       #
       # @return [Killer]
@@ -50,7 +52,8 @@ module Mutant
       #
       def run
         @killer = config.strategy.kill(mutation)
-        report(@killer)
+        report(killer)
+        @stop = config.fail_fast && !killer.success?
       end
 
     end # Mutation
