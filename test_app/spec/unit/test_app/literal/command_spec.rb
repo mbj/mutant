@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe TestApp::Literal,'#string' do
-  subject { object.command(mock) }
+describe TestApp::Literal, '#string' do
+  subject { object.command(double) }
 
   let(:object) { described_class.new }
 

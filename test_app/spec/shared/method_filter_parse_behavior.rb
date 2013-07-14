@@ -3,7 +3,7 @@ shared_examples_for 'a method filter parse result' do
     expected_class.stub(:new => response)
   end
 
-  let(:response) { mock('Response') }
+  let(:response) { double('Response') }
 
   it { should be(response) }
 
