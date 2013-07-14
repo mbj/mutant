@@ -4,17 +4,17 @@ describe Mutant::Runner::Mutation, '#killer' do
   let(:object) { described_class.run(config, mutation) }
 
   let(:config) do
-    mock(
+    double(
       'Config',
       :reporter => reporter,
       :strategy => strategy
     )
   end
 
-  let(:reporter) { mock('Reporter') }
-  let(:mutation) { mock('Mutation') }
-  let(:strategy) { mock('Strategy') }
-  let(:killer)   { mock('Killer')   }
+  let(:reporter) { double('Reporter') }
+  let(:mutation) { double('Mutation') }
+  let(:strategy) { double('Strategy') }
+  let(:killer)   { double('Killer')   }
 
   subject { object.killer }
 

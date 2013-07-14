@@ -32,9 +32,9 @@ describe Mutant::Matcher::Methods::Singleton, '#each' do
 
   end
 
-  let(:subject_a) { mock('Subject A') }
-  let(:subject_b) { mock('Subject B') }
-  let(:subject_c) { mock('Subject C') }
+  let(:subject_a) { double('Subject A') }
+  let(:subject_b) { double('Subject B') }
+  let(:subject_c) { double('Subject C') }
 
   let(:subjects) { [subject_a, subject_b, subject_c] }
 

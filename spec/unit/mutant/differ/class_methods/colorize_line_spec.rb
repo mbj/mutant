@@ -7,16 +7,19 @@ describe Mutant::Differ, '.colorize_line' do
 
   context 'line beginning with "+"' do
     let(:line) { '+line' }
+
     it { should eql(Mutant::Color::GREEN.format(line)) }
   end
 
   context 'line beginning with "-"' do
     let(:line) { '-line' }
+
     it { should eql(Mutant::Color::RED.format(line)) }
   end
 
   context 'line beginning in other char' do
     let(:line) { ' line' }
+
     it { should eql(line) }
   end
 end

@@ -5,7 +5,7 @@ describe Mutant::Matcher::Method::Instance, '.build' do
 
   subject { object.build(cache, scope, method) }
 
-  let(:cache) { mock }
+  let(:cache) { double }
 
   let(:scope) do
     Class.new do

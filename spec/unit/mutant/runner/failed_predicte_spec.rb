@@ -5,7 +5,7 @@ describe Mutant::Runner, '#failed?' do
 
   let(:object) { class_under_test.run(config) }
 
-  let(:config) { mock('Config') }
+  let(:config) { double('Config') }
   let(:class_under_test) do
     success = self.success
 

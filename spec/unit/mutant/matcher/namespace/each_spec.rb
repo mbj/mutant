@@ -3,15 +3,15 @@ require 'spec_helper'
 describe Mutant::Matcher::Namespace, '#each' do
   subject { object.each { |item| yields << item } }
 
-  let(:yields) { []                                    }
+  let(:yields) { []                                           }
   let(:object) { described_class.new(cache, TestApp::Literal) }
 
   let(:cache) { Mutant::Cache.new }
 
-  let(:singleton_a) { mock('SingletonA', :name => 'TestApp::Literal') }
-  let(:singleton_b) { mock('SingletonB', :name => 'TestApp::Foo')     }
-  let(:subject_a)   { mock('SubjectA')                                }
-  let(:subject_b)   { mock('SubjectB')                                }
+  let(:singleton_a) { double('SingletonA', :name => 'TestApp::Literal') }
+  let(:singleton_b) { double('SingletonB', :name => 'TestApp::Foo')     }
+  let(:subject_a)   { double('SubjectA')                                }
+  let(:subject_b)   { double('SubjectB')                                }
 
   before do
     Mutant::Matcher::Methods::Singleton.stub(:each).with(cache, singleton_a).and_yield(subject_a)

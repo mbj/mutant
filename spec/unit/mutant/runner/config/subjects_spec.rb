@@ -6,7 +6,7 @@ describe Mutant::Runner::Config, '#subjects' do
   subject { object.subjects }
 
   let(:config) do
-    mock(
+    double(
       'Config',
       :subjects => [mutation_subject],
       :strategy => strategy,
@@ -14,10 +14,10 @@ describe Mutant::Runner::Config, '#subjects' do
     )
   end
 
-  let(:reporter)         { mock('Reporter')         }
-  let(:strategy)         { mock('Strategy')         }
-  let(:mutation_subject) { mock('Mutation subject') }
-  let(:subject_runner)   { mock('Subject runner')   }
+  let(:reporter)         { double('Reporter')         }
+  let(:strategy)         { double('Strategy')         }
+  let(:mutation_subject) { double('Mutation subject') }
+  let(:subject_runner)   { double('Subject runner')   }
 
   class DummySubjectRunner
     include Concord::Public.new(:config, :mutation)

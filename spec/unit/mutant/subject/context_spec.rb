@@ -8,8 +8,8 @@ describe Mutant::Subject, '#context' do
   end
 
   let(:object)  { class_under_test.new(context, node) }
-  let(:node)    { mock('Node')                        }
-  let(:context) { mock('Context')                     }
+  let(:node)    { double('Node')                      }
+  let(:context) { double('Context')                   }
 
   it { should be(context) }
 

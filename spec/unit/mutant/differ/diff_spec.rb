@@ -15,7 +15,7 @@ describe Mutant::Differ, '#diff' do
   end
 
   context 'when there is a diff NOT at begin of hunk' do
-    let(:old) { %w(foo bar) }
+    let(:old) { %w(foo bar)     }
     let(:new) { %w(foo baz bar) }
 
     it { should eql("@@ -1,3 +1,4 @@\n foo\n+baz\n bar\n") }
@@ -24,7 +24,7 @@ describe Mutant::Differ, '#diff' do
   end
 
   context 'when the diff has a long context at begin' do
-    let(:old) { %w(foo bar baz boz a b c) }
+    let(:old) { %w(foo bar baz boz a b c)       }
     let(:new) { %w(foo bar baz boz a b c other) }
 
     it { should eql("@@ -1,8 +1,9 @@\n foo\n bar\n baz\n boz\n a\n b\n c\n+other\n") }
@@ -34,7 +34,7 @@ describe Mutant::Differ, '#diff' do
 
   context 'when the diff has a long context at end, deleting' do
     let(:old) { %w(other foo bar baz boz a b c) }
-    let(:new) { %w(foo bar baz boz a b c) }
+    let(:new) { %w(foo bar baz boz a b c)       }
 
     it { should eql("@@ -1,9 +1,8 @@\n-other\n foo\n bar\n baz\n boz\n a\n b\n c\n") }
 
@@ -42,7 +42,7 @@ describe Mutant::Differ, '#diff' do
   end
 
   context 'when the diff has a long context at end, inserting' do
-    let(:old) { %w(foo bar baz boz a b c) }
+    let(:old) { %w(foo bar baz boz a b c)       }
     let(:new) { %w(other foo bar baz boz a b c) }
 
     it { should eql("@@ -1,8 +1,9 @@\n+other\n foo\n bar\n baz\n boz\n a\n b\n c\n") }

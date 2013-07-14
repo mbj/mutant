@@ -4,11 +4,11 @@ describe Mutant::Strategy::Rspec::DM2::Lookup::Method::Singleton, '#spec_files' 
 
   subject { object.spec_files }
 
-  let(:object)           { described_class.new(mutation_subject)                                             }
-  let(:mutation_subject) { mock('Subject', :name => method_name, :public? => is_public, :context => context) }
-  let(:method_name)      { :bar                                                                              }
-  let(:files)            { 'Files'.freeze                                                                    }
-  let(:context)          { mock('Context', :name => 'Foo')                                                   }
+  let(:object)           { described_class.new(mutation_subject)                                               }
+  let(:mutation_subject) { double('Subject', :name => method_name, :public? => is_public, :context => context) }
+  let(:method_name)      { :bar                                                                                }
+  let(:files)            { 'Files'.freeze                                                                      }
+  let(:context)          { double('Context', :name => 'Foo')                                                   }
 
   this_example_group = 'Mutant::Strategy::Rspec::DM2::Lookup::Method::Singleton#spec_files'
 

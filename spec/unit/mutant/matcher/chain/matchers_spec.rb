@@ -4,7 +4,7 @@ describe Mutant::Matcher::Chain, '#matchers' do
   subject { object.matchers }
 
   let(:object)   { described_class.new(matchers) }
-  let(:matchers) { mock('Matchers')              }
+  let(:matchers) { double('Matchers')            }
 
   it { should be(matchers) }
 

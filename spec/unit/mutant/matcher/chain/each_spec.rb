@@ -7,11 +7,11 @@ describe Mutant::Matcher::Chain, '#each' do
 
   let(:matchers) { [matcher_a, matcher_b] }
 
-  let(:matcher_a) { mock('Matcher A') }
-  let(:matcher_b) { mock('Matcher B') }
+  let(:matcher_a) { double('Matcher A') }
+  let(:matcher_b) { double('Matcher B') }
 
-  let(:subject_a) { mock('Subject A') }
-  let(:subject_b) { mock('Subject B') }
+  let(:subject_a) { double('Subject A') }
+  let(:subject_b) { double('Subject B') }
 
   before do
     matcher_a.stub(:each).and_yield(subject_a).and_return(matcher_a)

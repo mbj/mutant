@@ -12,11 +12,11 @@ describe Mutant::Subject, '#each' do
 
   let(:object)     { class_under_test.new(context, node) }
   let(:yields)     { []                                  }
-  let(:node)       { mock('Node')                        }
-  let(:context)    { mock('Context')                     }
-  let(:mutant)     { mock('Mutant')                      }
-  let(:mutation_a) { mock('Mutation A')                  }
-  let(:mutation_b) { mock('Mutation B')                  }
+  let(:node)       { double('Node')                      }
+  let(:context)    { double('Context')                   }
+  let(:mutant)     { double('Mutant')                    }
+  let(:mutation_a) { double('Mutation A')                }
+  let(:mutation_b) { double('Mutation B')                }
 
   it_should_behave_like 'an #each method'
 

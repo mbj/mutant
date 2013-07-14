@@ -4,7 +4,7 @@ describe Mutant::Context::Scope, '#root' do
   subject { object.root(node) }
 
   let(:object) { described_class.new(TestApp::Literal, path) }
-  let(:path)   { mock('Path')                                }
+  let(:path)   { double('Path')                              }
   let(:node)   { parse(':node')                              }
 
   let(:scope)      { subject.body }

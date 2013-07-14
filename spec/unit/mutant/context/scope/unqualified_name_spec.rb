@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mutant::Context::Scope, '#unqualified_name' do
   subject { object.unqualified_name }
 
-  let(:path)   { mock('Path') }
+  let(:path)   { double('Path') }
 
   context 'with top level constant name' do
     let(:object) { described_class.new(TestApp, path) }
