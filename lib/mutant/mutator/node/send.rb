@@ -95,10 +95,24 @@ module Mutant
         # @api private
         #
         def normal_dispatch
-          emit(receiver) if receiver
+          emit_naked_receiver
           mutate_receiver
           emit_argument_propagation
           mutate_arguments
+        end
+
+        # Emit naked receiver mutation
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_naked_receiver
+          return unless receiver
+          op_assign      = OP_ASSIGN.include?(parent_type)
+          not_assignable = NOT_ASSIGNABLE.include?(receiver.type)
+          return if op_assign and not_assignable
+          emit(receiver)
         end
 
         # Test for binary operator
@@ -130,8 +144,6 @@ module Mutant
           end
         end
 
-        NO_PROPAGATE = [ :splat, :block_pass ].to_set
-
         # Emit argument propagation
         #
         # @return [undefined]
@@ -141,7 +153,7 @@ module Mutant
         def emit_argument_propagation
           return unless arguments.one?
           node = arguments.first
-          return if NO_PROPAGATE.include?(node.type)
+          return if NOT_STANDALONE.include?(node.type)
           emit(arguments.first)
         end
 

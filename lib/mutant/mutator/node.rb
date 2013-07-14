@@ -204,6 +204,20 @@ module Mutant
         end
       end
 
+      # Return parent type
+      #
+      # @return [Symbol] type
+      #   if parent with type is presnet
+      #
+      # @return [nil]
+      #   otherwise
+      #
+      # @api private
+      #
+      def parent_type
+        parent && parent.node.type
+      end
+
     end # Node
   end # Mutator
 end # Mutant
