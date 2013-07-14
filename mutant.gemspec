@@ -9,6 +9,8 @@ Gem::Specification.new do |gem|
   gem.description = 'Mutation testing for ruby'
   gem.summary     = 'Mutation testing tool for ruby under MRI and Rubinius'
   gem.homepage    = 'https://github.com/mbj/mutant'
+  
+  gem.license     = 'MIT'
 
   gem.require_paths    = [ 'lib' ]
   gem.files            = `git ls-files`.split("\n")
