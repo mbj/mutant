@@ -82,6 +82,8 @@ module Mutant
     # @return [false]
     #   otherwise
     #
+    # @api private
+    #
     def stop?
       !!@stop
     end
