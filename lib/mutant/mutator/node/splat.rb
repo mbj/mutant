@@ -1,6 +1,7 @@
 module Mutant
   class Mutator
     class Node
+      # Mutator for splat nodes
       class Splat < self
 
         handle :splat
