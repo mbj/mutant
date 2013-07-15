@@ -12,7 +12,7 @@ module Mutant
           :zsuper, :not, :or, :and, :defined,
           :next, :break, :match, :gvar, :cvar, :ensure,
           :dstr, :dsym, :yield, :rescue, :redo, :defined?,
-          :lvar, :splat, :const, :blockarg, :block_pass, :op_asgn, :and_asgn,
+          :lvar, :const, :blockarg, :block_pass, :op_asgn, :and_asgn,
           :regopt, :ivar, :restarg, :casgn, :resbody, :retry, :arg_expr,
           :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :cbase, :empty,
           :alias, :for, :xstr, :back_ref, :nth_ref, :class,

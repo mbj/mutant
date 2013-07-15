@@ -31,6 +31,8 @@ describe Mutant::Mutator, 'send' do
     let(:mutations) do
       mutations = []
       mutations << 'foo'
+      mutations << 'foo(nil)'
+      mutations << 'foo(bar)'
     end
 
     it_should_behave_like 'a mutator'
