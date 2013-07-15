@@ -64,6 +64,7 @@ TooManyInstanceVariables:
   - Mutant::CLI     # 4 vars
   - Mutant::Killer  # 4 vars
   - Mutant::Mutator # 4 vars
+  - Mutant::Runner  # 4 vars
   max_instance_variables: 3
 TooManyMethods:
   enabled: true
@@ -79,6 +80,7 @@ TooManyStatements:
   - Mutant::Reporter::CLI::Printer::Config::Runner#run
   - Mutant#self.singleton_subclass_instance
   - Mutant::Zombifier::File#self.find_uncached
+  - Mutant::Runner#dispatch
   max_statements: 6
 UncommunicativeMethodName:
   enabled: true
