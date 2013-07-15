@@ -32,13 +32,16 @@ module Mutant
 
           # Return mutations
           #
-          # @return [Enumerable<Mutation>]
+          # @param [#<<] emitter
+          #
+          # @return [undefined]
           #
           # @api private
           #
-          def mutations
-            Mutator.each(node).map do |mutant|
-              Mutation::Evil.new(self, memoizer_node(mutant))
+          def generate_mutations(emitter)
+            emitter << noop_mutation
+            Mutator.each(node) do |mutant|
+              emitter << Mutation::Evil.new(self, memoizer_node(mutant))
             end
           end
 
