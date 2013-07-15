@@ -14,7 +14,7 @@ module Mutant
     # @api private
     #
     def self.register(klass)
-      REGISTRY[klass]=self
+      REGISTRY[klass] = self
     end
     private_class_method :register
 
