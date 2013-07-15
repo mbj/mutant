@@ -29,10 +29,8 @@ module Mutant
     def self.lookup(klass)
       current = klass
       while current
-        handler = REGISTRY.fetch(current) do
-          current = current.superclass; nil
-        end
-        return handler if handler
+        return REGISTRY.fetch(current) if REGISTRY.key?(current)
+        current = current.superclass
       end
 
       raise ArgumentError, "No handler for: #{klass}"
