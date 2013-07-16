@@ -34,7 +34,7 @@ module Mutant
           end
         end
 
-      end # Noop
+      end # Generic
     end # Node
   end # Mutator
 end # Mutant
