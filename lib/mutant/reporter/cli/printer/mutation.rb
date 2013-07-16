@@ -35,7 +35,7 @@ module Mutant
           # @api private
           #
           def run
-            status(mutation.identification)
+            status('%s', mutation.identification)
             puts(details)
           end
 

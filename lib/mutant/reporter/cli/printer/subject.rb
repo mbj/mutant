@@ -17,7 +17,7 @@ module Mutant
           # @api private
           #
           def run
-            info(object.identification)
+            info('%s', object.identification)
           end
 
           # Prunter for subject runners
