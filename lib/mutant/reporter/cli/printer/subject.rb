@@ -20,7 +20,7 @@ module Mutant
             info('%s', object.identification)
           end
 
-          # Prunter for subject runners
+          # Printer for subject runners
           class Runner < self
 
             handle(Mutant::Runner::Subject)
