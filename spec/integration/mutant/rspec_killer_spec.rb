@@ -8,17 +8,15 @@ describe Mutant,'rspec integration' do
     end
   end
 
-  let(:strategy) { Mutant::Strategy::Rspec::DM2 }
-
-  specify 'allows to kill mutations' do
-    Kernel.system('bundle exec mutant --rspec-dm2 ::TestApp::Literal#string').should be(true)
+  pending 'allows to kill mutations' do
+    Kernel.system('bundle exec mutant --rspec ::TestApp::Literal#string').should be(true)
   end
 
-  specify 'fails to kill mutations when they are not covered' do
-    Kernel.system('bundle exec mutant --rspec-dm2 ::TestApp::Literal#uncovered_string').should be(false)
+  pending 'fails to kill mutations when they are not covered' do
+    Kernel.system('bundle exec mutant --rspec ::TestApp::Literal#uncovered_string').should be(false)
   end
 
-  specify 'fails when some mutations when are not covered' do
-    Kernel.system('bundle exec mutant --rspec-dm2 ::TestApp::Literal').should be(false)
+  pending 'fails when some mutations are not covered' do
+    Kernel.system('bundle exec mutant --rspec ::TestApp::Literal').should be(false)
   end
 end

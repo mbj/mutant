@@ -25,7 +25,7 @@ describe Mutant::CLI, '.new' do
 
   # Defaults
   let(:expected_filter)   { Mutant::Mutation::Filter::ALL      }
-  let(:expected_strategy) { Mutant::Strategy::Rspec::Unit      }
+  let(:expected_strategy) { Mutant::Strategy::Rspec            }
   let(:expected_reporter) { Mutant::Reporter::CLI.new($stdout) }
 
   let(:cli) { object.new(arguments) }
@@ -49,9 +49,9 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with many strategy flags' do
-    let(:arguments) { %w(--rspec-unit --rspec-dm2) }
+    let(:arguments) { %w(--rspec) }
 
-    let(:expected_strategy) { Mutant::Strategy::Rspec::DM2 }
+    let(:expected_strategy) { Mutant::Strategy::Rspec }
   end
 
   context 'without arguments' do
@@ -63,28 +63,28 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with code filter and missing argument' do
-    let(:arguments)        { %w(--rspec-unit --code)    }
+    let(:arguments)        { %w(--rspec --code)    }
     let(:expected_message) { 'missing argument: --code' }
 
     it_should_behave_like 'an invalid cli run'
   end
 
   context 'with explicit method matcher' do
-    let(:arguments)        { %w(--rspec-unit TestApp::Literal#float)                                          }
+    let(:arguments)        { %w(--rspec TestApp::Literal#float)                                               }
     let(:expected_matcher) { Mutant::CLI::Classifier::Method.new(Mutant::Cache.new, 'TestApp::Literal#float') }
 
     it_should_behave_like 'a cli parser'
   end
 
   context 'with namespace matcher' do
-    let(:arguments)        { %w(--rspec-unit ::TestApp*)                                                        }
+    let(:arguments)        { %w(--rspec ::TestApp*)                                                             }
     let(:expected_matcher) { Mutant::CLI::Classifier::Namespace::Recursive.new(Mutant::Cache.new, '::TestApp*') }
 
     it_should_behave_like 'a cli parser'
   end
 
   context 'with code filter' do
-    let(:arguments) { %w(--rspec-unit --code faa --code bbb TestApp::Literal#float) }
+    let(:arguments) { %w(--rspec --code faa --code bbb TestApp::Literal#float) }
 
     let(:filters) do
       [

@@ -240,12 +240,8 @@ module Mutant
     # @api private
     #
     def add_strategies(opts)
-      opts.on('--rspec-unit', 'executes all specs under ./spec/unit') do
-        set_strategy Strategy::Rspec::Unit
-      end.on('--rspec-full', 'executes all specs under ./spec') do
-        set_strategy Strategy::Rspec::Full
-      end.on('--rspec-dm2', 'executes spec/unit/namespace/class/method_spec.rb') do
-        set_strategy Strategy::Rspec::DM2
+      opts.on('--rspec', 'kills mutations with rspec') do
+        set_strategy Strategy::Rspec
       end
     end
 
