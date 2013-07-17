@@ -2,6 +2,7 @@ module Mutant
   class Strategy
     # Rspec killer strategy
     class Rspec < self
+      include Equalizer.new
 
       KILLER = Killer::Forking.new(Killer::Rspec)
 
@@ -11,7 +12,7 @@ module Mutant
       #
       # @api private
       #
-      def self.setup
+      def setup
         self
       end
 

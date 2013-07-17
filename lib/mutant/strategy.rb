@@ -4,24 +4,22 @@ module Mutant
   class Strategy
     include AbstractType, Adamantium::Flat
 
-    # Perform setup
+    # Perform strategy setup
     #
     # @return [self]
     #
     # @api private
     #
-    def self.setup
-      self
+    def setup
     end
 
-    # Perform teardown
+    # Perform strategy teardown
     #
     # @return [self]
     #
     # @api private
     #
-    def self.teardown
-      self
+    def teardown
     end
 
     # Kill mutation
@@ -32,9 +30,11 @@ module Mutant
     #
     # @api private
     #
-    def self.kill(mutation)
+    def kill(mutation)
       killer.new(self, mutation)
     end
+
+  private
 
     # Return killer
     #
@@ -42,8 +42,8 @@ module Mutant
     #
     # @api private
     #
-    def self.killer
-      self::KILLER
+    def killer
+      self.class::KILLER
     end
 
   end # Strategy

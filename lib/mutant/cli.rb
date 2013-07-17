@@ -241,7 +241,7 @@ module Mutant
     #
     def add_strategies(opts)
       opts.on('--rspec', 'kills mutations with rspec') do
-        set_strategy Strategy::Rspec
+        set_strategy Strategy::Rspec.new
       end
     end
 

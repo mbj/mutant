@@ -25,7 +25,7 @@ describe Mutant::CLI, '.new' do
 
   # Defaults
   let(:expected_filter)   { Mutant::Mutation::Filter::ALL      }
-  let(:expected_strategy) { Mutant::Strategy::Rspec            }
+  let(:expected_strategy) { Mutant::Strategy::Rspec.new        }
   let(:expected_reporter) { Mutant::Reporter::CLI.new($stdout) }
 
   let(:cli) { object.new(arguments) }
