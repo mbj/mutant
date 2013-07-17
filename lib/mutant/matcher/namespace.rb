@@ -52,24 +52,6 @@ module Mutant
         end
       end
 
-      # Test for bogus class
-      #
-      # FIXME: Remove this hack once bogus is fixed!
-      #
-      # @param [Object] object
-      #
-      # @return [true]
-      #   if is a bogous class
-      #
-      # @return [false]
-      #   otherwise
-      #
-      # @api private
-      #
-      def self.bogous?(object)
-        defined?(Bogus::Fake) && object == Bogus::Fake
-      end
-
       # Yield scope if name matches pattern
       #
       # @param [Module,Class] scope
@@ -79,11 +61,10 @@ module Mutant
       # @api private
       #
       def emit_scope(scope)
-        return if self.class.bogous?(scope)
         name = scope.name
-        # FIXME Fix nokogiri!
+        # FIXME Fix nokogiri to return a string here
         return unless name.kind_of?(String)
-        if pattern =~ scope.name
+        if pattern =~ name
           yield scope
         end
       end
