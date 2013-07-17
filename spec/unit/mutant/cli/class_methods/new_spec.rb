@@ -49,9 +49,10 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with many strategy flags' do
-    let(:arguments) { %w(--rspec) }
+    let(:arguments) { %w(--static-fail --rspec TestApp) }
+    let(:expected_matcher) { Mutant::CLI::Classifier::Namespace::Flat.new(Mutant::Cache.new, 'TestApp') }
 
-    let(:expected_strategy) { Mutant::Strategy::Rspec }
+    it_should_behave_like 'a cli parser'
   end
 
   context 'without arguments' do

@@ -240,6 +240,12 @@ module Mutant
     # @api private
     #
     def add_strategies(opts)
+      opts.on('--static-success', 'does succeed on all mutations') do
+        set_strategy Strategy::Static::Success.new
+      end
+      opts.on('--static-fail', 'does fail on all mutations') do
+        set_strategy Strategy::Static::Fail.new
+      end
       opts.on('--rspec', 'kills mutations with rspec') do
         set_strategy Strategy::Rspec.new
       end
