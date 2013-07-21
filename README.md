@@ -74,9 +74,11 @@ Coverage:  98.95%    # Coverage score
 Alive:     57        # Amount of alive mutations.
 ```
 
+
 Nodes still missing a dedicated mutator are handled via the 
 [Generic](https://github.com/mbj/mutant/blob/master/lib/mutant/mutator/node/generic.rb) mutator.
-This mutator does not perform node specific mutations and visits children. Your contribution is apprechiated!
+The goal is to remove this mutator and have dedicated mutator for every type of node and removing
+the Generic handler altogether.
 
 Examples
 --------
