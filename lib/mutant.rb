@@ -20,7 +20,9 @@ require 'concord'
 
 # Library namespace
 module Mutant
-end
+  # The empty string used within this namespace
+  EMPTY_STRING = ''.freeze
+end # Mutant
 
 require 'mutant/cache'
 require 'mutant/node_helpers'

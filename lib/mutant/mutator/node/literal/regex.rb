@@ -7,8 +7,6 @@ module Mutant
 
           handle(:regexp)
 
-          EMPTY_STRING = ''.freeze
-
           # No input can ever be matched with this
           NULL_REGEXP_SOURCE = 'a\A'.freeze
 
