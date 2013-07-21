@@ -53,13 +53,13 @@ gem install mutant --pre
 Mutations
 ---------
 
-Mutant supports a very wide range of mutation operators. Listing them all detailed would blow this document up.
+Mutant supports a very wide range of mutation operators. Listing them all in detail would blow this document up.
 
-It is planned to parse a list of mutation operators from the source. In the meanwhile pls refer to the
+It is planned to parse a list of mutation operators from the source. In the meantime please refer to the
 [code](https://github.com/mbj/mutant/tree/master/lib/mutant/mutator/node) each subclass of `Mutant::Mutator::Node` 
 emits around 3-6 mutations.
 
-Currently mutant explicitly covers the majority of rubies complex nodes that often occur in method bodies.
+Currently mutant covers the majority of ruby's complex nodes that often occur in method bodies.
 
 A some stats from the [axiom](https://github.com/dkubb/axiom) library:
 
@@ -74,7 +74,9 @@ Coverage:  98.95%    # Coverage score
 Alive:     57        # Amount of alive mutations.
 ```
 
-Nodes still missing a dedicated mutator are handled via the [Generic](https://github.com/mbj/mutant/blob/master/lib/mutant/mutator/node/generic.rb) mutator.
+Nodes still missing a dedicated mutator are handled via the 
+[Generic](https://github.com/mbj/mutant/blob/master/lib/mutant/mutator/node/generic.rb) mutator.
+This mutator does not perform node specific mutations and visits children. Your contribution is apprechiated!
 
 Examples
 --------
