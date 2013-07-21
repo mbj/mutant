@@ -45,6 +45,7 @@ module Mutant
               info   'Overhead:  %0.2f%%', overhead
               status 'Coverage:  %0.2f%%', coverage
               status 'Alive:     %s',      amount_alive
+              print_generic_stats
               self
             end
 
@@ -58,6 +59,84 @@ module Mutant
             #
             def subjects
               object.subjects
+            end
+
+            # Walker for all ast nodes
+            class Walker
+
+              # Run walkter
+              #
+              # @param [Parser::AST::Node] root
+              #
+              # @return [self]
+              #
+              # @api private
+              #
+              def self.run(root, &block)
+                new(root, block)
+                self
+              end
+
+              private_class_method :new
+
+              # Initialize and run walker
+              #
+              # @param [Parser::AST::Node] root
+              # @param [#call(node)] block
+              #
+              # @return [undefined]
+              #
+              # @api private
+              #
+              def initialize(root, block)
+                @root, @block = root, block
+                dispatch(root)
+              end
+
+            private
+
+              # Perform dispatch
+              #
+              # @return [undefined]
+              #
+              # @api private
+              #
+              def dispatch(node)
+                @block.call(node)
+                node.children.each do |child|
+                  next unless child.kind_of?(Parser::AST::Node)
+                  dispatch(child)
+                end
+              end
+            end
+
+            # Print generic stats
+            #
+            # @return [undefined]
+            #
+            # @api private
+            #
+            def print_generic_stats
+              stats = generic_stats.to_a.sort_by(&:last)
+              info('Nodes handled by genric mutator (type:occurances):')
+              stats.reverse_each do |type, amount|
+                info('%-10s: %d', type, amount)
+              end
+            end
+
+            # Return stats for nodes handled by generic mutator
+            #
+            # @return [Hash<Symbo, Fixnum>]
+            #
+            # @api private
+            #
+            def generic_stats
+              object.subjects.each_with_object(Hash.new(0)) do |runner, stats|
+                Walker.run(runner.subject.node) do |node|
+                  next unless Mutator::Registry.lookup(node) == Mutator::Node::Generic
+                  stats[node.type] += 1
+                end
+              end
             end
 
             # Return amount of subjects
