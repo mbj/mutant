@@ -103,10 +103,7 @@ module Mutant
               #
               def dispatch(node)
                 @block.call(node)
-                node.children.each do |child|
-                  next unless child.kind_of?(Parser::AST::Node)
-                  dispatch(child)
-                end
+                node.children.grep(Parser::AST::Node).each(&method(:dispatch))
               end
             end
 
