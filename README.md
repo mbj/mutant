@@ -56,7 +56,7 @@ Mutations
 Mutant supports a very wide range of mutation operators. Listing them all in detail would blow this document up.
 
 It is planned to parse a list of mutation operators from the source. In the meantime please refer to the
-[code](https://github.com/mbj/mutant/tree/master/lib/mutant/mutator/node) each subclass of `Mutant::Mutator::Node` 
+[code](https://github.com/mbj/mutant/tree/master/lib/mutant/mutator/node) each subclass of `Mutant::Mutator::Node`
 emits around 3-6 mutations.
 
 Currently mutant covers the majority of ruby's complex nodes that often occur in method bodies.
@@ -75,7 +75,7 @@ Alive:     57        # Amount of alive mutations.
 ```
 
 
-Nodes still missing a dedicated mutator are handled via the 
+Nodes still missing a dedicated mutator are handled via the
 [Generic](https://github.com/mbj/mutant/blob/master/lib/mutant/mutator/node/generic.rb) mutator.
 The goal is to remove this mutator and have dedicated mutator for every type of node and removing
 the Generic handler altogether.
