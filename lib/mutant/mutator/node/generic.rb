@@ -30,8 +30,7 @@ module Mutant
         #
         def dispatch
           children.each_with_index do |child, index|
-            next unless child.kind_of?(Parser::AST::Node)
-            mutate_child(index)
+            mutate_child(index) if child.kind_of?(Parser::AST::Node)
           end
         end
 
