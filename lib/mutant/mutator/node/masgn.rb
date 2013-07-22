@@ -2,7 +2,7 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutation emitter to handle multipl assignment nodes
+      # Mutation emitter to handle multiple assignment nodes
       class MultipleAssignment < self
 
         handle(:masgn)

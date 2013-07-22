@@ -1,6 +1,7 @@
 module Mutant
   class Mutator
     class Node
+
       # Generic mutator
       class Generic < self
 
