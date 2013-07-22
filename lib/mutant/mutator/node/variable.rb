@@ -2,10 +2,10 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutation emitter to handle local variable nodes
-      class LocalVariable < self
+      # Mutation emitter to handle variable nodes
+      class Variable < self
 
-        handle(:lvar)
+        handle(:gvar, :cvar, :ivar, :lvar)
 
       private
 
@@ -19,7 +19,7 @@ module Mutant
           emit_nil
         end
 
-      end # LocalVariable
+      end # Variable
     end # Node
   end # Mutator
 end # Mutant
