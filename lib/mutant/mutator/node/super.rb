@@ -2,7 +2,7 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutator for super with parantheses
+      # Mutator for super with parentheses
       class Super < self
 
         handle(:super)
