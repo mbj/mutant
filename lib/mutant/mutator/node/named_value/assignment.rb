@@ -1,11 +1,10 @@
 module Mutant
   class Mutator
     class Node
-      # Mutator base class for assignments
-      class Assignment < self
+      module NamedValue
 
-        # Mutator for variable assignment
-        class Variable < self
+        # Mutation emitter to handle value assignment nodes
+        class Assignment < Node
 
           children :name, :value
 
@@ -44,8 +43,8 @@ module Mutant
             end
           end
 
-        end # Variable
-      end # Assignment
+        end # Assignment
+      end # NamedValue
     end # Node
   end # Mutator
 end # Mutant
