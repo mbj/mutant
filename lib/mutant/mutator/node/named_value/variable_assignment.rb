@@ -1,11 +1,10 @@
 module Mutant
   class Mutator
     class Node
-      # Mutator base class for assignments
-      class Assignment < self
+      module NamedValue
 
-        # Mutator for variable assignment
-        class Variable < self
+        # Mutation emitter to handle variable assignment nodes
+        class VariableAssignment < Node
 
           children :name, :value
 
@@ -40,12 +39,12 @@ module Mutant
           def mutate_name
             prefix = MAP.fetch(node.type)
             Mutator::Util::Symbol.each(name, self) do |name|
-              emit_name("#{prefix}#{name}")
+              emit_name(prefix + name.to_s)
             end
           end
 
-        end # Variable
-      end # Assignment
+        end # VariableAssignment
+      end # NamedValue
     end # Node
   end # Mutator
 end # Mutant
