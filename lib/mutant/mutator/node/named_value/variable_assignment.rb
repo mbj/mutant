@@ -3,8 +3,8 @@ module Mutant
     class Node
       module NamedValue
 
-        # Mutation emitter to handle value assignment nodes
-        class Assignment < Node
+        # Mutation emitter to handle variable assignment nodes
+        class VariableAssignment < Node
 
           children :name, :value
 
@@ -43,7 +43,7 @@ module Mutant
             end
           end
 
-        end # Assignment
+        end # VariableAssignment
       end # NamedValue
     end # Node
   end # Mutator
