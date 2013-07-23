@@ -5,8 +5,6 @@ module Mutant
       # Generic mutator
       class Generic < self
 
-        handle(:self)
-
         # These nodes still need a dedicated mutator,
         # your contribution is that close!
         handle(
