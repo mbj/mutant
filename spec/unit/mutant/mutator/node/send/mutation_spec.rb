@@ -9,6 +9,7 @@ describe Mutant::Mutator, 'send' do
     let(:mutations) do
       mutations = []
       mutations << 'foo ||= expression'
+      mutations << 'nil.foo ||= expression'
     end
 
     it_should_behave_like 'a mutator'
@@ -74,6 +75,7 @@ describe Mutant::Mutator, 'send' do
         mutations = []
         mutations << 'foo'
         mutations << 'self'
+        mutations << 'nil.foo'
       end
 
       it_should_behave_like 'a mutator'
@@ -111,6 +113,7 @@ describe Mutant::Mutator, 'send' do
         mutations = []
         mutations << 'self.class'
         mutations << 'self.foo'
+        mutations << 'nil.class.foo'
       end
 
       it_should_behave_like 'a mutator'
@@ -142,6 +145,7 @@ describe Mutant::Mutator, 'send' do
         mutations << 'foo(nil)'
         mutations << 'nil'
         mutations << 'self.foo(::Object.new)'
+        mutations << 'nil.foo(nil)'
       end
 
       it_should_behave_like 'a mutator'
