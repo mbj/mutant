@@ -45,7 +45,7 @@ module Mutant
           emit_self(condition, else_branch, nil) if else_branch
           if if_branch
             emit_if_branch_mutations
-            emit_self(condition, if_branch,   nil)
+            emit_self(condition, if_branch, nil)
           end
         end
 
