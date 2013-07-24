@@ -48,8 +48,8 @@ module Mutant
           # @api private
           #
           def mutate_operands
-            emit(s(node.type, s(:not, left), right))
-            emit(s(node.type, left, s(:not, right)))
+            emit(s(node.type, n_not(left), right))
+            emit(s(node.type, left, n_not(right)))
           end
 
         end # Binary
