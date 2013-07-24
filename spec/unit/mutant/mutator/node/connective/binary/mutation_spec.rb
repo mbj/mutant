@@ -12,11 +12,8 @@ describe Mutant::Mutator::Node::Connective::Binary, 'mutations' do
 
       mutations << 'true or false'
 
-      mutations << 'false and false'
-      mutations << 'true and true'
-
-      mutations << 'nil and false'
-      mutations << 'true and nil'
+      mutations << 'not true and false'
+      mutations << 'true and not false'
     end
 
     it_should_behave_like 'a mutator'
@@ -33,11 +30,8 @@ describe Mutant::Mutator::Node::Connective::Binary, 'mutations' do
 
       mutations << 'true and false'
 
-      mutations << 'false or false'
-      mutations << 'true or true'
-
-      mutations << 'nil or false'
-      mutations << 'true or nil'
+      mutations << 'not true or false'
+      mutations << 'true or not false'
     end
 
     it_should_behave_like 'a mutator'

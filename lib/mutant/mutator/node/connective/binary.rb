@@ -28,7 +28,7 @@ module Mutant
             emit(left)
             emit(right)
             mutate_operator
-            mutate_conditions
+            mutate_operands
           end
 
           # Emit operator mutations
@@ -47,11 +47,9 @@ module Mutant
           #
           # @api private
           #
-          def mutate_conditions
-            [N_TRUE, N_FALSE, N_NIL].each do |condition|
-              emit_left(condition)  unless left == condition
-              emit_right(condition) unless right == condition
-            end
+          def mutate_operands
+            emit(s(node.type, s(:not, left), right))
+            emit(s(node.type, left, s(:not, right)))
           end
 
         end # Binary
