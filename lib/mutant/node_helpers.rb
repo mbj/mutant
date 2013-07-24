@@ -24,6 +24,8 @@ module Mutant
     RAISE             = s(:send, nil, :raise)
 
     N_NIL             = s(:nil)
+    N_TRUE            = s(:true)
+    N_FALSE           = s(:false)
     N_EMPTY           = s(:empty)
 
   end # NodeHelpers
