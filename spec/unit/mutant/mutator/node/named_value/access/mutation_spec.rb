@@ -64,17 +64,6 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
     it_should_behave_like 'a mutator'
   end
 
-  context 'constant' do
-    let(:source) { 'A' }
-
-    let(:mutations) do
-      mutants = []
-      mutants << 'nil'
-    end
-
-    it_should_behave_like 'a mutator'
-  end
-
   context 'self' do
     let(:source) { 'self' }
 

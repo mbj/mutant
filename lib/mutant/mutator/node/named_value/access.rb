@@ -6,7 +6,7 @@ module Mutant
         # Mutation emitter to handle named value access nodes
         class Access < Node
 
-          handle(:gvar, :cvar, :ivar, :lvar, :const, :self)
+          handle(:gvar, :cvar, :ivar, :lvar, :self)
 
         private
 
