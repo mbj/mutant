@@ -27,5 +27,17 @@ module Mutant
     N_NIL             = s(:nil)
     N_EMPTY           = s(:empty)
 
+    # Build a negated boolean node
+    #
+    # @param [Parser::AST::Node] node
+    #
+    # @return [Parser::AST::Node]
+    #
+    # @api private
+    #
+    def n_not(node)
+      s(:send, node, :!)
+    end
+
   end # NodeHelpers
 end # Mutant
