@@ -15,7 +15,6 @@ module Mutant
     end
     module_function :s
 
-
     NAN               = s(:send, s(:float,  0.0), :/, s(:args, s(:float, 0.0)))
     NEGATIVE_INFINITY = s(:send, s(:float, -1.0), :/, s(:args, s(:float, 0.0)))
     INFINITY          = s(:send, s(:float,  1.0), :/, s(:args, s(:float, 0.0)))
