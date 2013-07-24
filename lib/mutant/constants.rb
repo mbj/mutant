@@ -72,7 +72,7 @@ module Mutant
     :kwarg, :restarg, :arg, :block_pass, :or, :and,
     :next, :undef, :if, :module, :cbase, :block, :send,
     :zsuper, :super, :empty, :alias, :for, :redo,
-    :return, :splat, :not, :defined?, :op_asgn, :self,
+    :return, :splat, :defined?, :op_asgn, :self,
     :true, :false, :nil, :dstr, :dsym, :regexp,
     :regopt, :int, :str, :float, :sym, :pair, :hash, :array,
     :xstr, :def, :defs, :case, :when, :ivar, :lvar, :cvar, :gvar,

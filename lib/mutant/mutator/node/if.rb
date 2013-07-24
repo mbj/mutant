@@ -30,9 +30,9 @@ module Mutant
         #
         def mutate_condition
           emit_condition_mutations
-          emit_self(s(:send, condition, :!), if_branch, else_branch)
-          emit_self(s(:true),  if_branch, else_branch)
-          emit_self(s(:false), if_branch, else_branch)
+          emit_self(n_not(condition), if_branch, else_branch)
+          emit_self(N_TRUE,  if_branch, else_branch)
+          emit_self(N_FALSE, if_branch, else_branch)
         end
 
         # Emit if branch mutations
@@ -45,7 +45,7 @@ module Mutant
           emit_self(condition, else_branch, nil) if else_branch
           if if_branch
             emit_if_branch_mutations
-            emit_self(condition, if_branch,   nil)
+            emit_self(condition, if_branch, nil)
           end
         end
 

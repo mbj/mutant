@@ -8,7 +8,7 @@ module Mutant
         # These nodes still need a dedicated mutator,
         # your contribution is that close!
         handle(
-          :not, :or, :and, :defined,
+          :defined,
           :next, :break, :match, :ensure,
           :dstr, :dsym, :yield, :rescue, :redo, :defined?,
           :blockarg, :block_pass, :op_asgn, :and_asgn,
