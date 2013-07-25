@@ -10,9 +10,17 @@ module Mutant
           # No input can ever be matched with this
           NULL_REGEXP_SOURCE = 'a\A'.freeze
 
-          children :source, :options
-
         private
+
+          # Return options
+          #
+          # @return [Parser::AST::Node]
+          #
+          # @api private
+          #
+          def options
+            children.last
+          end
 
           # Emit mutants
           #
@@ -22,6 +30,9 @@ module Mutant
           #
           def dispatch
             emit_nil
+            children.each_with_index do |child, index|
+              mutate_child(index) unless child.type == :str
+            end
             emit_self(s(:str, EMPTY_STRING), options)
             emit_self(s(:str, NULL_REGEXP_SOURCE), options)
           end
