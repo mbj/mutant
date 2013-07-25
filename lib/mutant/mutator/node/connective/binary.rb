@@ -49,7 +49,7 @@ module Mutant
           #
           def mutate_operands
             emit(s(node.type, n_not(left), right))
-            emit(s(node.type, left, n_not(right)))
+            emit(n_not(node))
           end
 
         end # Binary
