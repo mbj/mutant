@@ -191,6 +191,8 @@ describe Mutant::Mutator, 'send' do
           mutations = []
           mutations << 'foo'
           mutations << 'left - right'
+          mutations << 'left / foo'
+          mutations << 'right / foo'
         end
 
         it_should_behave_like 'a mutator'
