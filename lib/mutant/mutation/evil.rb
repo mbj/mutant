@@ -30,6 +30,16 @@ module Mutant
         killer.killed?
       end
 
+      # Indicate if a killer should treat a kill as problematic.
+      #
+      # @return [false] Killing evil mutants is not problematic.
+      #
+      # @api private
+      #
+      def should_survive?
+        false
+      end
+
     end # Evil
   end # Mutation
 end # Mutant
