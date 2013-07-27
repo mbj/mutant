@@ -20,7 +20,9 @@ require 'concord'
 
 # Library namespace
 module Mutant
-end
+  # The empty string used within this namespace
+  EMPTY_STRING = ''.freeze
+end # Mutant
 
 require 'mutant/cache'
 require 'mutant/node_helpers'
@@ -52,16 +54,21 @@ require 'mutant/mutator/node/literal/array'
 require 'mutant/mutator/node/literal/hash'
 require 'mutant/mutator/node/literal/regex'
 require 'mutant/mutator/node/literal/nil'
-require 'mutant/mutator/node/assignment'
 require 'mutant/mutator/node/argument'
 require 'mutant/mutator/node/arguments'
 require 'mutant/mutator/node/begin'
+require 'mutant/mutator/node/cbase'
+require 'mutant/mutator/node/connective/binary'
+require 'mutant/mutator/node/const'
+require 'mutant/mutator/node/named_value/access'
+require 'mutant/mutator/node/named_value/constant_assignment'
+require 'mutant/mutator/node/named_value/variable_assignment'
 require 'mutant/mutator/node/while'
 require 'mutant/mutator/node/super'
+require 'mutant/mutator/node/zsuper'
 require 'mutant/mutator/node/send'
 require 'mutant/mutator/node/send/binary'
 require 'mutant/mutator/node/when'
-require 'mutant/mutator/node/assignment'
 require 'mutant/mutator/node/define'
 require 'mutant/mutator/node/mlhs'
 require 'mutant/mutator/node/masgn'

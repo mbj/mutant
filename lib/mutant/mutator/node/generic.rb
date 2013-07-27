@@ -1,20 +1,19 @@
 module Mutant
   class Mutator
     class Node
+
       # Generic mutator
       class Generic < self
-
-        handle(:self)
 
         # These nodes still need a dedicated mutator,
         # your contribution is that close!
         handle(
-          :zsuper, :not, :or, :and, :defined,
-          :next, :break, :match, :gvar, :cvar, :ensure,
+          :defined,
+          :next, :break, :match, :ensure,
           :dstr, :dsym, :yield, :rescue, :redo, :defined?,
-          :lvar, :const, :blockarg, :block_pass, :op_asgn, :and_asgn,
-          :regopt, :ivar, :restarg, :casgn, :resbody, :retry, :arg_expr,
-          :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :cbase, :empty,
+          :blockarg, :block_pass, :op_asgn, :and_asgn,
+          :regopt, :restarg, :resbody, :retry, :arg_expr,
+          :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :empty,
           :alias, :for, :xstr, :back_ref, :nth_ref, :class,
           :sclass, :match_with_lvasgn, :match_current_line, :or_asgn, :kwbegin
         )
@@ -29,8 +28,7 @@ module Mutant
         #
         def dispatch
           children.each_with_index do |child, index|
-            next unless child.kind_of?(Parser::AST::Node)
-            mutate_child(index)
+            mutate_child(index) if child.kind_of?(Parser::AST::Node)
           end
         end
 

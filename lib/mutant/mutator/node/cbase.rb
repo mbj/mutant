@@ -2,16 +2,14 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutation emitter to handle multiple assignment nodes
-      class MultipleAssignment < self
+      # Mutation emitter to handle cbase nodes
+      class Cbase < self
 
-        handle(:masgn)
-
-        children :left, :right
+        handle(:cbase)
 
       private
 
-        # Perform dispatch
+        # Emit mutations
         #
         # @return [undefined]
         #
@@ -21,7 +19,7 @@ module Mutant
           # noop, for now
         end
 
-      end # MultipleAssignment
+      end # Cbase
     end # Node
   end # Mutator
 end # Mutant

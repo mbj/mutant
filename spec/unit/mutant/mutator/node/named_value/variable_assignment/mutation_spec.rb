@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::Assignment, 'mutations' do
+describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
 
   before do
     Mutant::Random.stub(:hex_string => :random)

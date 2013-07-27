@@ -1,8 +1,11 @@
 AllCops:
   Includes:
     - '../**/*.rake'
+    - 'Gemfile'
+    - 'Gemfile.devtools'
   Excludes:
-    - '../vendor/**'
+    - '**/vendor/**'
+    - '**/benchmarks/**'
 
 # Avoid parameter lists longer than five parameters.
 ParameterLists:

@@ -21,7 +21,8 @@ module Mutant
               emit_self(*children)
             end
           end
-          children.each do |child|
+          children.each_with_index do |child, index|
+            mutate_child(index)
             emit(child)
           end
         end

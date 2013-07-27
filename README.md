@@ -5,7 +5,7 @@ mutant
 [![Dependency Status](https://gemnasium.com/mbj/mutant.png)](https://gemnasium.com/mbj/mutant)
 [![Code Climate](https://codeclimate.com/github/mbj/mutant.png)](https://codeclimate.com/github/mbj/mutant)
 
-Mutant is a mutation testing tool for ruby. It aims to be better than existing mutation testers.
+Mutant is a mutation testing tool for ruby.
 
 The idea is that if code can be changed and your tests do not notice, either that code isn't being covered
 or it does not have a speced side effect.
@@ -46,6 +46,36 @@ The 0.2 series is stable but has outdated dependencies. The 0.3 series is in bet
 ```ruby
 gem install mutant --pre
 ```
+
+Mutations
+---------
+
+Mutant supports a very wide range of mutation operators. Listing them all in detail would blow this document up.
+
+It is planned to parse a list of mutation operators from the source. In the meantime please refer to the
+[code](https://github.com/mbj/mutant/tree/master/lib/mutant/mutator/node) each subclass of `Mutant::Mutator::Node`
+emits around 3-6 mutations.
+
+Currently mutant covers the majority of ruby's complex nodes that often occur in method bodies.
+
+A some stats from the [axiom](https://github.com/dkubb/axiom) library:
+
+```
+Subjects:  417       # Amount of subjects being mutated (currently only methods)
+Mutations: 5442      # Amount of mutations mutant generated (~13 mutations per method)
+Kills:     5385      # Amount of successfully killed mutations
+Runtime:   1898.11s  # Total runtime
+Killtime:  1884.17s  # Time spend killing mutations
+Overhead:  0.73%
+Coverage:  98.95%    # Coverage score
+Alive:     57        # Amount of alive mutations.
+```
+
+
+Nodes still missing a dedicated mutator are handled via the
+[Generic](https://github.com/mbj/mutant/blob/master/lib/mutant/mutator/node/generic.rb) mutator.
+The goal is to remove this mutator and have dedicated mutator for every type of node and removing
+the Generic handler altogether.
 
 Examples
 --------

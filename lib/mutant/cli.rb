@@ -202,6 +202,8 @@ module Mutant
         opts.separator ''
         opts.separator 'Strategies:'
 
+        opts.on('--zombie', 'Run mutant zombified')
+
         add_strategies(opts)
         add_options(opts)
       end

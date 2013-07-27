@@ -47,6 +47,7 @@ NestedIterators:
   exclude:
   - Mutant#self.singleton_subclass_instance
   - Mutant::Mutator::Util::Array::Element#dispatch
+  - Mutant::Reporter::CLI::Printer::Config::Runner#generic_stats
   - Mutant::CLI#parse
   max_allowed_nesting: 1
   ignore_iterators: []

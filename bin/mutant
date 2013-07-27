@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 
 trap('INT') do |status|
-  exit! 128+status
+  exit! 128 + status
 end
 
 require 'mutant'
 
 namespace =
-  if File.basename($0) == 'zombie'
-    $stderr.puts('Detected zombie environment...')
+  if ARGV.include?('--zombie')
+    $stderr.puts('Running mutant zombified!')
     Mutant::Zombifier.zombify
     Zombie::Mutant
   else

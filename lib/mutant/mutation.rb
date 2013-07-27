@@ -28,6 +28,18 @@ module Mutant
     #
     abstract_method :success?
 
+    # Indicate if a killer should treat a kill as problematic
+    #
+    # @return [true]
+    #   if killing is unexpected
+    #
+    # @return [false]
+    #   if killing is expected
+    #
+    # @api private
+    #
+    abstract_method :should_survive?
+
     # Insert mutated node
     #
     # FIXME:

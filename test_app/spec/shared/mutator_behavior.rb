@@ -30,7 +30,10 @@ shared_examples_for 'a mutator' do
 
       unless subject == expected_mutations
         message = "Missing mutations: %s\nUnexpected mutations: %s" %
-         [expected_mutations - subject, subject - expected_mutations ].map(&:to_a).map(&:inspect)
+        [
+           expected_mutations - subject,
+           subject - expected_mutations
+        ].map(&:to_a).map(&:inspect)
         fail message
       end
     end
