@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.files            = `git ls-files`.split("\n")
   gem.test_files       = `git ls-files -- spec`.split("\n")
   gem.extra_rdoc_files = %w[TODO LICENSE]
-  gem.executables      = [ 'mutant', 'zombie' ]
+  gem.executables      = [ 'mutant' ]
 
   gem.add_runtime_dependency('parser',              '~> 2.0.0.pre3')
   gem.add_runtime_dependency('unparser',            '~> 0.0.8')
