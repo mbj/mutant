@@ -7,6 +7,8 @@ module Mutant
 
           handle(:sym)
 
+          PREFIX = 's'
+
         private
 
           # Emit mutatns
@@ -17,7 +19,7 @@ module Mutant
           #
           def dispatch
             emit_nil
-            emit_new { new_self(('s'+Random.hex_string).to_sym) }
+            emit_new { new_self((PREFIX + Random.hex_string).to_sym) }
           end
 
         end # Symbol

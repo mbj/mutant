@@ -28,7 +28,7 @@ module Mutant
           # @api private
           #
           def values
-            [0, 1, -value, value+1, value-1]
+            [0, 1, -value, value + 1, value - 1]
           end
 
           # Return value
