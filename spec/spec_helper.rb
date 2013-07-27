@@ -24,7 +24,7 @@ RSpec.configure do |config|
   config.include(CompressHelper)
   config.include(ParserHelper)
   config.include(Mutant::NodeHelpers)
-  config.mock_with :rspec do |config|
-    config.syntax = [:expect, :should]
+  config.mock_with :rspec do |rspec|
+    rspec.syntax = [:expect, :should]
   end
 end
