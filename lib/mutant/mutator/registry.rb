@@ -24,7 +24,7 @@ module Mutant
       #
       def self.register(type, mutator_class)
         raise "duplicate type registration: #{type}" if registry.key?(type)
-        registry[type]=mutator_class
+        registry[type] = mutator_class
         self
       end
 
@@ -42,7 +42,7 @@ module Mutant
       def self.lookup(node)
         type = node.type
         registry.fetch(type) do
-          raise ArgumentError,"No mutator to handle: #{type.inspect}"
+          raise ArgumentError, "No mutator to handle: #{type.inspect}"
         end
       end
 
