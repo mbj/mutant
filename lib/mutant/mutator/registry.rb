@@ -56,6 +56,8 @@ module Mutant
 
       # Assert the node type is valid
       #
+      # @return [undefined]
+      #
       # @raise [InvalidTypeError]
       #   raised when the node type is invalid
       #
@@ -69,6 +71,8 @@ module Mutant
       private_class_method :assert_valid_type
 
       # Assert the node type is unique and not already registered
+      #
+      # @return [undefined]
       #
       # @raise [DuplcateTypeError]
       #   raised when the node type is a duplicate
