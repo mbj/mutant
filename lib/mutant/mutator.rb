@@ -135,17 +135,13 @@ module Mutant
 
     # Call block until it generates a mutation
     #
-    # The primary use of this method is to give the random generated object
-    # a nice interface for retring generation when generation accidentally generated the
-    # input
-    #
     # @yield
     #   Execute block until object is generated where new?(object) returns true
     #
     # @return [self]
     #
     # @raise [RuntimeError]
-    #   raises RuntimeError in case no new ast node can be generated after MAX_TRIES.
+    #   raises RuntimeError when no new node can be generated after MAX_TRIES.
     #
     # @api private
     #
