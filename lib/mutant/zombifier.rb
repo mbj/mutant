@@ -4,7 +4,7 @@ module Mutant
 
     # Excluded from zombification, reasons
     #
-    # * Relies dynamic require, zombifier does not know how to recurse here (racc)
+    # * Relies dynamic require, zombifier does not know how to recurse (racc)
     # * Unparser bug (optparse)
     # * Toplevel reference/cbase nodes in code (rspec)
     # * Creates useless toplevel modules that get vendored under ::Zombie (set)
@@ -218,7 +218,9 @@ module Mutant
         children = node.type == :begin ? node.children : [node]
         children.select do |node|
           children = node.children
-          node.type == :send && children.at(RECEIVER_INDEX).nil? && children.at(SELECTOR_INDEX) == :require
+          node.type == :send &&
+          children.at(RECEIVER_INDEX).nil? &&
+          children.at(SELECTOR_INDEX) == :require
         end
       end
 
