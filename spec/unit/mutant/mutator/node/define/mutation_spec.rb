@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Mutant::Mutator, 'def' do
-
   context 'empty' do
     let(:source) { 'def foo; end' }
 
