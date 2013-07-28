@@ -41,7 +41,7 @@ module Mutant
         # @api private
         #
         def mutate_body
-          mutate_child(children.length-1)
+          mutate_child(children.length - 1)
         end
 
       end # When

@@ -190,7 +190,7 @@ describe Mutant::Mutator, 'send' do
         let(:mutations) do
           mutations = []
           mutations << 'foo'
-          mutations << 'left - right'
+          mutations << '(left - right)'
           mutations << 'left / foo'
           mutations << 'right / foo'
         end

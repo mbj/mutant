@@ -15,7 +15,7 @@ module Mutant
             :lvasgn => ''
           )
 
-          handle *MAP.keys
+          handle(*MAP.keys)
 
         private
 

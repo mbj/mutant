@@ -48,7 +48,6 @@ module Mutant
           # @api private
           #
           def emit_end_mutations
-            #emit_self(negative_infinity, finish)
             emit_self(NAN, _end)
           end
 

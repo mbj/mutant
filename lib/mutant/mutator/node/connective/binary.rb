@@ -11,7 +11,7 @@ module Mutant
             :or  => :and,
           }.freeze
 
-          handle *INVERSE.keys
+          handle(*INVERSE.keys)
 
           children :left, :right
 

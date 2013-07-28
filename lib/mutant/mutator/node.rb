@@ -154,7 +154,7 @@ module Mutant
       #
       def emit_child_update(index, node)
         new_children = children.dup
-        new_children[index]=node
+        new_children[index] = node
         emit_self(*new_children)
       end
 

@@ -9,8 +9,8 @@ describe Mutant::Mutator::Node::Literal, 'float' do
     mutations << '0.0'
     mutations << '1.0'
     mutations << random_float.to_s
-    mutations << '0.0/0.0'
-    mutations << '1.0/0.0'
+    mutations << '(0.0 / 0.0)'
+    mutations << '(1.0 / 0.0)'
     mutations << '(-1.0 / 0.0)'
     mutations << '-10.0'
   end
