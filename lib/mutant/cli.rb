@@ -197,15 +197,15 @@ module Mutant
     # @api private
     #
     def parse(arguments)
-      opts = OptionParser.new do |opts|
-        opts.banner = 'usage: mutant STRATEGY [options] MATCHERS ...'
-        opts.separator ''
-        opts.separator 'Strategies:'
+      opts = OptionParser.new do |builder|
+        builder.banner = 'usage: mutant STRATEGY [options] MATCHERS ...'
+        builder.separator ''
+        builder.separator 'Strategies:'
 
-        opts.on('--zombie', 'Run mutant zombified')
+        builder.on('--zombie', 'Run mutant zombified')
 
-        add_strategies(opts)
-        add_options(opts)
+        add_strategies(builder)
+        add_options(builder)
       end
 
       matchers =
@@ -246,7 +246,7 @@ module Mutant
         set_strategy Strategy::Rspec::Unit
       end.on('--rspec-full', 'executes all specs under ./spec') do
         set_strategy Strategy::Rspec::Full
-      end.on('--rspec-dm2', 'executes spec/unit/namespace/class/method_spec.rb') do
+      end.on('--rspec-dm2', 'executes spec/unit/$nesting/$method_spec.rb') do
         set_strategy Strategy::Rspec::DM2
       end
     end
