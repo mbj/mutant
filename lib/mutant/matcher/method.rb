@@ -26,7 +26,12 @@ module Mutant
           if subject
             yield subject
           else
-            $stderr.puts "Cannot find definition of: #{identification} in #{source_location.join(':')}"
+            message = sprinf(
+              'Cannot find definition of: %s in %s',
+              identification,
+              source_location.join(':')
+            )
+            $stderr.puts(message)
           end
         end
 
@@ -48,7 +53,11 @@ module Mutant
       def skip?
         location = source_location
         if location.nil? or BLACKLIST.match(location.first)
-          $stderr.puts "#{method.inspect} does not have valid source location so mutant is unable to emit matcher"
+          message = sprintf(
+            '%s does not have valid source location unable to emit matcher',
+            method.inspect
+          )
+          $stderr.puts(message)
           return true
         end
 
