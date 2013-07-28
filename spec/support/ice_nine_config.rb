@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'ice_nine'
 
 module IceNine

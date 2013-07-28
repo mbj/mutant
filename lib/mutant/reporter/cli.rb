@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
   class Reporter
     # Reporter that reports in human readable format

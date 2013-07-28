@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
   # A mixing to create method object semantics
   module MethodObject

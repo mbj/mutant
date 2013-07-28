@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'spec_helper'
 
 # This spec is only present to ensure 100% test coverage.

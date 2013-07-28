@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # This file is the sandbox for new mutations.
 # Once finished mutation test will be moved to class specfic
 # file.

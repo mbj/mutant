@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module TestApp
   def self.root
     File.expand_path('../../../test_app', __FILE__)

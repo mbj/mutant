@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'benchmark'
 require 'set'
 require 'adamantium'

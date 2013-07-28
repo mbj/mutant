@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
   # An abstract context where mutations can be appied to.
   class Context

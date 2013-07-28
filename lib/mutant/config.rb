@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
   # The configuration of a mutator run
   class Config

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
 
   METHOD_POSTFIX_EXPANSIONS = {

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'spec_helper'
 
 singleton = Mutant::Strategy::Rspec::DM2::Lookup::Method::Singleton

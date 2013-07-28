@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
   # Mixin for node helpers
   module NodeHelpers

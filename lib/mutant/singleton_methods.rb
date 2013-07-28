@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Singleton methods are defined here so zombie can pick them up
 module Mutant
 
