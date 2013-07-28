@@ -59,6 +59,8 @@ module Mutant
               object.subject
             end
 
+            FORMAT = '(%02d/%02d) %3d%% - %0.02fs'.freeze
+
             # Print stats
             #
             # @return [undefned
@@ -66,7 +68,7 @@ module Mutant
             # @api private
             #
             def print_stats
-              status('(%02d/%02d) %3d%% - %0.02fs', amount_kills, amount_mutations, coverage, time)
+              status(FORMAT, amount_kills, amount_mutations, coverage, time)
             end
 
             # Print progress bar finish
