@@ -48,7 +48,7 @@ module Mutant
           .sub(CBASE_PATTERN, EMPTY_STRING)
           .split(SCOPE_OPERATOR)
           .reduce(Object) do |parent, name|
-            parent.const_get(name)
+            parent.const_get(name, nil)
           end
       end
 
