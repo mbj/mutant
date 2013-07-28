@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::NamedValue::Access, 'const' do
+describe Mutant::Mutator::Node::Const, 'const' do
   let(:source) { 'A::B' }
 
   let(:mutations) do

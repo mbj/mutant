@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::NamedValue::Access, 'cbase' do
+describe Mutant::Mutator::Node::Noop, 'cbase' do
   let(:source) { '::A' }
 
   let(:mutations) do
