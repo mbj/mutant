@@ -92,7 +92,11 @@ module Mutant
           when :const
             receiver_name?(receiver)
           else
-            $stderr.puts "Can only match self or const, got #{receiver.type}, unable to match receiver of defs node"
+            message = sprintf(
+              'Can only match :defs on :self or :const got %s unable to match',
+              receiver.type.inspect
+            )
+            $stderr.puts(message)
             false
           end
         end
