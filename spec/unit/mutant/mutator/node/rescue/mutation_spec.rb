@@ -3,18 +3,20 @@
 require 'spec_helper'
 
 describe Mutant::Mutator::Node::Generic, 'rescue' do
-  let(:source)    { 'begin; rescue Exception => e; end' }
-  let(:mutations) { []                                  }
+  let(:source) { 'begin; rescue Exception => e; end' }
 
-  # TODO: remove once unparser is fixed
-  it 'does not raise an exception when unparsing source' do
-    pending 'unparser bug' do
-      expect { Unparser.unparse(Parser::CurrentRuby.parse(source)) }
-        .to_not raise_error
-    end
+  let(:mutations) do
+    mutations = []
+    mutations << 'begin; rescue Exception => srandom; end'
+    mutations << 'begin; rescue nil => e; end'
+    mutations << 'begin; rescue => e; end'
   end
 
-  pending 'unparser bug' do
+  before do
+    Mutant::Random.stub(:hex_string => 'random')
+  end
+
+  pending do
     it_should_behave_like 'a mutator'
   end
 end
