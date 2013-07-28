@@ -1,7 +1,8 @@
 module Mutant
   # Abstract base class for mutant killers
   class Killer
-    include Adamantium::Flat, AbstractType, Equalizer.new(:strategy, :mutation, :killed?)
+    include Adamantium::Flat, AbstractType
+    include Equalizer.new(:strategy, :mutation, :killed?)
 
     # Return strategy
     #
