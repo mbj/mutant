@@ -130,8 +130,9 @@ module Mutant
             def generic_stats
               object.subjects.each_with_object(Hash.new(0)) do |runner, stats|
                 Walker.run(runner.subject.node) do |node|
-                  next unless Mutator::Registry.lookup(node) == Mutator::Node::Generic
-                  stats[node.type] += 1
+                  if Mutator::Registry.lookup(node) == Mutator::Node::Generic
+                    stats[node.type] += 1
+                  end
                 end
               end
             end
