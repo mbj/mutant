@@ -17,7 +17,7 @@ module Mutant
   ].to_set.freeze
 
   # Set of node types that are not valid when emitted standalone
-  NOT_STANDALONE = [:splat, :block_pass].to_set.freeze
+  NOT_STANDALONE = [:splat, :restarg, :block_pass].to_set.freeze
 
   OPERATOR_EXPANSIONS = {
     :<=>  => :spaceship_operator,
