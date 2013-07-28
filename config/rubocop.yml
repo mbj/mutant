@@ -55,6 +55,18 @@ Documentation:
 IfUnlessModifier:
   Enabled: false
 
+# Mutant needs to define methods like def bar; end in specs
+Semicolon:
+  Enabled: false
+
+# Mutant needs to define multiple methods on same line in specs
+EmptyLineBetweenDefs:
+  Enabled: false
+
+# Mutant needs to define singleton methods like Foo.bar in specs
+ClassMethods:
+  Enabled: false
+
 # Allow case equality operator (in limited use within the specs)
 CaseEquality:
   Enabled: false

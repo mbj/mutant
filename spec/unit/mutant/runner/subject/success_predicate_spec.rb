@@ -13,13 +13,18 @@ describe Mutant::Runner::Subject, '#success?' do
     )
   end
 
-  let(:reporter)         { double('Reporter')                      }
-  let(:config)           { double('Config', :reporter => reporter) }
-  let(:mutation_a)       { double('Mutation A')                    }
-  let(:mutation_b)       { double('Mutation B')                    }
+  let(:reporter)   { double('Reporter')                      }
+  let(:config)     { double('Config', :reporter => reporter) }
+  let(:mutation_a) { double('Mutation A')                    }
+  let(:mutation_b) { double('Mutation B')                    }
 
-  let(:runner_a)         { double('Runner A', :success? => success_a, :stop? => stop_a) }
-  let(:runner_b)         { double('Runner B', :success? => success_b, :stop? => stop_b) }
+  let(:runner_a) do
+    double('Runner A', :success? => success_a, :stop? => stop_a)
+  end
+
+  let(:runner_b) do
+    double('Runner B', :success? => success_b, :stop? => stop_b)
+  end
 
   before do
     reporter.stub(:report => reporter)

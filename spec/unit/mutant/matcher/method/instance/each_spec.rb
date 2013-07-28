@@ -36,11 +36,14 @@ describe Mutant::Matcher::Method::Instance, '#each' do
     context 'on differend lines' do
       let(:base) { __LINE__ }
       class self::Foo
-        def bar; end
-        def bar(arg); end
+        def bar
+        end
+
+        def bar(arg)
+        end
       end
 
-      let(:method_line)  { 3 }
+      let(:method_line)  { 5 }
       let(:method_arity) { 1 }
 
       it_should_behave_like 'a method matcher'
@@ -77,7 +80,8 @@ describe Mutant::Matcher::Method::Instance, '#each' do
         let(:base) { __LINE__ }
         class self::Foo
           class Bar
-            def baz; end
+            def baz
+            end
           end
         end
 
@@ -92,7 +96,8 @@ describe Mutant::Matcher::Method::Instance, '#each' do
         let(:base) { __LINE__ }
         module self::Foo
           class Bar
-            def baz; end
+            def baz
+            end
           end
         end
 

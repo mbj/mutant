@@ -9,6 +9,11 @@ describe Mutant::Matcher, '#each' do
   let(:object) { described_class.allocate }
 
   it 'should raise error' do
-    expect { subject }.to raise_error(NotImplementedError, 'Mutant::Matcher#each is not implemented')
+    expect do
+      subject
+    end.to raise_error(
+      NotImplementedError,
+      'Mutant::Matcher#each is not implemented'
+    )
   end
 end

@@ -46,7 +46,12 @@ describe Mutant::Mutator, '#emit_new' do
     let(:generated) { input }
 
     it 'should raise error' do
-      expect { subject }.to raise_error(RuntimeError, 'New AST could not be generated after 3 attempts')
+      expect do
+        subject
+      end.to raise_error(
+        RuntimeError,
+        'New AST could not be generated after 3 attempts'
+      )
     end
   end
 end

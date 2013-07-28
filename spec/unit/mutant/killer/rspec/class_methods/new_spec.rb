@@ -4,12 +4,27 @@ describe Mutant::Killer::Rspec, '.new' do
 
   subject { object.new(strategy, mutation) }
 
-  let(:strategy)         { double('Strategy', :spec_files => ['foo'], :error_stream => $stderr, :output_stream => $stdout) }
-  let(:context)          { double('Context')                                                                               }
-  let(:mutation)         { double('Mutation', :subject => mutation_subject, :should_survive? => false)                     }
-  let(:mutation_subject) { double('Mutation Subject')                                                                      }
+  let(:context)          { double('Context')          }
+  let(:mutation_subject) { double('Mutation Subject') }
 
   let(:object)  { described_class }
+
+  let(:mutation) do
+    double(
+      'Mutation',
+      :subject => mutation_subject,
+      :should_survive? => false
+    )
+  end
+
+  let(:strategy) do
+    double(
+      'Strategy',
+      :spec_files => ['foo'],
+      :error_stream => $stderr,
+      :output_stream => $stdout
+    )
+  end
 
   before do
     mutation.stub(:insert)

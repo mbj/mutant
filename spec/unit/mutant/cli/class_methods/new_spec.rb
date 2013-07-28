@@ -2,7 +2,9 @@ require 'spec_helper'
 
 shared_examples_for 'an invalid cli run' do
   it 'should raise error' do
-    expect { subject }.to raise_error(Mutant::CLI::Error, expected_message)
+    expect do
+      subject
+    end.to raise_error(Mutant::CLI::Error, expected_message)
   end
 end
 
@@ -27,6 +29,9 @@ describe Mutant::CLI, '.new' do
   let(:expected_filter)   { Mutant::Mutation::Filter::ALL      }
   let(:expected_strategy) { Mutant::Strategy::Rspec::Unit      }
   let(:expected_reporter) { Mutant::Reporter::CLI.new($stdout) }
+
+  let(:ns)    { Mutant::CLI::Classifier }
+  let(:cache) { Mutant::Cache.new       }
 
   let(:cli) { object.new(arguments) }
 
@@ -70,21 +75,23 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with explicit method matcher' do
-    let(:arguments)        { %w(--rspec-unit TestApp::Literal#float)                                          }
-    let(:expected_matcher) { Mutant::CLI::Classifier::Method.new(Mutant::Cache.new, 'TestApp::Literal#float') }
+    let(:arguments)        { %w(--rspec-unit TestApp::Literal#float) }
+    let(:expected_matcher) { ns::Method.new(cache, 'TestApp::Literal#float') }
 
     it_should_behave_like 'a cli parser'
   end
 
   context 'with namespace matcher' do
-    let(:arguments)        { %w(--rspec-unit ::TestApp*)                                                        }
-    let(:expected_matcher) { Mutant::CLI::Classifier::Namespace::Recursive.new(Mutant::Cache.new, '::TestApp*') }
+    let(:matcher)          { '::TestApp*'                                 }
+    let(:arguments)        { %W(--rspec-unit #{matcher})                  }
+    let(:expected_matcher) { ns::Namespace::Recursive.new(cache, matcher) }
 
     it_should_behave_like 'a cli parser'
   end
 
   context 'with code filter' do
-    let(:arguments) { %w(--rspec-unit --code faa --code bbb TestApp::Literal#float) }
+    let(:matcher)   { 'TestApp::Literal#float'                          }
+    let(:arguments) { %W(--rspec-unit --code faa --code bbb #{matcher}) }
 
     let(:filters) do
       [
@@ -93,8 +100,8 @@ describe Mutant::CLI, '.new' do
       ]
     end
 
-    let(:expected_matcher) { Mutant::CLI::Classifier::Method.new(Mutant::Cache.new, 'TestApp::Literal#float') }
-    let(:expected_filter)  { Mutant::Mutation::Filter::Whitelist.new(filters)                                 }
+    let(:expected_matcher) { ns::Method.new(cache, 'TestApp::Literal#float')  }
+    let(:expected_filter)  { Mutant::Mutation::Filter::Whitelist.new(filters) }
 
     it_should_behave_like 'a cli parser'
   end

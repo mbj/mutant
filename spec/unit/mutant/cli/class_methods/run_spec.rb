@@ -21,7 +21,10 @@ describe Mutant::CLI, '.run' do
     it { should be(0) }
 
     it 'should run with attributes' do
-      Mutant::Runner::Config.should_receive(:run).with(config).and_return(runner)
+      Mutant::Runner::Config
+        .should_receive(:run)
+        .with(config)
+        .and_return(runner)
       should be(0)
     end
   end
@@ -32,7 +35,10 @@ describe Mutant::CLI, '.run' do
     it { should be(1) }
 
     it 'should run with attributes' do
-      Mutant::Runner::Config.should_receive(:run).with(config).and_return(runner)
+      Mutant::Runner::Config
+        .should_receive(:run)
+        .with(config)
+        .and_return(runner)
       should be(1)
     end
   end

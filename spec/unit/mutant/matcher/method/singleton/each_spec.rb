@@ -40,7 +40,8 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
         let(:base) { __LINE__ }
         module self::Namespace
           class Foo
-            def Foo.bar; end
+            def Foo.bar
+            end
           end
         end
 
@@ -54,12 +55,15 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
       context 'outside namespace' do
         let(:base) { __LINE__ }
         module self::Namespace
-          class Foo; end;
-          def Foo.bar; end
+          class Foo
+          end
+
+          def Foo.bar
+          end
         end
 
         let(:method_name) { :bar                       }
-        let(:method_line) { 3                          }
+        let(:method_line) { 5                          }
         let(:scope)       { self.class::Namespace::Foo }
 
         it_should_behave_like 'a method matcher'
@@ -72,7 +76,10 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
         module self::Namespace
           module Foo; end
           module Bar
-            def self.baz; end; def Foo.baz(arg); end
+            def self.baz
+            end
+            def Foo.baz(arg)
+            end
           end
         end
 

@@ -9,7 +9,16 @@ describe Mutant::Differ, '#diff' do
     let(:old) { %w(foo bar) }
     let(:new) { %w(baz bar) }
 
-    it { should eql("@@ -1,3 +1,3 @@\n-foo\n+baz\n bar\n") }
+    let(:expectation) do
+      strip_indent(<<-STR)
+        @@ -1,3 +1,3 @@
+        -foo
+        +baz
+         bar
+      STR
+    end
+
+    it { should eql(expectation) }
 
     it_should_behave_like 'an idempotent method'
   end
@@ -18,7 +27,16 @@ describe Mutant::Differ, '#diff' do
     let(:old) { %w(foo bar)     }
     let(:new) { %w(foo baz bar) }
 
-    it { should eql("@@ -1,3 +1,4 @@\n foo\n+baz\n bar\n") }
+    let(:expectation) do
+      strip_indent(<<-STR)
+        @@ -1,3 +1,4 @@
+         foo
+        +baz
+         bar
+      STR
+    end
+
+    it { should eql(expectation) }
 
     it_should_behave_like 'an idempotent method'
   end
@@ -27,7 +45,21 @@ describe Mutant::Differ, '#diff' do
     let(:old) { %w(foo bar baz boz a b c)       }
     let(:new) { %w(foo bar baz boz a b c other) }
 
-    it { should eql("@@ -1,8 +1,9 @@\n foo\n bar\n baz\n boz\n a\n b\n c\n+other\n") }
+    let(:expectation) do
+      strip_indent(<<-STR)
+        @@ -1,8 +1,9 @@
+         foo
+         bar
+         baz
+         boz
+         a
+         b
+         c
+        +other
+      STR
+    end
+
+    it { should eql(expectation) }
 
     it_should_behave_like 'an idempotent method'
   end
@@ -36,7 +68,21 @@ describe Mutant::Differ, '#diff' do
     let(:old) { %w(other foo bar baz boz a b c) }
     let(:new) { %w(foo bar baz boz a b c)       }
 
-    it { should eql("@@ -1,9 +1,8 @@\n-other\n foo\n bar\n baz\n boz\n a\n b\n c\n") }
+    let(:expectation) do
+      strip_indent(<<-STR)
+        @@ -1,9 +1,8 @@
+        -other
+         foo
+         bar
+         baz
+         boz
+         a
+         b
+         c
+      STR
+    end
+
+    it { should eql(expectation) }
 
     it_should_behave_like 'an idempotent method'
   end
@@ -45,7 +91,21 @@ describe Mutant::Differ, '#diff' do
     let(:old) { %w(foo bar baz boz a b c)       }
     let(:new) { %w(other foo bar baz boz a b c) }
 
-    it { should eql("@@ -1,8 +1,9 @@\n+other\n foo\n bar\n baz\n boz\n a\n b\n c\n") }
+    let(:expectation) do
+      strip_indent(<<-STR)
+        @@ -1,8 +1,9 @@
+        +other
+         foo
+         bar
+         baz
+         boz
+         a
+         b
+         c
+      STR
+    end
+
+    it { should eql(expectation) }
 
     it_should_behave_like 'an idempotent method'
   end
