@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
   before do
-    Mutant::Random.stub(:hex_string => :random)
+    Mutant::Random.stub(:hex_string => 'random')
   end
 
   let(:source) { 'A = true' }
