@@ -2,10 +2,10 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutation emitter to handle block_pass nodes
-      class BlockPass < self
+      # Mutation emitter to handle noop nodes
+      class Noop < self
 
-        handle(:block_pass)
+        handle(:block_pass, :cbase)
 
       private
 
@@ -16,10 +16,10 @@ module Mutant
         # @api private
         #
         def dispatch
-          # noop, for now
+          # noop
         end
 
-      end # BlockPass
+      end # Noop
     end # Node
   end # Mutator
 end # Mutant
