@@ -38,13 +38,13 @@ module Mutant
           # @api private
           #
           def self.handle(subject_class)
-            REGISTRY[subject_class]=self
+            REGISTRY[subject_class] = self
           end
           private_class_method :handle
 
           # Build lookup object
           #
-          # @param [Subjecŧ] subject
+          # @param [Subject] subject
           #
           # @return [Lookup]
           #

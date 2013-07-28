@@ -12,7 +12,7 @@ module Mutant
       SCOPE_PATTERN       = /(?:::)?#{SCOPE_NAME_PATTERN}(?:::#{SCOPE_NAME_PATTERN})*/.freeze
       CBASE_PATTERN       = /\A::/.freeze
       SCOPE_OPERATOR      = '::'.freeze
-      SINGLETON_PATTERN   = %r(\A(#{SCOPE_PATTERN})\z).freeze
+      SINGLETON_PATTERN   = /\A(#{SCOPE_PATTERN})\z/.freeze
 
       REGISTRY = []
 
@@ -36,7 +36,7 @@ module Mutant
       # @api private
       #
       def self.constant_lookup(location)
-        location.gsub(CBASE_PATTERN, EMPTY_STRING).split(SCOPE_OPERATOR).inject(Object) do |parent, name|
+        location.gsub(CBASE_PATTERN, EMPTY_STRING).split(SCOPE_OPERATOR).reduce(Object) do |parent, name|
           parent.const_get(name)
         end
       end

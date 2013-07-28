@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mutant::Mutator::Node::While do
 
   context 'with more than one statement' do
-    let(:source) { "while true; foo; bar; end" }
+    let(:source) { 'while true; foo; bar; end' }
 
     let(:mutations) do
       mutations = []

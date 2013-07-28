@@ -6,7 +6,8 @@ module Mutant
 
       # Methods within rbx kernel directory are precompiled and their source
       # cannot be accessed via reading source location
-      BLACKLIST = %r(\A#{Regexp.union('kernel/', '(eval)')}).freeze
+      SKIP_METHODS = %w[kernel/ (eval)].freeze
+      BLACKLIST    = /\A#{Regexp.union(*SKIP_METHODS)}/.freeze
 
       # Enumerate matches
       #

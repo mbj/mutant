@@ -34,7 +34,7 @@ module Mutant
       # @api private
       #
       def pattern
-        %r(\A#{Regexp.escape(namespace.name)}(?:::)?)
+        /\A#{Regexp.escape(namespace.name)}(?:::)?/
       end
       memoize :pattern
 
@@ -62,7 +62,7 @@ module Mutant
       #
       def emit_scope(scope)
         name = scope.name
-        # FIXME Fix nokogiri to return a string here
+        # FIXME: Fix nokogiri to return a string here
         return unless name.kind_of?(String)
         if pattern =~ name
           yield scope

@@ -21,7 +21,7 @@ module Mutant
           mutation.code.eql?(code)
         end
 
-        PATTERN = %r(\Acode:([a-f0-9]{1,6})\z).freeze
+        PATTERN = /\Acode:([a-f0-9]{1,6})\z/.freeze
 
         # Test if class handles string
         #

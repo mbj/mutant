@@ -5,13 +5,13 @@ describe Mutant::Runner::Subject, '#success?' do
 
   let(:object) { described_class.new(config, mutation_subject) }
 
-  let(:mutation_subject) {
+  let(:mutation_subject) do
     double(
       'Subject',
       :class     => Mutant::Subject,
       :mutations => [mutation_a, mutation_b]
     )
-  }
+  end
 
   let(:reporter)         { double('Reporter')                      }
   let(:config)           { double('Config', :reporter => reporter) }

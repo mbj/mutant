@@ -141,10 +141,10 @@ module Mutant
       #
       def self.find_uncached(logical_name)
         file_name =
-          unless logical_name.end_with?('.rb')
-            "#{logical_name}.rb"
-          else
+          if logical_name.end_with?('.rb')
             logical_name
+          else
+            "#{logical_name}.rb"
           end
 
         $LOAD_PATH.each do |path|
@@ -248,7 +248,7 @@ module Mutant
       # @api private
       #
       def root_file
-        File.find(name) || raise("No root file!")
+        File.find(name) or raise 'No root file!'
       end
       memoize :root_file
 

@@ -34,6 +34,7 @@ describe Mutant::Runner::Config, '#success?' do
     let(:stop_b)    { false }
     let(:success_a) { true  }
     let(:success_b) { true  }
+
     it { should be(true) }
   end
 

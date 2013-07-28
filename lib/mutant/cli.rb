@@ -38,7 +38,7 @@ module Mutant
     #
     # @api private
     #
-    def initialize(arguments=[])
+    def initialize(arguments = [])
       @filters, @matchers = [], []
 
       @cache = Mutant::Cache.new
@@ -148,7 +148,7 @@ module Mutant
     #
     # @api private
     #
-    def add_filter(klass,filter)
+    def add_filter(klass, filter)
       @filters << klass.new(filter)
     end
 
@@ -267,7 +267,7 @@ module Mutant
         add_filter Mutation::Filter::Code, filter
       end.on('--fail-fast', 'Fail fast') do
         set_fail_fast
-      end.on('-d','--debug', 'Enable debugging output') do
+      end.on('-d', '--debug', 'Enable debugging output') do
         set_debug
       end.on_tail('-h', '--help', 'Show this message') do
         puts opts

@@ -54,11 +54,12 @@ module Mutant
           # Reporter for noop mutations
           class Noop < self
 
-            MESSAGE =
-              "Parsed subject AST:\n" \
-              "%s\n"                  \
-              "Unparsed source:\n"    \
-              "%s\n"
+            MESSAGE = [
+              'Parsed subject AST:',
+              '%s',
+              'Unparsed source:',
+              '%s',
+            ].join("\n")
 
           private
 

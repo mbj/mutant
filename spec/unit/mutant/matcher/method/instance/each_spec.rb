@@ -1,23 +1,17 @@
 require 'spec_helper'
 
 describe Mutant::Matcher::Method::Instance, '#each' do
-  let(:cache)  { Fixtures::AST_CACHE                       }
-  let(:object) { described_class.new(cache, scope, method) }
-  let(:method) { scope.instance_method(method_name)        }
-
-  let(:yields) { [] }
-
-  let(:namespace) do
-    klass = self.class
-  end
-
-  let(:scope) { self.class::Foo }
-
   subject { object.each { |subject| yields << subject } }
 
-  let(:type)         { :def }
-  let(:method_name)  { :bar }
-  let(:method_arity) { 0    }
+  let(:cache)        { Fixtures::AST_CACHE                       }
+  let(:object)       { described_class.new(cache, scope, method) }
+  let(:method)       { scope.instance_method(method_name)        }
+  let(:yields)       { []                                        }
+  let(:namespace)    { self.class                                }
+  let(:scope)        { self.class::Foo                           }
+  let(:type)         { :def                                      }
+  let(:method_name)  { :bar                                      }
+  let(:method_arity) { 0                                         }
 
   def name
     node.children[0]

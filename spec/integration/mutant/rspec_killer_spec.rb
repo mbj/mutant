@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant,'rspec integration' do
+describe Mutant, 'rspec integration' do
 
   around do |example|
     Dir.chdir(TestApp.root) do

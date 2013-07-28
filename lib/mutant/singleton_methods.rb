@@ -12,13 +12,13 @@ module Mutant
   #
   def self.singleton_subclass_instance(name, superclass, &block)
     klass = Class.new(superclass) do
-
-      def inspect; self.class.name; end
+      def inspect
+        self.class.name
+      end
 
       define_singleton_method(:name) do
         "#{superclass.name}::#{name}".freeze
       end
-
     end
     klass.class_eval(&block)
     superclass.const_set(name, klass.new)

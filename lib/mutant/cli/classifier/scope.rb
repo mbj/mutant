@@ -5,7 +5,7 @@ module Mutant
       # Scope classifier
       class Scope < self
 
-        REGEXP = %r(\A(#{SCOPE_PATTERN})\z).freeze
+        REGEXP = /\A(#{SCOPE_PATTERN})\z/.freeze
 
       private
 
