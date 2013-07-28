@@ -1,7 +1,8 @@
 module Mutant
   # Represent a mutated node with its subject
   class Mutation
-    include AbstractType, Adamantium::Flat, Concord::Public.new(:subject, :node)
+    include AbstractType, Adamantium::Flat
+    include Concord::Public.new(:subject, :node)
 
     # Return mutated root node
     #
