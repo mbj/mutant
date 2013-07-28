@@ -24,9 +24,9 @@ DuplicateMethodCall:
 FeatureEnvy:
   enabled: true
   exclude:
-  - Mutant::Matcher::Method::Singleton#receiver?
-  - Mutant::Matcher::Method::Instance#match?
   - Mutant::CLI#parse
+  - Mutant::Matcher::Method::Instance#match?
+  - Mutant::Matcher::Method::Singleton#receiver?
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
   - Mutant::Reporter::CLI#subject_results
@@ -46,9 +46,9 @@ NestedIterators:
   enabled: true
   exclude:
   - Mutant#self.singleton_subclass_instance
+  - Mutant::CLI#parse
   - Mutant::Mutator::Util::Array::Element#dispatch
   - Mutant::Reporter::CLI::Printer::Config::Runner#generic_stats
-  - Mutant::CLI#parse
   max_allowed_nesting: 1
   ignore_iterators: []
 NilCheck:
@@ -76,12 +76,13 @@ TooManyMethods:
 TooManyStatements:
   enabled: true
   exclude:
+  - Mutant#self.singleton_subclass_instance
   - Mutant::CLI#parse
+  - Mutant::Killer::Rspec#run
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI::Printer::Config::Runner#run
-  - Mutant#self.singleton_subclass_instance
-  - Mutant::Zombifier::File#self.find_uncached
   - Mutant::Runner#dispatch
+  - Mutant::Zombifier::File#self.find_uncached
   max_statements: 6
 UncommunicativeMethodName:
   enabled: true
@@ -123,8 +124,8 @@ UnusedParameters:
 UtilityFunction:
   enabled: true
   exclude:
-  - Mutant::NodeHelpers#s
   - Mutant::CLI#reporter
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
+  - Mutant::NodeHelpers#s
   max_helper_calls: 0
