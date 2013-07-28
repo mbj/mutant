@@ -33,6 +33,16 @@ CollectionMethods:
 AccessControl:
   Enabled: false
 
+MethodLength:
+  CountComments: false
+  Max: 17 # TODO: Bring down to 10
+
+RegexpLiteral: # I do not agree %r(\A) is more readable than /\A/
+  Enabled: false
+
+Eval:
+  Enabled: false # Mutant must use Kernel#eval to inject mutated source
+
 # Limit line length
 LineLength:
   Max: 124  # TODO: lower to 79
