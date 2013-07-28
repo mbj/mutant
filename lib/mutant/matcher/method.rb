@@ -26,7 +26,7 @@ module Mutant
           if subject
             yield subject
           else
-            message = sprinf(
+            message = sprintf(
               'Cannot find definition of: %s in %s',
               identification,
               source_location.join(':')
