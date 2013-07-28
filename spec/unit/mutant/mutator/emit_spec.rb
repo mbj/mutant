@@ -4,7 +4,7 @@ describe Mutant::Mutator, '#emit' do
   subject { object.send(:emit, generated) }
 
   class Block
-    def arguments; @arguments; end
+    attr_reader :arguments
 
     def called?
       defined?(@arguments)
@@ -23,7 +23,7 @@ describe Mutant::Mutator, '#emit' do
   let(:class_under_test) do
     Class.new(described_class) do
       def dispatch
-        #noop
+        # noop
       end
     end
   end

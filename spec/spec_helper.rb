@@ -2,7 +2,7 @@ require 'mutant'
 require 'devtools'
 Devtools.init_spec_helper
 
-$: << File.join(TestApp.root,'lib')
+$LOAD_PATH << File.join(TestApp.root, 'lib')
 
 require 'test_app'
 

@@ -33,9 +33,19 @@ CollectionMethods:
 AccessControl:
   Enabled: false
 
+MethodLength:
+  CountComments: false
+  Max: 17 # TODO: Bring down to 10
+
+RegexpLiteral: # I do not agree %r(\A) is more readable than /\A/
+  Enabled: false
+
+Eval:
+  Enabled: false # Mutant must use Kernel#eval to inject mutated source
+
 # Limit line length
 LineLength:
-  Max: 79
+  Max: 124  # TODO: lower to 79
 
 # Disable documentation checking until a class needs to be documented once
 Documentation:
@@ -43,6 +53,18 @@ Documentation:
 
 # Do not favor modifier if/unless usage when you have a single-line body
 IfUnlessModifier:
+  Enabled: false
+
+# Mutant needs to define methods like def bar; end in specs
+Semicolon:
+  Enabled: false
+
+# Mutant needs to define multiple methods on same line in specs
+EmptyLineBetweenDefs:
+  Enabled: false
+
+# Mutant needs to define singleton methods like Foo.bar in specs
+ClassMethods:
   Enabled: false
 
 # Allow case equality operator (in limited use within the specs)

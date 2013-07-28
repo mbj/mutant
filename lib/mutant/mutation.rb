@@ -1,7 +1,8 @@
 module Mutant
   # Represent a mutated node with its subject
   class Mutation
-    include AbstractType, Adamantium::Flat, Concord::Public.new(:subject, :node)
+    include AbstractType, Adamantium::Flat
+    include Concord::Public.new(:subject, :node)
 
     # Return mutated root node
     #
@@ -42,10 +43,9 @@ module Mutant
 
     # Insert mutated node
     #
-    # FIXME:
-    #   Cache subject visibility in a better way! Ideally dont mutate it implicitly.
-    #   Also subject.public? should NOT be a public interface it is a detail of method
-    #   mutations.
+    # FIXME: Cache subject visibility in a better way! Ideally dont mutate it
+    #   implicitly. Also subject.public? should NOT be a public interface it
+    #   is a detail of method mutations.
     #
     # @return [self]
     #

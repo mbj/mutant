@@ -33,16 +33,18 @@ describe Mutant::Runner::Config, '#subjects' do
   context 'without earily stop' do
     let(:stop_a) { false }
     let(:stop_b) { false }
+
     it { should eql([runner_a, runner_b]) }
+
     it_should_behave_like 'an idempotent method'
   end
-
 
   context 'with earily stop' do
     let(:stop_a) { true  }
     let(:stop_b) { false }
+
     it { should eql([runner_a]) }
+
     it_should_behave_like 'an idempotent method'
   end
-
 end

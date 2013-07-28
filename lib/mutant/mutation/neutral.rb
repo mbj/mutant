@@ -10,12 +10,12 @@ module Mutant
 
         SYMBOL = 'noop'
 
-        # Indicate if a killer should treat a kill as problematic.
+        # Indicate if a killer should treat a kill as problematic
         #
         # @return [false] Killing noop mutants is a serious problem. Failures
         #   in noop may indicate a broken test suite, but they can also be an
         #   indication  mutant has altered the runtime environment in a subtle
-        #   way and tickled an odd bug.
+        #   way and tickled an odd bug
         #
         # @api private
         #
@@ -52,9 +52,9 @@ module Mutant
         !killer.killed?
       end
 
-      # Indicate if a killer should treat a kill as problematic.
+      # Indicate if a killer should treat a kill as problematic
       #
-      # @return [true] Neutral mutants must die.
+      # @return [true] Neutral mutants must die
       #
       # @api private
       #

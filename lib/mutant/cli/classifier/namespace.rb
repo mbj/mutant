@@ -29,14 +29,14 @@ module Mutant
 
         # Recursive namespace classifier
         class Recursive < self
-          REGEXP = %r(\A(#{SCOPE_PATTERN})\*\z).freeze
+          REGEXP = /\A(#{SCOPE_PATTERN})\*\z/.freeze
           MATCHER = Matcher::Namespace
           register
         end # Recursive
 
         # Recursive namespace classifier
         class Flat < self
-          REGEXP = %r(\A(#{SCOPE_PATTERN})\z).freeze
+          REGEXP = /\A(#{SCOPE_PATTERN})\z/.freeze
           MATCHER = Matcher::Scope
           register
         end # Flat

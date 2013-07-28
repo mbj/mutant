@@ -38,7 +38,7 @@ module Mutant
     #
     # @api private
     #
-    def initialize(arguments=[])
+    def initialize(arguments = [])
       @filters, @matchers = [], []
 
       @cache = Mutant::Cache.new
@@ -148,7 +148,7 @@ module Mutant
     #
     # @api private
     #
-    def add_filter(klass,filter)
+    def add_filter(klass, filter)
       @filters << klass.new(filter)
     end
 
@@ -197,15 +197,15 @@ module Mutant
     # @api private
     #
     def parse(arguments)
-      opts = OptionParser.new do |opts|
-        opts.banner = 'usage: mutant STRATEGY [options] MATCHERS ...'
-        opts.separator ''
-        opts.separator 'Strategies:'
+      opts = OptionParser.new do |builder|
+        builder.banner = 'usage: mutant STRATEGY [options] MATCHERS ...'
+        builder.separator ''
+        builder.separator 'Strategies:'
 
-        opts.on('--zombie', 'Run mutant zombified')
+        builder.on('--zombie', 'Run mutant zombified')
 
-        add_strategies(opts)
-        add_options(opts)
+        add_strategies(builder)
+        add_options(builder)
       end
 
       matchers =
@@ -269,7 +269,7 @@ module Mutant
         add_filter Mutation::Filter::Code, filter
       end.on('--fail-fast', 'Fail fast') do
         set_fail_fast
-      end.on('-d','--debug', 'Enable debugging output') do
+      end.on('-d', '--debug', 'Enable debugging output') do
         set_debug
       end.on_tail('-h', '--help', 'Show this message') do
         puts opts

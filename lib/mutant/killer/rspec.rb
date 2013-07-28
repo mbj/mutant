@@ -18,11 +18,13 @@ module Mutant
       def run
         mutation.insert
         # TODO: replace with real streams from configuration
-        # Note: we assume the only interesting output from a failed rspec run is stderr.
         require 'stringio'
+        # Note: We assume interesting output from a failed rspec run is stderr.
         rspec_err = StringIO.new
 
-        killed = !::RSpec::Core::Runner.run(command_line_arguments, nil, rspec_err).zero?
+        exit_code = ::RSpec::Core::Runner.run(cli_arguments, nil, rspec_err)
+
+        killed = !exit_code.zero?
 
         if killed and mutation.should_survive?
           rspec_err.rewind
@@ -41,7 +43,7 @@ module Mutant
       #
       # @api private
       #
-      def command_line_arguments
+      def cli_arguments
         %W(
           --fail-fast
         ) + strategy.spec_files(mutation.subject)

@@ -12,7 +12,7 @@ module Mutant
       # @api private
       #
       def root(node)
-        nesting.reverse.inject(node) do |current, scope|
+        nesting.reverse.reduce(node) do |current, scope|
           self.class.wrap(scope, current)
         end
       end

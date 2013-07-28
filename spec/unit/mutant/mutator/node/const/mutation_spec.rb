@@ -1,11 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::NamedValue::Access, 'const' do
-
-  before do
-    Mutant::Random.stub(:hex_string => :random)
-  end
-
+describe Mutant::Mutator::Node::Const, 'const' do
   let(:source) { 'A::B' }
 
   let(:mutations) do

@@ -32,7 +32,7 @@ class Subject
     again     = Unparser.generate(parsed)
     unless generated == again
       # mostly an unparser bug!
-      fail "Untransitive:\n%s\n---\n%s" % [generated, again]
+      fail sprintf("Untransitive:\n%s\n---\n%s", generated, again)
     end
     self
   end
@@ -74,16 +74,25 @@ shared_examples_for 'a mutator' do
       message = []
 
       if missing.any?
-        message << 'Missing mutations (%i):' % missing.length
+        message << sprintf('Missing mutations (%i):', missing.length)
         message.concat(missing)
       end
 
       if unexpected.any?
-        message << 'Unexpected mutations (%i):' % unexpected.length
+        message << sprintf('Unexpected mutations (%i):', unexpected.length)
         message.concat(unexpected)
       end
 
-      fail "Original:\n#{generate(node)}\n-----\n#{message.join("\n-----\n")}" if message.any?
+      if message.any?
+
+        message = sprintf(
+          "Original:\n%s\n-----\n%s",
+          generate(node),
+          message.join("\n-----\n")
+        )
+
+        fail message
+      end
     end
   end
 end

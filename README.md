@@ -32,6 +32,7 @@ The following projects adopted mutant, and aim 100% mutation coverage:
 * [virtus](https://github.com/solnic/virtus)
 * [quacky](https://github.com/benmoss/quacky)
 * [substation](https://github.com/snusnu/substation)
+* [large_binomials](https://github.com/filipvanlaenen/large_binomials)
 * various small/minor stuff under https://github.com/mbj
 
 Feel free to ping me to add your project to the list!

@@ -9,7 +9,8 @@ describe Mutant::CLI::Classifier, '.build' do
 
   shared_examples_for this_spec do
     it 'shoud return expected instance' do
-      should eql(expected_class.new(cache, expected_class::REGEXP.match(input)))
+      regexp = expected_class::REGEXP
+      should eql(expected_class.new(cache, regexp.match(input)))
     end
 
     let(:expected_class) { Mutant::CLI::Classifier::Method }

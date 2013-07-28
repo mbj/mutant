@@ -4,7 +4,7 @@ module Mutant
 
     # Excluded from zombification, reasons
     #
-    # * Relies dynamic require, zombifier does not know how to recurse here (racc)
+    # * Relies dynamic require, zombifier does not know how to recurse (racc)
     # * Unparser bug (optparse)
     # * Toplevel reference/cbase nodes in code (rspec)
     # * Creates useless toplevel modules that get vendored under ::Zombie (set)
@@ -141,10 +141,10 @@ module Mutant
       #
       def self.find_uncached(logical_name)
         file_name =
-          unless logical_name.end_with?('.rb')
-            "#{logical_name}.rb"
-          else
+          if logical_name.end_with?('.rb')
             logical_name
+          else
+            "#{logical_name}.rb"
           end
 
         $LOAD_PATH.each do |path|
@@ -218,7 +218,9 @@ module Mutant
         children = node.type == :begin ? node.children : [node]
         children.select do |node|
           children = node.children
-          node.type == :send && children.at(RECEIVER_INDEX).nil? && children.at(SELECTOR_INDEX) == :require
+          node.type == :send &&
+          children.at(RECEIVER_INDEX).nil? &&
+          children.at(SELECTOR_INDEX) == :require
         end
       end
 
@@ -248,7 +250,7 @@ module Mutant
       # @api private
       #
       def root_file
-        File.find(name) || raise("No root file!")
+        File.find(name) or raise 'No root file!'
       end
       memoize :root_file
 

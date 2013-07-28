@@ -14,12 +14,18 @@ describe Mutant::Runner::Config, '#success?' do
     )
   end
 
-  let(:reporter)  { double('Reporter')                                           }
-  let(:strategy)  { double('Strategy')                                           }
-  let(:subject_a) { double('Subject A')                                          }
-  let(:subject_b) { double('Subject B')                                          }
-  let(:runner_a)  { double('Runner A', :stop? => stop_a, :success? => success_a) }
-  let(:runner_b)  { double('Runner B', :stop? => stop_b, :success? => success_b) }
+  let(:reporter)  { double('Reporter')  }
+  let(:strategy)  { double('Strategy')  }
+  let(:subject_a) { double('Subject A') }
+  let(:subject_b) { double('Subject B') }
+
+  let(:runner_a) do
+    double('Runner A', :stop? => stop_a, :success? => success_a)
+  end
+
+  let(:runner_b) do
+    double('Runner B', :stop? => stop_b, :success? => success_b)
+  end
 
   before do
     reporter.stub(:report => reporter)
@@ -34,6 +40,7 @@ describe Mutant::Runner::Config, '#success?' do
     let(:stop_b)    { false }
     let(:success_a) { true  }
     let(:success_b) { true  }
+
     it { should be(true) }
   end
 

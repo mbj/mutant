@@ -28,13 +28,13 @@ describe Mutant::Matcher::Method::Instance, '.build' do
     context 'with unmemoized method' do
       let(:method_name) { :bar }
 
-      it { should eql(Mutant::Matcher::Method::Instance.new(cache, scope, method)) }
+      it { should eql(described_class.new(cache, scope, method)) }
     end
 
     context 'with memoized method' do
       let(:method_name) { :foo }
 
-      it { should eql(Mutant::Matcher::Method::Instance::Memoized.new(cache, scope, method)) }
+      it { should eql(described_class::Memoized.new(cache, scope, method)) }
     end
   end
 end

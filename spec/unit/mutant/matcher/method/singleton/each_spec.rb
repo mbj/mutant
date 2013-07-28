@@ -1,22 +1,16 @@
 require 'spec_helper'
 
 describe Mutant::Matcher::Method::Singleton, '#each' do
-  let(:object) { described_class.new(cache, scope, method) }
-  let(:method) { scope.method(method_name)                 }
-  let(:cache)  { Fixtures::AST_CACHE                       }
-
-  let(:yields) { [] }
-
-  let(:namespace) do
-    klass = self.class
-  end
-
-  let(:scope) { self.class::Foo }
-
   subject { object.each { |subject| yields << subject } }
 
-  let(:type)         { :defs }
-  let(:method_arity) { 0     }
+  let(:object)       { described_class.new(cache, scope, method) }
+  let(:method)       { scope.method(method_name)                 }
+  let(:cache)        { Fixtures::AST_CACHE                       }
+  let(:yields)       { []                                        }
+  let(:namespace)    { self.class                                }
+  let(:scope)        { self.class::Foo                           }
+  let(:type)         { :defs                                     }
+  let(:method_arity) { 0                                         }
 
   def name
     node.children[1]
@@ -46,7 +40,8 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
         let(:base) { __LINE__ }
         module self::Namespace
           class Foo
-            def Foo.bar; end
+            def Foo.bar
+            end
           end
         end
 
@@ -60,12 +55,15 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
       context 'outside namespace' do
         let(:base) { __LINE__ }
         module self::Namespace
-          class Foo; end;
-          def Foo.bar; end
+          class Foo
+          end
+
+          def Foo.bar
+          end
         end
 
         let(:method_name) { :bar                       }
-        let(:method_line) { 3                          }
+        let(:method_line) { 5                          }
         let(:scope)       { self.class::Namespace::Foo }
 
         it_should_behave_like 'a method matcher'
@@ -78,7 +76,10 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
         module self::Namespace
           module Foo; end
           module Bar
-            def self.baz; end; def Foo.baz(arg); end
+            def self.baz
+            end
+            def Foo.baz(arg)
+            end
           end
         end
 

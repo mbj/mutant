@@ -30,9 +30,9 @@ module Mutant
         killer.killed?
       end
 
-      # Indicate if a killer should treat a kill as problematic.
+      # Indicate if a killer should treat a kill as problematic
       #
-      # @return [false] Killing evil mutants is not problematic.
+      # @return [false] Killing evil mutants is not problematic
       #
       # @api private
       #

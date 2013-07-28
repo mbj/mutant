@@ -4,7 +4,7 @@ describe Mutant::Mutator, '#emit_new' do
   subject { object.send(:emit_new) { generated } }
 
   class Block
-    def arguments; @arguments; end
+    attr_reader :arguments
 
     def called?
       defined?(@arguments)
@@ -23,7 +23,7 @@ describe Mutant::Mutator, '#emit_new' do
   let(:class_under_test) do
     Class.new(described_class) do
       def dispatch
-        #noop
+        # noop
       end
     end
   end
@@ -46,7 +46,12 @@ describe Mutant::Mutator, '#emit_new' do
     let(:generated) { input }
 
     it 'should raise error' do
-      expect { subject }.to raise_error(RuntimeError, 'New AST could not be generated after 3 attempts')
+      expect do
+        subject
+      end.to raise_error(
+        RuntimeError,
+        'New AST could not be generated after 3 attempts'
+      )
     end
   end
 end

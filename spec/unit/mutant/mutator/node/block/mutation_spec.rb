@@ -21,7 +21,7 @@ describe Mutant::Mutator, 'block' do
     let(:source) { 'foo { |a, b| }' }
 
     before do
-      Mutant::Random.stub(:hex_string => :random)
+      Mutant::Random.stub(:hex_string => 'random')
     end
 
     let(:mutations) do
@@ -41,7 +41,7 @@ describe Mutant::Mutator, 'block' do
   context 'with block pattern args' do
 
     before do
-      Mutant::Random.stub(:hex_string => :random)
+      Mutant::Random.stub(:hex_string => 'random')
     end
 
     let(:source) { 'foo { |(a, b), c| }' }

@@ -17,7 +17,7 @@ module Mutant
   ].to_set.freeze
 
   # Set of node types that are not valid when emitted standalone
-  NOT_STANDALONE = [ :splat, :block_pass ].to_set.freeze
+  NOT_STANDALONE = [:splat, :restarg, :block_pass].to_set.freeze
 
   OPERATOR_EXPANSIONS = {
     :<=>  => :spaceship_operator,
@@ -49,7 +49,7 @@ module Mutant
     :'!'  => :negation_operator
   }.freeze
 
-  INDEX_OPERATORS = [ :[], :[]= ].freeze
+  INDEX_OPERATORS = [:[], :[]=].freeze
 
   UNARY_METHOD_OPERATORS = [
     :~@, :+@, :-@, :'!'
@@ -77,7 +77,7 @@ module Mutant
     :xstr, :def, :defs, :case, :when, :ivar, :lvar, :cvar, :gvar,
     :back_ref, :const, :nth_ref, :class, :sclass, :yield,
     :match_with_lvasgn, :match_current_line, :irange, :erange,
-    :or_asgn, :kwbegin, :and_asgn
+    :or_asgn, :kwbegin, :and_asgn, :while
   ].to_set.freeze
 
 end # Mutant
