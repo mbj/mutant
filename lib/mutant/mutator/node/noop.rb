@@ -2,10 +2,10 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutation emitter to handle cbase nodes
-      class Cbase < self
+      # Mutation emitter to handle noop nodes
+      class Noop < self
 
-        handle(:cbase)
+        handle(:block_pass, :cbase)
 
       private
 
@@ -16,10 +16,10 @@ module Mutant
         # @api private
         #
         def dispatch
-          # noop, for now
+          # noop
         end
 
-      end # Cbase
+      end # Noop
     end # Node
   end # Mutator
 end # Mutant

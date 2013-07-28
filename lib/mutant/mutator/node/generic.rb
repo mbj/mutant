@@ -11,7 +11,7 @@ module Mutant
           :defined,
           :next, :break, :match, :ensure,
           :dstr, :dsym, :yield, :rescue, :redo, :defined?,
-          :blockarg, :block_pass, :op_asgn, :and_asgn,
+          :blockarg, :op_asgn, :and_asgn,
           :regopt, :restarg, :resbody, :retry, :arg_expr,
           :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :empty,
           :alias, :for, :xstr, :back_ref, :nth_ref, :class,

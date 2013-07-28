@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Mutant::Mutator, 'if' do
-
   before do
     Mutant::Random.stub(:hex_string => 'random')
   end
