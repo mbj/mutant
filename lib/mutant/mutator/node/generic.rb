@@ -9,7 +9,7 @@ module Mutant
         # your contribution is that close!
         handle(
           :defined,
-          :next, :break, :match, :ensure,
+          :next, :break, :ensure,
           :dstr, :dsym, :yield, :rescue, :redo, :defined?,
           :blockarg, :op_asgn, :and_asgn,
           :regopt, :restarg, :resbody, :retry, :arg_expr,
