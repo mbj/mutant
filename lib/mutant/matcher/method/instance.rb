@@ -16,7 +16,8 @@ module Mutant
         # @api private
         #
         def self.build(cache, scope, method)
-          if scope.ancestors.include?(::Adamantium) and scope.memoized?(method.name)
+          name = method.name
+          if scope.ancestors.include?(::Adamantium) and scope.memoized?(name)
             return Memoized.new(cache, scope, method)
           end
           super
