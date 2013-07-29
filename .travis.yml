@@ -15,6 +15,6 @@ matrix:
 notifications:
   irc:
     channels:
-      - irc.freenode.org#rom-rb
+      - irc.freenode.org#mutant
     on_success: never
     on_failure: change
