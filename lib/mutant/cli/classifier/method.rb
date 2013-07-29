@@ -26,16 +26,6 @@ module Mutant
         SCOPE_SYMBOL_POSITION = 2
         METHOD_NAME_POSITION  = 3
 
-        # Return identification
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def identification
-          match.to_s
-        end
-
       private
 
         # Return method matcher
@@ -58,7 +48,7 @@ module Mutant
         def method
           methods_matcher.methods.detect do |method|
             method.name == method_name
-          end or raise("Cannot find method #{identification}")
+          end or raise "Cannot find method #{identifier}"
         end
         memoize :method, :freezer => :noop
 
