@@ -48,7 +48,7 @@ module Mutant
         def method
           methods_matcher.methods.detect do |method|
             method.name == method_name
-          end or raise "Cannot find method #{identifier}"
+          end or raise NameError, "Cannot find method #{identifier}"
         end
         memoize :method, :freezer => :noop
 
