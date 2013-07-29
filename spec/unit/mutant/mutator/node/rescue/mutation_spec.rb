@@ -3,13 +3,15 @@
 require 'spec_helper'
 
 describe Mutant::Mutator::Node::Generic, 'rescue' do
-  let(:source) { 'begin; rescue Exception => e; end' }
+  let(:source) { 'begin; rescue Exception => e; true end' }
 
   let(:mutations) do
     mutations = []
-    mutations << 'begin; rescue Exception => srandom; end'
-    mutations << 'begin; rescue nil => e; end'
-    mutations << 'begin; rescue => e; end'
+    mutations << 'begin; rescue Exception => srandom; true; end'
+    mutations << 'begin; rescue Exception => e; false; end'
+    mutations << 'begin; rescue Exception => e; nil; end'
+    mutations << 'begin; rescue nil => e; true; end'
+#    mutations << 'begin; rescue => e; true; end'  # FIXME
   end
 
   before do
