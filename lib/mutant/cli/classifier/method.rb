@@ -13,8 +13,13 @@ module Mutant
           '#' => Matcher::Methods::Instance,
         }.freeze
 
-        REGEXP =
-          %r(\A(#{SCOPE_PATTERN})([.#])(#{METHOD_NAME_PATTERN}\z)).freeze
+        REGEXP = /
+          \A
+            (#{SCOPE_PATTERN})
+            ([.#])
+            (#{METHOD_NAME_PATTERN})
+          \z
+        /x.freeze
 
         # Positions of captured regexp groups
         SCOPE_NAME_POSITION   = 1
