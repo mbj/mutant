@@ -3,13 +3,14 @@
 module Mutant
   class CLI
     class Classifier
+
       # Explicit method classifier
       class Method < self
         register
 
         TABLE = {
           '.' => Matcher::Methods::Singleton,
-          '#' => Matcher::Methods::Instance
+          '#' => Matcher::Methods::Instance,
         }.freeze
 
         REGEXP =
