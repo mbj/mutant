@@ -26,17 +26,6 @@ module Mutant
         SCOPE_SYMBOL_POSITION = 2
         METHOD_NAME_POSITION  = 3
 
-        # Return method matcher
-        #
-        # @return [Matcher::Method]
-        #
-        # @api private
-        #
-        def matcher
-          methods_matcher.matcher.build(cache, scope, method)
-        end
-        memoize :matcher
-
         # Return identification
         #
         # @return [String]
@@ -48,6 +37,17 @@ module Mutant
         end
 
       private
+
+        # Return method matcher
+        #
+        # @return [Matcher::Method]
+        #
+        # @api private
+        #
+        def matcher
+          methods_matcher.matcher.build(cache, scope, method)
+        end
+        memoize :matcher
 
         # Return method
         #
