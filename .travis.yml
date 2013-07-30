@@ -17,6 +17,7 @@ matrix:
     - rvm: ruby-head     # Broken at this time, bundler issue on travis
     - rvm: rbx-19mode    # Broken at this time, yard/yardstick issue
     - rvm: jruby-19mode  # No fork(2) support, workaround planned
+    - rvm: jruby-head    # No fork(2) support, workaround planned
 notifications:
   irc:
     channels:
