@@ -156,7 +156,7 @@ Your options:
 
 * GitHub Issues https://github.com/mbj/mutant/issues
 * Ping me on https://twitter.com/_m_b_j_
-* #mutant channel on freenode, I hang around on CET daytimes. (nick mbj) 
+* #mutant channel on freenode, I hang around on CET daytimes. (nick mbj)
   You'll also find others [ROM](https://github.com/rom-rb) team members here that can answer questions.
 
 Credits
