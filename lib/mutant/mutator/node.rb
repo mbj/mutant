@@ -1,8 +1,10 @@
 # encoding: utf-8
 
 module Mutant
+
   # Generator for mutations
   class Mutator
+
     # Abstract base class for node mutators
     class Node < self
       include AbstractType, NodeHelpers, Unparser::Constants
