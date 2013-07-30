@@ -54,16 +54,16 @@ module Mutant
       #
       def skip?
         location = source_location
-        if location.nil? or BLACKLIST.match(location.first)
+        if location.nil? || BLACKLIST.match(location.first)
           message = sprintf(
             '%s does not have valid source location unable to emit matcher',
             method.inspect
           )
           $stderr.puts(message)
-          return true
+          true
+        else
+          false
         end
-
-        false
       end
 
       # Return method name
