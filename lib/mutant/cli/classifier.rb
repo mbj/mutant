@@ -8,15 +8,19 @@ module Mutant
 
       include Equalizer.new(:identifier)
 
-      SCOPE_NAME_PATTERN  = /[A-Za-z][A-Za-z_0-9]*/.freeze
-      OPERATOR_PATTERN    = Regexp.union(*OPERATOR_METHODS.map(&:to_s)).freeze
-      METHOD_NAME_PATTERN =
-        /([_A-Za-z][A-Za-z0-9_]*[!?=]?|#{OPERATOR_PATTERN})/.freeze
-      SCOPE_PATTERN =
-        /(?:::)?#{SCOPE_NAME_PATTERN}(?:::#{SCOPE_NAME_PATTERN})*/.freeze
-      CBASE_PATTERN       = /\A::/.freeze
-      SCOPE_OPERATOR      = '::'.freeze
-      SINGLETON_PATTERN   = /\A(#{SCOPE_PATTERN})\z/.freeze
+      SCOPE_NAME_PATTERN = /[A-Za-z][A-Za-z\d_]*/.freeze
+      SCOPE_OPERATOR     = '::'.freeze
+      CBASE_PATTERN      = /\A#{SCOPE_OPERATOR}/.freeze
+
+      METHOD_NAME_PATTERN = Regexp.union(
+        /[A-Za-z_][A-Za-z\d_]*[!?=]?/,
+        *OPERATOR_METHODS.map(&:to_s)
+      ).freeze
+
+      SCOPE_PATTERN = /
+        (?:#{SCOPE_OPERATOR})?#{SCOPE_NAME_PATTERN}
+        (?:#{SCOPE_OPERATOR}#{SCOPE_NAME_PATTERN})*
+      /x.freeze
 
       REGISTRY = []
 
@@ -41,10 +45,10 @@ module Mutant
       #
       def self.constant_lookup(location)
         location
-          .gsub(CBASE_PATTERN, EMPTY_STRING)
+          .sub(CBASE_PATTERN, EMPTY_STRING)
           .split(SCOPE_OPERATOR)
           .reduce(Object) do |parent, name|
-            parent.const_get(name)
+            parent.const_get(name, nil)
           end
       end
 
@@ -126,6 +130,7 @@ module Mutant
       # @api private
       #
       abstract_method :matcher
+      private         :matcher
 
     end # Classifier
   end # CLI
