@@ -23,7 +23,7 @@ module Mutant
           mutation.code.eql?(code)
         end
 
-        PATTERN = /\Acode:([a-f0-9]{1,6})\z/.freeze
+        PATTERN = /\Acode:(?<code>[a-f0-9]{1,6})\z/.freeze
 
         # Test if class handles string
         #
@@ -40,7 +40,7 @@ module Mutant
         def self.handle(notation)
           match = PATTERN.match(notation)
           return unless match
-          new(match[1])
+          new(match[:code])
         end
 
       end # Code
