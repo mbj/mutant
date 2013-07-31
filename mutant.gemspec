@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('equalizer',           '~> 0.0.5')
   gem.add_runtime_dependency('inflecto',            '~> 0.0.2')
   gem.add_runtime_dependency('anima',               '~> 0.0.6')
-  gem.add_runtime_dependency('concord',             '~> 0.1.1')
+  gem.add_runtime_dependency('concord',             '~> 0.1.3')
   gem.add_runtime_dependency('rspec',               '~> 2.14.1')
 
   gem.add_development_dependency('bundler', '~> 1.3', '>= 1.3.5')
