@@ -2,13 +2,12 @@ language: ruby
 before_install: gem install bundler
 bundler_args: --without yard guard benchmarks
 script: "bundle exec rake ci"
-rvm:
-  - 1.9.3
-  - 2.0.0
-  - ruby-head
-  - rbx-19mode
 matrix:
   include:
+    - rvm: 1.9.3
+    - rvm: 2.0.0
+    - rvm: ruby-head
+    - rvm: rbx-19mode
     - rvm: jruby-19mode
       env: JRUBY_OPTS="$JRUBY_OPTS --debug"
     - rvm: jruby-head
