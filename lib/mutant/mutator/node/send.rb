@@ -11,6 +11,11 @@ module Mutant
 
         children :receiver, :selector
 
+        SELECTOR_REPLACEMENTS = {
+          :send => :public_send,
+          :gsub => :sub
+        }.freeze
+
         INDEX_REFERENCE = :[]
         INDEX_ASSIGN    = :[]=
         ASSIGN_SUFFIX   = :'='
@@ -111,9 +116,8 @@ module Mutant
         # @api private
         #
         def emit_selector_mutations
-          if selector == :send
-            emit_selector(:public_send)
-          end
+          replacement = SELECTOR_REPLACEMENTS.fetch(selector) { return }
+          emit_selector(replacement)
         end
 
         # Emit naked receiver mutation

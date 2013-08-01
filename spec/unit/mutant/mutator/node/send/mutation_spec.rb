@@ -5,6 +5,21 @@ require 'spec_helper'
 # FIXME: This spec needs to be structured better!
 describe Mutant::Mutator, 'send' do
 
+  context 'when using String#gsub' do
+    let(:source) { 'foo.gsub(a, b)' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'foo'
+      mutations << 'foo.gsub(a)'
+      mutations << 'foo.gsub(b)'
+      mutations << 'foo.gsub'
+      mutations << 'foo.sub(a, b)'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
   context 'when using Kernel#send' do
     let(:source) { 'foo.send(bar)' }
 
