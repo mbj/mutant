@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Namespace for test application
 module TestApp
 end

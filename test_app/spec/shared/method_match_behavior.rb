@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 shared_examples_for 'a method match' do
   subject { Mutant::Matcher::Method.parse(pattern).to_a }
 

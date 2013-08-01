@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
   class Matcher
     # Matcher for specific namespace

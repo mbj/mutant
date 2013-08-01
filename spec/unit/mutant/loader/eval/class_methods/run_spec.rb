@@ -1,12 +1,14 @@
+# encoding: utf-8
+
 require 'spec_helper'
 
 describe Mutant::Loader::Eval, '.run' do
 
   subject { object.run(node, mutation_subject) }
 
-  let(:object)           { described_class }
-  let(:path)             { 'test.rb'       }
-  let(:line)             { 1               }
+  let(:object) { described_class }
+  let(:path)   { __FILE__        }
+  let(:line)   { 1               }
 
   let(:mutation_subject) do
     double('Subject', :source_path => path, :source_line => line)
@@ -41,6 +43,6 @@ describe Mutant::Loader::Eval, '.run' do
     subject
     ::SomeNamespace::Bar
       .instance_method(:some_method)
-      .source_location.should eql(['test.rb', 3])
+      .source_location.should eql([__FILE__, 3])
   end
 end

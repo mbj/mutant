@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
   class Killer
     # Abstract base class for killer with static result

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Subject
 
   include Equalizer.new(:source)
@@ -56,9 +58,7 @@ shared_examples_for 'a mutator' do
     it { should be_instance_of(to_enum.class) }
 
     let(:expected_mutations) do
-      mutations.map do |mutation|
-        Subject.coerce(mutation)
-      end
+      mutations.map(&Subject.method(:coerce))
     end
 
     let(:generated_mutations) do

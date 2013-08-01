@@ -1,22 +1,32 @@
+# encoding: utf-8
+
 module Mutant
   class CLI
     class Classifier
+
       # Explicit method classifier
       class Method < self
         register
 
         TABLE = {
           '.' => Matcher::Methods::Singleton,
-          '#' => Matcher::Methods::Instance
+          '#' => Matcher::Methods::Instance,
         }.freeze
 
-        REGEXP =
-          %r(\A(#{SCOPE_PATTERN})([.#])(#{METHOD_NAME_PATTERN}\z)).freeze
+        REGEXP = /
+          \A
+            (#{SCOPE_PATTERN})
+            ([.#])
+            (#{METHOD_NAME_PATTERN})
+          \z
+        /x.freeze
 
         # Positions of captured regexp groups
         SCOPE_NAME_POSITION   = 1
         SCOPE_SYMBOL_POSITION = 2
         METHOD_NAME_POSITION  = 3
+
+      private
 
         # Return method matcher
         #
@@ -29,18 +39,6 @@ module Mutant
         end
         memoize :matcher
 
-        # Return identification
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def identification
-          match.to_s
-        end
-
-      private
-
         # Return method
         #
         # @return [Method, UnboundMethod]
@@ -50,7 +48,7 @@ module Mutant
         def method
           methods_matcher.methods.detect do |method|
             method.name == method_name
-          end or raise("Cannot find method #{identification}")
+          end or raise NameError, "Cannot find method #{identifier}"
         end
         memoize :method, :freezer => :noop
 

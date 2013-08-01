@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
   class Killer
     # Runner for rspec tests

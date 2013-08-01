@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
   # Abstract base class for mutant killers
   class Killer

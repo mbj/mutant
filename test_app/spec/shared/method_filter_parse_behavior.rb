@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 shared_examples_for 'a method filter parse result' do
   before do
     expected_class.stub(:new => response)

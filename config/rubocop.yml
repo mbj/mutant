@@ -3,6 +3,7 @@ AllCops:
     - '../**/*.rake'
     - 'Gemfile'
     - 'Gemfile.devtools'
+    - 'mutant.gemspec'
   Excludes:
     - '**/vendor/**'
     - '**/benchmarks/**'

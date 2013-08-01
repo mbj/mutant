@@ -1,3 +1,5 @@
 --color
 --format progress
+--profile
+--warnings
 --order random
