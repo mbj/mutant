@@ -5,6 +5,20 @@ require 'spec_helper'
 # FIXME: This spec needs to be structured better!
 describe Mutant::Mutator, 'send' do
 
+  context 'when using Kernel#send' do
+    let(:source) { 'foo.send(bar)' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'foo.send'
+      mutations << 'foo.public_send(bar)'
+      mutations << 'bar'
+      mutations << 'foo'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
   context 'inside op assign' do
     let(:source) { 'self.foo ||= expression' }
 

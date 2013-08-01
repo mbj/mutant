@@ -98,9 +98,22 @@ module Mutant
         #
         def normal_dispatch
           emit_naked_receiver
+          emit_selector_mutations
           mutate_receiver
           emit_argument_propagation
           mutate_arguments
+        end
+
+        # Emit selector mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_selector_mutations
+          if selector == :send
+            emit_selector(:public_send)
+          end
         end
 
         # Emit naked receiver mutation
