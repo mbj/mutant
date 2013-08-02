@@ -1,8 +1,10 @@
 # encoding: utf-8
+#
+require File.expand_path('../lib/mutant/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.name        = 'mutant'
-  gem.version     = '0.3.0.beta22'
+  gem.version     = Mutant::VERSION.dup
   gem.authors     = ['Markus Schirp']
   gem.email       = ['mbj@schirp-dso.com']
   gem.description = 'Mutation testing for ruby'
