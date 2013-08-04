@@ -59,6 +59,7 @@ module Mutant
     def config
       Config.new(
         :cache     => @cache,
+        :zombie    => @zombie,
         :debug     => debug?,
         :matcher   => matcher,
         :filter    => filter,
@@ -154,26 +155,6 @@ module Mutant
       @filters << klass.new(filter)
     end
 
-    # Set fail fast
-    #
-    # @api private
-    #
-    # @return [undefined]
-    #
-    def set_fail_fast
-      @fail_fast = true
-    end
-
-    # Set debug mode
-    #
-    # @api private
-    #
-    # @return [undefined]
-    #
-    def set_debug
-      @debug = true
-    end
-
     # Set strategy
     #
     # @param [Strategy] strategy
@@ -203,8 +184,6 @@ module Mutant
         builder.banner = 'usage: mutant STRATEGY [options] MATCHERS ...'
         builder.separator ''
         builder.separator 'Strategies:'
-
-        builder.on('--zombie', 'Run mutant zombified')
 
         add_strategies(builder)
         add_options(builder)
@@ -237,7 +216,7 @@ module Mutant
 
     # Add strategies
     #
-    # @param [Object]
+    # @param [Object] opts
     #
     # @return [undefined]
     #
@@ -258,9 +237,27 @@ module Mutant
       end
     end
 
+    # Add environmental options
+    #
+    # @param [Object] opts
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def add_environmental_options(opts)
+      opts.on('--zombie', 'Run mutant zombified') do
+        @zombie = true
+      end.on('-I', 'Add directory to $LOAD_PATH') do |directory|
+        $LOAD_PATH << directory
+      end.on('-r', '--require NAME', 'Require file with NAME') do |name|
+        require name
+      end
+    end
+
     # Add options
     #
-    # @param [Object]
+    # @param [Object] opts
     #
     # @return [undefined]
     #
@@ -271,18 +268,16 @@ module Mutant
       opts.separator 'Options:'
 
       opts.on('--version', 'Print mutants version') do |name|
-        puts "mutant-#{Mutant::VERSION}"
+        puts("mutant-#{Mutant::VERSION}")
         Kernel.exit(0)
-      end.on('-r', '--require NAME', 'Require file with NAME') do |name|
-        require name
       end.on('--code FILTER', 'Adds a code filter') do |filter|
-        add_filter Mutation::Filter::Code, filter
+        add_filter(Mutation::Filter::Code, filter)
       end.on('--fail-fast', 'Fail fast') do
-        set_fail_fast
+        @fail_fast = true
       end.on('-d', '--debug', 'Enable debugging output') do
-        set_debug
+        @debug = true
       end.on_tail('-h', '--help', 'Show this message') do
-        puts opts
+        puts(opts)
         exit
       end
     end
