@@ -59,7 +59,7 @@ emits around 3-6 mutations.
 
 Currently mutant covers the majority of ruby's complex nodes that often occur in method bodies.
 
-A some stats from the [axiom](https://github.com/dkubb/axiom) library:
+Some stats from the [axiom](https://github.com/dkubb/axiom) library:
 
 ```
 Subjects:  417       # Amount of subjects being mutated (currently only methods)
@@ -81,63 +81,35 @@ the Generic handler altogether.
 Examples
 --------
 
-CLI will be simplified in the next releases, but currently stick with this:
-
 ```
 cd virtus
-# Run mutant on virtus namespace (that uses the dm-2 style spec layout)
-mutant --rspec-dm2 '::Virtus*'
+# Run mutant on virtus namespace
+mutant --rspec '::Virtus*'
 # Run mutant on specific virtus class
-mutant --rspec-dm2 ::Virtus::Attribute
+mutant --rspec ::Virtus::Attribute
 # Run mutant on specific virtus class method
-mutant --rspec-dm2 ::Virtus::Attribute.build
+mutant --rspec ::Virtus::Attribute.build
 # Run mutant on specific virtus instance method
-mutant --rspec-dm2 ::Virtus::Attribute#name
+mutant --rspec ::Virtus::Attribute#name
 ```
 
-Strategies
-----------
+Subjects:
+---------
+
+Mutant currently mutates code in instance and singleton methods. It is planned to support mutation
+of constant definitions and domain specific languages, DSL probably as plugins.
+
+Test-Selection
+--------------
 
 Mutation testing is slow. The key to making it fast is selecting the correct set of tests to run.
-Mutant currently supports the following built-in strategies for selecting tests/specs.
+Mutant currently supports the following built-in strategy for selecting tests/specs:
 
-### --rspec-dm2
+Mutant uses the longest rspec example group descriptions match to select the tests to run.
 
-This strategy is the *fastest* but requires discipline in spec file naming.
-
-The following specs are executed to kill a mutation on:
-```
-Public instance  methods: spec/unit/#{namespace}/#{class_name}/#{method_name}_spec.rb
-Public singleton methods: spec/unit/#{namespace}/#{class_name}/class_methods/#{method_name}_spec.rb
-Private instance  methods: spec/unit/#{namespace}/#{class_name}/*_spec.rb
-Private singleton methods: spec/unit/#{namespace}/#{class_name}/class_methods/*_spec.rb
-```
-
-#### Expansions:
-
-Symbolic operator-like methods are expanded, e.g. ```Foo#<<``` is expanded to:
-```
-spec/unit/foo/left_shift_operator_spec.rb
-````
-
-The full list of expansions can be found here:
-
-https://github.com/mbj/mutant/blob/master/lib/mutant/constants.rb
-
-### --rspec-unit
-
-This strategy executes all specs under ``./spec/unit`` for each mutation.
-
-### --rspec-integration
-
-This strategy executes all specs under ``./spec/integration`` for each mutation.
-
-### --rspec-full
-
-This strategy executes all specs under ``./spec`` for each mutation.
-
-In the future, we plan on allowing explicit selections on the specs to be run, as well as support for other test frameworks.
-Custom project specific strategies are also on the roadmap.
+Example for a subject like `Foo::Bar#baz` it will run all example groups with description prefixes in
+`Foo::Bar#baz`, `Foo::Bar` and `Foo`. The order is important, so if mutant finds example groups in the
+current prefix level, these example groups *must* kill the mutation.
 
 Alternatives
 ------------
