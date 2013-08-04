@@ -99,7 +99,7 @@ module Mutant
     # @api private
     #
     def match_prefixes
-      context.match_prefixes.dup << match_expression
+      [match_expression].concat(context.match_prefixes)
     end
     memoize :match_prefixes
 
