@@ -5,6 +5,7 @@ module Mutant
     # Runner for rspec tests
     class Rspec < self
 
+      # Noop reporter
       module Reporter
         %w(example example_group).each do |method_name|
           %w(passed started failed finished pending).each do |state|
@@ -40,13 +41,11 @@ module Mutant
           return false
         end
 
-        puts "Killing via #{groups.map(&:description).join(', ')}"
-
         example_groups.each do |group|
           return true unless group.run(Reporter)
         end
 
-        return false
+        false
       end
 
       # Return match prefixes
