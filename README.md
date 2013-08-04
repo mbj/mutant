@@ -105,11 +105,14 @@ Test-Selection
 Mutation testing is slow. The key to making it fast is selecting the correct set of tests to run.
 Mutant currently supports the following built-in strategy for selecting tests/specs:
 
-Mutant uses the longest rspec example group descriptions match to select the tests to run.
+Mutant uses the "longest rspec example group descriptions prefix match" to select the tests to run.
 
 Example for a subject like `Foo::Bar#baz` it will run all example groups with description prefixes in
 `Foo::Bar#baz`, `Foo::Bar` and `Foo`. The order is important, so if mutant finds example groups in the
 current prefix level, these example groups *must* kill the mutation.
+
+This test selection strategy is compatible with the old `--rspec-dm2` and `--rspec-unit` strategy.
+It allows to define very fine grained specs, or coarse grained - as you like.
 
 Alternatives
 ------------
