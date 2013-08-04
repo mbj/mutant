@@ -186,6 +186,7 @@ module Mutant
         builder.separator 'Strategies:'
 
         add_strategies(builder)
+        add_environmental_options(builder)
         add_options(builder)
       end
 
