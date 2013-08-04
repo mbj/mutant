@@ -5,6 +5,19 @@ module Mutant
     # Runner for rspec tests
     class Rspec < self
 
+      module Reporter
+        %w(example example_group).each do |method_name|
+          %w(passed started failed finished pending).each do |state|
+            name = "#{method_name}_#{state}"
+            define_singleton_method(name) do |_subject|
+              self
+            end
+          end
+        end
+
+        freeze
+      end
+
     private
 
       # Run rspec test
@@ -27,13 +40,11 @@ module Mutant
           return false
         end
 
-        strategy.configuration.reporter.report(groups.length, nil) do |reporter|
-          example_groups.each do |group|
-            return true unless group.run(reporter)
-          end.all?
-
-          return false
+        example_groups.each do |group|
+          return true unless group.run(Reporter)
         end
+
+        return false
       end
 
       # Return match prefixes
