@@ -75,8 +75,6 @@ module Mutant
         end
       end
 
-      DELIMITERS = /::|#/.freeze
-
       # Return all example groups
       #
       # @return [Enumerable<RSpec::Example>]
