@@ -10,6 +10,9 @@ module Mutant
 
           handle(Mutant::Killer::Forked)
 
+          SUCCESS = '.'.freeze
+          FAILURE = 'F'.freeze
+
           # Run printer
           #
           # @return [undefined]
@@ -18,11 +21,13 @@ module Mutant
           #
           def run
             if success?
-              char('.', Color::GREEN)
-              return
+              char(SUCCESS, Color::GREEN)
+            else
+              char(FAILURE, Color::RED)
             end
-            char('F', Color::RED)
           end
+
+        private
 
           # Write colorized char
           #
@@ -37,6 +42,7 @@ module Mutant
             output.write(colorize(color, char))
             output.flush
           end
+
         end # Killer
       end # Printer
     end # CLI

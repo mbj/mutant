@@ -6,6 +6,8 @@ gemspec
 
 gem 'mutant', path: '.'
 
+gem 'rspec-core', path: '../rspec-core'
+
 group :development, :test do
   gem 'devtools', git: 'https://github.com/rom-rb/devtools.git'
 end

@@ -98,6 +98,16 @@ module Mutant
       @runtime = times.real
     end
 
+    # Return subject
+    #
+    # @return [Subject]
+    #
+    # @api private
+    #
+    def subject
+      mutation.subject
+    end
+
     # Run killer
     #
     # @return [true]
