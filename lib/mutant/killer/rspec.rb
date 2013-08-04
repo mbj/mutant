@@ -40,6 +40,8 @@ module Mutant
           return false
         end
 
+        puts "Killing via #{groups.map(&:description).join(', ')}"
+
         example_groups.each do |group|
           return true unless group.run(Reporter)
         end
