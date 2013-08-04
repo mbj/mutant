@@ -19,6 +19,7 @@ require 'diff/lcs/hunk'
 require 'rspec'
 require 'anima'
 require 'concord'
+require 'rspec'
 
 # Library namespace
 module Mutant

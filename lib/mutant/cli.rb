@@ -244,6 +244,9 @@ module Mutant
     # @api private
     #
     def add_strategies(opts)
+      opts.separator ''
+      opts.separator 'Strategies:'
+
       opts.on('--static-success', 'does succeed on all mutations') do
         set_strategy Strategy::Static::Success.new
       end

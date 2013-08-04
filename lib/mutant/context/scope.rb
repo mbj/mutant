@@ -89,6 +89,17 @@ module Mutant
         scope.name
       end
 
+      # Return match prefixes
+      #
+      # @return [Enumerable<String>]
+      #
+      # @api private
+      #
+      def match_prefixes
+        name_nesting.reverse
+      end
+      memoize :match_prefixes
+
       # Return scope wrapped by context
       #
       # @return [::Module|::Class]
