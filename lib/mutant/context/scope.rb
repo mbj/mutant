@@ -23,7 +23,7 @@ module Mutant
       #
       # @return [String]
       #
-      # @ai private
+      # @api private
       #
       def identification
         scope.name

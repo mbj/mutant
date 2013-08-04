@@ -11,6 +11,11 @@ module Mutant
 
         children :receiver, :selector
 
+        SELECTOR_REPLACEMENTS = {
+          :send => :public_send,
+          :gsub => :sub
+        }.freeze
+
         INDEX_REFERENCE = :[]
         INDEX_ASSIGN    = :[]=
         ASSIGN_SUFFIX   = :'='
@@ -98,9 +103,21 @@ module Mutant
         #
         def normal_dispatch
           emit_naked_receiver
+          emit_selector_mutations
           mutate_receiver
           emit_argument_propagation
           mutate_arguments
+        end
+
+        # Emit selector mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_selector_mutations
+          replacement = SELECTOR_REPLACEMENTS.fetch(selector) { return }
+          emit_selector(replacement)
         end
 
         # Emit naked receiver mutation

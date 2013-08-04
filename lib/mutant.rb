@@ -26,6 +26,7 @@ module Mutant
   EMPTY_STRING = ''.freeze
 end # Mutant
 
+require 'mutant/version'
 require 'mutant/cache'
 require 'mutant/node_helpers'
 require 'mutant/singleton_methods'
@@ -73,6 +74,7 @@ require 'mutant/mutator/node/send/binary'
 require 'mutant/mutator/node/when'
 require 'mutant/mutator/node/define'
 require 'mutant/mutator/node/mlhs'
+require 'mutant/mutator/node/nthref'
 require 'mutant/mutator/node/masgn'
 require 'mutant/mutator/node/return'
 require 'mutant/mutator/node/block'

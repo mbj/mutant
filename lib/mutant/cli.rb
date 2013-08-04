@@ -267,7 +267,12 @@ module Mutant
       opts.separator ''
       opts.separator 'Options:'
 
-      opts.on('--code FILTER', 'Adds a code filter') do |filter|
+      opts.on('--version', 'Print mutants version') do |name|
+        puts "mutant-#{Mutant::VERSION}"
+        Kernel.exit(0)
+      end.on('-r', '--require NAME', 'Require file with NAME') do |name|
+        require name
+      end.on('--code FILTER', 'Adds a code filter') do |filter|
         add_filter Mutation::Filter::Code, filter
       end.on('--fail-fast', 'Fail fast') do
         set_fail_fast
