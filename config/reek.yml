@@ -96,8 +96,7 @@ UncommunicativeMethodName:
   accept: []
 UncommunicativeModuleName:
   enabled: true
-  exclude:
-  - Mutant::Strategy::Rspec::DM2
+  exclude: []
   reject:
   - !ruby/regexp /^.$/
   - !ruby/regexp /[0-9]$/

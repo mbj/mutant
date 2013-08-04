@@ -17,10 +17,7 @@ any ruby engine that supports POSIX-fork(2) semantics.
 
 Only rspec2 is supported currently. This is subject to change.
 
-It is easy to write a mutation killer for other test/spec frameworks than rspec2.
-Just create your own Mutant::Killer subclass, and make sure I get a PR!
-
-See this [ASCII-Cast](http://ascii.io/a/1707) for mutant in action! (v0.2.1)
+It is easy to write a mutation killer/strategy for other test/spec frameworks than rspec2.
 
 Projects using Mutant
 ---------------------

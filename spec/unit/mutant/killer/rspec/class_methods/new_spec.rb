@@ -4,6 +4,10 @@ require 'spec_helper'
 
 describe Mutant::Killer::Rspec, '.new' do
 
+  before do
+    pending 'dactivated'
+  end
+
   subject { object.new(strategy, mutation) }
 
   let(:context)          { double('Context')          }

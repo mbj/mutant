@@ -29,7 +29,7 @@ describe Mutant::CLI, '.new' do
 
   # Defaults
   let(:expected_filter)   { Mutant::Mutation::Filter::ALL      }
-  let(:expected_strategy) { Mutant::Strategy::Rspec::Unit      }
+  let(:expected_strategy) { Mutant::Strategy::Rspec.new        }
   let(:expected_reporter) { Mutant::Reporter::CLI.new($stdout) }
 
   let(:ns)    { Mutant::CLI::Classifier }
@@ -56,9 +56,10 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with many strategy flags' do
-    let(:arguments) { %w(--rspec-unit --rspec-dm2) }
+    let(:arguments) { %w(--static-fail --rspec TestApp) }
+    let(:expected_matcher) { Mutant::CLI::Classifier::Namespace::Flat.new(Mutant::Cache.new, 'TestApp') }
 
-    let(:expected_strategy) { Mutant::Strategy::Rspec::DM2 }
+    it_should_behave_like 'a cli parser'
   end
 
   context 'without arguments' do
@@ -70,30 +71,54 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with code filter and missing argument' do
-    let(:arguments)        { %w(--rspec-unit --code)    }
+    let(:arguments)        { %w(--rspec --code)    }
     let(:expected_message) { 'missing argument: --code' }
 
     it_should_behave_like 'an invalid cli run'
   end
 
   context 'with explicit method matcher' do
-    let(:arguments)        { %w(--rspec-unit TestApp::Literal#float) }
+    let(:arguments)        { %w(--rspec TestApp::Literal#float) }
     let(:expected_matcher) { ns::Method.new(cache, 'TestApp::Literal#float') }
 
     it_should_behave_like 'a cli parser'
   end
 
+  context 'with debug flag' do
+    let(:matcher)          { '::TestApp*'                                 }
+    let(:arguments)        { %W(--debug --rspec #{matcher})               }
+    let(:expected_matcher) { ns::Namespace::Recursive.new(cache, matcher) }
+
+    it_should_behave_like 'a cli parser'
+
+    it 'should set the debug option' do
+      subject.config.debug.should be(true)
+    end
+  end
+
+  context 'with zombie flag' do
+    let(:matcher)          { '::TestApp*'                                 }
+    let(:arguments)        { %W(--zombie --rspec #{matcher})              }
+    let(:expected_matcher) { ns::Namespace::Recursive.new(cache, matcher) }
+
+    it_should_behave_like 'a cli parser'
+
+    it 'should set the zombie option' do
+      subject.config.zombie.should be(true)
+    end
+  end
+
   context 'with namespace matcher' do
     let(:matcher)          { '::TestApp*'                                 }
-    let(:arguments)        { %W(--rspec-unit #{matcher})                  }
+    let(:arguments)        { %W(--rspec #{matcher})                       }
     let(:expected_matcher) { ns::Namespace::Recursive.new(cache, matcher) }
 
     it_should_behave_like 'a cli parser'
   end
 
   context 'with code filter' do
-    let(:matcher)   { 'TestApp::Literal#float'                          }
-    let(:arguments) { %W(--rspec-unit --code faa --code bbb #{matcher}) }
+    let(:matcher)   { 'TestApp::Literal#float'                     }
+    let(:arguments) { %W(--rspec --code faa --code bbb #{matcher}) }
 
     let(:filters) do
       [

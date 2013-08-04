@@ -2,9 +2,9 @@
 
 module Mutant
   class Strategy
-
-    # Rspec strategy base class
+    # Rspec killer strategy
     class Rspec < self
+      include Equalizer.new
 
       KILLER = Killer::Forking.new(Killer::Rspec)
 
@@ -14,52 +14,62 @@ module Mutant
       #
       # @api private
       #
-      def self.setup
-        require('./spec/spec_helper.rb')
+      def setup
+        output = StringIO.new
+        configuration.error_stream = output
+        configuration.output_stream = output
+        options.configure(configuration)
+        configuration.load_spec_files
         self
       end
+      memoize :setup
 
-      # Run all unit specs per mutation
-      class Unit < self
+      # Return configuration
+      #
+      # @return [RSpec::Core::Configuration]
+      #
+      # @api private
+      #
+      def configuration
+        RSpec::Core::Configuration.new
+      end
+      memoize :configuration, :freezer => :noop
 
-        # Return file name pattern for mutation
-        #
-        # @return [Enumerable<String>]
-        #
-        # @api private
-        #
-        def self.spec_files(_mutation)
-          Dir['spec/unit/**/*_spec.rb']
-        end
-      end # Unit
+      # Return example groups
+      #
+      # @return [Enumerable<RSpec::Core::ExampleGroup>]
+      #
+      # @api private
+      #
+      def example_groups
+        world.example_groups
+      end
 
-      # Run all integration specs per mutation
-      class Integration < self
+    private
 
-        # Return file name pattern for mutation
-        #
-        # @return [Mutation]
-        #
-        # @api private
-        #
-        def self.spec_files(_mutation)
-          Dir['spec/integration/**/*_spec.rb']
-        end
-      end # Integration
+      # Return world
+      #
+      # @return [RSpec::Core::World]
+      #
+      # @api private
+      #
+      def world
+        RSpec.world
+      end
+      memoize :world, :freezer => :noop
 
-      # Run all specs per mutation
-      class Full < self
-
-        # Return spec files
-        #
-        # @return [Enumerable<String>]
-        #
-        # @api private
-        #
-        def self.spec_files(_mutation)
-          Dir['spec/**/*_spec.rb']
-        end
-      end # Full
+      # Return options
+      #
+      # @return [RSpec::Core::ConfigurationOptions]
+      #
+      # @api private
+      #
+      def options
+        options = RSpec::Core::ConfigurationOptions.new(%w(--fail-fast spec))
+        options.parse_options
+        options
+      end
+      memoize :options, :freezer => :noop
 
     end # Rspec
   end # Strategy
