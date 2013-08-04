@@ -84,6 +84,30 @@ describe Mutant::CLI, '.new' do
     it_should_behave_like 'a cli parser'
   end
 
+  context 'with debug flag' do
+    let(:matcher)          { '::TestApp*'                                 }
+    let(:arguments)        { %W(--debug --rspec #{matcher})               }
+    let(:expected_matcher) { ns::Namespace::Recursive.new(cache, matcher) }
+
+    it_should_behave_like 'a cli parser'
+
+    it 'should set the debug option' do
+      subject.config.debug.should be(true)
+    end
+  end
+
+  context 'with zombie flag' do
+    let(:matcher)          { '::TestApp*'                                 }
+    let(:arguments)        { %W(--zombie --rspec #{matcher})              }
+    let(:expected_matcher) { ns::Namespace::Recursive.new(cache, matcher) }
+
+    it_should_behave_like 'a cli parser'
+
+    it 'should set the zombie option' do
+      subject.config.zombie.should be(true)
+    end
+  end
+
   context 'with namespace matcher' do
     let(:matcher)          { '::TestApp*'                                 }
     let(:arguments)        { %W(--rspec #{matcher})                       }

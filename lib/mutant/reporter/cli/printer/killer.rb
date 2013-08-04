@@ -13,7 +13,6 @@ module Mutant
           SUCCESS = '.'.freeze
           FAILURE = 'F'.freeze
 
-
           # Run printer
           #
           # @return [undefined]
