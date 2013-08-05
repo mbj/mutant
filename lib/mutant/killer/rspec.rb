@@ -5,20 +5,6 @@ module Mutant
     # Runner for rspec tests
     class Rspec < self
 
-      # Noop reporter
-      module Reporter
-        %w(example example_group).each do |method_name|
-          %w(passed started failed finished pending).each do |state|
-            name = "#{method_name}_#{state}"
-            define_singleton_method(name) do |_subject|
-              self
-            end
-          end
-        end
-
-        freeze
-      end
-
     private
 
       # Run rspec test
@@ -41,8 +27,10 @@ module Mutant
           return false
         end
 
+        reporter = RSpec::Core::Reporter.new
+
         example_groups.each do |group|
-          return true unless group.run(Reporter)
+          return true unless group.run(reporter)
         end
 
         false
