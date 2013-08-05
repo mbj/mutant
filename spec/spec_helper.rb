@@ -17,7 +17,7 @@ if ENV['COVERAGE'] == 'true'
     add_filter       'config'
     add_filter       'spec'
     add_filter       'test_app'
-    minimum_coverage 89.56  # TODO: raise this to 100, then mutation test
+    minimum_coverage 89.65  # TODO: raise this to 100, then mutation test
   end
 end
 
