@@ -151,12 +151,12 @@ module Mutant
 
         $LOAD_PATH.each do |path|
           path = Pathname.new(path).join(file_name)
-          if path.exist?
+          if path.file?
             return new(path)
           end
         end
 
-        $stderr.puts "Cannot find #{file_name} in $LOAD_PATH"
+        $stderr.puts "Cannot find file #{file_name} in $LOAD_PATH"
         nil
       end
 
