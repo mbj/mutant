@@ -49,7 +49,7 @@ module Mutant
           .split(SCOPE_OPERATOR)
           .reduce(Object) do |parent, name|
             parent.const_get(name, nil)
-          end
+        end
       end
 
       # Return matchers for input
