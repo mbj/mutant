@@ -96,8 +96,8 @@ module Mutant
       # @api private
       #
       def match_prefixes
-        name_nesting.length.downto(1).map do |last|
-          name_nesting[0...last].join('::')
+        name_nesting.each_index.reverse_each.map do |index|
+          name_nesting.take(index.succ).join('::')
         end
       end
       memoize :match_prefixes
