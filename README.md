@@ -62,14 +62,14 @@ Currently mutant covers the majority of ruby's complex nodes that often occur in
 Some stats from the [axiom](https://github.com/dkubb/axiom) library:
 
 ```
-Subjects:  417       # Amount of subjects being mutated (currently only methods)
-Mutations: 5442      # Amount of mutations mutant generated (~13 mutations per method)
-Kills:     5385      # Amount of successfully killed mutations
-Runtime:   1898.11s  # Total runtime
-Killtime:  1884.17s  # Time spend killing mutations
-Overhead:  0.73%
-Coverage:  98.95%    # Coverage score
-Alive:     57        # Amount of alive mutations.
+Subjects:  424       # Amount of subjects being mutated (currently only methods)
+Mutations: 6760      # Amount of mutations mutant generated (~13 mutations per method)
+Kills:     6664      # Amount of successfully killed mutations
+Runtime:   5123.13s  # Total runtime
+Killtime:  5092.63s  # Time spend killing mutations
+Overhead:  0.60%
+Coverage:  98.58%    # Coverage score
+Alive:     96        # Amount of alive mutations.
 ```
 
 
