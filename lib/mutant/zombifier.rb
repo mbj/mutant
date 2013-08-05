@@ -152,7 +152,6 @@ module Mutant
         $LOAD_PATH.each do |path|
           path = Pathname.new(path).join(file_name)
           if path.exist?
-            $stderr.puts "Loading #{path}"
             return new(path)
           end
         end
