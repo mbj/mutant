@@ -14,6 +14,7 @@ module Mutant
     STOP = %w(
       set
       rspec
+      rspec/core/formatters/base_text_formatter
       diff/lcs
       diff/lcs/hunk
       parser

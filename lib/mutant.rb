@@ -20,6 +20,7 @@ require 'rspec'
 require 'anima'
 require 'concord'
 require 'rspec'
+require 'rspec/core/formatters/base_text_formatter'
 
 # Library namespace
 module Mutant
