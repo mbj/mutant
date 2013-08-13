@@ -22,7 +22,7 @@ module Mutant
         # @api private
         #
         def should_survive?
-          false
+          true
         end
 
       end

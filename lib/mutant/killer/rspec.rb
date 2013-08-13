@@ -5,6 +5,27 @@ module Mutant
     # Runner for rspec tests
     class Rspec < self
 
+    # Reporter for mutations that *should* survive
+    #
+    # @note This works by dumping output on STDERR from the child processes that
+    #   runs the rspecs, so its output can't neatly be merged with what's sent
+    #   to Mutant::Reporter::CLI::Printer.
+    class SurvivorReporter < RSpec::Core::Formatters::BaseTextFormatter
+      def initialize
+        super($stderr)
+      end
+
+      def example_failed(*)
+        super
+        message("\nTest suite unexpectedly failed:")
+        dump_failures
+        message("\n")
+      end
+    end
+
+    # Reporter that discards all rspec events.
+    class NullReporter < RSpec::Core::Reporter; end
+
     private
 
       # Run rspec test
@@ -27,7 +48,11 @@ module Mutant
           return false
         end
 
-        reporter = RSpec::Core::Reporter.new
+        reporter = if mutation.should_survive?
+          SurvivorReporter.new
+        else
+          NullReporter.new
+        end
 
         groups.each do |group|
           return true unless group.run(reporter)
