@@ -29,7 +29,7 @@ describe Mutant::CLI, '.new' do
 
   # Defaults
   let(:expected_filter)   { Mutant::Mutation::Filter::ALL      }
-  let(:expected_strategy) { Mutant::Strategy::Rspec.new        }
+  let(:expected_strategy) { Mutant::Strategy::Rspec.new(0)     }
   let(:expected_reporter) { Mutant::Reporter::CLI.new($stdout) }
 
   let(:ns)    { Mutant::CLI::Classifier }
@@ -56,7 +56,7 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with many strategy flags' do
-    let(:arguments) { %w(--static-fail --rspec TestApp) }
+    let(:arguments) { %w(--rspec --rspec TestApp) }
     let(:expected_matcher) { Mutant::CLI::Classifier::Namespace::Flat.new(Mutant::Cache.new, 'TestApp') }
 
     it_should_behave_like 'a cli parser'
@@ -65,7 +65,7 @@ describe Mutant::CLI, '.new' do
   context 'without arguments' do
     let(:arguments) { [] }
 
-    let(:expected_message) { 'No strategy was set!' }
+    let(:expected_message) { 'No matchers given' }
 
     it_should_behave_like 'an invalid cli run'
   end

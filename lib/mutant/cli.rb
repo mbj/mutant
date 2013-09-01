@@ -42,12 +42,11 @@ module Mutant
     #
     def initialize(arguments = [])
       @filters, @matchers = [], []
-
+      @debug = @fail_fast = @zombie = false
       @cache = Mutant::Cache.new
 
       parse(arguments)
-      strategy
-      matcher
+      config # trigger lazyness
     end
 
     # Return config
@@ -71,6 +70,8 @@ module Mutant
     memoize :config
 
   private
+
+    attr_writer :strategy_builder
 
     # Test for running in debug mode
     #
@@ -99,7 +100,6 @@ module Mutant
         Mutation::Filter::Whitelist.new(@filters)
       end
     end
-    memoize :filter
 
     # Return stratety
     #
@@ -108,9 +108,11 @@ module Mutant
     # @api private
     #
     def strategy
-      @strategy or raise(Error, 'No strategy was set!')
+      unless @strategy_builder
+        raise(Error, 'No strategy was set!')
+      end
+      @strategy_builder.strategy
     end
-    memoize :strategy
 
     # Return reporter
     #
@@ -121,7 +123,6 @@ module Mutant
     def reporter
       Reporter::CLI.new($stdout)
     end
-    memoize :reporter
 
     # Return matcher
     #
@@ -134,12 +135,11 @@ module Mutant
     #
     def matcher
       if @matchers.empty?
-        raise Error, 'No matchers given'
+        raise(Error, 'No matchers given')
       end
 
       Matcher::Chain.build(@matchers)
     end
-    memoize :matcher
 
     # Add mutation filter
     #
@@ -153,18 +153,6 @@ module Mutant
     #
     def add_filter(klass, filter)
       @filters << klass.new(filter)
-    end
-
-    # Set strategy
-    #
-    # @param [Strategy] strategy
-    #
-    # @api private
-    #
-    # @return [undefined]
-    #
-    def set_strategy(strategy)
-      @strategy = strategy
     end
 
     # Parse the command-line options
@@ -182,9 +170,7 @@ module Mutant
     def parse(arguments)
       opts = OptionParser.new do |builder|
         builder.banner = 'usage: mutant STRATEGY [options] MATCHERS ...'
-        builder.separator ''
-        builder.separator 'Strategies:'
-
+        builder.separator('')
         add_strategies(builder)
         add_environmental_options(builder)
         add_options(builder)
@@ -217,24 +203,20 @@ module Mutant
 
     # Add strategies
     #
-    # @param [Object] opts
+    # @param [OptionParser] parser
     #
     # @return [undefined]
     #
     # @api private
     #
-    def add_strategies(opts)
-      opts.separator ''
-      opts.separator 'Strategies:'
+    def add_strategies(parser)
+      parser.separator(EMPTY_STRING)
+      parser.separator('Strategies:')
 
-      opts.on('--static-success', 'does succeed on all mutations') do
-        set_strategy Strategy::Static::Success.new
-      end
-      opts.on('--static-fail', 'does fail on all mutations') do
-        set_strategy Strategy::Static::Fail.new
-      end
-      opts.on('--rspec', 'kills mutations with rspec') do
-        set_strategy Strategy::Rspec.new
+      [
+        Builder::Rspec
+      ].each do |builder|
+        builder.add_options(parser, &method(:strategy_builder=))
       end
     end
 
@@ -252,7 +234,7 @@ module Mutant
       end.on('-I', 'Add directory to $LOAD_PATH') do |directory|
         $LOAD_PATH << directory
       end.on('-r', '--require NAME', 'Require file with NAME') do |name|
-        require name
+        require(name)
       end
     end
 
@@ -282,6 +264,5 @@ module Mutant
         exit
       end
     end
-
   end # CLI
 end # Mutant
