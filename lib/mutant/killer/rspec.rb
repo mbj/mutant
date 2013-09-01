@@ -23,7 +23,7 @@ module Mutant
         groups = example_groups
 
         unless groups
-          $stderr.puts "No rspec example groups found for: #{match_prefixes.join(', ')}"
+          $stderr.puts("No rspec example groups found for: #{match_prefixes.join(', ')}")
           return false
         end
 
