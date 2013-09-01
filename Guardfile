@@ -25,8 +25,10 @@ guard :rspec, cli: File.read('.rspec').split.push('--fail-fast').join(' '), keep
   watch(%r{\Aspec/(?:unit|integration)/.+_spec\.rb\z})
 end
 
-guard :rubocop, cli: %w[--config config/rubocop.yml] do
-  watch(%r{.+\.(?:rb|rake)\z})
-  watch(%r{\Aconfig/rubocop\.yml\z})  { |m| File.dirname(m[0]) }
-  watch(%r{(?:.+/)?\.rubocop\.yml\z}) { |m| File.dirname(m[0]) }
-end
+# Deactivated for now. Somehow it disables the rspec guard.
+#
+# guard :rubocop, cli: %w[--config config/rubocop.yml] do
+#   watch(%r{.+\.(?:rb|rake)\z})
+#   watch(%r{\Aconfig/rubocop\.yml\z})  { |m| File.dirname(m[0]) }
+#   watch(%r{(?:.+/)?\.rubocop\.yml\z}) { |m| File.dirname(m[0]) }
+# end
