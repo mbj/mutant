@@ -4,7 +4,15 @@ module Mutant
   class Runner
     # Subject specific runner
     class Subject < self
-      include Concord::Public.new(:config, :subject)
+      include Equalizer.new(:config, :subject)
+
+      # Return subject
+      #
+      # @return [Subject]
+      #
+      # @api private
+      #
+      attr_reader :subject
 
       register Mutant::Subject
 

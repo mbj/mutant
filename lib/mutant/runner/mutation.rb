@@ -4,9 +4,17 @@ module Mutant
   class Runner
     # Mutation runner
     class Mutation < self
-      include Concord::Public.new(:config, :mutation)
+      include Equalizer.new(:config, :mutation)
 
       register Mutant::Mutation
+
+      # Return mutation
+      #
+      # @return [Mutation]
+      #
+      # @api private
+      #
+      attr_reader :mutation
 
       # Return killer instance
       #
