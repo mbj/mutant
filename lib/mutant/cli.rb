@@ -63,7 +63,7 @@ module Mutant
         :debug     => debug?,
         :matcher   => matcher,
         :filter    => filter,
-        :fail_fast => !!@fail_fast,
+        :fail_fast => @fail_fast,
         :strategy  => strategy,
         :reporter  => reporter
       )
@@ -83,7 +83,7 @@ module Mutant
     # @api private
     #
     def debug?
-      !!@debug
+      @debug
     end
 
     # Return mutation filter
