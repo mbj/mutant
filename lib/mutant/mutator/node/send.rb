@@ -103,19 +103,19 @@ module Mutant
         #
         def normal_dispatch
           emit_naked_receiver
-          emit_selector_mutations
+          emit_selector_replacements
           mutate_receiver
           emit_argument_propagation
           mutate_arguments
         end
 
-        # Emit selector mutations
+        # Emit selector replacements
         #
         # @return [undefined]
         #
         # @api private
         #
-        def emit_selector_mutations
+        def emit_selector_replacements
           replacement = SELECTOR_REPLACEMENTS.fetch(selector) { return }
           emit_selector(replacement)
         end
