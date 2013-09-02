@@ -13,6 +13,7 @@ module Mutant
     # @api private
     #
     def setup
+      self
     end
 
     # Perform strategy teardown
@@ -22,6 +23,7 @@ module Mutant
     # @api private
     #
     def teardown
+      self
     end
 
     # Kill mutation
