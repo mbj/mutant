@@ -72,8 +72,6 @@ module Mutant
 
   private
 
-    attr_writer :strategy_builder
-
     # Test for running in debug mode
     #
     # @return [true]
@@ -214,10 +212,14 @@ module Mutant
       parser.separator(EMPTY_STRING)
       parser.separator('Strategies:')
 
+      writer = lambda do |builder|
+        @strategy_builder = builder
+      end
+
       [
         Builder::Rspec
       ].each do |builder|
-        builder.add_options(parser, &method(:strategy_builder=))
+        builder.add_options(parser, &writer)
       end
     end
 
