@@ -29,8 +29,8 @@ module Mutant
           def dispatch
             emit_nil
             emit_inverse
-            emit_start_mutations
-            emit_end_mutations
+            emit_lower_bound_mutations
+            emit_upper_bound_mutations
           end
 
           # Return inverse node
@@ -49,7 +49,7 @@ module Mutant
           #
           # @api private
           #
-          def emit_end_mutations
+          def emit_upper_bound_mutations
             emit_self(NAN, _end)
           end
 
@@ -59,7 +59,7 @@ module Mutant
           #
           # @api private
           #
-          def emit_start_mutations
+          def emit_lower_bound_mutations
             emit_self(start, INFINITY)
             emit_self(start, NAN)
           end
