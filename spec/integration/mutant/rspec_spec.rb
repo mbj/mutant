@@ -14,12 +14,12 @@ describe Mutant, 'rspec integration' do
     Kernel.system('bundle exec mutant --rspec ::TestApp::Literal#string').should be(true)
   end
 
-  pending 'fails to kill mutations when they are not covered' do
+  specify 'fails to kill mutations when they are not covered' do
     cli = 'bundle exec mutant --rspec ::TestApp::Literal#uncovered_string'
     Kernel.system(cli).should be(false)
   end
 
-  pending 'fails when some mutations when are not covered' do
+  specify 'fails when some mutations are not covered' do
     cli = 'bundle exec mutant --rspec ::TestApp::Literal'
     Kernel.system(cli).should be(false)
   end
