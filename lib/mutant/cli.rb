@@ -94,9 +94,9 @@ module Mutant
     #
     def filter
       if @filters.empty?
-        Mutation::Filter::ALL
+        Filter::ALL
       else
-        Mutation::Filter::Whitelist.new(@filters)
+        Filter::Whitelist.new(@filters)
       end
     end
 
@@ -142,16 +142,14 @@ module Mutant
 
     # Add mutation filter
     #
-    # @param [Class<Mutant::Filter>] klass
-    #
-    # @param [String] filter
+    # @param [Class<Filter>] klass
     #
     # @return [undefined]
     #
     # @api private
     #
-    def add_filter(klass, filter)
-      @filters << klass.new(filter)
+    def add_filter(klass, *arguments)
+      @filters << klass.new(*arguments)
     end
 
     # Parse the command-line options
@@ -257,7 +255,7 @@ module Mutant
         puts("mutant-#{Mutant::VERSION}")
         Kernel.exit(0)
       end.on('--code FILTER', 'Adds a code filter') do |filter|
-        add_filter(Mutation::Filter::Code, filter)
+        add_filter(Filter::Attribute, :code, filter)
       end.on('--fail-fast', 'Fail fast') do
         @fail_fast = true
       end.on('-d', '--debug', 'Enable debugging output') do
