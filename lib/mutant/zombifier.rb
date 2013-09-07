@@ -11,7 +11,7 @@ module Mutant
     # * Toplevel reference/cbase nodes in code (rspec)
     # * Creates useless toplevel modules that get vendored under ::Zombie (set)
     #
-    STOP = %w(
+    IGNORE = %w(
       set
       rspec
       diff/lcs
@@ -31,6 +31,7 @@ module Mutant
     #
     def self.zombify
       run('mutant')
+      self
     end
 
     # Zombify gem
@@ -43,6 +44,7 @@ module Mutant
     #
     def self.run(name)
       Gem.new(name).zombify
+      self
     end
 
     # Zombifier subject, compatible with mutants loader
@@ -68,7 +70,7 @@ module Mutant
       # @api private
       #
       def zombify
-        $stderr.puts "Zombifying #{context.source_path}"
+        $stderr.puts("Zombifying #{context.source_path}")
         Loader::Eval.run(zombified_root, self)
         self
       end
@@ -109,6 +111,7 @@ module Mutant
         end
         self
       end
+      memoize :zombify
 
       # Find file
       #
@@ -123,7 +126,7 @@ module Mutant
       # @api private
       #
       def self.find(logical_name)
-        return if STOP.include?(logical_name)
+        return if IGNORE.include?(logical_name)
         CACHE.fetch(logical_name) do
           CACHE[logical_name] = find_uncached(logical_name)
         end
