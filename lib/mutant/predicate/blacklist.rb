@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 module Mutant
-  class Filter
-    # Blacklist filter
+  class Predicate
+    # Blacklist predicate
     class Blacklist < self
       include Adamantium::Flat, Concord.new(:blacklist)
 
@@ -19,7 +19,7 @@ module Mutant
       # @api private
       #
       def match?(object)
-        blacklist.none? { |filter| filter.match?(object) }
+        blacklist.none? { |predicate| predicate.match?(object) }
       end
 
     end # Whitelist

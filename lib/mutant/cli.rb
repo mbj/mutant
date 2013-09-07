@@ -94,9 +94,9 @@ module Mutant
     #
     def filter
       if @filters.empty?
-        Filter::ALL
+        Predicate::ALL
       else
-        Filter::Whitelist.new(@filters)
+        Predicate::Whitelist.new(@filters)
       end
     end
 
@@ -142,7 +142,7 @@ module Mutant
 
     # Add mutation filter
     #
-    # @param [Class<Filter>] klass
+    # @param [Class<Predicate>] klass
     #
     # @return [undefined]
     #
@@ -255,7 +255,7 @@ module Mutant
         puts("mutant-#{Mutant::VERSION}")
         Kernel.exit(0)
       end.on('--code FILTER', 'Adds a code filter') do |filter|
-        add_filter(Filter::Attribute, :code, filter)
+        add_filter(Predicate::Attribute, :code, filter)
       end.on('--fail-fast', 'Fail fast') do
         @fail_fast = true
       end.on('-d', '--debug', 'Enable debugging output') do

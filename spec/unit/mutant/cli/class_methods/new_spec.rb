@@ -28,7 +28,7 @@ describe Mutant::CLI, '.new' do
   end
 
   # Defaults
-  let(:expected_filter)   { Mutant::Filter::ALL      }
+  let(:expected_filter)   { Mutant::Predicate::ALL      }
   let(:expected_strategy) { Mutant::Strategy::Rspec.new(0)     }
   let(:expected_reporter) { Mutant::Reporter::CLI.new($stdout) }
 
@@ -122,13 +122,13 @@ describe Mutant::CLI, '.new' do
 
     let(:filters) do
       [
-        Mutant::Filter::Attribute.new(:code, 'faa'),
-        Mutant::Filter::Attribute.new(:code, 'bbb'),
+        Mutant::Predicate::Attribute.new(:code, 'faa'),
+        Mutant::Predicate::Attribute.new(:code, 'bbb'),
       ]
     end
 
     let(:expected_matcher) { ns::Method.new(cache, 'TestApp::Literal#float')  }
-    let(:expected_filter)  { Mutant::Filter::Whitelist.new(filters) }
+    let(:expected_filter)  { Mutant::Predicate::Whitelist.new(filters) }
 
     it_should_behave_like 'a cli parser'
   end

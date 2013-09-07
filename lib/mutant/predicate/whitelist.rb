@@ -1,8 +1,7 @@
 # encoding: utf-8
 
 module Mutant
-  class Filter
-
+  class Predicate
     # Whiltelist filter
     class Whitelist < self
       include Adamantium::Flat, Concord.new(:whitelist)
@@ -24,5 +23,5 @@ module Mutant
       end
 
     end # Whitelist
-  end # Filter
+  end # Predicate
 end # Mutant

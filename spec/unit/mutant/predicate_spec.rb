@@ -1,22 +1,22 @@
 require 'spec_helper'
 
 filter_helpers = proc do
-  let(:item_a) { double('Item A', :foo => 'bar') }
-  let(:item_b) { double('Item B', :foo => 'baz') }
+  let(:input_a) { double('Input A', :foo => 'bar') }
+  let(:input_b) { double('Input B', :foo => 'baz') }
 
   let(:filter_a) do
-    item_a = self.item_a
+    input_a = self.input_a
     Module.new do
-      define_singleton_method(:match?) do |item|
-        item == item_a
+      define_singleton_method(:match?) do |input|
+        input == input_a
       end
     end
   end
 
-  subject { object.match?(item) }
+  subject { object.match?(input) }
 end
 
-describe Mutant::Filter::Whitelist do
+describe Mutant::Predicate::Whitelist do
   instance_eval(&filter_helpers)
 
   let(:object) { described_class.new(whitelist) }
@@ -26,23 +26,23 @@ describe Mutant::Filter::Whitelist do
     context 'with empty whitelist' do
       let(:whitelist) { [] }
 
-      it 'accepts all items' do
-        expect(object.match?(item_a)).to be(false)
-        expect(object.match?(item_b)).to be(false)
+      it 'accepts all inputs' do
+        expect(object.match?(input_a)).to be(false)
+        expect(object.match?(input_b)).to be(false)
       end
     end
 
     context 'with non empty whitelist' do
       let(:whitelist) { [filter_a] }
 
-      context 'with whitelisted item' do
-        let(:item) { item_a }
+      context 'with whitelisted input' do
+        let(:input) { input_a }
 
         it { should be(true) }
       end
 
-      context 'with non whitelisted item' do
-        let(:item) { item_b }
+      context 'with non whitelisted input' do
+        let(:input) { input_b }
 
         it { should be(false) }
       end
@@ -50,7 +50,7 @@ describe Mutant::Filter::Whitelist do
   end
 end
 
-describe Mutant::Filter::Blacklist do
+describe Mutant::Predicate::Blacklist do
   instance_eval(&filter_helpers)
 
   let(:object) { described_class.new(whitelist) }
@@ -60,23 +60,23 @@ describe Mutant::Filter::Blacklist do
     context 'with empty whitelist' do
       let(:whitelist) { [] }
 
-      it 'accepts all items' do
-        expect(object.match?(item_a)).to be(true)
-        expect(object.match?(item_b)).to be(true)
+      it 'accepts all inputs' do
+        expect(object.match?(input_a)).to be(true)
+        expect(object.match?(input_b)).to be(true)
       end
     end
 
     context 'with non empty whitelist' do
       let(:whitelist) { [filter_a] }
 
-      context 'with whitelisted item' do
-        let(:item) { item_a }
+      context 'with whitelisted input' do
+        let(:input) { input_a }
 
         it { should be(false) }
       end
 
-      context 'with non whitelisted item' do
-        let(:item) { item_b }
+      context 'with non whitelisted input' do
+        let(:input) { input_b }
 
         it { should be(true) }
       end
@@ -84,11 +84,11 @@ describe Mutant::Filter::Blacklist do
   end
 end
 
-describe Mutant::Filter::Attribute::Equality do
+describe Mutant::Predicate::Attribute::Equality do
   instance_eval(&filter_helpers)
 
   let(:object) { described_class.new(attribute_name, expected_value) }
-  let(:item)   { double('Item', attribute_name => actual_value)      }
+  let(:input)   { double('Input', attribute_name => actual_value)      }
 
   let(:attribute_name) { :foo    }
   let(:expected_value) { 'value' }
@@ -108,11 +108,11 @@ describe Mutant::Filter::Attribute::Equality do
   end
 end
 
-describe Mutant::Filter::Attribute::Regexp do
+describe Mutant::Predicate::Attribute::Regexp do
   instance_eval(&filter_helpers)
 
   let(:object) { described_class.new(attribute_name, expectation) }
-  let(:item)   { double('Item', attribute_name => actual_value)   }
+  let(:input)   { double('Input', attribute_name => actual_value)   }
 
   let(:attribute_name) { :foo    }
   let(:expectation)    { /\Avalue\z/ }

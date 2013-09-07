@@ -1,6 +1,6 @@
 module Mutant
-  # Abstract base class for mutation/subject filters
-  class Filter
+  # Abstract base class for predicates used to filter subjects / mutations
+  class Predicate
     include Adamantium::Flat, AbstractType
     extend DescendantsTracker
 
@@ -9,7 +9,7 @@ module Mutant
     # @param [Object] object
     #
     # @return [true]
-    #   if object is matched by filter
+    #   if object is matched by predicate
     #
     # @return [false]
     #   otherwise
@@ -18,7 +18,7 @@ module Mutant
     #
     abstract_method :match?
 
-    # Build filter from string
+    # Build predicate from string
     #
     # @param [String] notation
     #
@@ -32,14 +32,14 @@ module Mutant
     #
     def self.build(notation)
       descendants.each do |descendant|
-        filter = descendant.handle(notation)
-        return filter if filter
+        predicate = descendant.handle(notation)
+        return predicate if predicate
       end
 
       nil
     end
 
-    # Return filter for handle
+    # Return predicate for handle
     #
     # @param [String] _notation
     #
@@ -52,7 +52,7 @@ module Mutant
       nil
     end
 
-    # Mutation filter matching all mutations
+    # Mutation predicate matching all mutations
     Mutant.singleton_subclass_instance('ALL', self) do
 
       # Test for match

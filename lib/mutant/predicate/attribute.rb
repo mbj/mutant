@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 module Mutant
-  class Filter
-    # Base class for filters filtering on object attributes
+  class Predicate
+    # Base class for predicates on object attributes
     class Attribute < self
       include Concord.new(:attribute_name, :expectation)
 
@@ -20,7 +20,7 @@ module Mutant
         object.public_send(attribute_name)
       end
 
-      # Regexp based attribute filter
+      # Regexp based attribute predicate
       class Regexp < self
 
         # Test for match
@@ -41,7 +41,7 @@ module Mutant
 
       end # Regexp
 
-      # Equality based attribute filter
+      # Equality based attribute predicate
       class Equality < self
 
         # Test for match
