@@ -11,10 +11,10 @@ module Mutant
           children :name, :value
 
           MAP = IceNine.deep_freeze(
-            :gvasgn => '$',
-            :cvasgn => '@@',
-            :ivasgn => '@',
-            :lvasgn => ''
+            gvasgn: '$',
+            cvasgn: '@@',
+            ivasgn: '@',
+            lvasgn: ''
           )
 
           handle(*MAP.keys)

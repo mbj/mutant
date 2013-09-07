@@ -10,8 +10,8 @@ module Mutant
         private
 
           MAP = {
-            :true  => :false,
-            :false => :true
+            true:  :false,
+            false: :true
           }.freeze
 
           handle(*MAP.keys)

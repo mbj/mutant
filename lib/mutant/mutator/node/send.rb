@@ -12,8 +12,8 @@ module Mutant
         children :receiver, :selector
 
         SELECTOR_REPLACEMENTS = {
-          :send => :public_send,
-          :gsub => :sub
+          send: :public_send,
+          gsub: :sub
         }.freeze
 
         INDEX_REFERENCE = :[]

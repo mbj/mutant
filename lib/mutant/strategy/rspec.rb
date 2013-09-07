@@ -33,7 +33,7 @@ module Mutant
       def configuration
         RSpec::Core::Configuration.new
       end
-      memoize :configuration, :freezer => :noop
+      memoize :configuration, freezer: :noop
 
       # Return example groups
       #
@@ -56,7 +56,7 @@ module Mutant
       def world
         RSpec.world
       end
-      memoize :world, :freezer => :noop
+      memoize :world, freezer: :noop
 
       # Return options
       #
@@ -69,7 +69,7 @@ module Mutant
         options.parse_options
         options
       end
-      memoize :options, :freezer => :noop
+      memoize :options, freezer: :noop
 
     end # Rspec
   end # Strategy

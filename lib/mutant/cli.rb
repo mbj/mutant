@@ -58,14 +58,14 @@ module Mutant
     #
     def config
       Config.new(
-        :cache     => @cache,
-        :zombie    => @zombie,
-        :debug     => debug?,
-        :matcher   => matcher,
-        :filter    => filter,
-        :fail_fast => @fail_fast,
-        :strategy  => strategy,
-        :reporter  => reporter
+        cache:     @cache,
+        zombie:    @zombie,
+        debug:     debug?,
+        matcher:   matcher,
+        filter:    filter,
+        fail_fast: @fail_fast,
+        strategy:  strategy,
+        reporter:  reporter
       )
     end
     memoize :config

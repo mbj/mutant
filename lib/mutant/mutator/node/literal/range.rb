@@ -10,8 +10,8 @@ module Mutant
           include AbstractType
 
           MAP = {
-            :irange => :erange,
-            :erange => :irange
+            irange: :erange,
+            erange: :irange
           }.freeze
 
           children :start, :_end

@@ -50,7 +50,7 @@ module Mutant
             method.name == method_name
           end or raise NameError, "Cannot find method #{identifier}"
         end
-        memoize :method, :freezer => :noop
+        memoize :method, freezer: :noop
 
         # Return scope name
         #

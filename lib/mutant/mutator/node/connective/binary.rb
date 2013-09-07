@@ -9,8 +9,8 @@ module Mutant
         class Binary < Node
 
           INVERSE = {
-            :and => :or,
-            :or  => :and,
+            and: :or,
+            or:  :and
           }.freeze
 
           handle(*INVERSE.keys)
