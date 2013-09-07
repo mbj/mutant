@@ -33,7 +33,7 @@ module Mutant
     #
     def initialize(strategy, mutation)
       @strategy, @mutation = strategy, mutation
-      run_with_benchmark
+      @killed = run
     end
 
     # Test for kill failure
@@ -65,14 +65,6 @@ module Mutant
       @killed
     end
 
-    # Return runtime of killer
-    #
-    # @return [Float]
-    #
-    # @api private
-    #
-    attr_reader :runtime
-
     # Return mutated source
     #
     # @return [String]
@@ -84,19 +76,6 @@ module Mutant
     end
 
   private
-
-    # Run with taking the time
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def run_with_benchmark
-      times = Benchmark.measure do
-        @killed = run
-      end
-      @runtime = times.real
-    end
 
     # Return subject
     #
