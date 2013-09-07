@@ -12,6 +12,8 @@ filter_helpers = proc do
       end
     end
   end
+
+  subject { object.match?(item) }
 end
 
 describe Mutant::Filter::Whitelist do
@@ -20,8 +22,6 @@ describe Mutant::Filter::Whitelist do
   let(:object) { described_class.new(whitelist) }
 
   describe '#match?' do
-
-    subject { object.match?(item) }
 
     context 'with empty whitelist' do
       let(:whitelist) { [] }
@@ -57,8 +57,6 @@ describe Mutant::Filter::Blacklist do
 
   describe '#match?' do
 
-    subject { object.match?(item) }
-
     context 'with empty whitelist' do
       let(:whitelist) { [] }
 
@@ -90,4 +88,46 @@ describe Mutant::Filter::Attribute::Equality do
   instance_eval(&filter_helpers)
 
   let(:object) { described_class.new(attribute_name, expected_value) }
+  let(:item)   { double('Item', attribute_name => actual_value)      }
+
+  let(:attribute_name) { :foo    }
+  let(:expected_value) { 'value' }
+
+  describe '#match?' do
+
+    context 'not matching' do
+      let(:actual_value) { 'other-value' }
+      it { should be(false) }
+    end
+
+    context 'matching' do
+      let(:actual_value) { 'value' }
+      it { should be(true) }
+    end
+
+  end
+end
+
+describe Mutant::Filter::Attribute::Regexp do
+  instance_eval(&filter_helpers)
+
+  let(:object) { described_class.new(attribute_name, expectation) }
+  let(:item)   { double('Item', attribute_name => actual_value)   }
+
+  let(:attribute_name) { :foo    }
+  let(:expectation)    { /\Avalue\z/ }
+
+  describe '#match?' do
+
+    context 'not matching' do
+      let(:actual_value) { 'other-value' }
+      it { should be(false) }
+    end
+
+    context 'matching' do
+      let(:actual_value) { 'value' }
+      it { should be(true) }
+    end
+
+  end
 end

@@ -20,6 +20,28 @@ module Mutant
         object.public_send(attribute_name)
       end
 
+      # Regexp based attribute filter
+      class Regexp < self
+
+        # Test for match
+        #
+        # @param [Object] object
+        #
+        # @return [true]
+        #   if attribute value matches expectation
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def match?(object)
+          !!(expectation =~ value(object))
+        end
+
+      end # Regexp
+
+      # Equality based attribute filter
       class Equality < self
 
         # Test for match
@@ -35,7 +57,7 @@ module Mutant
         # @api private
         #
         def match?(object)
-          value(object).eql?(value)
+          expectation.eql?(value(object))
         end
 
         PATTERN = /\A(code):([a-f0-9]{1,6})\z/.freeze
@@ -58,7 +80,7 @@ module Mutant
           new(match[1].to_sym, match[2])
         end
 
-      end # Code
+      end # Equality
     end # Attribute
   end # Filter
 end # Mutant
