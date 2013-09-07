@@ -8,9 +8,7 @@ module Mutant
         # Subject results printer
         class Subject < self
 
-          handle(Mutant::Subject::Method::Instance)
-          handle(Mutant::Subject::Method::Instance::Memoized)
-          handle(Mutant::Subject::Method::Singleton)
+          handle(Mutant::Subject)
 
           # Run subject results printer
           #
