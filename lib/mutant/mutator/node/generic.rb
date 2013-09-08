@@ -13,7 +13,7 @@ module Mutant
           :next, :break, :ensure,
           :dstr, :dsym, :yield, :rescue, :redo, :defined?,
           :blockarg, :op_asgn, :and_asgn,
-          :regopt, :restarg, :resbody, :retry, :arg_expr,
+          :regopt, :resbody, :retry, :arg_expr,
           :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :empty,
           :alias, :for, :xstr, :back_ref, :class,
           :sclass, :match_with_lvasgn, :match_current_line, :or_asgn, :kwbegin
