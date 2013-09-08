@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::Generic, 'dstr' do
+describe Mutant::Mutator::Node::Dstr, 'dstr' do
   before do
     Mutant::Random.stub(:hex_string => 'random')
   end
