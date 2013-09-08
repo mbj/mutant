@@ -10,7 +10,7 @@ module Mutant
       #   if block given
       #
       # @return [Enumerator<Subject>]
-      #   oherwise
+      #   otherwise
       #
       # @api private
       #
@@ -19,12 +19,12 @@ module Mutant
 
         matcher.each do |subject|
           next if filter.match?(subject)
-          yield matcher
+          yield subject
         end
 
         self
       end
 
     end # Filter
-  end
+  end # Matcher
 end # Mutant
