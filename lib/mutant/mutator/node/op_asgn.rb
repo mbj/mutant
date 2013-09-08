@@ -7,7 +7,7 @@ module Mutant
       # OpAsgn mutator
       class OpAsgn < Generic
 
-        handle(:op_asgn)
+        handle(:op_asgn, :or_asgn, :and_asgn)
 
         children :left, :right
 

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::AndAsgn, 'and_asgn' do
+describe Mutant::Mutator::Node::OpAsgn, 'and_asgn' do
   let(:random_fixnum) { 5        }
   let(:random_string) { 'random' }
 
