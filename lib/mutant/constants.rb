@@ -15,7 +15,7 @@ module Mutant
 
   # Set of op assign types
   OP_ASSIGN = [
-    :or_asgn, :and_asgn
+    :or_asgn, :and_asgn, :op_asgn
   ].to_set.freeze
 
   # Set of node types that are not valid when emitted standalone

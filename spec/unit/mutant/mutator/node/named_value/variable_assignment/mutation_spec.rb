@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
   before do
-    Mutant::Random.stub(:hex_string => 'random')
+    Mutant::Random.stub(hex_string: 'random')
   end
 
   context 'global variable' do
@@ -12,10 +12,10 @@ describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
 
     let(:mutations) do
       mutations = []
-
       mutations << '$srandom = true'
       mutations << '$a = false'
       mutations << '$a = nil'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -26,10 +26,10 @@ describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
 
     let(:mutations) do
       mutations = []
-
       mutations << '@@srandom = true'
       mutations << '@@a = false'
       mutations << '@@a = nil'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -40,10 +40,10 @@ describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
 
     let(:mutations) do
       mutations = []
-
       mutations << '@srandom = true'
       mutations << '@a = false'
       mutations << '@a = nil'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -54,10 +54,10 @@ describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
 
     let(:mutations) do
       mutations = []
-
       mutations << 'srandom = true'
       mutations << 'a = false'
       mutations << 'a = nil'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'

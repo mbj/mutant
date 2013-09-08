@@ -20,14 +20,7 @@ module Mutant
           #
           def self.build(runner, output)
             mutation = runner.mutation
-            case mutation
-            when Mutant::Mutation::Neutral::Noop
-              Noop
-            when Mutant::Mutation::Evil, Mutant::Mutation::Neutral
-              Diff
-            else
-              raise "Unknown mutation: #{mutation}"
-            end.new(runner, output)
+            lookup(mutation.class).new(runner, output)
           end
 
           # Run mutation printer
@@ -56,12 +49,14 @@ module Mutant
           # Reporter for noop mutations
           class Noop < self
 
-          MESSAGE = [
-            'Parsed subject AST:',
-            '%s',
-            'Unparsed source:',
-            '%s',
-          ].join("\n")
+            handle(Mutant::Mutation::Neutral::Noop)
+
+            MESSAGE = [
+              'Parsed subject AST:',
+              '%s',
+              'Unparsed source:',
+              '%s',
+            ].join("\n")
 
           private
 
@@ -83,6 +78,9 @@ module Mutant
 
           # Reporter for neutral and evil mutations
           class Diff < self
+
+            handle(Mutant::Mutation::Neutral)
+            handle(Mutant::Mutation::Evil)
 
             # Return diff
             #

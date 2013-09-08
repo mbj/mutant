@@ -8,6 +8,7 @@ describe Mutant::Mutator::Node::Noop, 'cbase' do
   let(:mutations) do
     mutants = []
     mutants << 'nil'
+    mutants << 'A'
   end
 
   it_should_behave_like 'a mutator'

@@ -26,6 +26,7 @@ module Mutant
           end
           emit_body(nil)
           emit_body(RAISE)
+          emit_nil
         end
 
       end # Block

@@ -63,9 +63,33 @@ module Mutant
         # @api private
         #
         def self.visit(object, output)
-          printer = REGISTRY.fetch(object.class)
+          printer = lookup(object.class)
           printer.run(object, output)
         end
+
+        # Lookup printer class
+        #
+        # @param [Class] klass
+        #
+        # @return [Class:Printer]
+        #   if found
+        #
+        # @raise [RuntimeError]
+        #   otherwise
+        #
+        # @api private
+        #
+        def self.lookup(klass)
+          current = klass
+          until current == Object
+            if REGISTRY.key?(current)
+              return REGISTRY.fetch(current)
+            end
+            current = current.superclass
+          end
+          raise "No printer for: #{klass}"
+        end
+        private_class_method :lookup
 
         abstract_method :run
 

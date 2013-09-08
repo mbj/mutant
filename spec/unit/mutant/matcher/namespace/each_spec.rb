@@ -10,10 +10,10 @@ describe Mutant::Matcher::Namespace, '#each' do
 
   let(:cache) { Mutant::Cache.new }
 
-  let(:singleton_a) { double('SingletonA', :name => 'TestApp::Literal') }
-  let(:singleton_b) { double('SingletonB', :name => 'TestApp::Foo')     }
-  let(:subject_a)   { double('SubjectA')                                }
-  let(:subject_b)   { double('SubjectB')                                }
+  let(:singleton_a) { double('SingletonA', name: 'TestApp::Literal') }
+  let(:singleton_b) { double('SingletonB', name: 'TestApp::Foo')     }
+  let(:subject_a)   { double('SubjectA')                             }
+  let(:subject_b)   { double('SubjectB')                             }
 
   before do
     Mutant::Matcher::Methods::Singleton.stub(:each)
@@ -22,7 +22,7 @@ describe Mutant::Matcher::Namespace, '#each' do
     Mutant::Matcher::Methods::Instance.stub(:each)
       .with(cache, singleton_a)
       .and_yield(subject_b)
-    ObjectSpace.stub(:each_object => [singleton_a, singleton_b])
+    ObjectSpace.stub(each_object: [singleton_a, singleton_b])
   end
 
   context 'with no block' do

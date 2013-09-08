@@ -18,13 +18,13 @@ module Mutant
     module_function :s
 
     NAN =
-      s(:begin, s(:send, s(:float,  0.0), :/, s(:args, s(:float, 0.0))))
+      s(:send, s(:float,  0.0), :/, s(:args, s(:float, 0.0)))
     INFINITY =
-      s(:begin, s(:send, s(:float,  1.0), :/, s(:args, s(:float, 0.0))))
+      s(:send, s(:float,  1.0), :/, s(:args, s(:float, 0.0)))
     NEW_OBJECT =
       s(:send, s(:const, s(:cbase), :Object), :new)
     NEGATIVE_INFINITY =
-      s(:begin, s(:send, s(:float, -1.0), :/, s(:args, s(:float, 0.0))))
+      s(:send, s(:float, -1.0), :/, s(:args, s(:float, 0.0)))
 
     RAISE             = s(:send, nil, :raise)
 

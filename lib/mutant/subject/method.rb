@@ -27,6 +27,16 @@ module Mutant
         node.children[self.class::NAME_INDEX]
       end
 
+      # Return match expression
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def match_expression
+        "#{context.identification}#{self.class::SYMBOL}#{name}"
+      end
+
     private
 
       # Return mutations
@@ -52,16 +62,6 @@ module Mutant
       #
       def scope
         context.scope
-      end
-
-      # Return subtype identifier
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def subtype
-        "#{context.identification}#{self.class::SYMBOL}#{name}"
       end
 
     end # Method

@@ -20,7 +20,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          # noop, for now
+          emit_nil
         end
 
       end # MultipleAssignment

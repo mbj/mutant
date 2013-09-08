@@ -46,7 +46,7 @@ module Mutant
     # @api private
     #
     def identification
-      "#{subtype}:#{source_path}:#{source_line}"
+      "#{match_expression}:#{source_path}:#{source_line}"
     end
     memoize :identification
 
@@ -84,16 +84,26 @@ module Mutant
     end
     memoize :original_root
 
-  private
-
-    # Return subtype identifier
+    # Return match expression
     #
     # @return [String]
     #
     # @api private
     #
-    abstract_method :subtype
-    private :subtype
+    abstract_method :match_expression
+
+    # Return match prefixes
+    #
+    # @return [Enumerable<String>]
+    #
+    # @api private
+    #
+    def match_prefixes
+      [match_expression].concat(context.match_prefixes)
+    end
+    memoize :match_prefixes
+
+  private
 
     # Return neutral mutation
     #

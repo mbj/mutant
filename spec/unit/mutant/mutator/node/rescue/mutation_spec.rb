@@ -15,7 +15,7 @@ describe Mutant::Mutator::Node::Generic, 'rescue' do
   end
 
   before do
-    Mutant::Random.stub(:hex_string => 'random')
+    Mutant::Random.stub(hex_string: 'random')
   end
 
   pending do

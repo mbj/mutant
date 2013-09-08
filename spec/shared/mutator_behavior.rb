@@ -86,8 +86,9 @@ shared_examples_for 'a mutator' do
       if message.any?
 
         message = sprintf(
-          "Original:\n%s\n-----\n%s",
+          "Original:\n%s\n%s\n-----\n%s",
           generate(node),
+          node.inspect,
           message.join("\n-----\n")
         )
 

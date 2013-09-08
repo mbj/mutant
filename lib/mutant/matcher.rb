@@ -14,6 +14,7 @@ module Mutant
     #   if block given
     #
     # @return [Enumerable<Subject>]
+    #   otherwise
     #
     # @api private
     #

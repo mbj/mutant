@@ -19,7 +19,7 @@ describe Mutant::Mutator, '.each' do
     end
 
     before do
-      Mutant::Random.stub(:hex_string => random_string)
+      Mutant::Random.stub(hex_string: random_string)
     end
 
     it_should_behave_like 'a mutator'

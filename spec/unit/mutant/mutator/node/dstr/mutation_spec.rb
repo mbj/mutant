@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::Generic, 'dstr' do
+describe Mutant::Mutator::Node::Dstr, 'dstr' do
   before do
-    Mutant::Random.stub(:hex_string => 'random')
+    Mutant::Random.stub(hex_string: 'random')
   end
 
   let(:source)  { '"foo#{bar}baz"' }
@@ -15,6 +15,8 @@ describe Mutant::Mutator::Node::Generic, 'dstr' do
     mutations << '"#{nil}#{bar}baz"'
     mutations << '"foo#{bar}random"'
     mutations << '"foo#{bar}#{nil}"'
+    mutations << '"foo#{nil}baz"'
+    mutations << 'nil'
   end
 
   it_should_behave_like 'a mutator'

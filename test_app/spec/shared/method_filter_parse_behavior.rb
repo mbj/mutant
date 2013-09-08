@@ -2,7 +2,7 @@
 
 shared_examples_for 'a method filter parse result' do
   before do
-    expected_class.stub(:new => response)
+    expected_class.stub(new: response)
   end
 
   let(:response) { double('Response') }

@@ -117,7 +117,7 @@ module Mutant
         def candidate_scope
           scope.singleton_class
         end
-        memoize :candidate_scope, :freezer => :noop
+        memoize :candidate_scope, freezer: :noop
 
       end # Singleton
 

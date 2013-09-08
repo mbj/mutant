@@ -21,6 +21,7 @@ describe Mutant::Mutator, 'super' do
     let(:mutations) do
       mutations = []
       mutations << 'super'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -35,6 +36,9 @@ describe Mutant::Mutator, 'super' do
       mutations << 'super()'
       mutations << 'super(foo)'
       mutations << 'super(bar)'
+      mutations << 'super(foo, nil)'
+      mutations << 'super(nil, bar)'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'

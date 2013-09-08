@@ -15,6 +15,8 @@ module Mutant
           #
           # @return [undefined]
           #
+          # @api private
+          #
           def dispatch
             emit_nil
             emit_values(values)

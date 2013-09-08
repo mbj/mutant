@@ -18,7 +18,8 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_nil
+          emit_nil unless parent_type == :const
+          emit_self(nil, *children.drop(1))
           children.each_with_index do |child, index|
             mutate_child(index) if child.kind_of?(Parser::AST::Node)
           end

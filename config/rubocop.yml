@@ -80,10 +80,6 @@ ConstantName:
 TrivialAccessors:
   Enabled: false
 
-# I like 1.8 syntax:
-HashSyntax:
-  Enabled: false
-
 # And also have a differend opinion here
 AndOr:
   Enabled: false

@@ -12,7 +12,10 @@ describe Mutant::Mutator, 'block' do
       mutations << 'foo { b }'
       mutations << 'foo {}'
       mutations << 'foo { raise }'
+      mutations << 'foo { a; nil }'
+      mutations << 'foo { nil; b }'
       mutations << 'foo'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -23,7 +26,7 @@ describe Mutant::Mutator, 'block' do
     let(:source) { 'foo { |a, b| }' }
 
     before do
-      Mutant::Random.stub(:hex_string => 'random')
+      Mutant::Random.stub(hex_string: 'random')
     end
 
     let(:mutations) do
@@ -35,6 +38,7 @@ describe Mutant::Mutator, 'block' do
       mutations << 'foo { |a| }'
       mutations << 'foo { |b| }'
       mutations << 'foo { || }'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -43,7 +47,7 @@ describe Mutant::Mutator, 'block' do
   context 'with block pattern args' do
 
     before do
-      Mutant::Random.stub(:hex_string => 'random')
+      Mutant::Random.stub(hex_string: 'random')
     end
 
     let(:source) { 'foo { |(a, b), c| }' }
@@ -61,6 +65,7 @@ describe Mutant::Mutator, 'block' do
       mutations << 'foo { |(a, srandom), c| }'
       mutations << 'foo { |(a, b), srandom| }'
       mutations << 'foo'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'

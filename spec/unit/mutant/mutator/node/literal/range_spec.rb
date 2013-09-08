@@ -3,6 +3,13 @@
 require 'spec_helper'
 
 describe Mutant::Mutator::Node::Literal, 'range' do
+
+  before :each do
+    Mutant::Random.stub(fixnum: random_fixnum)
+  end
+
+  let(:random_fixnum) { 5 }
+
   context 'inclusive range literal' do
     let(:source) { '1..100' }
 
@@ -13,6 +20,18 @@ describe Mutant::Mutator::Node::Literal, 'range' do
       mutations << '(0.0 / 0.0)..100'
       mutations << '1..(1.0 / 0.0)'
       mutations << '1..(0.0 / 0.0)'
+      mutations << '-1..100'
+      mutations << '5..100'
+      mutations << '0..100'
+      mutations << '2..100'
+      mutations << 'nil..100'
+      mutations << '1..nil'
+      mutations << '1..0'
+      mutations << '1..1'
+      mutations << '1..99'
+      mutations << '1..101'
+      mutations << '1..-100'
+      mutations << '1..5'
     end
 
     it_should_behave_like 'a mutator'
@@ -28,6 +47,18 @@ describe Mutant::Mutator::Node::Literal, 'range' do
       mutations << '(0.0 / 0.0)...100'
       mutations << '1...(1.0 / 0.0)'
       mutations << '1...(0.0 / 0.0)'
+      mutations << '-1...100'
+      mutations << '5...100'
+      mutations << '0...100'
+      mutations << '2...100'
+      mutations << 'nil...100'
+      mutations << '1...nil'
+      mutations << '1...0'
+      mutations << '1...1'
+      mutations << '1...99'
+      mutations << '1...101'
+      mutations << '1...-100'
+      mutations << '1...5'
     end
 
     it_should_behave_like 'a mutator'

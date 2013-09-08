@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
   before do
-    Mutant::Random.stub(:hex_string => 'random')
+    Mutant::Random.stub(hex_string: 'random')
   end
 
   context 'global variable' do
@@ -17,6 +17,7 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants << '$a'
       mutants << '$a = ::Object.new; $a'
       mutants << '$srandom = nil; $a'
+      mutants << 'nil; $a'
     end
 
     it_should_behave_like 'a mutator'
@@ -32,6 +33,7 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants << '@@a'
       mutants << '@@a = ::Object.new; @@a'
       mutants << '@@srandom = nil; @@a'
+      mutants << 'nil; @@a'
     end
   end
 
@@ -45,6 +47,7 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants << '@a'
       mutants << '@a = ::Object.new; @a'
       mutants << '@srandom = nil; @a'
+      mutants << 'nil; @a'
     end
 
     it_should_behave_like 'a mutator'
@@ -60,6 +63,7 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants << 'a'
       mutants << 'a = ::Object.new; a'
       mutants << 'srandom = nil; a'
+      mutants << 'nil; a'
     end
 
     it_should_behave_like 'a mutator'

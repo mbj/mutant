@@ -11,10 +11,10 @@ module Mutant
           children :name, :value
 
           MAP = IceNine.deep_freeze(
-            :gvasgn => '$',
-            :cvasgn => '@@',
-            :ivasgn => '@',
-            :lvasgn => ''
+            gvasgn: '$',
+            cvasgn: '@@',
+            ivasgn: '@',
+            lvasgn: ''
           )
 
           handle(*MAP.keys)
@@ -30,6 +30,7 @@ module Mutant
           def dispatch
             mutate_name
             emit_value_mutations if value # mlhs!
+            emit_nil
           end
 
           # Emit name mutations

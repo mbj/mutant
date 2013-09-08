@@ -25,11 +25,13 @@ FeatureEnvy:
   enabled: true
   exclude:
   - Mutant::CLI#parse
+  - Mutant::CLI#add_strategies
   - Mutant::Matcher::Method::Instance#match?
   - Mutant::Matcher::Method::Singleton#receiver?
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
   - Mutant::Reporter::CLI#subject_results
+  - Mutant::Strategy::Rspec#options
 IrresponsibleModule:
   enabled: true
   exclude: []
@@ -78,6 +80,8 @@ TooManyStatements:
   exclude:
   - Mutant#self.singleton_subclass_instance
   - Mutant::CLI#parse
+  - Mutant::CLI#add_options
+  - Mutant::CLI#add_strategies
   - Mutant::Killer::Rspec#run
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI::Printer::Config::Runner#run
@@ -96,8 +100,7 @@ UncommunicativeMethodName:
   accept: []
 UncommunicativeModuleName:
   enabled: true
-  exclude:
-  - Mutant::Strategy::Rspec::DM2
+  exclude: []
   reject:
   - !ruby/regexp /^.$/
   - !ruby/regexp /[0-9]$/
@@ -128,4 +131,8 @@ UtilityFunction:
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
   - Mutant::NodeHelpers#s
+  - Mutant::Strategy::Rspec#configuration
+  - Mutant::Strategy::Rspec#options
+  - Mutant::Strategy::Rspec#world
+
   max_helper_calls: 0

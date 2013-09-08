@@ -4,7 +4,8 @@ module Mutant
   # The configuration of a mutator run
   class Config
     include Adamantium::Flat, Anima.new(
-      :cache, :debug, :strategy, :matcher, :filter, :reporter, :fail_fast
+      :cache, :debug, :strategy, :matcher, :filter,
+      :reporter, :fail_fast, :zombie
     )
 
     # Enumerate subjects

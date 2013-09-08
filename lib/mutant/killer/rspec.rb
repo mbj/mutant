@@ -19,36 +19,65 @@ module Mutant
       #
       def run
         mutation.insert
-        # TODO: replace with real streams from configuration
-        require 'stringio'
-        # Note: We assume interesting output from a failed rspec run is stderr.
-        rspec_err = StringIO.new
 
-        exit_code = ::RSpec::Core::Runner.run(cli_arguments, nil, rspec_err)
+        groups = example_groups
 
-        killed = !exit_code.zero?
-
-        if killed and mutation.should_survive?
-          rspec_err.rewind
-
-          puts "#{mutation.class} test failed."
-          puts 'RSpec stderr:'
-          puts rspec_err.read
+        unless groups
+          $stderr.puts("No rspec example groups found for: #{match_prefixes.join(', ')}")
+          return false
         end
 
-        killed
+        reporter = RSpec::Core::Reporter.new
+
+        groups.each do |group|
+          return true unless group.run(reporter)
+        end
+
+        false
       end
 
-      # Return command line arguments
+      # Return match prefixes
       #
-      # @return [Array]
+      # @return [Enumerble<String>]
       #
       # @api private
       #
-      def cli_arguments
-        %W(
-          --fail-fast
-        ) + strategy.spec_files(mutation.subject)
+      def match_prefixes
+        subject.match_prefixes
+      end
+
+      # Return example groups
+      #
+      # @return [Array<RSpec::Example>]
+      #
+      # @api private
+      #
+      def example_groups
+        match_prefixes.flat_map { |prefix| find_with(prefix) }.compact.uniq
+      end
+
+      # Return example groups that match expression
+      #
+      # @param [String] match_expression
+      #
+      # @return [Enumerable<String>]
+      #
+      # @api private
+      #
+      def find_with(match_expression)
+        all_example_groups.select do |example_group|
+          example_group.description.start_with?(match_expression)
+        end
+      end
+
+      # Return all example groups
+      #
+      # @return [Enumerable<RSpec::Example>]
+      #
+      # @api private
+      #
+      def all_example_groups
+        strategy.example_groups
       end
 
     end # Rspec

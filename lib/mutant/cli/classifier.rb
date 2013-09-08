@@ -49,7 +49,7 @@ module Mutant
           .split(SCOPE_OPERATOR)
           .reduce(Object) do |parent, name|
             parent.const_get(name, nil)
-          end
+        end
       end
 
       # Return matchers for input
@@ -63,12 +63,9 @@ module Mutant
       # @api private
       #
       def self.build(*arguments)
-        classifiers = REGISTRY.map do |descendant|
-          descendant.run(*arguments)
-        end.compact
-
+        classifiers = REGISTRY.map { |descendant| descendant.run(*arguments) }
+        classifiers.compact!
         raise if classifiers.length > 1
-
         classifiers.first
       end
 

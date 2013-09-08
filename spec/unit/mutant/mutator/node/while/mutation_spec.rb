@@ -14,6 +14,9 @@ describe Mutant::Mutator::Node::While do
       mutations << 'while true; end'
       mutations << 'while false; foo; bar; end'
       mutations << 'while nil;   foo; bar; end'
+      mutations << 'while true;  foo; nil; end'
+      mutations << 'while true;  nil; bar; end'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'

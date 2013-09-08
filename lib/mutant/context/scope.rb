@@ -23,7 +23,7 @@ module Mutant
       #
       # @return [String]
       #
-      # @ai private
+      # @api private
       #
       def identification
         scope.name
@@ -88,6 +88,19 @@ module Mutant
       def name
         scope.name
       end
+
+      # Return match prefixes
+      #
+      # @return [Enumerable<String>]
+      #
+      # @api private
+      #
+      def match_prefixes
+        name_nesting.each_index.reverse_each.map do |index|
+          name_nesting.take(index.succ).join('::')
+        end
+      end
+      memoize :match_prefixes
 
       # Return scope wrapped by context
       #

@@ -11,7 +11,7 @@ describe Mutant::Loader::Eval, '.run' do
   let(:line)   { 1               }
 
   let(:mutation_subject) do
-    double('Subject', :source_path => path, :source_line => line)
+    double('Subject', source_path: path, source_line: line)
   end
 
   let(:source) do

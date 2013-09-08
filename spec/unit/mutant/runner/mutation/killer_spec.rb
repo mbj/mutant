@@ -8,24 +8,24 @@ describe Mutant::Runner::Mutation, '#killer' do
   let(:config) do
     double(
       'Config',
-      :fail_fast => fail_fast,
-      :reporter  => reporter,
-      :strategy  => strategy
+      fail_fast: fail_fast,
+      reporter:  reporter,
+      strategy:  strategy
     )
   end
 
-  let(:reporter)  { double('Reporter')                             }
-  let(:mutation)  { double('Mutation', :class => Mutant::Mutation) }
-  let(:strategy)  { double('Strategy')                             }
-  let(:killer)    { double('Killer', :success? => success)         }
-  let(:fail_fast) { false                                          }
-  let(:success)   { false                                          }
+  let(:reporter)  { double('Reporter')                          }
+  let(:mutation)  { double('Mutation', class: Mutant::Mutation) }
+  let(:strategy)  { double('Strategy')                          }
+  let(:killer)    { double('Killer', success?: success)         }
+  let(:fail_fast) { false                                       }
+  let(:success)   { false                                       }
 
   subject { object.killer }
 
   before do
-    reporter.stub(:report => reporter)
-    strategy.stub(:kill => killer)
+    reporter.stub(report: reporter)
+    strategy.stub(kill: killer)
   end
 
   it 'should call configuration to identify strategy' do

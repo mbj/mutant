@@ -19,9 +19,7 @@ module Mutant
         #
         def dispatch
           Util::Array.each(children, self) do |children|
-            if children.length > 1
-              emit_self(*children)
-            end
+            emit_child_subset(children)
           end
           children.each_with_index do |child, index|
             mutate_child(index)
@@ -29,18 +27,22 @@ module Mutant
           end
         end
 
-        # Test if parent input is a send
+        # Emit child subset
         #
-        # @return [true]
-        #   if parent input is a send node
+        # @param [Array<Parser::AST::Node>] nodes
         #
-        # @return [false]
-        #   otherwise
+        # @return [undefined]
         #
         # @api private
         #
-        def parent_send?
-          parent && parent.input.type == :send
+        def emit_child_subset(children)
+          case children.length
+          when 0
+          when 1
+            emit(children.first)
+          else
+            emit_self(*children)
+          end
         end
 
       end # Block

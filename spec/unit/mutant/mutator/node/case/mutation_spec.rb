@@ -6,7 +6,7 @@ describe Mutant::Mutator::Node::Case do
   let(:random_string) { 'random' }
 
   before do
-    Mutant::Random.stub(:hex_string => random_string)
+    Mutant::Random.stub(hex_string: random_string)
   end
 
   context 'with multiple when branches' do
@@ -217,6 +217,8 @@ describe Mutant::Mutator::Node::Case do
           :else
         end
       RUBY
+
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -314,6 +316,8 @@ describe Mutant::Mutator::Node::Case do
           :else
         end
       RUBY
+
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'

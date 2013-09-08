@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Mutant::Mutator, 'if' do
   before do
-    Mutant::Random.stub(:hex_string => 'random')
+    Mutant::Random.stub(hex_string: 'random')
   end
 
   context 'with if and else branches' do
@@ -36,6 +36,8 @@ describe Mutant::Mutator, 'if' do
       # mutations of else body
       mutants << 'if :condition; true;  else true;  end'
       mutants << 'if :condition; true;  else nil;   end'
+
+      mutants << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -51,6 +53,8 @@ describe Mutant::Mutator, 'if' do
       mutants << 'if condition;  nil;   end'
       mutants << 'if true;       true;  end'
       mutants << 'if false;      true;  end'
+      mutants << 'if nil;        true;  end'
+      mutants << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -69,6 +73,7 @@ describe Mutant::Mutator, 'if' do
       mutants << 'unless true;        true;  end'
       mutants << 'unless false;       true;  end'
       mutants << 'if     :condition;  true;  end'
+      mutants << 'nil'
     end
 
     it_should_behave_like 'a mutator'

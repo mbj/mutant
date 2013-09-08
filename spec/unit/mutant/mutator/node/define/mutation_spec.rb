@@ -43,7 +43,7 @@ describe Mutant::Mutator, 'def' do
     let(:source) { 'def foo(a, b); end' }
 
     before do
-      Mutant::Random.stub(:hex_string => 'random')
+      Mutant::Random.stub(hex_string: 'random')
     end
 
     let(:mutations) do
@@ -83,7 +83,7 @@ describe Mutant::Mutator, 'def' do
     let(:source) { 'def foo(a = true); end' }
 
     before do
-      Mutant::Random.stub(:hex_string => 'random')
+      Mutant::Random.stub(hex_string: 'random')
     end
 
     let(:mutations) do
@@ -127,7 +127,7 @@ describe Mutant::Mutator, 'def' do
   context 'define on singleton with argument' do
 
     before do
-      Mutant::Random.stub(:hex_string => 'random')
+      Mutant::Random.stub(hex_string: 'random')
     end
 
     let(:source) { 'def self.foo(a, b); end' }

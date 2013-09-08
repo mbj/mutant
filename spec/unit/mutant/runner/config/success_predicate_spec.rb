@@ -10,9 +10,9 @@ describe Mutant::Runner::Config, '#success?' do
   let(:config) do
     double(
       'Config',
-      :reporter => reporter,
-      :strategy => strategy,
-      :subjects => [subject_a, subject_b]
+      reporter: reporter,
+      strategy: strategy,
+      subjects: [subject_a, subject_b]
     )
   end
 
@@ -22,15 +22,15 @@ describe Mutant::Runner::Config, '#success?' do
   let(:subject_b) { double('Subject B') }
 
   let(:runner_a) do
-    double('Runner A', :stop? => stop_a, :success? => success_a)
+    double('Runner A', stop?: stop_a, success?: success_a)
   end
 
   let(:runner_b) do
-    double('Runner B', :stop? => stop_b, :success? => success_b)
+    double('Runner B', stop?: stop_b, success?: success_b)
   end
 
   before do
-    reporter.stub(:report => reporter)
+    reporter.stub(report: reporter)
     strategy.stub(:setup)
     strategy.stub(:teardown)
     Mutant::Runner.stub(:run).with(config, subject_a).and_return(runner_a)
