@@ -42,7 +42,7 @@ describe Mutant::CLI::Classifier, '.build' do
     let(:input) { '::' }
 
     it 'should return nil' do
-      should be(nil)
+      expect { subject }.to raise_error(Mutant::CLI::Error, "No matcher handles: #{input.inspect}")
     end
   end
 end

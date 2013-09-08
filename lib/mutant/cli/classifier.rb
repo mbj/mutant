@@ -54,19 +54,28 @@ module Mutant
 
       # Return matchers for input
       #
+      # @param [Cache] cache
+      # @param [String] pattern
+      #
       # @return [Classifier]
       #   if a classifier handles the input
       #
-      # @return [nil]
+      # @raise [RuntimeError]
       #   otherwise
       #
       # @api private
       #
-      def self.build(*arguments)
-        classifiers = REGISTRY.map { |descendant| descendant.run(*arguments) }
+      def self.build(cache, pattern)
+        classifiers = REGISTRY.map { |descendant| descendant.run(cache, pattern) }
         classifiers.compact!
-        raise if classifiers.length > 1
-        classifiers.first
+        case classifiers.length
+        when 0
+          raise Error, "No matcher handles: #{pattern.inspect}"
+        when 1
+          return classifiers.first
+        else
+          raise Error, "More than one matcher found for: #{pattern.inspect}"
+        end
       end
 
       # Run classifier
