@@ -229,8 +229,7 @@ module Mutant
       # @api private
       #
       def agsn_left?
-        [:or_asgn, :op_asgn, :and_asgn].include?(parent_type) &&
-        parent.left.equal?(node)
+        OP_ASSIGN.include?(parent_type) && parent.left.equal?(node)
       end
 
     end # Node
