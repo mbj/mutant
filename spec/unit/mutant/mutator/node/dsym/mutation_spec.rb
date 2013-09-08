@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Mutant::Mutator::Node::Generic, 'dsum' do
   before do
-    Mutant::Random.stub(:hex_string => 'random')
+    Mutant::Random.stub(hex_string: 'random')
   end
 
   let(:source)  { ':"foo#{bar}baz"' }

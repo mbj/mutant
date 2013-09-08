@@ -5,13 +5,13 @@ require 'spec_helper'
 describe Mutant::Killer, '#success?' do
   subject { object.success? }
 
-  let(:object)           { class_under_test.new(strategy, mutation)    }
-  let(:strategy)         { double('Strategy')                          }
-  let(:mutation)         { double('Mutation', :success? => kill_state) }
-  let(:kill_state)       { double('Kill State')                        }
+  let(:object)           { class_under_test.new(strategy, mutation) }
+  let(:strategy)         { double('Strategy')                       }
+  let(:mutation)         { double('Mutation', success?: kill_state) }
+  let(:kill_state)       { double('Kill State')                     }
 
   before do
-    kill_state.stub(:freeze => kill_state, :dup => kill_state)
+    kill_state.stub(freeze: kill_state, dup: kill_state)
   end
 
   let(:class_under_test) do

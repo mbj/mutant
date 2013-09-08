@@ -10,26 +10,26 @@ describe Mutant::Runner::Subject, '#success?' do
   let(:mutation_subject) do
     double(
       'Subject',
-      :class     => Mutant::Subject,
-      :mutations => [mutation_a, mutation_b]
+      class:     Mutant::Subject,
+      mutations: [mutation_a, mutation_b]
     )
   end
 
-  let(:reporter)   { double('Reporter')                      }
-  let(:config)     { double('Config', :reporter => reporter) }
-  let(:mutation_a) { double('Mutation A')                    }
-  let(:mutation_b) { double('Mutation B')                    }
+  let(:reporter)   { double('Reporter')                   }
+  let(:config)     { double('Config', reporter: reporter) }
+  let(:mutation_a) { double('Mutation A')                 }
+  let(:mutation_b) { double('Mutation B')                 }
 
   let(:runner_a) do
-    double('Runner A', :success? => success_a, :stop? => stop_a)
+    double('Runner A', success?: success_a, stop?: stop_a)
   end
 
   let(:runner_b) do
-    double('Runner B', :success? => success_b, :stop? => stop_b)
+    double('Runner B', success?: success_b, stop?: stop_b)
   end
 
   before do
-    reporter.stub(:report => reporter)
+    reporter.stub(report: reporter)
     Mutant::Runner.stub(:run).with(config, mutation_a).and_return(runner_a)
     Mutant::Runner.stub(:run).with(config, mutation_b).and_return(runner_b)
   end

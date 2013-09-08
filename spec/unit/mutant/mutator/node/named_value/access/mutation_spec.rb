@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
   before do
-    Mutant::Random.stub(:hex_string => 'random')
+    Mutant::Random.stub(hex_string: 'random')
   end
 
   context 'global variable' do

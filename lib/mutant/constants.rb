@@ -64,7 +64,6 @@ module Mutant
   OPERATOR_METHODS =
     OPERATOR_EXPANSIONS.keys + INDEX_OPERATORS + UNARY_METHOD_OPERATORS
 
-
   # Hopefully all types parser does generate
   NODE_TYPES = [
     :lvasgn, :ivasgn, :cvasgn, :gvasgn,

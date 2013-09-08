@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Mutant::Mutator::Node::Literal, 'range' do
 
   before :each do
-    Mutant::Random.stub(:fixnum => random_fixnum)
+    Mutant::Random.stub(fixnum: random_fixnum)
   end
 
   let(:random_fixnum) { 5 }

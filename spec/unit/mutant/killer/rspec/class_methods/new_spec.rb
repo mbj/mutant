@@ -18,24 +18,24 @@ describe Mutant::Killer::Rspec, '.new' do
   let(:mutation) do
     double(
       'Mutation',
-      :subject => mutation_subject,
-      :should_survive? => false
+      subject: mutation_subject,
+      should_survive?: false
     )
   end
 
   let(:strategy) do
     double(
       'Strategy',
-      :spec_files => ['foo'],
-      :error_stream => $stderr,
-      :output_stream => $stdout
+      spec_files: ['foo'],
+      error_stream: $stderr,
+      output_stream: $stdout
     )
   end
 
   before do
     mutation.stub(:insert)
     mutation.stub(:reset)
-    RSpec::Core::Runner.stub(:run => exit_status)
+    RSpec::Core::Runner.stub(run: exit_status)
   end
 
   context 'when run exits zero' do

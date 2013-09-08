@@ -24,7 +24,7 @@ describe Mutant::CLI, '.new' do
   let(:time)   { Time.now        }
 
   before do
-    Time.stub(:now => time)
+    Time.stub(now: time)
   end
 
   # Defaults

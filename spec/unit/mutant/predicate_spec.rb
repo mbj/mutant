@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 filter_helpers = proc do
-  let(:input_a) { double('Input A', :foo => 'bar') }
-  let(:input_b) { double('Input B', :foo => 'baz') }
+  let(:input_a) { double('Input A', foo: 'bar') }
+  let(:input_b) { double('Input B', foo: 'baz') }
 
   let(:filter_a) do
     input_a = self.input_a

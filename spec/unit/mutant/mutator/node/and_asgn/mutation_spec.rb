@@ -20,7 +20,7 @@ describe Mutant::Mutator::Node::OpAsgn, 'and_asgn' do
   end
 
   before do
-    Mutant::Random.stub(:fixnum => random_fixnum, :hex_string => random_string)
+    Mutant::Random.stub(fixnum: random_fixnum, hex_string: random_string)
   end
 
   it_should_behave_like 'a mutator'
