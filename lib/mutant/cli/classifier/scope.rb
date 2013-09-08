@@ -7,7 +7,7 @@ module Mutant
       # Scope classifier
       class Scope < self
 
-        REGEXP = /\A(#{SCOPE_PATTERN})\z/.freeze
+        REGEXP = /\A(?<scope>#{SCOPE_PATTERN})\z/.freeze
 
       private
 
@@ -28,7 +28,7 @@ module Mutant
         # @api private
         #
         def scope
-          Classifier.constant_lookup(match[1].to_s)
+          Classifier.constant_lookup(match[__method__].to_s)
         end
 
       end # Scope
