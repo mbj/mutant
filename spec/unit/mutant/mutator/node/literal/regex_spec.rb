@@ -9,9 +9,9 @@ describe Mutant::Mutator::Node::Literal, 'regex' do
 
     let(:mutations) do
       mutations = []
-      mutations << 'nil'
       mutations << '//' # match all
       mutations << '/a\A/' # match nothing
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -22,10 +22,12 @@ describe Mutant::Mutator::Node::Literal, 'regex' do
 
     let(:mutations) do
       mutations = []
-      mutations << 'nil'
       mutations << '//' # match all
       mutations << '/#{foo}n/' # match all
       mutations << '/a\A/' # match nothing
+      mutations << '/#{nil.bar}n/'
+      mutations << '/#{nil}n/'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'

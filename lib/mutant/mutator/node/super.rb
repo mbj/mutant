@@ -27,6 +27,7 @@ module Mutant
             mutate_child(index)
             delete_child(index)
           end
+          emit_nil
         end
 
       end # Super

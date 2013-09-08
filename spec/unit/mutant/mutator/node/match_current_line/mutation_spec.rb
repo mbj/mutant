@@ -14,6 +14,7 @@ describe Mutant::Mutator::Node::Generic, 'match_current_line' do
     mutations << 'true if nil'
     mutations << 'true if !//'
     mutations << 'true if /a\A/'
+    mutations << 'nil'
   end
 
   it_should_behave_like 'a mutator'

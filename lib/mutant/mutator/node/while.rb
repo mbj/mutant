@@ -23,6 +23,7 @@ module Mutant
           emit_condition_mutations
           emit_body_mutations
           emit_body(nil)
+          emit_nil
         end
 
       end # While
