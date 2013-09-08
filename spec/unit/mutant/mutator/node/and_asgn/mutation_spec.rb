@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::Generic, 'and_asgn' do
+describe Mutant::Mutator::Node::AndAsgn, 'and_asgn' do
   let(:random_fixnum) { 5        }
   let(:random_string) { 'random' }
 
@@ -16,6 +16,7 @@ describe Mutant::Mutator::Node::Generic, 'and_asgn' do
     mutations << 'a &&= -1'
     mutations << 'a &&= 2'
     mutations << 'a &&= 5'
+    mutations << 'nil'
   end
 
   before do
