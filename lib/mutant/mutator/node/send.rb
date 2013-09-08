@@ -71,6 +71,7 @@ module Mutant
           else
             non_index_dispatch
           end
+          emit_nil
         end
 
         # Perform non index dispatch

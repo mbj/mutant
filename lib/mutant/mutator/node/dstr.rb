@@ -4,26 +4,25 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutation emitter to handle multiple assignment nodes
-      class MultipleAssignment < self
+      # Dstr mutator
+      class Dstr < Generic
 
-        handle(:masgn)
-
-        children :left, :right
+        handle(:dstr)
 
       private
 
-        # Perform dispatch
+        # Emit mutations
         #
         # @return [undefined]
         #
         # @api private
         #
         def dispatch
+          super
           emit_nil
         end
 
-      end # MultipleAssignment
+      end # Dstr
     end # Node
   end # Mutator
 end # Mutant

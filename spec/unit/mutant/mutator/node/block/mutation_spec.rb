@@ -12,7 +12,10 @@ describe Mutant::Mutator, 'block' do
       mutations << 'foo { b }'
       mutations << 'foo {}'
       mutations << 'foo { raise }'
+      mutations << 'foo { a; nil }'
+      mutations << 'foo { nil; b }'
       mutations << 'foo'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -35,6 +38,7 @@ describe Mutant::Mutator, 'block' do
       mutations << 'foo { |a| }'
       mutations << 'foo { |b| }'
       mutations << 'foo { || }'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -61,6 +65,7 @@ describe Mutant::Mutator, 'block' do
       mutations << 'foo { |(a, srandom), c| }'
       mutations << 'foo { |(a, b), srandom| }'
       mutations << 'foo'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'

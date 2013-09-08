@@ -4,26 +4,27 @@ module Mutant
   class Mutator
     class Node
 
-      # Mutation emitter to handle multiple assignment nodes
-      class MultipleAssignment < self
+      # OpAsgn mutator
+      class OpAsgn < Generic
 
-        handle(:masgn)
+        handle(:op_asgn, :or_asgn, :and_asgn)
 
         children :left, :right
 
       private
 
-        # Perform dispatch
+        # Emit mutations
         #
         # @return [undefined]
         #
         # @api private
         #
         def dispatch
+          super
           emit_nil
         end
 
-      end # MultipleAssignment
+      end # OpAsgn
     end # Node
   end # Mutator
 end # Mutant

@@ -15,6 +15,7 @@ describe Mutant::Mutator::Node::Generic, 'dsum' do
     mutations << ':"#{nil}#{bar}baz"'
     mutations << ':"foo#{bar}random"'
     mutations << ':"foo#{bar}#{nil}"'
+    mutations << ':"foo#{nil}baz"'
   end
 
   it_should_behave_like 'a mutator'

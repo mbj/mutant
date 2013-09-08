@@ -11,12 +11,12 @@ module Mutant
         # your contribution is that close!
         handle(
           :next, :break, :ensure,
-          :dstr, :dsym, :yield, :rescue, :redo, :defined?,
-          :blockarg, :op_asgn, :and_asgn,
+          :dsym, :yield, :rescue, :redo, :defined?,
+          :blockarg,
           :regopt, :restarg, :resbody, :retry, :arg_expr,
           :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :empty,
           :alias, :for, :xstr, :back_ref, :class,
-          :sclass, :match_with_lvasgn, :match_current_line, :or_asgn, :kwbegin
+          :sclass, :match_with_lvasgn, :match_current_line, :kwbegin
         )
 
       private

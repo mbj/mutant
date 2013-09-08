@@ -15,6 +15,10 @@ describe Mutant::Mutator, 'send' do
       mutations << 'foo.gsub(b)'
       mutations << 'foo.gsub'
       mutations << 'foo.sub(a, b)'
+      mutations << 'foo.gsub(a, nil)'
+      mutations << 'foo.gsub(nil, b)'
+      mutations << 'nil.gsub(a, b)'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -29,6 +33,9 @@ describe Mutant::Mutator, 'send' do
       mutations << 'foo.public_send(bar)'
       mutations << 'bar'
       mutations << 'foo'
+      mutations << 'foo.send(nil)'
+      mutations << 'nil.send(bar)'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -40,7 +47,9 @@ describe Mutant::Mutator, 'send' do
     let(:mutations) do
       mutations = []
       mutations << 'foo ||= expression'
+      mutations << 'self.foo ||= nil'
       mutations << 'nil.foo ||= expression'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -52,6 +61,7 @@ describe Mutant::Mutator, 'send' do
     let(:mutations) do
       mutations = []
       mutations << 'foo'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -65,6 +75,8 @@ describe Mutant::Mutator, 'send' do
       mutations << 'foo'
       mutations << 'foo(nil)'
       mutations << 'foo(bar)'
+      mutations << 'foo(*nil)'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -76,6 +88,7 @@ describe Mutant::Mutator, 'send' do
     let(:mutations) do
       mutations = []
       mutations << 'foo'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -87,6 +100,7 @@ describe Mutant::Mutator, 'send' do
     let(:mutations) do
       mutations = []
       mutations << 'foo'
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -96,7 +110,12 @@ describe Mutant::Mutator, 'send' do
     context 'implicit' do
       let(:source) { 'foo' }
 
-      it_should_behave_like 'a noop mutator'
+      let(:mutations) do
+        mutations = []
+        mutations << 'nil'
+      end
+
+      it_should_behave_like 'a mutator'
     end
 
     context 'explict receiver' do
@@ -107,6 +126,7 @@ describe Mutant::Mutator, 'send' do
         mutations << 'foo'
         mutations << 'self'
         mutations << 'nil.foo'
+        mutations << 'nil'
       end
 
       it_should_behave_like 'a mutator'
@@ -132,6 +152,8 @@ describe Mutant::Mutator, 'send' do
       let(:mutations) do
         mutations = []
         mutations << 'foo'
+        mutations << 'nil.bar'
+        mutations << 'nil'
       end
 
       it_should_behave_like 'a mutator'
@@ -145,6 +167,8 @@ describe Mutant::Mutator, 'send' do
         mutations << 'self.class'
         mutations << 'self.foo'
         mutations << 'nil.class.foo'
+        mutations << 'nil.foo'
+        mutations << 'nil'
       end
 
       it_should_behave_like 'a mutator'
@@ -191,8 +215,9 @@ describe Mutant::Mutator, 'send' do
             mutations = []
             mutations << "foo.#{keyword}"
             mutations << 'foo'
-            mutations << 'nil'
             mutations << "foo.#{keyword}(::Object.new)"
+            mutations << "nil.#{keyword}(nil)"
+            mutations << 'nil'
           end
 
           it_should_behave_like 'a mutator'
@@ -209,6 +234,7 @@ describe Mutant::Mutator, 'send' do
         mutations << 'foo(nil)'
         mutations << 'foo(::Object.new, nil)'
         mutations << 'foo(nil, ::Object.new)'
+        mutations << 'nil'
       end
 
       it_should_behave_like 'a mutator'
@@ -224,6 +250,11 @@ describe Mutant::Mutator, 'send' do
           mutations << '(left - right)'
           mutations << 'left / foo'
           mutations << 'right / foo'
+          mutations << '(left - right) / nil'
+          mutations << '(left - nil) / foo'
+          mutations << '(nil - right) / foo'
+          mutations << 'nil / foo'
+          mutations << 'nil'
         end
 
         it_should_behave_like 'a mutator'
@@ -241,6 +272,7 @@ describe Mutant::Mutator, 'send' do
             mutations << "true  #{operator} nil"
             mutations << 'true'
             mutations << 'false'
+            mutations << 'nil'
           end
 
           it_should_behave_like 'a mutator'
@@ -252,6 +284,9 @@ describe Mutant::Mutator, 'send' do
             mutations = []
             mutations << 'left'
             mutations << 'right'
+            mutations << "left #{operator} nil"
+            mutations << "nil #{operator} right"
+            mutations << 'nil'
           end
 
           it_should_behave_like 'a mutator'
