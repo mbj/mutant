@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::Generic, 'dsum' do
+describe Mutant::Mutator::Node::Dsym, 'dsym' do
   before do
     Mutant::Random.stub(:hex_string => 'random')
   end
@@ -16,6 +16,7 @@ describe Mutant::Mutator::Node::Generic, 'dsum' do
     mutations << ':"foo#{bar}random"'
     mutations << ':"foo#{bar}#{nil}"'
     mutations << ':"foo#{nil}baz"'
+    mutations << 'nil'
   end
 
   it_should_behave_like 'a mutator'
