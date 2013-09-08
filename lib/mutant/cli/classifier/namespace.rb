@@ -26,12 +26,12 @@ module Mutant
         # @api private
         #
         def namespace
-          Classifier.constant_lookup(match[1].to_s)
+          Classifier.constant_lookup(match[__method__].to_s)
         end
 
         # Recursive namespace classifier
         class Recursive < self
-          REGEXP  = /\A(#{SCOPE_PATTERN})\*\z/.freeze
+          REGEXP  = /\A(?<namespace>#{SCOPE_PATTERN})\*\z/.freeze
           MATCHER = Matcher::Namespace
 
           register
@@ -39,7 +39,7 @@ module Mutant
 
         # Recursive namespace classifier
         class Flat < self
-          REGEXP  = /\A(#{SCOPE_PATTERN})\z/.freeze
+          REGEXP  = /\A(?<namespace>#{SCOPE_PATTERN})\z/.freeze
           MATCHER = Matcher::Scope
 
           register

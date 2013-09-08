@@ -15,16 +15,11 @@ module Mutant
 
         REGEXP = /
           \A
-            (#{SCOPE_PATTERN})
-            ([.#])
-            (#{METHOD_NAME_PATTERN})
+            (?<scope_name>#{SCOPE_PATTERN})
+            (?<scope_symbol>[.#])
+            (?<method_name>#{METHOD_NAME_PATTERN})
           \z
         /x.freeze
-
-        # Positions of captured regexp groups
-        SCOPE_NAME_POSITION   = 1
-        SCOPE_SYMBOL_POSITION = 2
-        METHOD_NAME_POSITION  = 3
 
       private
 
@@ -59,7 +54,7 @@ module Mutant
         # @api private
         #
         def scope_name
-          match[SCOPE_NAME_POSITION]
+          match[__method__]
         end
 
         # Return scope
@@ -79,7 +74,7 @@ module Mutant
         # @api private
         #
         def method_name
-          match[METHOD_NAME_POSITION].to_sym
+          match[__method__].to_sym
         end
 
         # Return scope symbol
@@ -89,7 +84,7 @@ module Mutant
         # @api private
         #
         def scope_symbol
-          match[SCOPE_SYMBOL_POSITION]
+          match[__method__]
         end
 
         # Return matcher class
