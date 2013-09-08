@@ -22,9 +22,8 @@ module Mutant
           if value
             emit(value)
             emit_value_mutations
-          else
-            emit_nil
           end
+          emit_nil
         end
 
       end # Return

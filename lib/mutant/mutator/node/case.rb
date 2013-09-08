@@ -23,6 +23,7 @@ module Mutant
           emit_condition_mutations
           emit_when_mutations
           emit_else_mutations
+          emit_nil
         end
 
         # Emit when mutations

@@ -217,6 +217,8 @@ describe Mutant::Mutator::Node::Case do
           :else
         end
       RUBY
+
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'
@@ -314,6 +316,8 @@ describe Mutant::Mutator::Node::Case do
           :else
         end
       RUBY
+
+      mutations << 'nil'
     end
 
     it_should_behave_like 'a mutator'

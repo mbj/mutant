@@ -7,18 +7,22 @@ describe Mutant::Mutator, 'return' do
   context 'return without value' do
     let(:source) { 'return' }
 
-    let(:mutations) { ['nil'] }
+    let(:mutations) do
+      mutations = []
+      mutations << 'nil'
+    end
 
     it_should_behave_like 'a mutator'
   end
 
   context 'return with value' do
-    let(:source) { 'return nil' }
+    let(:source) { 'return foo' }
 
     let(:mutations) do
       mutations = []
+      mutations << 'foo'
+      mutations << 'return nil'
       mutations << 'nil'
-      mutations << 'return ::Object.new'
     end
 
     it_should_behave_like 'a mutator'

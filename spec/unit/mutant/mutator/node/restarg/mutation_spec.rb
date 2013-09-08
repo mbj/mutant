@@ -10,6 +10,8 @@ describe Mutant::Mutator::Node::Restarg, 'restarg' do
     mutants << 'foo'
     mutants << 'foo(nil)'
     mutants << 'foo(bar)'
+    mutants << 'foo(*nil)'
+    mutants << 'nil'
   end
 
   it_should_behave_like 'a mutator'

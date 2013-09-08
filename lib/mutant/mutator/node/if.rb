@@ -22,6 +22,7 @@ module Mutant
           mutate_condition
           mutate_if_branch
           mutate_else_branch
+          emit_nil
         end
 
         # Emit conditon mutations

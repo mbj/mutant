@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Mutant::Mutator::Node::Generic, 'op_asgn' do
   let(:random_fixnum) { 5 }
 
-  let(:source)  { '@a.b += 1' }
+  let(:source) { '@a.b += 1' }
 
   let(:mutations) do
     mutations = []
@@ -16,6 +16,7 @@ describe Mutant::Mutator::Node::Generic, 'op_asgn' do
     mutations << '@a += 1'
     mutations << '@a.b += 5'
     mutations << 'nil.b += 1'
+    mutations << 'nil'
   end
 
   before do
