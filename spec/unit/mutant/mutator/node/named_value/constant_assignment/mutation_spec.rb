@@ -11,7 +11,6 @@ describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
 
   let(:mutations) do
     mutations = []
-
     mutations << 'SRANDOM = true'
     mutations << 'A = false'
     mutations << 'A = nil'
