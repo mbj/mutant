@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::Generic, 'restarg' do
+describe Mutant::Mutator::Node::Restarg, 'restarg' do
   let(:source) { 'foo(*bar)' }
 
   let(:mutations) do
