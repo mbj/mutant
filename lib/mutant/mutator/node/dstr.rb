@@ -9,6 +9,19 @@ module Mutant
 
         handle(:dstr)
 
+      private
+
+        # Emit mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def dispatch
+          super
+          emit_nil
+        end
+
       end # Dstr
     end # Node
   end # Mutator

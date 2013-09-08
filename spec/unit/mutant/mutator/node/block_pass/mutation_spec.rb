@@ -8,6 +8,7 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'block_pass' do
   let(:mutations) do
     mutants = []
     mutants << 'foo'
+    mutants << 'nil'
   end
 
   it_should_behave_like 'a mutator'

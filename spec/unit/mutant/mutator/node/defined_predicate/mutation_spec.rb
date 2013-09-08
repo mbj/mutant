@@ -3,8 +3,12 @@
 require 'spec_helper'
 
 describe Mutant::Mutator::Node::Generic, 'defined?' do
-  let(:source)    { 'defined?(foo)' }
-  let(:mutations) { []              }
+  let(:source) { 'defined?(foo)' }
+
+  let(:mutations) do
+    mutations = []
+    mutations << 'defined?(nil)'
+  end
 
   it_should_behave_like 'a mutator'
 end
