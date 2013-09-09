@@ -1,8 +1,5 @@
 # encoding: utf-8
 
-require 'equalizer'
-require 'devtools/spec_helper'
-
 if ENV['COVERAGE'] == 'true'
   require 'simplecov'
   require 'coveralls'
@@ -13,14 +10,19 @@ if ENV['COVERAGE'] == 'true'
  ]
 
   SimpleCov.start do
-    command_name     'spec:unit'
-    add_filter       'config'
-    add_filter       'spec'
-    add_filter       'test_app'
+    command_name 'spec:unit'
+
+    add_filter 'config'
+    add_filter 'spec'
+    add_filter 'vendor'
+    add_filter 'test_app'
+
     minimum_coverage 90.1  # TODO: raise this to 100, then mutation test
   end
 end
 
+require 'equalizer'
+require 'devtools/spec_helper'
 require 'mutant'
 
 $LOAD_PATH << File.join(TestApp.root, 'lib')
