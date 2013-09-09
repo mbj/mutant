@@ -44,7 +44,7 @@ module Mutant
       # Equality based attribute predicate
       class Equality < self
 
-        PATTERN = /\A(code):([[:xdigit:]]{1,6})\z/.freeze
+        PATTERN = /\Acode:(?<code>[[:xdigit:]]{1,6})\z/.freeze
 
         # Test if class handles string
         #
@@ -60,7 +60,7 @@ module Mutant
         #
         def self.handle(notation)
           match = PATTERN.match(notation)
-          new(match[1].to_sym, match[2]) if match
+          new(:code, match[:code]) if match
         end
 
         # Test for match
