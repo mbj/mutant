@@ -12,7 +12,6 @@ module Mutant
         handle(
           :next, :break, :ensure,
           :yield, :rescue, :redo, :defined?,
-          :blockarg,
           :regopt, :resbody, :retry, :arg_expr,
           :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :empty,
           :alias, :for, :xstr, :back_ref, :class,
