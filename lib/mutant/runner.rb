@@ -71,7 +71,8 @@ module Mutant
     #
     def initialize(config)
       @config = config
-      @start = Time.now
+      @stop   = false
+      @start  = Time.now
       run
       @end = Time.now
     end
@@ -87,7 +88,7 @@ module Mutant
     # @api private
     #
     def stop?
-      !!@stop
+      @stop
     end
 
     # Return runtime
