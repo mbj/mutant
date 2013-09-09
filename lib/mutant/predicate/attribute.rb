@@ -60,8 +60,7 @@ module Mutant
         #
         def self.handle(notation)
           match = PATTERN.match(notation)
-          return unless match
-          new(match[1].to_sym, match[2])
+          new(match[1].to_sym, match[2]) if match
         end
 
         # Test for match
