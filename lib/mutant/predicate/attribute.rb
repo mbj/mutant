@@ -60,7 +60,7 @@ module Mutant
           expectation.eql?(value(object))
         end
 
-        PATTERN = /\A(code):([a-f0-9]{1,6})\z/.freeze
+        PATTERN = /\A(code):([[:xdigit:]]{1,6})\z/.freeze
 
         # Test if class handles string
         #
