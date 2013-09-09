@@ -156,10 +156,8 @@ module Mutant
       input.each do |object|
         runner = visit(object)
         collection << runner
-        if runner.stop?
-          @stop = true
-          break
-        end
+        @stop = runner.stop?
+        break if @stop
       end
       collection
     end
