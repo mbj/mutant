@@ -44,22 +44,6 @@ module Mutant
       # Equality based attribute predicate
       class Equality < self
 
-        # Test for match
-        #
-        # @param [Object] object
-        #
-        # @return [true]
-        #   if attribute value matches expectation
-        #
-        # @return [false]
-        #   otherwise
-        #
-        # @api private
-        #
-        def match?(object)
-          expectation.eql?(value(object))
-        end
-
         PATTERN = /\A(code):([[:xdigit:]]{1,6})\z/.freeze
 
         # Test if class handles string
@@ -78,6 +62,22 @@ module Mutant
           match = PATTERN.match(notation)
           return unless match
           new(match[1].to_sym, match[2])
+        end
+
+        # Test for match
+        #
+        # @param [Object] object
+        #
+        # @return [true]
+        #   if attribute value matches expectation
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def match?(object)
+          expectation.eql?(value(object))
         end
 
       end # Equality
