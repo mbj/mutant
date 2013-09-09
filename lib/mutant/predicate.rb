@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
   # Abstract base class for predicates used to filter subjects / mutations
   class Predicate

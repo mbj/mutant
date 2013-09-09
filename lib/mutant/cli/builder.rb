@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Mutant
   class CLI
     # Abstract base class for strategy builders
