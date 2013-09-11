@@ -22,7 +22,7 @@ module Mutant
         (?:#{SCOPE_OPERATOR}#{SCOPE_NAME_PATTERN})*
       /x.freeze
 
-      REGISTRY = []
+      REGISTRY = {}
 
       # Register classifier
       #
@@ -30,8 +30,8 @@ module Mutant
       #
       # @api private
       #
-      def self.register
-        REGISTRY << self
+      def self.register(regexp)
+        REGISTRY[regexp] = self
       end
       private_class_method :register
 
@@ -66,41 +66,33 @@ module Mutant
       # @api private
       #
       def self.build(cache, pattern)
-        classifiers = REGISTRY.map { |descendant| descendant.run(cache, pattern) }
-        classifiers.compact!
-        case classifiers.length
+        matches = find(pattern)
+        case matches.length
         when 0
           raise Error, "No matcher handles: #{pattern.inspect}"
         when 1
-          return classifiers.first
+          klass, match = matches.first
+          klass.new(cache, match)
         else
           raise Error, "More than one matcher found for: #{pattern.inspect}"
         end
       end
 
-      # Run classifier
-      #
-      # @param [Cache] cache
+      # Find classifiers
       #
       # @param [String] input
       #
-      # @return [Classifier]
-      #   if input is handled by classifier
-      #
-      # @return [nil]
-      #   otherwise
-      #
       # @api private
       #
-      def self.run(cache, input)
-        match = self::REGEXP.match(input)
-        return unless match
-
-        new(cache, match)
+      def self.find(input)
+        REGISTRY.each_with_object([]) do |(regexp, klass), matches|
+          match = regexp.match(input)
+          if match
+            matches << [klass, match]
+          end
+        end
       end
-
-      # No protected_class_method in ruby :(
-      class << self; protected :run; end
+      private_class_method :find
 
       # Enumerate subjects
       #

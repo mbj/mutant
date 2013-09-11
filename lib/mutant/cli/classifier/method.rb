@@ -6,7 +6,6 @@ module Mutant
 
       # Explicit method classifier
       class Method < self
-        register
 
         TABLE = {
           '.' => Matcher::Methods::Singleton,
@@ -20,6 +19,8 @@ module Mutant
             (?<method_name>#{METHOD_NAME_PATTERN})
           \z
         /x.freeze
+
+        register(REGEXP)
 
       private
 
