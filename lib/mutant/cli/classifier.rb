@@ -65,7 +65,7 @@ module Mutant
       #
       # @api private
       #
-      def self.build(cache, pattern)
+      def self.run(cache, pattern)
         matches = find(pattern)
         case matches.length
         when 0
