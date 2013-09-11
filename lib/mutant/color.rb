@@ -36,7 +36,7 @@ module Mutant
       # @param [String] text
       #
       # @return [String]
-      #   returns the argument string
+      #   the argument string
       #
       # @api private
       #

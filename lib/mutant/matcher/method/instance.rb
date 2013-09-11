@@ -45,10 +45,10 @@ module Mutant
         # @param [Parser::AST::Node] node
         #
         # @return [true]
-        #   returns true if node matches method
+        #   if node matches method
         #
         # @return [false]
-        #   returns false if node NOT matches method
+        #   otherwise
         #
         # @api private
         #

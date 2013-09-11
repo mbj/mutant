@@ -14,10 +14,10 @@ module Mutant
       # Enumerate matches
       #
       # @return [Enumerable<Subject>]
-      #   returns enumerable when no block given
+      #   if no block given
       #
       # @return [self]
-      #   returns self when block given
+      #   otherwise
       #
       # @api private
       #
@@ -129,7 +129,7 @@ module Mutant
       # Return subject
       #
       # @return [Subject]
-      #   returns subject if there is a matched node
+      #   if there is a matched node
       #
       # @return [nil]
       #   otherwise

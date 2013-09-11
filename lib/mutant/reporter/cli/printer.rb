@@ -164,10 +164,10 @@ module Mutant
         # Test for colored output
         #
         # @return [true]
-        #   returns true if output is colored
+        #   if output is colored
         #
         # @return [false]
-        #   returns false otherwise
+        #   otherwise
         #
         # @api private
         #
@@ -183,8 +183,8 @@ module Mutant
         # @api private
         #
         # @return [String]
-        #   returns colorized string if color is enabled
-        #   returns unmodified message otherwise
+        #   if color is enabled
+        #   unmodified message otherwise
         #
         def colorize(color, message)
           color = Color::NONE unless tty?
@@ -194,10 +194,10 @@ module Mutant
         # Test for output to tty
         #
         # @return [true]
-        #   returns true if output is a tty
+        #   if output is a tty
         #
         # @return [false]
-        #   returns false otherwise
+        #   otherwise
         #
         # @api private
         #

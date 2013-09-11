@@ -28,7 +28,7 @@ module Mutant
     #   when can be build from string
     #
     # @return [nil]
-    #   returns nil otherwise
+    #   otherwise
     #
     # @api private
     #
@@ -46,7 +46,6 @@ module Mutant
     # @param [String] _notation
     #
     # @return [nil]
-    #   returns nil
     #
     # @api private
     #
@@ -62,7 +61,6 @@ module Mutant
       # @pram [Mutation] _mutation
       #
       # @return [true]
-      #   returns true
       #
       # @api private
       #

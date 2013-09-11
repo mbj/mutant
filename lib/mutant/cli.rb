@@ -19,7 +19,7 @@ module Mutant
     # @param [Array<String>] arguments
     #
     # @return [Fixnum]
-    #   returns exit status
+    #   the exit status
     #
     # @api private
     #

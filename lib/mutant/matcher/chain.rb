@@ -9,10 +9,10 @@ module Mutant
       # Enumerate subjects
       #
       # @return [Enumerator<Subject]
-      #   returns subject enumerator if no block given
+      #   if no block given
       #
       # @return [self]
-      #   returnns self otherwise
+      #   otherwise
       #
       # @api private
       #

@@ -108,7 +108,6 @@ module Mutant
     # @param [String] line
     #
     # @return [String]
-    #   returns colorized line
     #
     # @api private
     #

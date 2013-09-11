@@ -23,7 +23,6 @@ module Mutant
     # Not aliased to prevent problems from inheritance
     #
     # @return [Objecct]
-    #   returns the created object
     #
     # @api private
     #
