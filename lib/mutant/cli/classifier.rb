@@ -3,7 +3,7 @@
 module Mutant
   class CLI
     # A classifier for input strings
-    class Classifier < Matcher
+    class Classifier
       include AbstractType, Adamantium::Flat, Concord.new(:cache, :match)
 
       include Equalizer.new(:identifier)
