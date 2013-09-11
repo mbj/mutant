@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe Mutant::CLI::Classifier::Method, '#each' do
-  let(:object)           { described_class.build(cache, input) }
+  let(:object)           { described_class.run(cache, input) }
   let(:cache)            { Mutant::Cache.new                   }
   let(:instance_method)  { '::TestApp::Literal#string'         }
   let(:singleton_method) { '::TestApp::Literal.string'         }

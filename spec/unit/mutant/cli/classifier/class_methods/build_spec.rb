@@ -2,8 +2,8 @@
 
 require 'spec_helper'
 
-describe Mutant::CLI::Classifier, '.build' do
-  subject { described_class.build(cache, input) }
+describe Mutant::CLI::Classifier, '.run' do
+  subject { described_class.run(cache, input) }
 
   let(:cache) { double('Cache') }
 

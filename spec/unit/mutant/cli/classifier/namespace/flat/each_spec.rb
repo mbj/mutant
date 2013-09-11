@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe Mutant::CLI::Classifier::Namespace::Flat, '#each' do
-  let(:object)            { described_class.build(cache, input) }
+  let(:object)            { described_class.run(cache, input) }
   let(:cache)             { Mutant::Cache.new                   }
   let(:known_namespace)   { '::TestApp::Literal'                }
   let(:unknown_namespace) { '::TestApp::Object'                 }
