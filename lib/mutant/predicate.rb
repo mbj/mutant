@@ -53,8 +53,25 @@ module Mutant
       nil
     end
 
-    # Mutation predicate matching all mutations
-    Mutant.singleton_subclass_instance('ALL', self) do
+    # Mutation predicate matching no inputs
+    Mutant.singleton_subclass_instance('CONTRADICTION', self) do
+
+      # Test for match
+      #
+      # @pram [Mutation] _mutation
+      #
+      # @return [true]
+      #
+      # @api private
+      #
+      def match?(_mutation)
+        false
+      end
+
+    end
+
+    # Mutation predicate matching all inputs
+    Mutant.singleton_subclass_instance('TAUTOLOGY', self) do
 
       # Test for match
       #

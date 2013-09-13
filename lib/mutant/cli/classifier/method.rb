@@ -22,8 +22,6 @@ module Mutant
 
         register(REGEXP)
 
-      private
-
         # Return method matcher
         #
         # @return [Matcher::Method]
@@ -34,6 +32,8 @@ module Mutant
           methods_matcher.matcher.build(cache, scope, method)
         end
         memoize :matcher
+
+      private
 
         # Return method
         #

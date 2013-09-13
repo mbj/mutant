@@ -7,8 +7,6 @@ module Mutant
       # Namespace classifier
       class Namespace < self
 
-      private
-
         # Return matcher
         #
         # @return [Matcher]
@@ -18,6 +16,8 @@ module Mutant
         def matcher
           self.class::MATCHER.new(cache, namespace)
         end
+
+      private
 
         # Return namespace
         #

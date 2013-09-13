@@ -4,8 +4,14 @@ module Mutant
   # The configuration of a mutator run
   class Config
     include Adamantium::Flat, Anima.new(
-      :cache, :debug, :strategy, :matcher, :filter,
-      :reporter, :fail_fast, :zombie
+      :cache,
+      :debug,
+      :strategy,
+      :matcher,
+      :subject_predicate,
+      :reporter,
+      :fail_fast,
+      :zombie
     )
 
     # Enumerate subjects
@@ -22,7 +28,7 @@ module Mutant
     #
     def subjects(&block)
       return to_enum(__method__) unless block_given?
-      matcher.each(&block)
+      Matcher::Filter.new(matcher, subject_predicate).each(&block)
       self
     end
 

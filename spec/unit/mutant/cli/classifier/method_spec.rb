@@ -3,6 +3,7 @@
 require 'spec_helper'
 
 describe Mutant::CLI::Classifier::Method, '#each' do
+
   let(:object)           { described_class.run(cache, input) }
   let(:cache)            { Mutant::Cache.new                   }
   let(:instance_method)  { '::TestApp::Literal#string'         }
@@ -70,19 +71,6 @@ describe Mutant::CLI::Classifier::Method, '#each' do
       it 'yield an instance subject' do
         expect { |block| subject.each(&block) }
           .to yield_with_args(Mutant::Subject::Method::Singleton)
-      end
-    end
-
-    context 'with an unknown method' do
-      let(:input) { unknown_method }
-
-      it 'returns an enumerator' do
-        should be_instance_of(to_enum.class)
-      end
-
-      it 'raises an exception when #each is called' do
-        expect { subject.each {} }
-          .to raise_error(NameError, "Cannot find method #{input}")
       end
     end
   end

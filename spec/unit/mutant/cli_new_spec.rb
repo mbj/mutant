@@ -13,7 +13,6 @@ end
 shared_examples_for 'a cli parser' do
   subject { cli.config }
 
-  its(:filter)   { should eql(expected_filter)   }
   its(:strategy) { should eql(expected_strategy) }
   its(:reporter) { should eql(expected_reporter) }
   its(:matcher)  { should eql(expected_matcher)  }
@@ -28,12 +27,12 @@ describe Mutant::CLI, '.new' do
   end
 
   # Defaults
-  let(:expected_filter)   { Mutant::Predicate::ALL      }
+  let(:expected_filter)   { Mutant::Predicate::TAUTOLOGY       }
   let(:expected_strategy) { Mutant::Strategy::Rspec.new(0)     }
   let(:expected_reporter) { Mutant::Reporter::CLI.new($stdout) }
 
-  let(:ns)    { Mutant::CLI::Classifier }
-  let(:cache) { Mutant::Cache.new       }
+  let(:ns)    { Mutant::Matcher   }
+  let(:cache) { Mutant::Cache.new }
 
   let(:cli) { object.new(arguments) }
 
@@ -57,7 +56,7 @@ describe Mutant::CLI, '.new' do
 
   context 'with many strategy flags' do
     let(:arguments) { %w(--rspec --rspec TestApp) }
-    let(:expected_matcher) { Mutant::CLI::Classifier::Namespace::Flat.new(Mutant::Cache.new, 'TestApp') }
+    let(:expected_matcher) { Mutant::Matcher::Scope.new(cache, TestApp) }
 
     it_should_behave_like 'a cli parser'
   end
@@ -79,15 +78,15 @@ describe Mutant::CLI, '.new' do
 
   context 'with explicit method matcher' do
     let(:arguments)        { %w(--rspec TestApp::Literal#float) }
-    let(:expected_matcher) { ns::Method.new(cache, 'TestApp::Literal#float') }
+    let(:expected_matcher) { ns::Method::Instance.new(cache, TestApp::Literal, TestApp::Literal.instance_method(:float)) }
 
     it_should_behave_like 'a cli parser'
   end
 
   context 'with debug flag' do
-    let(:matcher)          { '::TestApp*'                                 }
-    let(:arguments)        { %W(--debug --rspec #{matcher})               }
-    let(:expected_matcher) { ns::Namespace::Recursive.new(cache, matcher) }
+    let(:matcher)          { '::TestApp*'                      }
+    let(:arguments)        { %W(--debug --rspec #{matcher})    }
+    let(:expected_matcher) { ns::Namespace.new(cache, TestApp) }
 
     it_should_behave_like 'a cli parser'
 
@@ -97,9 +96,9 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with zombie flag' do
-    let(:matcher)          { '::TestApp*'                                 }
-    let(:arguments)        { %W(--zombie --rspec #{matcher})              }
-    let(:expected_matcher) { ns::Namespace::Recursive.new(cache, matcher) }
+    let(:matcher)          { '::TestApp*'                      }
+    let(:arguments)        { %W(--zombie --rspec #{matcher})   }
+    let(:expected_matcher) { ns::Namespace.new(cache, TestApp) }
 
     it_should_behave_like 'a cli parser'
 
@@ -109,9 +108,9 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with namespace matcher' do
-    let(:matcher)          { '::TestApp*'                                 }
-    let(:arguments)        { %W(--rspec #{matcher})                       }
-    let(:expected_matcher) { ns::Namespace::Recursive.new(cache, matcher) }
+    let(:matcher)          { '::TestApp*'                      }
+    let(:arguments)        { %W(--rspec #{matcher})            }
+    let(:expected_matcher) { ns::Namespace.new(cache, TestApp) }
 
     it_should_behave_like 'a cli parser'
   end
@@ -127,7 +126,7 @@ describe Mutant::CLI, '.new' do
       ]
     end
 
-    let(:expected_matcher) { ns::Method.new(cache, 'TestApp::Literal#float')  }
+    let(:expected_matcher) { ns::Method::Instance.new(cache, TestApp::Literal, TestApp::Literal.instance_method(:float))  }
     let(:expected_filter)  { Mutant::Predicate::Whitelist.new(filters) }
 
     it_should_behave_like 'a cli parser'

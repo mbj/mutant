@@ -57,7 +57,7 @@ module Mutant
       # @param [Cache] cache
       # @param [String] pattern
       #
-      # @return [Classifier]
+      # @return [Matcher]
       #   if a classifier handles the input
       #
       # @raise [RuntimeError]
@@ -72,7 +72,7 @@ module Mutant
           raise Error, "No matcher handles: #{pattern.inspect}"
         when 1
           klass, match = matches.first
-          klass.new(cache, match)
+          klass.new(cache, match).matcher
         else
           raise Error, "More than one matcher found for: #{pattern.inspect}"
         end

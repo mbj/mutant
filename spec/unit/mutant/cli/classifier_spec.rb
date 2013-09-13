@@ -11,8 +11,7 @@ describe Mutant::CLI::Classifier, '.run' do
 
   shared_examples_for this_spec do
     it 'shoud return expected instance' do
-      regexp = expected_class::REGEXP
-      should eql(expected_class.new(cache, regexp.match(input)))
+      should eql(expected_matcher)
     end
 
     let(:expected_class) { Mutant::CLI::Classifier::Method }
@@ -22,20 +21,32 @@ describe Mutant::CLI::Classifier, '.run' do
 
     let(:input) { '::TestApp::Literal#string' }
 
-    it_should_behave_like this_spec
+    let(:expected_matcher) do
+      Mutant::Matcher::Method::Instance.new(cache, TestApp::Literal, TestApp::Literal.instance_method(:string))
+    end
+
+    include_examples this_spec
   end
 
   context 'with instance method notation' do
 
     let(:input) { 'TestApp::Literal#string' }
 
-    it_should_behave_like this_spec
+    let(:expected_matcher) do
+      Mutant::Matcher::Method::Instance.new(cache, TestApp::Literal, TestApp::Literal.instance_method(:string))
+    end
+
+    include_examples this_spec
   end
 
   context 'with singleton method notation' do
     let(:input) { 'TestApp::Literal.string' }
 
-    it_should_behave_like this_spec
+    let(:expected_matcher) do
+      Mutant::Matcher::Method::Singleton.new(cache, TestApp::Literal, TestApp::Literal.method(:string))
+    end
+
+    include_examples this_spec
   end
 
   context 'with invalid notation' do

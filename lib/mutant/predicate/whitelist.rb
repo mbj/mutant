@@ -2,6 +2,7 @@
 
 module Mutant
   class Predicate
+
     # Whiltelist filter
     class Whitelist < self
       include Adamantium::Flat, Concord.new(:whitelist)

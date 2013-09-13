@@ -20,9 +20,9 @@ module Mutant
           #
           def run
             info 'Mutant configuration:'
-            info 'Matcher:  %s', object.matcher.inspect
-            info 'Filter:   %s', object.filter.inspect
-            info 'Strategy: %s', object.strategy.inspect
+            info 'Matcher:        %s', object.matcher.inspect
+            info 'Subject Filter: %s', object.subject_predicate.inspect
+            info 'Strategy:       %s', object.strategy.inspect
             self
           end
 

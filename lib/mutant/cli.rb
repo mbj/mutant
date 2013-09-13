@@ -45,9 +45,8 @@ module Mutant
       @debug = @fail_fast = @zombie = false
       @cache = Mutant::Cache.new
       @strategy_builder = nil
-
       parse(arguments)
-      config # trigger lazyness
+      config # trigger lazyness now
     end
 
     # Return config
@@ -58,60 +57,19 @@ module Mutant
     #
     def config
       Config.new(
-        cache:     @cache,
-        zombie:    @zombie,
-        debug:     debug?,
-        matcher:   matcher,
-        filter:    filter,
-        fail_fast: @fail_fast,
-        strategy:  strategy,
-        reporter:  reporter
+        cache:             @cache,
+        zombie:            @zombie,
+        debug:             @debug,
+        matcher:           matcher,
+        subject_predicate: @subject_predicate.output,
+        strategy:          @strategy.output,
+        fail_fast:         @fail_fast,
+        reporter:          reporter
       )
     end
     memoize :config
 
   private
-
-    # Test for running in debug mode
-    #
-    # @return [true]
-    #   if debug mode is active
-    #
-    # @return [false]
-    #   otherwise
-    #
-    # @api private
-    #
-    def debug?
-      @debug
-    end
-
-    # Return mutation filter
-    #
-    # @return [Mutant::Matcher]
-    #
-    # @api private
-    #
-    def filter
-      if @filters.empty?
-        Predicate::ALL
-      else
-        Predicate::Whitelist.new(@filters)
-      end
-    end
-
-    # Return stratety
-    #
-    # @return [Strategy]
-    #
-    # @api private
-    #
-    def strategy
-      unless @strategy_builder
-        raise(Error, 'No strategy was set!')
-      end
-      @strategy_builder.strategy
-    end
 
     # Return reporter
     #
@@ -173,14 +131,14 @@ module Mutant
         add_options(builder)
       end
 
-      matchers =
+      patterns =
         begin
           opts.parse!(arguments)
         rescue OptionParser::ParseError => error
           raise(Error, error.message, error.backtrace)
         end
 
-      parse_matchers(matchers)
+      parse_matchers(patterns)
     end
 
     # Parse matchers
@@ -210,14 +168,12 @@ module Mutant
       parser.separator(EMPTY_STRING)
       parser.separator('Strategies:')
 
-      writer = lambda do |builder|
-        @strategy_builder = builder
-      end
-
-      [
-        Builder::Rspec
-      ].each do |builder|
-        builder.add_options(parser, &writer)
+      {
+        Builder::Rspec              => :@strategy,
+        Builder::Predicate::Subject => :@subject_predicate,
+      }.each do |builder, instance_variable_name|
+        builder = builder.new(@cache, parser)
+        instance_variable_set(instance_variable_name, builder)
       end
     end
 
