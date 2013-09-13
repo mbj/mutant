@@ -232,9 +232,9 @@ module Mutant
     def add_environmental_options(opts)
       opts.on('--zombie', 'Run mutant zombified') do
         @zombie = true
-      end.on('-I', 'Add directory to $LOAD_PATH') do |directory|
+      end.on('-I', '--include DIRECTORY', 'Add DIRECTORY to $LOAD_PATH') do |directory|
         $LOAD_PATH << directory
-      end.on('-r', '--require NAME', 'Require file with NAME') do |name|
+      end.on('-require', '--require NAME', 'Require file with NAME') do |name|
         require(name)
       end
     end
