@@ -69,17 +69,6 @@ module Mutant
     end
     memoize :code
 
-    # Return sha1 sum of source and subject identification
-    #
-    # @return [String]
-    #
-    # @api private
-    #
-    def sha1
-      Digest::SHA1.hexdigest(subject.identification + 0.chr + source)
-    end
-    memoize :sha1
-
     # Return source
     #
     # @return [String]
@@ -100,6 +89,19 @@ module Mutant
     def original_source
       subject.source
     end
+
+  private
+
+    # Return sha1 sum of source and subject identification
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    def sha1
+      Digest::SHA1.hexdigest(subject.identification + 0.chr + source)
+    end
+    memoize :sha1
 
   end # Mutation
 end # Mutant
