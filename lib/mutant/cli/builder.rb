@@ -145,7 +145,6 @@ module Mutant
 
         private
 
-
           # Add cli options
           #
           # @return [undefined]
