@@ -13,7 +13,7 @@ describe Mutant, 'rspec integration' do
   let(:base_cmd) { 'bundle exec mutant -I lib --require test_app --rspec' }
 
   specify 'it allows to kill mutations' do
-    Kernel.system("#{base_cmd} ::TestApp::Literal#string').should be(true)")
+    Kernel.system("#{base_cmd} ::TestApp::Literal#string").should be(true)
   end
 
   specify 'it allows to exclude mutations' do
