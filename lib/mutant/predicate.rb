@@ -20,27 +20,6 @@ module Mutant
     #
     abstract_method :match?
 
-    # Build predicate from string
-    #
-    # @param [String] notation
-    #
-    # @return [Filter]
-    #   when can be build from string
-    #
-    # @return [nil]
-    #   otherwise
-    #
-    # @api private
-    #
-    def self.build(notation)
-      descendants.each do |descendant|
-        predicate = descendant.handle(notation)
-        return predicate if predicate
-      end
-
-      nil
-    end
-
     # Return predicate for handle
     #
     # @param [String] _notation
