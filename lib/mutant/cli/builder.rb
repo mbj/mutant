@@ -118,6 +118,7 @@ module Mutant
       # Abstract predicate builder
       class Predicate < self
 
+        # Bubject predicate builder
         class Subject < self
 
           # Initialize object
