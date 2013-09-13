@@ -46,23 +46,6 @@ module Mutant
 
         PATTERN = /\Acode:(?<code>[[:xdigit:]]{1,6})\z/.freeze
 
-        # Test if class handles string
-        #
-        # @param [String] notation
-        #
-        # @return [Filter]
-        #   if notation matches pattern
-        #
-        # @return [nil]
-        #   otherwise
-        #
-        # @api private
-        #
-        def self.handle(notation)
-          match = PATTERN.match(notation)
-          new(:code, match[:code]) if match
-        end
-
         # Test for match
         #
         # @param [Object] object
