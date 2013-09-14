@@ -34,7 +34,7 @@ module Mutant
 
         reporter = RSpec::Core::Reporter.new
 
-        groups.each do |group|
+        example_groups.each do |group|
           return true unless group.run(reporter)
         end
 
@@ -58,7 +58,12 @@ module Mutant
       # @api private
       #
       def example_groups
-        match_prefixes.flat_map { |prefix| find_with(prefix) }.compact.uniq
+        match_prefixes.each do |match_expression|
+          example_groups = find_with(match_expression)
+          return example_groups unless example_groups.empty?
+        end
+
+        nil
       end
 
       # Return example groups that match expression
