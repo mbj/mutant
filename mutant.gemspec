@@ -19,8 +19,8 @@ Gem::Specification.new do |gem|
   gem.executables      = %w[mutant]
 
   gem.add_runtime_dependency('parser',              '~> 2.0.0.pre7')
-  gem.add_runtime_dependency('unparser',            '~> 0.1.1')
-  gem.add_runtime_dependency('ice_nine',            '~> 0.8')
+  gem.add_runtime_dependency('unparser',            '~> 0.1.2')
+  gem.add_runtime_dependency('ice_nine',            '~> 0.9')
   gem.add_runtime_dependency('descendants_tracker', '~> 0.0.1')
   gem.add_runtime_dependency('adamantium',          '~> 0.1.0')
   gem.add_runtime_dependency('equalizer',           '~> 0.0.7')
