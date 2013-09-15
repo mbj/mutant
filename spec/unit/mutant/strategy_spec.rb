@@ -20,4 +20,3 @@ describe Mutant::Strategy do
     it_should_behave_like 'a command method'
   end
 end
-

@@ -32,7 +32,7 @@ describe Mutant::CLI::Classifier::Namespace::Flat, '#each' do
   end
 
   context 'without a block' do
-   subject { object.each }
+    subject { object.each }
 
     context 'with a known namespace' do
       let(:input) { known_namespace }

@@ -44,11 +44,9 @@ module Mutant
       # @api private
       #
       def self.constant_lookup(location)
-        location
-          .sub(CBASE_PATTERN, EMPTY_STRING)
-          .split(SCOPE_OPERATOR)
+        location.sub(CBASE_PATTERN, EMPTY_STRING).split(SCOPE_OPERATOR)
           .reduce(Object) do |parent, name|
-            parent.const_get(name, nil)
+          parent.const_get(name, nil)
         end
       end
 

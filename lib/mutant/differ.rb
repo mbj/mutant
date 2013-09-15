@@ -16,16 +16,12 @@ module Mutant
     # @api private
     #
     def diff
-      output = ''
       case diffs.length
       when 0
         nil
       when 1
-        output =
-          Diff::LCS::Hunk.new(
-            old, new, diffs.first, max_length, 0
-          ).diff(:unified)
-        output << "\n"
+        Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0)
+          .diff(:unified) << "\n"
       else
         $stderr.puts(
           'Mutation resulted in more than one diff, should not happen! ' +
