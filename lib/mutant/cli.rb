@@ -190,7 +190,7 @@ module Mutant
         @zombie = true
       end.on('-I', '--include DIRECTORY', 'Add DIRECTORY to $LOAD_PATH') do |directory|
         $LOAD_PATH << directory
-      end.on('-require', '--require NAME', 'Require file with NAME') do |name|
+      end.on('-r', '--require NAME', 'Require file with NAME') do |name|
         require(name)
       end
     end
