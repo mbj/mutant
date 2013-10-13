@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-require 'devtools'
+require 'triage'
 
-Devtools.init_rake_tasks
+Triage.init_rake_tasks
 
 Rake.application.load_imports
 task('metrics:mutant').clear

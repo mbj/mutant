@@ -2,7 +2,7 @@ AllCops:
   Includes:
     - '../**/*.rake'
     - 'Gemfile'
-    - 'Gemfile.devtools'
+    - 'Gemfile.triage'
     - 'mutant.gemspec'
   Excludes:
     - '**/vendor/**'
