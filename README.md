@@ -84,13 +84,13 @@ Examples
 ```
 cd virtus
 # Run mutant on virtus namespace
-mutant --rspec '::Virtus*'
+mutant --include lib --require virtus --rspec ::Virtus*
 # Run mutant on specific virtus class
-mutant --rspec ::Virtus::Attribute
+mutant --include lib --require virtus --rspec ::Virtus::Attribute
 # Run mutant on specific virtus class method
-mutant --rspec ::Virtus::Attribute.build
+mutant --include lib --require virtus --rspec ::Virtus::Attribute.build
 # Run mutant on specific virtus instance method
-mutant --rspec ::Virtus::Attribute#name
+mutant --include lib --require virtus --rspec ::Virtus::Attribute#type
 ```
 
 Subjects:
