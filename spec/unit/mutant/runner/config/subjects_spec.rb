@@ -32,7 +32,7 @@ describe Mutant::Runner::Config, '#subjects' do
     Mutant::Runner.stub(:run).with(config, subject_b).and_return(runner_b)
   end
 
-  context 'without earily stop' do
+  context 'without early stop' do
     let(:stop_a) { false }
     let(:stop_b) { false }
 
@@ -41,7 +41,7 @@ describe Mutant::Runner::Config, '#subjects' do
     it_should_behave_like 'an idempotent method'
   end
 
-  context 'with earily stop' do
+  context 'with early stop' do
     let(:stop_a) { true  }
     let(:stop_b) { false }
 
