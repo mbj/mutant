@@ -30,6 +30,17 @@ module Mutant
         class Memoized < self
           include NodeHelpers
 
+          # Return source
+          #
+          # @return [String]
+          #
+          # @api private
+          #
+          def source
+            Unparser.unparse(memoizer_node(node))
+          end
+          memoize :source
+
         private
 
           # Return mutations
