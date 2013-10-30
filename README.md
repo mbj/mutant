@@ -93,6 +93,14 @@ mutant --include lib --require virtus --rspec ::Virtus::Attribute.build
 mutant --include lib --require virtus --rspec ::Virtus::Attribute#type
 ```
 
+Presentations:
+--------------
+
+There are some presentations about mutant in the wild:
+
+* Eurocamp-2013 / FrOSCon-2013 http://slid.es/markusschirp/mutation-testing
+* I know there are more, pls ping me to add them here!
+
 Subjects:
 ---------
 
