@@ -7,7 +7,6 @@ module Mutant
 
         # Abstract literal range mutator
         class Range < self
-          include AbstractType
 
           MAP = {
             irange: :erange,
