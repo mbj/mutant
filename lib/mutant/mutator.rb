@@ -8,7 +8,6 @@ module Mutant
     # Run mutator on input
     #
     # @param [Parser::AST::Node] node
-    # @param [#call] block
     #
     # @return [self]
     #
