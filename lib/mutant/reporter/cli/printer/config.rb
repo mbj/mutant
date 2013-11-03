@@ -117,6 +117,7 @@ module Mutant
             #
             def print_generic_stats
               stats = generic_stats.to_a.sort_by(&:last)
+              return if stats.empty?
               info('Nodes handled by generic mutator (type:occurrences):')
               stats.reverse_each do |type, amount|
                 info('%-10s: %d', type, amount)
