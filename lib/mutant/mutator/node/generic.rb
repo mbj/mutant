@@ -11,7 +11,7 @@ module Mutant
         # your contribution is that close!
         handle(
           :next, :break, :ensure,
-          :yield, :rescue, :redo, :defined?,
+          :rescue, :redo, :defined?,
           :regopt, :resbody, :retry, :arg_expr,
           :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :empty,
           :alias, :for, :xstr, :back_ref, :class,

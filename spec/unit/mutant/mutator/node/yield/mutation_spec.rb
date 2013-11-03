@@ -9,6 +9,8 @@ describe Mutant::Mutator::Node::Generic, 'yield' do
     mutations = []
     mutations << 'yield false'
     mutations << 'yield nil'
+    mutations << 'yield'
+    mutations << 'nil'
   end
 
   it_should_behave_like 'a mutator'
