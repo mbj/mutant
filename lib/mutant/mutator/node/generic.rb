@@ -10,7 +10,7 @@ module Mutant
         # These nodes still need a dedicated mutator,
         # your contribution is that close!
         handle(
-          :next, :break, :ensure,
+          :next, :ensure,
           :rescue, :redo, :defined?,
           :regopt, :resbody, :retry, :arg_expr,
           :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :empty,
