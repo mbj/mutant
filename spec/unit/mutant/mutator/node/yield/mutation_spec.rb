@@ -2,8 +2,8 @@
 
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::Generic, 'yield' do
-  let(:source)  { 'yield true' }
+describe Mutant::Mutator::Node::Yield, 'yield' do
+  let(:source) { 'yield true' }
 
   let(:mutations) do
     mutations = []
