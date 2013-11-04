@@ -15,7 +15,7 @@ module Mutant
           :regopt, :resbody, :retry, :arg_expr,
           :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :empty,
           :alias, :for, :xstr, :back_ref, :class,
-          :sclass, :match_with_lvasgn, :match_current_line, :kwbegin
+          :sclass, :match_with_lvasgn, :match_current_line
         )
 
       private
