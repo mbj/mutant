@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Mutant : Mutation tests for ruby" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Mutant</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/mbj/mutant">View on GitHub</a>
+
+          <h1 id="project_title">Mutant</h1>
+          <h2 id="project_tagline">Mutation tests for ruby</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/mbj/mutant/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/mbj/mutant/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="mutant" class="anchor" href="#mutant"><span class="octicon octicon-link"></span></a>mutant</h1>
+
+<p><a href="http://travis-ci.org/mbj/mutant"><img src="https://secure.travis-ci.org/mbj/mutant.png?branch=master" alt="Build Status"></a>
+<a href="https://gemnasium.com/mbj/mutant"><img src="https://gemnasium.com/mbj/mutant.png" alt="Dependency Status"></a>
+<a href="https://codeclimate.com/github/mbj/mutant"><img src="https://codeclimate.com/github/mbj/mutant.png" alt="Code Climate"></a></p>
+
+<p>Mutant is a mutation testing tool for ruby.</p>
+
+<p>The idea is that if code can be changed and your tests do not notice, either that code isn't being covered
+or it does not have a speced side effect.</p>
+
+<p>A more readable introduction can be found under: <a href="http://solnic.eu/2013/01/23/mutation-testing-with-mutant.html">http://solnic.eu/2013/01/23/mutation-testing-with-mutant.html</a></p>
+
+<p>Mutant supports MRI and RBX 1.9 and 2.0, while support for jruby is planned. It should also work under
+any ruby engine that supports POSIX-fork(2) semantics.</p>
+
+<p>Only rspec2 is supported currently. This is subject to change.</p>
+
+<p>It is easy to write a mutation killer/strategy for other test/spec frameworks than rspec2.</p>
+
+<h2>
+<a name="projects-using-mutant" class="anchor" href="#projects-using-mutant"><span class="octicon octicon-link"></span></a>Projects using Mutant</h2>
+
+<p>The following projects adopted mutant, and aim 100% mutation coverage:</p>
+
+<ul>
+<li><a href="https://github.com/dkubb/axiom">axiom</a></li>
+<li><a href="https://github.com/dkubb/axiom-types">axiom-types</a></li>
+<li><a href="https://github.com/rom-rb/rom-mapper">rom-mapper</a></li>
+<li><a href="https://github.com/rom-rb/rom-session">rom-session</a></li>
+<li><a href="https://github.com/kevinrutherford/event_bus">event_bus</a></li>
+<li><a href="https://github.com/solnic/virtus">virtus</a></li>
+<li><a href="https://github.com/benmoss/quacky">quacky</a></li>
+<li><a href="https://github.com/snusnu/substation">substation</a></li>
+<li><a href="https://github.com/filipvanlaenen/large_binomials">large_binomials</a></li>
+<li>various small/minor stuff under <a href="https://github.com/mbj">https://github.com/mbj</a>
+</li>
+</ul><p>Feel free to ping me to add your project to the list!</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Install the gem <code>mutant</code> via your preferred method.</p>
+
+<p>The 0.2 series is stable but has outdated dependencies. The 0.3 series is in beta phase currently.</p>
+
+<div class="highlight highlight-ruby"><pre><span class="n">gem</span> <span class="n">install</span> <span class="n">mutant</span> <span class="o">--</span><span class="n">pre</span>
+</pre></div>
+
+<h2>
+<a name="mutations" class="anchor" href="#mutations"><span class="octicon octicon-link"></span></a>Mutations</h2>
+
+<p>Mutant supports a very wide range of mutation operators. Listing them all in detail would blow this document up.</p>
+
+<p>It is planned to parse a list of mutation operators from the source. In the meantime please refer to the
+<a href="https://github.com/mbj/mutant/tree/master/lib/mutant/mutator/node">code</a> each subclass of <code>Mutant::Mutator::Node</code>
+emits around 3-6 mutations.</p>
+
+<p>Currently mutant covers the majority of ruby's complex nodes that often occur in method bodies.</p>
+
+<p>Some stats from the <a href="https://github.com/dkubb/axiom">axiom</a> library:</p>
+
+<pre><code>Subjects:  424       # Amount of subjects being mutated (currently only methods)
+Mutations: 6760      # Amount of mutations mutant generated (~13 mutations per method)
+Kills:     6664      # Amount of successfully killed mutations
+Runtime:   5123.13s  # Total runtime
+Killtime:  5092.63s  # Time spend killing mutations
+Overhead:  0.60%
+Coverage:  98.58%    # Coverage score
+Alive:     96        # Amount of alive mutations.
+</code></pre>
+
+<p>Nodes still missing a dedicated mutator are handled via the
+<a href="https://github.com/mbj/mutant/blob/master/lib/mutant/mutator/node/generic.rb">Generic</a> mutator.
+The goal is to remove this mutator and have dedicated mutator for every type of node and removing
+the Generic handler altogether.</p>
+
+<h2>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<pre><code>cd virtus
+# Run mutant on virtus namespace
+mutant --include lib --require virtus --rspec ::Virtus*
+# Run mutant on specific virtus class
+mutant --include lib --require virtus --rspec ::Virtus::Attribute
+# Run mutant on specific virtus class method
+mutant --include lib --require virtus --rspec ::Virtus::Attribute.build
+# Run mutant on specific virtus instance method
+mutant --include lib --require virtus --rspec ::Virtus::Attribute#type
+</code></pre>
+
+<h2>
+<a name="presentations" class="anchor" href="#presentations"><span class="octicon octicon-link"></span></a>Presentations:</h2>
+
+<p>There are some presentations about mutant in the wild:</p>
+
+<ul>
+<li>
+<a href="http://2013.eurucamp.org/">Eurocamp-2013</a> / FrOSCon-2013 <a href="http://slid.es/markusschirp/mutation-testing">http://slid.es/markusschirp/mutation-testing</a>
+</li>
+<li>
+<a href="http://www.colognerb.de/topics/mutation-testing-mit-mutant">Cologne.rb</a> <a href="https://github.com/DonSchado/colognerb-on-mutant/blob/master/mutation_testing_slides.pdf">https://github.com/DonSchado/colognerb-on-mutant/blob/master/mutation_testing_slides.pdf</a>
+</li>
+</ul><h2>
+<a name="subjects" class="anchor" href="#subjects"><span class="octicon octicon-link"></span></a>Subjects:</h2>
+
+<p>Mutant currently mutates code in instance and singleton methods. It is planned to support mutation
+of constant definitions and domain specific languages, DSL probably as plugins.</p>
+
+<h2>
+<a name="test-selection" class="anchor" href="#test-selection"><span class="octicon octicon-link"></span></a>Test-Selection</h2>
+
+<p>Mutation testing is slow. The key to making it fast is selecting the correct set of tests to run.
+Mutant currently supports the following built-in strategy for selecting tests/specs:</p>
+
+<p>Mutant uses the "longest rspec example group descriptions prefix match" to select the tests to run.</p>
+
+<p>Example for a subject like <code>Foo::Bar#baz</code> it will run all example groups with description prefixes in
+<code>Foo::Bar#baz</code>, <code>Foo::Bar</code> and <code>Foo</code>. The order is important, so if mutant finds example groups in the
+current prefix level, these example groups <em>must</em> kill the mutation.</p>
+
+<p>This test selection strategy is compatible with the old <code>--rspec-dm2</code> and <code>--rspec-unit</code> strategy.
+The old flags where removed.  It allows to define very fine grained specs, or coarse grained - as you like.</p>
+
+<h2>
+<a name="support" class="anchor" href="#support"><span class="octicon octicon-link"></span></a>Support</h2>
+
+<p>I'm very happy to receive/answer feedback/questions and critism.</p>
+
+<p>Your options:</p>
+
+<ul>
+<li>GitHub Issues <a href="https://github.com/mbj/mutant/issues">https://github.com/mbj/mutant/issues</a>
+</li>
+<li>Ping me on <a href="https://twitter.com/_m_b_j_">https://twitter.com/_m_b_j_</a>
+</li>
+<li>#mutant channel on freenode, I hang around on CET daytimes. (nick mbj)
+You'll also find others <a href="https://github.com/rom-rb">ROM</a> team members here that can answer questions.</li>
+</ul><h2>
+<a name="credits" class="anchor" href="#credits"><span class="octicon octicon-link"></span></a>Credits</h2>
+
+<ul>
+<li><a href="https://github.com/mbj">Markus Schirp (mbj)</a></li>
+<li>A <a href="https://gist.github.com/1065789">gist</a> from <a href="https://github.com/dkubb">dkubb</a> showing ideas.</li>
+<li>Older abandoned <a href="https://github.com/txus/mutant">mutant</a>. For motivating me doing this one.</li>
+<li>
+<a href="https://github.com/seattlerb/heckle">heckle</a>. For getting me into mutation testing.</li>
+</ul><h2>
+<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<ul>
+<li>Fork the project.</li>
+<li>Make your feature addition or bug fix.</li>
+<li>Add tests for it. This is important so I don't break it in a
+future version unintentionally.</li>
+<li>Commit, do not mess with Rakefile or version
+(if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)</li>
+<li>Send me a pull request. Bonus points for topic branches.</li>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>See LICENSE file.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Mutant maintained by <a href="https://github.com/mbj">mbj</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
