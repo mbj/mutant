@@ -98,8 +98,8 @@ Presentations:
 
 There are some presentations about mutant in the wild:
 
-* Eurocamp-2013 / FrOSCon-2013 http://slid.es/markusschirp/mutation-testing
-* I know there are more, pls ping me to add them here!
+* [Eurocamp-2013](http://2013.eurucamp.org/) / FrOSCon-2013 http://slid.es/markusschirp/mutation-testing
+* [Cologne.rb](http://www.colognerb.de/topics/mutation-testing-mit-mutant) https://github.com/DonSchado/colognerb-on-mutant/blob/master/mutation_testing_slides.pdf
 
 Subjects:
 ---------
