@@ -11,7 +11,7 @@ describe Mutant::CLI::Classifier::Method, '#each' do
   let(:unknown_method)   { '::TestApp::Literal#unknown'        }
 
   context 'with a block' do
-    subject { object.each {} }
+    subject { object.each { } }
 
     context 'with an instance method name' do
       let(:input) { instance_method }

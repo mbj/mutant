@@ -9,7 +9,7 @@ describe Mutant::CLI::Classifier::Namespace::Flat, '#each' do
   let(:unknown_namespace) { '::TestApp::Object'                 }
 
   context 'with a block' do
-    subject { object.each {} }
+    subject { object.each { } }
 
     context 'with a known namespace' do
       let(:input) { known_namespace }
@@ -51,7 +51,7 @@ describe Mutant::CLI::Classifier::Namespace::Flat, '#each' do
       let(:input) { unknown_namespace }
 
       it 'raises an exception when #each is called' do
-        expect { subject.each {} }.to raise_error(NameError)
+        expect { subject.each { } }.to raise_error(NameError)
       end
     end
   end

@@ -8,8 +8,8 @@ module Mutant
       class LoopControl < Generic
 
         INVERSE = IceNine.deep_freeze(
-          :next => :break,
-          :break => :next
+          next: :break,
+          break: :next
         )
 
         handle(*INVERSE.keys)
