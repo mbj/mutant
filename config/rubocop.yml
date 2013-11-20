@@ -97,3 +97,6 @@ SignalException:
 # I need to chain optparse builder, else it is more ugly
 MultilineBlockChain:
   Enabled: false
+
+ClassLength:
+  Max: 105
