@@ -100,3 +100,7 @@ MultilineBlockChain:
 
 ClassLength:
   Max: 105
+
+# I align private keywords with class body
+IndentationWidth:
+  Enabled: false
