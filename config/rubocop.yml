@@ -83,3 +83,7 @@ TrivialAccessors:
 # And also have a differend opinion here
 AndOr:
   Enabled: false
+
+# I like my raise
+SignalException:
+  Enabled: false
