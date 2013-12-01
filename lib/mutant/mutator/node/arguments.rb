@@ -18,7 +18,7 @@ module Mutant
         #
         def dispatch
           emit_children_mutations
-          emit_mlhs_expansion
+          emit_mlhs_expansion if children.length > 1
         end
 
         # Emit mlhs expansions
