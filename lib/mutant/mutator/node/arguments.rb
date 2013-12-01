@@ -8,6 +8,8 @@ module Mutant
 
         handle(:args)
 
+        UNDERSCORE = '_'.freeze
+
       private
 
         # Perform dispatch
@@ -17,8 +19,35 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_children_mutations
+          emit_self if relevant_args_with_index.any?
+          emit_relevant_args
           emit_mlhs_expansion
+        end
+
+        # Emit mutations for children not marked as irrelevant
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def emit_relevant_args
+          relevant_args_with_index.each do |_child, index|
+            mutate_child(index)
+            delete_child(index)
+          end
+        end
+
+        # Return children not marked as irrelevant
+        #
+        # @return [Enumerable<Parser::AST::Node, Fixnum>]
+        #
+        # @api private
+        #
+        def relevant_args_with_index
+          children.each_with_index.reject do |child, _index|
+            name = child.children.first
+            name.to_s.start_with?(UNDERSCORE)
+          end
         end
 
         # Emit mlhs expansions
@@ -43,7 +72,7 @@ module Mutant
         # @api private
         #
         def mlhs_childs_with_index
-          children.each_with_index.select do |child, index|
+          children.each_with_index.select do |child, _index|
             child.type == :mlhs
           end
         end

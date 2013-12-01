@@ -73,7 +73,6 @@ describe Mutant::Mutator, 'def' do
     let(:mutations) do
       mutations = []
       mutations << 'def foo(_unused); raise; end'
-      mutations << 'def foo; end'
     end
 
     it_should_behave_like 'a mutator'
