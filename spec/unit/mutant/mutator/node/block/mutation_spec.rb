@@ -70,4 +70,27 @@ describe Mutant::Mutator, 'block' do
 
     it_should_behave_like 'a mutator'
   end
+
+  context 'with tuple arg' do
+
+    before  do
+      Mutant::Random.stub(hex_string: 'random')
+    end
+
+    let(:source) { 'foo { |(a, b)| }' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'foo { || }'
+      mutations << 'foo { |(a, b)| raise }'
+      mutations << 'foo { |(a)| }'
+      mutations << 'foo { |(b)| }'
+      mutations << 'foo { |(srandom, b)| }'
+      mutations << 'foo { |(a, srandom)| }'
+      mutations << 'foo'
+      mutations << 'nil'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
 end
