@@ -49,7 +49,11 @@ module Mutant
           # @api private
           #
           def values
-            [0.0, 1.0, -children.first]
+            original = children.first
+            # Work around a bug in RBX/MRI or JRUBY:
+            [0.0, 1.0, -original].delete_if do |value|
+              value.eql?(original)
+            end
           end
 
         end # Float
