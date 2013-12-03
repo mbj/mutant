@@ -1,6 +1,5 @@
 Code:
   * Test mutant with dynamically created zombie.
-  * Break up lib/mutant/mutator/node/send.rb in class specific files
   * Log all warnings through reporter, so remove random $stderr.puts calls
 
 Mutations:
@@ -12,9 +11,7 @@ Mutations:
   * Mutate options on Regexp literals
   * Add mutations for dynamic regexp symbol and string literals
   * Mutate "def foo; bar; end" to "def foo; self; end"?
-  * Emit negative and positive mutations
   * Mutate Block catch "def foo(&block)" and block pass "foo(&block)"
-  * Mutate super arguments just like send arguments
   * Binary operator mutations
   * Add timeout to terminate infinite loops
 
