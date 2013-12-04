@@ -8,8 +8,6 @@ module Mutant
       class Argument < self
         handle(:arg)
 
-        UNDERSCORE = '_'.freeze
-
         children :name
 
       private
@@ -35,20 +33,6 @@ module Mutant
           Mutator::Util::Symbol.each(name, self) do |name|
             emit_name(name)
           end
-        end
-
-        # Test if argument mutation is skipped
-        #
-        # @return [true]
-        #   if argument should not get mutated
-        #
-        # @return [false]
-        #   otherwise
-        #
-        # @api private
-        #
-        def skip?
-          name.to_s.start_with?(UNDERSCORE)
         end
 
         # Mutator for optional arguments
