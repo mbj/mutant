@@ -34,6 +34,7 @@ The following projects adopted mutant, and aim 100% mutation coverage:
 * [substation](https://github.com/snusnu/substation)
 * [large_binomials](https://github.com/filipvanlaenen/large_binomials)
 * [promise.rb](https://github.com/lgierth/promise.rb)
+* [full_name](https://github.com/AGILiDEE/full_name)
 * various small/minor stuff under https://github.com/mbj
 
 Feel free to ping me to add your project to the list!
