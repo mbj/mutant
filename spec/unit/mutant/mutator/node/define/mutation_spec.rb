@@ -79,6 +79,21 @@ describe Mutant::Mutator, 'def' do
     it_should_behave_like 'a mutator'
   end
 
+  context 'with optional argument beginning in an underscore' do
+    let(:source) { 'def foo(_unused = true); end' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'def foo(_unused = nil); end'
+      mutations << 'def foo(_unused = false); end'
+      mutations << 'def foo(_unused = true); raise; end'
+      mutations << 'def foo(_unused); end'
+      mutations << 'def foo; end'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
   context 'default argument' do
     let(:source) { 'def foo(a = true); end' }
 
