@@ -2,18 +2,12 @@
 
 module Mutant
 
-  METHOD_POSTFIX_EXPANSIONS = {
-    '?' => '_predicate',
-    '=' => '_writer',
-    '!' => '_bang'
-  }.freeze
-
-  # Set of not assignable nodes
+  # Set of nodes that cannot be on the LHS of an assignment
   NOT_ASSIGNABLE = [
     :int, :float, :str, :dstr, :class, :module, :self
   ].to_set.freeze
 
-  # Set of op assign types
+  # Set of op-assign types
   OP_ASSIGN = [
     :or_asgn, :and_asgn, :op_asgn
   ].to_set.freeze
@@ -21,50 +15,30 @@ module Mutant
   # Set of node types that are not valid when emitted standalone
   NOT_STANDALONE = [:splat, :restarg, :block_pass].to_set.freeze
 
-  OPERATOR_EXPANSIONS = {
-    :<=>  => :spaceship_operator,
-    :===  => :case_equality_operator,
-    :[]=  => :element_writer,
-    :[]   => :element_reader,
-    :<=   => :less_than_or_equal_to_operator,
-    :>=   => :greater_than_or_equal_to_operator,
-    :==   => :equality_operator,
-    :'!~' => :nomatch_operator,
-    :'!=' => :inequality_operator,
-    :=~   => :match_operator,
-    :<<   => :left_shift_operator,
-    :>>   => :right_shift_operator,
-    :**   => :exponentation_operator,
-    :*    => :multiplication_operator,
-    :%    => :modulo_operator,
-    :/    => :division_operator,
-    :|    => :bitwise_or_operator,
-    :^    => :bitwise_xor_operator,
-    :&    => :bitwise_and_operator,
-    :<    => :less_than_operator,
-    :>    => :greater_than_operator,
-    :+    => :addition_operator,
-    :-    => :substraction_operator,
-    :~@   => :unary_match_operator,
-    :+@   => :unary_addition_operator,
-    :-@   => :unary_substraction_operator,
-    :'!'  => :negation_operator
-  }.freeze
+  # Operators ruby implementeds as methods
+  METHOD_OPERATORS = %w(
+    <=> === []= [] <= >= == !~ != =~ <<
+    >> ** * % / | ^ & < > + - ~@ +@ -@ !
+  ).map(&:to_sym).to_set.freeze
 
-  INDEX_OPERATORS = [:[], :[]=].freeze
+  INDEX_OPERATORS = [:[], :[]=].to_set.freeze
 
-  UNARY_METHOD_OPERATORS = [
-    :~@, :+@, :-@, :'!'
-  ].freeze
+  UNARY_METHOD_OPERATORS = %w(
+    ~@ +@ -@ !
+  ).map(&:to_sym).to_set.freeze
 
   BINARY_METHOD_OPERATORS = (
-    OPERATOR_EXPANSIONS.keys - (INDEX_OPERATORS + UNARY_METHOD_OPERATORS)
+    METHOD_OPERATORS - (INDEX_OPERATORS + UNARY_METHOD_OPERATORS)
   ).to_set.freeze
 
-  OPERATOR_METHODS =
-    OPERATOR_EXPANSIONS.keys + INDEX_OPERATORS + UNARY_METHOD_OPERATORS
+  OPERATOR_METHODS = (
+    METHOD_OPERATORS + INDEX_OPERATORS + UNARY_METHOD_OPERATORS
+  ).to_set.freeze
 
-  # Hopefully all types parser does generate
+  # Hopefully all node types parser does generate.
+  #
+  # FIXME: Maintain this list only in unparser / parser!
+  #
   NODE_TYPES = [
     :lvasgn, :ivasgn, :cvasgn, :gvasgn,
     :casgn, :masgn, :mlhs, :break, :rescue,
