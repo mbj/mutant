@@ -70,4 +70,26 @@ describe Mutant::Mutator, 'block' do
 
     it_should_behave_like 'a mutator'
   end
+
+  context 'with mini block pattern arg' do
+
+    before do
+      Mutant::Random.stub(hex_string: 'random')
+    end
+
+    let(:source) { 'foo { |(a)| }' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'foo { || }'
+      mutations << 'foo { |a| }'
+      mutations << 'foo { |(a)| raise }'
+      mutations << 'foo { |(srandom)| }'
+      mutations << 'foo'
+      mutations << 'nil'
+    end
+
+    it_should_behave_like 'a mutator'
+
+  end
 end
