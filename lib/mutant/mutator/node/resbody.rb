@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Mutant
   class Mutator
     class Node
