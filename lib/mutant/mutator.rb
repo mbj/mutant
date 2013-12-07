@@ -5,16 +5,6 @@ module Mutant
   class Mutator
     include Adamantium::Flat, AbstractType
 
-    # Mutator configuration
-    class Config
-      include Anima.new
-    end
-
-    # Context of a mutation
-    class Context
-      include Concord::Public.new(:config, :parent, :input)
-    end
-
     # Run mutator on input
     #
     # @param [Parser::AST::Node] node
