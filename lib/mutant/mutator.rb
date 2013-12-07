@@ -5,6 +5,16 @@ module Mutant
   class Mutator
     include Adamantium::Flat, AbstractType
 
+    # Mutator configuration
+    class Config
+      include Anima.new
+    end
+
+    # Context of a mutation
+    class Context
+      include Concord::Public.new(:config, :parent, :input)
+    end
+
     # Run mutator on input
     #
     # @param [Parser::AST::Node] node
@@ -15,7 +25,9 @@ module Mutant
     #
     def self.each(input, parent = nil, &block)
       return to_enum(__method__, input, parent) unless block_given?
-      Registry.lookup(input).new(input, parent, block)
+
+      context = Context.new(Config.new({}), parent, input)
+      Registry.lookup(input).new(context, block)
 
       self
     end
@@ -45,13 +57,29 @@ module Mutant
       object
     end
 
-    # Return input
+    # Return parent mutator
     #
-    # @return [Object]
+    # @return [Mutator]
+    #   if parent mutator is present
+    #
+    # @return [nil]
+    #   otherwise
     #
     # @api private
     #
-    attr_reader :input
+    def parent
+      context.parent
+    end
+
+    # Return input
+    #
+    # @return [Config]
+    #
+    # @api private
+    #
+    def config
+      context.config
+    end
 
     # Return input
     #
@@ -59,26 +87,35 @@ module Mutant
     #
     # @api private
     #
-    attr_reader :parent
+    def input
+      context.input
+    end
 
   private
 
     # Initialize object
     #
-    # @param [Object] input
-    # @param [Object] parent
+    # @param [Context] context
     # @param [#call(node)] block
     #
     # @return [undefined]
     #
     # @api private
     #
-    def initialize(input, parent, block)
-      @input, @parent, @block = input, parent, block
+    def initialize(context, block)
+      @context, @block = context, block
       @seen = Set.new
       guard(input)
       dispatch
     end
+
+    # Return context
+    #
+    # @return [Context]
+    #
+    # @api private
+    #
+    attr_reader :context
 
     # Test if generated object is not guarded from emmitting
     #
@@ -191,7 +228,7 @@ module Mutant
     # @api private
     #
     def run(mutator)
-      mutator.new(input, self, method(:emit))
+      mutator.new(Context.new(config, self, input), method(:emit))
     end
 
     # Shortcut to create a new unfrozen duplicate of input

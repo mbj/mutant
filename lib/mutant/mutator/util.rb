@@ -18,10 +18,12 @@ module Mutant
       #
       # @api private
       #
-      def self.each(object, parent, &block)
-        return to_enum(__method__, object, parent) unless block_given?
+      def self.each(input, parent, &block)
+        return to_enum(__method__, input, parent) unless block_given?
 
-        new(object, parent, block)
+        context = Context.new(Config.new({}), parent, input)
+
+        new(context, block)
 
         self
       end
