@@ -31,7 +31,7 @@ module Mutant
       # @api private
       #
       def self.define_named_child(name, index)
-        define_method("#{name}") do
+        define_method(name) do
           children.at(index)
         end
 
