@@ -13,9 +13,9 @@ module Mutant
     #
     # @api private
     #
-    def self.each(node, parent = nil, &block)
-      return to_enum(__method__, node, parent) unless block_given?
-      Registry.lookup(node).new(node, parent, block)
+    def self.each(input, parent = nil, &block)
+      return to_enum(__method__, input, parent) unless block_given?
+      Registry.lookup(input).new(input, parent, block)
 
       self
     end
@@ -92,7 +92,7 @@ module Mutant
     # @api private
     #
     def new?(object)
-      !@seen.include?(self.class.identity(object))
+      !@seen.include?(identity(object))
     end
 
     # Add object to guarded values
@@ -104,7 +104,19 @@ module Mutant
     # @api private
     #
     def guard(object)
-      @seen << self.class.identity(object)
+      @seen << identity(object)
+    end
+
+    # Return identity for input
+    #
+    # @param [Object] input
+    #
+    # @return [Object]
+    #
+    # @api private
+    #
+    def identity(input)
+      self.class.identity(input)
     end
 
     # Dispatch node generations
