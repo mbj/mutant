@@ -19,7 +19,7 @@ module Mutant
         def dispatch
           children.each_index do |index|
             mutate_child(index)
-            delete_child(index)
+            delete_child(index) if children.length > 1
           end
         end
 
