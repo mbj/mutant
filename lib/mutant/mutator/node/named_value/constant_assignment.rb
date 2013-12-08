@@ -34,7 +34,7 @@ module Mutant
           def mutate_name
             Mutator::Util::Symbol.each(inherit_context(name)) do |name|
               emit_name(name.upcase)
-            inherit_context(name)end
+            end
           end
 
         end # ConstantAssignment

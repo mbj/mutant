@@ -8,7 +8,7 @@ module Mutant
       )
 
       DEFAULT = new(
-        :return_as_last_statement_elimination => true
+        return_as_last_statement_elimination: true
       )
 
     end # Config

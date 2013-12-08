@@ -12,7 +12,6 @@ describe Mutant::Mutator do
   let(:parent)  { :parent                                             }
   let(:config)  { double('Config')                                    }
 
-
   class Block
     attr_reader :arguments
 
