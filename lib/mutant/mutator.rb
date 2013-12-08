@@ -222,7 +222,7 @@ module Mutant
 
     # Return inherited context for input
     #
-    # @param [Objecŧ] input
+    # @param [Object] input
     #
     # @return [Context]
     #
