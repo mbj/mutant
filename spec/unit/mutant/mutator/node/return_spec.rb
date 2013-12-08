@@ -49,25 +49,48 @@ describe Mutant::Mutator::Node::Return do
     end
 
     context 'with config where return value propagation is disabled' do
-
       let(:config) do
         Mutant::Mutator::Config::DEFAULT.update(
           return_as_last_block_statement_value_propagation: false
         )
       end
 
-      let(:mutations) do
-        mutations = []
-        mutations << 'foo'
-        mutations << 'return false'
-        mutations << 'nil; return false'
-        mutations << 'foo; return nil'
-        mutations << 'foo; return true'
-        mutations << 'foo; nil'
+      context 'and no other return lives within the same block' do
+
+        let(:mutations) do
+          mutations = []
+          mutations << 'foo'
+          mutations << 'return false'
+          mutations << 'nil; return false'
+          mutations << 'foo; return nil'
+          mutations << 'foo; return true'
+          mutations << 'foo; nil'
+        end
+
+        it_should_behave_like 'a mutator'
+
       end
 
-      it_should_behave_like 'a mutator'
+      context 'and another eql return lives within the same block' do
 
+        # Thise one proves we pick the correct last expression to disable return value propagation
+        let(:source) { 'return false; return false' }
+
+        let(:mutations) do
+          mutations = []
+          mutations << 'return true; return false'
+          mutations << 'return nil; return false'
+          mutations << 'return false; return true'
+          mutations << 'return false; return nil'
+          mutations << 'return false'
+          mutations << 'return false; nil'
+          mutations << 'nil; return false'
+          mutations << 'false; return false'
+        end
+
+        it_should_behave_like 'a mutator'
+
+      end
     end
   end
 
