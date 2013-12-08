@@ -103,7 +103,7 @@ module Mutant
       # @api private
       #
       def emit_children_mutations
-        Mutator::Util::Array.each(children, self) do |children|
+        Mutator::Util::Array.each(inherit_context(children)) do |children|
           emit_self(*children)
         end
       end

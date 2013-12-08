@@ -33,11 +33,9 @@ module Mutant
         def mutate_captures
           return unless captures
           emit_captures(nil)
-          Util::Array.each(captures.children, self) do |matchers|
+          Util::Array.each(inherit_context(captures.children)) do |matchers|
             next if matchers.empty?
             emit_captures(s(:array, *matchers))
-            # p capture
-            # emit_captures(s(:array, *capture))
           end
         end
 

@@ -32,7 +32,7 @@ module Mutant
         #
         def emit_name_mutation
           return if skip?
-          Mutator::Util::Symbol.each(name, self) do |name|
+          Mutator::Util::Symbol.each(inherit_context(name)) do |name|
             emit_name(name)
           end
         end
