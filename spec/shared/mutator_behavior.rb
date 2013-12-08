@@ -41,7 +41,11 @@ class Subject
 end
 
 shared_examples_for 'a mutator' do
-  subject { object.each(node) { |item| yields << item } }
+  let(:config)  { double('Mutator Config') }
+
+  let(:context) { Mutant::Mutator::Context.root(config, node) }
+
+  subject { object.each(context) { |item| yields << item } }
 
   let(:yields) { []              }
   let(:object) { described_class }
@@ -53,7 +57,7 @@ shared_examples_for 'a mutator' do
   it_should_behave_like 'a command method'
 
   context 'with no block' do
-    subject { object.each(node) }
+    subject { object.each(context) }
 
     it { should be_instance_of(to_enum.class) }
 

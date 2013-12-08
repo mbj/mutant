@@ -49,7 +49,7 @@ module Mutant
       #
       def generate_mutations(emitter)
         emitter << noop_mutation
-        Mutator.each(node) do |mutant|
+        Mutator.each(Mutator::Context.root(Mutator::Config.new({}), node)) do |mutant|
           emitter << Mutation::Evil.new(self, mutant)
         end
       end

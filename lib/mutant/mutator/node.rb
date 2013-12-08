@@ -128,7 +128,7 @@ module Mutant
       #
       def mutate_child(index, mutator = Mutator)
         child = children.at(index)
-        mutator.each(child, self) do |mutation|
+        mutator.each(inherit_context(child)) do |mutation|
           emit_child_update(index, mutation)
         end
       end

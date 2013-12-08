@@ -13,11 +13,10 @@ module Mutant
     #
     # @api private
     #
-    def self.each(input, parent = nil, &block)
-      return to_enum(__method__, input, parent) unless block_given?
+    def self.each(context, &block)
+      return to_enum(__method__, context) unless block_given?
 
-      context = Context.new(Config.new({}), parent, input)
-      Registry.lookup(input).new(context, block)
+      Registry.lookup(context.input).new(context, block)
 
       self
     end
@@ -218,7 +217,19 @@ module Mutant
     # @api private
     #
     def run(mutator)
-      mutator.new(Context.new(config, self, input), method(:emit))
+      mutator.new(inherit_context(input), method(:emit))
+    end
+
+    # Return inherited context for input
+    #
+    # @param [Objecŧ] input
+    #
+    # @return [Context]
+    #
+    # @api private
+    #
+    def inherit_context(input)
+      Context.new(config, self, input)
     end
 
     # Shortcut to create a new unfrozen duplicate of input
