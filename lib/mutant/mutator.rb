@@ -216,8 +216,8 @@ module Mutant
     #
     # @api private
     #
-    def run(mutator)
-      mutator.new(inherit_context(input), method(:emit))
+    def run(mutator, parent = self)
+      mutator.new(inherit_context(input, parent), method(:emit))
     end
 
     # Return inherited context for input
@@ -228,8 +228,8 @@ module Mutant
     #
     # @api private
     #
-    def inherit_context(input)
-      Context.new(config, self, input)
+    def inherit_context(input, parent = self)
+      Context.new(config, parent, input)
     end
 
     # Shortcut to create a new unfrozen duplicate of input

@@ -43,7 +43,7 @@ module Mutant
           #
           def dispatch
             input.each_with_index do |element, index|
-              Mutator.each(Context.root(config, element)).each do |mutation|
+              Mutator.each(inherit_context(element, parent)).each do |mutation|
                 dup = dup_input
                 dup[index] = mutation
                 emit(dup)
@@ -62,8 +62,8 @@ module Mutant
         # @api private
         #
         def dispatch
-          run(Element)
-          run(Presence)
+          run(Element, parent)
+          run(Presence, parent)
           emit([])
         end
 

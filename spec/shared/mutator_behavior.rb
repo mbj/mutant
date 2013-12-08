@@ -41,7 +41,10 @@ class Subject
 end
 
 shared_examples_for 'a mutator' do
-  let(:config)  { double('Mutator Config') }
+
+  unless instance_methods.include?(:config)
+    let(:config)  { Mutant::Mutator::Config::DEFAULT }
+  end
 
   let(:context) { Mutant::Mutator::Context.root(config, node) }
 
@@ -50,7 +53,7 @@ shared_examples_for 'a mutator' do
   let(:yields) { []              }
   let(:object) { described_class }
 
-  unless instance_methods.map(&:to_s).include?('node')
+  unless instance_methods.include?(:node)
     let(:node) { parse(source) }
   end
 
@@ -63,9 +66,6 @@ shared_examples_for 'a mutator' do
 
     let(:expected_mutations) do
       mutations.map(&Subject.method(:coerce))
-    end
-
-    let(:generated_mutations) do
     end
 
     it 'generates the expected mutations' do
