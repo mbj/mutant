@@ -18,7 +18,6 @@ tmtags
 .rbx
 
 ## PROJECT::GENERAL
-*.gem
 coverage
 profiling
 turbulence
