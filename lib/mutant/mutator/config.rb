@@ -13,6 +13,6 @@ module Mutant
       )
 
     end # Config
-  end # Mutator
 
+  end # Mutator
 end # Mutant
