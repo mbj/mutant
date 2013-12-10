@@ -1,15 +1,23 @@
-# v0.3.0 2013-06-xx
+# v0.3.0 2013-12-10
 
 Feature:
 
-* Rewrite all mutators on top of whitequark/parser
+* Rewrite all mutators on top of whitequark/parser (major!)
 * Also mutate conditions in case statements
+* Add tons of mutators I lost track about during development.
+* Add --ignore-subject optoin supporting the same syntax as matchers
+
+Bugfixes:
+
+* Fix lots of crashes.
+* Fix all known multiple diff errors
+* Handle methods memoized with adamantium correctly
 
 Bugfixes:
 
 * Fix all bugs caused by mutant-melbourne
 
-# v0.2.20 2013-03-1
+# v0.2.20 2013-03-01
 
 * Update dependencies
 
