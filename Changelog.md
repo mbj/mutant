@@ -1,3 +1,9 @@
+# v0.3.1 2013-12-19
+
+Bugfixes:
+
+* Add missing require of stringio, #141
+
 # v0.3.0 2013-12-10
 
 Feature:
