@@ -13,7 +13,7 @@ module Mutant
     # @api private
     #
     def s(type, *children)
-      Parser::AST::Node.new(type, children)
+      ::Parser::AST::Node.new(type, children)
     end
     module_function :s
 
