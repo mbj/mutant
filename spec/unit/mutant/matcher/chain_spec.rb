@@ -9,7 +9,6 @@ describe Mutant::Matcher::Chain do
   describe '#each' do
     subject { object.each { |entry| yields << entry } }
 
-
     let(:matchers) { [matcher_a, matcher_b] }
 
     let(:matcher_a) { double('Matcher A') }
