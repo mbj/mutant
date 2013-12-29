@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Mutant::Mutator::Node::Connective::Binary, 'mutations' do
+describe Mutant::Mutator::Node::Binary, 'mutations' do
   context 'and' do
     let(:source) { 'true and false' }
 
