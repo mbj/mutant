@@ -22,7 +22,7 @@ if ENV['COVERAGE'] == 'true'
 end
 
 require 'equalizer'
-require 'triage/spec_helper'
+require 'devtools/spec_helper'
 require 'mutant'
 
 $LOAD_PATH << File.join(TestApp.root, 'lib')
