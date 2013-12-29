@@ -5,9 +5,9 @@ module Mutant
     class Node
 
       # Mutator for while expressions
-      class While < self
+      class ConditionalLoop < self
 
-        handle(:while)
+        handle(:until, :while)
 
         children :condition, :body
 
