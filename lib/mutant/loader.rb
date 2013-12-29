@@ -4,17 +4,7 @@ module Mutant
   # Base class for code loaders
   class Loader
     include AbstractType
-    extend MethodObject
-
-  private
-
-    # Run the loader
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    abstract_method :run
+    include Procto.call
 
     # Initialize and insert mutation into vm
     #
@@ -27,28 +17,28 @@ module Mutant
     #
     def initialize(root, subject)
       @root, @subject = root, subject
-      run
     end
 
     # Eval based loader
     class Eval < self
 
-    private
-
-      # Run loader
+      # Call loader
       #
       # @return [undefined]
       #
       # @api private
       #
-      def run
+      def call
         eval(
           source,
           TOPLEVEL_BINDING,
           @subject.source_path.to_s,
           @subject.source_line
         )
+        nil
       end
+
+    private
 
       # Return source
       #
@@ -59,6 +49,7 @@ module Mutant
       def source
         Unparser.unparse(@root)
       end
+
     end # Eval
 
   end # Loader

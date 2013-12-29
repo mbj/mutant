@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-describe Mutant::Loader::Eval, '.run' do
+describe Mutant::Loader::Eval, '.call' do
 
-  subject { object.run(node, mutation_subject) }
+  subject { object.call(node, mutation_subject) }
 
   let(:object) { described_class }
   let(:path)   { __FILE__        }
