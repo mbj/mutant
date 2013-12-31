@@ -12,7 +12,7 @@ describe Mutant::Mutator::Node::Generic, 'match_current_line' do
     mutations << 'true if true'
     mutations << 'true if false'
     mutations << 'true if nil'
-    mutations << 'true if !//'
+    mutations << 'true if !(//)'
     mutations << 'true if /a\A/'
     mutations << 'nil'
   end
