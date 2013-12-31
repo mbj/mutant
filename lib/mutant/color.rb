@@ -3,19 +3,7 @@
 module Mutant
   # Class to colorize strings
   class Color
-    include Adamantium::Flat
-
-    # Initialize color object
-    #
-    # @param [Fixnum] code
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def initialize(code)
-      @code = code
-    end
+    include Adamantium::Flat, Concord.new(:color)
 
     # Format text with color
     #
