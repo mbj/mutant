@@ -18,6 +18,8 @@ Gem::Specification.new do |gem|
   gem.extra_rdoc_files = %w[TODO LICENSE]
   gem.executables      = %w[mutant]
 
+  gem.required_ruby_version = '>= 1.9.3'
+
   gem.add_runtime_dependency('parser',              '~> 2.1.0')
   gem.add_runtime_dependency('procto',              '~> 0.0.2')
   gem.add_runtime_dependency('abstract_type',       '~> 0.0.7')
