@@ -104,3 +104,11 @@ ClassLength:
 # I align private keywords with class body
 IndentationWidth:
   Enabled: false
+
+# I like to have an empty line before closing the currently opened body
+EmptyLinesAroundBody:
+  Enabled: false
+
+# I like my style more
+AccessModifierIndentation:
+  Enabled: false
