@@ -84,17 +84,6 @@ module Mutant
 
       private
 
-        # Set rspec level
-        #
-        # @return [self]
-        #
-        # @api private
-        #
-        def set_level(level)
-          @level = level
-          self
-        end
-
         # Add cli options
         #
         # @param [OptionParser] parser
