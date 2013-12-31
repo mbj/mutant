@@ -1,3 +1,12 @@
+# v0.3.2 2013-12-31
+
+Bugfixes:
+
+* Fix crash on until nodes: https://github.com/mbj/mutant/issues/143
+* Fix missing requires: https://github.com/mbj/mutant/issues/141
+* Fix crash on unknown nodes, fixes #143
+* Use more durable unparser version 0.1.6
+
 # v0.3.1 2013-12-19
 
 Bugfixes:
