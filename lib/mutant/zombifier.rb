@@ -16,6 +16,7 @@ module Mutant
       rspec
       diff/lcs
       diff/lcs/hunk
+      unparser
       parser
       parser/all
       parser/current
