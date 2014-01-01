@@ -3,7 +3,7 @@
 module Mutant
   # Class to colorize strings
   class Color
-    include Adamantium::Flat, Concord.new(:color)
+    include Adamantium::Flat, Concord.new(:code)
 
     # Format text with color
     #
