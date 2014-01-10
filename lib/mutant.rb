@@ -42,6 +42,7 @@ module Parser
         and not or if when case while until while_post
         until_post for break next redo return resbody
         kwbegin begin retry preexe postexe iflipflop eflipflop
+        shadowarg
       ).map(&:to_sym).to_set.freeze
   end # Meta
 end # Parser
