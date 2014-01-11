@@ -18,7 +18,7 @@ module Mutant
 
         INDEX_REFERENCE = :[]
         INDEX_ASSIGN    = :[]=
-        ASSIGN_SUFFIX   = :'='
+        ASSIGN_SUFFIX   = '='.freeze
 
         # Base mutator for index operations
         class Index < self
@@ -81,11 +81,12 @@ module Mutant
         # @api private
         #
         def non_index_dispatch
-          if binary_operator?
+          case
+          when binary_operator?
             run(Binary)
-            return
+          else
+            normal_dispatch
           end
-          normal_dispatch
         end
 
         # Return arguments
@@ -149,6 +150,19 @@ module Mutant
           arguments.one? && BINARY_METHOD_OPERATORS.include?(selector)
         end
 
+        # Test for attribute assignment
+        #
+        # @return [true]
+        #   if node represetns and attribute assignment
+        #
+        # @return [false]
+        #
+        # @api private
+        #
+        def attribute_assignment?
+          !BINARY_OPERATORS.include?(selector) && !UNARY_OPERATORS.include?(selector) && assignment? && !mlhs?
+        end
+
         # Mutate arguments
         #
         # @return [undefined]
@@ -196,9 +210,53 @@ module Mutant
         # @api private
         #
         def emit_implicit_self
-          if receiver.type == :self and !KEYWORDS.include?(selector)
+          if receiver.type == :self && !KEYWORDS.include?(selector) && !attribute_assignment?
             emit_receiver(nil)
           end
+        end
+
+        # Test for assignment
+        #
+        # FIXME: This also returns true for <= operator!
+        #
+        # @return [true]
+        #   if node represents attribute / element assignment
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def assignment?
+          selector.to_s[-1] == ASSIGN_SUFFIX
+        end
+
+        # Test for mlhs
+        #
+        # @return [true]
+        #   if node is within an mlhs
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def mlhs?
+          assignment? && !arguments?
+        end
+
+        # Test for empty arguments
+        #
+        # @return [true]
+        #   if arguments are empty
+        #
+        # @return [false]
+        #   otherwise
+        #
+        # @api private
+        #
+        def arguments?
+          arguments.any?
         end
 
       end # Send
