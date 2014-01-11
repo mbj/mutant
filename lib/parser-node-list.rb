@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 # Monkeypatch on parser with a list of allowed nodes.
 # Will be pushed upstream once turning out to be correct.
 module Parser
