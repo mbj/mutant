@@ -55,6 +55,23 @@ describe Mutant::Mutator, 'send' do
     it_should_behave_like 'a mutator'
   end
 
+  context 'attribute assign' do
+    let(:source) { 'foo.bar=baz' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'foo'
+      mutations << 'nil'
+      mutations << 'foo.bar=nil'
+      mutations << 'foo.bar'
+      mutations << 'baz'
+      # This one could probably be removed
+      mutations << 'nil.bar=baz'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
   context 'index assign' do
     let(:source) { 'foo[bar]=baz' }
 
