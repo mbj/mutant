@@ -1,3 +1,9 @@
+# v0.3.4 2014-01-11
+
+Bugfixes:
+
+* Correctly fix crash on attribute assignments nodes: https://github.com/mbj/mutant/issues/149
+
 # v0.3.3 2014-01-11
 
 Changes:
