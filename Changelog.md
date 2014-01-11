@@ -1,3 +1,13 @@
+# v0.3.3 2014-01-11
+
+Changes:
+
+* Bump dependency to unparser-0.1.8 that fixes dozens of non reported issues.
+
+Bugfixes:
+
+* Fix crash on attribute assignments nodes: https://github.com/mbj/mutant/issues/149
+
 # v0.3.2 2013-12-31
 
 Bugfixes:
