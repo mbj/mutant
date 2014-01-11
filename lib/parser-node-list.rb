@@ -22,4 +22,3 @@ module Parser
       ).map(&:to_sym).to_set.freeze
   end # Meta
 end # Parser
-
