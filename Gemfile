@@ -3,7 +3,6 @@
 source 'https://rubygems.org'
 
 gem 'mutant', path: '.'
-gem 'unparser', git: 'https://github.com/mbj/unparser.git'
 
 gemspec
 
