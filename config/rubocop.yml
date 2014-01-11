@@ -12,9 +12,6 @@ AllCops:
     - 'Gemfile'
     - 'Gemfile.triage'
     - 'mutant.gemspec'
-  Excludes:
-    - '**/vendor/**'
-    - '**/benchmarks/**'
 
 # Avoid parameter lists longer than five parameters.
 ParameterLists:
