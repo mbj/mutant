@@ -29,7 +29,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('adamantium',          '~> 0.1')
   gem.add_runtime_dependency('equalizer',           '~> 0.0.7')
   gem.add_runtime_dependency('inflecto',            '~> 0.0.2')
-  gem.add_runtime_dependency('anima',               '~> 0.1.1')
+  gem.add_runtime_dependency('anima',               '~> 0.2.0')
   gem.add_runtime_dependency('concord',             '~> 0.1.4')
   gem.add_runtime_dependency('rspec',               '~> 2.14.1')
 
