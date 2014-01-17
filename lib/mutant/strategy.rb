@@ -4,7 +4,7 @@ module Mutant
 
   # Abstract base class for killing strategies
   class Strategy
-    include AbstractType, Adamantium::Flat
+    include AbstractType, Adamantium::Flat, Equalizer.new
 
     REGISTRY = {}
 

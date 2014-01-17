@@ -43,6 +43,7 @@ module Mutant
     def initialize(arguments = [])
       @filters, @matchers = [], []
       @debug = @fail_fast = @zombie = false
+      @strategy = Strategy::Null.new
       @cache = Mutant::Cache.new
       parse(arguments)
       config # trigger lazyness now
@@ -61,7 +62,7 @@ module Mutant
         debug:             @debug,
         matcher:           matcher,
         subject_predicate: @subject_predicate.output,
-        strategy:          @strategy || Strategy::Null.new,
+        strategy:          @strategy,
         fail_fast:         @fail_fast,
         reporter:          reporter
       )
@@ -189,19 +190,21 @@ module Mutant
       end
     end
 
-    # Add runner
+    # Use plugin
     #
-    # @param [String] runner_name
+    # FIXME: For now all plugins are strategies. Later they could be anything that allows "late integration".
+    #
+    # @param [String] name
     #
     # @return [undefined]
     #
     # @api private
     #
-    def set_strategy(name)
+    def use(name)
       require "mutant/#{name}"
       @strategy = Strategy.lookup(name).new
     rescue LoadError
-      $stderr.puts("Cannot load strategy: #{name.inspect}")
+      $stderr.puts("Cannot load plugin: #{name.inspect}")
       raise
     end
 
@@ -217,11 +220,9 @@ module Mutant
       opts.separator ''
       opts.separator 'Options:'
 
-      opts.on('--via STRATEGY', 'Use STRATEGY for killing mutations') do |runner|
-        set_strategy(runner)
-      end
-
-      opts.on('--version', 'Print mutants version') do |name|
+      opts.on('--use STRATEGY', 'Use STRATEGY for killing mutations') do |runner|
+        use(runner)
+      end.on('--version', 'Print mutants version') do |name|
         puts("mutant-#{Mutant::VERSION}")
         Kernel.exit(0)
       end.on('--code FILTER', 'Adds a code filter') do |filter|
