@@ -6,6 +6,18 @@ module Mutant
     class Builder
       include AbstractType
 
+      REGISTRY = {}
+
+      # Register builder
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def self.register(instance_variable_name)
+        REGISTRY[self] = instance_variable_name
+      end
+
       # Return cache
       #
       # @return [Cache]
@@ -53,62 +65,13 @@ module Mutant
       #
       abstract_method :output
 
-      # Rspec strategy builder
-      class Rspec < self
-
-        # Initialize object
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def initialize(*)
-          @level = 0
-          @rspec = false
-          super
-        end
-
-        # Return strategy
-        #
-        # @return [Strategy::Rspec]
-        #
-        # @api private
-        #
-        def output
-          unless @rspec
-            raise Error, 'No strategy given'
-          end
-
-          Strategy::Rspec.new(@level)
-        end
-
-      private
-
-        # Add cli options
-        #
-        # @param [OptionParser] parser
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def add_options
-          parser.on('--rspec', 'kills mutations with rspec') do
-            @rspec = true
-          end
-
-          parser.on('--rspec-level LEVEL', 'set rspec expansion level') do |level|
-            @level = level.to_i
-          end
-        end
-
-      end # Rspec
-
       # Abstract predicate builder
       class Predicate < self
 
         # Bubject predicate builder
         class Subject < self
+
+          register :@subject_predicate
 
           # Initialize object
           #
@@ -158,7 +121,7 @@ module Mutant
             @predicates << Mutant::Predicate::Matcher.new(matcher)
           end
 
-        end
+        end # Subject
 
       end # Predicate
 

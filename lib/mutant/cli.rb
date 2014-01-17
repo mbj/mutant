@@ -168,10 +168,7 @@ module Mutant
       parser.separator(EMPTY_STRING)
       parser.separator('Strategies:')
 
-      {
-        Builder::Rspec              => :@strategy,
-        Builder::Predicate::Subject => :@subject_predicate,
-      }.each do |builder, instance_variable_name|
+      Builder::REGISTRY.each do |builder, instance_variable_name|
         builder = builder.new(@cache, parser)
         instance_variable_set(instance_variable_name, builder)
       end

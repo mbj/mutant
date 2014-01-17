@@ -1,9 +1,9 @@
 # encoding: utf-8
 
 module Mutant
-  class Killer
+  module Rspec
     # Runner for rspec tests
-    class Rspec < self
+    class Killer < Mutant::Killer
 
     private
 
@@ -90,6 +90,6 @@ module Mutant
         strategy.example_groups
       end
 
-    end # Rspec
-  end # Killer
+    end # Killer
+  end # Rspec
 end # Mutant

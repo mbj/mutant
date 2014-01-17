@@ -1,12 +1,12 @@
 # encoding: utf-8
 
 module Mutant
-  class Strategy
+  module Rspec
     # Rspec killer strategy
-    class Rspec < self
-      include Concord.new(:level)
+    class Strategy < Mutant::Strategy
+      include Equalizer.new
 
-      KILLER = Killer::Forking.new(Killer::Rspec)
+      KILLER = Killer::Forking.new(Rspec::Killer)
 
       # Setup rspec strategy
       #
@@ -71,6 +71,6 @@ module Mutant
       end
       memoize :options, freezer: :noop
 
-    end # Rspec
-  end # Strategy
+    end # Strategy
+  end # Rspec
 end # Mutant
