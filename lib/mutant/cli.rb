@@ -61,7 +61,7 @@ module Mutant
         debug:             @debug,
         matcher:           matcher,
         subject_predicate: @subject_predicate.output,
-        strategy:          @strategy.output,
+        strategy:          @strategy || Strategy::Null.new,
         fail_fast:         @fail_fast,
         reporter:          reporter
       )
@@ -167,10 +167,8 @@ module Mutant
       parser.separator(EMPTY_STRING)
       parser.separator('Strategies:')
 
-      Builder::REGISTRY.each do |builder, instance_variable_name|
-        builder = builder.new(@cache, parser)
-        instance_variable_set(instance_variable_name, builder)
-      end
+      builder = Builder::Predicate::Subject.new(@cache, parser)
+      @subject_predicate = builder
     end
 
     # Add environmental options
@@ -191,6 +189,22 @@ module Mutant
       end
     end
 
+    # Add runner
+    #
+    # @param [String] runner_name
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def set_strategy(name)
+      require "mutant/#{name}"
+      @strategy = Strategy.lookup(name).new
+    rescue LoadError
+      $stderr.puts("Cannot load strategy: #{name.inspect}")
+      raise
+    end
+
     # Add options
     #
     # @param [Object] opts
@@ -202,6 +216,10 @@ module Mutant
     def add_options(opts)
       opts.separator ''
       opts.separator 'Options:'
+
+      opts.on('--via STRATEGY', 'Use STRATEGY for killing mutations') do |runner|
+        set_strategy(runner)
+      end
 
       opts.on('--version', 'Print mutants version') do |name|
         puts("mutant-#{Mutant::VERSION}")

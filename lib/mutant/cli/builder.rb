@@ -6,18 +6,6 @@ module Mutant
     class Builder
       include AbstractType
 
-      REGISTRY = {}
-
-      # Register builder
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def self.register(instance_variable_name)
-        REGISTRY[self] = instance_variable_name
-      end
-
       # Return cache
       #
       # @return [Cache]
@@ -70,8 +58,6 @@ module Mutant
 
         # Bubject predicate builder
         class Subject < self
-
-          register :@subject_predicate
 
           # Initialize object
           #

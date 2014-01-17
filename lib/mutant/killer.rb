@@ -99,5 +99,25 @@ module Mutant
     #
     abstract_method :run
 
+    # Null killer that never kills a mutation
+    class Null < self
+
+    private
+
+      # Run killer
+      #
+      # @return [true]
+      #   when mutant was killed
+      #
+      # @return [false]
+      #   otherwise
+      #
+      # @api private
+      #
+      def run
+        false
+      end
+
+    end
   end # Killer
 end # Mutant

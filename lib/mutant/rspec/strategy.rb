@@ -4,7 +4,8 @@ module Mutant
   module Rspec
     # Rspec killer strategy
     class Strategy < Mutant::Strategy
-      include Equalizer.new
+
+      register 'rspec'
 
       KILLER = Killer::Forking.new(Rspec::Killer)
 
