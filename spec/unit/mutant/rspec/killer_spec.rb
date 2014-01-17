@@ -1,8 +1,9 @@
 # encoding: utf-8
 
 require 'spec_helper'
+require 'mutant-rspec'
 
-describe Mutant::Killer::Rspec, '.new' do
+describe Mutant::Rspec::Killer, '.new' do
 
   before do
     pending 'dactivated'

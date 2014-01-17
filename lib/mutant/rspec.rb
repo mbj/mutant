@@ -1,9 +1,9 @@
+# encoding: UTF-8
+
 require 'rspec'
 
-require 'mutant/rspec/killer'
-require 'mutant/rspec/strategy'
-
 module Mutant
+  # Rspec integration namespace
   module Rspec
   end # Rspec
 end # Mutant
