@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 gem 'mutant', path: '.'
 
-gemspec
+gemspec name: 'mutant'
 
 gem 'devtools', git: 'https://github.com/rom-rb/devtools.git'
 eval_gemfile 'Gemfile.devtools'
