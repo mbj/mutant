@@ -44,7 +44,6 @@ module Mutant
       @filters, @matchers = [], []
       @debug = @fail_fast = @zombie = false
       @cache = Mutant::Cache.new
-      @strategy_builder = nil
       parse(arguments)
       config # trigger lazyness now
     end
