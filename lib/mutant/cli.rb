@@ -43,6 +43,7 @@ module Mutant
     def initialize(arguments = [])
       @filters, @matchers = [], []
       @debug = @fail_fast = @zombie = false
+      @expect_coverage = 100.0
       @strategy = Strategy::Null.new
       @cache = Mutant::Cache.new
       parse(arguments)
@@ -64,7 +65,8 @@ module Mutant
         subject_predicate: @subject_predicate.output,
         strategy:          @strategy,
         fail_fast:         @fail_fast,
-        reporter:          reporter
+        reporter:          reporter,
+        expect_coverage:   @expect_coverage
       )
     end
     memoize :config
