@@ -128,9 +128,10 @@ module Mutant
       opts = OptionParser.new do |builder|
         builder.banner = 'usage: mutant STRATEGY [options] MATCHERS ...'
         builder.separator('')
-        add_strategies(builder)
+        add_filters(builder)
         add_environmental_options(builder)
-        add_options(builder)
+        add_mutation_options(builder)
+        add_debug_options(builder)
       end
 
       patterns =
@@ -158,7 +159,7 @@ module Mutant
       end
     end
 
-    # Add strategies
+    # Add filters
     #
     # @param [OptionParser] parser
     #
@@ -166,7 +167,7 @@ module Mutant
     #
     # @api private
     #
-    def add_strategies(parser)
+    def add_filters(parser)
       parser.separator(EMPTY_STRING)
       parser.separator('Strategies:')
 
@@ -183,6 +184,8 @@ module Mutant
     # @api private
     #
     def add_environmental_options(opts)
+      opts.separator('')
+      opts.separator('Environment:')
       opts.on('--zombie', 'Run mutant zombified') do
         @zombie = true
       end.on('-I', '--include DIRECTORY', 'Add DIRECTORY to $LOAD_PATH') do |directory|
@@ -212,27 +215,39 @@ module Mutant
 
     # Add options
     #
-    # @param [Object] opts
+    # @param [OptionParser] opts
     #
     # @return [undefined]
     #
     # @api private
     #
-    def add_options(opts)
-      opts.separator ''
-      opts.separator 'Options:'
+    def add_mutation_options(opts)
+      opts.separator('')
+      opts.separator('Options:')
 
       opts.on('--score COVERAGE', 'Fail unless COVERAGE is not reached exactly') do |coverage|
         @expected_coverage = Float(coverage)
       end.on('--use STRATEGY', 'Use STRATEGY for killing mutations') do |runner|
         use(runner)
+      end.on('--code FILTER', 'Adds a code filter') do |filter|
+        add_filter(Predicate::Attribute, :code, filter)
+      end
+    end
+
+    # Add debug options
+    #
+    # @param [OptionParser] opts
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def add_debug_options(opts)
+      opts.on('--fail-fast', 'Fail fast') do
+        @fail_fast = true
       end.on('--version', 'Print mutants version') do |name|
         puts("mutant-#{Mutant::VERSION}")
         Kernel.exit(0)
-      end.on('--code FILTER', 'Adds a code filter') do |filter|
-        add_filter(Predicate::Attribute, :code, filter)
-      end.on('--fail-fast', 'Fail fast') do
-        @fail_fast = true
       end.on('-d', '--debug', 'Enable debugging output') do
         @debug = true
       end.on_tail('-h', '--help', 'Show this message') do
