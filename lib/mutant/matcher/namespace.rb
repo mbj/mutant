@@ -54,6 +54,29 @@ module Mutant
         end
       end
 
+      # Return scope name
+      #
+      # @param [Class,Module] scope
+      #
+      # @return [String]
+      #   if scope has a name and does not raise exceptions optaining it
+      #
+      # @return [nil]
+      #   otherwise
+      #
+      # @api private
+      #
+      def self.scope_name(scope)
+        scope.name
+      rescue => exception
+        $stderr.puts <<-MESSAGE
+WARNING:
+While optaining #{scope.class}#name from: #{scope.inspect}
+It raised an error: #{exception.inspect} fix your lib!
+        MESSAGE
+        nil
+      end
+
       # Yield scope if name matches pattern
       #
       # @param [Module,Class] scope
@@ -63,9 +86,15 @@ module Mutant
       # @api private
       #
       def emit_scope(scope)
-        name = scope.name
+        name = self.class.scope_name(scope)
         # FIXME: Fix nokogiri to return a string here
-        return unless name.kind_of?(String)
+        unless name.nil? or name.kind_of?(String)
+          $stderr.puts <<-MESSAGE
+WARNING:
+#{scope.class}#name did not return a string or nil.
+Fix your lib!
+          MESSAGE
+        end
         if pattern =~ name
           yield scope
         end
