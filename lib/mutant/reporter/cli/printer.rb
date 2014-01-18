@@ -18,12 +18,26 @@ module Mutant
         #
         def self.delegate(*names)
           names.each do |name|
-            define_method(name) do
-              object.public_send(name)
-            end
-            private name
+            define_delegator(name)
           end
         end
+        private_class_method :delegate
+
+        # Create delegator to object
+        #
+        # @param [Symbol] name
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def self.define_delegator(name)
+          define_method(name) do
+            object.public_send(name)
+          end
+          private name
+        end
+        private_class_method :define_delegator
 
         # Registre handler for class
         #
