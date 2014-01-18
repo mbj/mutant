@@ -11,7 +11,8 @@ module Mutant
       :subject_predicate,
       :reporter,
       :fail_fast,
-      :zombie
+      :zombie,
+      :expected_coverage
     )
 
     # Enumerate subjects

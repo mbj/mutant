@@ -2,6 +2,7 @@
 
 Changes:
 
+* Add configurable coverage expectation via --coverage (default 100%)
 * Drop --rspec option use: --use rspec instead.
 
 # v0.3.4 2014-01-11

@@ -10,6 +10,21 @@ module Mutant
 
         REGISTRY = {}
 
+        # Create delegators to object
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def self.delegate(*names)
+          names.each do |name|
+            define_method(name) do
+              object.public_send(name)
+            end
+            private name
+          end
+        end
+
         # Registre handler for class
         #
         # @param [Class] klass

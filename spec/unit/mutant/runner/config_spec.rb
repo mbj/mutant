@@ -5,14 +5,21 @@ require 'spec_helper'
 describe Mutant::Runner::Config do
 
   let(:config) do
-    double(
-      'Config',
-      class:    Mutant::Config,
-      subjects: [subject_a, subject_b],
-      strategy: strategy,
-      reporter: reporter
+    Mutant::Config.new(
+      matcher:           [subject_a, subject_b],
+      cache:             Mutant::Cache.new,
+      debug:             false,
+      strategy:          strategy,
+      reporter:          reporter,
+      fail_fast:         fail_fast,
+      expected_coverage: expected_coverage,
+      zombie:            false,
+      subject_predicate: double(:match? => false)
     )
   end
+
+  let(:fail_fast)         { false }
+  let(:expected_coverage) { 100.0 }
 
   before do
     reporter.stub(report: reporter)
@@ -59,30 +66,39 @@ describe Mutant::Runner::Config do
 
     let(:object) { described_class.new(config) }
 
+    let(:mutation_a) do
+      double('Mutation A', success?: false)
+    end
+
+    let(:mutation_b) do
+      double('Mutation B', success?: true)
+    end
+
     let(:runner_a) do
-      double('Runner A', stop?: stop_a, success?: success_a)
+      double('Runner A', stop?: false, success?: false, mutations: [mutation_a])
     end
 
     let(:runner_b) do
-      double('Runner B', stop?: stop_b, success?: success_b)
+      double('Runner B', stop?: false, success?: true, mutations: [mutation_b])
     end
 
-    context 'without failed subjects' do
-      let(:stop_a)    { false }
-      let(:stop_b)    { false }
-      let(:success_a) { true  }
-      let(:success_b) { true  }
+    context 'without fail fast' do
 
-      it { should be(true) }
-    end
+      context 'when expected coverage equals actual coverage' do
+        let(:expected_coverage) { 50.0 }
+        it { should be(true) }
+      end
 
-    context 'with failing subjects' do
-      let(:stop_a)    { false }
-      let(:stop_b)    { false }
-      let(:success_a) { false }
-      let(:success_b) { true  }
+      context 'when expected coverage closely equals actual coverage' do
+        let(:expected_coverage) { 50.01 }
+        it { should be(true) }
+      end
 
-      it { should be(false) }
+      context 'when expected coverage does not equal actual coverage' do
+        let(:expected_coverage) { 51.00 }
+        it { should be(false) }
+      end
+
     end
   end
 end

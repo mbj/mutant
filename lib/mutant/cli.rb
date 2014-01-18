@@ -66,7 +66,7 @@ module Mutant
         strategy:          @strategy,
         fail_fast:         @fail_fast,
         reporter:          reporter,
-        expect_coverage:   @expect_coverage
+        expected_coverage: @expect_coverage
       )
     end
     memoize :config
@@ -222,7 +222,9 @@ module Mutant
       opts.separator ''
       opts.separator 'Options:'
 
-      opts.on('--use STRATEGY', 'Use STRATEGY for killing mutations') do |runner|
+      opts.on('--score COVERAGE', 'Fail unless COVERAGE is not reached exactly') do |coverage|
+        @expected_coverage = Float(coverage)
+      end.on('--use STRATEGY', 'Use STRATEGY for killing mutations') do |runner|
         use(runner)
       end.on('--version', 'Print mutants version') do |name|
         puts("mutant-#{Mutant::VERSION}")

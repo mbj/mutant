@@ -40,6 +40,8 @@ module Mutant
       end
       memoize :failed_subjects
 
+      COVERAGE_PRECISION = 1
+
       # Test if run was successful
       #
       # @return [true]
@@ -51,7 +53,7 @@ module Mutant
       # @api private
       #
       def success?
-        failed_subjects.empty?
+        coverage.round(COVERAGE_PRECISION) == config.expected_coverage.round(COVERAGE_PRECISION)
       end
       memoize :success?
 
@@ -63,6 +65,50 @@ module Mutant
       #
       def strategy
         config.strategy
+      end
+
+      # Return coverage
+      #
+      # @return [Float]
+      #
+      # @api private
+      #
+      def coverage
+        return 0.0 if amount_mutations.zero?
+        Rational(amount_kills, amount_mutations) * 100
+      end
+      memoize :coverage
+
+      # Return amount of kills
+      #
+      # @return [Fixnum]
+      #
+      # @api private
+      #
+      def amount_kills
+        mutations.select(&:success?).length
+      end
+      memoize :amount_kills
+
+      # Return mutations
+      #
+      # @return [Array<Mutation>]
+      #
+      # @api private
+      #
+      def mutations
+        subjects.map(&:mutations).flatten
+      end
+      memoize :mutations
+
+      # Return amount of mutations
+      #
+      # @return [Fixnum]
+      #
+      # @api private
+      #
+      def amount_mutations
+        mutations.length
       end
 
     private
