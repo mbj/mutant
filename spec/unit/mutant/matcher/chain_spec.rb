@@ -32,7 +32,7 @@ describe Mutant::Matcher::Chain do
         pending 'FIX RBX rspec? BUG HERE'
       else
         it 'yields the expected values' do
-          subject.to_a.should eql(object.to_a)
+          expect(subject.to_a).to eql(object.to_a)
         end
       end
     end

@@ -52,7 +52,7 @@ describe Mutant::Matcher::Methods::Singleton, '#each' do
 
   it 'should yield expected subjects' do
     subject
-    yields.should eql(subjects)
+    expect(yields).to eql(subjects)
   end
 
   it_should_behave_like 'an #each method'

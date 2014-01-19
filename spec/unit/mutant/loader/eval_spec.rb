@@ -41,8 +41,8 @@ describe Mutant::Loader::Eval, '.call' do
 
   it 'should set file and line correctly' do
     subject
-    ::SomeNamespace::Bar
+    expect(::SomeNamespace::Bar
       .instance_method(:some_method)
-      .source_location.should eql([__FILE__, 3])
+      .source_location).to eql([__FILE__, 3])
   end
 end

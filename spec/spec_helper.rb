@@ -48,6 +48,6 @@ RSpec.configure do |config|
   config.include(ParserHelper)
   config.include(Mutant::NodeHelpers)
   config.expect_with :rspec do |rspec|
-    rspec.syntax = [:expect, :should]
+    rspec.syntax = :expect
   end
 end

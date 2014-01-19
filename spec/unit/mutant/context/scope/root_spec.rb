@@ -31,6 +31,6 @@ describe Mutant::Context::Scope, '#root' do
   end
 
   it 'should create correct source' do
-    generated_source.should eql(expected_source)
+    expect(generated_source).to eql(expected_source)
   end
 end
