@@ -53,7 +53,7 @@ gem install mutant
 If you plan to use the rspec integration you'll have to install `mutant-rspec` also.
 
 ```ruby
-gem intall mutant-rspec
+gem install mutant-rspec
 ```
 
 Mutations
