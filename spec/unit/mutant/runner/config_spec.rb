@@ -13,8 +13,7 @@ describe Mutant::Runner::Config do
       reporter:          reporter,
       fail_fast:         fail_fast,
       expected_coverage: expected_coverage,
-      zombie:            false,
-      subject_predicate: double(:match? => false)
+      zombie:            false
     )
   end
 

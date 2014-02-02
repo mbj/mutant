@@ -27,7 +27,7 @@ describe Mutant::CLI, '.new' do
   end
 
   # Defaults
-  let(:expected_filter)   { Mutant::Predicate::TAUTOLOGY       }
+  let(:expected_filter)   { Morpher.evaluator(s(:true))        }
   let(:expected_strategy) { Mutant::Strategy::Null.new         }
   let(:expected_reporter) { Mutant::Reporter::CLI.new($stdout) }
 
@@ -57,7 +57,7 @@ describe Mutant::CLI, '.new' do
   context 'without arguments' do
     let(:arguments) { [] }
 
-    let(:expected_message) { 'No matchers given' }
+    let(:expected_message) { 'No patterns given' }
 
     it_should_behave_like 'an invalid cli run'
   end
@@ -69,58 +69,80 @@ describe Mutant::CLI, '.new' do
     it_should_behave_like 'an invalid cli run'
   end
 
-  context 'with explicit method matcher' do
+  context 'with explicit method pattern' do
     let(:arguments)        { %w(TestApp::Literal#float) }
-    let(:expected_matcher) { ns::Method::Instance.new(cache, TestApp::Literal, TestApp::Literal.instance_method(:float)) }
+
+    let(:expected_matcher) do
+      ns::Method::Instance.new(cache, TestApp::Literal, TestApp::Literal.instance_method(:float))
+    end
 
     it_should_behave_like 'a cli parser'
   end
 
   context 'with debug flag' do
-    let(:matcher)          { '::TestApp*'           }
-    let(:arguments)        { %W(--debug #{matcher}) }
+    let(:pattern)          { '::TestApp*'           }
+    let(:arguments)        { %W(--debug #{pattern}) }
     let(:expected_matcher) { ns::Namespace.new(cache, TestApp) }
 
     it_should_behave_like 'a cli parser'
 
     it 'should set the debug option' do
-      subject.config.debug.should be(true)
+      expect(subject.config.debug).to be(true)
     end
   end
 
   context 'with zombie flag' do
-    let(:matcher)          { '::TestApp*'            }
-    let(:arguments)        { %W(--zombie #{matcher}) }
+    let(:pattern)          { '::TestApp*'            }
+    let(:arguments)        { %W(--zombie #{pattern}) }
     let(:expected_matcher) { ns::Namespace.new(cache, TestApp) }
 
     it_should_behave_like 'a cli parser'
 
     it 'should set the zombie option' do
-      subject.config.zombie.should be(true)
+      expect(subject.config.zombie).to be(true)
     end
   end
 
-  context 'with namespace matcher' do
-    let(:matcher)          { '::TestApp*'   }
-    let(:arguments)        { %W(#{matcher}) }
+  context 'with namespace pattern' do
+    let(:pattern)          { '::TestApp*'   }
+    let(:arguments)        { %W(#{pattern}) }
     let(:expected_matcher) { ns::Namespace.new(cache, TestApp) }
 
     it_should_behave_like 'a cli parser'
   end
 
-  context 'with code filter' do
-    let(:matcher)   { 'TestApp::Literal#float'                     }
-    let(:arguments) { %W(--code faa --code bbb #{matcher}) }
+  context 'with subject code filter' do
+    let(:pattern)   { 'TestApp::Literal#float' }
+    let(:arguments) { %W(--code faa --code bbb #{pattern}) }
 
-    let(:filters) do
-      [
-        Mutant::Predicate::Attribute.new(:code, 'faa'),
-        Mutant::Predicate::Attribute.new(:code, 'bbb'),
-      ]
+    let(:expected_filter) do
+      Morpher.evaluator(
+        s(:mxor,
+          s(:eql, s(:attribute, :code), s(:value, 'faa')),
+          s(:eql, s(:attribute, :code), s(:value, 'bbb'))
+        )
+      )
     end
 
-    let(:expected_matcher) { ns::Method::Instance.new(cache, TestApp::Literal, TestApp::Literal.instance_method(:float))  }
-    let(:expected_filter)  { Mutant::Predicate::Whitelist.new(filters) }
+    let(:expected_matcher) do
+      matcher = ns::Method::Instance.new(
+        cache,
+        TestApp::Literal, TestApp::Literal.instance_method(:float)
+      )
+      predicate = Morpher.evaluator(
+        s(:or,
+          s(:eql,
+            s(:attribute, :code),
+            s(:static, 'faa')
+          ),
+          s(:eql,
+            s(:attribute, :code),
+            s(:static, 'bbb')
+          )
+        )
+      )
+      ns::Filter.new(matcher, predicate)
+    end
 
     it_should_behave_like 'a cli parser'
   end

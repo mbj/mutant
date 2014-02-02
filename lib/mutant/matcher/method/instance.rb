@@ -73,7 +73,7 @@ module Mutant
           # @api private
           #
           def source_location
-            scope.original_instance_method(method.name).source_location
+            scope.unmemoized_instance_method(method.name).source_location
           end
 
         end # Memoized

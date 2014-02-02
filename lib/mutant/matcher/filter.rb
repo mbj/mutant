@@ -4,7 +4,7 @@ module Mutant
   class Matcher
     # Matcher filter
     class Filter < self
-      include Concord.new(:matcher, :filter)
+      include Concord.new(:matcher, :predicate)
 
       # Enumerate matches
       #
@@ -16,14 +16,9 @@ module Mutant
       #
       # @api private
       #
-      def each
+      def each(&block)
         return to_enum unless block_given?
-
-        matcher.each do |subject|
-          next if filter.match?(subject)
-          yield subject
-        end
-
+        matcher.select(&predicate.method(:call)).each(&block)
         self
       end
 

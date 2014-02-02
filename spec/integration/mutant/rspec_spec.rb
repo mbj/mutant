@@ -17,7 +17,12 @@ describe Mutant, 'rspec integration' do
   end
 
   specify 'it allows to exclude mutations' do
-    cli = "#{base_cmd} ::TestApp::Literal#string ::TestApp::Literal#uncovered_string --ignore-subject ::TestApp::Literal#uncovered_string"
+    cli = <<-CMD.split("\n").join(' ')
+      #{base_cmd}
+      ::TestApp::Literal#string
+      ::TestApp::Literal#uncovered_string
+        --ignore-subject ::TestApp::Literal#uncovered_string
+    CMD
     expect(Kernel.system(cli)).to be(true)
   end
 

@@ -10,7 +10,7 @@ module Mutant
 
           handle(Mutant::Config)
 
-          delegate :matcher, :subject_predicate, :strategy, :expected_coverage
+          delegate :matcher, :strategy, :expected_coverage
 
           # Report configuration
           #
@@ -23,7 +23,6 @@ module Mutant
           def run
             info 'Mutant configuration:'
             info 'Matcher:         %s',     matcher.inspect
-            info 'Subject Filter:  %s',     subject_predicate.inspect
             info 'Strategy:        %s',     strategy.inspect
             info 'Expect Coverage: %02f%%', expected_coverage.inspect
             self
