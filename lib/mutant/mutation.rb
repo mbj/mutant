@@ -56,7 +56,6 @@ module Mutant
     def identification
       "#{subject.identification}:#{code}"
     end
-    memoize :identification
 
     # Return mutation code
     #

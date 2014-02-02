@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Mutant::Mutation do
 
-  let(:class_under_test) { Class.new(described_class)                                         }
+  let(:class_under_test) { Class.new(described_class) { memoize :identification }             }
   let(:object)           { class_under_test.new(mutation_subject, Mutant::NodeHelpers::N_NIL) }
   let(:mutation_subject) { double('Subject', identification: 'subject', source: 'original')   }
   let(:node)             { double('Node')                                                     }
