@@ -1,10 +1,15 @@
-# v0.4.0 2014-02-16
+# v0.5.0 2014-02-16
 
 Changes:
 
 * Add configurable coverage expectation via --coverage (default 100%)
 * rspec integration was moved into a gem 'mutant-rspec'
+* Replace filters implementation with morpher predicates
 * Drop --rspec option use: --use rspec instead.
+
+# v0.4.0 2014-02-16
+
+Status: Yanked because of broken dependencies.
 
 # v0.3.4 2014-01-11
 
