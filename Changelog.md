@@ -1,8 +1,9 @@
-# v0.4.0 2014-01-xx
+# v0.4.0 2014-02-16
 
 Changes:
 
 * Add configurable coverage expectation via --coverage (default 100%)
+* rspec integration was moved into a gem 'mutant-rspec'
 * Drop --rspec option use: --use rspec instead.
 
 # v0.3.4 2014-01-11
