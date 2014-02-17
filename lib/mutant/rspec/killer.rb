@@ -32,7 +32,7 @@ module Mutant
           return false
         end
 
-        reporter = RSpec::Core::Reporter.new
+        reporter = RSpec.configuration.reporter
 
         example_groups.each do |group|
           return true unless group.run(reporter)
