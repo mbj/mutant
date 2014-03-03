@@ -95,8 +95,9 @@ module Mutant
       # @api private
       #
       def reporter
-        @reporter ||= rspec2? ? rspec_reporter.new : rspec_reporter.new(strategy.configuration)
+        rspec2? ? rspec_reporter.new : rspec_reporter.new(strategy.configuration)
       end
+      memoize :reporter, freezer: :noop
 
       # Reporter class
       #
@@ -119,7 +120,7 @@ module Mutant
       # @api private
       #
       def rspec2?
-        RSpec::Core::Version::STRING.split('.').first == '2'
+        RSpec::Core::Version::STRING.start_with?('2.')
       end
 
     end # Killer
