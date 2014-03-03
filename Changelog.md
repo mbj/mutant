@@ -1,4 +1,10 @@
-# v0.5.0 2014-02-16
+# v0.5.1 2014-03-03
+
+Changes:
+
+* Remove rspec dep from main mutant gem
+
+# v0.5.0 2014-03-02
 
 Changes:
 
