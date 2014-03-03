@@ -88,14 +88,36 @@ module Mutant
         strategy.example_groups
       end
 
+      # Instantiate and memoize RSpec reporter
+      #
+      # @return [RSpec::Core::Reporter]
+      #
+      # @api private
+      #
       def reporter
         @reporter ||= rspec2? ? rspec_reporter.new : rspec_reporter.new(strategy.configuration)
       end
 
+      # Reporter class
+      #
+      # @return [Class]
+      #
+      # @api private
+      #
       def rspec_reporter
         RSpec::Core::Reporter
       end
 
+      # Detect RSpec 2
+      #
+      # @return [true]
+      #   when RSpec 2
+      #
+      # @return [false]
+      #   otherwise
+      #
+      # @api private
+      #
       def rspec2?
         RSpec::Core::Version::STRING.split('.').first == '2'
       end
