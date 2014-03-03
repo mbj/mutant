@@ -32,8 +32,6 @@ module Mutant
           return false
         end
 
-        reporter = RSpec.configuration.reporter
-
         example_groups.each do |group|
           return true unless group.run(reporter)
         end
@@ -88,6 +86,18 @@ module Mutant
       #
       def all_example_groups
         strategy.example_groups
+      end
+
+      def reporter
+        @reporter ||= rspec2? ? rspec_reporter.new : rspec_reporter.new(strategy.configuration)
+      end
+
+      def rspec_reporter
+        RSpec::Core::Reporter
+      end
+
+      def rspec2?
+        RSpec::Core::Version::STRING.split('.').first == '2'
       end
 
     end # Killer
