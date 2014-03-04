@@ -1,3 +1,9 @@
+# v0.5.2 2014-03-04
+
+Changes:
+
+* Use parser 2.1.6 that has its own Parser::Meta::NODE_LIST
+
 # v0.5.1 2014-03-03
 
 Changes:
