@@ -88,16 +88,40 @@ module Mutant
         strategy.example_groups
       end
 
-      # Instantiate and memoize RSpec reporter
+      # Choose and memoize RSpec reporter
       #
       # @return [RSpec::Core::Reporter]
       #
       # @api private
       #
       def reporter
-        rspec2? ? rspec_reporter.new : rspec_reporter.new(strategy.configuration)
+        if strategy.rspec2?
+          rspec2_reporter
+        else
+          rspec3_reporter
+        end
       end
       memoize :reporter, freezer: :noop
+
+      # Instantiate RSpec 2 reporter
+      #
+      # @return [RSpec::Core::Reporter]
+      #
+      # @api private
+      #
+      def rspec2_reporter
+        reporter_class.new
+      end
+
+      # Instantiate RSpec 3 reporter
+      #
+      # @return [RSpec::Core::Reporter]
+      #
+      # @api private
+      #
+      def rspec3_reporter
+        reporter_class.new(strategy.configuration)
+      end
 
       # Reporter class
       #
@@ -105,22 +129,8 @@ module Mutant
       #
       # @api private
       #
-      def rspec_reporter
+      def reporter_class
         RSpec::Core::Reporter
-      end
-
-      # Detect RSpec 2
-      #
-      # @return [true]
-      #   when RSpec 2
-      #
-      # @return [false]
-      #   otherwise
-      #
-      # @api private
-      #
-      def rspec2?
-        RSpec::Core::Version::STRING.start_with?('2.')
       end
 
     end # Killer

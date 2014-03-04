@@ -11,6 +11,7 @@ describe Mutant, 'rspec integration' do
       Bundler.with_clean_env do
         Dir.chdir(TestApp.root) do
           Kernel.system("bundle install --gemfile=#{gemfile}")
+          ENV['BUNDLE_GEMFILE'] = gemfile
           example.run
         end
       end

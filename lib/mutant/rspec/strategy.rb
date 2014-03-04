@@ -46,6 +46,20 @@ module Mutant
         world.example_groups
       end
 
+      # Detect RSpec 2
+      #
+      # @return [true]
+      #   when RSpec 2
+      #
+      # @return [false]
+      #   otherwise
+      #
+      # @api private
+      #
+      def rspec2?
+        RSpec::Core::Version::STRING.start_with?('2.')
+      end
+
     private
 
       # Return world
@@ -67,7 +81,7 @@ module Mutant
       #
       def options
         options = RSpec::Core::ConfigurationOptions.new(%w(--fail-fast spec))
-        options.parse_options
+        options.parse_options if rspec2?
         options
       end
       memoize :options, freezer: :noop
