@@ -16,6 +16,7 @@ module Mutant
       rspec
       diff/lcs
       diff/lcs/hunk
+      unparser
       parser
       parser/all
       parser/current
@@ -71,7 +72,7 @@ module Mutant
       #
       def zombify
         $stderr.puts("Zombifying #{context.source_path}")
-        Loader::Eval.run(zombified_root, self)
+        Loader::Eval.call(zombified_root, self)
         self
       end
       memoize :zombify

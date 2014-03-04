@@ -12,12 +12,14 @@ or it does not have a speced side effect.
 
 A more readable introduction can be found under: http://solnic.eu/2013/01/23/mutation-testing-with-mutant.html
 
-Mutant supports MRI and RBX 1.9 and 2.0, while support for jruby is planned. It should also work under
-any ruby engine that supports POSIX-fork(2) semantics.
+Mutant supports MRI and RBX 1.9 and 2.0, while support for jruby is planned.
+It should also work under any ruby engine that supports POSIX-fork(2) semantics.
+Support for MRI 2.1 is unstable, because this MRI release segfaults on basic metaprogramming mutants dependencies do.
 
-Only rspec2 is supported currently. This is subject to change.
+Integrations
+------------
 
-It is easy to write a mutation killer/strategy for other test/spec frameworks than rspec2.
+Only rspec2 is supported currently.
 
 Projects using Mutant
 ---------------------
@@ -44,10 +46,14 @@ Installation
 
 Install the gem `mutant` via your preferred method.
 
-The 0.2 series is stable but has outdated dependencies. The 0.3 series is in beta phase currently.
+```ruby
+gem install mutant
+```
+
+If you plan to use the rspec integration you'll have to install `mutant-rspec` also.
 
 ```ruby
-gem install mutant --pre
+gem install mutant-rspec
 ```
 
 Mutations
@@ -86,13 +92,13 @@ Examples
 ```
 cd virtus
 # Run mutant on virtus namespace
-mutant --include lib --require virtus --rspec ::Virtus*
+mutant --include lib --require virtus --use rspec ::Virtus*
 # Run mutant on specific virtus class
-mutant --include lib --require virtus --rspec ::Virtus::Attribute
+mutant --include lib --require virtus --use rspec ::Virtus::Attribute
 # Run mutant on specific virtus class method
-mutant --include lib --require virtus --rspec ::Virtus::Attribute.build
+mutant --include lib --require virtus --use rspec ::Virtus::Attribute.build
 # Run mutant on specific virtus instance method
-mutant --include lib --require virtus --rspec ::Virtus::Attribute#type
+mutant --include lib --require virtus --use rspec ::Virtus::Attribute#type
 ```
 
 Presentations:

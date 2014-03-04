@@ -6,7 +6,7 @@ module Mutant
 
   # Comandline parser
   class CLI
-    include Adamantium::Flat, Equalizer.new(:config)
+    include Adamantium::Flat, Equalizer.new(:config), NodeHelpers
 
     # Error raised when CLI argv is invalid
     Error = Class.new(RuntimeError)
@@ -32,6 +32,132 @@ module Mutant
       EXIT_FAILURE
     end
 
+    # Builder for configuration components
+    class Builder
+      include NodeHelpers
+
+      # Initalize object
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def initialize
+        @matchers          = []
+        @subject_ignores   = []
+        @subject_selectors = []
+      end
+
+      # Add a subject ignore
+      #
+      # @param [Matcher]
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def add_subject_ignore(matcher)
+        @subject_ignores << matcher
+        self
+      end
+
+      # Add a subject selector
+      #
+      # @param [#call] selector
+      #
+      # @return [self]
+      def add_subject_selector(selector)
+        @subject_selectors << selector
+        self
+      end
+
+      # Add a subject matcher
+      #
+      # @param [#call] selector
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def add_matcher(matcher)
+        @matchers << matcher
+        self
+      end
+
+      def matcher
+        if @matchers.empty?
+          raise(Error, 'No patterns given')
+        end
+
+        matcher = Matcher::Chain.build(@matchers)
+
+        if predicate
+          Matcher::Filter.new(matcher, predicate)
+        else
+          matcher
+        end
+      end
+
+    private
+
+      # Return subject selector
+      #
+      # @return [#call]
+      #   if selector is present
+      #
+      # @return [nil]
+      #   otherwise
+      #
+      # @api private
+      #
+      def subject_selector
+        if @subject_selectors.any?
+          Morpher::Evaluator::Predicate::Or.new(@subject_selectors)
+        end
+      end
+
+      # Return predicate
+      #
+      # @return [#call]
+      #   if filter is needed
+      #
+      # @return [nil]
+      #   othrwise
+      #
+      # @api private
+      #
+      def predicate
+        if subject_selector && subject_rejector
+          Morpher::Evaluator::Predicate::And.new([
+            subject_selector,
+            Morpher::Evaluator::Predicate::Negation.new(subject_rejector)
+          ])
+        elsif subject_selector
+          subject_selector
+        elsif subject_rejector
+          Morpher::Evaluator::Predicate::Negation.new(subject_rejector)
+        else
+          nil
+        end
+      end
+
+      # Return subject rejector
+      #
+      # @return [#call]
+      #
+      # @api private
+      #
+      def subject_rejector
+        rejectors = @subject_ignores.flat_map(&:to_a).map do |subject|
+          Morpher.evaluator(s(:eql, s(:attribute, :identification), s(:static, subject.identification)))
+        end
+
+        if rejectors.any?
+          Morpher::Evaluator::Predicate::Or.new(rejectors)
+        end
+      end
+    end
+
     # Initialize objecct
     #
     # @param [Array<String>]
@@ -41,10 +167,11 @@ module Mutant
     # @api private
     #
     def initialize(arguments = [])
-      @filters, @matchers = [], []
+      @builder = Builder.new
       @debug = @fail_fast = @zombie = false
+      @expect_coverage = 100.0
+      @strategy = Strategy::Null.new
       @cache = Mutant::Cache.new
-      @strategy_builder = nil
       parse(arguments)
       config # trigger lazyness now
     end
@@ -60,55 +187,16 @@ module Mutant
         cache:             @cache,
         zombie:            @zombie,
         debug:             @debug,
-        matcher:           matcher,
-        subject_predicate: @subject_predicate.output,
-        strategy:          @strategy.output,
+        matcher:           @builder.matcher,
+        strategy:          @strategy,
         fail_fast:         @fail_fast,
-        reporter:          reporter
+        reporter:          Reporter::CLI.new($stdout),
+        expected_coverage: @expect_coverage
       )
     end
     memoize :config
 
   private
-
-    # Return reporter
-    #
-    # @return [Mutant::Reporter::CLI]
-    #
-    # @api private
-    #
-    def reporter
-      Reporter::CLI.new($stdout)
-    end
-
-    # Return matcher
-    #
-    # @return [Mutant::Matcher]
-    #
-    # @raise [CLI::Error]
-    #   raises error when matcher is not given
-    #
-    # @api private
-    #
-    def matcher
-      if @matchers.empty?
-        raise(Error, 'No matchers given')
-      end
-
-      Matcher::Chain.build(@matchers)
-    end
-
-    # Add mutation filter
-    #
-    # @param [Class<Predicate>] klass
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def add_filter(klass, *arguments)
-      @filters << klass.new(*arguments)
-    end
 
     # Parse the command-line options
     #
@@ -124,11 +212,12 @@ module Mutant
     #
     def parse(arguments)
       opts = OptionParser.new do |builder|
-        builder.banner = 'usage: mutant STRATEGY [options] MATCHERS ...'
+        builder.banner = 'usage: mutant STRATEGY [options] PATTERN ...'
         builder.separator('')
-        add_strategies(builder)
         add_environmental_options(builder)
-        add_options(builder)
+        add_mutation_options(builder)
+        add_filter_options(builder)
+        add_debug_options(builder)
       end
 
       patterns =
@@ -152,28 +241,7 @@ module Mutant
     def parse_matchers(patterns)
       patterns.each do |pattern|
         matcher = Classifier.run(@cache, pattern)
-        @matchers << matcher if matcher
-      end
-    end
-
-    # Add strategies
-    #
-    # @param [OptionParser] parser
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def add_strategies(parser)
-      parser.separator(EMPTY_STRING)
-      parser.separator('Strategies:')
-
-      {
-        Builder::Rspec              => :@strategy,
-        Builder::Predicate::Subject => :@subject_predicate,
-      }.each do |builder, instance_variable_name|
-        builder = builder.new(@cache, parser)
-        instance_variable_set(instance_variable_name, builder)
+        @builder.add_matcher(matcher)
       end
     end
 
@@ -186,6 +254,8 @@ module Mutant
     # @api private
     #
     def add_environmental_options(opts)
+      opts.separator('')
+      opts.separator('Environment:')
       opts.on('--zombie', 'Run mutant zombified') do
         @zombie = true
       end.on('-I', '--include DIRECTORY', 'Add DIRECTORY to $LOAD_PATH') do |directory|
@@ -195,25 +265,74 @@ module Mutant
       end
     end
 
-    # Add options
+    # Use plugin
     #
-    # @param [Object] opts
+    # FIXME: For now all plugins are strategies. Later they could be anything that allows "late integration".
+    #
+    # @param [String] name
     #
     # @return [undefined]
     #
     # @api private
     #
-    def add_options(opts)
-      opts.separator ''
-      opts.separator 'Options:'
+    def use(name)
+      require "mutant-#{name}"
+      @strategy = Strategy.lookup(name).new
+    rescue LoadError
+      $stderr.puts("Cannot load plugin: #{name.inspect}")
+      raise
+    end
 
-      opts.on('--version', 'Print mutants version') do |name|
+    # Add options
+    #
+    # @param [OptionParser] opts
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def add_mutation_options(opts)
+      opts.separator(EMPTY_STRING)
+      opts.separator('Options:')
+
+      opts.on('--score COVERAGE', 'Fail unless COVERAGE is not reached exactly') do |coverage|
+        @expected_coverage = Float(coverage)
+      end.on('--use STRATEGY', 'Use STRATEGY for killing mutations') do |runner|
+        use(runner)
+      end
+    end
+
+    # Add filter options
+    #
+    # @param [OptionParser] opts
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def add_filter_options(opts)
+      opts.on('--ignore-subject PATTERN', 'Ignore subjects that match PATTERN') do |pattern|
+        @builder.add_subject_ignore(Classifier.run(@cache, pattern))
+      end
+      opts.on('--code CODE', 'Scope execution to subjects with CODE') do |code|
+        @builder.add_subject_selector(Morpher.evaluator(s(:eql, s(:attribute, :code), s(:static, code))))
+      end
+    end
+
+    # Add debug options
+    #
+    # @param [OptionParser] opts
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def add_debug_options(opts)
+      opts.on('--fail-fast', 'Fail fast') do
+        @fail_fast = true
+      end.on('--version', 'Print mutants version') do |name|
         puts("mutant-#{Mutant::VERSION}")
         Kernel.exit(0)
-      end.on('--code FILTER', 'Adds a code filter') do |filter|
-        add_filter(Predicate::Attribute, :code, filter)
-      end.on('--fail-fast', 'Fail fast') do
-        @fail_fast = true
       end.on('-d', '--debug', 'Enable debugging output') do
         @debug = true
       end.on_tail('-h', '--help', 'Show this message') do

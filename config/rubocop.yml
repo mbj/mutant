@@ -1,3 +1,5 @@
+inherit_from: ../.rubocop.yml
+
 # General note about rubocop.
 # It does NOT allow to silence a specific rule violation.
 # For that reason I sometimes have to disable a whole cop where
@@ -10,9 +12,6 @@ AllCops:
     - 'Gemfile'
     - 'Gemfile.triage'
     - 'mutant.gemspec'
-  Excludes:
-    - '**/vendor/**'
-    - '**/benchmarks/**'
 
 # Avoid parameter lists longer than five parameters.
 ParameterLists:
@@ -30,15 +29,6 @@ CollectionMethods:
     inject:   'reduce'
     find:     'detect'
     find_all: 'select'
-
-# Do not force public/protected/private keyword to be indented at the same
-# level as the def keyword. My personal preference is to outdent these keywords
-# because I think when scanning code it makes it easier to identify the
-# sections of code and visually separate them. When the keyword is at the same
-# level I think it sort of blends in with the def keywords and makes it harder
-# to scan the code and see where the sections are.
-AccessControl:
-  Enabled: false
 
 MethodLength:
   CountComments: false
@@ -99,8 +89,16 @@ MultilineBlockChain:
   Enabled: false
 
 ClassLength:
-  Max: 105
+  Max: 119
 
 # I align private keywords with class body
 IndentationWidth:
+  Enabled: false
+
+# I like to have an empty line before closing the currently opened body
+EmptyLinesAroundBody:
+  Enabled: false
+
+# I like my style more
+AccessModifierIndentation:
   Enabled: false

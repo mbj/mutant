@@ -43,7 +43,7 @@ module Mutant
     #
     def insert
       subject.public?
-      Loader::Eval.run(root, subject)
+      Loader::Eval.call(root, subject)
       self
     end
 
@@ -56,7 +56,6 @@ module Mutant
     def identification
       "#{subject.identification}:#{code}"
     end
-    memoize :identification
 
     # Return mutation code
     #

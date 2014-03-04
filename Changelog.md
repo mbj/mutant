@@ -1,15 +1,79 @@
-# v0.3.0 2013-06-xx
+# v0.5.1 2014-03-03
+
+Changes:
+
+* Remove rspec dep from main mutant gem
+
+# v0.5.0 2014-03-02
+
+Changes:
+
+* Add configurable coverage expectation via --coverage (default 100%)
+* rspec integration was moved into a gem 'mutant-rspec'
+* Replace filters implementation with morpher predicates
+* Drop --rspec option use: --use rspec instead.
+
+# v0.4.0 2014-02-16
+
+Status: Yanked because of broken dependencies.
+
+# v0.3.4 2014-01-11
+
+Changes:
+
+* Depend on anima-0.2.0
+
+# v0.3.4 2014-01-11
+
+Bugfixes:
+
+* Correctly fix crash on attribute assignments nodes: https://github.com/mbj/mutant/issues/149
+
+# v0.3.3 2014-01-11
+
+Changes:
+
+* Bump dependency to unparser-0.1.8 that fixes dozens of non reported issues.
+
+Bugfixes:
+
+* Fix crash on attribute assignments nodes: https://github.com/mbj/mutant/issues/149
+
+# v0.3.2 2013-12-31
+
+Bugfixes:
+
+* Fix crash on until nodes: https://github.com/mbj/mutant/issues/143
+* Fix missing requires: https://github.com/mbj/mutant/issues/141
+* Fix crash on unknown nodes, fixes #143
+* Use more durable unparser version 0.1.6
+
+# v0.3.1 2013-12-19
+
+Bugfixes:
+
+* Add missing require of stringio, #141
+
+# v0.3.0 2013-12-10
 
 Feature:
 
-* Rewrite all mutators on top of whitequark/parser
+* Rewrite all mutators on top of whitequark/parser (major!)
 * Also mutate conditions in case statements
+* Add tons of mutators I lost track about during development.
+* Add --ignore-subject optoin supporting the same syntax as matchers
+
+Bugfixes:
+
+* Fix lots of crashes.
+* Fix all known multiple diff errors
+* Handle methods memoized with adamantium correctly
 
 Bugfixes:
 
 * Fix all bugs caused by mutant-melbourne
 
-# v0.2.20 2013-03-1
+# v0.2.20 2013-03-01
 
 * Update dependencies
 

@@ -8,10 +8,10 @@ module Mutant
       :debug,
       :strategy,
       :matcher,
-      :subject_predicate,
       :reporter,
       :fail_fast,
-      :zombie
+      :zombie,
+      :expected_coverage
     )
 
     # Enumerate subjects
@@ -28,7 +28,7 @@ module Mutant
     #
     def subjects(&block)
       return to_enum(__method__) unless block_given?
-      Matcher::Filter.new(matcher, subject_predicate).each(&block)
+      matcher.each(&block)
       self
     end
 

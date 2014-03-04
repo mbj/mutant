@@ -24,14 +24,15 @@ DuplicateMethodCall:
 FeatureEnvy:
   enabled: true
   exclude:
-  - Mutant::CLI#parse
-  - Mutant::CLI#add_strategies
   - Mutant::Matcher::Method::Instance#match?
   - Mutant::Matcher::Method::Singleton#receiver?
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
   - Mutant::Reporter::CLI#subject_results
-  - Mutant::Strategy::Rspec#options
+  - Mutant::Rspec::Strategy#options
+  # Nature of OptionParser :(
+  - Mutant::CLI#add_environmental_options
+  - Mutant::CLI#parse
 IrresponsibleModule:
   enabled: true
   exclude: []
@@ -81,14 +82,14 @@ TooManyStatements:
   enabled: true
   exclude:
   - Mutant#self.singleton_subclass_instance
-  - Mutant::CLI#parse
-  - Mutant::CLI#add_options
-  - Mutant::CLI#add_strategies
-  - Mutant::Killer::Rspec#run
+  - Mutant::Rspec::Killer#run
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI::Printer::Config::Runner#run
   - Mutant::Runner#dispatch
   - Mutant::Zombifier::File#self.find_uncached
+  # How mutant does CLI parsing is shit
+  - Mutant::CLI#parse
+  - Mutant::CLI#initialize
   max_statements: 6
 UncommunicativeMethodName:
   enabled: true
@@ -133,8 +134,7 @@ UtilityFunction:
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
   - Mutant::NodeHelpers#s
-  - Mutant::Strategy::Rspec#configuration
-  - Mutant::Strategy::Rspec#options
-  - Mutant::Strategy::Rspec#world
-
+  - Mutant::Rspec::Strategy#configuration
+  - Mutant::Rspec::Strategy#options
+  - Mutant::Rspec::Strategy#world
   max_helper_calls: 0

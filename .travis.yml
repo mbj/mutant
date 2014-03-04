@@ -1,23 +1,14 @@
 language: ruby
-before_install: gem install bundler
-bundler_args: --without yard guard benchmarks
 script: "bundle exec rake ci"
 rvm:
   - 1.9.3
   - 2.0.0
-  - ruby-head
-  - rbx-19mode
+  - 2.1.0
+  - rbx
 matrix:
-  include:
-    - rvm: jruby-19mode
-      env: JRUBY_OPTS="$JRUBY_OPTS --debug"
-    - rvm: jruby-head
-      env: JRUBY_OPTS="$JRUBY_OPTS --debug"
   allow_failures:
-    - rvm: ruby-head     # Broken at this time, rvm issue on travis
-    - rvm: rbx-19mode    # Broken at this time, yard/yardstick issue
-    - rvm: jruby-19mode  # No fork(2) support, workaround planned
-    - rvm: jruby-head    # No fork(2) support, workaround planned
+    - rvm: rbx
+    - rvm: 2.1.0
 notifications:
   irc:
     channels:
