@@ -13,9 +13,9 @@ end
 shared_examples_for 'a cli parser' do
   subject { cli.config }
 
-  its(:strategy) { should eql(expected_strategy) }
-  its(:reporter) { should eql(expected_reporter) }
-  its(:matcher)  { should eql(expected_matcher)  }
+  it { expect(subject.strategy).to eql(expected_strategy) }
+  it { expect(subject.reporter).to eql(expected_reporter) }
+  it { expect(subject.matcher).to  eql(expected_matcher)  }
 end
 
 describe Mutant::CLI, '.new' do

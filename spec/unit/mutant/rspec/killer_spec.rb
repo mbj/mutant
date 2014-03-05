@@ -42,7 +42,7 @@ describe Mutant::Rspec::Killer, '.new' do
   context 'when run exits zero' do
     let(:exit_status) { 0 }
 
-    its(:killed?) { should be(false) }
+    it { expect(subject.killed?).to be(false) }
 
     it { should be_a(described_class) }
   end
@@ -50,7 +50,7 @@ describe Mutant::Rspec::Killer, '.new' do
   context 'when run exits nonzero' do
     let(:exit_status) { 1 }
 
-    its(:killed?) { should be(true) }
+    it { expect(subject.killed?).to be(true) }
 
     it { should be_a(described_class) }
   end
