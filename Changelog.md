@@ -1,3 +1,9 @@
+# v0.5.3 2014-03-05
+
+Changes:
+
+* mutant-rspec now supports rspec3 beta
+
 # v0.5.2 2014-03-04
 
 Changes:
