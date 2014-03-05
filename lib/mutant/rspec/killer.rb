@@ -95,43 +95,15 @@ module Mutant
       # @api private
       #
       def reporter
+        reporter_class = RSpec::Core::Reporter
+
         if strategy.rspec2?
-          rspec2_reporter
+          reporter_class.new
         else
-          rspec3_reporter
+          reporter_class.new(strategy.configuration)
         end
       end
       memoize :reporter, freezer: :noop
-
-      # Instantiate RSpec 2 reporter
-      #
-      # @return [RSpec::Core::Reporter]
-      #
-      # @api private
-      #
-      def rspec2_reporter
-        reporter_class.new
-      end
-
-      # Instantiate RSpec 3 reporter
-      #
-      # @return [RSpec::Core::Reporter]
-      #
-      # @api private
-      #
-      def rspec3_reporter
-        reporter_class.new(strategy.configuration)
-      end
-
-      # Reporter class
-      #
-      # @return [Class]
-      #
-      # @api private
-      #
-      def reporter_class
-        RSpec::Core::Reporter
-      end
 
     end # Killer
   end # Rspec
