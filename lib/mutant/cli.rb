@@ -169,7 +169,7 @@ module Mutant
     def initialize(arguments = [])
       @builder = Builder.new
       @debug = @fail_fast = @zombie = false
-      @expect_coverage = 100.0
+      @expected_coverage = 100.0
       @strategy = Strategy::Null.new
       @cache = Mutant::Cache.new
       parse(arguments)
@@ -191,7 +191,7 @@ module Mutant
         strategy:          @strategy,
         fail_fast:         @fail_fast,
         reporter:          Reporter::CLI.new($stdout),
-        expected_coverage: @expect_coverage
+        expected_coverage: @expected_coverage
       )
     end
     memoize :config
