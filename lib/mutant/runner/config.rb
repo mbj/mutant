@@ -74,8 +74,8 @@ module Mutant
       # @api private
       #
       def coverage
-        return 0.0 if amount_mutations.zero?
-        Rational(amount_kills, amount_mutations) * 100
+        return 0.0 if amount_mutations.zero? && amount_kills.zero?
+        (amount_kills.to_f / amount_mutations) * 100
       end
       memoize :coverage
 
