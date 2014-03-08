@@ -29,7 +29,7 @@ describe Mutant::Subject do
     double(
       'Context',
       source_path: 'source_path',
-      source_line: 'source_line',
+      source_line: 'source_line'
     )
   end
 

@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Mutant, 'rspec integration' do
 
-  let(:base_cmd) { "bundle exec mutant -I lib --require test_app --use rspec" }
+  let(:base_cmd) { 'bundle exec mutant -I lib --require test_app --use rspec' }
 
   shared_examples_for 'rspec integration' do
     around do |example|

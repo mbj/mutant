@@ -9,7 +9,7 @@ module Mutant
 
         TABLE = {
           '.' => Matcher::Methods::Singleton,
-          '#' => Matcher::Methods::Instance,
+          '#' => Matcher::Methods::Instance
         }.freeze
 
         REGEXP = /
