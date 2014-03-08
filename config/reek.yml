@@ -137,4 +137,5 @@ UtilityFunction:
   - Mutant::Rspec::Strategy#configuration
   - Mutant::Rspec::Strategy#options
   - Mutant::Rspec::Strategy#world
+  - Mutant::Rspec::Strategy#rspec2
   max_helper_calls: 0

@@ -32,8 +32,6 @@ module Mutant
           return false
         end
 
-        reporter = RSpec::Core::Reporter.new
-
         example_groups.each do |group|
           return true unless group.run(reporter)
         end
@@ -89,6 +87,23 @@ module Mutant
       def all_example_groups
         strategy.example_groups
       end
+
+      # Choose and memoize RSpec reporter
+      #
+      # @return [RSpec::Core::Reporter]
+      #
+      # @api private
+      #
+      def reporter
+        reporter_class = RSpec::Core::Reporter
+
+        if strategy.rspec2?
+          reporter_class.new
+        else
+          reporter_class.new(strategy.configuration)
+        end
+      end
+      memoize :reporter, freezer: :noop
 
     end # Killer
   end # Rspec

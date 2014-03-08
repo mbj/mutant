@@ -3,6 +3,7 @@
 require 'spec_helper'
 
 describe Mutant::Runner::Config do
+  let(:object) { described_class.run(config) }
 
   let(:config) do
     Mutant::Config.new(
@@ -17,8 +18,12 @@ describe Mutant::Runner::Config do
     )
   end
 
-  let(:fail_fast)         { false }
-  let(:expected_coverage) { 100.0 }
+  let(:fail_fast)         { false               }
+  let(:expected_coverage) { 100.0               }
+  let(:reporter)          { double('Reporter')  }
+  let(:strategy)          { double('Strategy')  }
+  let(:subject_a)         { double('Subject A') }
+  let(:subject_b)         { double('Subject B') }
 
   before do
     reporter.stub(report: reporter)
@@ -28,13 +33,7 @@ describe Mutant::Runner::Config do
     Mutant::Runner.stub(:run).with(config, subject_b).and_return(runner_b)
   end
 
-  let(:reporter) { double('Reporter') }
-  let(:strategy) { double('Strategy') }
-  let(:subject_a) { double('Subject A') }
-  let(:subject_b) { double('Subject B') }
-
   describe '#subjects' do
-    let(:object) { described_class.run(config) }
 
     subject { object.subjects }
 
@@ -60,10 +59,61 @@ describe Mutant::Runner::Config do
     end
   end
 
+  describe '#coverage' do
+    subject { object.coverage }
+
+    let(:runner_a)  { double('Runner A', stop?: false, :mutations => mutations_a) }
+    let(:runner_b)  { double('Runner B', stop?: false, :mutations => []) }
+
+    let(:mutations_a) do
+      Array.new(amount_mutations) do |number|
+        double('Mutation', success?: number <= amount_kills - 1)
+      end
+    end
+
+    context 'with zero mutations and kills' do
+      let(:amount_mutations) { 0 }
+      let(:amount_kills)     { 0 }
+
+      it { should be(0.0) }
+    end
+
+    context 'with one mutation' do
+      let(:amount_mutations) { 1 }
+
+      context 'and one kill' do
+        let(:amount_kills) { 1 }
+        it { should be(100.0) }
+      end
+
+      context 'and no kills' do
+        let(:amount_kills) { 0 }
+        it { should be(0.0) }
+      end
+    end
+
+    context 'with many mutations' do
+      let(:amount_mutations) { 10 }
+
+      context 'and no kill' do
+        let(:amount_kills) { 0 }
+        it { should be(0.0) }
+      end
+
+      context 'and some kills' do
+        let(:amount_kills) { 2 }
+        it { should be(20.0) }
+      end
+
+      context 'and as many kills' do
+        let(:amount_kills) { amount_mutations }
+        it { should be(100.0) }
+      end
+    end
+  end
+
   describe '#success?' do
     subject { object.success? }
-
-    let(:object) { described_class.new(config) }
 
     let(:mutation_a) do
       double('Mutation A', success?: false)
@@ -71,6 +121,14 @@ describe Mutant::Runner::Config do
 
     let(:mutation_b) do
       double('Mutation B', success?: true)
+    end
+
+    let(:runner_a) do
+      double('Runner A', stop?: false, success?: false, mutations: [mutation_a])
+    end
+
+    let(:runner_b) do
+      double('Runner B', stop?: false, success?: true, mutations: [mutation_b])
     end
 
     let(:runner_a) do
