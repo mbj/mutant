@@ -24,7 +24,7 @@ module Mutant
           .diff(:unified) << "\n"
       else
         $stderr.puts(
-          'Mutation resulted in more than one diff, should not happen! ' +
+          'Mutation resulted in more than one diff, should not happen! ' \
           'PLS report a bug!'
         )
         nil

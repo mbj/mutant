@@ -55,7 +55,7 @@ module Mutant
               'Parsed subject AST:',
               '%s',
               'Unparsed source:',
-              '%s',
+              '%s'
             ].join("\n")
 
           private
