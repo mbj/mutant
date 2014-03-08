@@ -75,7 +75,7 @@ describe Mutant::Runner::Config do
       let(:amount_mutations) { 0 }
       let(:amount_kills)     { 0 }
 
-      it { should be(0.0) }
+      it { should eql(0.0) }
     end
 
     context 'with one mutation' do
@@ -83,12 +83,12 @@ describe Mutant::Runner::Config do
 
       context 'and one kill' do
         let(:amount_kills) { 1 }
-        it { should be(100.0) }
+        it { should eql(100.0) }
       end
 
       context 'and no kills' do
         let(:amount_kills) { 0 }
-        it { should be(0.0) }
+        it { should eql(0.0) }
       end
     end
 
@@ -97,17 +97,17 @@ describe Mutant::Runner::Config do
 
       context 'and no kill' do
         let(:amount_kills) { 0 }
-        it { should be(0.0) }
+        it { should eql(0.0) }
       end
 
       context 'and some kills' do
         let(:amount_kills) { 2 }
-        it { should be(20.0) }
+        it { should eql(20.0) }
       end
 
       context 'and as many kills' do
         let(:amount_kills) { amount_mutations }
-        it { should be(100.0) }
+        it { should eql(100.0) }
       end
     end
   end
