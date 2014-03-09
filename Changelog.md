@@ -1,3 +1,9 @@
+# v0.5.5 2014-03-09
+
+Changes:
+
+* Morpher dependency bump
+
 # v0.5.4 2014-03-08
 
 Changes:
