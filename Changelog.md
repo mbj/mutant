@@ -1,3 +1,9 @@
+# v0.5.6 2014-03-09
+
+Changes:
+
+* Correctly specifiy diff-lcs dependency
+
 # v0.5.5 2014-03-09
 
 Changes:
