@@ -14,6 +14,10 @@ describe Mutant::Loader::Eval, '.call' do
     double('Subject', source_path: path, source_line: line)
   end
 
+  before do
+    expect(mutation_subject).to receive(:prepare).and_return(mutation_subject)
+  end
+
   let(:source) do
     <<-RUBY
       class SomeNamespace

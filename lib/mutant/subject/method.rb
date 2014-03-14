@@ -27,6 +27,17 @@ module Mutant
         node.children[self.class::NAME_INDEX]
       end
 
+      # Prepare subject for mutation insertion
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def prepare
+        scope.send(:undef_method, name)
+        self
+      end
+
       # Return match expression
       #
       # @return [String]

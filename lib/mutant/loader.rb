@@ -15,6 +15,7 @@ module Mutant
       # @api private
       #
       def call
+        subject.prepare
         eval(
           source,
           TOPLEVEL_BINDING,
