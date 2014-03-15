@@ -24,6 +24,17 @@ module Mutant
         end
         memoize :public?
 
+        # Prepare subject for mutation insertion
+        #
+        # @return [self]
+        #
+        # @api private
+        #
+        def prepare
+          scope.singleton_class.send(:undef_method, name)
+          self
+        end
+
       end # Singleton
     end # Method
   end # Subject
