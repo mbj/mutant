@@ -12,7 +12,7 @@ $LOAD_PATH << Pathname.new(__FILE__).parent.parent.join('lib').to_s
 
 require 'test_app'
 
-class TestLiteral < Minitest::Unit::TestCase
+class TestLiteral < MiniTest::Unit::TestCase
   def test_command
     object = TestApp::Literal.new
     assert_equal(object, object.command(:foo))
