@@ -19,11 +19,8 @@ module Mutant
       #
       def run
         mutation.insert
-        ENV['MUTANT'] = '1'
-        Pathname.glob(Pathname.new('.').join('test/**/*_test.rb')) do |path|
-          require "./#{path}"
-        end
         arguments = []
+        MiniTest::Unit.output = StringIO.new
         !MiniTest::Unit.new.run(arguments).zero?
       end
 
