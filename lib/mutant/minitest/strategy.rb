@@ -20,7 +20,6 @@ module Mutant
       end
       memoize :setup
 
-
     end # Strategy
   end # Rspec
 end # Mutant
