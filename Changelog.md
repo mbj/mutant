@@ -1,3 +1,9 @@
+# v0.5.7 2014-03-23
+
+Changes:
+
+* Fix crash on invalid partial AST unparsing, closes: #164
+
 # v0.5.6 2014-03-09
 
 Changes:
