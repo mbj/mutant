@@ -36,8 +36,6 @@ module Mutant
           Util::Array.each(captures.children, self) do |matchers|
             next if matchers.empty?
             emit_captures(s(:array, *matchers))
-            # p capture
-            # emit_captures(s(:array, *capture))
           end
         end
 
