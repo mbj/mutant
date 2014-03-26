@@ -1,3 +1,9 @@
+# v0.5.8 2014-03-26
+
+Changes:
+
+* Fix crash on Module#name and Class#name returning non Strings
+
 # v0.5.7 2014-03-23
 
 Changes:
