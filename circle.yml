@@ -1,4 +1,7 @@
 ---
+---
+ruby:
+  version: 2.0.0
 test:
   override:
     - bundle exec rake ci
