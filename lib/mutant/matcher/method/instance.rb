@@ -7,7 +7,7 @@ module Mutant
       class Instance < self
         SUBJECT_CLASS = Subject::Method::Instance
 
-        # Dispatching builder, detects adamantium case
+        # Dispatching builder, detects memoizable case
         #
         # @param [Cache] cache
         # @param [Class, Module] scope
@@ -19,7 +19,7 @@ module Mutant
         #
         def self.build(cache, scope, method)
           name = method.name
-          if scope.ancestors.include?(::Adamantium) and scope.memoized?(name)
+          if scope.ancestors.include?(::Memoizable) and scope.memoized?(name)
             return Memoized.new(cache, scope, method)
           end
           super
