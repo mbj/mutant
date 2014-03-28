@@ -1,3 +1,9 @@
+# v0.5.9 2014-03-28
+
+Changes:
+
+* Fix mutation of memoized methods with the memoizable gem.
+
 # v0.5.8 2014-03-26
 
 Changes:
