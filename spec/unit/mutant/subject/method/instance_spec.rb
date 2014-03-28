@@ -51,6 +51,35 @@ describe Mutant::Subject::Method::Instance::Memoized do
     s(:def, :foo, s(:args))
   end
 
+  describe '#prepare' do
+
+    let(:context) do
+      Mutant::Context::Scope.new(scope, double('Source Path'))
+    end
+
+    let(:scope) do
+      Class.new do
+        include Memoizable
+        def foo
+        end
+        memoize :foo
+      end
+    end
+
+    subject { object.prepare }
+
+    it 'undefines memoizer' do
+      expect { subject }.to change { scope.memoized?(:foo) }.from(true).to(false)
+    end
+
+    it 'undefines method on scope' do
+      expect { subject }.to change { scope.instance_methods.include?(:foo) }.from(true).to(false)
+    end
+
+    it_should_behave_like 'a command method'
+  end
+
+
   describe '#source' do
     subject { object.source }
 
