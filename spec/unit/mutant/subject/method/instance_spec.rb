@@ -79,7 +79,6 @@ describe Mutant::Subject::Method::Instance::Memoized do
     it_should_behave_like 'a command method'
   end
 
-
   describe '#source' do
     subject { object.source }
 
