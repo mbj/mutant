@@ -90,6 +90,7 @@ TooManyStatements:
   # How mutant does CLI parsing is shit
   - Mutant::CLI#parse
   - Mutant::CLI#initialize
+  - Mutant::CLI#add_debug_options
   max_statements: 6
 UncommunicativeMethodName:
   enabled: true

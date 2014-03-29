@@ -94,6 +94,7 @@ WARNING:
 #{scope.class}#name did not return a string or nil.
 Fix your lib!
           MESSAGE
+          return
         end
         if pattern =~ name
           yield scope

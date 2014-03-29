@@ -24,6 +24,17 @@ module Mutant
         end
         memoize :public?
 
+        # Prepare subject for mutation insertion
+        #
+        # @return [self]
+        #
+        # @api private
+        #
+        def prepare
+          scope.send(:undef_method, name)
+          self
+        end
+
       private
 
         # Mutator for memoized instance methods
@@ -40,6 +51,18 @@ module Mutant
             Unparser.unparse(memoizer_node(node))
           end
           memoize :source
+
+          # Prepare subject for mutation insertion
+          #
+          # @return [self]
+          #
+          # @api private
+          #
+          def prepare
+            scope.send(:memoized_methods).instance_variable_get(:@memory).delete(name)
+            scope.send(:undef_method, name)
+            self
+          end
 
         private
 

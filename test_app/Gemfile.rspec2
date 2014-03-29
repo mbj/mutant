@@ -1,4 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rspec', '~> 2.14.1'
-gem 'mutant', path: '../'
+gem 'rspec',       '~> 2.14.1'
+gem 'rspec-core',  '~> 2.14.1'
+gem 'mutant',       path: '../'
+gem 'mutant-rspec', path: '../'

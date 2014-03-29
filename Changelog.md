@@ -1,3 +1,39 @@
+# v0.5.9 2014-03-28
+
+Changes:
+
+* Fix mutation of memoized methods with the memoizable gem.
+
+# v0.5.8 2014-03-26
+
+Changes:
+
+* Fix crash on Module#name and Class#name returning non Strings
+
+# v0.5.7 2014-03-23
+
+Changes:
+
+* Fix crash on invalid partial AST unparsing, closes: #164
+
+# v0.5.6 2014-03-09
+
+Changes:
+
+* Correctly specifiy diff-lcs dependency
+
+# v0.5.5 2014-03-09
+
+Changes:
+
+* Morpher dependency bump
+
+# v0.5.4 2014-03-08
+
+Changes:
+
+* Morpher dependency bump
+
 # v0.5.3 2014-03-05
 
 Changes:

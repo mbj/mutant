@@ -3,21 +3,7 @@
 module Mutant
   # Base class for code loaders
   class Loader
-    include AbstractType
-    include Procto.call
-
-    # Initialize and insert mutation into vm
-    #
-    # @param [Parser::AST::Node] root
-    # @param [Subject] subject
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def initialize(root, subject)
-      @root, @subject = root, subject
-    end
+    include AbstractType, Concord.new(:root, :subject), Procto.call
 
     # Eval based loader
     class Eval < self
@@ -29,11 +15,12 @@ module Mutant
       # @api private
       #
       def call
+        subject.prepare
         eval(
           source,
           TOPLEVEL_BINDING,
-          @subject.source_path.to_s,
-          @subject.source_line
+          subject.source_path.to_s,
+          subject.source_line
         )
         nil
       end
@@ -47,7 +34,7 @@ module Mutant
       # @api private
       #
       def source
-        Unparser.unparse(@root)
+        Unparser.unparse(root)
       end
 
     end # Eval

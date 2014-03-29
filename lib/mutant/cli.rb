@@ -112,7 +112,7 @@ module Mutant
       #
       def subject_selector
         if @subject_selectors.any?
-          Morpher::Evaluator::Predicate::Or.new(@subject_selectors)
+          Morpher::Evaluator::Predicate::Boolean::Or.new(@subject_selectors)
         end
       end
 
@@ -128,7 +128,7 @@ module Mutant
       #
       def predicate
         if subject_selector && subject_rejector
-          Morpher::Evaluator::Predicate::And.new([
+          Morpher::Evaluator::Predicate::Boolean::And.new([
             subject_selector,
             Morpher::Evaluator::Predicate::Negation.new(subject_rejector)
           ])
@@ -149,11 +149,11 @@ module Mutant
       #
       def subject_rejector
         rejectors = @subject_ignores.flat_map(&:to_a).map do |subject|
-          Morpher.evaluator(s(:eql, s(:attribute, :identification), s(:static, subject.identification)))
+          Morpher.compile(s(:eql, s(:attribute, :identification), s(:static, subject.identification)))
         end
 
         if rejectors.any?
-          Morpher::Evaluator::Predicate::Or.new(rejectors)
+          Morpher::Evaluator::Predicate::Boolean::Or.new(rejectors)
         end
       end
     end
@@ -315,7 +315,7 @@ module Mutant
         @builder.add_subject_ignore(Classifier.run(@cache, pattern))
       end
       opts.on('--code CODE', 'Scope execution to subjects with CODE') do |code|
-        @builder.add_subject_selector(Morpher.evaluator(s(:eql, s(:attribute, :code), s(:static, code))))
+        @builder.add_subject_selector(Morpher.compile(s(:eql, s(:attribute, :code), s(:static, code))))
       end
     end
 

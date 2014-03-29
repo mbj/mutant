@@ -29,6 +29,16 @@ module Mutant
       context.source_path
     end
 
+    # Prepare the subject for the insertion of mutation
+    #
+    # @return [self]
+    #
+    # @api private
+    #
+    def prepare
+      self
+    end
+
     # Return source line
     #
     # @return [Fixnum]

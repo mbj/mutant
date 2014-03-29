@@ -129,7 +129,7 @@ describe Mutant::CLI, '.new' do
         cache,
         TestApp::Literal, TestApp::Literal.instance_method(:float)
       )
-      predicate = Morpher.evaluator(
+      predicate = Morpher.compile(
         s(:or,
           s(:eql,
             s(:attribute, :code),
