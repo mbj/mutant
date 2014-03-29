@@ -19,7 +19,7 @@ Support for MRI 2.1 is unstable, because this MRI release segfaults on basic met
 Integrations
 ------------
 
-Only rspec2 is supported currently.
+Only rspec2 and rspec-3 beta2 is supported currently.
 
 Projects using Mutant
 ---------------------
@@ -50,7 +50,8 @@ Install the gem `mutant` via your preferred method.
 gem install mutant
 ```
 
-If you plan to use the rspec integration you'll have to install `mutant-rspec` also.
+If you plan to use the rspec integration you'll have to install `mutant-rspec` also. 
+Please add an explicit dependency to `rspec-core` for the rspec version you want to use.
 
 ```ruby
 gem install mutant-rspec

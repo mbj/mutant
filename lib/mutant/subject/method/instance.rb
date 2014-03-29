@@ -52,6 +52,18 @@ module Mutant
           end
           memoize :source
 
+          # Prepare subject for mutation insertion
+          #
+          # @return [self]
+          #
+          # @api private
+          #
+          def prepare
+            scope.send(:memoized_methods).instance_variable_get(:@memory).delete(name)
+            scope.send(:undef_method, name)
+            self
+          end
+
         private
 
           # Return mutations

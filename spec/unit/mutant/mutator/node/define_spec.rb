@@ -14,6 +14,19 @@ describe Mutant::Mutator, 'def' do
     it_should_behave_like 'a mutator'
   end
 
+  context 'empty rescue body' do
+    let(:source) { "def foo\nfoo\nrescue\nend" }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'def foo; raise; end'
+      mutations << 'def foo; nil; rescue; end'
+      mutations << 'def foo; end'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
   context 'with no arguments' do
     let(:source) { 'def foo; true; false; end' }
 
