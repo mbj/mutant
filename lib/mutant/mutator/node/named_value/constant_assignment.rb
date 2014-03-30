@@ -32,7 +32,7 @@ module Mutant
           # @api private
           #
           def mutate_name
-            Mutator::Util::Symbol.each(name, self) do |name|
+            Mutator::Util::Symbol.each(inherit_context(name)) do |name|
               emit_name(name.upcase)
             end
           end

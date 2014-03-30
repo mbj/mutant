@@ -1,29 +1,93 @@
-# encoding: utf-8
-
-# This file is the sandbox for new mutations.
-# Once finished mutation test will be moved to class specfic
-# file.
+# encoding: UTF-8
 
 require 'spec_helper'
 
 describe Mutant::Mutator do
-  describe '.each' do
 
-    pending 'interpolated string literal (DynamicString)' do
-      let(:source) { '"foo#{1}bar"' }
+  let(:object)  { class_under_test.new(context, block) }
 
-      let(:random_string) { 'this-is-random' }
+  let(:context) { described_class::Context.new(config, parent, input) }
+  let(:block)   { Block.new                                           }
+  let(:input)   { :input                                              }
+  let(:parent)  { :parent                                             }
+  let(:config)  { double('Config')                                    }
 
-      let(:mutations) do
-        mutations = []
-        mutations << 'nil'
+  class Block
+    attr_reader :arguments
+
+    def called?
+      !!defined?(@arguments)
+    end
+
+    def call(*arguments)
+      @arguments = arguments
+    end
+  end
+
+  let(:class_under_test) do
+    Class.new(described_class) do
+      def dispatch
+        # noop
+      end
+    end
+  end
+
+  describe '#emit' do
+
+    subject { object.send(:emit, generated) }
+
+    context 'with generated that is not equal to input' do
+      let(:generated) { :generated }
+
+      it 'should call block' do
+        subject
+        expect(block.called?).to be(true)
       end
 
-      before do
-        Mutant::Random.stub(hex_string: random_string)
+      it 'should call block with generated' do
+        subject
+        expect(block.arguments).to eql([generated])
+      end
+    end
+
+    context 'with generated object that is equal to input' do
+      let(:generated) { input }
+
+      it 'should not call block' do
+        subject
+        expect(block.called?).to be(false)
+      end
+    end
+  end
+
+  describe '#emit_new' do
+    subject { object.send(:emit_new) { generated } }
+
+    context 'when new object generated' do
+      let(:generated) { :generated }
+
+      it 'should call block' do
+        subject
+        expect(block.called?).to be(true)
       end
 
-      it_should_behave_like 'a mutator'
+      it 'should call block with generated object' do
+        subject
+        expect(block.arguments).to eql([generated])
+      end
+    end
+
+    context 'when new AST could not be generated' do
+      let(:generated) { input }
+
+      it 'should raise error' do
+        expect do
+          subject
+        end.to raise_error(
+          RuntimeError,
+          'New AST could not be generated after 3 attempts'
+        )
+      end
     end
   end
 end

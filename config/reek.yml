@@ -74,7 +74,8 @@ TooManyMethods:
   enabled: true
   exclude:
   - Mutant::CLI
-  - Mutant::Mutator::Node
+  - Mutant::Mutator       # 90% private and mostly helpers
+  - Mutant::Mutator::Node # 90% private and mostly helpers
   - Mutant::Reporter::CLI
   max_methods: 10
 TooManyStatements:

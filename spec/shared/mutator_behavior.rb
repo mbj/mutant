@@ -41,27 +41,31 @@ class Subject
 end
 
 shared_examples_for 'a mutator' do
-  subject { object.each(node) { |item| yields << item } }
+
+  unless instance_methods.include?(:config)
+    let(:config)  { Mutant::Mutator::Config::DEFAULT }
+  end
+
+  let(:context) { Mutant::Mutator::Context.root(config, node) }
+
+  subject { object.each(context) { |item| yields << item } }
 
   let(:yields) { []              }
   let(:object) { described_class }
 
-  unless instance_methods.map(&:to_s).include?('node')
+  unless instance_methods.include?(:node)
     let(:node) { parse(source) }
   end
 
   it_should_behave_like 'a command method'
 
   context 'with no block' do
-    subject { object.each(node) }
+    subject { object.each(context) }
 
     it { should be_instance_of(to_enum.class) }
 
     let(:expected_mutations) do
       mutations.map(&Subject.method(:coerce))
-    end
-
-    let(:generated_mutations) do
     end
 
     it 'generates the expected mutations' do

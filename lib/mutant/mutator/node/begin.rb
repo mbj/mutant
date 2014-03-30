@@ -18,7 +18,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          Util::Array.each(children, self) do |children|
+          Util::Array.each(inherit_context(children)) do |children|
             emit_child_subset(children)
           end
           children.each_with_index do |child, index|
