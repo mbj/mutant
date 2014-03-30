@@ -21,8 +21,10 @@ require 'morpher'
 
 # Library namespace
 module Mutant
-  # The empty string used within this namespace
+  # The frozen empty string used within mutant
   EMPTY_STRING = ''.freeze
+  # The frozen empty array used within mutant
+  EMPTY_ARRAY = [].freeze
 end # Mutant
 
 require 'mutant/version'

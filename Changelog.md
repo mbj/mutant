@@ -3,6 +3,8 @@
 Changes:
 
 * Remove dependency to descendants tracker
+* Add mutation #== => #eql?, #equal?
+* Add mutation #eql? =>  #equal?
 
 # v0.5.9 2014-03-28
 
