@@ -5,7 +5,7 @@ require 'spec_helper'
 # FIXME: This spec needs to be structured better!
 describe Mutant::Mutator, 'send' do
 
-  context 'when using String#gsub' do
+  context 'when using #gsub' do
     let(:source) { 'foo.gsub(a, b)' }
 
     let(:mutations) do
