@@ -55,7 +55,7 @@ module Mutant
       self
     end
 
-    # Use warning filter
+    # Use warning filter during block execution
     #
     # @return [Array<String>]
     #
