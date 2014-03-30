@@ -80,6 +80,12 @@ module Mutant
       #
       # @param [String] input
       #
+      # @return [Classifier]
+      #   if classifier can be found
+      #
+      # @return [nil]
+      #   otherwise
+      #
       # @api private
       #
       def self.find(input)

@@ -66,6 +66,9 @@ module Mutant
       # @param [#call] selector
       #
       # @return [self]
+      #
+      # @api private
+      #
       def add_subject_selector(selector)
         @subject_selectors << selector
         self
@@ -84,6 +87,12 @@ module Mutant
         self
       end
 
+      # Return generated matcher
+      #
+      # @return [Mutant::Matcher]
+      #
+      # @api private
+      #
       def matcher
         if @matchers.empty?
           raise(Error, 'No patterns given')
