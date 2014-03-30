@@ -1,3 +1,9 @@
+# v0.5.10 2014-xx-xx
+
+Changes:
+
+* Remove dependency to descendants tracker
+
 # v0.5.9 2014-03-28
 
 Changes:

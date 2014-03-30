@@ -23,20 +23,19 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 1.9.3'
 
-  gem.add_runtime_dependency('parser',              '~> 2.1')
-  gem.add_runtime_dependency('morpher',             '~> 0.2.0')
-  gem.add_runtime_dependency('procto',              '~> 0.0.2')
-  gem.add_runtime_dependency('abstract_type',       '~> 0.0.7')
-  gem.add_runtime_dependency('unparser',            '~> 0.1.8')
-  gem.add_runtime_dependency('ice_nine',            '~> 0.11.0')
-  gem.add_runtime_dependency('descendants_tracker', '~> 0.0.1')
-  gem.add_runtime_dependency('adamantium',          '~> 0.2.0')
-  gem.add_runtime_dependency('memoizable',          '~> 0.4.2')
-  gem.add_runtime_dependency('equalizer',           '~> 0.0.7')
-  gem.add_runtime_dependency('inflecto',            '~> 0.0.2')
-  gem.add_runtime_dependency('anima',               '~> 0.2.0')
-  gem.add_runtime_dependency('concord',             '~> 0.1.4')
-  gem.add_runtime_dependency('diff-lcs',            '~> 1.2')
+  gem.add_runtime_dependency('parser',        '~> 2.1')
+  gem.add_runtime_dependency('diff-lcs',      '~> 1.2')
+  gem.add_runtime_dependency('morpher',       '~> 0.2.1')
+  gem.add_runtime_dependency('procto',        '~> 0.0.2')
+  gem.add_runtime_dependency('abstract_type', '~> 0.0.7')
+  gem.add_runtime_dependency('unparser',      '~> 0.1.8')
+  gem.add_runtime_dependency('ice_nine',      '~> 0.11.0')
+  gem.add_runtime_dependency('adamantium',    '~> 0.2.0')
+  gem.add_runtime_dependency('memoizable',    '~> 0.4.2')
+  gem.add_runtime_dependency('equalizer',     '~> 0.0.7')
+  gem.add_runtime_dependency('inflecto',      '~> 0.0.2')
+  gem.add_runtime_dependency('anima',         '~> 0.2.0')
+  gem.add_runtime_dependency('concord',       '~> 0.1.4')
 
   gem.add_development_dependency('bundler', '~> 1.3', '>= 1.3.5')
 end
