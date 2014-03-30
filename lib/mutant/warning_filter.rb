@@ -55,5 +55,20 @@ module Mutant
       self
     end
 
+    # Use warning filter
+    #
+    # @return [Array<String>]
+    #
+    # @api private
+    #
+    def self.use
+      original = $stderr
+      $stderr = filter = new(original)
+      yield
+      filter.warnings
+    ensure
+      $stderr = original
+    end
+
   end # WarningFilter
 end # Mutant

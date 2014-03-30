@@ -43,4 +43,51 @@ describe Mutant::WarningFilter do
       end
     end
   end
+
+  describe '.use' do
+    let(:object) { described_class }
+
+    it 'executes block with warning filter enabled' do
+      found = false
+      object.use do
+        found = $stderr.kind_of?(described_class)
+      end
+      expect(found).to be(true)
+    end
+
+    it 'resets to original stderr after execution with exeception ' do
+      original = $stderr
+      begin
+        object.use { fail }
+      rescue
+      end
+      expect($stderr).to be(original)
+    end
+
+    it 'returns warnings generated within block' do
+      warnings = object.use do
+        eval(<<-RUBY)
+          Class.new do
+            def foo
+            end
+
+            def foo
+            end
+          end
+        RUBY
+      end
+      expect(warnings).to eql(
+        [
+          "(eval):5: warning: method redefined; discarding old foo\n",
+          "(eval):2: warning: previous definition of foo was here\n"
+        ]
+      )
+    end
+
+    it 'resets to original stderr after execution' do
+      original = $stderr
+      object.use { }
+      expect($stderr).to be(original)
+    end
+  end
 end
