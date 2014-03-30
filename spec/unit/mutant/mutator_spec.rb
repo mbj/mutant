@@ -16,7 +16,7 @@ describe Mutant::Mutator do
     attr_reader :arguments
 
     def called?
-      defined?(@arguments)
+      !!defined?(@arguments)
     end
 
     def call(*arguments)
@@ -41,12 +41,12 @@ describe Mutant::Mutator do
 
       it 'should call block' do
         subject
-        block.should be_called
+        expect(block.called?).to be(true)
       end
 
       it 'should call block with generated' do
         subject
-        block.arguments.should eql([generated])
+        expect(block.arguments).to eql([generated])
       end
     end
 
@@ -55,7 +55,7 @@ describe Mutant::Mutator do
 
       it 'should not call block' do
         subject
-        block.should_not be_called
+        expect(block.called?).to be(false)
       end
     end
   end
@@ -68,12 +68,12 @@ describe Mutant::Mutator do
 
       it 'should call block' do
         subject
-        block.should be_called
+        expect(block.called?).to be(true)
       end
 
       it 'should call block with generated object' do
         subject
-        block.arguments.should eql([generated])
+        expect(block.arguments).to eql([generated])
       end
     end
 
