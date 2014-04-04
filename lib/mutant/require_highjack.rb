@@ -25,8 +25,6 @@ module Mutant
       desinfect
     end
 
-  private
-
     # Infect kernel with highjack
     #
     # @return [self]

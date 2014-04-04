@@ -3,8 +3,8 @@
 require 'spec_helper'
 
 describe Mutant, 'as a zombie' do
-  pending 'it allows to create zombie from mutant' do
-    Mutant::Zombifier.run('mutant')
+  specify 'it allows to create zombie from mutant' do
+    expect { Mutant.zombify }.to change { !!defined?(Zombie) }.from(false).to(true)
     expect(Zombie.constants).to include(:Mutant)
   end
 end
