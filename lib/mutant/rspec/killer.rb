@@ -56,6 +56,7 @@ module Mutant
 
         nil
       end
+      memoize :example_groups
 
       # Return example groups that match expression
       #
