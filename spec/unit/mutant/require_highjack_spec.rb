@@ -17,7 +17,7 @@ describe Mutant::RequireHighjack do
   end
 
   describe '#run' do
-    let(:block)        { -> { }                 }
+    let(:block)        { -> {}                  }
     let(:logical_name) { double('Logical Name') }
 
     subject do
