@@ -22,7 +22,6 @@ describe Mutant::Mutator, 'send' do
     it_should_behave_like 'a mutator'
   end
 
-
   context 'when using #gsub' do
     let(:source) { 'foo.gsub(a, b)' }
 
