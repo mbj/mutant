@@ -33,7 +33,7 @@ module Mutant
       # @api private
       #
       def self.find(logical_name)
-        file_name = expand(logical_name)
+        file_name =
           case ::File.extname(logical_name)
           when '.so'
             return
