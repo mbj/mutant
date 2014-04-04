@@ -19,7 +19,9 @@ module Mutant
       # without dynamically recompiling openssl ;)
       'openssl',
       # Constant propagation errors
-      'thread_safe'
+      'thread_safe',
+      # Unparser errors!
+      'time'
     ].to_set.freeze
 
     # Initialize object
