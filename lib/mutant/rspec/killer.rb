@@ -20,14 +20,7 @@ module Mutant
       def run
         mutation.insert
 
-        groups =
-          if mutation.is_a?(Mutation::Neutral::Noop)
-            [example_groups.first]
-          else
-            example_groups
-          end
-
-        unless groups
+        unless example_groups.any?
           $stderr.puts("No rspec example groups found for: #{match_prefixes.join(', ')}")
           return false
         end
