@@ -5,24 +5,17 @@ module Mutant
   class Zombifier
     include Adamantium::Flat, Concord.new(:namespace)
 
-    # Excluded from zombification
-    IGNORE = [
-      # Unparser is not performant enough (does some backtracking!) for generated lexer.rb
-      'parser',
-      'parser/all',
-      'parser/current',
-      # Wierd constant definitions / guards.
-      'diff/lcs',
-      'diff/lcs/hunk',
-      # Mix beteen constants defined in .so and .rb files
-      # Cannot be deterministically namespaced from ruby
-      # without dynamically recompiling openssl ;)
-      'openssl',
-      # Constant propagation errors
-      'thread_safe',
-      # Unparser errors!
-      'time'
-    ].to_set.freeze
+    # Excluded into zombification
+    includes = %w(
+      mutant
+      morpher
+      adamantium
+      equalizer
+      anima
+      concord
+    )
+
+    INCLUDES = %r(\A#{Regexp.union(includes)}(?:/.*)?\z).freeze
 
     # Initialize object
     #
@@ -34,7 +27,8 @@ module Mutant
     #
     def initialize(namespace)
       @namespace = namespace
-      @zombified = Set.new(IGNORE)
+      @zombified = Set.new
+      @highjack = RequireHighjack.new(Kernel, method(:require))
     end
 
     # Perform zombification of target library
@@ -57,9 +51,18 @@ module Mutant
     # @api private
     #
     def run(logical_name)
-      highjack = RequireHighjack.new(Kernel, method(:require))
-      highjack.infect
+      @highjack.infect
       require(logical_name)
+    end
+
+    # Test if logical name is subjected to zombification
+    #
+    # @param [String]
+    #
+    # @api private
+    #
+    def include?(logical_name)
+      !@zombified.include?(logical_name) && INCLUDES =~ logical_name
     end
 
     # Require file in zombie namespace
@@ -71,7 +74,8 @@ module Mutant
     # @api private
     #
     def require(logical_name)
-      return if @zombified.include?(logical_name)
+      @highjack.original.call(logical_name)
+      return unless include?(logical_name)
       @zombified << logical_name
       file = File.find(logical_name)
       file.zombify(namespace) if file
