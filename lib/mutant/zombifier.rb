@@ -71,43 +71,9 @@ module Mutant
     def require(logical_name)
       return if @zombified.include?(logical_name)
       @zombified << logical_name
-      file = find(logical_name)
+      file = File.find(logical_name)
       file.zombify(namespace) if file
       self
-    end
-
-  private
-
-    # Find file without cache
-    #
-    # @param [String] logical_name
-    #
-    # @return [File]
-    #   if found
-    #
-    # @return [nil]
-    #   otherwise
-    #
-    # @api private
-    #
-    def find(logical_name)
-      file_name =
-        case File.extname(logical_name)
-        when '.so'
-          return
-        when '.rb'
-          logical_name
-        else
-          "#{logical_name}.rb"
-        end
-
-      $LOAD_PATH.each do |path|
-        path = Pathname.new(path).join(file_name)
-        return File.new(path) if path.file?
-      end
-
-      $stderr.puts "Cannot find file #{file_name} in $LOAD_PATH"
-      nil
     end
 
   end # Zombifier

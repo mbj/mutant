@@ -20,6 +20,38 @@ module Mutant
         self
       end
 
+      # Find file by logical path
+      #
+      # @param [String] logical_name
+      #
+      # @return [File]
+      #   if found
+      #
+      # @return [nil]
+      #   otherwise
+      #
+      # @api private
+      #
+      def self.find(logical_name)
+        file_name = expand(logical_name)
+          case ::File.extname(logical_name)
+          when '.so'
+            return
+          when '.rb'
+            logical_name
+          else
+            "#{logical_name}.rb"
+          end
+
+        $LOAD_PATH.each do |path|
+          path = Pathname.new(path).join(file_name)
+          return new(path) if path.file?
+        end
+
+        $stderr.puts "Cannot find file #{file_name} in $LOAD_PATH"
+        nil
+      end
+
     private
 
       # Return node
