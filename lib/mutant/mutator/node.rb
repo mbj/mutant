@@ -181,7 +181,7 @@ module Mutant
       # @api private
       #
       def emit_nil
-        emit(N_NIL) unless agsn_left?
+        emit(N_NIL) unless asgn_left?
       end
 
       # Return new self typed child
@@ -228,7 +228,7 @@ module Mutant
       #
       # @api private
       #
-      def agsn_left?
+      def asgn_left?
         OP_ASSIGN.include?(parent_type) && parent.left.equal?(node)
       end
 
