@@ -67,7 +67,7 @@ module Mutant
       #
       def find_with(match_expression)
         all_example_groups.select do |example_group|
-          example_group.description.start_with?(match_expression)
+          example_group.description == match_expression
         end
       end
 
