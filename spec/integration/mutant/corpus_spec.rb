@@ -22,9 +22,12 @@ describe 'Mutant on ruby corpus' do
       checkout
       Pathname.glob(repo_path.join('**/*.rb')).each do |path|
         node = Parser::CurrentRuby.parse(path.read)
+        count = 0
         Mutant::Mutator::Node.each(node) do |mutant|
+          count += 1
           # Verify mutant can be generated without crashing
         end
+        puts "#{count} mutations for: #{path.to_s}"
       end
       self
     end
