@@ -69,6 +69,8 @@ emits around 3-6 mutations.
 
 Currently mutant covers the majority of ruby's complex nodes that often occur in method bodies.
 
+NOTE: The textbook examples you find on mutation testing are intentionally not implemented. This is subjected to change.
+
 Some stats from the [axiom](https://github.com/dkubb/axiom) library:
 
 ```
