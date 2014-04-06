@@ -20,7 +20,7 @@ module Mutant
       def run
         mutation.insert
 
-        if example_groups.empty?
+        if example_groups.nil? || example_groups.empty?
           $stderr.puts("No rspec example groups found for: #{match_prefixes.join(', ')}")
           return false
         end
