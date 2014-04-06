@@ -20,7 +20,7 @@ describe 'Mutant on ruby corpus' do
     #
     def verify
       checkout
-      Pathname.glob(repo_path.join('**/*.rb')).each do |path|
+      Pathname.glob(repo_path.join('**/*.rb')).sort.each do |path|
         node = Parser::CurrentRuby.parse(path.read)
         count = 0
         Mutant::Mutator::Node.each(node) do |mutant|
