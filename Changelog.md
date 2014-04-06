@@ -2,6 +2,7 @@
 
 Changes:
 
+* Fix crash without conditionals
 * Remove dependency to descendants tracker
 * Add mutation #== => #eql?, #equal?
 * Add mutation #eql? =>  #equal?

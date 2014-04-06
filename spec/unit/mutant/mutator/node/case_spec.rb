@@ -9,6 +9,43 @@ describe Mutant::Mutator::Node::Case do
     Mutant::Random.stub(hex_string: random_string)
   end
 
+  context 'without condition' do
+    let(:source) do
+      <<-RUBY
+        case
+        when true
+        else
+        end
+      RUBY
+    end
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'nil'
+      mutations << <<-RUBY
+        case
+        when true
+          raise
+        else
+        end
+      RUBY
+      mutations << <<-RUBY
+        case
+        when false
+        else
+        end
+      RUBY
+      mutations << <<-RUBY
+        case
+        when nil
+        else
+        end
+      RUBY
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
   context 'with multiple when branches' do
     let(:source) do
       <<-RUBY
