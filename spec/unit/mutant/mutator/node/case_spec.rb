@@ -14,7 +14,6 @@ describe Mutant::Mutator::Node::Case do
       <<-RUBY
         case :condition
         when :foo
-          :foo
         when :bar, :baz
           :barbaz
         else
@@ -38,7 +37,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :foo
         else
           :else
         end
@@ -46,7 +44,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :foo
         when :bar, :baz
           :barbaz
         end
@@ -56,7 +53,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case nil
         when :foo
-          :foo
         when :bar, :baz
           :barbaz
         else
@@ -66,7 +62,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :srandom
         when :foo
-          :foo
         when :bar, :baz
           :barbaz
         else
@@ -78,7 +73,7 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          nil
+          raise
         when :bar, :baz
           :barbaz
         else
@@ -88,17 +83,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :srandom
-        when :bar, :baz
-          :barbaz
-        else
-          :else
-        end
-      RUBY
-      mutations << <<-RUBY
-        case :condition
-        when :foo
-          :foo
         when :bar, :baz
           :srandom
         else
@@ -108,7 +92,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :foo
         when :bar, :baz
           nil
         else
@@ -118,7 +101,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :foo
         when :bar, :baz
           :barbaz
         else
@@ -128,7 +110,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :foo
         when :bar, :baz
           :barbaz
         else
@@ -140,7 +121,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :srandom
-          :foo
         when :bar, :baz
           :barbaz
         else
@@ -150,7 +130,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when nil
-          :foo
         when :bar, :baz
           :barbaz
         else
@@ -160,7 +139,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :foo
         when :srandom, :baz
           :barbaz
         else
@@ -170,7 +148,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :foo
         when nil, :baz
           :barbaz
         else
@@ -180,7 +157,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :foo
         when :bar, nil
           :barbaz
         else
@@ -190,7 +166,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :foo
         when :bar, :srandom
           :barbaz
         else
@@ -200,7 +175,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :foo
         when :baz
           :barbaz
         else
@@ -210,7 +184,6 @@ describe Mutant::Mutator::Node::Case do
       mutations << <<-RUBY
         case :condition
         when :foo
-          :foo
         when :bar
           :barbaz
         else
