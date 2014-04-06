@@ -1,0 +1,23 @@
+---
+- name: rubyspec
+  repo_uri: 'https://github.com/rubyspec/rubyspec.git'
+  exclude:
+    # Binary encoded source subjected to limitations see Readme
+    - core/array/pack/{b,h,u}_spec.rb
+    - language/versions/*1.8*
+    - core/array/pack/shared/float.rb
+    - core/array/pack/shared/integer.rb
+    - core/array/pack/{c,m,w}_spec.rb
+    - core/regexp/shared/new.rb
+    - core/regexp/shared/quote.rb
+    - core/encoding/compatible_spec.rb
+    - core/io/readpartial_spec.rb
+    - core/env/element_reference_spec.rb
+    - core/dir/pwd_spec.rb
+    - core/string/casecmp_spec.rb
+    - core/string/unpack/{b,c,h,m,u,w}_spec.rb
+    - core/string/unpack/b_spec.rb
+    - core/string/unpack/shared/float.rb
+    - core/string/unpack/shared/integer.rb
+    - core/symbol/casecmp_spec.rb
+    - optional/capi/integer_spec.rb
