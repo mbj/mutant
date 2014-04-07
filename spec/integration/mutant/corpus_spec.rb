@@ -21,6 +21,7 @@ describe 'Mutant on ruby corpus' do
     def verify
       checkout
       Pathname.glob(repo_path.join('**/*.rb')).sort.each do |path|
+        puts "Generating mutations for: #{path.to_s}"
         node = Parser::CurrentRuby.parse(path.read)
         count = 0
         Mutant::Mutator::Node.each(node) do |mutant|
@@ -29,7 +30,7 @@ describe 'Mutant on ruby corpus' do
             puts count
           end
         end
-        puts "#{count} mutations for: #{path.to_s}"
+        puts "Mutations: #{count}"
       end
       self
     end
