@@ -6,11 +6,17 @@ Changes:
 * Add support for require highjack based zombification
 * Mutant self hosting coverage targets on CI
 
+# v0.5.11 2014-04-07
+
+Changes:
+
+* Fix crash on while and until without body
+
 # v0.5.10 2014-04-06
 
 Changes:
 
-* Fix crash without conditionals
+* Fix crash on case without conditional
 * Remove dependency to descendants tracker
 * Add mutation #== => #eql?, #equal?
 * Add mutation #eql? =>  #equal?

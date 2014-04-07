@@ -21,8 +21,9 @@ module Mutant
         #
         def dispatch
           emit_condition_mutations
-          emit_body_mutations
+          emit_body_mutations if body
           emit_body(nil)
+          emit_body(RAISE)
           emit_nil
         end
 
