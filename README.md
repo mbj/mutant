@@ -17,6 +17,9 @@ Mutant supports MRI and RBX 1.9 and 2.0, while support for jruby is planned.
 It should also work under any ruby engine that supports POSIX-fork(2) semantics.
 Support for MRI 2.1 is unstable, because this MRI release segfaults on basic metaprogramming mutants dependencies do.
 
+Mutant uses a pure ruby [parser](https://github.com/whitequark/parser) and an [unparser](https://github.com/mbj/unparser)
+to do its magic.
+
 Integrations
 ------------
 
