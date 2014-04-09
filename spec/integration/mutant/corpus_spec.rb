@@ -3,6 +3,11 @@
 require 'spec_helper'
 
 describe 'Mutant on ruby corpus' do
+
+  before do
+    pending 'Unparser is too slow on big files'
+  end
+
   ROOT = Pathname.new(__FILE__).parent.parent.parent.parent
 
   TMP = ROOT.join('tmp')
