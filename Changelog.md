@@ -1,16 +1,9 @@
-# v0.6.0 2014-04-xx
-
-Changes:
-
-* Do strict 1:1 mutation-subject : test matching
-* Add support for require highjack based zombification
-* Mutant self hosting coverage targets on CI
-
 # v0.5.11 2014-04-07
 
 Changes:
 
 * Fix crash on while and until without body
+* Better require highjack based zombifier
 
 # v0.5.10 2014-04-06
 
