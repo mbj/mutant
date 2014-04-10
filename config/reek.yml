@@ -52,6 +52,8 @@ NestedIterators:
   - Mutant::CLI#parse
   - Mutant::Mutator::Util::Array::Element#dispatch
   - Mutant::Reporter::CLI::Printer::Config::Runner#generic_stats
+  - Mutant::RequireHighjack#infect
+  - Mutant::RequireHighjack#desinfect
   max_allowed_nesting: 1
   ignore_iterators: []
 NilCheck:
@@ -85,7 +87,8 @@ TooManyStatements:
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI::Printer::Config::Runner#run
   - Mutant::Runner#dispatch
-  - Mutant::Zombifier::File#self.find_uncached
+  - Mutant::Zombifier::File#self.find
+  - Mutant::RequireHighjack#infect
   # How mutant does CLI parsing is shit
   - Mutant::CLI#parse
   - Mutant::CLI#initialize

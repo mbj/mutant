@@ -1,8 +1,18 @@
-# v0.5.10 2014-xx-xx
+# v0.5.11 2014-04-07
 
 Changes:
 
+* Fix crash on while and until without body
+* Better require highjack based zombifier
+
+# v0.5.10 2014-04-06
+
+Changes:
+
+* Fix crash on case without conditional
 * Remove dependency to descendants tracker
+* Add mutation #== => #eql?, #equal?
+* Add mutation #eql? =>  #equal?
 
 # v0.5.9 2014-03-28
 

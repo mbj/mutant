@@ -20,7 +20,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_condition_mutations
+          emit_condition_mutations if condition
           emit_when_mutations
           emit_else_mutations
           emit_nil

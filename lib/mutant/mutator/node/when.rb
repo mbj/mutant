@@ -18,7 +18,11 @@ module Mutant
         # @api private
         #
         def dispatch
-          mutate_body
+          if body
+            mutate_body
+          else
+            emit_child_update(body_index, RAISE)
+          end
           mutate_conditions
         end
 
@@ -43,7 +47,31 @@ module Mutant
         # @api private
         #
         def mutate_body
-          mutate_child(children.length - 1)
+          mutate_child(body_index)
+        end
+
+        # Return body node
+        #
+        # @return [Parser::AST::Node]
+        #   if body is present
+        #
+        # @return [nil]
+        #   otherwise
+        #
+        # @api private
+        #
+        def body
+          children[body_index]
+        end
+
+        # Return body index
+        #
+        # @return [Fixnum]
+        #
+        # @api private
+        #
+        def body_index
+          children.length - 1
         end
 
       end # When

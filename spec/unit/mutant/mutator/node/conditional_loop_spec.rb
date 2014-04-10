@@ -4,6 +4,20 @@ require 'spec_helper'
 
 describe Mutant::Mutator::Node::ConditionalLoop do
 
+  context 'with empty body' do
+    let(:source) { 'while true; end' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'while true; raise; end'
+      mutations << 'while false; end'
+      mutations << 'while nil; end'
+      mutations << 'nil'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
   context 'with while statement' do
     let(:source) { 'while true; foo; bar; end' }
 
@@ -16,6 +30,7 @@ describe Mutant::Mutator::Node::ConditionalLoop do
       mutations << 'while nil;   foo; bar; end'
       mutations << 'while true;  foo; nil; end'
       mutations << 'while true;  nil; bar; end'
+      mutations << 'while true;  raise; end'
       mutations << 'nil'
     end
 
@@ -34,6 +49,7 @@ describe Mutant::Mutator::Node::ConditionalLoop do
       mutations << 'until nil;   foo; bar; end'
       mutations << 'until true;  foo; nil; end'
       mutations << 'until true;  nil; bar; end'
+      mutations << 'until true;  raise; end'
       mutations << 'nil'
     end
 

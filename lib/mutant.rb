@@ -21,8 +21,22 @@ require 'morpher'
 
 # Library namespace
 module Mutant
-  # The empty string used within this namespace
+  # The frozen empty string used within mutant
   EMPTY_STRING = ''.freeze
+  # The frozen empty array used within mutant
+  EMPTY_ARRAY = [].freeze
+
+  # Perform self zombification
+  #
+  # @return [self]
+  #
+  # @api private
+  #
+  def self.zombify
+    Zombifier.run('mutant', :Zombie)
+    self
+  end
+
 end # Mutant
 
 require 'mutant/version'
@@ -33,6 +47,7 @@ require 'mutant/warning_filter'
 require 'mutant/constants'
 require 'mutant/random'
 require 'mutant/walker'
+require 'mutant/require_highjack'
 require 'mutant/mutator'
 require 'mutant/mutation'
 require 'mutant/mutation/evil'
@@ -131,3 +146,4 @@ require 'mutant/reporter/cli/printer/subject'
 require 'mutant/reporter/cli/printer/killer'
 require 'mutant/reporter/cli/printer/mutation'
 require 'mutant/zombifier'
+require 'mutant/zombifier/file'

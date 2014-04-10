@@ -5,7 +5,24 @@ require 'spec_helper'
 # FIXME: This spec needs to be structured better!
 describe Mutant::Mutator, 'send' do
 
-  context 'when using String#gsub' do
+  context 'when using #==' do
+    let(:source) { 'foo == bar' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'foo'
+      mutations << 'bar'
+      mutations << 'nil == bar'
+      mutations << 'foo == nil'
+      mutations << 'nil'
+      mutations << 'foo.eql?(bar)'
+      mutations << 'foo.equal?(bar)'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
+  context 'when using #gsub' do
     let(:source) { 'foo.gsub(a, b)' }
 
     let(:mutations) do
@@ -297,7 +314,7 @@ describe Mutant::Mutator, 'send' do
         it_should_behave_like 'a mutator'
       end
 
-      Mutant::BINARY_METHOD_OPERATORS.each do |operator|
+      (Mutant::BINARY_METHOD_OPERATORS - [:==, :eql?]).each do |operator|
         context 'on literal scalar arguments' do
           let(:source) { "true #{operator} false" }
 
