@@ -9,18 +9,6 @@ module Mutant
     class Node < self
       include AbstractType, NodeHelpers, Unparser::Constants
 
-      # Return identity of node
-      #
-      # @param [Parser::AST::Node] node
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def self.identity(node)
-        Unparser.unparse(node)
-      end
-
       # Define named child
       #
       # @param [Symbol] name
