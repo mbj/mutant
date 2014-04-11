@@ -7,3 +7,4 @@ ignore_subjects:
 - Mutant::Runner.lookup
 - Mutant::Zombifier*
 - Mutant::Reporter*
+- Mutant::CLI*
