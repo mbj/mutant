@@ -1,6 +1,8 @@
 name: mutant
 namespace: Mutant
 zombify: true
-ignore_subject:
+ignore_subjects:
 # Mutation causes infinite runtime
 - Mutant::Runner.lookup
+- Mutant::Zombifier*
+- Mutant::Reporter*
