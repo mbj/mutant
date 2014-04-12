@@ -89,7 +89,7 @@ private
   # @api private
   #
   def unparser
-    Unparser::CLI::Source::Node.new(original_node)
+    Unparser::CLI::Source::Node.new(Unparser::Preprocessor.run(original_node))
   end
   memoize :unparser
 end # MutationVerifier
