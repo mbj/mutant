@@ -21,7 +21,7 @@ class MutationVerifier
   #
   def error_report
     unless unparser.success?
-      return unparser.error_report
+      return unparser.report
     end
     mutation_report
   end
