@@ -8,18 +8,6 @@ module Mutant
 
         handle :rescue
 
-        # Return identity
-        #
-        # @param [Parser::AST::Node] node
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def self.identity(node)
-          super(NodeHelpers.s(:kwbegin, node))
-        end
-
       end # Rescue
     end # Node
   end # Mutator
