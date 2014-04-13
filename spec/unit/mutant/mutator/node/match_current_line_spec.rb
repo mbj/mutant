@@ -3,6 +3,10 @@
 require 'spec_helper'
 
 describe Mutant::Mutator::Node::Generic, 'match_current_line' do
+  before do
+    pending
+  end
+
   let(:source) { 'true if //' }
 
   let(:mutations) do
