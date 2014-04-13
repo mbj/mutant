@@ -15,7 +15,6 @@ module Mutant
         def record(*arguments)
         end
 
-
         # Fake null API of mintest runners
         #
         # @return [undefined]
@@ -40,7 +39,7 @@ module Mutant
       #
       def run
         mutation.insert
-        ::Minitest.mutant_killers(subject).any? do |test|
+        strategy.test_provider.call(subject).any? do |test|
           test.run(RUNNER)
           !test.passed?
         end

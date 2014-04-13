@@ -24,6 +24,36 @@ module Mutant
       end
       memoize :setup
 
+      # Return tests provider
+      #
+      # @return [#call(subject)]
+      #
+      # @api private
+      #
+      def test_provider
+        if ::Minitest.respond_to?(:mutant_killers)
+          ::Minitest.method(:mutant_killers)
+        else
+          self.class.method(:all_tests)
+        end
+      end
+      memoize :test_provider
+
+      # Return all tests from minitest
+      #
+      # @return [Enumerable<Minitest::Unit::TestCase>]
+      #
+      # @api private
+      #
+      def self.all_tests(_subject)
+        @all_tests ||= ::MiniTest::Unit::TestCase.test_suites.each_with_object([]) do |suite, tests|
+          suite.test_methods.each do |method|
+            tests << suite.new(method)
+          end
+        end
+      end
+      private_class_method :all_tests
+
     end # Strategy
   end # Rspec
 end # Mutant
