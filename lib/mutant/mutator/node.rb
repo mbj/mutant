@@ -9,18 +9,6 @@ module Mutant
     class Node < self
       include AbstractType, NodeHelpers, Unparser::Constants
 
-      # Return identity of node
-      #
-      # @param [Parser::AST::Node] node
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def self.identity(node)
-        Unparser.unparse(node)
-      end
-
       # Define named child
       #
       # @param [Symbol] name
@@ -181,7 +169,7 @@ module Mutant
       # @api private
       #
       def emit_nil
-        emit(N_NIL) unless agsn_left?
+        emit(N_NIL) unless asgn_left?
       end
 
       # Return new self typed child
@@ -228,7 +216,7 @@ module Mutant
       #
       # @api private
       #
-      def agsn_left?
+      def asgn_left?
         OP_ASSIGN.include?(parent_type) && parent.left.equal?(node)
       end
 

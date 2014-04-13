@@ -11,10 +11,12 @@ module Mutant
 
         children :receiver, :selector
 
-        SELECTOR_REPLACEMENTS = {
-          send: :public_send,
-          gsub: :sub
-        }.freeze
+        SELECTOR_REPLACEMENTS = IceNine.deep_freeze(
+          send:  [:public_send],
+          gsub:  [:sub],
+          eql?:  [:equal?],
+          :== => [:eql?, :equal?]
+        )
 
         INDEX_REFERENCE = :[]
         INDEX_ASSIGN    = :[]=
@@ -118,8 +120,9 @@ module Mutant
         # @api private
         #
         def emit_selector_replacement
-          replacement = SELECTOR_REPLACEMENTS.fetch(selector) { return }
-          emit_selector(replacement)
+          SELECTOR_REPLACEMENTS.fetch(selector, EMPTY_ARRAY).each do |replacement|
+            emit_selector(replacement)
+          end
         end
 
         # Emit naked receiver mutation

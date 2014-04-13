@@ -33,18 +33,6 @@ module Mutant
     end
     private_class_method :handle
 
-    # Return identity of object (for deduplication)
-    #
-    # @param [Object] object
-    #
-    # @return [Object]
-    #
-    # @api private
-    #
-    def self.identity(object)
-      object
-    end
-
     # Return input
     #
     # @return [Object]
@@ -92,7 +80,7 @@ module Mutant
     # @api private
     #
     def new?(object)
-      !@seen.include?(identity(object))
+      !@seen.include?(object)
     end
 
     # Add object to guarded values
@@ -104,19 +92,7 @@ module Mutant
     # @api private
     #
     def guard(object)
-      @seen << identity(object)
-    end
-
-    # Return identity for input
-    #
-    # @param [Object] input
-    #
-    # @return [Object]
-    #
-    # @api private
-    #
-    def identity(input)
-      self.class.identity(input)
+      @seen << object
     end
 
     # Dispatch node generations

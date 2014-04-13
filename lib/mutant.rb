@@ -5,7 +5,6 @@ require 'set'
 require 'adamantium'
 require 'ice_nine'
 require 'abstract_type'
-require 'descendants_tracker'
 require 'securerandom'
 require 'equalizer'
 require 'digest/sha1'
@@ -20,10 +19,59 @@ require 'anima'
 require 'concord'
 require 'morpher'
 
+# Monkey patch to parser that needs to be pushed upstream
+module Parser
+  # AST namespace
+  module AST
+    # The AST nodes we use in mutant
+    class Node
+
+      # Return hash compatible with #eql?
+      #
+      # @return [Fixnum]
+      #
+      # @api private
+      def hash
+        @type.hash ^ @children.hash ^ self.class.hash
+      end
+
+      # Test if node is equal to anotheo
+      #
+      # @return [true]
+      #   if node represents the same code semantics locations are ignored
+      #
+      # @return [false]
+      #   otherwise
+      #
+      # @api private
+      #
+      def eql?(other)
+        other.kind_of?(self.class)
+        other.type.eql?(@type) && other.children.eql?(@children)
+      end
+
+    end # Node
+  end # AST
+end # Parser
+
 # Library namespace
 module Mutant
-  # The empty string used within this namespace
+  # The frozen empty string used within mutant
   EMPTY_STRING = ''.freeze
+  # The frozen empty array used within mutant
+  EMPTY_ARRAY = [].freeze
+
+  # Perform self zombification
+  #
+  # @return [self]
+  #
+  # @api private
+  #
+  def self.zombify
+    Zombifier.run('mutant', :Zombie)
+    self
+  end
+
 end # Mutant
 
 require 'mutant/version'
@@ -33,6 +81,7 @@ require 'mutant/singleton_methods'
 require 'mutant/constants'
 require 'mutant/random'
 require 'mutant/walker'
+require 'mutant/require_highjack'
 require 'mutant/mutator'
 require 'mutant/mutation'
 require 'mutant/mutation/evil'
@@ -131,3 +180,4 @@ require 'mutant/reporter/cli/printer/subject'
 require 'mutant/reporter/cli/printer/killer'
 require 'mutant/reporter/cli/printer/mutation'
 require 'mutant/zombifier'
+require 'mutant/zombifier/file'

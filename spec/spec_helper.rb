@@ -21,8 +21,10 @@ if ENV['COVERAGE'] == 'true'
   end
 end
 
-require 'equalizer'
+require 'concord'
+require 'adamantium'
 require 'devtools/spec_helper'
+require 'unparser/cli'
 require 'mutant'
 
 $LOAD_PATH << File.join(TestApp.root, 'lib')

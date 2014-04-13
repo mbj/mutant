@@ -10,7 +10,7 @@ require 'mutant'
 namespace =
   if ARGV.include?('--zombie')
     $stderr.puts('Running mutant zombified!')
-    Mutant::Zombifier.zombify
+    Mutant.zombify
     Zombie::Mutant
   else
     Mutant

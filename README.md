@@ -4,6 +4,7 @@ mutant
 [![Build Status](https://secure.travis-ci.org/mbj/mutant.png?branch=master)](http://travis-ci.org/mbj/mutant)
 [![Dependency Status](https://gemnasium.com/mbj/mutant.png)](https://gemnasium.com/mbj/mutant)
 [![Code Climate](https://codeclimate.com/github/mbj/mutant.png)](https://codeclimate.com/github/mbj/mutant)
+[![Inline docs](http://inch-pages.github.io/github/mbj/mutant.png)](http://inch-pages.github.io/github/mbj/mutant)
 
 Mutant is a mutation testing tool for ruby.
 
@@ -15,6 +16,9 @@ A more readable introduction can be found under: http://solnic.eu/2013/01/23/mut
 Mutant supports MRI and RBX 1.9 and 2.0, while support for jruby is planned.
 It should also work under any ruby engine that supports POSIX-fork(2) semantics.
 Support for MRI 2.1 is unstable, because this MRI release segfaults on basic metaprogramming mutants dependencies do.
+
+Mutant uses a pure ruby [parser](https://github.com/whitequark/parser) and an [unparser](https://github.com/mbj/unparser)
+to do its magic.
 
 Integrations
 ------------
@@ -67,6 +71,8 @@ It is planned to parse a list of mutation operators from the source. In the mean
 emits around 3-6 mutations.
 
 Currently mutant covers the majority of ruby's complex nodes that often occur in method bodies.
+
+NOTE: The textbook examples you find on mutation testing are intentionally not implemented. This is subjected to change.
 
 Some stats from the [axiom](https://github.com/dkubb/axiom) library:
 

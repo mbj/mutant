@@ -42,7 +42,7 @@ module Mutant
           def mutate_name
             prefix = MAP.fetch(node.type)
             Mutator::Util::Symbol.each(name, self) do |name|
-              emit_name(prefix + name.to_s)
+              emit_name(:"#{prefix}#{name}")
             end
           end
 

@@ -1,2 +1,15 @@
 name: mutant
 namespace: Mutant
+zombify: true
+expect_coverage: 64.99
+ignore_subjects:
+# Mutation causes infinite runtime
+- Mutant::Runner.lookup
+# Suboptimal test selection stragegy (will be fixed soon) causes timeouts on CI
+- Mutant::Zombifier*
+- Mutant::Reporter*
+- Mutant::CLI*
+- Mutant.singleton_subclass_instance
+- Mutant.symbolset
+# Executing this has undefined behavior with the zombifier
+- Mutant.zombify
