@@ -5,6 +5,27 @@ module Mutant
     # Runner for rspec tests
     class Killer < Mutant::Killer
 
+      RUNNER = Class.new do
+        # Fake null API of mintest runners
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def record(*arguments)
+        end
+
+
+        # Fake null API of mintest runners
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def puke(*)
+        end
+      end.new
+
     private
 
       # Run rspec test
@@ -19,9 +40,10 @@ module Mutant
       #
       def run
         mutation.insert
-        arguments = []
-        MiniTest::Unit.output = StringIO.new
-        !MiniTest::Unit.new.run(arguments).zero?
+        ::Minitest.mutant_killers(subject).any? do |test|
+          test.run(RUNNER)
+          !test.passed?
+        end
       end
 
     end # Killer
