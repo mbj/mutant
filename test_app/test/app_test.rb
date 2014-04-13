@@ -1,8 +1,9 @@
 # encoding: UTF-8
 
-if ENV.key?('MUTANT')
-  require 'minitest/unit'
-else
+require 'minitest/unit'
+require 'mutant-minitest'
+
+unless Mutant::Minitest.active?
   require 'minitest/autorun'
 end
 

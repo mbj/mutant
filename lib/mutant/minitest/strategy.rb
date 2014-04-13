@@ -16,7 +16,7 @@ module Mutant
       # @api private
       #
       def setup
-        ENV['MUTANT'] = '1'
+        Minitest.set_active
         Pathname.glob(Pathname.new('.').join('test/**/*_test.rb')) do |path|
           require "./#{path}"
         end
