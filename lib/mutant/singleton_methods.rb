@@ -5,6 +5,8 @@ module Mutant
 
   # Define instance of subclassed superclass as constant
   #
+  # TODO: Should be usable without superclass.
+  #
   # @param [Class] superclass
   # @param [Symbol] name
   #

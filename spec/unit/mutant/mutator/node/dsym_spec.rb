@@ -4,6 +4,7 @@ require 'spec_helper'
 
 describe Mutant::Mutator::Node::Dsym, 'dsym' do
   before do
+    pending
     Mutant::Random.stub(hex_string: 'random')
   end
 

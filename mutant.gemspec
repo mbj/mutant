@@ -14,9 +14,11 @@ Gem::Specification.new do |gem|
 
   gem.require_paths    = %w[lib]
 
-  mutant_rspec_files = `git ls-files -- lib/mutant{-,/}rspec.rb lib/mutant/rspec`.split("\n")
+  exclude_files = %w(rspec minitest).flat_map do |name|
+    `git ls-files -- lib/mutant{-,/}#{name}.rb lib/mutant/#{name}`.split("\n")
+  end
 
-  gem.files            = `git ls-files`.split("\n") - mutant_rspec_files
+  gem.files            = `git ls-files`.split("\n") - exclude_files
   gem.test_files       = `git ls-files -- spec/{unit,integration}`.split("\n")
   gem.extra_rdoc_files = %w[TODO LICENSE]
   gem.executables      = %w[mutant]

@@ -3,6 +3,10 @@
 require 'spec_helper'
 
 describe Mutant::Mutator, 'nthref' do
+  before do
+    pending
+  end
+
   context '$1' do
     let(:source)    { '$1' }
     let(:mutations) { ['$2', '$0']   }
