@@ -23,6 +23,15 @@ module Mutant
         #
         def puke(*)
         end
+
+        # Fake null API of mintest runners
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def info_signal(*)
+        end
       end.new
 
     private
