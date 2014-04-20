@@ -72,12 +72,48 @@ module Mutant
     self
   end
 
+  # Return a frozen set of symbols from string enumerable
+  #
+  # @param [Enumerable<String>]
+  #
+  # @return [Set<Symbol>]
+  #
+  # @api private
+  #
+  def self.symbolset(strings)
+    strings.map(&:to_sym).to_set.freeze
+  end
+  private_class_method :symbolset
+
+  # Define instance of subclassed superclass as constant
+  #
+  # @param [Class] superclass
+  # @param [Symbol] name
+  #
+  # @return [self]
+  #
+  # @api private
+  #
+  def self.singleton_subclass_instance(name, superclass, &block)
+    klass = Class.new(superclass) do
+      def inspect
+        self.class.name
+      end
+
+      define_singleton_method(:name) do
+        "#{superclass.name}::#{name}".freeze
+      end
+    end
+    klass.class_eval(&block)
+    superclass.const_set(name, klass.new)
+    self
+  end
+
 end # Mutant
 
 require 'mutant/version'
 require 'mutant/cache'
 require 'mutant/node_helpers'
-require 'mutant/singleton_methods'
 require 'mutant/constants'
 require 'mutant/random'
 require 'mutant/walker'
