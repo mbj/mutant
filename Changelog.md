@@ -4,6 +4,7 @@ Changes:
 
 * Fix crash on while and until without body
 * Better require highjack based zombifier
+* Do not mutate nthref $1 to gvar $0
 
 # v0.5.10 2014-04-06
 
