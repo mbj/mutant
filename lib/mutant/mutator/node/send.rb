@@ -180,7 +180,7 @@ module Mutant
         # @api private
         #
         def emit_implicit_self
-          if receiver.type == :self && !KEYWORDS.include?(selector) && !attribute_assignment?
+          if receiver.type == :self && !KEYWORDS.include?(selector) && !attribute_assignment? && !OP_ASSIGN.include?(parent_type)
             emit_receiver(nil)
           end
         end
