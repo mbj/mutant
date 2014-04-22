@@ -1,4 +1,4 @@
-# v0.5.11 2014-04-xx
+# v0.5.11 2014-04-21
 
 Changes:
 
@@ -6,6 +6,8 @@ Changes:
 * Better require highjack based zombifier
 * Do not mutate nthref $1 to gvar $0
 * Use faster duplicate guarding hashing AST::Node intances
+* Fix lots of shadowed invalid ASTs
+* Fix undefine initialize warnings, Closes #175
 
 # v0.5.10 2014-04-06
 

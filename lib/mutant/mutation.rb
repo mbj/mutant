@@ -43,7 +43,9 @@ module Mutant
     #
     def insert
       subject.public?
-      Loader::Eval.call(root, subject)
+      subject.warning_expectation.execute do
+        Loader::Eval.call(root, subject)
+      end
       self
     end
 
