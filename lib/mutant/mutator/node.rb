@@ -46,6 +46,10 @@ module Mutant
           children.each_with_index.drop(names.length)
         end
 
+        define_method(:remaining_children_indices) do
+          children.each_index.drop(names.length)
+        end
+
         define_method(:remaining_children) do
           children.drop(names.length)
         end

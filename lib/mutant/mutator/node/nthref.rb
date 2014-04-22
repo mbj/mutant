@@ -19,7 +19,9 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_number(number - 1)
+          unless number.equal?(1)
+            emit_number(number - 1)
+          end
           emit_number(number + 1)
         end
 

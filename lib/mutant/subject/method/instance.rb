@@ -31,7 +31,15 @@ module Mutant
         # @api private
         #
         def prepare
-          scope.send(:undef_method, name)
+          expected_warnings =
+            if name.equal?(:initialize)
+              ["#{__FILE__}:#{__LINE__ + 5}: warning: undefining `initialize' may cause serious problems\n"]
+            else
+              []
+            end
+          WarningExpectation.new(expected_warnings).execute do
+            scope.send(:undef_method, name)
+          end
           self
         end
 
