@@ -93,4 +93,3 @@ private
   end
   memoize :unparser
 end # MutationVerifier
-

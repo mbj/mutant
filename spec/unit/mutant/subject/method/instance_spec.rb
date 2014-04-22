@@ -20,6 +20,12 @@ describe Mutant::Subject::Method::Instance do
 
     let(:scope) do
       Class.new do
+        attr_reader :bar
+
+        def initialize
+          @bar = :boo
+        end
+
         def foo
         end
       end
@@ -27,11 +33,36 @@ describe Mutant::Subject::Method::Instance do
 
     subject { object.prepare }
 
-    it 'undefines method on scope' do
-      expect { subject }.to change { scope.instance_methods.include?(:foo) }.from(true).to(false)
+    context 'on non initialize methods' do
+
+      it 'undefines method on scope' do
+        expect { subject }.to change { scope.instance_methods.include?(:foo) }.from(true).to(false)
+      end
+
+      it_should_behave_like 'a command method'
+
     end
 
-    it_should_behave_like 'a command method'
+    context 'on initialize method' do
+
+      let(:node) do
+        s(:def, :initialize, s(:args))
+      end
+
+      it 'does not write warnings' do
+        warnings = Mutant::WarningFilter.use do
+          subject
+        end
+        expect(warnings).to eql([])
+      end
+
+      it 'undefines method on scope' do
+        subject
+        expect { scope.new }.to raise_error(NoMethodError)
+      end
+
+      it_should_behave_like 'a command method'
+    end
   end
 
   describe '#source' do

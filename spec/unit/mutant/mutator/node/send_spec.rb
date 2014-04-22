@@ -67,7 +67,6 @@ describe Mutant::Mutator, 'send' do
 
     let(:mutations) do
       mutations = []
-      mutations << 'foo ||= expression'
       mutations << 'self.foo ||= nil'
       mutations << 'nil.foo ||= expression'
       mutations << 'nil'

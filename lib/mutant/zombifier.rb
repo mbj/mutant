@@ -26,9 +26,9 @@ module Mutant
     # @api private
     #
     def initialize(namespace)
-      @namespace = namespace
       @zombified = Set.new
       @highjack = RequireHighjack.new(Kernel, method(:require))
+      super(namespace)
     end
 
     # Perform zombification of target library

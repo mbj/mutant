@@ -4,8 +4,6 @@ source 'https://rubygems.org'
 
 gem 'mutant', path: '.'
 
-gem 'unparser', git: 'https://github.com/mbj/unparser.git'
-
 gemspec name: 'mutant'
 
 gem 'devtools', git: 'https://github.com/rom-rb/devtools.git'

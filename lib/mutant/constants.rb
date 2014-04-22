@@ -2,19 +2,6 @@
 
 module Mutant
 
-  # Return a frozen set of symbols from string enumerable
-  #
-  # @param [Enumerable<String>]
-  #
-  # @return [Set<Symbol>]
-  #
-  # @api private
-  #
-  def self.symbolset(strings)
-    strings.map(&:to_sym).to_set.freeze
-  end
-  private_class_method :symbolset
-
   # Set of nodes that cannot be on the LHS of an assignment
   NOT_ASSIGNABLE = symbolset %w(
     int float str dstr class module self
