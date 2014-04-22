@@ -61,7 +61,7 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants << 'a = nil; nil'
       mutants << 'a = nil'
       mutants << 'a = ::Object.new; a'
-      # TODO:
+      # TODO: fix invalid AST
       #   These ASTs are not valid and should NOT be emitted
       #   Mutations of lvarasgn need to be special cased to avoid this.
       mutants << s(:begin, s(:lvasgn, :srandom, s(:nil)), s(:lvar, :a))

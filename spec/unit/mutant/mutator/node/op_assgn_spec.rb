@@ -16,7 +16,7 @@ describe Mutant::Mutator::Node::Generic, 'op_asgn' do
     mutations << '@a.b += 5'
     mutations << 'nil.b += 1'
     mutations << 'nil'
-    # TODO:
+    # TODO: fix invalid AST
     #   This should not get emitted as invalid AST with valid unparsed source
     mutations << s(:op_asgn, s(:ivar, :@a), :+, s(:int, 1))
   end
