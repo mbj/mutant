@@ -54,6 +54,7 @@ NestedIterators:
   - Mutant::Reporter::CLI::Printer::Config::Runner#generic_stats
   - Mutant::RequireHighjack#infect
   - Mutant::RequireHighjack#desinfect
+  - Parser::Lexer#self.new
   max_allowed_nesting: 1
   ignore_iterators: []
 NilCheck:
@@ -126,7 +127,7 @@ UncommunicativeVariableName:
   - !ruby/regexp /^.$/
   - !ruby/regexp /[0-9]$/
   - !ruby/regexp /[A-Z]/
-  accept: []
+  accept: ['force_utf32']
 UnusedParameters:
   enabled: true
   exclude: []

@@ -1,6 +1,7 @@
 module Mutant
   class Mutator
     class Node
+      # Emitter for perl style match current line node
       class MatchCurrentLine < self
 
         handle :match_current_line
