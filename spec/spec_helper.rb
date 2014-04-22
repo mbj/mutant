@@ -21,8 +21,10 @@ if ENV['COVERAGE'] == 'true'
   end
 end
 
-require 'equalizer'
+require 'concord'
+require 'adamantium'
 require 'devtools/spec_helper'
+require 'unparser/cli'
 require 'mutant'
 
 $LOAD_PATH << File.join(TestApp.root, 'lib')
@@ -39,7 +41,7 @@ module ParserHelper
   end
 
   def parse(string)
-    Parser::CurrentRuby.parse(string)
+    Unparser::Preprocessor.run(Parser::CurrentRuby.parse(string))
   end
 end
 

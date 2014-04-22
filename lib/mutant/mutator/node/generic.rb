@@ -13,7 +13,7 @@ module Mutant
           :ensure, :redo, :defined?, :regopt, :retry, :arg_expr,
           :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :empty,
           :alias, :for, :xstr, :back_ref, :class,
-          :sclass, :match_with_lvasgn, :match_current_line, :while_post,
+          :sclass, :match_with_lvasgn, :while_post,
           :until_post, :preexe, :postexe, :iflipflop, :eflipflop, :kwsplat,
           :shadowarg
         )

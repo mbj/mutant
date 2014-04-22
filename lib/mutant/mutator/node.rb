@@ -9,18 +9,6 @@ module Mutant
     class Node < self
       include AbstractType, NodeHelpers, Unparser::Constants
 
-      # Return identity of node
-      #
-      # @param [Parser::AST::Node] node
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def self.identity(node)
-        Unparser.unparse(node)
-      end
-
       # Define named child
       #
       # @param [Symbol] name
@@ -56,6 +44,10 @@ module Mutant
       def self.define_remaining_children(names)
         define_method(:remaining_children_with_index) do
           children.each_with_index.drop(names.length)
+        end
+
+        define_method(:remaining_children_indices) do
+          children.each_index.drop(names.length)
         end
 
         define_method(:remaining_children) do

@@ -11,6 +11,7 @@ require 'digest/sha1'
 require 'inflecto'
 require 'parser'
 require 'parser/current'
+require 'parser_extensions'
 require 'unparser'
 require 'ice_nine'
 require 'diff/lcs'
@@ -37,12 +38,48 @@ module Mutant
     self
   end
 
+  # Return a frozen set of symbols from string enumerable
+  #
+  # @param [Enumerable<String>]
+  #
+  # @return [Set<Symbol>]
+  #
+  # @api private
+  #
+  def self.symbolset(strings)
+    strings.map(&:to_sym).to_set.freeze
+  end
+  private_class_method :symbolset
+
+  # Define instance of subclassed superclass as constant
+  #
+  # @param [Class] superclass
+  # @param [Symbol] name
+  #
+  # @return [self]
+  #
+  # @api private
+  #
+  def self.singleton_subclass_instance(name, superclass, &block)
+    klass = Class.new(superclass) do
+      def inspect
+        self.class.name
+      end
+
+      define_singleton_method(:name) do
+        "#{superclass.name}::#{name}".freeze
+      end
+    end
+    klass.class_eval(&block)
+    superclass.const_set(name, klass.new)
+    self
+  end
+
 end # Mutant
 
 require 'mutant/version'
 require 'mutant/cache'
 require 'mutant/node_helpers'
-require 'mutant/singleton_methods'
 require 'mutant/warning_filter'
 require 'mutant/constants'
 require 'mutant/random'
@@ -91,6 +128,8 @@ require 'mutant/mutator/node/zsuper'
 require 'mutant/mutator/node/restarg'
 require 'mutant/mutator/node/send'
 require 'mutant/mutator/node/send/binary'
+require 'mutant/mutator/node/send/attribute_assignment'
+require 'mutant/mutator/node/send/index'
 require 'mutant/mutator/node/when'
 require 'mutant/mutator/node/define'
 require 'mutant/mutator/node/mlhs'
@@ -103,6 +142,7 @@ require 'mutant/mutator/node/case'
 require 'mutant/mutator/node/splat'
 require 'mutant/mutator/node/resbody'
 require 'mutant/mutator/node/rescue'
+require 'mutant/mutator/node/match_current_line'
 require 'mutant/config'
 require 'mutant/loader'
 require 'mutant/context'

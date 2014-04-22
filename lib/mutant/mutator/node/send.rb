@@ -22,40 +22,6 @@ module Mutant
         INDEX_ASSIGN    = :[]=
         ASSIGN_SUFFIX   = '='.freeze
 
-        # Base mutator for index operations
-        class Index < self
-
-          # Mutator for index references
-          class Reference < self
-
-            # Perform dispatch
-            #
-            # @return [undefined]
-            #
-            # @api private
-            #
-            def dispatch
-              emit(receiver)
-            end
-
-          end # Reference
-
-          # Mutator for index assignments
-          class Assign < self
-
-            # Perform dispatch
-            #
-            # @return [undefined]
-            #
-            # @api private
-            #
-            def dispatch
-              emit(receiver)
-            end
-
-          end # Assign
-        end # Index
-
       private
 
         # Perform dispatch
@@ -65,6 +31,7 @@ module Mutant
         # @api private
         #
         def dispatch
+          emit_nil
           case selector
           when INDEX_REFERENCE
             run(Index::Reference)
@@ -73,7 +40,6 @@ module Mutant
           else
             non_index_dispatch
           end
-          emit_nil
         end
 
         # Perform non index dispatch
@@ -86,6 +52,8 @@ module Mutant
           case
           when binary_operator?
             run(Binary)
+          when attribute_assignment?
+            run(AttributeAssignment)
           else
             normal_dispatch
           end
@@ -173,7 +141,6 @@ module Mutant
         # @api private
         #
         def mutate_arguments
-          return if arguments.empty?
           emit_self(receiver, selector)
           remaining_children_with_index.each do |node, index|
             mutate_child(index)
@@ -213,7 +180,10 @@ module Mutant
         # @api private
         #
         def emit_implicit_self
-          if receiver.type == :self && !KEYWORDS.include?(selector) && !attribute_assignment?
+          if receiver.type == :self &&
+             !KEYWORDS.include?(selector) &&
+             !attribute_assignment? &&
+             !OP_ASSIGN.include?(parent_type)
             emit_receiver(nil)
           end
         end
