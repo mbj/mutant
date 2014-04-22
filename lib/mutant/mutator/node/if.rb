@@ -33,7 +33,7 @@ module Mutant
         #
         def mutate_condition
           emit_condition_mutations
-          emit_self(n_not(condition), if_branch, else_branch)
+          emit_self(n_not(condition), if_branch, else_branch) unless condition.type == :match_current_line
           emit_self(N_TRUE,  if_branch, else_branch)
           emit_self(N_FALSE, if_branch, else_branch)
         end
