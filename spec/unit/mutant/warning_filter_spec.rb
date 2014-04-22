@@ -60,6 +60,7 @@ describe Mutant::WarningFilter do
       begin
         object.use { fail }
       rescue
+        :make_rubo_cop_happy
       end
       expect($stderr).to be(original)
     end
@@ -86,7 +87,7 @@ describe Mutant::WarningFilter do
 
     it 'resets to original stderr after execution' do
       original = $stderr
-      object.use { }
+      object.use {}
       expect($stderr).to be(original)
     end
   end
