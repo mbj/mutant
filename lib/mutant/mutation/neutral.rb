@@ -5,12 +5,13 @@ module Mutant
     # Neutral mutation
     class Neutral < self
 
-      SYMBOL = 'neutral'
+      SYMBOL      = 'neutral'.freeze
+      SHOULD_FAIL = false
 
       # Noop mutation, special case of neutral
       class Noop < self
 
-        SYMBOL = 'noop'
+        SYMBOL = 'noop'.freeze
 
       end
 
@@ -24,22 +25,6 @@ module Mutant
         "#{self.class::SYMBOL}:#{super}"
       end
       memoize :identification
-
-      # Test if killer is successful
-      #
-      # @param [Killer] killer
-      #
-      # @return [true]
-      #   if killer did NOT killed mutation
-      #
-      # @return [false]
-      #   otherwise
-      #
-      # @api private
-      #
-      def success?(killer)
-        !killer.killed?
-      end
 
     end # Neutral
   end # Mutation

@@ -89,6 +89,16 @@ module Mutant
       subject.source
     end
 
+    # Test if test should fail under mutation
+    #
+    # @return [Boolean]
+    #
+    # @api private
+    #
+    def should_fail?
+      self.class::SHOULD_FAIL
+    end
+
   private
 
     # Return sha1 sum of source and subject identification

@@ -145,7 +145,9 @@ module Mutant
       reporter.report(object)
     end
 
-    # Perform dispatch
+    # Perform dispatch on multiple inputs
+    #
+    # @param [Enumerable<Object>] input
     #
     # @return [Enumerable<Runner>]
     #

@@ -5,6 +5,8 @@ module Mutant
     # Evul mutation
     class Evil < self
 
+      SHOULD_FAIL = true
+
       # Return identification
       #
       # @return [String]

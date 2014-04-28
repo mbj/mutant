@@ -1,79 +1,52 @@
 # encoding: utf-8
 
 module Mutant
-  # Abstract base class for mutant killers
+  # Mutation killer
   class Killer
-    include Adamantium::Flat, AbstractType
-    include Equalizer.new(:strategy, :mutation, :killed?)
+    include Adamantium::Flat
+    include Anima.new(:test, :mutation)
 
-    # Return strategy
+    # Report object for kill results
+    class Report
+      include Anima.new(
+        :killer,
+        :test_report
+      )
+
+      # Test if kill was successful
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
+      def success?
+        killer.mutation.should_fail?.equal?(test_report.failed?)
+      end
+
+    end # Report
+
+    # Return test report
     #
-    # @return [Strategy]
+    # @return [Test]
     #
     # @api private
     #
-    attr_reader :strategy
-
-    # Return mutation to kill
-    #
-    # @return [Mutation]
-    #
-    # @api private
-    #
-    attr_reader :mutation
-
-    # Initialize killer object
-    #
-    # @param [Strategy] strategy
-    # @param [Mutation] mutation
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def initialize(strategy, mutation)
-      @strategy, @mutation = strategy, mutation
-      @killed = run
+    def run
+      mutation.insert
+      report = test.run
+      Report.new(
+        killer: self,
+        test_report: report
+      )
     end
 
-    # Test for kill failure
-    #
-    # @return [true]
-    #   when killer succeeded
-    #
-    # @return [false]
-    #   otherwise
-    #
-    # @api private
-    #
-    def success?
-      mutation.success?(self)
-    end
-    memoize :success?
+    # pid = fork do
+    #   killer = @killer.new(strategy, mutation)
+    #   exit(killer.killed? ? CLI::EXIT_SUCCESS : CLI::EXIT_FAILURE)
+    # end
 
-    # Test if mutant was killed
-    #
-    # @return [true]
-    #   if mutant was killed
-    #
-    # @return [false]
-    #   otherwise
-    #
-    # @api private
-    #
-    def killed?
-      @killed
-    end
-
-    # Return mutated source
-    #
-    # @return [String]
-    #
-    # @api private
-    #
-    def mutation_source
-      mutation.source
-    end
+    # status = Process.wait2(pid).last
+    # status.exited? && status.success?
 
   private
 
@@ -86,18 +59,6 @@ module Mutant
     def subject
       mutation.subject
     end
-
-    # Run killer
-    #
-    # @return [true]
-    #   when mutant was killed
-    #
-    # @return [false]
-    #   otherwise
-    #
-    # @api private
-    #
-    abstract_method :run
 
     # Null killer that never kills a mutation
     class Null < self
@@ -118,6 +79,6 @@ module Mutant
         false
       end
 
-    end
+    end # Null
   end # Killer
 end # Mutant

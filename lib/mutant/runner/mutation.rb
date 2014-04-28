@@ -16,13 +16,13 @@ module Mutant
       #
       attr_reader :mutation
 
-      # Return killer instance
+      # Return killers
       #
       # @return [Killer]
       #
       # @api private
       #
-      attr_reader :killer
+      attr_reader :killers
 
       # Initialize object
       #
@@ -49,7 +49,7 @@ module Mutant
       # @api private
       #
       def success?
-        mutation.success?(killer)
+        killers.any?(&:success?)
       end
 
     private
@@ -61,9 +61,8 @@ module Mutant
       # @api private
       #
       def run
-        @killer = config.strategy.kill(mutation)
-        report(killer)
-        @stop = config.fail_fast && !killer.success?
+        @killers = dispatch(config.strategy.killers(mutation))
+        report(self)
       end
 
     end # Mutation

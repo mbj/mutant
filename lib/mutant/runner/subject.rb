@@ -72,7 +72,6 @@ module Mutant
       # @api private
       #
       def run
-        subject = self.subject
         report(subject)
         @mutations = dispatch(subject.mutations)
         report(self)

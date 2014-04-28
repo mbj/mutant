@@ -54,6 +54,7 @@ NestedIterators:
   - Mutant::Reporter::CLI::Printer::Config::Runner#generic_stats
   - Mutant::RequireHighjack#infect
   - Mutant::RequireHighjack#desinfect
+  - Mutant::Strategy#tests
   - Parser::Lexer#self.new
   max_allowed_nesting: 1
   ignore_iterators: []
@@ -63,6 +64,7 @@ RepeatedConditional:
   enabled: true
   exclude:
   - Mutant::Mutator
+  - Mutant::Rspec::Strategy
   - Mutant::Reporter::CLI
   max_ifs: 1
 TooManyInstanceVariables:
