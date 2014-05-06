@@ -108,16 +108,17 @@ mutant --include lib --require virtus --use rspec ::Virtus::Attribute.build
 mutant --include lib --require virtus --use rspec ::Virtus::Attribute#type
 ```
 
-Presentations:
---------------
+Presentations
+-------------
 
 There are some presentations about mutant in the wild:
 
 * [Eurocamp-2013](http://2013.eurucamp.org/) / FrOSCon-2013 http://slid.es/markusschirp/mutation-testing
 * [Cologne.rb](http://www.colognerb.de/topics/mutation-testing-mit-mutant) https://github.com/DonSchado/colognerb-on-mutant/blob/master/mutation_testing_slides.pdf
+* [RailsConf 2014](http://railsconf.com/) http://confreaks.com/videos/3333-railsconf-mutation-testing-with-mutant
 
-Subjects:
----------
+Subjects
+--------
 
 Mutant currently mutates code in instance and singleton methods. It is planned to support mutation
 of constant definitions and domain specific languages, DSL probably as plugins.
