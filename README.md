@@ -145,6 +145,15 @@ current prefix level, these example groups *must* kill the mutation.
 This test selection strategy is compatible with the old `--rspec-dm2` and `--rspec-unit` strategy.
 The old flags were removed.  It allows to define very fine grained specs, or coarse grained - as you like.
 
+Donations
+---------
+
+I ([mbj](https://github.com/mbj)) build this and adjacent tools in my free time.
+There already whent LOTS of into it and there is still a lot to do.
+
+You might consider to donate. I have a [gittip](https://gittip.com/mbj) account.
+Also I'm looking for sponsors. Email me if you are interested.
+
 Support
 -------
 
