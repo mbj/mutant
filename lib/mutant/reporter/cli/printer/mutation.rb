@@ -7,7 +7,7 @@ module Mutant
         # Mutation printer
         class Mutation < self
 
-          handle(Runner::Mutation)
+          handle(Mutant::Mutation)
 
           # Build printer
           #
