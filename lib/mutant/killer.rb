@@ -27,26 +27,21 @@ module Mutant
 
     # Return test report
     #
-    # @return [Test]
+    # @return [Test::Report]
     #
     # @api private
     #
     def run
-      mutation.insert
-      report = test.run
+      test_report = Mutant.isolate do
+        mutation.insert
+        test.run
+      end
+
       Report.new(
-        killer: self,
-        test_report: report
+        killer:      self,
+        test_report: test_report.update(test: test)
       )
     end
-
-    # pid = fork do
-    #   killer = @killer.new(strategy, mutation)
-    #   exit(killer.killed? ? CLI::EXIT_SUCCESS : CLI::EXIT_FAILURE)
-    # end
-
-    # status = Process.wait2(pid).last
-    # status.exited? && status.success?
 
   private
 

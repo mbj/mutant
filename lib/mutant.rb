@@ -38,6 +38,41 @@ module Mutant
     self
   end
 
+  IsolationError = Class.new(RuntimeError)
+
+  # Call block in isolation
+  #
+  # This isolation implements the fork strategy.
+  # Future strategies will probably use a process pool that can
+  # handle multiple mutation kills, in-isolation at once.
+  #
+  # @return [Object]
+  #
+  # @api private
+  #
+  def self.isolate(&block)
+    reader, writer = IO.pipe
+
+    pid = fork do
+      reader.close
+      writer.write(Marshal.dump(block.call))
+    end
+
+    writer.close
+
+    begin
+      data = Marshal.load(reader.read)
+    rescue ArgumentError => exception
+      raise IsolationError, 'Childprocess wrote unmarshallable data'
+    end
+
+    status = Process.waitpid2(pid).last
+
+    raise IsolationError, "Childprocess exited with nonzero exit status: #{status.exitstatus}" unless status.exitstatus.zero?
+
+    data
+  end
+
   # Return a frozen set of symbols from string enumerable
   #
   # @param [Enumerable<String>]
