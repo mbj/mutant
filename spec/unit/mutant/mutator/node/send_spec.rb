@@ -237,7 +237,6 @@ describe Mutant::Mutator, 'send' do
         mutations = []
         mutations << 'foo'
         mutations << 'nil'
-        mutations << 'foo(::Object.new)'
       end
 
       it_should_behave_like 'a mutator'
@@ -252,7 +251,6 @@ describe Mutant::Mutator, 'send' do
         mutations << 'self.foo'
         mutations << 'foo(nil)'
         mutations << 'nil'
-        mutations << 'self.foo(::Object.new)'
         mutations << 'nil.foo(nil)'
       end
 
@@ -268,7 +266,6 @@ describe Mutant::Mutator, 'send' do
             mutations = []
             mutations << "foo.#{keyword}"
             mutations << 'foo'
-            mutations << "foo.#{keyword}(::Object.new)"
             mutations << "nil.#{keyword}(nil)"
             mutations << 'nil'
           end
@@ -285,8 +282,6 @@ describe Mutant::Mutator, 'send' do
         mutations = []
         mutations << 'foo()'
         mutations << 'foo(nil)'
-        mutations << 'foo(::Object.new, nil)'
-        mutations << 'foo(nil, ::Object.new)'
         mutations << 'nil'
       end
 

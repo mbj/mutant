@@ -1,3 +1,9 @@
+# v0.5.12 2014-05-09
+
+Changes:
+
+* Remove pointless mutation nil => Object.new
+
 # v0.5.11 2014-04-22
 
 Changes:

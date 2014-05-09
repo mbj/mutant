@@ -18,7 +18,6 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit(NEW_OBJECT)
           end
 
         end # Nil

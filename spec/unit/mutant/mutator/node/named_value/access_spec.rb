@@ -15,7 +15,6 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants << '$a = nil; nil'
       mutants << '$a = nil'
       mutants << '$a'
-      mutants << '$a = ::Object.new; $a'
       mutants << '$srandom = nil; $a'
       mutants << 'nil; $a'
     end
@@ -31,7 +30,6 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants << '@@a = nil; nil'
       mutants << '@@a = nil'
       mutants << '@@a'
-      mutants << '@@a = ::Object.new; @@a'
       mutants << '@@srandom = nil; @@a'
       mutants << 'nil; @@a'
     end
@@ -45,7 +43,6 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants << '@a = nil; nil'
       mutants << '@a = nil'
       mutants << '@a'
-      mutants << '@a = ::Object.new; @a'
       mutants << '@srandom = nil; @a'
       mutants << 'nil; @a'
     end
@@ -60,7 +57,6 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants = []
       mutants << 'a = nil; nil'
       mutants << 'a = nil'
-      mutants << 'a = ::Object.new; a'
       # TODO: fix invalid AST
       #   These ASTs are not valid and should NOT be emitted
       #   Mutations of lvarasgn need to be special cased to avoid this.
