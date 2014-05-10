@@ -88,7 +88,7 @@ module Mutant
             # @api private
             #
             def amount_kills
-              amount_mutations = object.failed_mutations.length
+              amount_mutations - object.failed_mutations.length
             end
 
             # Return amount of mutations
