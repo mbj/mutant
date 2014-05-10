@@ -1,7 +1,7 @@
 name: mutant
 namespace: Mutant
 zombify: true
-expect_coverage: 61.83
+expect_coverage: 62.08
 ignore_subjects:
 # Mutation causes infinite runtime
 - Mutant::Runner.lookup
