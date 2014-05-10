@@ -24,17 +24,8 @@ module Mutant
       def each
         return to_enum unless block_given?
 
-        unless skip?
-          if subject
-            yield subject
-          else
-            message = sprintf(
-              'Cannot find definition of: %s in %s',
-              identification,
-              source_location.join(':')
-            )
-            $stderr.puts(message)
-          end
+        if !skip? && subject
+          yield subject
         end
 
         self

@@ -1,3 +1,9 @@
+# v0.5.13 2014-05-xx
+
+Changes:
+
+* Silence warnings on methods without source location
+
 # v0.5.12 2014-05-09
 
 Changes:
