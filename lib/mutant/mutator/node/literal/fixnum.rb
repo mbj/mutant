@@ -20,7 +20,6 @@ module Mutant
           def dispatch
             emit_nil
             emit_values(values)
-            emit_new { new_self(Random.fixnum) }
           end
 
           # Return values to mutate against

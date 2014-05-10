@@ -8,11 +8,7 @@ describe Mutant::Mutator::Node::Literal, 'symbol' do
   let(:source) { ':foo' }
 
   let(:mutations) do
-    %w(nil) << ":s#{random_string}"
-  end
-
-  before do
-    Mutant::Random.stub(hex_string: random_string)
+    %w(nil) << ':foo__mutant__'
   end
 
   it_should_behave_like 'a mutator'

@@ -10,11 +10,15 @@ module Mutant
 
           children :name, :value
 
-          MAP = IceNine.deep_freeze(
+          map = {
             gvasgn: '$',
             cvasgn: '@@',
             ivasgn: '@',
             lvasgn: ''
+          }
+
+          MAP = IceNine.deep_freeze(
+            Hash[map.map { |type, prefix| [type, [prefix, /^#{Regexp.escape(prefix)}/]] }]
           )
 
           handle(*MAP.keys)
@@ -40,8 +44,9 @@ module Mutant
           # @api private
           #
           def mutate_name
-            prefix = MAP.fetch(node.type)
-            Mutator::Util::Symbol.each(name, self) do |name|
+            prefix, regexp = MAP.fetch(node.type)
+            stripped = name.to_s.sub(regexp, EMPTY_STRING)
+            Mutator::Util::Symbol.each(stripped, self) do |name|
               emit_name(:"#{prefix}#{name}")
             end
           end

@@ -3,16 +3,12 @@
 require 'spec_helper'
 
 describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
-  before do
-    Mutant::Random.stub(hex_string: 'random')
-  end
-
   context 'global variable' do
     let(:source) { '$a = true' }
 
     let(:mutations) do
       mutations = []
-      mutations << '$srandom = true'
+      mutations << '$a__mutant__ = true'
       mutations << '$a = false'
       mutations << '$a = nil'
       mutations << 'nil'
@@ -26,7 +22,7 @@ describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
 
     let(:mutations) do
       mutations = []
-      mutations << '@@srandom = true'
+      mutations << '@@a__mutant__ = true'
       mutations << '@@a = false'
       mutations << '@@a = nil'
       mutations << 'nil'
@@ -40,7 +36,7 @@ describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
 
     let(:mutations) do
       mutations = []
-      mutations << '@srandom = true'
+      mutations << '@a__mutant__ = true'
       mutations << '@a = false'
       mutations << '@a = nil'
       mutations << 'nil'
@@ -54,7 +50,7 @@ describe Mutant::Mutator::Node::NamedValue::VariableAssignment, 'mutations' do
 
     let(:mutations) do
       mutations = []
-      mutations << 'srandom = true'
+      mutations << 'a__mutant__ = true'
       mutations << 'a = false'
       mutations << 'a = nil'
       mutations << 'nil'

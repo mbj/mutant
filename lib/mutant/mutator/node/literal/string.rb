@@ -19,7 +19,6 @@ module Mutant
           #
           def dispatch
             emit_nil
-            emit_new { new_self(Random.hex_string) }
           end
 
         end # String

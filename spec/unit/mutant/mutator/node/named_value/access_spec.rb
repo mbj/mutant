@@ -3,9 +3,6 @@
 require 'spec_helper'
 
 describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
-  before do
-    Mutant::Random.stub(hex_string: 'random')
-  end
 
   context 'global variable' do
     let(:source) { '$a = nil; $a' }
@@ -15,7 +12,7 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants << '$a = nil; nil'
       mutants << '$a = nil'
       mutants << '$a'
-      mutants << '$srandom = nil; $a'
+      mutants << '$a__mutant__ = nil; $a'
       mutants << 'nil; $a'
     end
 
@@ -30,7 +27,7 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants << '@@a = nil; nil'
       mutants << '@@a = nil'
       mutants << '@@a'
-      mutants << '@@srandom = nil; @@a'
+      mutants << '@@a__mutant__ = nil; @@a'
       mutants << 'nil; @@a'
     end
   end
@@ -43,7 +40,7 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       mutants << '@a = nil; nil'
       mutants << '@a = nil'
       mutants << '@a'
-      mutants << '@srandom = nil; @a'
+      mutants << '@a__mutant__ = nil; @a'
       mutants << 'nil; @a'
     end
 
@@ -60,7 +57,7 @@ describe Mutant::Mutator::Node::NamedValue::Access, 'mutations' do
       # TODO: fix invalid AST
       #   These ASTs are not valid and should NOT be emitted
       #   Mutations of lvarasgn need to be special cased to avoid this.
-      mutants << s(:begin, s(:lvasgn, :srandom, s(:nil)), s(:lvar, :a))
+      mutants << s(:begin, s(:lvasgn, :a__mutant__, s(:nil)), s(:lvar, :a))
       mutants << s(:begin, s(:nil), s(:lvar, :a))
       mutants << s(:lvar, :a)
     end
