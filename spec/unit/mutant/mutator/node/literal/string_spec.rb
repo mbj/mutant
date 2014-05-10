@@ -8,11 +8,7 @@ describe Mutant::Mutator::Node::Literal, 'string' do
   let(:source) { '"foo"' }
 
   let(:mutations) do
-    %W(nil "#{random_string}")
-  end
-
-  before do
-    Mutant::Random.stub(hex_string: random_string)
+    %W(nil)
   end
 
   it_should_behave_like 'a mutator'

@@ -55,10 +55,6 @@ describe Mutant::Mutator, 'def' do
   context 'with arguments' do
     let(:source) { 'def foo(a, b); end' }
 
-    before do
-      Mutant::Random.stub(hex_string: 'random')
-    end
-
     let(:mutations) do
       mutations = []
 
@@ -70,8 +66,8 @@ describe Mutant::Mutator, 'def' do
       mutations << 'def foo; end'
 
       # Rename each argument
-      mutations << 'def foo(srandom, b); end'
-      mutations << 'def foo(a, srandom); end'
+      mutations << 'def foo(a__mutant__, b); end'
+      mutations << 'def foo(a, b__mutant__); end'
 
       # Mutation of body
       mutations << 'def foo(a, b); raise; end'
@@ -110,17 +106,13 @@ describe Mutant::Mutator, 'def' do
   context 'default argument' do
     let(:source) { 'def foo(a = true); end' }
 
-    before do
-      Mutant::Random.stub(hex_string: 'random')
-    end
-
     let(:mutations) do
       mutations = []
       mutations << 'def foo(a); end'
       mutations << 'def foo(); end'
       mutations << 'def foo(a = false); end'
       mutations << 'def foo(a = nil); end'
-      mutations << 'def foo(srandom = true); end'
+      mutations << 'def foo(a__mutant__ = true); end'
       mutations << 'def foo(a = true); raise; end'
     end
 
@@ -154,10 +146,6 @@ describe Mutant::Mutator, 'def' do
 
   context 'define on singleton with argument' do
 
-    before do
-      Mutant::Random.stub(hex_string: 'random')
-    end
-
     let(:source) { 'def self.foo(a, b); end' }
 
     let(:mutations) do
@@ -171,8 +159,8 @@ describe Mutant::Mutator, 'def' do
       mutations << 'def self.foo; end'
 
       # Rename each argument
-      mutations << 'def self.foo(srandom, b); end'
-      mutations << 'def self.foo(a, srandom); end'
+      mutations << 'def self.foo(a__mutant__, b); end'
+      mutations << 'def self.foo(a, b__mutant__); end'
 
       # Mutation of body
       mutations << 'def self.foo(a, b); raise; end'

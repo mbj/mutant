@@ -25,16 +25,12 @@ describe Mutant::Mutator, 'block' do
 
     let(:source) { 'foo { |a, b| }' }
 
-    before do
-      Mutant::Random.stub(hex_string: 'random')
-    end
-
     let(:mutations) do
       mutations = []
       mutations << 'foo'
       mutations << 'foo { |a, b| raise }'
-      mutations << 'foo { |a, srandom| }'
-      mutations << 'foo { |srandom, b| }'
+      mutations << 'foo { |a, b__mutant__| }'
+      mutations << 'foo { |a__mutant__, b| }'
       mutations << 'foo { |a| }'
       mutations << 'foo { |b| }'
       mutations << 'foo { || }'
@@ -45,10 +41,6 @@ describe Mutant::Mutator, 'block' do
   end
 
   context 'with block pattern args' do
-
-    before do
-      Mutant::Random.stub(hex_string: 'random')
-    end
 
     let(:source) { 'foo { |(a, b), c| }' }
 
@@ -61,9 +53,9 @@ describe Mutant::Mutator, 'block' do
       mutations << 'foo { |(b), c| }'
       mutations << 'foo { |(a, b)| }'
       mutations << 'foo { |c| }'
-      mutations << 'foo { |(srandom, b), c| }'
-      mutations << 'foo { |(a, srandom), c| }'
-      mutations << 'foo { |(a, b), srandom| }'
+      mutations << 'foo { |(a__mutant__, b), c| }'
+      mutations << 'foo { |(a, b__mutant__), c| }'
+      mutations << 'foo { |(a, b), c__mutant__| }'
       mutations << 'foo'
       mutations << 'nil'
     end
@@ -73,10 +65,6 @@ describe Mutant::Mutator, 'block' do
 
   context 'with mini block pattern arg' do
 
-    before do
-      Mutant::Random.stub(hex_string: 'random')
-    end
-
     let(:source) { 'foo { |(a)| }' }
 
     let(:mutations) do
@@ -84,7 +72,7 @@ describe Mutant::Mutator, 'block' do
       mutations << 'foo { || }'
       mutations << 'foo { |a| }'
       mutations << 'foo { |(a)| raise }'
-      mutations << 'foo { |(srandom)| }'
+      mutations << 'foo { |(a__mutant__)| }'
       mutations << 'foo'
       mutations << 'nil'
     end

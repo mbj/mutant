@@ -21,7 +21,6 @@ module Mutant
             emit_nil
             emit_values(values)
             emit_special_cases
-            emit_new { new_self(Random.float) }
           end
 
           SPECIAL = [

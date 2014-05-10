@@ -4,10 +4,6 @@ require 'spec_helper'
 
 describe Mutant::Mutator::Node::Generic, 'rescue' do
 
-  before do
-    Mutant::Random.stub(hex_string: 'random')
-  end
-
   context 'multiple exception selectors and assignment' do
     let(:source) { 'begin; rescue ExceptionA, ExceptionB => error; true; end' }
 

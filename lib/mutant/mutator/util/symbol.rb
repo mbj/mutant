@@ -9,6 +9,8 @@ module Mutant
 
         handle(::Symbol)
 
+        POSTFIX = '__mutant__'.freeze
+
       private
 
         # Emit mutations
@@ -18,7 +20,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_new { :"s#{Random.hex_string}" }
+          emit((input.to_s + POSTFIX).to_sym)
         end
 
       end # Symbol

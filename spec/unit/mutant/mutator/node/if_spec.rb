@@ -3,10 +3,6 @@
 require 'spec_helper'
 
 describe Mutant::Mutator, 'if' do
-  before do
-    Mutant::Random.stub(hex_string: 'random')
-  end
-
   context 'with if and else branches' do
     let(:source) { 'if :condition; true; else false; end' }
 
@@ -14,11 +10,11 @@ describe Mutant::Mutator, 'if' do
       mutants = []
 
       # mutations of condition
-      mutants << 'if :srandom;    true; else false; end'
-      mutants << 'if !:condition; true; else false; end'
-      mutants << 'if nil;         true; else false; end'
-      mutants << 'if true;        true; else false; end'
-      mutants << 'if false;       true; else false; end'
+      mutants << 'if :condition__mutant__; true; else false; end'
+      mutants << 'if !:condition;          true; else false; end'
+      mutants << 'if nil;                  true; else false; end'
+      mutants << 'if true;                 true; else false; end'
+      mutants << 'if false;                true; else false; end'
 
       # Deleted else branch
       mutants << 'if :condition; true end'
@@ -65,14 +61,14 @@ describe Mutant::Mutator, 'if' do
 
     let(:mutations) do
       mutants = []
-      mutants << 'unless !:condition; true;  end'
-      mutants << 'unless :srandom;    true;  end'
-      mutants << 'unless nil;         true;  end'
-      mutants << 'unless :condition;  false; end'
-      mutants << 'unless :condition;  nil;   end'
-      mutants << 'unless true;        true;  end'
-      mutants << 'unless false;       true;  end'
-      mutants << 'if     :condition;  true;  end'
+      mutants << 'unless !:condition;          true;  end'
+      mutants << 'unless :condition__mutant__; true;  end'
+      mutants << 'unless nil;                  true;  end'
+      mutants << 'unless :condition;           false; end'
+      mutants << 'unless :condition;           nil;   end'
+      mutants << 'unless true;                 true;  end'
+      mutants << 'unless false;                true;  end'
+      mutants << 'if     :condition;           true;  end'
       mutants << 'nil'
     end
 
