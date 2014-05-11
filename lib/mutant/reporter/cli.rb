@@ -4,7 +4,7 @@ module Mutant
   class Reporter
     # Reporter that reports in human readable format
     class CLI < self
-      include Concord::Public.new(:output)
+      include Concord.new(:output)
 
       NL = "\n".freeze
 
