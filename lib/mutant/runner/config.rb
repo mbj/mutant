@@ -5,6 +5,9 @@ module Mutant
     # Runner for object config
     class Config < self
 
+      # The expected coverage precision
+      COVERAGE_PRECISION = 1
+
       register Mutant::Config
 
       # Run runner for object
@@ -39,8 +42,6 @@ module Mutant
         subjects.reject(&:success?)
       end
       memoize :failed_subjects
-
-      COVERAGE_PRECISION = 1
 
       # Test if run was successful
       #
