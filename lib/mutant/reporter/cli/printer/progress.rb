@@ -22,11 +22,7 @@ module Mutant
             # @api private
             #
             def run
-              if success?
-                char(SUCCESS, Color::GREEN)
-              else
-                char(FAILURE, Color::RED)
-              end
+              char(success? ? SUCCESS : FAILURE)
             end
 
           private
@@ -34,14 +30,13 @@ module Mutant
             # Write colorized char
             #
             # @param [String] char
-            # @param [Color]
             #
             # @return [undefined]
             #
             # @api private
             #
-            def char(char, color)
-              output.write(colorize(color, char))
+            def char(char)
+              output.write(colorize(status_color, char))
               output.flush
             end
 

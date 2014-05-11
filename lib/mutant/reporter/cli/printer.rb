@@ -130,7 +130,7 @@ module Mutant
         #
         # @api private
         #
-        def color
+        def status_color
           success? ? Color::GREEN : Color::RED
         end
 
@@ -163,7 +163,7 @@ module Mutant
         # @api private
         #
         def status(string, *arguments)
-          puts(colorize(color, sprintf(string, *arguments)))
+          puts(colorize(status_color, sprintf(string, *arguments)))
         end
 
         # Print a line to output
