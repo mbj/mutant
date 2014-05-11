@@ -13,6 +13,6 @@ describe 'null integration' do
   end
 
   specify 'it allows to kill mutations' do
-    expect(Kernel.system(base_cmd)).to be(true)
+    expect(Kernel.system(base_cmd)).to be(false)
   end
 end
