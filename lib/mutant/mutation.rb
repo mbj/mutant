@@ -6,6 +6,9 @@ module Mutant
     include AbstractType, Adamantium::Flat
     include Concord::Public.new(:subject, :node)
 
+    CODE_DELIMITER = "\0".freeze
+    CODE_RANGE     = (0..4).freeze
+
     # Return mutated root node
     #
     # @return [Parser::AST::Node]
@@ -64,7 +67,7 @@ module Mutant
     # @api private
     #
     def code
-      sha1[0..4]
+      sha1[CODE_RANGE]
     end
     memoize :code
 
@@ -108,7 +111,7 @@ module Mutant
     # @api private
     #
     def sha1
-      Digest::SHA1.hexdigest(subject.identification + 0.chr + source)
+      Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
     end
     memoize :sha1
 
