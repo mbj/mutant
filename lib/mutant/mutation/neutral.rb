@@ -13,7 +13,7 @@ module Mutant
 
         SYMBOL = 'noop'.freeze
 
-      end
+      end # Noop
 
       # Return identification
       #
