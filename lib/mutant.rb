@@ -62,7 +62,7 @@ module Mutant
     begin
       data = Marshal.load(reader.read)
     rescue ArgumentError
-      raise IsolationError, 'Childprocess wrote unmarshallable data'
+      raise IsolationError, 'Childprocess wrote un-unmarshallable data'
     end
 
     status = Process.waitpid2(pid).last
