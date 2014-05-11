@@ -9,6 +9,8 @@ module Mutant
 
           handle(Mutant::Mutation)
 
+          FORMAT = '%s'.freeze
+
           # Build printer
           #
           # @param [Runner::Mutation] runner
@@ -30,7 +32,7 @@ module Mutant
           # @api private
           #
           def run
-            status('%s', mutation.identification)
+            status(FORMAT, mutation.identification)
             puts(details)
           end
 
