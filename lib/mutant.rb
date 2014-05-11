@@ -67,7 +67,9 @@ module Mutant
 
     status = Process.waitpid2(pid).last
 
-    raise IsolationError, "Childprocess exited with nonzero exit status: #{status.exitstatus}" unless status.exitstatus.zero?
+    unless status.exitstatus.zero?
+      raise IsolationError, "Childprocess exited with nonzero exit status: #{status.exitstatus}"
+    end
 
     data
   end
