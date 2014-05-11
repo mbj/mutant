@@ -57,8 +57,9 @@ module Mutant
     # @api private
     #
     def identification
-      "#{subject.identification}:#{code}"
+      "#{self.class::SYMBOL}:#{subject.identification}:#{code}"
     end
+    memoize :identification
 
     # Return mutation code
     #

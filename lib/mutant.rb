@@ -61,7 +61,7 @@ module Mutant
 
     begin
       data = Marshal.load(reader.read)
-    rescue ArgumentError => exception
+    rescue ArgumentError
       raise IsolationError, 'Childprocess wrote unmarshallable data'
     end
 

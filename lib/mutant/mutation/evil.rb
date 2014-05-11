@@ -6,17 +6,7 @@ module Mutant
     class Evil < self
 
       SHOULD_FAIL = true
-
-      # Return identification
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def identification
-        "evil:#{super}"
-      end
-      memoize :identification
+      SYMBOL      = 'evil'.freeze
 
       # Test if killer is successful
       #

@@ -15,17 +15,6 @@ module Mutant
 
       end # Noop
 
-      # Return identification
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def identification
-        "#{self.class::SYMBOL}:#{super}"
-      end
-      memoize :identification
-
     end # Neutral
   end # Mutation
 end # Mutant
