@@ -61,7 +61,7 @@ module Mutant
       # @api private
       #
       def run
-        @killers = dispatch(config.strategy.killers(mutation))
+        @killers = visit_collection(config.strategy.killers(mutation))
         report(self)
       end
 

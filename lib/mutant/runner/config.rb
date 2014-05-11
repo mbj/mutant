@@ -122,7 +122,7 @@ module Mutant
       def run_subjects
         strategy = self.strategy
         strategy.setup
-        @subjects = dispatch(config.subjects)
+        @subjects = visit_collection(config.subjects)
         strategy.teardown
       end
 

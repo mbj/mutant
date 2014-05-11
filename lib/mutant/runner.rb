@@ -133,7 +133,7 @@ module Mutant
     #
     abstract_method :run
 
-    # Return reporter
+    # Run reporter on object
     #
     # @param [Object] object
     #
@@ -153,7 +153,7 @@ module Mutant
     #
     # @api private
     #
-    def dispatch(input)
+    def visit_collection(input)
       collection = []
       input.each do |object|
         runner = visit(object)

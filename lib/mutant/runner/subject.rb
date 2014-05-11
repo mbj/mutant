@@ -73,7 +73,7 @@ module Mutant
       #
       def run
         report(subject)
-        @mutations = dispatch(subject.mutations)
+        @mutations = visit_collection(subject.mutations)
         report(self)
       end
 
