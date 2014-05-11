@@ -8,6 +8,7 @@ module Mutant
         class Progress < self
           include AbstractType
 
+          # Mutation progress reporter
           class Mutation < self
 
             handle(Runner::Mutation)
