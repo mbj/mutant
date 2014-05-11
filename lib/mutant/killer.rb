@@ -55,25 +55,5 @@ module Mutant
       mutation.subject
     end
 
-    # Null killer that never kills a mutation
-    class Null < self
-
-    private
-
-      # Run killer
-      #
-      # @return [true]
-      #   when mutant was killed
-      #
-      # @return [false]
-      #   otherwise
-      #
-      # @api private
-      #
-      def run
-        false
-      end
-
-    end # Null
   end # Killer
 end # Mutant
