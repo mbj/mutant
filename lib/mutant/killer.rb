@@ -43,17 +43,5 @@ module Mutant
       )
     end
 
-  private
-
-    # Return subject
-    #
-    # @return [Subject]
-    #
-    # @api private
-    #
-    def subject
-      mutation.subject
-    end
-
   end # Killer
 end # Mutant
