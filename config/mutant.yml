@@ -10,6 +10,5 @@ ignore_subjects:
 - Mutant::Reporter*
 - Mutant::CLI*
 - Mutant.singleton_subclass_instance
-- Mutant.symbolset
 # Executing this has undefined behavior with the zombifier
 - Mutant.zombify

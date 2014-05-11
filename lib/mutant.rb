@@ -74,19 +74,6 @@ module Mutant
     data
   end
 
-  # Return a frozen set of symbols from string enumerable
-  #
-  # @param [Enumerable<String>]
-  #
-  # @return [Set<Symbol>]
-  #
-  # @api private
-  #
-  def self.symbolset(strings)
-    strings.map(&:to_sym).to_set.freeze
-  end
-  private_class_method :symbolset
-
   # Define instance of subclassed superclass as constant
   #
   # @param [Class] superclass
