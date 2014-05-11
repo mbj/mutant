@@ -102,6 +102,7 @@ end # Mutant
 
 require 'mutant/version'
 require 'mutant/cache'
+require 'mutant/delegator'
 require 'mutant/node_helpers'
 require 'mutant/warning_filter'
 require 'mutant/warning_expectation'
