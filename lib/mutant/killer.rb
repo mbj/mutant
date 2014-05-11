@@ -25,9 +25,9 @@ module Mutant
 
     end # Report
 
-    # Return test report
+    # Return killer report
     #
-    # @return [Test::Report]
+    # @return [Killer::Report]
     #
     # @api private
     #
