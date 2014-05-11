@@ -15,32 +15,54 @@ describe Mutant::Runner::Mutation do
   let(:runners)   { [runner_a, runner_b]                                   }
   let(:killers)   { [killer_a, killer_b]                                   }
   let(:fail_fast) { false                                                  }
-  let(:success_a) { false                                                  }
-  let(:success_b) { false                                                  }
+  let(:success_a) { true                                                   }
+  let(:success_b) { true                                                   }
   let(:stop_a)    { false                                                  }
   let(:stop_b)    { false                                                  }
 
   before do
-    allow(Mutant::Runner).to receive(:run).with(config, killer_a).and_return(runner_a)
-    allow(Mutant::Runner).to receive(:run).with(config, killer_b).and_return(runner_b)
+    expect(Mutant::Runner).to receive(:run).with(config, killer_a).and_return(runner_a)
+    expect(Mutant::Runner).to receive(:run).with(config, killer_b).and_return(runner_b)
+  end
+
+  let(:config) do
+    double(
+      'Config',
+      fail_fast: fail_fast,
+      reporter:  reporter,
+      strategy:  strategy
+    )
+  end
+
+  before do
+    reporter.stub(report: reporter)
+    strategy.stub(killers: killers)
+  end
+
+  describe '#success?' do
+    subject { object.success? }
+
+    context 'when all killers are successful' do
+      it { should be(true) }
+    end
+
+    context 'when one killer is not successful' do
+      let(:success_b) { false }
+
+      it { should be(true) }
+    end
+
+    context 'when all killer are not successful' do
+      let(:success_a) { false }
+      let(:success_b) { false }
+
+      it { should be(false) }
+    end
   end
 
   describe '#killers' do
     subject { object.killers }
 
-    let(:config) do
-      double(
-        'Config',
-        fail_fast: fail_fast,
-        reporter:  reporter,
-        strategy:  strategy
-      )
-    end
-
-    before do
-      reporter.stub(report: reporter)
-      strategy.stub(killers: killers)
-    end
 
     it { should eql(runners) }
 
