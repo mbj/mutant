@@ -92,7 +92,7 @@ module Mutant
             #
             def details
               original, current = mutation.original_source, mutation.source
-              differ = Differ.build(original, current)
+              differ = Diff.build(original, current)
               color? ? differ.colorized_diff : differ.diff
             end
 

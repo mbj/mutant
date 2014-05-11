@@ -2,7 +2,7 @@
 
 module Mutant
   # Class to create diffs from source code
-  class Differ
+  class Diff
     include Adamantium::Flat, Concord.new(:old, :new)
 
     # Return source diff
@@ -20,7 +20,7 @@ module Mutant
       when 0
         nil
       when 1
-        Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0)
+        ::Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0)
           .diff(:unified) << "\n"
       else
         $stderr.puts(
@@ -55,7 +55,7 @@ module Mutant
     # @param [String] old
     # @param [String] new
     #
-    # @return [Differ]
+    # @return [Diff]
     #
     # @api private
     #
@@ -85,7 +85,7 @@ module Mutant
     # @api private
     #
     def diffs
-      Diff::LCS.diff(old, new)
+      ::Diff::LCS.diff(old, new)
     end
     memoize :diffs
 
@@ -118,5 +118,5 @@ module Mutant
       end.format(line)
     end
 
-  end # Differ
+  end # Diff
 end # Mutant
