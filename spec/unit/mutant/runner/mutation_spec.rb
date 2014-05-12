@@ -35,7 +35,7 @@ describe Mutant::Runner::Mutation do
   end
 
   before do
-    reporter.stub(report: reporter)
+    reporter.stub(progress: reporter)
     strategy.stub(killers: killers)
   end
 

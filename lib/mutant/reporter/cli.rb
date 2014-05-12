@@ -8,6 +8,19 @@ module Mutant
 
       NL = "\n".freeze
 
+      # Report progress object
+      #
+      # @param [Object] object
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def progress(object)
+        Progress.run(output, object)
+        self
+      end
+
       # Report object
       #
       # @param [Object] object
@@ -17,7 +30,7 @@ module Mutant
       # @api private
       #
       def report(object)
-        Printer.visit(object, output)
+        Report.run(output, object)
         self
       end
 

@@ -101,16 +101,6 @@ module Mutant
       (@end || Time.now) - @start
     end
 
-    # Return reporter
-    #
-    # @return [Reporter]
-    #
-    # @api private
-    #
-    def reporter
-      config.reporter
-    end
-
     # Test if runner is successful
     #
     # @return [true]
@@ -141,8 +131,18 @@ module Mutant
     #
     # @api private
     #
-    def report(object)
-      reporter.report(object)
+    def progress(object)
+      reporter.progress(object)
+    end
+
+    # Return reporter
+    #
+    # @return [Reporter]
+    #
+    # @api private
+    #
+    def reporter
+      config.reporter
     end
 
     # Perform dispatch on multiple inputs

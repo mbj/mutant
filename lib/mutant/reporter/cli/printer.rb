@@ -6,40 +6,19 @@ module Mutant
 
       # CLI runner status printer base class
       class Printer
-        include AbstractType, Delegator, Adamantium::Flat, Concord.new(:object, :output)
+        include AbstractType, Delegator, Adamantium::Flat, Concord.new(:output, :object)
 
-        REGISTRY = {}
-
-        # Registre handler for class
+        # Run printer on object to output
         #
-        # @param [Class] klass
+        # @param [IO] output
+        # @param [Object] object
         #
-        # @return [undefined]
+        # @return [self]
         #
-        # @api private
-        #
-        def self.handle(klass)
-          REGISTRY[klass] = self
-        end
-
-        # Finalize CLI reporter
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def self.finalize
-          REGISTRY.freeze
-        end
-
-        # Build printer
-        #
-        # @return [Printer]
-        #
-        # @api private
-        #
-        def self.build(*args)
-          new(*args)
+        def self.run(output, object)
+          handler = lookup(object.class)
+          handler.new(output, object).run
+          self
         end
 
         # Run printer
@@ -48,49 +27,6 @@ module Mutant
         #
         # @api private
         #
-        def self.run(*args)
-          build(*args).run
-          self
-        end
-
-        # Visit object
-        #
-        # @param [Object] object
-        # @param [IO] output
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def self.visit(object, output)
-          printer = lookup(object.class)
-          printer.run(object, output)
-        end
-
-        # Lookup printer class
-        #
-        # @param [Class] klass
-        #
-        # @return [Class:Printer]
-        #   if found
-        #
-        # @raise [RuntimeError]
-        #   otherwise
-        #
-        # @api private
-        #
-        def self.lookup(klass)
-          current = klass
-          until current == Object
-            if REGISTRY.key?(current)
-              return REGISTRY.fetch(current)
-            end
-            current = current.superclass
-          end
-          raise "No printer for: #{klass}"
-        end
-        private_class_method :lookup
-
         abstract_method :run
 
       private
@@ -114,7 +50,7 @@ module Mutant
         # @api private
         #
         def visit(object)
-          self.class.visit(object, output)
+          self.class.run(output, object)
         end
 
         # Print an info line to output

@@ -134,10 +134,10 @@ module Mutant
       # @api private
       #
       def run
-        report(config)
+        progress(config)
         run_subjects
         @end = Time.now
-        report(self)
+        reporter.report(self)
       end
 
     end # Config

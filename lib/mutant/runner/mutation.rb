@@ -61,8 +61,9 @@ module Mutant
       # @api private
       #
       def run
+        progress(mutation)
         @killers = visit_collection(config.strategy.killers(mutation))
-        report(self)
+        progress(self)
       end
 
     end # Mutation

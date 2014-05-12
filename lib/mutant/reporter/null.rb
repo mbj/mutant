@@ -5,6 +5,7 @@ module Mutant
 
     # Null reporter
     class Null < self
+      include Equalizer.new
 
       # Report object
       #
@@ -15,6 +16,18 @@ module Mutant
       # @api private
       #
       def report(_object)
+        self
+      end
+
+      # Report progress on object
+      #
+      # @param [Object] _object
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def progress(_object)
         self
       end
 
