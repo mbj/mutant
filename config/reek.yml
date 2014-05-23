@@ -52,6 +52,7 @@ NestedIterators:
   - Mutant#self.singleton_subclass_instance
   - Mutant::CLI#parse
   - Mutant::Mutator::Util::Array::Element#dispatch
+  - Mutant::Mutator::Node::Resbody#mutate_captures
   - Mutant::Reporter::CLI::Report::Config#generic_stats
   - Mutant::RequireHighjack#infect
   - Mutant::RequireHighjack#desinfect
