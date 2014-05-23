@@ -149,7 +149,7 @@ Donations
 ---------
 
 I ([mbj](https://github.com/mbj)) build this and adjacent tools in my free time.
-There already whent LOTS of unaccounted time and fun into this project.
+LOTS of unaccounted time and fun already went into this project.
 
 You might consider to donate. I have a [gittip](https://gittip.com/mbj) account.
 Also I'm looking for sponsors. Email me if you are interested.
