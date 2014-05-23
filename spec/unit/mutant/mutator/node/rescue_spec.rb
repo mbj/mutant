@@ -10,31 +10,25 @@ describe Mutant::Mutator::Node::Generic, 'rescue' do
     let(:mutations) do
       mutations = []
       mutations << 'nil'
-      # mutations << 'begin; rescue ExceptionA, ExceptionB => error; true; end'
       mutations << 'begin; rescue ExceptionA, ExceptionB; true; end'
       mutations << 'begin; rescue ExceptionA, ExceptionB => error; false; end'
       mutations << 'begin; rescue ExceptionA, ExceptionB => error; nil; end'
-      mutations << 'begin; rescue ExceptionA, nil => error; true; end'
       mutations << 'begin; rescue ExceptionA => error; true; end'
       mutations << 'begin; rescue ExceptionB => error; true; end'
-      mutations << 'begin; rescue nil, ExceptionB => error; true; end'
-      mutations << 'begin; rescue => error; true; end'
     end
 
     it_should_behave_like 'a mutator'
   end
 
   context 'single exception selector and assignment' do
-    let(:source) { 'begin; rescue Exception => error; true; end' }
+    let(:source) { 'begin; rescue SomeException => error; true; end' }
 
     let(:mutations) do
       mutations = []
       mutations << 'nil'
-      mutations << 'begin; rescue Exception; true; end'
-      mutations << 'begin; rescue Exception => error; false; end'
-      mutations << 'begin; rescue Exception => error; nil; end'
-      mutations << 'begin; rescue nil => error; true; end'
-      mutations << 'begin; rescue => error; true; end'
+      mutations << 'begin; rescue SomeException; true; end'
+      mutations << 'begin; rescue SomeException => error; false; end'
+      mutations << 'begin; rescue SomeException => error; nil; end'
     end
 
     it_should_behave_like 'a mutator'

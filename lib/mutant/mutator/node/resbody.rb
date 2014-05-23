@@ -8,7 +8,7 @@ module Mutant
 
         handle(:resbody)
 
-        children :captures, :assignment, :block
+        children :captures, :assignment, :body
 
       private
 
@@ -20,7 +20,7 @@ module Mutant
         #
         def dispatch
           emit_assignment(nil)
-          emit_block_mutations if block
+          emit_body_mutations if body
           mutate_captures
         end
 
@@ -32,9 +32,8 @@ module Mutant
         #
         def mutate_captures
           return unless captures
-          emit_captures(nil)
           Util::Array.each(captures.children, self) do |matchers|
-            next if matchers.empty?
+            next if matchers.empty? || matchers.any? { |node| node.type == :nil }
             emit_captures(s(:array, *matchers))
           end
         end
