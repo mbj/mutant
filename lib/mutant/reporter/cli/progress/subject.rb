@@ -7,8 +7,6 @@ module Mutant
 
           handle(Mutant::Subject)
 
-          FORMAT = '%s'.freeze
-
           # Run subject results printer
           #
           # @return [undefined]
@@ -16,7 +14,7 @@ module Mutant
           # @api private
           #
           def run
-            info(FORMAT, object.identification)
+            puts(object.identification)
           end
 
         end # Subject
@@ -54,7 +52,7 @@ module Mutant
 
           # Print stats
           #
-          # @return [undefned
+          # @return [undefined]
           #
           # @api private
           #
