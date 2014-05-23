@@ -42,6 +42,34 @@ describe Mutant::Runner::Mutation do
     strategy.stub(killers: killers)
   end
 
+  describe '#stop?' do
+    subject { object.stop? }
+
+    context 'when fail fast is false' do
+      it { should be(false) }
+    end
+
+    context 'when fail fast is true' do
+      let(:fail_fast) { true }
+
+      context 'when all killers are successful' do
+        it { should be(false) }
+      end
+
+      context 'when one killer is NOT successful' do
+        let(:success_b) { false }
+        it { should be(false) }
+      end
+
+      context 'when all killer are NOT successful' do
+        let(:success_b) { false }
+        let(:success_a) { false }
+
+        it { should be(true) }
+      end
+    end
+  end
+
   describe '#success?' do
     subject { object.success? }
 

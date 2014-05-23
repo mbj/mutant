@@ -37,6 +37,7 @@ module Mutant
       def initialize(config, mutation, tests)
         @mutation, @tests = mutation, tests
         super(config)
+        @stop = config.fail_fast && !success?
       end
 
       # Test if mutation was handeled successfully

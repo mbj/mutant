@@ -48,9 +48,9 @@ module Mutant
     #
     # @api private
     #
-    def self.run(config, object)
+    def self.run(config, object, *arguments)
       handler = lookup(object.class)
-      handler.new(config, object)
+      handler.new(config, object, *arguments)
     end
 
     # Return config
@@ -153,10 +153,10 @@ module Mutant
     #
     # @api private
     #
-    def visit_collection(input)
+    def visit_collection(input, *arguments)
       collection = []
       input.each do |object|
-        runner = visit(object)
+        runner = visit(object, *arguments)
         collection << runner
         @stop = runner.stop?
         break if @stop
@@ -172,8 +172,8 @@ module Mutant
     #
     # @api private
     #
-    def visit(object)
-      Runner.run(config, object)
+    def visit(object, *arguments)
+      Runner.run(config, object, *arguments)
     end
 
   end # Runner

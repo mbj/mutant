@@ -33,8 +33,8 @@ describe Mutant::Runner::Subject, '#success?' do
 
   before do
     expect(strategy).to receive(:tests).with(mutation_subject).and_return(tests)
-    expect(Mutant::Runner::Mutation).to receive(:new).with(config, mutation_a, tests).and_return(runner_a)
-    expect(Mutant::Runner::Mutation).to receive(:new).with(config, mutation_b, tests).and_return(runner_b)
+    expect(Mutant::Runner).to receive(:run).with(config, mutation_a, tests).and_return(runner_a)
+    expect(Mutant::Runner).to receive(:run).with(config, mutation_b, tests).and_return(runner_b)
   end
 
   context 'with failing mutations' do
