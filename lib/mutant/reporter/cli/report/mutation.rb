@@ -31,6 +31,8 @@ module Mutant
               '%s'
             ].join("\n").freeze
 
+            delegate :killers
+
           private
 
             # Return details
@@ -40,7 +42,7 @@ module Mutant
             # @api private
             #
             def details
-              MESSAGE % [object.subject.node.inspect, object.original_source]
+              info(MESSAGE, object.subject.node.inspect, object.original_source)
             end
 
           end # Noop
@@ -79,6 +81,28 @@ module Mutant
           #
           def run
             visit(object.mutation)
+            if object.mutation.kind_of?(Mutant::Mutation::Neutral::Noop)
+              report_noop
+            end
+            self
+          end
+
+          delegate :killers
+
+        private
+
+          # Report noop output
+          #
+          # @return [undefined]
+          #
+          # @api private
+          #
+          def report_noop
+            info('NOOP MUTATION TESTS FAILED!')
+            killers.reject(&:success?).map(&:report).map(&:test_report).each do |report|
+              puts(report.test.identification)
+              puts(report.output)
+            end
           end
 
         end # Mutation

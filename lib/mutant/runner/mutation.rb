@@ -18,7 +18,7 @@ module Mutant
 
       # Return killers
       #
-      # @return [Killer]
+      # @return [Enumerable<Runner::Killer>]
       #
       # @api private
       #

@@ -15,6 +15,14 @@ module Mutant
       attr_reader :killer
       protected :killer
 
+      # Return kill report
+      #
+      # @return [Killer::Report]
+      #
+      # @api private
+      #
+      attr_reader :report
+
       # Test if killer ran successfully
       #
       # @return [Boolean]

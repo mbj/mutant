@@ -40,6 +40,7 @@ LongParameterList:
   enabled: true
   exclude:
   - Mutant::Matcher::Method::Instance#self.build?
+  - Mutant::Runner#self.run
   max_params: 2
 LongYieldList:
   enabled: true
@@ -95,6 +96,8 @@ TooManyStatements:
   - Mutant::Zombifier::File#self.find
   - Mutant::RequireHighjack#infect
   - Mutant::Reporter::CLI::Registry#included
+  - Mutant::Rspec::Strategy#new_reporter
+  - Mutant::Rspec::Strategy#run
   # How mutant does CLI parsing is shit
   - Mutant::CLI#parse
   - Mutant::CLI#initialize
@@ -144,6 +147,7 @@ UtilityFunction:
   - Mutant::Mutation::Neutral#success?
   - Mutant::NodeHelpers#s
   - Mutant::Rspec::Strategy#configuration
+  - Mutant::Rspec::Strategy#example_groups
   - Mutant::Rspec::Strategy#options
   - Mutant::Rspec::Strategy#world
   - Mutant::Rspec::Strategy#rspec2
