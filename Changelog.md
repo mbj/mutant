@@ -1,3 +1,10 @@
+# v0.5.14 2014-05-23
+
+Changes:
+
+* Add support for rspec-3.0.0.rc1
+* Remive some senseless rescue mutations
+
 # v0.5.13 2014-05-23
 
 Changes:
