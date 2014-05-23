@@ -39,9 +39,7 @@ module Mutant
     #
     def self.included(host)
       super
-      host.class_eval do
-        extend ClassMethods
-      end
+      host.extend(ClassMethods)
     end
 
   end # Delegator
