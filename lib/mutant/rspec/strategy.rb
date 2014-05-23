@@ -38,8 +38,8 @@ module Mutant
         end
         output.rewind
         Test::Report.new(
-          test: self,
-          output: output.read,
+          test:    self,
+          output:  output.read,
           success: success
         )
       end
@@ -80,10 +80,17 @@ module Mutant
       def new_reporter(output)
         reporter_class = RSpec::Core::Reporter
 
+        # rspec3 does not require that one via a very indirect autoload setup
+        require 'rspec/core/formatters/base_text_formatter'
+        formatter = RSpec::Core::Formatters::BaseTextFormatter.new(output)
+
         if rspec2?
-          reporter_class.new(RSpec::Core::Formatters::BaseTextFormatter.new(output))
+          reporter_class.new(formatter)
         else
-          reporter_class.new(configuration)
+          notifications = RSpec::Core::Formatters::Loader.allocate.send(:notifications_for, formatter.class)
+          reporter = reporter_class.new(configuration)
+          reporter.register_listener(formatter, *notifications)
+          reporter
         end
       end
 
