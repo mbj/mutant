@@ -25,8 +25,8 @@ module Mutant
             object.failed_mutations.each(&method(:visit))
             self
           end
-        end
 
+        end # Subject
       end # Report
     end # CLI
   end # Reporter
