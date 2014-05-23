@@ -11,9 +11,7 @@ module Mutant
       # @api private
       #
       def delegate(*names)
-        names.each do |name|
-          define_delegator(name)
-        end
+        names.each(&method(:define_delegator))
       end
 
       # Create delegator to object
