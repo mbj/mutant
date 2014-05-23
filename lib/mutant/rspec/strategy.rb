@@ -6,6 +6,8 @@ module Mutant
     # Rspec killer strategy
     class Strategy < Mutant::Strategy
 
+      RSPEC_2_VERSION_PREFIX = '2.'.freeze
+
       register 'rspec'
 
       # Setup rspec strategy
@@ -15,24 +17,71 @@ module Mutant
       # @api private
       #
       def setup
-        output = StringIO.new
-        configuration.error_stream = output
-        configuration.output_stream = output
         options.configure(configuration)
         configuration.load_spec_files
         self
       end
       memoize :setup
 
-      # Return new reporter
+      # Return report for test
+      #
+      # @param [Rspec::Test] test
       #
       # @api private
       #
-      def reporter
+      def run(test)
+        output = StringIO.new
+        success = false
+        reporter = new_reporter(output)
+        reporter.report(1) do
+          success = test.example_group.run(reporter)
+        end
+        output.rewind
+        Test::Report.new(
+          test: self,
+          output: output.read,
+          success: success
+        )
+      end
+
+      # Return all available tests
+      #
+      # @return [Enumerable<Test>]
+      #
+      # @api private
+      #
+      def all_tests
+        example_groups.map do |example_group|
+          Test.new(self, example_group)
+        end
+      end
+      memoize :all_tests
+
+    private
+
+      # Return example groups
+      #
+      # @return [Enumerable<RSpec::Core::ExampleGroup>]
+      #
+      # @api private
+      #
+      def example_groups
+        RSpec.world.example_groups
+      end
+
+      # Return new reporter
+      #
+      # @param [StringIO] output
+      #
+      # @return [RSpec::Core::Reporter]
+      #
+      # @api private
+      #
+      def new_reporter(output)
         reporter_class = RSpec::Core::Reporter
 
         if rspec2?
-          reporter_class.new
+          reporter_class.new(RSpec::Core::Formatters::BaseTextFormatter.new(output))
         else
           reporter_class.new(configuration)
         end
@@ -49,7 +98,7 @@ module Mutant
       # @api private
       #
       def rspec2?
-        RSpec::Core::Version::STRING.start_with?('2.')
+        RSpec::Core::Version::STRING.start_with?(RSPEC_2_VERSION_PREFIX)
       end
 
       # Return configuration
@@ -62,41 +111,6 @@ module Mutant
         RSpec::Core::Configuration.new
       end
       memoize :configuration, freezer: :noop
-
-      # Return example groups
-      #
-      # @return [Enumerable<RSpec::Core::ExampleGroup>]
-      #
-      # @api private
-      #
-      def example_groups
-        world.example_groups
-      end
-
-    private
-
-      # Return world
-      #
-      # @return [RSpec::Core::World]
-      #
-      # @api private
-      #
-      def world
-        RSpec.world
-      end
-      memoize :world, freezer: :noop
-
-      # Return all available tests
-      #
-      # @return [Enumerable<Test>]
-      #
-      # @api private
-      #
-      def all_tests
-        example_groups.map do |example_group|
-          Test.new(self, example_group)
-        end
-      end
 
       # Return options
       #

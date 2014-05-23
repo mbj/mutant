@@ -2,7 +2,7 @@ module Mutant
   module Rspec
     # Rspec test abstraction
     class Test < Mutant::Test
-      include Concord.new(:strategy, :example_group)
+      include Concord::Public.new(:strategy, :example_group)
 
       PREFIX = :rspec
 
@@ -24,12 +24,7 @@ module Mutant
       # @api private
       #
       def run
-        flag = example_group.run(strategy.reporter)
-        Report.new(
-          test: self,
-          output: '',
-          success: flag
-        )
+        strategy.run(self)
       end
 
     end # Test
