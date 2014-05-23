@@ -73,7 +73,10 @@ module Mutant
       #
       def run
         progress(subject)
-        @mutations = visit_collection(subject.mutations)
+        tests = config.strategy.tests(subject)
+        @mutations = subject.mutations.map do |mutation|
+          Runner::Mutation.new(config, mutation, tests)
+        end
         progress(self)
       end
 

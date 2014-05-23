@@ -4,7 +4,7 @@ module Mutant
   class Runner
     # Mutation runner
     class Mutation < self
-      include Equalizer.new(:config, :mutation)
+      include Equalizer.new(:config, :mutation, :tests)
 
       register Mutant::Mutation
 
@@ -28,13 +28,14 @@ module Mutant
       #
       # @param [Config] config
       # @param [Mutation] mutation
+      # @param [Enumerable<Test>] tests
       #
       # @return [undefined]
       #
       # @api private
       #
-      def initialize(config, mutation)
-        @mutation = mutation
+      def initialize(config, mutation, tests)
+        @mutation, @tests = mutation, tests
         super(config)
       end
 
@@ -62,7 +63,12 @@ module Mutant
       #
       def run
         progress(mutation)
-        @killers = visit_collection(config.strategy.killers(mutation))
+        @killers = @tests.map do |test|
+          Mutant::Killer.new(
+            mutation: mutation,
+            test:     test
+          )
+        end.map(&method(:visit))
         progress(self)
       end
 

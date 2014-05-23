@@ -3,8 +3,7 @@
 module Mutant
   # Mutation killer
   class Killer
-    include Adamantium::Flat
-    include Anima.new(:test, :mutation)
+    include Adamantium::Flat, Anima.new(:test, :mutation)
 
     # Report object for kill results
     class Report

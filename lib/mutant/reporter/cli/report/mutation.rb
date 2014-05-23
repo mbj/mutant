@@ -8,6 +8,18 @@ module Mutant
         # Reporter for mutations
         class Mutation < self
 
+          # Run report printer
+          #
+          # @return [self]
+          #
+          # @api private
+          #
+          def run
+            puts(object.identification)
+            puts(details)
+            self
+          end
+
           # Reporter for noop mutations
           class Noop < self
             handle(Mutant::Mutation::Neutral::Noop)
@@ -19,16 +31,18 @@ module Mutant
               '%s'
             ].join("\n").freeze
 
-            # Run report printer
+          private
+
+            # Return details
             #
             # @return [self]
             #
             # @api private
             #
-            def run
-              puts(MESSAGE % [object.subject.node.inspect, object.original_source])
-              self
+            def details
+              MESSAGE % [object.subject.node.inspect, object.original_source]
             end
+
           end # Noop
 
           # Reporter for mutations producing a diff
@@ -36,7 +50,7 @@ module Mutant
             handle(Mutant::Mutation::Evil)
             handle(Mutant::Mutation::Neutral)
 
-            delegate :subject
+          private
 
             # Run report printer
             #
@@ -44,14 +58,14 @@ module Mutant
             #
             # @api private
             #
-            def run
+            def details
               original, current = object.original_source, object.source
               diff = Mutant::Diff.build(original, current)
-              puts(color? ? diff.colorized_diff : diff.diff)
-              self
+              color? ? diff.colorized_diff : diff.diff
             end
-          end
-        end
+
+          end # Diff
+        end # Mutation
 
         # Subject report printer
         class MutationRunner < self

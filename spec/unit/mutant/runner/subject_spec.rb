@@ -15,10 +15,11 @@ describe Mutant::Runner::Subject, '#success?' do
     )
   end
 
-  let(:reporter)   { Mutant::Reporter::Trace.new          }
-  let(:config)     { double('Config', reporter: reporter) }
-  let(:mutation_a) { double('Mutation A')                 }
-  let(:mutation_b) { double('Mutation B')                 }
+  let(:reporter)   { Mutant::Reporter::Trace.new                              }
+  let(:config)     { double('Config', reporter: reporter, strategy: strategy) }
+  let(:mutation_a) { double('Mutation A')                                     }
+  let(:mutation_b) { double('Mutation B')                                     }
+  let(:strategy)   { double('Strategy')                                       }
 
   let(:runner_a) do
     double('Runner A', success?: success_a, stop?: stop_a)
@@ -28,9 +29,12 @@ describe Mutant::Runner::Subject, '#success?' do
     double('Runner B', success?: success_b, stop?: stop_b)
   end
 
+  let(:tests) { [double('test a'), double('test b')] }
+
   before do
-    expect(Mutant::Runner).to receive(:run).with(config, mutation_a).and_return(runner_a)
-    expect(Mutant::Runner).to receive(:run).with(config, mutation_b).and_return(runner_b)
+    expect(strategy).to receive(:tests).with(mutation_subject).and_return(tests)
+    expect(Mutant::Runner::Mutation).to receive(:new).with(config, mutation_a, tests).and_return(runner_a)
+    expect(Mutant::Runner::Mutation).to receive(:new).with(config, mutation_b, tests).and_return(runner_b)
   end
 
   context 'with failing mutations' do

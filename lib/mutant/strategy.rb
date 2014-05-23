@@ -62,23 +62,6 @@ module Mutant
     #
     abstract_method :all_tests
 
-    # Return killers for mutation
-    #
-    # @param [Mutation] mutation
-    #
-    # @return [Enumerable<Killer>]
-    #
-    # @api private
-    #
-    def killers(mutation)
-      tests(mutation).map do |test|
-        Killer.new(
-          mutation: mutation,
-          test:     test
-        )
-      end
-    end
-
     # Return tests for mutation
     #
     # TODO: This logic is now centralized but still fucked.
@@ -89,8 +72,8 @@ module Mutant
     #
     # @api private
     #
-    def tests(mutation)
-      mutation.subject.match_prefixes.map do |match_expression|
+    def tests(subject)
+      subject.match_prefixes.map do |match_expression|
         tests = all_tests.select do |test|
           test.subject_identification.start_with?(match_expression)
         end
@@ -114,7 +97,7 @@ module Mutant
       # @api private
       #
       def all_tests
-        []
+        EMPTY_ARRAY
       end
 
     end # Null
