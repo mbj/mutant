@@ -19,6 +19,9 @@ module Mutant
           #
           def run
             status(subject.identification)
+            object.tests.each do |test|
+              puts("- #{test.identification}")
+            end
             object.failed_mutations.each(&method(:visit))
             self
           end

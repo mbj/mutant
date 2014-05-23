@@ -4,6 +4,8 @@ module Mutant
     class Test < Mutant::Test
       include Concord.new(:strategy, :example_group)
 
+      PREFIX = :rspec
+
       # Return subject identification
       #
       # @return [String]

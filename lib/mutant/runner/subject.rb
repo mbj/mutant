@@ -63,6 +63,17 @@ module Mutant
         failed_mutations.empty?
       end
 
+      # Return tests used to kill mutations on this subject
+      #
+      # @return [Enumerable<Test>]
+      #
+      # @api private
+      #
+      def tests
+        config.strategy.tests(subject)
+      end
+      memoize :tests
+
     private
 
       # Perform operation
@@ -73,7 +84,6 @@ module Mutant
       #
       def run
         progress(subject)
-        tests = config.strategy.tests(subject)
         @mutations = visit_collection(subject.mutations, tests)
         progress(self)
       end
