@@ -94,7 +94,6 @@ describe Mutant::Runner::Mutation do
   describe '#killers' do
     subject { object.killers }
 
-
     it { should eql(runners) }
 
     it_should_behave_like 'an idempotent method'
