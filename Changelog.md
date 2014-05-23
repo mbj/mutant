@@ -3,7 +3,7 @@
 Changes:
 
 * Add support for rspec-3.0.0.rc1
-* Remive some senseless rescue mutations
+* Remove some senseless rescue mutations
 
 # v0.5.13 2014-05-23
 
