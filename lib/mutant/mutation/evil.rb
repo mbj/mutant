@@ -5,16 +5,8 @@ module Mutant
     # Evul mutation
     class Evil < self
 
-      # Return identification
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def identification
-        "evil:#{super}"
-      end
-      memoize :identification
+      SHOULD_FAIL = true
+      SYMBOL      = 'evil'.freeze
 
       # Test if killer is successful
       #

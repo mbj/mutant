@@ -68,7 +68,7 @@ module Mutant
           #
           def prepare
             scope.send(:memoized_methods).instance_variable_get(:@memory).delete(name)
-            scope.send(:undef_method, name)
+            super
             self
           end
 

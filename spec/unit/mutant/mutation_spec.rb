@@ -4,10 +4,13 @@ require 'spec_helper'
 
 describe Mutant::Mutation do
 
-  let(:class_under_test) { Class.new(described_class) { memoize :identification }             }
-  let(:object)           { class_under_test.new(mutation_subject, Mutant::NodeHelpers::N_NIL) }
-  let(:mutation_subject) { double('Subject', identification: 'subject', source: 'original')   }
-  let(:node)             { double('Node')                                                     }
+  class TestMutation < Mutant::Mutation
+    SYMBOL = 'test'
+  end
+
+  let(:object)           { TestMutation.new(mutation_subject, Mutant::NodeHelpers::N_NIL)   }
+  let(:mutation_subject) { double('Subject', identification: 'subject', source: 'original') }
+  let(:node)             { double('Node')                                                   }
 
   describe '#code' do
     subject { object.code }
@@ -37,7 +40,7 @@ describe Mutant::Mutation do
 
     subject { object.identification }
 
-    it { should eql('subject:8771a') }
+    it { should eql('test:subject:8771a') }
 
     it_should_behave_like 'an idempotent method'
   end

@@ -37,18 +37,42 @@ module Mutant
     self
   end
 
-  # Return a frozen set of symbols from string enumerable
+  IsolationError = Class.new(RuntimeError)
+
+  # Call block in isolation
   #
-  # @param [Enumerable<String>]
+  # This isolation implements the fork strategy.
+  # Future strategies will probably use a process pool that can
+  # handle multiple mutation kills, in-isolation at once.
   #
-  # @return [Set<Symbol>]
+  # @return [Object]
   #
   # @api private
   #
-  def self.symbolset(strings)
-    strings.map(&:to_sym).to_set.freeze
+  def self.isolate(&block)
+    reader, writer = IO.pipe
+
+    pid = fork do
+      reader.close
+      writer.write(Marshal.dump(block.call))
+    end
+
+    writer.close
+
+    begin
+      data = Marshal.load(reader.read)
+    rescue ArgumentError
+      raise IsolationError, 'Childprocess wrote un-unmarshallable data'
+    end
+
+    status = Process.waitpid2(pid).last
+
+    unless status.exitstatus.zero?
+      raise IsolationError, "Childprocess exited with nonzero exit status: #{status.exitstatus}"
+    end
+
+    data
   end
-  private_class_method :symbolset
 
   # Define instance of subclassed superclass as constant
   #
@@ -78,6 +102,7 @@ end # Mutant
 
 require 'mutant/version'
 require 'mutant/cache'
+require 'mutant/delegator'
 require 'mutant/node_helpers'
 require 'mutant/warning_filter'
 require 'mutant/warning_expectation'
@@ -162,27 +187,33 @@ require 'mutant/matcher/scope'
 require 'mutant/matcher/filter'
 require 'mutant/matcher/null'
 require 'mutant/killer'
-require 'mutant/killer/static'
-require 'mutant/killer/forking'
-require 'mutant/killer/forked'
+require 'mutant/test'
 require 'mutant/strategy'
 require 'mutant/runner'
 require 'mutant/runner/config'
 require 'mutant/runner/subject'
 require 'mutant/runner/mutation'
+require 'mutant/runner/killer'
 require 'mutant/cli'
 require 'mutant/cli/classifier'
 require 'mutant/cli/classifier/namespace'
 require 'mutant/cli/classifier/method'
 require 'mutant/color'
-require 'mutant/differ'
+require 'mutant/diff'
 require 'mutant/reporter'
 require 'mutant/reporter/null'
+require 'mutant/reporter/trace'
 require 'mutant/reporter/cli'
+require 'mutant/reporter/cli/registry'
 require 'mutant/reporter/cli/printer'
-require 'mutant/reporter/cli/printer/config'
-require 'mutant/reporter/cli/printer/subject'
-require 'mutant/reporter/cli/printer/killer'
-require 'mutant/reporter/cli/printer/mutation'
+require 'mutant/reporter/cli/report'
+require 'mutant/reporter/cli/report/config'
+require 'mutant/reporter/cli/report/subject'
+require 'mutant/reporter/cli/report/mutation'
+require 'mutant/reporter/cli/progress'
+require 'mutant/reporter/cli/progress/config'
+require 'mutant/reporter/cli/progress/subject'
+require 'mutant/reporter/cli/progress/mutation'
+require 'mutant/reporter/cli/progress/noop'
 require 'mutant/zombifier'
 require 'mutant/zombifier/file'

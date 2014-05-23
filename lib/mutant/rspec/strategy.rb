@@ -2,12 +2,11 @@
 
 module Mutant
   module Rspec
+
     # Rspec killer strategy
     class Strategy < Mutant::Strategy
 
       register 'rspec'
-
-      KILLER = Killer::Forking.new(Rspec::Killer)
 
       # Setup rspec strategy
       #
@@ -24,6 +23,34 @@ module Mutant
         self
       end
       memoize :setup
+
+      # Return new reporter
+      #
+      # @api private
+      #
+      def reporter
+        reporter_class = RSpec::Core::Reporter
+
+        if rspec2?
+          reporter_class.new
+        else
+          reporter_class.new(configuration)
+        end
+      end
+
+      # Detect RSpec 2
+      #
+      # @return [true]
+      #   when RSpec 2
+      #
+      # @return [false]
+      #   otherwise
+      #
+      # @api private
+      #
+      def rspec2?
+        RSpec::Core::Version::STRING.start_with?('2.')
+      end
 
       # Return configuration
       #
@@ -46,20 +73,6 @@ module Mutant
         world.example_groups
       end
 
-      # Detect RSpec 2
-      #
-      # @return [true]
-      #   when RSpec 2
-      #
-      # @return [false]
-      #   otherwise
-      #
-      # @api private
-      #
-      def rspec2?
-        RSpec::Core::Version::STRING.start_with?('2.')
-      end
-
     private
 
       # Return world
@@ -72,6 +85,18 @@ module Mutant
         RSpec.world
       end
       memoize :world, freezer: :noop
+
+      # Return all available tests
+      #
+      # @return [Enumerable<Test>]
+      #
+      # @api private
+      #
+      def all_tests
+        example_groups.map do |example_group|
+          Test.new(self, example_group)
+        end
+      end
 
       # Return options
       #

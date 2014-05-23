@@ -4,9 +4,22 @@ module Mutant
   class Reporter
     # Reporter that reports in human readable format
     class CLI < self
-      include Concord::Public.new(:output)
+      include Concord.new(:output)
 
       NL = "\n".freeze
+
+      # Report progress object
+      #
+      # @param [Object] object
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def progress(object)
+        Progress.run(output, object)
+        self
+      end
 
       # Report object
       #
@@ -17,7 +30,7 @@ module Mutant
       # @api private
       #
       def report(object)
-        Printer.visit(object, output)
+        Report.run(output, object)
         self
       end
 

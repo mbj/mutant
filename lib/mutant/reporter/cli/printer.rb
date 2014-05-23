@@ -6,69 +6,19 @@ module Mutant
 
       # CLI runner status printer base class
       class Printer
-        include AbstractType, Adamantium::Flat, Concord.new(:object, :output)
+        include AbstractType, Delegator, Adamantium::Flat, Concord.new(:output, :object)
 
-        REGISTRY = {}
-
-        # Create delegators to object
+        # Run printer on object to output
         #
-        # @return [undefined]
+        # @param [IO] output
+        # @param [Object] object
         #
-        # @api private
+        # @return [self]
         #
-        def self.delegate(*names)
-          names.each do |name|
-            define_delegator(name)
-          end
-        end
-        private_class_method :delegate
-
-        # Create delegator to object
-        #
-        # @param [Symbol] name
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def self.define_delegator(name)
-          define_method(name) do
-            object.public_send(name)
-          end
-          private name
-        end
-        private_class_method :define_delegator
-
-        # Registre handler for class
-        #
-        # @param [Class] klass
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def self.handle(klass)
-          REGISTRY[klass] = self
-        end
-
-        # Finalize CLI reporter
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def self.finalize
-          REGISTRY.freeze
-        end
-
-        # Build printer
-        #
-        # @return [Printer]
-        #
-        # @api private
-        #
-        def self.build(*args)
-          new(*args)
+        def self.run(output, object)
+          handler = lookup(object.class)
+          handler.new(output, object).run
+          self
         end
 
         # Run printer
@@ -77,49 +27,6 @@ module Mutant
         #
         # @api private
         #
-        def self.run(*args)
-          build(*args).run
-          self
-        end
-
-        # Visit object
-        #
-        # @param [Object] object
-        # @param [IO] output
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def self.visit(object, output)
-          printer = lookup(object.class)
-          printer.run(object, output)
-        end
-
-        # Lookup printer class
-        #
-        # @param [Class] klass
-        #
-        # @return [Class:Printer]
-        #   if found
-        #
-        # @raise [RuntimeError]
-        #   otherwise
-        #
-        # @api private
-        #
-        def self.lookup(klass)
-          current = klass
-          until current == Object
-            if REGISTRY.key?(current)
-              return REGISTRY.fetch(current)
-            end
-            current = current.superclass
-          end
-          raise "No printer for: #{klass}"
-        end
-        private_class_method :lookup
-
         abstract_method :run
 
       private
@@ -130,7 +37,7 @@ module Mutant
         #
         # @api private
         #
-        def color
+        def status_color
           success? ? Color::GREEN : Color::RED
         end
 
@@ -143,7 +50,7 @@ module Mutant
         # @api private
         #
         def visit(object)
-          self.class.visit(object, output)
+          self.class.run(output, object)
         end
 
         # Print an info line to output
@@ -163,7 +70,7 @@ module Mutant
         # @api private
         #
         def status(string, *arguments)
-          puts(colorize(color, sprintf(string, *arguments)))
+          puts(colorize(status_color, sprintf(string, *arguments)))
         end
 
         # Print a line to output

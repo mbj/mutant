@@ -4,7 +4,7 @@ module Mutant
   class Runner
     # Mutation runner
     class Mutation < self
-      include Equalizer.new(:config, :mutation)
+      include Equalizer.new(:config, :mutation, :tests)
 
       register Mutant::Mutation
 
@@ -16,26 +16,28 @@ module Mutant
       #
       attr_reader :mutation
 
-      # Return killer instance
+      # Return killers
       #
       # @return [Killer]
       #
       # @api private
       #
-      attr_reader :killer
+      attr_reader :killers
 
       # Initialize object
       #
       # @param [Config] config
       # @param [Mutation] mutation
+      # @param [Enumerable<Test>] tests
       #
       # @return [undefined]
       #
       # @api private
       #
-      def initialize(config, mutation)
-        @mutation = mutation
+      def initialize(config, mutation, tests)
+        @mutation, @tests = mutation, tests
         super(config)
+        @stop = config.fail_fast && !success?
       end
 
       # Test if mutation was handeled successfully
@@ -49,7 +51,7 @@ module Mutant
       # @api private
       #
       def success?
-        mutation.success?(killer)
+        killers.any?(&:success?)
       end
 
     private
@@ -61,9 +63,14 @@ module Mutant
       # @api private
       #
       def run
-        @killer = config.strategy.kill(mutation)
-        report(killer)
-        @stop = config.fail_fast && !killer.success?
+        progress(mutation)
+        @killers = @tests.map do |test|
+          Mutant::Killer.new(
+            mutation: mutation,
+            test:     test
+          )
+        end.map(&method(:visit))
+        progress(self)
       end
 
     end # Mutation

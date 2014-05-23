@@ -1,14 +1,12 @@
-# encoding: utf-8
-
 module Mutant
   class Reporter
     class CLI
-      class Printer
+      class Progress
 
-        # Printer for killer results
-        class Killer < self
+        # Mutation progress reporter
+        class Mutation < self
 
-          handle(Mutant::Killer)
+          handle(Runner::Mutation)
 
           SUCCESS = '.'.freeze
           FAILURE = 'F'.freeze
@@ -20,11 +18,7 @@ module Mutant
           # @api private
           #
           def run
-            if success?
-              char(SUCCESS, Color::GREEN)
-            else
-              char(FAILURE, Color::RED)
-            end
+            char(success? ? SUCCESS : FAILURE)
           end
 
         private
@@ -32,19 +26,18 @@ module Mutant
           # Write colorized char
           #
           # @param [String] char
-          # @param [Color]
           #
           # @return [undefined]
           #
           # @api private
           #
-          def char(char, color)
-            output.write(colorize(color, char))
+          def char(char)
+            output.write(colorize(status_color, char))
             output.flush
           end
 
-        end # Killer
-      end # Printer
+        end # Mutation
+      end # Progress
     end # CLI
   end # Reporter
 end # Mutant

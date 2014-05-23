@@ -5,6 +5,9 @@ module Mutant
     # Runner for object config
     class Config < self
 
+      # The expected coverage precision
+      COVERAGE_PRECISION = 1
+
       register Mutant::Config
 
       # Run runner for object
@@ -39,8 +42,6 @@ module Mutant
         subjects.reject(&:success?)
       end
       memoize :failed_subjects
-
-      COVERAGE_PRECISION = 1
 
       # Test if run was successful
       #
@@ -122,7 +123,7 @@ module Mutant
       def run_subjects
         strategy = self.strategy
         strategy.setup
-        @subjects = dispatch(config.subjects)
+        @subjects = visit_collection(config.subjects)
         strategy.teardown
       end
 
@@ -133,10 +134,10 @@ module Mutant
       # @api private
       #
       def run
-        report(config)
+        progress(config)
         run_subjects
         @end = Time.now
-        report(self)
+        reporter.report(self)
       end
 
     end # Config

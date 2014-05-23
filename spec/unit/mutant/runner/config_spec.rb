@@ -18,15 +18,14 @@ describe Mutant::Runner::Config do
     )
   end
 
-  let(:fail_fast)         { false               }
-  let(:expected_coverage) { 100.0               }
-  let(:reporter)          { double('Reporter')  }
-  let(:strategy)          { double('Strategy')  }
-  let(:subject_a)         { double('Subject A') }
-  let(:subject_b)         { double('Subject B') }
+  let(:fail_fast)         { false                       }
+  let(:expected_coverage) { 100.0                       }
+  let(:reporter)          { Mutant::Reporter::Trace.new }
+  let(:strategy)          { double('Strategy')          }
+  let(:subject_a)         { double('Subject A')         }
+  let(:subject_b)         { double('Subject B')         }
 
   before do
-    reporter.stub(report: reporter)
     strategy.stub(:setup)
     strategy.stub(:teardown)
     Mutant::Runner.stub(:run).with(config, subject_a).and_return(runner_a)

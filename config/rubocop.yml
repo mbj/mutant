@@ -99,6 +99,10 @@ IndentationWidth:
 EmptyLinesAroundBody:
   Enabled: false
 
+# I test this style for a while
+LambdaCall:
+  Enabled: false
+
 # I like my style more
 AccessModifierIndentation:
   Enabled: false

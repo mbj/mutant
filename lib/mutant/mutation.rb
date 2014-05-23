@@ -6,6 +6,9 @@ module Mutant
     include AbstractType, Adamantium::Flat
     include Concord::Public.new(:subject, :node)
 
+    CODE_DELIMITER = "\0".freeze
+    CODE_RANGE     = (0..4).freeze
+
     # Return mutated root node
     #
     # @return [Parser::AST::Node]
@@ -54,8 +57,9 @@ module Mutant
     # @api private
     #
     def identification
-      "#{subject.identification}:#{code}"
+      "#{self.class::SYMBOL}:#{subject.identification}:#{code}"
     end
+    memoize :identification
 
     # Return mutation code
     #
@@ -64,7 +68,7 @@ module Mutant
     # @api private
     #
     def code
-      sha1[0..4]
+      sha1[CODE_RANGE]
     end
     memoize :code
 
@@ -89,6 +93,16 @@ module Mutant
       subject.source
     end
 
+    # Test if test should fail under mutation
+    #
+    # @return [Boolean]
+    #
+    # @api private
+    #
+    def should_fail?
+      self.class::SHOULD_FAIL
+    end
+
   private
 
     # Return sha1 sum of source and subject identification
@@ -98,7 +112,7 @@ module Mutant
     # @api private
     #
     def sha1
-      Digest::SHA1.hexdigest(subject.identification + 0.chr + source)
+      Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
     end
     memoize :sha1
 
