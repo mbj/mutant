@@ -3,6 +3,7 @@ module Mutant
     module ClassMethods
 
     private
+
       # Create delegators to object
       #
       # @return [undefined]
