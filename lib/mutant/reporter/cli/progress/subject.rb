@@ -21,6 +21,7 @@ module Mutant
 
         end # Subject
 
+        # Reporter for subject runners
         class SubjectRunner < self
 
           FORMAT = '(%02d/%02d) %3d%% - %0.02fs'.freeze

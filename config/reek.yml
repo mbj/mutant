@@ -51,9 +51,10 @@ NestedIterators:
   - Mutant#self.singleton_subclass_instance
   - Mutant::CLI#parse
   - Mutant::Mutator::Util::Array::Element#dispatch
-  - Mutant::Reporter::CLI::Printer::Config::Runner#generic_stats
+  - Mutant::Reporter::CLI::Report::Config#generic_stats
   - Mutant::RequireHighjack#infect
   - Mutant::RequireHighjack#desinfect
+  - Mutant::Reporter::CLI::Registry#included
   - Mutant::Strategy#tests
   - Parser::Lexer#self.new
   max_allowed_nesting: 1
@@ -89,10 +90,11 @@ TooManyStatements:
   - Mutant#self.isolate
   - Mutant::Rspec::Killer#run
   - Mutant::Reporter::CLI#colorized_diff
-  - Mutant::Reporter::CLI::Printer::Config::Runner#run
+  - Mutant::Reporter::CLI::Report::Config#run
   - Mutant::Runner#visit_collection
   - Mutant::Zombifier::File#self.find
   - Mutant::RequireHighjack#infect
+  - Mutant::Reporter::CLI::Registry#included
   # How mutant does CLI parsing is shit
   - Mutant::CLI#parse
   - Mutant::CLI#initialize

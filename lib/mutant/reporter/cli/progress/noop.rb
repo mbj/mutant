@@ -2,6 +2,7 @@ module Mutant
   class Reporter
     class CLI
       class Progress
+        # Noop CLI progress reporter
         class Noop < self
 
           handle(Mutant::Mutation)
