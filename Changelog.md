@@ -1,7 +1,11 @@
-# v0.5.13 2014-05-xx
+# v0.5.13 2014-05-23
 
 Changes:
 
+* Imporve reporting of isolation problems
+* Centralize test selection
+* Report selected tests
+* Report rspec output on noop failures
 * Silence warnings on methods without source location
 
 # v0.5.12 2014-05-09
