@@ -1,4 +1,8 @@
-# v0.5.14 2014-05-23
+# v0.5.15 2014-05-24
+
+Changes:
+
+* Put isolation pipe into binmode
 
 Changes:
 
