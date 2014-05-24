@@ -5,6 +5,18 @@ require 'spec_helper'
 # FIXME: This spec needs to be structured better!
 describe Mutant::Mutator, 'send' do
 
+  context 'when using #map' do
+    let(:source) { 'map' }
+
+    let(:mutations) do
+      mutations = []
+      mutations << 'nil'
+      mutations << 'each'
+    end
+
+    it_should_behave_like 'a mutator'
+  end
+
   context 'when using #==' do
     let(:source) { 'foo == bar' }
 

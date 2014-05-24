@@ -1,3 +1,9 @@
+# v0.5.16 2014-05-xx
+
+Changes:
+
+* Add mutation from #map to #each
+
 # v0.5.15 2014-05-24
 
 Changes:
