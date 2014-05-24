@@ -2,6 +2,8 @@
 
 Changes:
 
+* Add mutation from #reverse_each to #each
+* Add mutation from #reverse_map to #each, #map
 * Add mutation from #map to #each
 
 # v0.5.15 2014-05-24
