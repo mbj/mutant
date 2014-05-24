@@ -50,7 +50,7 @@ module Mutant
   # @api private
   #
   def self.isolate(&block)
-    reader, writer = IO.pipe.map(&:binmode)
+    reader, writer = IO.pipe.each(&:binmode)
 
     pid = fork do
       reader.close
