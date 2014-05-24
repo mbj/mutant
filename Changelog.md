@@ -2,6 +2,7 @@
 
 Changes:
 
+* Add mutation from [item] to item
 * Add mutation from #reverse_each to #each
 * Add mutation from #reverse_map to #each, #map
 * Add mutation from #map to #each

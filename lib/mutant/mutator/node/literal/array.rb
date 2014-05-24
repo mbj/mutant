@@ -21,6 +21,9 @@ module Mutant
             emit_nil
             emit_self
             mutate_body
+            if children.one?
+              emit(children.first)
+            end
           end
 
           # Mutate body
