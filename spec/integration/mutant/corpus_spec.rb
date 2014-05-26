@@ -45,8 +45,8 @@ describe 'Mutant on ruby corpus' do
         total += count
       end
       took = Time.now - start
-      puts "Total Mutations/Time/Parse-Errors: %s/%02.2fs/%i - %02.2f/s" % [
-        total, parse_errors.size, took, total / took
+      puts "Total Mutations/Time/Parse-Errors: %s/%0.2fs/%i - %0.2f/s" % [
+        total, took, parse_errors.size, total / took
       ]
       if parse_errors.any?
         puts 'Files with parse errors:'
