@@ -4,13 +4,9 @@ require 'spec_helper'
 
 describe 'Mutant on ruby corpus' do
 
-  before do
-    pending 'Unparser is too slow on big files'
-  end
-
   ROOT = Pathname.new(__FILE__).parent.parent.parent.parent
 
-  TMP = ROOT.join('tmp')
+  TMP = ROOT.join('tmp').freeze
 
   class Project
     include Anima.new(:name, :repo_uri, :exclude)
@@ -25,9 +21,18 @@ describe 'Mutant on ruby corpus' do
     #
     def verify
       checkout
+      total = 0
+      parse_errors = []
+      start = Time.now
       Pathname.glob(repo_path.join('**/*.rb')).sort.each do |path|
         puts "Generating mutations for: #{path.to_s}"
-        node = Parser::CurrentRuby.parse(path.read)
+        begin
+          node = Parser::CurrentRuby.parse(path.read)
+        rescue ArgumentError
+          parse_errors << path
+          next
+        end
+        next if node.nil?
         count = 0
         Mutant::Mutator::Node.each(node) do |mutant|
           count += 1
@@ -36,6 +41,15 @@ describe 'Mutant on ruby corpus' do
           end
         end
         puts "Mutations: #{count}"
+        total += count
+      end
+      took = Time.now - start
+      puts "Total Mutations/Time/Parse-Errors: %s/%02.2fs/%i - %02.2f/s" % [
+        total, parse_errors.size, took, total / took
+      ]
+      if parse_errors.any?
+        puts 'Files with parse errors:'
+        parse_errors.each(&method(:puts))
       end
       self
     end
