@@ -8,6 +8,10 @@ describe 'Mutant on ruby corpus' do
 
   TMP = ROOT.join('tmp').freeze
 
+  before do
+    pending 'Corpus test is deactivated on 1.9.3' if RUBY_VERSION.eql?('1.9.3')
+  end
+
   class Project
     include Anima.new(:name, :repo_uri, :exclude)
 
