@@ -37,7 +37,7 @@ describe 'Mutant on ruby corpus' do
         count = 0
         Mutant::Mutator::Node.each(node) do |mutant|
           count += 1
-          if (count % 100).zero?
+          if (count % 1000).zero?
             puts count
           end
         end
