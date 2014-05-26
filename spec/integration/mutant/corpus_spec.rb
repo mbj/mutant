@@ -28,7 +28,8 @@ describe 'Mutant on ruby corpus' do
         puts "Generating mutations for: #{path.to_s}"
         begin
           node = Parser::CurrentRuby.parse(path.read)
-        rescue ArgumentError
+        # Ignore known parser bugs
+        rescue ArgumentError, EncodingError
           parse_errors << path
           next
         end
