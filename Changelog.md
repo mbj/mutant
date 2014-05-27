@@ -1,3 +1,11 @@
+# v0.5.17 2014-05-27
+
+Changes:
+
+* Report selected tests in progress runner
+* Fix scope of rspec selections to include meaningful parents.
+* Add short circuts on already dead mutations under multiple test selections.
+
 # v0.5.16 2014-05-27
 
 Changes:
