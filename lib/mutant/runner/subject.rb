@@ -83,9 +83,7 @@ module Mutant
       # @api private
       #
       def run
-        progress(subject)
         @mutations = visit_collection(subject.mutations, tests)
-        progress(self)
       end
 
     end # Subject

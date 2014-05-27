@@ -53,6 +53,16 @@ module Mutant
       handler.new(config, object, *arguments)
     end
 
+    # Test if runner is running
+    #
+    # Yeah this is evil. Should be refactored away
+    #
+    # @return [Boolean]
+    #
+    def running?
+      @running
+    end
+
     # Return config
     #
     # @return [Mutant::Config]
@@ -73,7 +83,11 @@ module Mutant
       @config = config
       @stop   = false
       @start  = Time.now
+      @running = true
+      progress(self)
       run
+      @running = false
+      progress(self)
       @end = Time.now
     end
 

@@ -13,12 +13,15 @@ module Mutant
 
           # Run printer
           #
-          # @return [undefined]
+          # @return [self]
           #
           # @api private
           #
           def run
-            char(success? ? SUCCESS : FAILURE)
+            unless running?
+              char(success? ? SUCCESS : FAILURE)
+            end
+            self
           end
 
         private

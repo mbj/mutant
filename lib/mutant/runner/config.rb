@@ -134,7 +134,6 @@ module Mutant
       # @api private
       #
       def run
-        progress(config)
         run_subjects
         @end = Time.now
         reporter.report(self)

@@ -2,29 +2,14 @@ module Mutant
   class Reporter
     class CLI
       class Progress
-        # Subject results printer
-        class Subject < self
-
-          handle(Mutant::Subject)
-
-          # Run subject results printer
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def run
-            puts(object.identification)
-          end
-
-        end # Subject
-
         # Reporter for subject runners
-        class SubjectRunner < self
+        class Subject < self
 
           FORMAT = '(%02d/%02d) %3d%% - %0.02fs'.freeze
 
           handle(Mutant::Runner::Subject)
+
+          delegate :running?, :tests, :subject
 
           # Run printer
           #
@@ -33,8 +18,15 @@ module Mutant
           # @api private
           #
           def run
-            print_progress_bar_finish
-            print_stats
+            if running?
+              puts(subject.identification)
+              tests.each do |test|
+                puts "- #{test.identification}"
+              end
+            else
+              print_progress_bar_finish
+              print_stats
+            end
             self
           end
 

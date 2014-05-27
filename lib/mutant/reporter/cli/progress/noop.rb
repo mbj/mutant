@@ -5,7 +5,7 @@ module Mutant
         # Noop CLI progress reporter
         class Noop < self
 
-          handle(Mutant::Mutation)
+          handle(Mutant::Runner::Killer)
 
           # Noop progress report
           #

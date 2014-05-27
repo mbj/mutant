@@ -6,6 +6,8 @@ module Mutant
       # Abstract base class for process printers
       class Progress < Printer
         include AbstractType, Registry.new
+
+        delegate :running?
       end # Progress
     end # CLI
   end # Reporter

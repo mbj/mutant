@@ -5,9 +5,9 @@ module Mutant
         # Progress printer for configuration
         class Config < self
 
-          handle(Mutant::Config)
+          handle(Mutant::Runner::Config)
 
-          delegate :matcher, :strategy, :expected_coverage
+          delegate :config
 
           # Report configuration
           #
@@ -18,10 +18,12 @@ module Mutant
           # @api private
           #
           def run
-            info 'Mutant configuration:'
-            info 'Matcher:         %s',     matcher.inspect
-            info 'Strategy:        %s',     strategy.inspect
-            info 'Expect Coverage: %02f%%', expected_coverage.inspect
+            if running?
+              info 'Mutant configuration:'
+              info 'Matcher:         %s',     config.matcher.inspect
+              info 'Strategy:        %s',     config.strategy.inspect
+              info 'Expect Coverage: %02f%%', config.expected_coverage.inspect
+            end
             self
           end
 

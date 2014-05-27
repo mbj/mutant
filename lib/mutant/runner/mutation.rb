@@ -63,14 +63,12 @@ module Mutant
       # @api private
       #
       def run
-        progress(mutation)
         @killers = @tests.map do |test|
           Mutant::Killer.new(
             mutation: mutation,
             test:     test
           )
         end.map(&method(:visit))
-        progress(self)
       end
 
     end # Mutation
