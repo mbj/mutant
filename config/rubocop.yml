@@ -7,7 +7,7 @@ inherit_from: ../.rubocop.yml
 
 
 AllCops:
-  Includes:
+  Include:
     - '../**/*.rake'
     - 'Gemfile'
     - 'Gemfile.triage'
