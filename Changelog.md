@@ -1,7 +1,8 @@
-# v0.5.16 2014-05-xx
+# v0.5.16 2014-05-27
 
 Changes:
 
+* Fix granularity of test selection under rspec
 * Add mutation from [item] to item
 * Add mutation from #reverse_each to #each
 * Add mutation from #reverse_map to #each, #map
