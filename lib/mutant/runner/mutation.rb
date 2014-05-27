@@ -63,12 +63,20 @@ module Mutant
       # @api private
       #
       def run
-        @killers = @tests.map do |test|
+        @killers = []
+
+        killers = @tests.map do |test|
           Mutant::Killer.new(
             mutation: mutation,
             test:     test
           )
-        end.map(&method(:visit))
+        end
+
+        killers.each do |killer|
+          runner = visit(killer)
+          @killers << runner
+          return if runner.mutation_dead?
+        end
       end
 
     end # Mutation

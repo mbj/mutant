@@ -32,6 +32,15 @@ module Mutant
         @report.success?
       end
 
+      # Test if this killer ALONE can determine if mutation is dead
+      #
+      # @return [Boolean]
+      #
+      def mutation_dead?
+        test_report = report.test_report
+        killer.mutation.should_fail? && test_report.failed?
+      end
+
       # Initialize object
       #
       # @param [Config] config
@@ -45,6 +54,8 @@ module Mutant
         @killer = killer
         super(config)
       end
+
+    private
 
       # Run killer
       #

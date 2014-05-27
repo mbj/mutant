@@ -5,23 +5,25 @@ require 'spec_helper'
 describe Mutant::Runner::Mutation do
   let(:object) { described_class.new(config, mutation, tests) }
 
-  let(:reporter)  { double('Reporter')                                     }
-  let(:mutation)  { double('Mutation', class: Mutant::Mutation)            }
-  let(:strategy)  { double('Strategy')                                     }
-  let(:killer_a)  { Mutant::Killer.new(test: test_a, mutation: mutation)   }
-  let(:killer_b)  { Mutant::Killer.new(test: test_b, mutation: mutation)   }
-  let(:runner_a)  { double('Runner A', success?: success_a, stop?: stop_a) }
-  let(:runner_b)  { double('Runner B', success?: success_b, stop?: stop_b) }
-  let(:runners)   { [runner_a, runner_b]                                   }
-  let(:killers)   { [killer_a, killer_b]                                   }
-  let(:fail_fast) { false                                                  }
-  let(:success_a) { true                                                   }
-  let(:success_b) { true                                                   }
-  let(:stop_a)    { false                                                  }
-  let(:stop_b)    { false                                                  }
-  let(:test_a)    { double('test a')                                       }
-  let(:test_b)    { double('test b')                                       }
-  let(:tests)     { [test_a, test_b]                                       }
+  let(:reporter)  { double('Reporter')                                                             }
+  let(:mutation)  { double('Mutation', class: Mutant::Mutation)                                    }
+  let(:strategy)  { double('Strategy')                                                             }
+  let(:killer_a)  { Mutant::Killer.new(test: test_a, mutation: mutation)                           }
+  let(:killer_b)  { Mutant::Killer.new(test: test_b, mutation: mutation)                           }
+  let(:runner_a)  { double('Runner A', success?: success_a, stop?: stop_a, mutation_dead?: dead_a) }
+  let(:runner_b)  { double('Runner B', success?: success_b, stop?: stop_b, mutation_dead?: dead_b) }
+  let(:runners)   { [runner_a, runner_b]                                                           }
+  let(:killers)   { [killer_a, killer_b]                                                           }
+  let(:fail_fast) { false                                                                          }
+  let(:success_a) { true                                                                           }
+  let(:success_b) { true                                                                           }
+  let(:stop_a)    { false                                                                          }
+  let(:stop_b)    { false                                                                          }
+  let(:dead_a)    { false                                                                          }
+  let(:dead_b)    { false                                                                          }
+  let(:test_a)    { double('test a')                                                               }
+  let(:test_b)    { double('test b')                                                               }
+  let(:tests)     { [test_a, test_b]                                                               }
 
   before do
     expect(Mutant::Runner).to receive(:run).with(config, killer_a).and_return(runner_a)
