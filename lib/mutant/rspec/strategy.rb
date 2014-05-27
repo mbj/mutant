@@ -63,9 +63,10 @@ module Mutant
       def all_tests
         example_groups
           .flat_map(&:descendants)
-          .select { |example_group| example_group.descendants.one? }
           .map do |example_group|
             Test.new(self, example_group)
+          end.select do |test|
+            test.identification.split(' ', 2).first.eql?(test.identification)
           end
       end
       memoize :all_tests
