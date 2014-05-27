@@ -23,6 +23,16 @@ module Mutant
       end
       memoize :setup
 
+      # Test for rspec2
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
+      def rspec2?
+        RSpec::Core::Version::STRING.start_with?(RSPEC_2_VERSION_PREFIX)
+      end
+
       # Return report for test
       #
       # @param [Rspec::Test] test
@@ -51,9 +61,12 @@ module Mutant
       # @api private
       #
       def all_tests
-        example_groups.map do |example_group|
-          Test.new(self, example_group)
-        end
+        example_groups
+          .flat_map(&:descendants)
+          .select { |example_group| example_group.descendants.one? }
+          .map do |example_group|
+            Test.new(self, example_group)
+          end
       end
       memoize :all_tests
 
@@ -92,20 +105,6 @@ module Mutant
           reporter.register_listener(formatter, *notifications)
           reporter
         end
-      end
-
-      # Detect RSpec 2
-      #
-      # @return [true]
-      #   when RSpec 2
-      #
-      # @return [false]
-      #   otherwise
-      #
-      # @api private
-      #
-      def rspec2?
-        RSpec::Core::Version::STRING.start_with?(RSPEC_2_VERSION_PREFIX)
       end
 
       # Return configuration
