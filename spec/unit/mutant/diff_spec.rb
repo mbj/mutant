@@ -12,7 +12,7 @@ describe Mutant::Diff do
     let(:old_string) { "foo\nbar" }
     let(:new_string) { "bar\nbaz" }
 
-    it { should eql(Mutant::Diff.new(%w(foo bar), %w(bar baz))) }
+    it { should eql(Mutant::Diff.new(%w[foo bar], %w[bar baz])) }
 
   end
 
@@ -46,8 +46,8 @@ describe Mutant::Diff do
     subject { object.diff }
 
     context 'when there is a diff at begin of hunk' do
-      let(:old) { %w(foo bar) }
-      let(:new) { %w(baz bar) }
+      let(:old) { %w[foo bar] }
+      let(:new) { %w[baz bar] }
 
       let(:expectation) do
         strip_indent(<<-STR)
@@ -64,8 +64,8 @@ describe Mutant::Diff do
     end
 
     context 'when there is a diff NOT at begin of hunk' do
-      let(:old) { %w(foo bar)     }
-      let(:new) { %w(foo baz bar) }
+      let(:old) { %w[foo bar]     }
+      let(:new) { %w[foo baz bar] }
 
       let(:expectation) do
         strip_indent(<<-STR)
@@ -82,8 +82,8 @@ describe Mutant::Diff do
     end
 
     context 'when the diff has a long context at begin' do
-      let(:old) { %w(foo bar baz boz a b c)       }
-      let(:new) { %w(foo bar baz boz a b c other) }
+      let(:old) { %w[foo bar baz boz a b c]       }
+      let(:new) { %w[foo bar baz boz a b c other] }
 
       let(:expectation) do
         strip_indent(<<-STR)
@@ -105,8 +105,8 @@ describe Mutant::Diff do
     end
 
     context 'when the diff has a long context at end, deleting' do
-      let(:old) { %w(other foo bar baz boz a b c) }
-      let(:new) { %w(foo bar baz boz a b c)       }
+      let(:old) { %w[other foo bar baz boz a b c] }
+      let(:new) { %w[foo bar baz boz a b c]       }
 
       let(:expectation) do
         strip_indent(<<-STR)
@@ -128,8 +128,8 @@ describe Mutant::Diff do
     end
 
     context 'when the diff has a long context at end, inserting' do
-      let(:old) { %w(foo bar baz boz a b c)       }
-      let(:new) { %w(other foo bar baz boz a b c) }
+      let(:old) { %w[foo bar baz boz a b c]       }
+      let(:new) { %w[other foo bar baz boz a b c] }
 
       let(:expectation) do
         strip_indent(<<-STR)

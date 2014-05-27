@@ -43,7 +43,7 @@ module Mutant
         # @api private
         #
         def mlhs_childs_with_index
-          children.each_with_index.select do |child, index|
+          children.each_with_index.select do |child, _index|
             child.type == :mlhs
           end
         end

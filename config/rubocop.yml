@@ -30,6 +30,19 @@ CollectionMethods:
     find:     'detect'
     find_all: 'select'
 
+# Use square brackets for literal Array objects
+PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%':  ()
+    '%i': '[]'
+    '%q': ()
+    '%Q': ()
+    '%r': '{}'
+    '%s': ()
+    '%w': '[]'
+    '%W': '[]'
+    '%x': ()
+
 MethodLength:
   CountComments: false
   Max: 17 # TODO: Bring down to 10

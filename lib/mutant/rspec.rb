@@ -5,3 +5,7 @@ module Mutant
   module Rspec
   end # Rspec
 end # Mutant
+
+require 'mutant/rspec'
+require 'mutant/rspec/strategy'
+require 'mutant/rspec/test'

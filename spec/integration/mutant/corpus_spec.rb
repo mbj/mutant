@@ -23,13 +23,14 @@ describe 'Mutant on ruby corpus' do
     # @raise [Exception]
     #   otherwise
     #
+    # rubocop:disable MethodLength
     def verify
       checkout
       total = 0
       parse_errors = []
       start = Time.now
       Pathname.glob(repo_path.join('**/*.rb')).sort.each do |path|
-        puts "Generating mutations for: #{path.to_s}"
+        puts "Generating mutations for: #{path}"
         begin
           node = Parser::CurrentRuby.parse(path.read)
         # Ignore known parser bugs
@@ -39,7 +40,7 @@ describe 'Mutant on ruby corpus' do
         end
         next if node.nil?
         count = 0
-        Mutant::Mutator::Node.each(node) do |mutant|
+        Mutant::Mutator::Node.each(node) do
           count += 1
           if (count % 1000).zero?
             puts count
@@ -49,9 +50,13 @@ describe 'Mutant on ruby corpus' do
         total += count
       end
       took = Time.now - start
-      puts "Total Mutations/Time/Parse-Errors: %s/%0.2fs/%i - %0.2f/s" % [
-        total, took, parse_errors.size, total / took
-      ]
+      puts format(
+        'Total Mutations/Time/Parse-Errors: %s/%0.2fs/%i - %0.2f/s',
+        total,
+        took,
+        parse_errors.size,
+        total / took
+      )
       if parse_errors.any?
         puts 'Files with parse errors:'
         parse_errors.each(&method(:puts))
@@ -69,11 +74,11 @@ describe 'Mutant on ruby corpus' do
       TMP.mkdir unless TMP.directory?
       if repo_path.exist?
         Dir.chdir(repo_path) do
-          system(%w(git pull origin master))
-          system(%w(git clean -f -d -x))
+          system(%w[git pull origin master])
+          system(%w[git clean -f -d -x])
         end
       else
-        system(%W(git clone #{repo_uri} #{repo_path}))
+        system(%W[git clone #{repo_uri} #{repo_path}])
       end
       self
     end

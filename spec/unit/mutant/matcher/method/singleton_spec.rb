@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 
+# rubocop:disable ClassAndModuleChildren
 describe Mutant::Matcher::Method::Singleton, '#each' do
   subject { object.each { |subject| yields << subject } }
 
@@ -80,7 +81,7 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
           module Bar
             def self.baz
             end
-            def Foo.baz(arg)
+            def Foo.baz(_arg)
             end
           end
         end

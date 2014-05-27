@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 
+# rubocop:disable ClassAndModuleChildren
 describe Mutant::Matcher::Method::Instance do
 
   let(:cache) { Fixtures::AST_CACHE }
@@ -44,7 +45,7 @@ describe Mutant::Matcher::Method::Instance do
           def bar
           end
 
-          def bar(arg)
+          def bar(_arg)
           end
         end
 
@@ -57,7 +58,7 @@ describe Mutant::Matcher::Method::Instance do
       context 'on the same line' do
         let(:base) { __LINE__ }
         class self::Foo
-          def bar; end; def bar(arg); end
+          def bar; end; def bar(_arg); end
         end
 
         let(:method_line)  { 2 }
@@ -69,7 +70,7 @@ describe Mutant::Matcher::Method::Instance do
       context 'on the same line with differend scope' do
         let(:base) { __LINE__ }
         class self::Foo
-          def self.bar; end; def bar(arg); end
+          def self.bar; end; def bar(_arg); end
         end
 
         let(:method_line)  { 2 }

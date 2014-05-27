@@ -7,7 +7,7 @@ describe Mutant::Mutator::Node::Literal, 'boolean' do
     let(:source) { 'true' }
 
     let(:mutations) do
-      %w(nil false)
+      %w[nil false]
     end
 
     it_should_behave_like 'a mutator'
@@ -17,7 +17,7 @@ describe Mutant::Mutator::Node::Literal, 'boolean' do
     let(:source) { 'false' }
 
     let(:mutations) do
-      %w(nil true)
+      %w[nil true]
     end
 
     it_should_behave_like 'a mutator'

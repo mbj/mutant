@@ -7,7 +7,7 @@ module TestApp
       true
     end
 
-    def command(foo)
+    def command(_foo)
       self
     end
 

@@ -8,7 +8,7 @@ describe Mutant::Mutator::Node::Literal, 'symbol' do
   let(:source) { ':foo' }
 
   let(:mutations) do
-    %w(nil) << ':foo__mutant__'
+    %w[nil :foo__mutant__]
   end
 
   it_should_behave_like 'a mutator'

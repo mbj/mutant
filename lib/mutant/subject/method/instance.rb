@@ -43,8 +43,6 @@ module Mutant
           self
         end
 
-      private
-
         # Mutator for memoized instance methods
         class Memoized < self
           include NodeHelpers

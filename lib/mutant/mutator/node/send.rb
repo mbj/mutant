@@ -145,7 +145,7 @@ module Mutant
         #
         def mutate_arguments
           emit_self(receiver, selector)
-          remaining_children_with_index.each do |node, index|
+          remaining_children_with_index.each do |_node, index|
             mutate_child(index)
             delete_child(index)
           end

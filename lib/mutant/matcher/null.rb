@@ -16,7 +16,7 @@ module Mutant
       #
       # @api private
       #
-      def each(&block)
+      def each
         return to_enum unless block_given?
         self
       end
