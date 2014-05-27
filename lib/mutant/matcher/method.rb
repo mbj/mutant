@@ -46,7 +46,7 @@ module Mutant
       def skip?
         location = source_location
         if location.nil? || BLACKLIST.match(location.first)
-          message = sprintf(
+          message = format(
             '%s does not have valid source location unable to emit matcher',
             method.inspect
           )

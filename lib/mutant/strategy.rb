@@ -83,8 +83,6 @@ module Mutant
       []
     end
 
-  private
-
     # Null strategy that never kills a mutation
     class Null < self
 

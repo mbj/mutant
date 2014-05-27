@@ -94,7 +94,7 @@ module Mutant
           when :const
             receiver_name?(receiver)
           else
-            message = sprintf(
+            message = format(
               'Can only match :defs on :self or :const got %s unable to match',
               receiver.type.inspect
             )

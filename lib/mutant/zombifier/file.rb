@@ -11,7 +11,7 @@ module Mutant
       # @api private
       #
       def zombify(namespace)
-        $stderr.puts("Zombifying #{path.to_s}")
+        $stderr.puts("Zombifying #{path}")
         eval(
           Unparser.unparse(namespaced_node(namespace)),
           TOPLEVEL_BINDING,

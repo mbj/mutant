@@ -125,7 +125,7 @@ module Mutant
       # @api private
       #
       def options
-        options = RSpec::Core::ConfigurationOptions.new(%w(--fail-fast spec))
+        options = RSpec::Core::ConfigurationOptions.new(%w[--fail-fast spec])
         options.parse_options if rspec2?
         options
       end

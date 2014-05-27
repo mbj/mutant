@@ -285,7 +285,7 @@ module Mutant
     # @api private
     #
     def use(name)
-      require "mutant-#{name}"
+      require "mutant/#{name}"
       @strategy = Strategy.lookup(name).new
     rescue LoadError
       $stderr.puts("Cannot load plugin: #{name.inspect}")
@@ -339,7 +339,7 @@ module Mutant
     def add_debug_options(opts)
       opts.on('--fail-fast', 'Fail fast') do
         @fail_fast = true
-      end.on('--version', 'Print mutants version') do |name|
+      end.on('--version', 'Print mutants version') do
         puts("mutant-#{Mutant::VERSION}")
         Kernel.exit(0)
       end.on('-d', '--debug', 'Enable debugging output') do

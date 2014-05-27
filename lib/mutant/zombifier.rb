@@ -6,16 +6,16 @@ module Mutant
     include Adamantium::Flat, Concord.new(:namespace)
 
     # Excluded into zombification
-    includes = %w(
+    includes = %w[
       mutant
       morpher
       adamantium
       equalizer
       anima
       concord
-    )
+    ]
 
-    INCLUDES = %r(\A#{Regexp.union(includes)}(?:/.*)?\z).freeze
+    INCLUDES = %r{\A#{Regexp.union(includes)}(?:/.*)?\z}.freeze
 
     # Initialize object
     #

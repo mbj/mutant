@@ -23,13 +23,13 @@ module Mutant
           #
           def run
             failed_subjects.each(&method(:visit))
-            info   'Subjects:  %s',      amount_subjects
-            info   'Mutations: %s',      amount_mutations
-            info   'Kills:     %s',      amount_kills
-            info   'Alive:     %s',      amount_alive
-            info   'Runtime:   %0.2fs',  runtime
-            info   'Killtime:  %0.2fs',  killtime
-            info   'Overhead:  %0.2f%%', overhead
+            info 'Subjects:  %s',      amount_subjects
+            info 'Mutations: %s',      amount_mutations
+            info 'Kills:     %s',      amount_kills
+            info 'Alive:     %s',      amount_alive
+            info 'Runtime:   %0.2fs',  runtime
+            info 'Killtime:  %0.2fs',  killtime
+            info 'Overhead:  %0.2f%%', overhead
             status 'Coverage:  %0.2f%%', coverage
             status 'Expected:  %0.2f%%', object.config.expected_coverage
             print_generic_stats

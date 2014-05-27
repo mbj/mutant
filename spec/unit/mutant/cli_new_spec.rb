@@ -15,7 +15,7 @@ shared_examples_for 'a cli parser' do
 
   it { expect(subject.strategy).to eql(expected_strategy) }
   it { expect(subject.reporter).to eql(expected_reporter) }
-  it { expect(subject.matcher).to  eql(expected_matcher)  }
+  it { expect(subject.matcher).to eql(expected_matcher)   }
 end
 
 describe Mutant::CLI, '.new' do
@@ -39,7 +39,7 @@ describe Mutant::CLI, '.new' do
   subject { cli }
 
   context 'with unknown flag' do
-    let(:arguments) { %w(--invalid) }
+    let(:arguments) { %w[--invalid] }
 
     let(:expected_message) { 'invalid option: --invalid' }
 
@@ -47,7 +47,7 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with unknown option' do
-    let(:arguments) { %w(--invalid Foo) }
+    let(:arguments) { %w[--invalid Foo] }
 
     let(:expected_message) { 'invalid option: --invalid' }
 
@@ -63,14 +63,14 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with code filter and missing argument' do
-    let(:arguments)        { %w(--code)    }
+    let(:arguments)        { %w[--code]                 }
     let(:expected_message) { 'missing argument: --code' }
 
     it_should_behave_like 'an invalid cli run'
   end
 
   context 'with explicit method pattern' do
-    let(:arguments)        { %w(TestApp::Literal#float) }
+    let(:arguments)        { %w[TestApp::Literal#float] }
 
     let(:expected_matcher) do
       ns::Method::Instance.new(cache, TestApp::Literal, TestApp::Literal.instance_method(:float))
@@ -81,7 +81,7 @@ describe Mutant::CLI, '.new' do
 
   context 'with debug flag' do
     let(:pattern)          { '::TestApp*'           }
-    let(:arguments)        { %W(--debug #{pattern}) }
+    let(:arguments)        { %W[--debug #{pattern}] }
     let(:expected_matcher) { ns::Namespace.new(cache, TestApp) }
 
     it_should_behave_like 'a cli parser'
@@ -93,7 +93,7 @@ describe Mutant::CLI, '.new' do
 
   context 'with zombie flag' do
     let(:pattern)          { '::TestApp*'            }
-    let(:arguments)        { %W(--zombie #{pattern}) }
+    let(:arguments)        { %W[--zombie #{pattern}] }
     let(:expected_matcher) { ns::Namespace.new(cache, TestApp) }
 
     it_should_behave_like 'a cli parser'
@@ -104,8 +104,8 @@ describe Mutant::CLI, '.new' do
   end
 
   context 'with namespace pattern' do
-    let(:pattern)          { '::TestApp*'   }
-    let(:arguments)        { %W(#{pattern}) }
+    let(:pattern)          { '::TestApp*' }
+    let(:arguments)        { [pattern]    }
     let(:expected_matcher) { ns::Namespace.new(cache, TestApp) }
 
     it_should_behave_like 'a cli parser'
@@ -113,7 +113,7 @@ describe Mutant::CLI, '.new' do
 
   context 'with subject code filter' do
     let(:pattern)   { 'TestApp::Literal#float' }
-    let(:arguments) { %W(--code faa --code bbb #{pattern}) }
+    let(:arguments) { %W[--code faa --code bbb #{pattern}] }
 
     let(:expected_filter) do
       Morpher.evaluator(

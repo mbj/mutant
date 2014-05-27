@@ -60,7 +60,7 @@ module Mutant
         # @api private
         #
         def info(string, *arguments)
-          puts(sprintf(string, *arguments))
+          puts(format(string, *arguments))
         end
 
         # Print a status line to output
@@ -70,7 +70,7 @@ module Mutant
         # @api private
         #
         def status(string, *arguments)
-          puts(colorize(status_color, sprintf(string, *arguments)))
+          puts(colorize(status_color, format(string, *arguments)))
         end
 
         # Print a line to output

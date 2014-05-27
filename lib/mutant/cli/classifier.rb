@@ -132,7 +132,7 @@ module Mutant
       # @api private
       #
       abstract_method :matcher
-      private         :matcher
+      private :matcher
 
     end # Classifier
   end # CLI
