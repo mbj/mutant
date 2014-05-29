@@ -87,12 +87,11 @@ It raised an error: #{exception.inspect} fix your lib!
       #
       def emit_scope(scope)
         name = self.class.scope_name(scope)
-        # FIXME: Fix nokogiri to return a string here
         unless name.nil? or name.kind_of?(String)
           $stderr.puts <<-MESSAGE
 WARNING:
-#{scope.class}#name did not return a string or nil.
-Fix your lib!
+#{scope.class}#name from: #{scope.inspect} did not return a String or nil.
+Fix your lib to support normal ruby semantics!
           MESSAGE
           return
         end
