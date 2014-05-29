@@ -80,7 +80,7 @@ module Mutant
         return tests if tests.any?
       end
 
-      []
+      EMPTY_ARRAY
     end
 
     # Null strategy that never kills a mutation
