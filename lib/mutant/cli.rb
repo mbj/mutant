@@ -249,7 +249,11 @@ module Mutant
     #
     def parse_matchers(patterns)
       patterns.each do |pattern|
-        @builder.add_matcher(Classifier.run(@cache, pattern))
+        expression = Expression.parse(pattern)
+        unless expression
+          raise Error, "Invalid mutant expression: #{pattern.inspect}"
+        end
+        @builder.add_matcher(expression.matcher(@cache))
       end
     end
 
