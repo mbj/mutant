@@ -81,22 +81,6 @@ module Mutant
       end
       private_class_method :find
 
-      # Enumerate subjects
-      #
-      # @return [self]
-      #   if block given
-      #
-      # @return [Enumerator<Subject>]
-      #   otherwise
-      #
-      # @api private
-      #
-      def each(&block)
-        return to_enum unless block_given?
-        matcher.each(&block)
-        self
-      end
-
       # Return identifier
       #
       # @return [String]
