@@ -4,6 +4,9 @@ module Mutant
 
   symbolset = ->(strings) { strings.map(&:to_sym).to_set.freeze }
 
+  SCOPE_OPERATOR     = '::'.freeze
+  CBASE_PATTERN      = /\A#{SCOPE_OPERATOR}/.freeze
+
   # Set of nodes that cannot be on the LHS of an assignment
   NOT_ASSIGNABLE = symbolset.(%w[int float str dstr class module self])
 

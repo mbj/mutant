@@ -65,7 +65,7 @@ module Mutant
         # @api private
         #
         def scope
-          Classifier.constant_lookup(scope_name)
+          Mutant.constant_lookup(scope_name)
         end
 
         # Return method name

@@ -26,7 +26,7 @@ module Mutant
         # @api private
         #
         def namespace
-          Classifier.constant_lookup(match[__method__].to_s)
+          Mutant.constant_lookup(match[__method__].to_s)
         end
 
         # Recursive namespace classifier

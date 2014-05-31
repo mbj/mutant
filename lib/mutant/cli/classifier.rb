@@ -9,8 +9,6 @@ module Mutant
       include Equalizer.new(:identifier)
 
       SCOPE_NAME_PATTERN = /[A-Za-z][A-Za-z\d_]*/.freeze
-      SCOPE_OPERATOR     = '::'.freeze
-      CBASE_PATTERN      = /\A#{SCOPE_OPERATOR}/.freeze
 
       METHOD_NAME_PATTERN = Regexp.union(
         /[A-Za-z_][A-Za-z\d_]*[!?=]?/,
@@ -34,21 +32,6 @@ module Mutant
         REGISTRY[regexp] = self
       end
       private_class_method :register
-
-      # Return constant
-      #
-      # @param [String] location
-      #
-      # @return [Class|Module]
-      #
-      # @api private
-      #
-      def self.constant_lookup(location)
-        location.sub(CBASE_PATTERN, EMPTY_STRING).split(SCOPE_OPERATOR)
-          .reduce(Object) do |parent, name|
-          parent.const_get(name, nil)
-        end
-      end
 
       # Return matchers for input
       #
