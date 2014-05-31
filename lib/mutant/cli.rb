@@ -249,8 +249,7 @@ module Mutant
     #
     def parse_matchers(patterns)
       patterns.each do |pattern|
-        matcher = Classifier.run(@cache, pattern)
-        @builder.add_matcher(matcher)
+        @builder.add_matcher(Classifier.run(@cache, pattern))
       end
     end
 
