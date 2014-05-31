@@ -31,7 +31,7 @@ module Mutant
       # Recursive namespace expression
       class Recursive < self
 
-        register(/\A(?<namespace>#{SCOPE_PATTERN})\*\z/)
+        register(/\A(?<namespace>#{SCOPE_PATTERN})?\*\z/)
 
         MATCHER = Matcher::Namespace
 
@@ -42,7 +42,7 @@ module Mutant
         # @api private
         def initialize(*)
           super
-          namespace_src = Regexp.escape(match[:namespace])
+          namespace_src = Regexp.escape(namespace)
           @recursion_pattern = Regexp.union(/\A#{namespace_src}\z/, /\A#{namespace_src}::/)
         end
 
@@ -56,10 +56,22 @@ module Mutant
         #
         def match_length(expression)
           if @recursion_pattern =~ expression.syntax
-            match[:namespace].length
+            namespace.length
           else
             0
           end
+        end
+
+      private
+
+        # Return matched namespace
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        def namespace
+          match[__method__] || ''
         end
 
       end # Recursive
