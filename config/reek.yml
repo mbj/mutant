@@ -94,6 +94,8 @@ TooManyStatements:
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI::Report::Config#run
   - Mutant::Runner#visit_collection
+  - Mutant::Runner#initialize
+  - Mutant::Runner::Mutation#run
   - Mutant::Zombifier::File#self.find
   - Mutant::RequireHighjack#infect
   - Mutant::Reporter::CLI::Registry#included
