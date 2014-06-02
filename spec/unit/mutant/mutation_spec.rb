@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Mutant::Mutation do
 
   class TestMutation < Mutant::Mutation
-    SYMBOL = 'test'
+    SYMBOL = 'test'.freeze
   end
 
   let(:object)           { TestMutation.new(mutation_subject, Mutant::NodeHelpers::N_NIL)   }
