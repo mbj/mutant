@@ -3,7 +3,6 @@
 source 'https://rubygems.org'
 
 gem 'mutant', path: '.'
-gem 'morpher', path: '../morpher'
 
 gemspec name: 'mutant'
 
