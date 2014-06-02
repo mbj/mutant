@@ -1,5 +1,6 @@
 # encoding: UTF-8
 
+require 'parallel'
 require 'spec_helper'
 
 describe 'Mutant on ruby corpus' do
@@ -11,6 +12,8 @@ describe 'Mutant on ruby corpus' do
   before do
     pending 'Corpus test is deactivated on 1.9.3' if RUBY_VERSION.eql?('1.9.3')
   end
+
+  MUTEX = Mutex.new
 
   class Project
     include Anima.new(:name, :repo_uri, :exclude)
@@ -26,41 +29,28 @@ describe 'Mutant on ruby corpus' do
     # rubocop:disable MethodLength
     def verify
       checkout
-      total = 0
-      parse_errors = []
       start = Time.now
-      Pathname.glob(repo_path.join('**/*.rb')).sort.each do |path|
-        puts "Generating mutations for: #{path}"
-        begin
-          node = Parser::CurrentRuby.parse(path.read)
-        # Ignore known parser bugs
-        rescue ArgumentError, EncodingError
-          parse_errors << path
-          next
-        end
-        next if node.nil?
+      total = Parallel.map(Pathname.glob(repo_path.join('**/*.rb')).sort_by(&:size).reverse, finish: method(:progress)) do |path|
         count = 0
-        Mutant::Mutator::Node.each(node) do
-          count += 1
-          if (count % 1000).zero?
-            puts count
+        node =
+          begin
+            Parser::CurrentRuby.parse(path.read)
+          rescue EncodingError, ArgumentError
+          end
+        unless node.nil?
+          Mutant::Mutator::Node.each(node) do
+            count += 1
           end
         end
-        puts "Mutations: #{count}"
-        total += count
-      end
+        count
+      end.inject(0, :+)
       took = Time.now - start
       puts format(
-        'Total Mutations/Time/Parse-Errors: %s/%0.2fs/%i - %0.2f/s',
+        'Total Mutations/Time/Parse-Errors: %s/%0.2fs - %0.2f/s',
         total,
         took,
-        parse_errors.size,
         total / took
       )
-      if parse_errors.any?
-        puts 'Files with parse errors:'
-        parse_errors.each(&method(:puts))
-      end
       self
     end
 
@@ -93,6 +83,20 @@ describe 'Mutant on ruby corpus' do
     #
     def repo_path
       TMP.join(name)
+    end
+
+    # Print progress
+    #
+    # @param [Pathname] path
+    # @param [Fixnum] _index
+    # @param [Fixnum] count
+    #
+    # @return [undefined]
+    #
+    def progress(path, _index, count)
+      MUTEX.synchronize do
+        puts 'Mutations - %4i - %s' % [count, path]
+      end
     end
 
     # Helper method to execute system commands
