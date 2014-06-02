@@ -104,8 +104,10 @@ module Mutant
         #
         def unexpected_report
           if unexpected.any?
-            message << 'Unexpected mutations:'
-            message << unexpected.map(&method(:format_mutation)).join("\n-----\n")
+            [
+              'Unexpected mutations:',
+              unexpected.map(&method(:format_mutation)).join("\n-----\n")
+            ]
           end
         end
 
