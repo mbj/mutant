@@ -10,7 +10,8 @@ ClassVariable:
   exclude: []
 ControlParameter:
   enabled: true
-  exclude: []
+  exclude:
+  - Mutant::Expression#match_length
 DataClump:
   enabled: true
   exclude: []
@@ -33,6 +34,8 @@ FeatureEnvy:
   # Nature of OptionParser :(
   - Mutant::CLI#add_environmental_options
   - Mutant::CLI#parse
+  # False positive, its a utility
+  - Mutant::Meta::Example::Verification#format_mutation
 IrresponsibleModule:
   enabled: true
   exclude: []
@@ -69,6 +72,7 @@ RepeatedConditional:
   - Mutant::Mutator
   - Mutant::Rspec::Strategy
   - Mutant::Reporter::CLI
+  - Mutant::Meta::Example::DSL
   max_ifs: 1
 TooManyInstanceVariables:
   enabled: true
@@ -154,4 +158,5 @@ UtilityFunction:
   - Mutant::Rspec::Strategy#options
   - Mutant::Rspec::Strategy#world
   - Mutant::Rspec::Strategy#rspec2
+  - Mutant::Meta::Example::Verification#format_mutation
   max_helper_calls: 0

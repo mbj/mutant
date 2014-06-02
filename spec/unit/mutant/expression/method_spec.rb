@@ -33,7 +33,12 @@ describe Mutant::Expression::Method do
     context 'with an instance method' do
       let(:input) { instance_method }
 
-      it { should eql(Mutant::Matcher::Method::Instance.new(cache, TestApp::Literal, TestApp::Literal.instance_method(:string))) }
+      it 'returns correct matcher' do
+        should eql(Mutant::Matcher::Method::Instance.new(
+          cache,
+          TestApp::Literal, TestApp::Literal.instance_method(:string)
+        ))
+      end
     end
 
     context 'with a singleton method' do
