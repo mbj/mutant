@@ -99,10 +99,20 @@ module Mutant
           #
           def report_noop
             info('NOOP MUTATION TESTS FAILED!')
-            killers.reject(&:success?).map(&:report).map(&:test_report).each do |report|
+            noop_reports.each do |report|
               puts(report.test.identification)
               puts(report.output)
             end
+          end
+
+          # Return test noop reports
+          #
+          # @return [Enumerable<Test::Report>]
+          #
+          # @api private
+          #
+          def noop_reports
+            killers.reject(&:success?).map(&:report).map(&:test_report)
           end
 
         end # Mutation
