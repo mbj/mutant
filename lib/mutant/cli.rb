@@ -324,7 +324,7 @@ module Mutant
     #
     def add_filter_options(opts)
       opts.on('--ignore-subject PATTERN', 'Ignore subjects that match PATTERN') do |pattern|
-        @builder.add_subject_ignore(Classifier.run(@cache, pattern))
+        @builder.add_subject_ignore(Expression.parse(pattern).matcher(@cache))
       end
       opts.on('--code CODE', 'Scope execution to subjects with CODE') do |code|
         @builder.add_subject_selector(Morpher.compile(s(:eql, s(:attribute, :code), s(:static, code))))

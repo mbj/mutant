@@ -5,8 +5,8 @@ require 'spec_helper'
 describe Mutant::Matcher::Namespace, '#each' do
   subject { object.each { |item| yields << item } }
 
-  let(:yields) { []                                           }
-  let(:object) { described_class.new(cache, TestApp::Literal) }
+  let(:yields) { []                                             }
+  let(:object) { described_class.new(cache, 'TestApp::Literal') }
 
   let(:cache) { Mutant::Cache.new }
 

@@ -36,7 +36,7 @@ module Mutant
       # @api private
       #
       def pattern
-        /\A#{Regexp.escape(namespace.name)}(?:::)?/
+        /\A#{Regexp.escape(namespace)}(?:::)?/
       end
       memoize :pattern
 

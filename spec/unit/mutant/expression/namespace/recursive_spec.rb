@@ -10,7 +10,7 @@ describe Mutant::Expression::Namespace::Recursive do
 
   describe '#matcher' do
     subject { object.matcher(cache) }
-    it { should eql(Mutant::Matcher::Namespace.new(cache, TestApp::Literal)) }
+    it { should eql(Mutant::Matcher::Namespace.new(cache, '::TestApp::Literal')) }
   end
 
   describe '#match_length' do
