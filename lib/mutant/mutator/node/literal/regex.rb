@@ -35,8 +35,8 @@ module Mutant
             children.each_with_index do |child, index|
               mutate_child(index) unless child.type == :str
             end
-            emit_self(options)
-            emit_self(s(:str, NULL_REGEXP_SOURCE), options)
+            emit_type(options)
+            emit_type(s(:str, NULL_REGEXP_SOURCE), options)
           end
 
         end # Regex

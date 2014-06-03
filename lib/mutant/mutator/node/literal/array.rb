@@ -19,7 +19,7 @@ module Mutant
           #
           def dispatch
             emit_nil
-            emit_self
+            emit_type
             mutate_body
             if children.one?
               emit(children.first)
@@ -36,7 +36,7 @@ module Mutant
             children.each_index do |index|
               dup_children = children.dup
               dup_children.delete_at(index)
-              emit_self(*dup_children)
+              emit_type(*dup_children)
               mutate_child(index)
             end
           end

@@ -40,7 +40,7 @@ module Mutant
           # @api private
           #
           def emit_attribute_read
-            emit_self(receiver, selector.to_s[0..-2].to_sym)
+            emit_type(receiver, selector.to_s[0..-2].to_sym)
           end
 
         end # AttributeAssignment

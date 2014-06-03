@@ -96,7 +96,7 @@ module Mutant
       #
       def emit_children_mutations
         Mutator::Util::Array.each(children, self) do |children|
-          emit_self(*children)
+          emit_type(*children)
         end
       end
 
@@ -136,7 +136,7 @@ module Mutant
       def delete_child(index)
         dup_children = children.dup
         dup_children.delete_at(index)
-        emit_self(*dup_children)
+        emit_type(*dup_children)
       end
 
       # Emit updated child
@@ -151,7 +151,7 @@ module Mutant
       def emit_child_update(index, node)
         new_children = children.dup
         new_children[index] = node
-        emit_self(*new_children)
+        emit_type(*new_children)
       end
 
       # Emit a new AST node with same class as wrapped node
@@ -162,7 +162,7 @@ module Mutant
       #
       # @api private
       #
-      def emit_self(*children)
+      def emit_type(*children)
         emit(new_self(*children))
       end
 
@@ -196,7 +196,7 @@ module Mutant
       #
       def emit_values(values)
         values.each do |value|
-          emit_self(value)
+          emit_type(value)
         end
       end
 

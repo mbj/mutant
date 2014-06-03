@@ -41,7 +41,7 @@ module Mutant
           when 1
             emit(children.first)
           else
-            emit_self(*children)
+            emit_type(*children)
           end
         end
 

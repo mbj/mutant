@@ -19,7 +19,7 @@ module Mutant
           #
           def dispatch
             emit_nil
-            emit_self
+            emit_type
             mutate_body
           end
 
@@ -34,7 +34,7 @@ module Mutant
               mutate_child(index)
               dup_children = children.dup
               dup_children.delete_at(index)
-              emit_self(*dup_children)
+              emit_type(*dup_children)
             end
           end
 

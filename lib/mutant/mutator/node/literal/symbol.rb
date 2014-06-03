@@ -24,7 +24,7 @@ module Mutant
           def dispatch
             emit_nil
             Mutator::Util::Symbol.each(value, self) do |value|
-              emit_self(value)
+              emit_type(value)
             end
           end
 

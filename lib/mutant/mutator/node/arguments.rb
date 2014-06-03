@@ -32,7 +32,7 @@ module Mutant
             dup_children = children.dup
             dup_children.delete_at(index)
             dup_children.insert(index, *child.children)
-            emit_self(*dup_children)
+            emit_type(*dup_children)
           end
         end
 
