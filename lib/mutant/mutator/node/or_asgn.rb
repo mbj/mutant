@@ -5,9 +5,11 @@ module Mutant
     class Node
 
       # OpAsgn mutator
-      class OpAsgn < Generic
+      class OrAsgn < self
 
-        handle(:op_asgn, :and_asgn)
+        handle(:or_asgn)
+
+        children :left, :right
 
       private
 
@@ -18,11 +20,12 @@ module Mutant
         # @api private
         #
         def dispatch
-          super
           emit_nil
+          emit_left_mutations unless left.type.equal?(:ivasgn)
+          emit_right_mutations
         end
 
-      end # OpAsgn
+      end # OrAsgn
     end # Node
   end # Mutator
 end # Mutant

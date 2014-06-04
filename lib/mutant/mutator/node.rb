@@ -221,7 +221,7 @@ module Mutant
       # @api private
       #
       def asgn_left?
-        OP_ASSIGN.include?(parent_type) && parent.left.equal?(node)
+        OP_ASSIGN.include?(parent_type) && parent.node.children.first.equal?(node)
       end
 
     end # Node
