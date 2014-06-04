@@ -1,3 +1,9 @@
+# v0.5.18 2014-06-04
+
+Changes:
+
+* Do not rename lhs of or assigns when lhs is a ivasgn. Closes #150
+
 # v0.5.17 2014-05-27
 
 Changes:
