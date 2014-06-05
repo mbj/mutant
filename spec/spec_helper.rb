@@ -14,7 +14,7 @@ if ENV['COVERAGE'] == 'true'
     add_filter 'spec'
     add_filter 'vendor'
     add_filter 'test_app'
-    add_filter 'lib/mutant/meta/**/*.rb'
+    add_filter 'lib/mutant/meta/*'
 
     minimum_coverage 89.77  # TODO: raise this to 100, then mutation test
   end
