@@ -19,7 +19,7 @@ module Mutant
         #
         def dispatch
           super
-          emit_nil
+          emit_singletons
         end
 
       end # Dsym

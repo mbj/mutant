@@ -18,7 +18,7 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit_nil
+            emit_singletons
             emit_type
             mutate_body
             if children.one?

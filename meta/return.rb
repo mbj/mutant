@@ -3,13 +3,14 @@
 Mutant::Meta::Example.add do
   source 'return'
 
-  mutation 'nil'
+  singleton_mutations
 end
 
 Mutant::Meta::Example.add do
   source 'return foo'
 
+  singleton_mutations
   mutation 'foo'
   mutation 'return nil'
-  mutation 'nil'
+  mutation 'return self'
 end

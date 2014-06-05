@@ -1,7 +1,8 @@
 # encoding: utf-8
 
 Mutant::Meta::Example.add do
-  source 'a, b = c, d'
+  source 'false'
 
-  singleton_mutations
+  mutation 'nil'
+  mutation 'true'
 end

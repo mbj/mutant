@@ -23,8 +23,8 @@ module Mutant
           children.at(index)
         end
 
-        define_method("emit_#{name}_mutations") do
-          mutate_child(index)
+        define_method("emit_#{name}_mutations") do |&block|
+          mutate_child(index, &block)
         end
 
         define_method("emit_#{name}") do |node|
@@ -118,10 +118,13 @@ module Mutant
       #
       # @api private
       #
-      def mutate_child(index, mutator = Mutator)
+      def mutate_child(index, mutator = Mutator, &block)
+        block ||= lambda { |_node| true }
         child = children.at(index)
         mutator.each(child, self) do |mutation|
-          emit_child_update(index, mutation)
+          if block.call(mutation)
+            emit_child_update(index, mutation)
+          end
         end
       end
 
@@ -166,7 +169,28 @@ module Mutant
         emit(new_self(*children))
       end
 
-      # Emit a new AST node with NilLiteral class
+      # Emit singleton literals
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def emit_singletons
+        emit_nil
+        emit_self
+      end
+
+      # Emit a literal self
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def emit_self
+        emit(N_SELF)
+      end
+
+      # Emit a literal nil
       #
       # @return [undefined]
       #

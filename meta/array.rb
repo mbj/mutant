@@ -3,7 +3,7 @@
 Mutant::Meta::Example.add do
   source '[true]'
 
-  mutation 'nil'
+  singleton_mutations
   mutation 'true'
   mutation '[false]'
   mutation '[nil]'
@@ -13,7 +13,7 @@ end
 Mutant::Meta::Example.add do
   source '[true, false]'
 
-  mutation 'nil'
+  singleton_mutations
 
   # Mutation of each element in array
   mutation '[nil, false]'

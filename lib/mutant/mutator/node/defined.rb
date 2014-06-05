@@ -3,11 +3,12 @@
 module Mutant
   class Mutator
     class Node
+      # Namespace for define mutations
+      class Defined < self
 
-      # Kwbegin mutator
-      class Kwbegin < Generic
+        handle(:defined?)
 
-        handle(:kwbegin)
+        children :expression
 
       private
 
@@ -18,11 +19,12 @@ module Mutant
         # @api private
         #
         def dispatch
-          super
-          emit_singletons
+          emit_expression_mutations do |node|
+            !node.type.equal?(:self)
+          end
         end
 
-      end # Kwbegin
+      end # Defined
     end # Node
   end # Mutator
 end # Mutant

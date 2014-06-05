@@ -22,7 +22,7 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit_nil
+            emit_singletons
             Mutator::Util::Symbol.each(value, self) do |value|
               emit_type(value)
             end

@@ -5,9 +5,9 @@ module Mutant
     class Node
 
       # OpAsgn mutator
-      class OrAsgn < self
+      class AndAsgn < self
 
-        handle(:or_asgn)
+        handle(:and_asgn)
 
         children :left, :right
 
@@ -21,10 +21,8 @@ module Mutant
         #
         def dispatch
           emit_singletons
-          unless left.type.equal?(:ivasgn)
-            emit_left_mutations do |mutation|
-              !mutation.type.equal?(:self)
-            end
+          emit_left_mutations do |mutation|
+            !mutation.type.equal?(:self)
           end
           emit_right_mutations
         end
@@ -33,3 +31,4 @@ module Mutant
     end # Node
   end # Mutator
 end # Mutant
+

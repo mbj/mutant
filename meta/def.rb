@@ -7,10 +7,11 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
-  source "def foo\nfoo\nrescue\nend"
+  source 'def foo; foo; rescue; end'
 
   mutation 'def foo; raise; end'
   mutation 'def foo; nil; rescue; end'
+  mutation 'def foo; self; rescue; end'
   mutation 'def foo; end'
 end
 

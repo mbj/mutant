@@ -3,8 +3,7 @@
 Mutant::Meta::Example.add do
   source '{true => true, false => false}'
 
-  # Literal replaced with nil
-  mutation 'nil'
+  singleton_mutations
 
   # Mutation of each key and value in hash
   mutation '{ false => true  ,  false => false }'

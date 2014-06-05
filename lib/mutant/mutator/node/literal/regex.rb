@@ -31,7 +31,7 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit_nil unless parent_type == :match_current_line
+            emit_singletons unless parent_type == :match_current_line
             children.each_with_index do |child, index|
               mutate_child(index) unless child.type == :str
             end

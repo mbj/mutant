@@ -24,12 +24,13 @@ module Mutant
     NEGATIVE_INFINITY =
       s(:send, s(:float, -1.0), :/, s(:float, 0.0))
 
-    RAISE             = s(:send, nil, :raise)
+    RAISE   = s(:send, nil, :raise)
 
-    N_TRUE            = s(:true)
-    N_FALSE           = s(:false)
-    N_NIL             = s(:nil)
-    N_EMPTY           = s(:empty)
+    N_TRUE  = s(:true)
+    N_FALSE = s(:false)
+    N_NIL   = s(:nil)
+    N_EMPTY = s(:empty)
+    N_SELF  = s(:self)
 
     # Build a negated boolean node
     #

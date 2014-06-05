@@ -3,19 +3,22 @@
 Mutant::Meta::Example.add do
   source 'foo() { a; b }'
 
+  singleton_mutations
   mutation 'foo { a }'
   mutation 'foo { b }'
   mutation 'foo {}'
   mutation 'foo { raise }'
   mutation 'foo { a; nil }'
+  mutation 'foo { a; self }'
   mutation 'foo { nil; b }'
+  mutation 'foo { self; b }'
   mutation 'foo'
-  mutation 'nil'
 end
 
 Mutant::Meta::Example.add do
   source 'foo { |a, b| }'
 
+  singleton_mutations
   mutation 'foo'
   mutation 'foo { |a, b| raise }'
   mutation 'foo { |a, b__mutant__| }'
@@ -23,13 +26,12 @@ Mutant::Meta::Example.add do
   mutation 'foo { |a| }'
   mutation 'foo { |b| }'
   mutation 'foo { || }'
-  mutation 'nil'
 end
 
 Mutant::Meta::Example.add do
   source 'foo { |(a, b), c| }'
 
-  mutation 'nil'
+  singleton_mutations
   mutation 'foo { || }'
   mutation 'foo { |a, b, c| }'
   mutation 'foo { |(a, b), c| raise }'
@@ -46,10 +48,10 @@ end
 Mutant::Meta::Example.add do
   source 'foo { |(a)| }'
 
+  singleton_mutations
   mutation 'foo { || }'
   mutation 'foo { |a| }'
   mutation 'foo { |(a)| raise }'
   mutation 'foo { |(a__mutant__)| }'
   mutation 'foo'
-  mutation 'nil'
 end

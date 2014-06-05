@@ -32,9 +32,9 @@ module Mutant
           # @api private
           #
           def dispatch
+            emit_singletons
             mutate_name
             emit_value_mutations if value # mlhs!
-            emit_nil
           end
 
           # Emit name mutations

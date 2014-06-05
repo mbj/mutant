@@ -19,7 +19,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_nil
+          emit_singletons
           emit_expression_mutations
           emit(expression)
         end

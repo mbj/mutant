@@ -3,18 +3,20 @@
 Mutant::Meta::Example.add do
   source '/foo/'
 
+  singleton_mutations
   mutation '//'    # match all
   mutation '/a\A/' # match nothing
-  mutation 'nil'
 end
 
 Mutant::Meta::Example.add do
   source '/#{foo.bar}n/'
 
+  singleton_mutations
   mutation '//' # match all
   mutation '/#{foo}n/'
   mutation '/a\A/'         # match nothing
   mutation '/#{nil.bar}n/'
+  mutation '/#{self.bar}n/'
   mutation '/#{nil}n/'
-  mutation 'nil'
+  mutation '/#{self}n/'
 end

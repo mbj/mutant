@@ -34,7 +34,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_nil
+          emit_singletons
           case selector
           when INDEX_REFERENCE
             run(Index::Reference)

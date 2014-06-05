@@ -19,6 +19,7 @@ module Mutant
         # @api private
         #
         def dispatch
+          emit_singletons
           emit(send)
           emit_arguments_mutations
           if body
@@ -26,7 +27,6 @@ module Mutant
           end
           emit_body(nil)
           emit_body(RAISE)
-          emit_nil
         end
 
       end # Block

@@ -24,9 +24,9 @@ module Mutant
         #
         def dispatch
           super
+          emit_singletons
           children.each_index(&method(:delete_child))
           emit(s(INVERSE.fetch(node.type), *children))
-          emit_nil
         end
 
       end # Next

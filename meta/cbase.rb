@@ -3,6 +3,6 @@
 Mutant::Meta::Example.add do
   source '::A'
 
-  mutation 'nil'
+  singleton_mutations
   mutation 'A'
 end

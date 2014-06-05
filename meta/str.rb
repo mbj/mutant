@@ -3,5 +3,5 @@
 Mutant::Meta::Example.add do
   source '"foo"'
 
-  mutation 'nil'
+  singleton_mutations
 end

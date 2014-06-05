@@ -26,7 +26,7 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit_nil
+            emit_singletons
             emit_inverse
             emit_lower_bound_mutations
             emit_upper_bound_mutations

@@ -19,8 +19,8 @@ module Mutant
         #
         def dispatch
           super
+          emit_singletons
           children.each_index(&method(:delete_child))
-          emit_nil
         end
 
       end # Yield

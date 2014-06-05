@@ -74,6 +74,17 @@ module Mutant
           self
         end
 
+        # Add singleotn mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def singleton_mutations
+          mutation 'nil'
+          mutation 'self'
+        end
+
         # Helper method to coerce input to node
         #
         # @param [String,Parser::AST::Node] input

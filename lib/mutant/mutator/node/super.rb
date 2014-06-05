@@ -21,13 +21,13 @@ module Mutant
         # @api private
         #
         def dispatch
+          emit_singletons
           emit(Z_SUPER)
           emit(EMPTY_SUPER)
           children.each_index do |index|
             mutate_child(index)
             delete_child(index)
           end
-          emit_nil
         end
 
       end # Super
