@@ -5,14 +5,9 @@ module Mutant
     class Node
 
       # Mutator for loop control keywords
-      class LoopControl < Generic
+      class Next < Generic
 
-        INVERSE = IceNine.deep_freeze(
-          next: :break,
-          break: :next
-        )
-
-        handle(*INVERSE.keys)
+        handle(:next)
 
       private
 
@@ -26,10 +21,11 @@ module Mutant
           super
           emit_singletons
           children.each_index(&method(:delete_child))
-          emit(s(INVERSE.fetch(node.type), *children))
+          emit(s(:break, *children))
         end
 
       end # Next
     end # Node
   end # Mutator
 end # Mutant
+

@@ -7,5 +7,4 @@ Mutant::Meta::Example.add do
   mutation 'break false'
   mutation 'break nil'
   mutation 'break'
-  mutation 'next true'
 end
