@@ -1,3 +1,10 @@
+# v0.5.19 2014-06-06
+
+Changes:
+
+* Do not emit more powerful rescue matchers #183
+* Do not emit more powerful loop control #201
+
 # v0.5.18 2014-06-04
 
 Changes:
