@@ -9,8 +9,6 @@ Mutant::Meta::Example.add do
   mutation 'begin; rescue ExceptionA, self => error; true; end'
   mutation 'begin; rescue ExceptionA, ExceptionB => error; false; end'
   mutation 'begin; rescue ExceptionA, ExceptionB => error; nil; end'
-  mutation 'begin; rescue ExceptionA => error; true; end'
-  mutation 'begin; rescue ExceptionB => error; true; end'
 end
 
 Mutant::Meta::Example.add do
