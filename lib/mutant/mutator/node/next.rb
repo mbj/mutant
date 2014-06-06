@@ -28,4 +28,3 @@ module Mutant
     end # Node
   end # Mutator
 end # Mutant
-

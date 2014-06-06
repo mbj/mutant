@@ -56,6 +56,7 @@ NestedIterators:
   - Mutant::CLI#parse
   - Mutant::Mutator::Util::Array::Element#dispatch
   - Mutant::Mutator::Node::Resbody#mutate_captures
+  - Mutant::Mutator::Node::Arguments#emit_argument_mutations
   - Mutant::Reporter::CLI::Report::Config#generic_stats
   - Mutant::RequireHighjack#infect
   - Mutant::RequireHighjack#desinfect

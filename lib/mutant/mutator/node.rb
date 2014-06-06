@@ -119,7 +119,7 @@ module Mutant
       # @api private
       #
       def mutate_child(index, mutator = Mutator, &block)
-        block ||= lambda { |_node| true }
+        block ||= ->(_node) { true }
         child = children.at(index)
         mutator.each(child, self) do |mutation|
           if block.call(mutation)
@@ -166,7 +166,7 @@ module Mutant
       # @api private
       #
       def emit_type(*children)
-        emit(new_self(*children))
+        emit(Parser::AST::Node.new(node.type, children))
       end
 
       # Emit singleton literals
@@ -198,16 +198,6 @@ module Mutant
       #
       def emit_nil
         emit(N_NIL) unless asgn_left?
-      end
-
-      # Return new self typed child
-      #
-      # @return [Parser::AST::Node]
-      #
-      # @api private
-      #
-      def new_self(*children)
-        Parser::AST::Node.new(node.type, children)
       end
 
       # Emit values

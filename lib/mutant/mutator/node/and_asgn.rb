@@ -27,8 +27,7 @@ module Mutant
           emit_right_mutations
         end
 
-      end # OrAsgn
+      end # AndAsgn
     end # Node
   end # Mutator
 end # Mutant
-
