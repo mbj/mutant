@@ -28,6 +28,12 @@ describe Mutant::Expression::Namespace::Recursive do
       it { should be(0) }
     end
 
+    context 'when other expression describes adjacent namespace' do
+      let(:other) { described_class.parse('::TestApp::LiteralFoo') }
+
+      it { should be(0) }
+    end
+
     context 'when other expression describes a longer prefix' do
       let(:other) { described_class.parse('::TestApp::Literal::Deep') }
 
