@@ -115,13 +115,13 @@ Examples
 ```
 cd virtus
 # Run mutant on virtus namespace
-mutant --include lib --require virtus --use rspec ::Virtus*
+mutant --include lib --require virtus --use rspec Virtus*
 # Run mutant on specific virtus class
-mutant --include lib --require virtus --use rspec ::Virtus::Attribute
+mutant --include lib --require virtus --use rspec Virtus::Attribute
 # Run mutant on specific virtus class method
-mutant --include lib --require virtus --use rspec ::Virtus::Attribute.build
+mutant --include lib --require virtus --use rspec Virtus::Attribute.build
 # Run mutant on specific virtus instance method
-mutant --include lib --require virtus --use rspec ::Virtus::Attribute#type
+mutant --include lib --require virtus --use rspec Virtus::Attribute#type
 ```
 
 Subjects
