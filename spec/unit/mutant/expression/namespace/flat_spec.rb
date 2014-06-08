@@ -6,7 +6,7 @@ describe Mutant::Expression::Namespace::Exact do
 
   let(:object)            { described_class.parse(input) }
   let(:cache)             { Mutant::Cache.new            }
-  let(:input)             { '::TestApp::Literal'         }
+  let(:input)             { 'TestApp::Literal'           }
 
   describe '#matcher' do
     subject { object.matcher(cache) }

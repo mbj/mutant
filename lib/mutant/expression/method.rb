@@ -9,15 +9,9 @@ module Mutant
         '#' => Matcher::Methods::Instance
       }.freeze
 
-      regexp = /
-        \A
-          (?<scope_name>#{SCOPE_PATTERN})
-          (?<scope_symbol>[.#])
-          (?<method_name>#{METHOD_NAME_PATTERN})
-        \z
-      /x.freeze
-
-      register(regexp)
+      register(
+        /\A(?<scope_name>#{SCOPE_PATTERN})(?<scope_symbol>[.#])(?<method_name>#{METHOD_NAME_PATTERN})\z/
+      )
 
       # Return method matcher
       #

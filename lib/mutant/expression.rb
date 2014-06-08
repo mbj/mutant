@@ -13,10 +13,7 @@ module Mutant
       *OPERATOR_METHODS.map(&:to_s)
     ).freeze
 
-    SCOPE_PATTERN = /
-      (?:#{SCOPE_OPERATOR})?#{SCOPE_NAME_PATTERN}
-      (?:#{SCOPE_OPERATOR}#{SCOPE_NAME_PATTERN})*
-    /x.freeze
+    SCOPE_PATTERN = /#{SCOPE_NAME_PATTERN}(?:#{SCOPE_OPERATOR}#{SCOPE_NAME_PATTERN})*/.freeze
 
     REGISTRY = {}
 

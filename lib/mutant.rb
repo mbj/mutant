@@ -29,7 +29,6 @@ module Mutant
   symbolset = ->(strings) { strings.map(&:to_sym).to_set.freeze }
 
   SCOPE_OPERATOR     = '::'.freeze
-  CBASE_PATTERN      = /\A#{SCOPE_OPERATOR}/.freeze
 
   # Set of nodes that cannot be on the LHS of an assignment
   NOT_ASSIGNABLE         = symbolset.(%w[int float str dstr class module self nil])
@@ -75,7 +74,7 @@ module Mutant
   # @api private
   #
   def self.constant_lookup(location)
-    location.sub(CBASE_PATTERN, EMPTY_STRING).split(SCOPE_OPERATOR).reduce(Object) do |parent, name|
+    location.split(SCOPE_OPERATOR).reduce(Object) do |parent, name|
       parent.const_get(name, nil)
     end
   end
