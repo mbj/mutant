@@ -156,7 +156,7 @@ LOTS of unaccounted time and fun already went into this project.
 You might consider to donate if you like this tool.
 
 * [![Gittip](https://img.shields.io/gittip/mbj.svg)](https://gittip.com/mbj)
-* [![Flattr this](http://img.shields.io/gittip/mbj.svg)](http://flattr.com/thing/1823010/mbjmutant-on-GitHub)
+* [![Flattr this](http://api.flattr.com/button/flattr-badge-large.png)](http://flattr.com/thing/1823010/mbjmutant-on-GitHub)
 
 Support
 -------
