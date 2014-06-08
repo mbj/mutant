@@ -31,7 +31,7 @@ describe 'Mutant on ruby corpus' do
       checkout
       start = Time.now
       paths = Pathname.glob(repo_path.join('**/*.rb')).sort_by(&:size).reverse
-      total = Parallel.map(paths, finish: method(:progress)) do |path|
+      total = Parallel.map(paths, finish: method(:finish), start: method(:start)) do |path|
         count = 0
         node =
           begin
@@ -87,7 +87,7 @@ describe 'Mutant on ruby corpus' do
       TMP.join(name)
     end
 
-    # Print progress
+    # Print start progress
     #
     # @param [Pathname] path
     # @param [Fixnum] _index
@@ -95,7 +95,21 @@ describe 'Mutant on ruby corpus' do
     #
     # @return [undefined]
     #
-    def progress(path, _index, count)
+    def start(path, _index)
+      MUTEX.synchronize do
+        puts format('Starting - %s', path)
+      end
+    end
+
+    # Print finish progress
+    #
+    # @param [Pathname] path
+    # @param [Fixnum] _index
+    # @param [Fixnum] count
+    #
+    # @return [undefined]
+    #
+    def finish(path, _index, count)
       MUTEX.synchronize do
         puts format('Mutations - %4i - %s', count, path)
       end
