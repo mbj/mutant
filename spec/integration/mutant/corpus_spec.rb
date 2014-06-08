@@ -37,7 +37,7 @@ describe 'Mutant on ruby corpus' do
           begin
             Parser::CurrentRuby.parse(path.read)
           rescue EncodingError, ArgumentError
-            :foo # make rubocop happy
+            nil # Make rubocop happy
           end
         unless node.nil?
           Mutant::Mutator::Node.each(node) do
