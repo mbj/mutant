@@ -94,7 +94,7 @@ TooManyStatements:
   enabled: true
   exclude:
   - Mutant#self.singleton_subclass_instance
-  - Mutant#self.isolate
+  - Mutant::Isolation#self.call
   - Mutant::Rspec::Killer#run
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI::Report::Config#run
