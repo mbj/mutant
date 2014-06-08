@@ -32,7 +32,7 @@ module Mutant
         #
         def prepare
           expected_warnings =
-            if name.equal?(:initialize)
+            if RUBY_ENGINE.eql?('ruby') && name.equal?(:initialize)
               ["#{__FILE__}:#{__LINE__ + 5}: warning: undefining `initialize' may cause serious problems\n"]
             else
               []

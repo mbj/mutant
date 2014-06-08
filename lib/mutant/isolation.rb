@@ -18,9 +18,16 @@ module Mutant
     def self.call(&block)
       reader, writer = IO.pipe.each(&:binmode)
 
-      pid = fork do
-        reader.close
-        writer.write(Marshal.dump(block.call))
+      pid = fork
+
+      if pid.nil?
+        begin
+          reader.close
+          writer.write(Marshal.dump(block.call))
+          Kernel.exit!(0)
+        ensure
+          Kernel.exit!(1)
+        end
       end
 
       writer.close
@@ -40,7 +47,7 @@ module Mutant
     def self.read_result(reader, pid)
       begin
         data = Marshal.load(reader.read)
-      rescue ArgumentError
+      rescue ArgumentError, TypeError
         raise Error, 'Childprocess wrote un-unmarshallable data'
       end
 

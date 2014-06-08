@@ -28,7 +28,7 @@ describe Mutant::Isolation do
       let(:block) do
         lambda do
           redirect_stderr
-          $stderr # not mashallable, nothing written to pipe and raised exceptions in child
+          $stderr # not mashallable, nothing written to pipe and raises exception in child
         end
       end
 
@@ -37,14 +37,13 @@ describe Mutant::Isolation do
       end
     end
 
-    context 'when block does return marshallable data, but process exits with nonzero exitstatus' do
+    context 'when block causes the child to exit nonzero' do
       let(:block) do
         lambda do
-          redirect_stderr
-          at_exit do
-            raise
+          method = Kernel.method(:exit!)
+          Kernel.define_singleton_method(:exit!) do |_status|
+            method.call(1)
           end
-          :foo
         end
       end
 

@@ -34,7 +34,7 @@ describe Mutant::Matcher::Namespace do
       it { should be_instance_of(to_enum.class) }
 
       if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
-        pending 'FIX RBX rspec? BUG HERE'
+        skip 'FIX RBX rspec? BUG HERE'
       else
         it 'yields the expected values' do
           expect(subject.to_a).to eql(object.to_a)
