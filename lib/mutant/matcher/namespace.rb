@@ -95,9 +95,7 @@ Fix your lib to support normal ruby semantics!
           MESSAGE
           return
         end
-        if pattern =~ name
-          yield scope
-        end
+        yield scope if pattern =~ name
       end
 
     end # Namespace

@@ -30,12 +30,14 @@ describe 'Mutant on ruby corpus' do
     def verify
       checkout
       start = Time.now
-      total = Parallel.map(Pathname.glob(repo_path.join('**/*.rb')).sort_by(&:size).reverse, finish: method(:progress)) do |path|
+      paths = Pathname.glob(repo_path.join('**/*.rb')).sort_by(&:size).reverse
+      total = Parallel.map(paths, finish: method(:progress)) do |path|
         count = 0
         node =
           begin
             Parser::CurrentRuby.parse(path.read)
           rescue EncodingError, ArgumentError
+            :foo # make rubocop happy
           end
         unless node.nil?
           Mutant::Mutator::Node.each(node) do
@@ -95,7 +97,7 @@ describe 'Mutant on ruby corpus' do
     #
     def progress(path, _index, count)
       MUTEX.synchronize do
-        puts 'Mutations - %4i - %s' % [count, path]
+        puts format('Mutations - %4i - %s', count, path)
       end
     end
 
@@ -106,12 +108,11 @@ describe 'Mutant on ruby corpus' do
     # @api private
     #
     def system(arguments)
-      unless Kernel.system(*arguments)
-        if block_given?
-          yield
-        else
-          raise 'System command failed!'
-        end
+      return if Kernel.system(*arguments)
+      if block_given?
+        yield
+      else
+        raise 'System command failed!'
       end
     end
 

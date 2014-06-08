@@ -48,10 +48,9 @@ module Mutant
         #
         def mutate_if_branch
           emit_type(condition, else_branch, nil) if else_branch
-          if if_branch
-            emit_if_branch_mutations
-            emit_type(condition, if_branch, nil)
-          end
+          return unless if_branch
+          emit_if_branch_mutations
+          emit_type(condition, if_branch, nil)
         end
 
         # Emit else branch mutations
@@ -61,10 +60,9 @@ module Mutant
         # @api private
         #
         def mutate_else_branch
-          if else_branch
-            emit_else_branch_mutations
-            emit_type(condition, nil, else_branch)
-          end
+          return unless else_branch
+          emit_else_branch_mutations
+          emit_type(condition, nil, else_branch)
         end
 
       end # If

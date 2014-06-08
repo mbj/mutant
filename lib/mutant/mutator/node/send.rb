@@ -183,12 +183,20 @@ module Mutant
         # @api private
         #
         def emit_implicit_self
-          if receiver.type == :self &&
-             !KEYWORDS.include?(selector) &&
-             !attribute_assignment? &&
-             !OP_ASSIGN.include?(parent_type)
-            emit_receiver(nil)
-          end
+          emit_receiver(nil) if allow_implicit_self?
+        end
+
+        # Test if implicit self is allowed
+        #
+        # @return [Boolean]
+        #
+        # @api private
+        #
+        def allow_implicit_self?
+          receiver.type == :self &&
+          !KEYWORDS.include?(selector) &&
+          !attribute_assignment? &&
+          !OP_ASSIGN.include?(parent_type)
         end
 
         # Test for assignment

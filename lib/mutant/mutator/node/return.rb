@@ -20,10 +20,9 @@ module Mutant
         #
         def dispatch
           emit_singletons
-          if value
-            emit(value)
-            emit_value_mutations
-          end
+          return unless value
+          emit(value)
+          emit_value_mutations
         end
 
       end # Return

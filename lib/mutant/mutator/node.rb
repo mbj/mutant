@@ -122,9 +122,8 @@ module Mutant
         block ||= ->(_node) { true }
         child = children.at(index)
         mutator.each(child, self) do |mutation|
-          if block.call(mutation)
-            emit_child_update(index, mutation)
-          end
+          next unless block.call(mutation)
+          emit_child_update(index, mutation)
         end
       end
 

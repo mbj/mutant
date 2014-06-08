@@ -220,5 +220,3 @@ Mutant::Meta::Example.add do
     end
   RUBY
 end
-
-

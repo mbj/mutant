@@ -44,9 +44,8 @@ module Mutant
         def emit_argument_mutations
           children.each_with_index do |child, index|
             Mutator.each(child) do |mutant|
-              unless invalid_argument_replacement?(mutant, index)
-                emit_child_update(index, mutant)
-              end
+              next if invalid_argument_replacement?(mutant, index)
+              emit_child_update(index, mutant)
             end
           end
         end

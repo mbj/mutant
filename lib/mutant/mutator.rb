@@ -119,34 +119,6 @@ module Mutant
       emit!(object)
     end
 
-    # Maximum amount of tries to generate a new object
-    MAX_TRIES = 3
-
-    # Call block until it generates a mutation
-    #
-    # @yield
-    #   Execute block until object is generated where new?(object) returns true
-    #
-    # @return [self]
-    #
-    # @raise [RuntimeError]
-    #   raises RuntimeError when no new node can be generated after MAX_TRIES.
-    #
-    # @api private
-    #
-    def emit_new
-      MAX_TRIES.times do
-        object = yield
-
-        if new?(object)
-          emit!(object)
-          return
-        end
-      end
-
-      raise "New AST could not be generated after #{MAX_TRIES} attempts"
-    end
-
     # Call block with node
     #
     # @param [Parser::AST::Node] node

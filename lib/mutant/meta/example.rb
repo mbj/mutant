@@ -91,9 +91,10 @@ module Mutant
         # @api private
         #
         def missing_report
-          if missing.any?
-            ['Missing mutations:', missing.map(&method(:format_mutation)).join("\n-----\n")]
-          end
+          [
+            'Missing mutations:',
+            missing.map(&method(:format_mutation)).join("\n-----\n")
+          ] if missing.any?
         end
 
         # Return unexpected report
@@ -103,12 +104,10 @@ module Mutant
         # @api private
         #
         def unexpected_report
-          if unexpected.any?
-            [
-              'Unexpected mutations:',
-              unexpected.map(&method(:format_mutation)).join("\n-----\n")
-            ]
-          end
+          [
+            'Unexpected mutations:',
+            unexpected.map(&method(:format_mutation)).join("\n-----\n")
+          ] if unexpected.any?
         end
 
         # Format mutation

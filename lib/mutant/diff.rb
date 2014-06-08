@@ -16,10 +16,9 @@ module Mutant
     # @api private
     #
     def diff
-      if diffs.length.equal?(1)
-        ::Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0)
-          .diff(:unified) << "\n"
-      end
+      return unless diffs.length.equal?(1)
+      ::Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0)
+        .diff(:unified) << "\n"
     end
     memoize :diff
 

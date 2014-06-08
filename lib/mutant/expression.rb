@@ -99,9 +99,8 @@ module Mutant
     def self.expressions(input)
       REGISTRY.each_with_object([]) do |(regexp, klass), expressions|
         match = regexp.match(input)
-        if match
-          expressions << klass.new(match)
-        end
+        next unless match
+        expressions << klass.new(match)
       end
     end
     private_class_method :expressions
