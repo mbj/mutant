@@ -1,3 +1,7 @@
+# v0.5.20 2014-06-08
+
+* Remove support for matchers prefixed with ::
+
 # v0.5.19 2014-06-06
 
 Changes:
