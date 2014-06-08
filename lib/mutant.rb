@@ -51,43 +51,6 @@ module Mutant
     self
   end
 
-  IsolationError = Class.new(RuntimeError)
-
-  # Call block in isolation
-  #
-  # This isolation implements the fork strategy.
-  # Future strategies will probably use a process pool that can
-  # handle multiple mutation kills, in-isolation at once.
-  #
-  # @return [Object]
-  #
-  # @api private
-  #
-  def self.isolate(&block)
-    reader, writer = IO.pipe.each(&:binmode)
-
-    pid = fork do
-      reader.close
-      writer.write(Marshal.dump(block.call))
-    end
-
-    writer.close
-
-    begin
-      data = Marshal.load(reader.read)
-    rescue ArgumentError
-      raise IsolationError, 'Childprocess wrote un-unmarshallable data'
-    end
-
-    status = Process.waitpid2(pid).last
-
-    unless status.exitstatus.zero?
-      raise IsolationError, "Childprocess exited with nonzero exit status: #{status.exitstatus}"
-    end
-
-    data
-  end
-
   # Define instance of subclassed superclass as constant
   #
   # @param [Class] superclass
@@ -123,6 +86,7 @@ require 'mutant/warning_expectation'
 require 'mutant/constants'
 require 'mutant/walker'
 require 'mutant/require_highjack'
+require 'mutant/isolation'
 require 'mutant/mutator'
 require 'mutant/mutation'
 require 'mutant/mutation/evil'

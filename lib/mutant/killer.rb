@@ -31,7 +31,7 @@ module Mutant
     # @api private
     #
     def run
-      test_report = Mutant.isolate do
+      test_report = Isolation.call do
         mutation.insert
         test.run
       end
