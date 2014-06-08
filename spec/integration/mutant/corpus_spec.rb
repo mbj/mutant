@@ -39,7 +39,7 @@ describe 'Mutant on ruby corpus' do
           rescue EncodingError, ArgumentError
             nil # Make rubocop happy
           end
-        unless node.nil?
+        if node
           Mutant::Mutator::Node.each(node) do
             count += 1
           end
