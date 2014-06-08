@@ -5,7 +5,7 @@ mutant
 [![Dependency Status](https://gemnasium.com/mbj/mutant.png)](https://gemnasium.com/mbj/mutant)
 [![Code Climate](https://codeclimate.com/github/mbj/mutant.png)](https://codeclimate.com/github/mbj/mutant)
 [![Inline docs](http://inch-ci.org/github/mbj/mutant.png)](http://inch-ci.org/github/mbj/mutant)
-[![Gem Version](https://img.shields.io/gem/v/formatador.sv)](https://rubygems.org/mutant)
+[![Gem Version](https://img.shields.io/gem/v/mutant.svg)](https://rubygems.org/gems/mutant)
 [![Gittip](https://img.shields.io/gittip/mbj.svg)](https://gittip.com/mbj)
 
 Mutant is a mutation testing tool for ruby.
