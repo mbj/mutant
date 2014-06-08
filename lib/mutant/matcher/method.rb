@@ -5,6 +5,7 @@ module Mutant
     # Matcher for subjects that are a specific method
     class Method < self
       include Adamantium::Flat, Concord::Public.new(:cache, :scope, :method)
+      include Equalizer.new(:identification)
 
       # Methods within rbx kernel directory are precompiled and their source
       # cannot be accessed via reading source location
