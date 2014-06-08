@@ -24,7 +24,7 @@ module Mutant
     #
     def parse(path)
       @cache.fetch(path) do
-        @cache[path] = Parser::CurrentRuby.parse(File.read(path))
+        @cache[path] = Unparser::Preprocessor.run(Parser::CurrentRuby.parse(File.read(path)))
       end
     end
 
