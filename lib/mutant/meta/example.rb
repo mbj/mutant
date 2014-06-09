@@ -15,20 +15,33 @@ module Mutant
         Verification.new(self, generated)
       end
 
+      # Return source
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def source
+        Unparser.unparse(node)
+      end
+      memoize :source
+
       # Return generated mutations
       #
-      # @return [Emumerable<Parser::AST::Node>]
+      # @return [Emumerable<Mutant::Mutation>]
       #
       # @api private
       #
       def generated
-        Mutant::Mutator.each(node).to_a
+        Mutant::Mutator.each(node).map do |node|
+          Mutant::Mutation::Evil.new(self, node)
+        end
       end
       memoize :generated
 
       # Example verification
       class Verification
-        include Adamantium::Flat, Concord.new(:example, :generated)
+        include Adamantium::Flat, Concord.new(:example, :mutations)
 
         # Test if mutation was verified successfully
         #
@@ -37,7 +50,7 @@ module Mutant
         # @api private
         #
         def success?
-          unparser.success? && missing.empty? && unexpected.empty?
+          unparser.success? && missing.empty? && unexpected.empty? && no_diffs.empty?
         end
 
         # Return error report
@@ -62,9 +75,20 @@ module Mutant
         # @api private
         #
         def unexpected
-          generated - example.mutations
+          mutations.map(&:node) - example.mutations
         end
         memoize :unexpected
+
+        # Return mutations with no diff to original
+        #
+        # @return [Enumerable<Mutation>]
+        #
+        # @api private
+        #
+        def no_diffs
+          mutations.select { |mutation| mutation.source.eql?(example.source) }
+        end
+        memoize :no_diffs
 
         # Return mutation report
         #
@@ -78,9 +102,10 @@ module Mutant
             'Original-AST:',
             original_node.inspect,
             'Original-Source:',
-            Unparser.unparse(original_node),
+            example.source,
             *missing_report,
-            *unexpected_report
+            *unexpected_report,
+            *no_diff_report,
           ].join("\n======\n")
         end
 
@@ -95,6 +120,21 @@ module Mutant
             'Missing mutations:',
             missing.map(&method(:format_mutation)).join("\n-----\n")
           ] if missing.any?
+        end
+
+        # Return no diff report
+        #
+        # @return [Array, nil]
+        #
+        # @api private
+        #
+        def no_diff_report
+          [
+            'No source diffs to original:',
+            no_diffs.map do |mutation|
+              "#{mutation.node.inspect}\n#{mutation.source}"
+            end
+          ] if no_diffs.any?
         end
 
         # Return unexpected report
@@ -123,14 +163,14 @@ module Mutant
           ].join("\n")
         end
 
-        # Return missing mutationso
+        # Return missing mutations
         #
         # @return [Array<Parser::AST::Node>]
         #
         # @api private
         #
         def missing
-          example.mutations - generated
+          example.mutations - mutations.map(&:node)
         end
         memoize :missing
 

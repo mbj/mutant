@@ -23,7 +23,7 @@ module Mutant
           end
           children.each_with_index do |child, index|
             mutate_child(index)
-            emit(child)
+            emit(child) unless children.eql?([child])
           end
         end
 
@@ -36,13 +36,8 @@ module Mutant
         # @api private
         #
         def emit_child_subset(children)
-          case children.length
-          when 0
-          when 1
-            emit(children.first)
-          else
-            emit_type(*children)
-          end
+          return if children.length < 2
+          emit_type(*children)
         end
 
       end # Block

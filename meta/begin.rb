@@ -13,3 +13,13 @@ Mutant::Meta::Example.add do
   mutation 'true'
   mutation 'false'
 end
+
+# encoding: utf-8
+
+Mutant::Meta::Example.add do
+
+  source s(:begin, s(:true))
+  # Mutation of each statement in block
+  mutation s(:begin, s(:false))
+  mutation s(:begin, s(:nil))
+end
