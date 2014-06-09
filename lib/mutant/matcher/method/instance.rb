@@ -19,7 +19,7 @@ module Mutant
         #
         def self.build(cache, scope, method)
           name = method.name
-          if scope.ancestors.include?(::Memoizable) and scope.memoized?(name)
+          if scope.ancestors.include?(::Memoizable) && scope.memoized?(name)
             return Memoized.new(cache, scope, method)
           end
           super
