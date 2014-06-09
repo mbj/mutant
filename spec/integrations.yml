@@ -1,6 +1,10 @@
 ---
 - name: rubyspec
+  namespace: Rubyspec
   repo_uri: 'https://github.com/rubyspec/rubyspec.git'
+  mutation_coverage: false
+  mutation_generation: true
+  expect_coverage: 0.0 # not run
   exclude:
     # Binary encoded source subjected to limitations see README of unparser
     - core/array/pack/{b,h,u}_spec.rb
@@ -22,5 +26,9 @@
     - core/symbol/casecmp_spec.rb
     - optional/capi/integer_spec.rb
 - name: auom
+  namespace: AUOM
   repo_uri: 'https://github.com/mbj/auom.git'
+  mutation_coverage: true
+  mutation_generation: true
   exclude: []
+  expect_coverage: 99.81
