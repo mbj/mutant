@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'stringio'
 require 'set'
 require 'adamantium'

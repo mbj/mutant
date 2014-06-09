@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   # Class to create diffs from source code
   class Diff

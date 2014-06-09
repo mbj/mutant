@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # Patch rspec to allow nested execution
 module Rspec
   # Run block in clean rspec environment

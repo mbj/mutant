@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module CompressHelper
   def strip_indent(string)
     lines       = string.lines

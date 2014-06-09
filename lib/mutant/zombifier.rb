@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   # Zombifier namespace
   class Zombifier

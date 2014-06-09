@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   # Represent a mutated node with its subject
   class Mutation

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutation
     # Evul mutation

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   # Subject of a mutation
   class Subject

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Matcher
     # Abstract base class for matcher that returns method subjects from scope

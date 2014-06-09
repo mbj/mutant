@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Runner
     # Runner for object config
