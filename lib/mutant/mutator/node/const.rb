@@ -16,7 +16,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_singletons unless parent_type == :const
+          emit_singletons unless n_const?(parent_node)
           emit_type(nil, *children.drop(1))
           children.each_with_index do |child, index|
             mutate_child(index) if child.kind_of?(Parser::AST::Node)

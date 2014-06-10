@@ -31,9 +31,9 @@ module Mutant
         #
         def mutate_condition
           emit_condition_mutations do |condition|
-            !condition.type.eql?(:self)
+            !n_self?(condition)
           end
-          emit_type(n_not(condition), if_branch, else_branch) unless condition.type == :match_current_line
+          emit_type(n_not(condition), if_branch, else_branch) unless n_match_current_line?(condition)
           emit_type(N_TRUE,  if_branch, else_branch)
           emit_type(N_FALSE, if_branch, else_branch)
         end

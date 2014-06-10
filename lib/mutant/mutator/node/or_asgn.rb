@@ -19,12 +19,11 @@ module Mutant
         #
         def dispatch
           emit_singletons
-          unless left.type.equal?(:ivasgn)
-            emit_left_mutations do |mutation|
-              !mutation.type.equal?(:self)
-            end
-          end
           emit_right_mutations
+          return if n_ivasgn?(left)
+          emit_left_mutations do |node|
+            !n_self?(node)
+          end
         end
 
       end # OrAsgn

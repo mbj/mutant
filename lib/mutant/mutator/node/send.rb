@@ -191,7 +191,7 @@ module Mutant
         # @api private
         #
         def allow_implicit_self?
-          receiver.type == :self &&
+          n_self?(receiver) &&
           !KEYWORDS.include?(selector) &&
           !attribute_assignment? &&
           !OP_ASSIGN.include?(parent_type)

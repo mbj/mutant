@@ -33,7 +33,7 @@ module Mutant
         def mutate_captures
           return unless captures
           Util::Array::Element.each(captures.children, self) do |matchers|
-            next if matchers.any? { |node| node.type.equal?(:nil) }
+            next if matchers.any?(&method(:n_nil?))
             emit_captures(s(:array, *matchers))
           end
         end

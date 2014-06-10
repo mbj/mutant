@@ -20,7 +20,7 @@ module Mutant
             emit(left)
             emit_left_mutations
             emit_selector_replacement
-            emit(right) unless right.type == :splat
+            emit(right) unless splat?(right)
             emit_right_mutations
           end
 

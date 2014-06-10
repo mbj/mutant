@@ -42,5 +42,16 @@ module Mutant
       s(:send, node, :!)
     end
 
+    NODE_TYPES.each do |type|
+      fail "method: #{type} is already defined" if instance_methods(true).include?(type)
+
+      name = "n_#{type.to_s.sub(/\??\z/, '?')}"
+
+      define_method(name) do |node|
+        node.type.equal?(type)
+      end
+      private name
+    end
+
   end # NodeHelpers
 end # Mutant

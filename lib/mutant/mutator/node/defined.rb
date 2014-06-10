@@ -18,7 +18,7 @@ module Mutant
         #
         def dispatch
           emit_expression_mutations do |node|
-            !node.type.equal?(:self)
+            !n_self?(node)
           end
         end
 

@@ -58,9 +58,10 @@ module Mutant
         #
         def invalid_argument_replacement?(mutant, index)
           original = children.fetch(index)
-          original.type.equal?(:optarg) &&
-          mutant.type.equal?(:arg)      &&
-          children[0...index].any? { |node| node.type.equal?(:optarg) }
+
+          n_optarg?(original) &&
+          n_arg?(mutant)      &&
+          children[0...index].any?(&method(:n_optarg?))
         end
 
         # Emit mlhs expansions
@@ -86,7 +87,7 @@ module Mutant
         #
         def mlhs_childs_with_index
           children.each_with_index.select do |child, _index|
-            child.type.equal?(:mlhs)
+            n_mlhs?(child)
           end
         end
 
