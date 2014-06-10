@@ -1,5 +1,7 @@
 module Mutant
+  # A simple delegator with opinions
   module Delegator
+    # Class level mixins
     module ClassMethods
 
     private

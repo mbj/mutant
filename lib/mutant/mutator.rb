@@ -5,7 +5,10 @@ module Mutant
 
     # Run mutator on input
     #
-    # @param [Parser::AST::Node] node
+    # @param [Object] input
+    #   the input to mutate
+    #
+    # @param [Mutator] parent
     #
     # @return [self]
     #

@@ -20,6 +20,9 @@ module Mutant
     # Initialize expression
     #
     # @param [MatchData] match
+    #
+    # @api private
+    #
     def initialize(*)
       super
       @syntax = match.to_s
@@ -38,6 +41,8 @@ module Mutant
     # @param [Expression] neddle
     #
     # @return [Fixnum]
+    #
+    # @api private
     #
     def match_length(neddle)
       if eql?(neddle)
