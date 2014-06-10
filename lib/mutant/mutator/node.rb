@@ -222,7 +222,7 @@ module Mutant
       # @api private
       #
       def parent_node
-        parent && parent.node
+        parent.node if parent
       end
 
       # Return parent type
@@ -236,7 +236,7 @@ module Mutant
       # @api private
       #
       def parent_type
-        parent_node && parent_node.type
+        parent_node.type if parent_node
       end
 
       # Test if the node is the left of an or_asgn or op_asgn
