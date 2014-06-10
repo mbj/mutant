@@ -105,7 +105,7 @@ module Mutant
             example.source,
             *missing_report,
             *unexpected_report,
-            *no_diff_report,
+            *no_diff_report
           ].join("\n======\n")
         end
 
