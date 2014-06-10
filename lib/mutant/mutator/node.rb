@@ -211,6 +211,20 @@ module Mutant
         end
       end
 
+      # Return parent node
+      #
+      # @return [Parser::AST::Node] node
+      #   if parent with node is presnet
+      #
+      # @return [nil]
+      #   otherwise
+      #
+      # @api private
+      #
+      def parent_node
+        parent && parent.node
+      end
+
       # Return parent type
       #
       # @return [Symbol] type
@@ -222,7 +236,7 @@ module Mutant
       # @api private
       #
       def parent_type
-        parent && parent.node.type
+        parent_node && parent_node.type
       end
 
       # Test if the node is the left of an or_asgn or op_asgn
