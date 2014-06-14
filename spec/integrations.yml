@@ -31,4 +31,4 @@
   mutation_coverage: true
   mutation_generation: true
   exclude: []
-  expect_coverage: 99.81
+  expect_coverage: 100.0
