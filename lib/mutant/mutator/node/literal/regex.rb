@@ -29,7 +29,7 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit_singletons unless n_match_current_line?(parent_node)
+            emit_singletons unless parent_node && n_match_current_line?(parent_node)
             children.each_with_index do |child, index|
               mutate_child(index) unless n_str?(child)
             end
