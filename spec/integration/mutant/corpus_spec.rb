@@ -97,7 +97,7 @@ describe 'Mutant on ruby corpus' do
       TMP.mkdir unless TMP.directory?
       if repo_path.exist?
         Dir.chdir(repo_path) do
-          system(%w[git pull origin master])
+          system(%w[git pull -f origin master])
           system(%w[git clean -f -d -x])
         end
       else
