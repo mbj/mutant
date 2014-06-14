@@ -15,7 +15,6 @@ describe Mutant::Matcher::Chain do
     let(:subject_a) { double('Subject A') }
     let(:subject_b) { double('Subject B') }
 
-
     # it_should_behave_like 'an #each method'
     context 'with no block' do
       subject { object.each }

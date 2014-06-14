@@ -5,7 +5,9 @@ describe Mutant::Isolation do
     let(:object) { described_class }
 
     before do
-      skip 'Series of events is indeterministic cross ruby implementations. Skipping this test under non 2.1.2' unless RUBY_VERSION.eql?('2.1.2')
+      unless RUBY_VERSION.eql?('2.1.2')
+        skip 'Series of events is indeterministic cross ruby implementations. Skipping this test under non 2.1.2'
+      end
     end
 
     let(:expected_return) { :foo }

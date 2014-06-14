@@ -17,7 +17,15 @@ describe 'Mutant on ruby corpus' do
   MUTEX = Mutex.new
 
   class Project
-    include Adamantium, Anima.new(:name, :repo_uri, :exclude, :mutation_coverage, :mutation_generation, :namespace, :expect_coverage)
+    include Adamantium, Anima.new(
+      :name,
+      :repo_uri,
+      :exclude,
+      :mutation_coverage,
+      :mutation_generation,
+      :namespace,
+      :expect_coverage
+    )
 
     # Verify mutation coverage
     #
@@ -165,8 +173,10 @@ describe 'Mutant on ruby corpus' do
               s(:key_symbolize, :name,                s(:guard, s(:primitive, String))),
               s(:key_symbolize, :namespace,           s(:guard, s(:primitive, String))),
               s(:key_symbolize, :expect_coverage,     s(:guard, s(:primitive, Float))),
-              s(:key_symbolize, :mutation_coverage,   s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
-              s(:key_symbolize, :mutation_generation, s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
+              s(:key_symbolize, :mutation_coverage,
+                s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
+              s(:key_symbolize, :mutation_generation,
+                s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
               s(:key_symbolize, :exclude,             s(:map, s(:guard, s(:primitive, String))))
             ),
             s(:load_attribute_hash,
