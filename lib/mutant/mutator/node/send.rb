@@ -151,9 +151,8 @@ module Mutant
         # @api private
         #
         def emit_argument_propagation
-          return unless arguments.one?
           node = arguments.first
-          emit(node) unless NOT_STANDALONE.include?(node.type)
+          emit(node) if arguments.one? && !NOT_STANDALONE.include?(node.type)
         end
 
         # Emit receiver mutations
