@@ -1,3 +1,7 @@
+# v0.5.22 2014-06-15
+
+* Fix invalid AST generation on operator method mutation with self as receiver.
+
 # v0.5.21 2014-06-15
 
 * Readd mutation of index assignments

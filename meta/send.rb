@@ -236,6 +236,16 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
+  source 'self[foo]'
+
+  singleton_mutations
+  mutation 'self[self]'
+  mutation 'self[nil]'
+  mutation 'self[]'
+  mutation 'foo'
+end
+
+Mutant::Meta::Example.add do
   source 'foo[*bar]'
 
   singleton_mutations

@@ -170,8 +170,9 @@ module Mutant
         #
         def emit_implicit_self
           emit_receiver(nil) if n_self?(receiver) && !(
-            KEYWORDS.include?(selector)     ||
-            OP_ASSIGN.include?(parent_type) ||
+            KEYWORDS.include?(selector)         ||
+            METHOD_OPERATORS.include?(selector) ||
+            OP_ASSIGN.include?(parent_type)     ||
             attribute_assignment?
           )
         end
