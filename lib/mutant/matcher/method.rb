@@ -6,9 +6,8 @@ module Mutant
       include Equalizer.new(:identification)
 
       # Methods within rbx kernel directory are precompiled and their source
-      # cannot be accessed via reading source location
-      SKIP_METHODS = %w[kernel/ (eval)].freeze
-      BLACKLIST    = /\A#{Regexp.union(*SKIP_METHODS)}/.freeze
+      # cannot be accessed via reading source location. Same for methods created by eval.
+      BLACKLIST = %r{\Akernel/|(eval)}.freeze
 
       # Enumerate matches
       #
