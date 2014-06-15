@@ -29,7 +29,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('morpher',       '~> 0.2.3')
   gem.add_runtime_dependency('procto',        '~> 0.0.2')
   gem.add_runtime_dependency('abstract_type', '~> 0.0.7')
-  gem.add_runtime_dependency('unparser',      '~> 0.1.13')
+  gem.add_runtime_dependency('unparser',      '~> 0.1.14')
   gem.add_runtime_dependency('ice_nine',      '~> 0.11.0')
   gem.add_runtime_dependency('adamantium',    '~> 0.2.0')
   gem.add_runtime_dependency('memoizable',    '~> 0.4.2')
