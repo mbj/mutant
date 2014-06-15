@@ -185,10 +185,11 @@ module Mutant
         # @api private
         #
         def allow_implicit_self?
-          n_self?(receiver)                &&
-          !KEYWORDS.include?(selector)     &&
-          !attribute_assignment?           &&
-          !OP_ASSIGN.include?(parent_type)
+          n_self?(receiver) && !(
+            KEYWORDS.include?(selector)     ||
+            OP_ASSIGN.include?(parent_type) ||
+            attribute_assignment?
+          )
         end
 
         # Test for assignment
