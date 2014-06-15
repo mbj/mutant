@@ -111,7 +111,7 @@ TooManyStatements:
   - Mutant::CLI#parse
   - Mutant::CLI#initialize
   - Mutant::CLI#add_debug_options
-  max_statements: 6
+  max_statements: 7
 UncommunicativeMethodName:
   enabled: true
   exclude:
