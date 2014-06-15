@@ -10,12 +10,12 @@ module Mutant
         children :receiver, :selector
 
         SELECTOR_REPLACEMENTS = IceNine.deep_freeze(
-          reverse_map:  [:map, :each   ],
-          reverse_each: [:each         ],
-          map:          [:each         ],
-          send:         [:public_send  ],
-          gsub:         [:sub          ],
-          eql?:         [:equal?       ],
+          reverse_map:  [:map, :each],
+          reverse_each: [:each],
+          map:          [:each],
+          send:         [:public_send],
+          gsub:         [:sub],
+          eql?:         [:equal?],
           :== =>        [:eql?, :equal?]
         )
 
