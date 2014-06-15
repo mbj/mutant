@@ -101,11 +101,8 @@ module Mutant
         # @api private
         #
         def emit_naked_receiver
-          return unless receiver
-          op_assign      = OP_ASSIGN.include?(parent_type)
-          not_assignable = NOT_ASSIGNABLE.include?(receiver.type)
-          return if op_assign and not_assignable
-          emit(receiver)
+          return if OP_ASSIGN.include?(parent_type) && NOT_ASSIGNABLE.include?(receiver.type)
+          emit(receiver) if receiver
         end
 
         # Test for binary operator
