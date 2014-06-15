@@ -175,17 +175,7 @@ module Mutant
         # @api private
         #
         def emit_implicit_self
-          emit_receiver(nil) if allow_implicit_self?
-        end
-
-        # Test if implicit self is allowed
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        #
-        def allow_implicit_self?
-          n_self?(receiver) && !(
+          emit_receiver(nil) if n_self?(receiver) && !(
             KEYWORDS.include?(selector)     ||
             OP_ASSIGN.include?(parent_type) ||
             attribute_assignment?
