@@ -1,5 +1,6 @@
 # v0.5.20 2014-06-xx
 
+* Readd mutation of index assignments
 * Remove a bunch of useless mutations to nil.something
 * Readd mutation of index reference arguments
 

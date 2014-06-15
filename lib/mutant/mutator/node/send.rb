@@ -35,8 +35,7 @@ module Mutant
         #
         def dispatch
           emit_singletons
-          case selector
-          when INDEX_ASSIGN
+          if selector.equal?(INDEX_ASSIGN)
             run(Index::Assign)
           else
             non_index_dispatch

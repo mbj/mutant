@@ -90,10 +90,17 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
-  source 'foo[bar]=baz'
+  source 'foo[bar] = baz'
 
   singleton_mutations
   mutation 'foo'
+  mutation 'foo[bar]'
+  mutation 'foo[bar] = self'
+  mutation 'foo[bar] = nil'
+  mutation 'foo[nil] = baz'
+  mutation 'foo[self] = baz'
+  mutation 'foo[] = baz'
+  mutation 'baz'
 end
 
 Mutant::Meta::Example.add do
