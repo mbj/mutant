@@ -180,17 +180,7 @@ module Mutant
       @strategy = Strategy::Null.new
       @cache = Mutant::Cache.new
       parse(arguments)
-      config # trigger lazyness now
-    end
-
-    # Return config
-    #
-    # @return [Config]
-    #
-    # @api private
-    #
-    def config
-      Config.new(
+      @config  = Config.new(
         cache:             @cache,
         zombie:            @zombie,
         debug:             @debug,
@@ -201,7 +191,14 @@ module Mutant
         expected_coverage: @expected_coverage
       )
     end
-    memoize :config
+
+    # Return config
+    #
+    # @return [Config]
+    #
+    # @api private
+    #
+    attr_reader :config
 
   private
 
