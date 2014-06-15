@@ -1,10 +1,10 @@
-# v0.5.20 2014-06-xx
+# v0.5.21 2014-06-15
 
 * Readd mutation of index assignments
 * Remove a bunch of useless mutations to nil.something
 * Readd mutation of index reference arguments
 
-# v0.5.20 2014-06-15
+# v0.5.20 2014-06-14
 
 * Remove support for matchers prefixed with ::
 * Fix cases where mutated source diff was empty #198
