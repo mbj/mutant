@@ -19,9 +19,11 @@ module Mutant
           :== =>        [:eql?, :equal?]
         )
 
-        INDEX_REFERENCE = :[]
-        INDEX_ASSIGN    = :[]=
-        ASSIGN_SUFFIX   = '='.freeze
+        INDEX_REFERENCE      = :[]
+        INDEX_ASSIGN         = :[]=
+        VARIABLE_ASSIGN      = :'='
+        ASSIGNMENT_OPERATORS = [INDEX_ASSIGN, VARIABLE_ASSIGN].to_set.freeze
+        ATTRIBUTE_ASSIGNMENT = /\A[a-z\d_]+=\z/.freeze
 
       private
 
@@ -195,14 +197,12 @@ module Mutant
 
         # Test for assignment
         #
-        # FIXME: This also returns true for <= operator!
-        #
         # @return [Boolean]
         #
         # @api private
         #
         def assignment?
-          selector.to_s[-1] == ASSIGN_SUFFIX
+          arguments.one? && (ASSIGNMENT_OPERATORS.include?(selector) || ATTRIBUTE_ASSIGNMENT.match(selector))
         end
 
         # Test for mlhs
