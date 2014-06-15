@@ -122,15 +122,12 @@ module Mutant
 
         # Test for attribute assignment
         #
-        # @return [true]
-        #   if node represetns and attribute assignment
-        #
-        # @return [false]
+        # @return [Boolean]
         #
         # @api private
         #
         def attribute_assignment?
-          !BINARY_OPERATORS.include?(selector) && !UNARY_OPERATORS.include?(selector) && assignment? && !mlhs?
+          arguments.one? && ATTRIBUTE_ASSIGNMENT =~ selector
         end
 
         # Mutate arguments
@@ -188,9 +185,9 @@ module Mutant
         # @api private
         #
         def allow_implicit_self?
-          n_self?(receiver) &&
-          !KEYWORDS.include?(selector) &&
-          !attribute_assignment? &&
+          n_self?(receiver)                &&
+          !KEYWORDS.include?(selector)     &&
+          !attribute_assignment?           &&
           !OP_ASSIGN.include?(parent_type)
         end
 
@@ -201,13 +198,12 @@ module Mutant
         # @api private
         #
         def assignment?
-          arguments.one? && (ASSIGNMENT_OPERATORS.include?(selector) || ATTRIBUTE_ASSIGNMENT.match(selector))
+          arguments.one? && (ASSIGNMENT_OPERATORS.include?(selector) || attribute_assignment?)
         end
 
-        # Test for mlhs
+        # Test if node is part of an mlhs
         #
         # @return [Boolean]
-        #   if node is within an mlhs
         #
         # @api private
         #
