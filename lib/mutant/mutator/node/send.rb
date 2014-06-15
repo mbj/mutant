@@ -103,8 +103,7 @@ module Mutant
         # @api private
         #
         def emit_naked_receiver
-          return if OP_ASSIGN.include?(parent_type) && NOT_ASSIGNABLE.include?(receiver.type)
-          emit(receiver) if receiver
+          emit(receiver) if receiver && !(OP_ASSIGN.include?(parent_type) && NOT_ASSIGNABLE.include?(receiver.type))
         end
 
         # Test for binary operator
