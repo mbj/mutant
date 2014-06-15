@@ -108,11 +108,7 @@ module Mutant
 
         # Test for binary operator
         #
-        # @return [true]
-        #   if send is a binary operator
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
