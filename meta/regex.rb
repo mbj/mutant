@@ -15,7 +15,6 @@ Mutant::Meta::Example.add do
   mutation '//' # match all
   mutation '/#{foo}n/'
   mutation '/a\A/'         # match nothing
-  mutation '/#{nil.bar}n/'
   mutation '/#{self.bar}n/'
   mutation '/#{nil}n/'
   mutation '/#{self}n/'

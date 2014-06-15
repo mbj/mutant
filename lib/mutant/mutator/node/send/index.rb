@@ -7,21 +7,6 @@ module Mutant
         # Base mutator for index operations
         class Index < self
 
-          # Mutator for index references
-          class Reference < self
-
-            # Perform dispatch
-            #
-            # @return [undefined]
-            #
-            # @api private
-            #
-            def dispatch
-              emit(receiver)
-            end
-
-          end # Reference
-
           # Mutator for index assignments
           class Assign < self
 

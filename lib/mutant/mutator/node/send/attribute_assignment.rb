@@ -2,8 +2,7 @@ module Mutant
   class Mutator
     class Node
       class Send
-
-        # Mutator for sends that correspond to an attribute assignment
+        # Mutator for attribute assignments
         class AttributeAssignment < self
 
         private
@@ -42,7 +41,6 @@ module Mutant
           end
 
         end # AttributeAssignment
-
       end # Send
     end # Node
   end # Mutator

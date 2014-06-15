@@ -49,7 +49,6 @@ Mutant::Meta::Example.add do
   mutation 'foo.gsub(a, self)'
   mutation 'foo.gsub(nil, b)'
   mutation 'foo.gsub(self, b)'
-  mutation 'nil.gsub(a, b)'
   mutation 'self.gsub(a, b)'
 end
 
@@ -64,7 +63,6 @@ Mutant::Meta::Example.add do
   mutation 'self.send(bar)'
   mutation 'foo.send(nil)'
   mutation 'foo.send(self)'
-  mutation 'nil.send(bar)'
 end
 
 Mutant::Meta::Example.add do
@@ -76,7 +74,6 @@ Mutant::Meta::Example.add do
   mutation 'self.bar'
   mutation 'baz'
   # This one could probably be removed
-  mutation 'nil.bar=baz'
 end
 
 Mutant::Meta::Example.add do
@@ -90,7 +87,6 @@ Mutant::Meta::Example.add do
   mutation 'foo.bar'
   mutation 'baz'
   # This one could probably be removed
-  mutation 'nil.bar = baz'
 end
 
 Mutant::Meta::Example.add do
@@ -120,13 +116,6 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
-  source 'foo[*bar]'
-
-  singleton_mutations
-  mutation 'foo'
-end
-
-Mutant::Meta::Example.add do
   source 'foo'
 
   singleton_mutations
@@ -137,7 +126,6 @@ Mutant::Meta::Example.add do
 
   singleton_mutations
   mutation 'foo'
-  mutation 'nil.foo'
 end
 
 Unparser::Constants::KEYWORDS.each do |keyword|
@@ -145,7 +133,6 @@ Unparser::Constants::KEYWORDS.each do |keyword|
     source "self.#{keyword}"
 
     singleton_mutations
-    mutation "nil.#{keyword}"
   end
 end
 
@@ -154,7 +141,6 @@ Mutant::Meta::Example.add do
 
   singleton_mutations
   mutation 'foo'
-  mutation 'nil.bar'
   mutation 'self.bar'
 end
 
@@ -164,8 +150,6 @@ Mutant::Meta::Example.add do
   singleton_mutations
   mutation 'self.class'
   mutation 'self.foo'
-  mutation 'nil.class.foo'
-  mutation 'nil.foo'
 end
 
 Mutant::Meta::Example.add do
@@ -181,7 +165,6 @@ Mutant::Meta::Example.add do
   singleton_mutations
   mutation 'self.foo'
   mutation 'foo(nil)'
-  mutation 'nil.foo(nil)'
 end
 
 Unparser::Constants::KEYWORDS.each do |keyword|
@@ -192,7 +175,6 @@ Unparser::Constants::KEYWORDS.each do |keyword|
     mutation "self.#{keyword}(nil)"
     mutation "foo.#{keyword}"
     mutation 'foo'
-    mutation "nil.#{keyword}(nil)"
   end
 end
 
@@ -220,6 +202,44 @@ Mutant::Meta::Example.add do
   mutation '(self - right) / foo'
   mutation 'nil / foo'
   mutation 'self / foo'
+end
+
+Mutant::Meta::Example.add do
+  source 'foo[1]'
+
+  singleton_mutations
+  mutation '1'
+  mutation 'foo'
+  mutation 'foo[]'
+  mutation 'self[1]'
+  mutation 'foo[0]'
+  mutation 'foo[2]'
+  mutation 'foo[-1]'
+  mutation 'foo[nil]'
+  mutation 'foo[self]'
+end
+
+Mutant::Meta::Example.add do
+  source 'self.foo[]'
+
+  singleton_mutations
+  mutation 'self.foo'
+  mutation 'self[]'
+  mutation 'foo[]'
+end
+
+Mutant::Meta::Example.add do
+  source 'foo[*bar]'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'foo[]'
+  mutation 'foo[nil]'
+  mutation 'foo[self]'
+  mutation 'foo[bar]'
+  mutation 'foo[*self]'
+  mutation 'foo[*nil]'
+  mutation 'self[*bar]'
 end
 
 (Mutant::BINARY_METHOD_OPERATORS - [:==, :eql?]).each do |operator|

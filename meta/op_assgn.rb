@@ -9,7 +9,6 @@ Mutant::Meta::Example.add do
   mutation '@a.b += 0'
   mutation '@a.b += nil'
   mutation '@a.b += self'
-  mutation 'nil.b += 1'
   mutation 'self.b += 1'
   # TODO: fix invalid AST
   #   This should not get emitted as invalid AST with valid unparsed source

@@ -36,8 +36,6 @@ module Mutant
         def dispatch
           emit_singletons
           case selector
-          when INDEX_REFERENCE
-            run(Index::Reference)
           when INDEX_ASSIGN
             run(Index::Assign)
           else
@@ -160,7 +158,9 @@ module Mutant
         def mutate_receiver
           return unless receiver
           emit_implicit_self
-          emit_receiver_mutations
+          emit_receiver_mutations do |node|
+            !n_nil?(node)
+          end
         end
 
         # Emit implicit self mutation
@@ -210,4 +210,5 @@ module Mutant
       end # Send
     end # Node
   end # Mutator
+
 end # Mutant
