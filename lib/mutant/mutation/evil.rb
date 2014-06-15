@@ -10,11 +10,7 @@ module Mutant
       #
       # @param [Killer] killer
       #
-      # @return [true]
-      #   if killer killed mutation
-      #
-      # @return [false]
-      #   otherwise
+      # @return [Boolean]
       #
       # @api private
       #

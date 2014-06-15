@@ -22,11 +22,7 @@ module Mutant
     #
     # @param [Killer] killer
     #
-    # @return [true]
-    #   if killer is successful
-    #
-    # @return [false]
-    #   otherwise
+    # @return [Boolean]
     #
     # @api private
     #

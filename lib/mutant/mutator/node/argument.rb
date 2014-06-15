@@ -37,11 +37,7 @@ module Mutant
 
         # Test if argument mutation is skipped
         #
-        # @return [true]
-        #   if argument should not get mutated
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #

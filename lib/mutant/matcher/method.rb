@@ -31,13 +31,9 @@ module Mutant
 
     private
 
-      # Test if method is skipped
+      # Test if method should be skipped
       #
-      # @return [true]
-      #   true and print warning if location must be filtered
-      #
-      # @return [false]
-      #   otherwise
+      # @return [Boolean]
       #
       # @api private
       #

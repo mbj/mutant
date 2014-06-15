@@ -26,11 +26,7 @@ module Mutant
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   if node matches method
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -42,11 +38,7 @@ module Mutant
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   if node matches source line
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -60,11 +52,7 @@ module Mutant
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   if node name matches
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -76,11 +64,7 @@ module Mutant
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   when receiver matches
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -105,11 +89,7 @@ module Mutant
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   if node name matches unqualified scope name
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #

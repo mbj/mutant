@@ -9,11 +9,7 @@ module Mutant
 
         # Test if method is public
         #
-        # @return [true]
-        #   if method is public
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #

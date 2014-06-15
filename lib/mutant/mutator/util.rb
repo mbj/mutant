@@ -30,11 +30,7 @@ module Mutant
       #
       # @param [Object] generated
       #
-      # @return [true]
-      #   if object is new
-      #
-      # @return [false]
-      #   otherwise
+      # @return [Boolean]
       #
       # @api private
       #

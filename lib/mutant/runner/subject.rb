@@ -49,11 +49,7 @@ module Mutant
 
       # Test if subject was processed successful
       #
-      # @return [true]
-      #   if successful
-      #
-      # @return [false]
-      #   otherwise
+      # @return [Boolean]
       #
       # @api private
       #

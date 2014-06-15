@@ -83,11 +83,7 @@ module Mutant
 
         # Test if runner was successful
         #
-        # @return [true]
-        #   if runner is successful
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -95,13 +91,9 @@ module Mutant
           object.success?
         end
 
-        # Test for colored output
+        # Test if output can be colored
         #
-        # @return [true]
-        #   if output is colored
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -127,11 +119,7 @@ module Mutant
 
         # Test for output to tty
         #
-        # @return [true]
-        #   if output is a tty
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #

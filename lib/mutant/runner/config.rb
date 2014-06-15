@@ -43,11 +43,7 @@ module Mutant
 
       # Test if run was successful
       #
-      # @return [true]
-      #   if run was successful
-      #
-      # @return [false]
-      #   otherwise
+      # @return [Boolean]
       #
       # @api private
       #

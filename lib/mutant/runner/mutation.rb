@@ -40,11 +40,7 @@ module Mutant
 
       # Test if mutation was handeled successfully
       #
-      # @return [true]
-      #   if successful
-      #
-      # @return [false]
-      #   otherwise
+      # @return [Boolean]
       #
       # @api private
       #

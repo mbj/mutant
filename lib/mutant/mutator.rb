@@ -73,10 +73,7 @@ module Mutant
     #
     # @param [Object] object
     #
-    # @return [true]
-    #   if generated object is different
-    #
-    # @return [false]
+    # @return [Boolean]
     #
     # @api private
     #

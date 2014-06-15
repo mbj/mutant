@@ -42,11 +42,7 @@ module Mutant
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   if node matches method
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
