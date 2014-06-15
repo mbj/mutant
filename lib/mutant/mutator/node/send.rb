@@ -197,11 +197,7 @@ module Mutant
         #
         # FIXME: This also returns true for <= operator!
         #
-        # @return [true]
-        #   if node represents attribute / element assignment
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -211,11 +207,8 @@ module Mutant
 
         # Test for mlhs
         #
-        # @return [true]
+        # @return [Boolean]
         #   if node is within an mlhs
-        #
-        # @return [false]
-        #   otherwise
         #
         # @api private
         #
@@ -225,11 +218,7 @@ module Mutant
 
         # Test for empty arguments
         #
-        # @return [true]
-        #   if arguments are empty
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
