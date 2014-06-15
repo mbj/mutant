@@ -65,13 +65,14 @@ module Mutant
 
     # Require file in zombie namespace
     #
-    # @param [String] logical_name
+    # @param [#to_s] logical_name
     #
     # @return [self]
     #
     # @api private
     #
     def require(logical_name)
+      logical_name = logical_name.to_s
       @highjack.original.call(logical_name)
       return unless include?(logical_name)
       @zombified << logical_name
