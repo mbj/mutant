@@ -20,9 +20,9 @@ module Mutant
           def run
             if running?
               info 'Mutant configuration:'
-              info 'Matcher:         %s',     config.matcher.inspect
-              info 'Strategy:        %s',     config.strategy.inspect
-              info 'Expect Coverage: %02f%%', config.expected_coverage.inspect
+              info 'Matcher:         %s',      config.matcher.inspect
+              info 'Strategy:        %s',      config.strategy.inspect
+              info 'Expect Coverage: %0.2f%%', config.expected_coverage.inspect
             end
             self
           end
