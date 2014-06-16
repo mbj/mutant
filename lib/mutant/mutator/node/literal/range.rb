@@ -48,7 +48,7 @@ module Mutant
           #
           def emit_upper_bound_mutations
             emit__end_mutations
-            emit_type(NAN, _end)
+            emit_type(N_NAN, _end)
           end
 
           # Emit start mutations
@@ -59,8 +59,8 @@ module Mutant
           #
           def emit_lower_bound_mutations
             emit_start_mutations
-            emit_type(start, INFINITY)
-            emit_type(start, NAN)
+            emit_type(start, N_INFINITY)
+            emit_type(start, N_NAN)
           end
 
         end # Range

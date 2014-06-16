@@ -24,7 +24,7 @@ module Mutant
             emit_body_mutations
           end
           emit_body(nil)
-          emit_body(RAISE)
+          emit_body(N_RAISE)
         end
 
       end # Block

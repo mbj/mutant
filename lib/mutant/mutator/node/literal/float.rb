@@ -22,9 +22,9 @@ module Mutant
           end
 
           SPECIAL = [
-            NodeHelpers::NAN,
-            NodeHelpers::NEGATIVE_INFINITY,
-            NodeHelpers::INFINITY
+            N_NAN,
+            N_NEGATIVE_INFINITY,
+            N_INFINITY
           ].freeze
 
           # Emit special cases
@@ -34,9 +34,7 @@ module Mutant
           # @api private
           #
           def emit_special_cases
-            SPECIAL.each do |value|
-              emit(value)
-            end
+            SPECIAL.each(&method(:emit))
           end
 
           # Return values to test against
