@@ -35,7 +35,7 @@ module Mutant
       # @api private
       #
       def new?(generated)
-        input != generated
+        !input.eql?(generated)
       end
 
     end # Util

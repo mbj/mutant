@@ -48,7 +48,7 @@ module Mutant
       # @api private
       #
       def success?
-        coverage.round(COVERAGE_PRECISION) == config.expected_coverage.round(COVERAGE_PRECISION)
+        coverage.round(COVERAGE_PRECISION).equal?(config.expected_coverage.round(COVERAGE_PRECISION))
       end
       memoize :success?
 

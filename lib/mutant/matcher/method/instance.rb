@@ -49,9 +49,9 @@ module Mutant
         def match?(node)
           location                  = node.location       || return
           expression                = location.expression || return
-          expression.line           == source_line &&
-          node.type                 == :def        &&
-          node.children[NAME_INDEX] == method_name
+          expression.line.equal?(source_line)           &&
+          node.type.equal?(:def)                        &&
+          node.children[NAME_INDEX].equal?(method_name)
         end
 
         # Matcher for memoized instance methods

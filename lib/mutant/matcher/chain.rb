@@ -33,7 +33,7 @@ module Mutant
       # @api private
       #
       def self.build(matchers)
-        if matchers.length == 1
+        if matchers.length.equal?(1)
           return matchers.first
         end
 

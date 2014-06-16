@@ -45,7 +45,7 @@ module Mutant
         def line?(node)
           expression = node.location.expression
           return false unless expression
-          expression.line == source_line
+          expression.line.equal?(source_line)
         end
 
         # Test for name match
@@ -57,7 +57,7 @@ module Mutant
         # @api private
         #
         def name?(node)
-          node.children[NAME_INDEX] == method_name
+          node.children[NAME_INDEX].equal?(method_name)
         end
 
         # Test for receiver match
@@ -95,7 +95,7 @@ module Mutant
         #
         def receiver_name?(node)
           name = node.children[CONST_NAME_INDEX]
-          name.to_s == context.unqualified_name
+          name.to_s.eql?(context.unqualified_name)
         end
 
       end # Singleton

@@ -24,7 +24,7 @@ module Mutant
       def matcher(cache)
         methods_matcher = MATCHERS.fetch(scope_symbol).new(cache, scope)
         method = methods_matcher.methods.detect do |meth|
-          meth.name == method_name
+          meth.name.equal?(method_name)
         end or raise NameError, "Cannot find method #{identifier}"
         methods_matcher.matcher.build(cache, scope, method)
       end

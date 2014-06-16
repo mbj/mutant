@@ -43,7 +43,7 @@ module Mutant
       def methods
         candidate_names.each_with_object([]) do |name, methods|
           method = access(name)
-          methods << method if method.owner == candidate_scope
+          methods << method if method.owner.equal?(candidate_scope)
         end
       end
       memoize :methods

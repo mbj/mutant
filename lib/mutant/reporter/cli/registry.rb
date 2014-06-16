@@ -43,7 +43,7 @@ module Mutant
         #
         def lookup(subject)
           current = subject
-          until current == Object
+          until current.equal?(Object)
             if registry.key?(current)
               return registry.fetch(current)
             end
