@@ -8,6 +8,9 @@ describe Mutant::Isolation do
       unless RUBY_VERSION.eql?('2.1.2')
         skip 'Series of events is indeterministic cross ruby implementations. Skipping this test under non 2.1.2'
       end
+      if ENV['COVERAGE']
+        skip 'Simplecov inferences with these tests, skipping'
+      end
     end
 
     let(:expected_return) { :foo }
@@ -18,16 +21,14 @@ describe Mutant::Isolation do
       $stderr = File.open('/dev/null')
     end
 
-    unless ENV['COVERAGE']
-      context 'when block returns mashallable data, and process exists zero' do
-        let(:block) do
-          lambda do
-            :data_from_child_process
-          end
+    context 'when block returns mashallable data, and process exists zero' do
+      let(:block) do
+        lambda do
+          :data_from_child_process
         end
-
-        it { should eql(:data_from_child_process) }
       end
+
+      it { should eql(:data_from_child_process) }
     end
 
     context 'when block does return marshallable data' do
