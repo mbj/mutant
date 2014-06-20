@@ -31,7 +31,7 @@ describe Mutant::Isolation do
       it { should eql(:data_from_child_process) }
     end
 
-    context 'when block does return marshallable data' do
+    context 'when block does NOT return marshallable data' do
       let(:block) do
         lambda do
           redirect_stderr
