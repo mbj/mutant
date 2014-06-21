@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
@@ -31,9 +29,9 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit_nil unless parent_type == :match_current_line
+            emit_singletons unless parent_node && n_match_current_line?(parent_node)
             children.each_with_index do |child, index|
-              mutate_child(index) unless child.type == :str
+              mutate_child(index) unless n_str?(child)
             end
             emit_type(options)
             emit_type(s(:str, NULL_REGEXP_SOURCE), options)

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   # Class to create diffs from source code
   class Diff
@@ -8,7 +6,7 @@ module Mutant
     # Return source diff
     #
     # @return [String]
-    #   if there is a diff
+    #   if there is exactly one diff
     #
     # @return [nil]
     #   otherwise
@@ -16,19 +14,9 @@ module Mutant
     # @api private
     #
     def diff
-      case diffs.length
-      when 0
-        nil
-      when 1
-        ::Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0)
-          .diff(:unified) << "\n"
-      else
-        $stderr.puts(
-          'Mutation resulted in more than one diff, should not happen! ' \
-          'PLS report a bug!'
-        )
-        nil
-      end
+      return unless diffs.length.equal?(1)
+      ::Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0)
+        .diff(:unified) << "\n"
     end
     memoize :diff
 

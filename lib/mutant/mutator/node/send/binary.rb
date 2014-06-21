@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
@@ -22,7 +20,7 @@ module Mutant
             emit(left)
             emit_left_mutations
             emit_selector_replacement
-            emit(right) unless right.type == :splat
+            emit(right) unless n_splat?(right)
             emit_right_mutations
           end
 

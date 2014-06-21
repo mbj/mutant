@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
@@ -19,7 +17,7 @@ module Mutant
         #
         def dispatch
           super
-          emit_nil
+          emit_singletons
         end
 
       end # Dstr

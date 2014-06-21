@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Runner
     # Runner for object config
@@ -45,16 +43,12 @@ module Mutant
 
       # Test if run was successful
       #
-      # @return [true]
-      #   if run was successful
-      #
-      # @return [false]
-      #   otherwise
+      # @return [Boolean]
       #
       # @api private
       #
       def success?
-        coverage.round(COVERAGE_PRECISION) == config.expected_coverage.round(COVERAGE_PRECISION)
+        coverage.round(COVERAGE_PRECISION).eql?(config.expected_coverage.round(COVERAGE_PRECISION))
       end
       memoize :success?
 

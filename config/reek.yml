@@ -56,6 +56,7 @@ NestedIterators:
   - Mutant::CLI#parse
   - Mutant::Mutator::Util::Array::Element#dispatch
   - Mutant::Mutator::Node::Resbody#mutate_captures
+  - Mutant::Mutator::Node::Arguments#emit_argument_mutations
   - Mutant::Reporter::CLI::Report::Config#generic_stats
   - Mutant::RequireHighjack#infect
   - Mutant::RequireHighjack#desinfect
@@ -88,12 +89,13 @@ TooManyMethods:
   - Mutant::CLI
   - Mutant::Mutator::Node
   - Mutant::Reporter::CLI
+  - Mutant::Meta::Example::Verification
   max_methods: 10
 TooManyStatements:
   enabled: true
   exclude:
   - Mutant#self.singleton_subclass_instance
-  - Mutant#self.isolate
+  - Mutant::Isolation#self.call
   - Mutant::Rspec::Killer#run
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI::Report::Config#run
@@ -109,7 +111,7 @@ TooManyStatements:
   - Mutant::CLI#parse
   - Mutant::CLI#initialize
   - Mutant::CLI#add_debug_options
-  max_statements: 6
+  max_statements: 7
 UncommunicativeMethodName:
   enabled: true
   exclude:

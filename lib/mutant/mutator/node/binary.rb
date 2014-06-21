@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
@@ -24,7 +22,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_nil
+          emit_singletons
           emit(left)
           emit(right)
           mutate_operator

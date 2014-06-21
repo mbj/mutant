@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Matcher
 
@@ -36,7 +34,7 @@ module Mutant
       # @api private
       #
       def pattern
-        /\A#{Regexp.escape(namespace)}(?:::)?/
+        /\A#{Regexp.escape(namespace)}(?:\z|::)/
       end
       memoize :pattern
 
@@ -95,9 +93,7 @@ Fix your lib to support normal ruby semantics!
           MESSAGE
           return
         end
-        if pattern =~ name
-          yield scope
-        end
+        yield scope if pattern =~ name
       end
 
     end # Namespace

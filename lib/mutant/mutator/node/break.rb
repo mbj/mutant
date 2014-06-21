@@ -1,18 +1,11 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
 
       # Mutator for loop control keywords
-      class LoopControl < Generic
+      class Break < Generic
 
-        INVERSE = IceNine.deep_freeze(
-          next: :break,
-          break: :next
-        )
-
-        handle(*INVERSE.keys)
+        handle(:break)
 
       private
 
@@ -24,12 +17,11 @@ module Mutant
         #
         def dispatch
           super
+          emit_singletons
           children.each_index(&method(:delete_child))
-          emit(s(INVERSE.fetch(node.type), *children))
-          emit_nil
         end
 
-      end # Next
+      end # Break
     end # Node
   end # Mutator
 end # Mutant

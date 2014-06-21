@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
 
   # Generator for mutations
@@ -23,8 +21,8 @@ module Mutant
           children.at(index)
         end
 
-        define_method("emit_#{name}_mutations") do
-          mutate_child(index)
+        define_method("emit_#{name}_mutations") do |&block|
+          mutate_child(index, &block)
         end
 
         define_method("emit_#{name}") do |node|
@@ -118,9 +116,11 @@ module Mutant
       #
       # @api private
       #
-      def mutate_child(index, mutator = Mutator)
+      def mutate_child(index, mutator = Mutator, &block)
+        block ||= ->(_node) { true }
         child = children.at(index)
         mutator.each(child, self) do |mutation|
+          next unless block.call(mutation)
           emit_child_update(index, mutation)
         end
       end
@@ -163,10 +163,31 @@ module Mutant
       # @api private
       #
       def emit_type(*children)
-        emit(new_self(*children))
+        emit(Parser::AST::Node.new(node.type, children))
       end
 
-      # Emit a new AST node with NilLiteral class
+      # Emit singleton literals
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def emit_singletons
+        emit_nil
+        emit_self
+      end
+
+      # Emit a literal self
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def emit_self
+        emit(N_SELF)
+      end
+
+      # Emit a literal nil
       #
       # @return [undefined]
       #
@@ -174,16 +195,6 @@ module Mutant
       #
       def emit_nil
         emit(N_NIL) unless asgn_left?
-      end
-
-      # Return new self typed child
-      #
-      # @return [Parser::AST::Node]
-      #
-      # @api private
-      #
-      def new_self(*children)
-        Parser::AST::Node.new(node.type, children)
       end
 
       # Emit values
@@ -200,6 +211,20 @@ module Mutant
         end
       end
 
+      # Return parent node
+      #
+      # @return [Parser::AST::Node] node
+      #   if parent with node is presnet
+      #
+      # @return [nil]
+      #   otherwise
+      #
+      # @api private
+      #
+      def parent_node
+        parent.node if parent
+      end
+
       # Return parent type
       #
       # @return [Symbol] type
@@ -211,7 +236,7 @@ module Mutant
       # @api private
       #
       def parent_type
-        parent && parent.node.type
+        parent_node.type if parent_node
       end
 
       # Test if the node is the left of an or_asgn or op_asgn

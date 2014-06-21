@@ -13,16 +13,16 @@ module Mutant
       *OPERATOR_METHODS.map(&:to_s)
     ).freeze
 
-    SCOPE_PATTERN = /
-      (?:#{SCOPE_OPERATOR})?#{SCOPE_NAME_PATTERN}
-      (?:#{SCOPE_OPERATOR}#{SCOPE_NAME_PATTERN})*
-    /x.freeze
+    SCOPE_PATTERN = /#{SCOPE_NAME_PATTERN}(?:#{SCOPE_OPERATOR}#{SCOPE_NAME_PATTERN})*/.freeze
 
     REGISTRY = {}
 
     # Initialize expression
     #
     # @param [MatchData] match
+    #
+    # @api private
+    #
     def initialize(*)
       super
       @syntax = match.to_s
@@ -41,6 +41,8 @@ module Mutant
     # @param [Expression] neddle
     #
     # @return [Fixnum]
+    #
+    # @api private
     #
     def match_length(neddle)
       if eql?(neddle)
@@ -99,9 +101,8 @@ module Mutant
     def self.expressions(input)
       REGISTRY.each_with_object([]) do |(regexp, klass), expressions|
         match = regexp.match(input)
-        if match
-          expressions << klass.new(match)
-        end
+        next unless match
+        expressions << klass.new(match)
       end
     end
     private_class_method :expressions

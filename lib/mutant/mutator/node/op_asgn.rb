@@ -1,13 +1,13 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
 
       # OpAsgn mutator
-      class OpAsgn < Generic
+      class OpAsgn < self
 
-        handle(:op_asgn, :and_asgn)
+        handle(:op_asgn)
+
+        children :left, :operation, :right
 
       private
 
@@ -18,8 +18,11 @@ module Mutant
         # @api private
         #
         def dispatch
-          super
-          emit_nil
+          emit_singletons
+          emit_left_mutations do |node|
+            !n_self?(node)
+          end
+          emit_right_mutations
         end
 
       end # OpAsgn

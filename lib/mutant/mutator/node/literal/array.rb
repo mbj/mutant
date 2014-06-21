@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
@@ -18,12 +16,11 @@ module Mutant
           # @api private
           #
           def dispatch
-            emit_nil
+            emit_singletons
             emit_type
             mutate_body
-            if children.one?
-              emit(children.first)
-            end
+            return unless children.one?
+            emit(children.first)
           end
 
           # Mutate body

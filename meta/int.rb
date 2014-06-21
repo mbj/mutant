@@ -3,8 +3,7 @@
 Mutant::Meta::Example.add do
   source '10'
 
-  # generic
-  mutation 'nil'
+  singleton_mutations
 
   # edge cases
   mutation '0'

@@ -1,5 +1,6 @@
 # encoding: UTF-8
-require 'rspec'
+require 'rspec/core'
+require 'rspec/version'
 
 module Mutant
   # Rspec integration namespace

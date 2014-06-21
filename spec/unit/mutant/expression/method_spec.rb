@@ -1,13 +1,11 @@
-# encoding: utf-8
-
 require 'spec_helper'
 
 describe Mutant::Expression::Method do
 
   let(:object)           { described_class.parse(input) }
   let(:cache)            { Mutant::Cache.new            }
-  let(:instance_method)  { '::TestApp::Literal#string'  }
-  let(:singleton_method) { '::TestApp::Literal.string'  }
+  let(:instance_method)  { 'TestApp::Literal#string'    }
+  let(:singleton_method) { 'TestApp::Literal.string'    }
 
   describe '#match_length' do
     let(:input) { instance_method }

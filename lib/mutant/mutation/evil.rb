@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutation
     # Evul mutation
@@ -12,11 +10,7 @@ module Mutant
       #
       # @param [Killer] killer
       #
-      # @return [true]
-      #   if killer killed mutation
-      #
-      # @return [false]
-      #   otherwise
+      # @return [Boolean]
       #
       # @api private
       #

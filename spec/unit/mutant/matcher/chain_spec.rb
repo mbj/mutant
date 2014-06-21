@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'spec_helper'
 
 describe Mutant::Matcher::Chain do
@@ -11,16 +9,11 @@ describe Mutant::Matcher::Chain do
 
     let(:matchers) { [matcher_a, matcher_b] }
 
-    let(:matcher_a) { double('Matcher A') }
-    let(:matcher_b) { double('Matcher B') }
+    let(:matcher_a) { [subject_a] }
+    let(:matcher_b) { [subject_b] }
 
     let(:subject_a) { double('Subject A') }
     let(:subject_b) { double('Subject B') }
-
-    before do
-      matcher_a.stub(:each).and_yield(subject_a).and_return(matcher_a)
-      matcher_b.stub(:each).and_yield(subject_b).and_return(matcher_b)
-    end
 
     # it_should_behave_like 'an #each method'
     context 'with no block' do
@@ -28,12 +21,8 @@ describe Mutant::Matcher::Chain do
 
       it { should be_instance_of(to_enum.class) }
 
-      if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
-        pending 'FIX RBX rspec? BUG HERE'
-      else
-        it 'yields the expected values' do
-          expect(subject.to_a).to eql(object.to_a)
-        end
+      it 'yields the expected values' do
+        expect(subject.to_a).to eql(object.to_a)
       end
     end
 

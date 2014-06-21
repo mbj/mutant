@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
@@ -19,10 +17,10 @@ module Mutant
         # @api private
         #
         def dispatch
+          emit_singletons
           mutate_condition
           mutate_if_branch
           mutate_else_branch
-          emit_nil
         end
 
         # Emit conditon mutations
@@ -32,8 +30,10 @@ module Mutant
         # @api private
         #
         def mutate_condition
-          emit_condition_mutations
-          emit_type(n_not(condition), if_branch, else_branch) unless condition.type == :match_current_line
+          emit_condition_mutations do |condition|
+            !n_self?(condition)
+          end
+          emit_type(n_not(condition), if_branch, else_branch) unless n_match_current_line?(condition)
           emit_type(N_TRUE,  if_branch, else_branch)
           emit_type(N_FALSE, if_branch, else_branch)
         end
@@ -46,10 +46,9 @@ module Mutant
         #
         def mutate_if_branch
           emit_type(condition, else_branch, nil) if else_branch
-          if if_branch
-            emit_if_branch_mutations
-            emit_type(condition, if_branch, nil)
-          end
+          return unless if_branch
+          emit_if_branch_mutations
+          emit_type(condition, if_branch, nil)
         end
 
         # Emit else branch mutations
@@ -59,10 +58,9 @@ module Mutant
         # @api private
         #
         def mutate_else_branch
-          if else_branch
-            emit_else_branch_mutations
-            emit_type(condition, nil, else_branch)
-          end
+          return unless else_branch
+          emit_else_branch_mutations
+          emit_type(condition, nil, else_branch)
         end
 
       end # If

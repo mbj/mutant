@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
@@ -21,7 +19,7 @@ module Mutant
           if body
             mutate_body
           else
-            emit_child_update(body_index, RAISE)
+            emit_child_update(body_index, N_RAISE)
           end
           mutate_conditions
         end

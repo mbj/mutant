@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Subject
     class Method
@@ -11,11 +9,7 @@ module Mutant
 
         # Test if method is public
         #
-        # @return [true]
-        #   if method is public
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -32,7 +26,7 @@ module Mutant
         #
         def prepare
           expected_warnings =
-            if name.equal?(:initialize)
+            if RUBY_ENGINE.eql?('ruby') && name.equal?(:initialize)
               ["#{__FILE__}:#{__LINE__ + 5}: warning: undefining `initialize' may cause serious problems\n"]
             else
               []

@@ -8,7 +8,7 @@ Mutant::Meta::Example.add do
     end
   RUBY
 
-  mutation 'nil'
+  singleton_mutations
 
   mutation <<-RUBY
     case
@@ -33,271 +33,190 @@ end
 
 Mutant::Meta::Example.add do
   source <<-RUBY
-    case :condition
-    when :foo
-    when :bar, :baz
-      :barbaz
+    case condition
+    when A
+    when B, C
+      C
     else
-      :else
+      D
     end
   RUBY
 
-  # Presence of branches
-  mutation <<-RUBY
-    case :condition
-    when :bar, :baz
-      :barbaz
-    else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    when :bar, :baz
-      :barbaz
-    end
-  RUBY
+  singleton_mutations
 
-  # Mutations of condition
   mutation <<-RUBY
     case nil
-    when :foo
-    when :bar, :baz
-      :barbaz
+    when A
+    when B, C
+      C
     else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition__mutant__
-    when :foo
-    when :bar, :baz
-      :barbaz
-    else
-      :else
+      D
     end
   RUBY
 
-  # Mutations of branch bodies
   mutation <<-RUBY
-    case :condition
-    when :foo
+    case self
+    when A
+    when B, C
+      C
+    else
+      D
+    end
+  RUBY
+
+  mutation <<-RUBY
+    case condition
+    when A
       raise
-    when :bar, :baz
-      :barbaz
+    when B, C
+      C
     else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    when :bar, :baz
-      :barbaz__mutant__
-    else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    when :bar, :baz
-      nil
-    else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    when :bar, :baz
-      :barbaz
-    else
-      :else__mutant__
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    when :bar, :baz
-      :barbaz
-    else
-      nil
+      D
     end
   RUBY
 
-  # Mutations of when conditions
   mutation <<-RUBY
-    case :condition
-    when :foo__mutant__
-    when :bar, :baz
-      :barbaz
-    else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
+    case condition
     when nil
-    when :bar, :baz
-      :barbaz
+    when B, C
+      C
     else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    when :bar__mutant__, :baz
-      :barbaz
-    else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    when nil, :baz
-      :barbaz
-    else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    when :bar, nil
-      :barbaz
-    else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    when :bar, :baz__mutant__
-      :barbaz
-    else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    when :baz
-      :barbaz
-    else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when :foo
-    when :bar
-      :barbaz
-    else
-      :else
+      D
     end
   RUBY
 
-  mutation 'nil'
-end
-
-Mutant::Meta::Example.add do
-  source <<-RUBY
-    case :condition
-    when :foo
-      :foo
+  mutation <<-RUBY
+    case condition
+    when self
+    when B, C
+      C
     else
-      :else
+      D
     end
   RUBY
 
-  # Presence of branches
   mutation <<-RUBY
-    case :condition
-    when :foo
-      :foo
-    end
-  RUBY
-
-  # Mutations of condition
-  mutation <<-RUBY
-    case nil
-    when :foo
-      :foo
+    case condition
+    when B, C
+      C
     else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition__mutant__
-    when :foo
-      :foo
-    else
-      :else
+      D
     end
   RUBY
 
-  # Mutations of branch bodies
   mutation <<-RUBY
-    case :condition
-    when :foo
+    case condition
+    when A
+    when B, C
       nil
     else
-      :else
+      D
     end
   RUBY
+
   mutation <<-RUBY
-    case :condition
-    when :foo
-      :foo__mutant__
+    case condition
+    when A
+    when B, C
+      self
     else
-      :else
+      D
     end
   RUBY
+
   mutation <<-RUBY
-    case :condition
-    when :foo
-      :foo
+    case condition
+    when A
+    when C
+      C
     else
-      :else__mutant__
+      D
     end
   RUBY
+
   mutation <<-RUBY
-    case :condition
-    when :foo
-      :foo
+    case condition
+    when A
+    when nil, C
+      C
+    else
+      D
+    end
+  RUBY
+
+  mutation <<-RUBY
+    case condition
+    when A
+    when self, C
+      C
+    else
+      D
+    end
+  RUBY
+
+  mutation <<-RUBY
+    case condition
+    when A
+    when B
+      C
+    else
+      D
+    end
+  RUBY
+
+  mutation <<-RUBY
+    case condition
+    when A
+    when B, nil
+      C
+    else
+      D
+    end
+  RUBY
+
+  mutation <<-RUBY
+    case condition
+    when A
+    when B, self
+      C
+    else
+      D
+    end
+  RUBY
+
+  mutation <<-RUBY
+    case condition
+    when A
+    else
+      D
+    end
+  RUBY
+
+  mutation <<-RUBY
+    case condition
+    when A
+    when B, C
+      C
     else
       nil
     end
   RUBY
 
-  # Mutations of when conditions
   mutation <<-RUBY
-    case :condition
-    when :foo__mutant__
-      :foo
+    case condition
+    when A
+    when B, C
+      C
     else
-      :else
-    end
-  RUBY
-  mutation <<-RUBY
-    case :condition
-    when nil
-      :foo
-    else
-      :else
+      self
     end
   RUBY
 
-  mutation 'nil'
+  mutation <<-RUBY
+    case condition
+    when A
+    when B, C
+      C
+    end
+  RUBY
 end

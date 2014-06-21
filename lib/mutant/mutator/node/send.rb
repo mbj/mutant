@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
@@ -21,9 +19,11 @@ module Mutant
           :== =>        [:eql?, :equal?]
         )
 
-        INDEX_REFERENCE = :[]
-        INDEX_ASSIGN    = :[]=
-        ASSIGN_SUFFIX   = '='.freeze
+        INDEX_REFERENCE      = :[]
+        INDEX_ASSIGN         = :[]=
+        VARIABLE_ASSIGN      = :'='
+        ASSIGNMENT_OPERATORS = [INDEX_ASSIGN, VARIABLE_ASSIGN].to_set.freeze
+        ATTRIBUTE_ASSIGNMENT = /\A[a-z\d_]+=\z/.freeze
 
       private
 
@@ -34,11 +34,8 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_nil
-          case selector
-          when INDEX_REFERENCE
-            run(Index::Reference)
-          when INDEX_ASSIGN
+          emit_singletons
+          if selector.equal?(INDEX_ASSIGN)
             run(Index::Assign)
           else
             non_index_dispatch
@@ -79,8 +76,8 @@ module Mutant
         def normal_dispatch
           emit_naked_receiver
           emit_selector_replacement
-          mutate_receiver
           emit_argument_propagation
+          mutate_receiver
           mutate_arguments
         end
 
@@ -103,20 +100,12 @@ module Mutant
         # @api private
         #
         def emit_naked_receiver
-          return unless receiver
-          op_assign      = OP_ASSIGN.include?(parent_type)
-          not_assignable = NOT_ASSIGNABLE.include?(receiver.type)
-          return if op_assign and not_assignable
-          emit(receiver)
+          emit(receiver) if receiver && !NOT_ASSIGNABLE.include?(receiver.type)
         end
 
         # Test for binary operator
         #
-        # @return [true]
-        #   if send is a binary operator
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -126,15 +115,12 @@ module Mutant
 
         # Test for attribute assignment
         #
-        # @return [true]
-        #   if node represetns and attribute assignment
-        #
-        # @return [false]
+        # @return [Boolean]
         #
         # @api private
         #
         def attribute_assignment?
-          !BINARY_OPERATORS.include?(selector) && !UNARY_OPERATORS.include?(selector) && assignment? && !mlhs?
+          arguments.one? && ATTRIBUTE_ASSIGNMENT =~ selector
         end
 
         # Mutate arguments
@@ -158,10 +144,8 @@ module Mutant
         # @api private
         #
         def emit_argument_propagation
-          return unless arguments.one?
           node = arguments.first
-          return if NOT_STANDALONE.include?(node.type)
-          emit(arguments.first)
+          emit(node) if arguments.one? && !NOT_STANDALONE.include?(node.type)
         end
 
         # Emit receiver mutations
@@ -173,7 +157,9 @@ module Mutant
         def mutate_receiver
           return unless receiver
           emit_implicit_self
-          emit_receiver_mutations
+          emit_receiver_mutations do |node|
+            !n_nil?(node)
+          end
         end
 
         # Emit implicit self mutation
@@ -183,37 +169,27 @@ module Mutant
         # @api private
         #
         def emit_implicit_self
-          if receiver.type == :self &&
-             !KEYWORDS.include?(selector) &&
-             !attribute_assignment? &&
-             !OP_ASSIGN.include?(parent_type)
-            emit_receiver(nil)
-          end
+          emit_receiver(nil) if n_self?(receiver) && !(
+            KEYWORDS.include?(selector)         ||
+            METHOD_OPERATORS.include?(selector) ||
+            OP_ASSIGN.include?(parent_type)     ||
+            attribute_assignment?
+          )
         end
 
         # Test for assignment
         #
-        # FIXME: This also returns true for <= operator!
-        #
-        # @return [true]
-        #   if node represents attribute / element assignment
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
         def assignment?
-          selector.to_s[-1] == ASSIGN_SUFFIX
+          arguments.one? && (ASSIGNMENT_OPERATORS.include?(selector) || attribute_assignment?)
         end
 
-        # Test for mlhs
+        # Test if node is part of an mlhs
         #
-        # @return [true]
-        #   if node is within an mlhs
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -223,11 +199,7 @@ module Mutant
 
         # Test for empty arguments
         #
-        # @return [true]
-        #   if arguments are empty
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -238,4 +210,5 @@ module Mutant
       end # Send
     end # Node
   end # Mutator
+
 end # Mutant

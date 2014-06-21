@@ -17,7 +17,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          emit_nil
+          emit_singletons
           emit_regexp_mutations
         end
 

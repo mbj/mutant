@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Matcher
     class Method
@@ -19,7 +17,7 @@ module Mutant
         #
         def self.build(cache, scope, method)
           name = method.name
-          if scope.ancestors.include?(::Memoizable) and scope.memoized?(name)
+          if scope.ancestors.include?(::Memoizable) && scope.memoized?(name)
             return Memoized.new(cache, scope, method)
           end
           super
@@ -44,20 +42,16 @@ module Mutant
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   if node matches method
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
         def match?(node)
           location                  = node.location       || return
           expression                = location.expression || return
-          expression.line           == source_line &&
-          node.type                 == :def        &&
-          node.children[NAME_INDEX] == method_name
+          expression.line.equal?(source_line)           &&
+          node.type.equal?(:def)                        &&
+          node.children[NAME_INDEX].equal?(method_name)
         end
 
         # Matcher for memoized instance methods

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Matcher
     # Abstract base class for matcher that returns method subjects from scope
@@ -45,7 +43,7 @@ module Mutant
       def methods
         candidate_names.each_with_object([]) do |name, methods|
           method = access(name)
-          methods << method if method.owner == candidate_scope
+          methods << method if method.owner.equal?(candidate_scope)
         end
       end
       memoize :methods

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   # Generator for mutations
   class Mutator
@@ -7,7 +5,10 @@ module Mutant
 
     # Run mutator on input
     #
-    # @param [Parser::AST::Node] node
+    # @param [Object] input
+    #   the input to mutate
+    #
+    # @param [Mutator] parent
     #
     # @return [self]
     #
@@ -72,10 +73,7 @@ module Mutant
     #
     # @param [Object] object
     #
-    # @return [true]
-    #   if generated object is different
-    #
-    # @return [false]
+    # @return [Boolean]
     #
     # @api private
     #
@@ -117,34 +115,6 @@ module Mutant
       guard(object)
 
       emit!(object)
-    end
-
-    # Maximum amount of tries to generate a new object
-    MAX_TRIES = 3
-
-    # Call block until it generates a mutation
-    #
-    # @yield
-    #   Execute block until object is generated where new?(object) returns true
-    #
-    # @return [self]
-    #
-    # @raise [RuntimeError]
-    #   raises RuntimeError when no new node can be generated after MAX_TRIES.
-    #
-    # @api private
-    #
-    def emit_new
-      MAX_TRIES.times do
-        object = yield
-
-        if new?(object)
-          emit!(object)
-          return
-        end
-      end
-
-      raise "New AST could not be generated after #{MAX_TRIES} attempts"
     end
 
     # Call block with node

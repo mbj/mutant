@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Matcher
     # A null matcher, that does not match any subjects

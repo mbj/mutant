@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     # Namespace for utility mutators
@@ -32,16 +30,12 @@ module Mutant
       #
       # @param [Object] generated
       #
-      # @return [true]
-      #   if object is new
-      #
-      # @return [false]
-      #   otherwise
+      # @return [Boolean]
       #
       # @api private
       #
       def new?(generated)
-        input != generated
+        !input.eql?(generated)
       end
 
     end # Util

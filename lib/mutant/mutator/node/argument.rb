@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
@@ -39,11 +37,7 @@ module Mutant
 
         # Test if argument mutation is skipped
         #
-        # @return [true]
-        #   if argument should not get mutated
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #

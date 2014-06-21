@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   # Base class for code loaders
   class Loader

@@ -10,7 +10,6 @@ Mutations:
   * Replace nil or add "do not touch me object" to literal mutations.
   * Mutate options on Regexp literals
   * Add mutations for dynamic regexp symbol and string literals
-  * Mutate "def foo; bar; end" to "def foo; self; end"?
   * Mutate Block catch "def foo(&block)" and block pass "foo(&block)"
   * Binary operator mutations
   * Add timeout to terminate infinite loops
@@ -21,15 +20,6 @@ Mutations:
 
 Loader:
   * Make sure loader does not change visibility of injected mutants
-
-Killers:
-  * Move test framework specific stuff to strategy
-  * Add a general master <=> killer IPC interface. So different strategies of isolation
-    (fork, vs jruby runtime creation) will work without big impact.
-
-Strategy:
-  * Aggregate warnings on missing spec files
-  * Provide "expicit files to kill with" strategy
 
 Matcher:
   * Allow matches on attr_reader with literal name argument(s)?

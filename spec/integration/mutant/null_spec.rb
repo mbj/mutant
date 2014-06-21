@@ -1,10 +1,8 @@
-# encoding: utf-8
-
 require 'spec_helper'
 
 describe 'null integration' do
 
-  let(:base_cmd) { 'bundle exec mutant -I lib --require test_app "::TestApp*"' }
+  let(:base_cmd) { 'bundle exec mutant -I lib --require test_app "TestApp*"' }
 
   around do |example|
     Dir.chdir(TestApp.root) do

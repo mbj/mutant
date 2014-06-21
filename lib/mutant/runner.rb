@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   # Runner baseclass
   class Runner
@@ -93,11 +91,7 @@ module Mutant
 
     # Test if runner should stop
     #
-    # @return [true]
-    #   if runner should stop
-    #
-    # @return [false]
-    #   otherwise
+    # @return [Boolean]
     #
     # @api private
     #
@@ -117,11 +111,7 @@ module Mutant
 
     # Test if runner is successful
     #
-    # @return [true]
-    #   if successful
-    #
-    # @return [false]
-    #   otherwise
+    # @return [Boolean]
     #
     # @api private
     #

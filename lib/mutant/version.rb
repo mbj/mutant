@@ -1,6 +1,4 @@
-# encoding: utf-8
-
 module Mutant
   # The current mutant version
-  VERSION = '0.5.18'.freeze
+  VERSION = '0.5.22'.freeze
 end # Mutant

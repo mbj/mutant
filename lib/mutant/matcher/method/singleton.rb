@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Matcher
     class Method
@@ -28,11 +26,7 @@ module Mutant
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   if node matches method
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -44,45 +38,33 @@ module Mutant
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   if node matches source line
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
         def line?(node)
           expression = node.location.expression
           return false unless expression
-          expression.line == source_line
+          expression.line.equal?(source_line)
         end
 
         # Test for name match
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   if node name matches
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
         def name?(node)
-          node.children[NAME_INDEX] == method_name
+          node.children[NAME_INDEX].equal?(method_name)
         end
 
         # Test for receiver match
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   when receiver matches
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
@@ -107,17 +89,13 @@ module Mutant
         #
         # @param [Parser::AST::Node] node
         #
-        # @return [true]
-        #   if node name matches unqualified scope name
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #
         def receiver_name?(node)
           name = node.children[CONST_NAME_INDEX]
-          name.to_s == context.unqualified_name
+          name.to_s.eql?(context.unqualified_name)
         end
 
       end # Singleton

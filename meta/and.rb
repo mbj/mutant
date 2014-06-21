@@ -3,7 +3,7 @@
 Mutant::Meta::Example.add do
   source 'true and false'
 
-  mutation 'nil'
+  singleton_mutations
   mutation 'true'
   mutation 'false'
   mutation 'true or false'

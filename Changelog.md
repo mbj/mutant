@@ -1,3 +1,29 @@
+# v0.5.22 2014-06-15
+
+* Fix invalid AST generation on operator method mutation with self as receiver.
+
+# v0.5.21 2014-06-15
+
+* Readd mutation of index assignments
+* Remove a bunch of useless mutations to nil.something
+* Readd mutation of index reference arguments
+
+# v0.5.20 2014-06-14
+
+* Remove support for matchers prefixed with ::
+* Fix cases where mutated source diff was empty #198
+* Fix mutate to simpler primitive violation break to next #203
+* Improve integration / corpus tests to spot highlevel regressions on CI level.
+
+* Remove support for matchers prefixed with ::
+
+# v0.5.19 2014-06-06
+
+Changes:
+
+* Do not emit more powerful rescue matchers #183
+* Do not emit more powerful loop control #201
+
 # v0.5.18 2014-06-04
 
 Changes:

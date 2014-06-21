@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Matcher
     # A chain of matchers
@@ -35,7 +33,7 @@ module Mutant
       # @api private
       #
       def self.build(matchers)
-        if matchers.length == 1
+        if matchers.length.equal?(1)
           return matchers.first
         end
 

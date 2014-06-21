@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'optparse'
 
 module Mutant
@@ -120,9 +118,7 @@ module Mutant
       # @api private
       #
       def subject_selector
-        if @subject_selectors.any?
-          Morpher::Evaluator::Predicate::Boolean::Or.new(@subject_selectors)
-        end
+        Morpher::Evaluator::Predicate::Boolean::Or.new(@subject_selectors) if @subject_selectors.any?
       end
 
       # Return predicate
@@ -153,6 +149,10 @@ module Mutant
       # Return subject rejector
       #
       # @return [#call]
+      #   if there is a subject rejector
+      #
+      # @return [nil]
+      #   otherwise
       #
       # @api private
       #
@@ -161,9 +161,7 @@ module Mutant
           Morpher.compile(s(:eql, s(:attribute, :identification), s(:static, subject.identification)))
         end
 
-        if rejectors.any?
-          Morpher::Evaluator::Predicate::Boolean::Or.new(rejectors)
-        end
+        Morpher::Evaluator::Predicate::Boolean::Or.new(rejectors) if rejectors.any?
       end
     end
 
@@ -183,17 +181,7 @@ module Mutant
       @cache = Mutant::Cache.new
       @reporter = Reporter::CLI.new($stdout)
       parse(arguments)
-      config # trigger lazyness now
-    end
-
-    # Return config
-    #
-    # @return [Config]
-    #
-    # @api private
-    #
-    def config
-      Config.new(
+      @config  = Config.new(
         cache:             @cache,
         zombie:            @zombie,
         debug:             @debug,
@@ -204,7 +192,14 @@ module Mutant
         expected_coverage: @expected_coverage
       )
     end
-    memoize :config
+
+    # Return config
+    #
+    # @return [Config]
+    #
+    # @api private
+    #
+    attr_reader :config
 
   private
 

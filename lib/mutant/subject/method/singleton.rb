@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Subject
     class Method
@@ -11,11 +9,7 @@ module Mutant
 
         # Test if method is public
         #
-        # @return [true]
-        #   if method is public
-        #
-        # @return [false]
-        #   otherwise
+        # @return [Boolean]
         #
         # @api private
         #

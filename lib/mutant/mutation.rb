@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   # Represent a mutated node with its subject
   class Mutation
@@ -24,11 +22,7 @@ module Mutant
     #
     # @param [Killer] killer
     #
-    # @return [true]
-    #   if killer is successful
-    #
-    # @return [false]
-    #   otherwise
+    # @return [Boolean]
     #
     # @api private
     #

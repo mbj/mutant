@@ -74,6 +74,17 @@ module Mutant
           self
         end
 
+        # Add singleotn mutations
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def singleton_mutations
+          mutation('nil')
+          mutation('self')
+        end
+
         # Helper method to coerce input to node
         #
         # @param [String,Parser::AST::Node] input
@@ -86,17 +97,14 @@ module Mutant
         # @api private
         #
         def node(input)
-          node =
-            case input
-            when String
-              Parser::CurrentRuby.parse(input)
-            when Parser::AST::Node
-              input
-            else
-              raise "Cannot coerce to node: #{source.inspect}"
-            end
-
-          Unparser::Preprocessor.run(node)
+          case input
+          when String
+            Unparser::Preprocessor.run(Parser::CurrentRuby.parse(input))
+          when Parser::AST::Node
+            input
+          else
+            raise "Cannot coerce to node: #{source.inspect}"
+          end
         end
 
       end # DSL

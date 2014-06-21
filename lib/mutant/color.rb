@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   # Class to colorize strings
   class Color

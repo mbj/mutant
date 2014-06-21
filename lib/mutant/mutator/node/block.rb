@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Mutator
     class Node
@@ -19,14 +17,14 @@ module Mutant
         # @api private
         #
         def dispatch
+          emit_singletons
           emit(send)
           emit_arguments_mutations
           if body
             emit_body_mutations
           end
           emit_body(nil)
-          emit_body(RAISE)
-          emit_nil
+          emit_body(N_RAISE)
         end
 
       end # Block

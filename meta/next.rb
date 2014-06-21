@@ -3,9 +3,9 @@
 Mutant::Meta::Example.add do
   source 'next true'
 
+  singleton_mutations
   mutation 'next false'
   mutation 'next nil'
   mutation 'next'
-  mutation 'nil'
   mutation 'break true'
 end

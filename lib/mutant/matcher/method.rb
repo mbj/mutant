@@ -1,15 +1,13 @@
-# encoding: utf-8
-
 module Mutant
   class Matcher
     # Matcher for subjects that are a specific method
     class Method < self
       include Adamantium::Flat, Concord::Public.new(:cache, :scope, :method)
+      include Equalizer.new(:identification)
 
       # Methods within rbx kernel directory are precompiled and their source
-      # cannot be accessed via reading source location
-      SKIP_METHODS = %w[kernel/ (eval)].freeze
-      BLACKLIST    = /\A#{Regexp.union(*SKIP_METHODS)}/.freeze
+      # cannot be accessed via reading source location. Same for methods created by eval.
+      BLACKLIST = %r{\Akernel/|(eval)}.freeze
 
       # Enumerate matches
       #
@@ -33,13 +31,9 @@ module Mutant
 
     private
 
-      # Test if method is skipped
+      # Test if method should be skipped
       #
-      # @return [true]
-      #   true and print warning if location must be filtered
-      #
-      # @return [false]
-      #   otherwise
+      # @return [Boolean]
       #
       # @api private
       #

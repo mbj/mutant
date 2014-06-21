@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Mutant
   class Reporter
     class CLI
@@ -52,20 +50,22 @@ module Mutant
             handle(Mutant::Mutation::Evil)
             handle(Mutant::Mutation::Neutral)
 
+            DIFF_ERROR_MESSAGE = 'BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction'.freeze
+
           private
 
             # Run report printer
             #
-            # @return [self]
+            # @return [String]
             #
             # @api private
             #
             def details
               original, current = object.original_source, object.source
               diff = Mutant::Diff.build(original, current)
-              color? ? diff.colorized_diff : diff.diff
+              diff = color? ? diff.colorized_diff : diff.diff
+              diff || DIFF_ERROR_MESSAGE
             end
-
           end # Diff
         end # Mutation
 
