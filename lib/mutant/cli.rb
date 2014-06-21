@@ -181,6 +181,7 @@ module Mutant
       @expected_coverage = 100.0
       @strategy = Strategy::Null.new
       @cache = Mutant::Cache.new
+      @reporter = Reporter::CLI.new($stdout)
       parse(arguments)
       config # trigger lazyness now
     end
@@ -199,7 +200,7 @@ module Mutant
         matcher:           @builder.matcher,
         strategy:          @strategy,
         fail_fast:         @fail_fast,
-        reporter:          Reporter::CLI.new($stdout),
+        reporter:          @reporter,
         expected_coverage: @expected_coverage
       )
     end
@@ -226,6 +227,7 @@ module Mutant
         add_environmental_options(builder)
         add_mutation_options(builder)
         add_filter_options(builder)
+        add_reporting_options(builder)
         add_debug_options(builder)
       end
 
@@ -328,6 +330,25 @@ module Mutant
       end
       opts.on('--code CODE', 'Scope execution to subjects with CODE') do |code|
         @builder.add_subject_selector(Morpher.compile(s(:eql, s(:attribute, :code), s(:static, code))))
+      end
+    end
+
+    # Add reporting options
+    #
+    # @param [OptionParser] opts
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def add_reporting_options(opts)
+      opts.on('--reporting OUTPUT', 'use OUTPUT to print the results (cli or html)') do |output_name|
+        if output_name.downcase == 'html'
+          # stdout so it can give some feedback to the user
+          @reporter = Reporter::HTML.new($stdout)
+        else #default
+          @reporter = Reporter::CLI.new($stdout)
+        end
       end
     end
 

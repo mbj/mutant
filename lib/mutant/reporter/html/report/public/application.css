@@ -1,0 +1,53 @@
+
+body {
+  font-family: "Lucida Grande", Helvetica, "Helvetica Neue", Arial, sans-serif;
+  padding: 12px;
+  background-color: #333333; }
+
+h1, h2, h3, h4 {
+  color: #1c2324;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 12px; }
+
+#content {
+  clear: left;
+  background-color: white;
+  border: 2px solid #dddddd;
+  border-top: 8px solid #dddddd;
+  padding: 18px;
+}
+
+.timestamp {
+  color: #dddddd; }
+
+a.src_link {
+  background: url("./magnify.png") no-repeat left 50%;
+  padding-left: 18px; }
+
+#footer {
+  color: #dddddd;
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 12px;
+  text-align: right; }
+  #footer a {
+    color: #eeeeee;
+    text-decoration: underline; }
+    #footer a:hover {
+      color: white;
+      text-decoration: none; }
+
+.subject {
+	  margin-left: 10px;
+	  display: none;
+}
+
+.percentage {
+	margin-left: 10px;
+	font-weight: bold;
+}
+
+.mutants_ratio {
+	margin-left: 10px;
+}
