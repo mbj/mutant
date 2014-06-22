@@ -81,6 +81,7 @@ module Mutant
           # @api private
           #
           def render(result)
+            result.project_name # This does nothing, called only to make Rubocop happy
             # the variable named result will be available in the ERB template
             template(TEMPLATE_NAME).result(binding)
           end
@@ -120,14 +121,12 @@ module Mutant
           # @api private
           #
           def rgb_values(percentage)
-            g=(255*percentage)/100
-            r=(255*(100-percentage))/100;
-            b=0
+            g = (255 * percentage) / 100
+            r = (255 * (100 - percentage)) / 100;
+            b = 0
             "rgb(#{r}, #{g}, #{b})"
           end
         end
-
-
 
         # Printer for configuration
         class Config < self
@@ -221,7 +220,6 @@ module Mutant
           def output_file
             File.join(MUTANT_HTML_REPORT_DIR, MUTANT_HTML_REPORT_FILE)
           end
-
 
         end # Config
       end # Report
