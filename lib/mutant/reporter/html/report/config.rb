@@ -1,5 +1,4 @@
 # encoding: utf-8
-require 'debugger'
 require 'fileutils'
 require 'erb'
 
@@ -16,7 +15,7 @@ module Mutant
             @total = subject.mutations.size
             failed = subject.failed_mutations.size
             @passed = total - failed
-            @percentage = @passed *100 / @total
+            @percentage = @passed * 100 / @total
           end
         end
 
