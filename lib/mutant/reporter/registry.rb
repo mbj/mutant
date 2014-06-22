@@ -1,6 +1,5 @@
 module Mutant
   class Reporter
-    class HTML
       # Mixin to generate registry semantics
       class Registry < Module
         include Concord.new(:registry)
@@ -43,7 +42,7 @@ module Mutant
         #
         def lookup(subject)
           current = subject
-          until current == Object
+          until current.equal?(Object)
             if registry.key?(current)
               return registry.fetch(current)
             end
@@ -72,6 +71,5 @@ module Mutant
         end
 
       end # Registry
-    end # CLI
   end # Reporter
 end # Mutant
