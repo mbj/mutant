@@ -341,7 +341,7 @@ module Mutant
         if output_name.downcase == 'html'
           # stdout so it can give some feedback to the user
           @reporter = Reporter::HTML.new($stdout)
-        else #default
+        else # default
           @reporter = Reporter::CLI.new($stdout)
         end
       end

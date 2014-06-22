@@ -14,7 +14,7 @@ module Mutant
       #
       # @api private
       #
-      def progress(object)
+      def progress(_)
         self
       end
 

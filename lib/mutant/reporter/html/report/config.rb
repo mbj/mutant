@@ -9,13 +9,16 @@ module Mutant
 
         # Class used for the HTML Report to gather information about a subject result
         class SubjectResult
-          attr_reader :name, :total, :passed, :percentage
+          attr_reader :name, :total, :passed
           def initialize(subject)
             @name = subject.subject.identification.split(':/').first.split('#')[1]
             @total = subject.mutations.size
             failed = subject.failed_mutations.size
             @passed = total - failed
-            @percentage = @passed * 100 / @total
+          end
+
+          def percentage
+            @passed * 100 / @total
           end
         end
 
@@ -29,6 +32,13 @@ module Mutant
             @passed = 0
           end
 
+          # Adds a subject to the group results
+          #
+          # @param [SubjectResult] subject
+          # @return [Undefined]
+          #
+          # @api private
+          #
           def add_subject(subject)
             subject_result = SubjectResult.new(subject)
             @subjects.push(subject_result)
@@ -37,20 +47,23 @@ module Mutant
           end
 
           def percentage
-            @passed*100/@total
+            @passed * 100 / @total
           end
 
         end
 
         # Class used for the HTML report, used to gather information about all the subjects run
         class ProjectResult
-          attr_reader :scopes, :total, :passed, :project_name, :percentage
+          attr_reader :scopes, :total, :passed, :project_name
           def initialize(results)
             @scopes = results
             @total = results.map(&:total).inject(:+)
             @passed = results.map(&:passed).inject(:+)
-            @percentage = @passed*100/@total
             @project_name =  File.basename(Dir.getwd.split('/').last).capitalize.gsub('_', ' ')
+          end
+
+          def percentage
+            @passed * 100 / @total
           end
         end
 
@@ -59,7 +72,6 @@ module Mutant
         class TemplateHelper
           TEMPLATE_NAME = 'layout'
           TEMPLATE_DIR = 'views'
-
 
           # Renders the template in TEMPLATE_DIR/TEMPLATE_NAME
           #
@@ -134,9 +146,9 @@ module Mutant
           # @api private
           #
           def run
-            scopes = subjects.group_by{ |subject| subject.subject.context.scope }
+            scopes = subjects.group_by { |subject| subject.subject.context.scope }
 
-            results = scopes.keys.inject([]) do |array, scope_name|
+            results = scopes.keys.reduce([]) do |array, scope_name|
               scope_result = ScopeResult.new(scope_name)
               scopes[scope_name].each do |subject|
                 scope_result.add_subject(subject)
@@ -183,7 +195,7 @@ module Mutant
             Dir[File.join(File.dirname(__FILE__), 'public/*')].each do |path|
               FileUtils.cp_r(path, assets_output_path)
             end
-            File.open(output_file, "w+") do |file|
+            File.open(output_file, 'w+') do |file|
               file.puts TemplateHelper.new.render(result)
             end
           end
