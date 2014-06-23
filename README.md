@@ -6,7 +6,6 @@ mutant
 [![Code Climate](https://codeclimate.com/github/mbj/mutant.png)](https://codeclimate.com/github/mbj/mutant)
 [![Inline docs](http://inch-ci.org/github/mbj/mutant.png)](http://inch-ci.org/github/mbj/mutant)
 [![Gem Version](https://img.shields.io/gem/v/mutant.svg)](https://rubygems.org/gems/mutant)
-[![Gittip](https://img.shields.io/gittip/mbj.svg)](https://gittip.com/mbj)
 
 Mutant is a mutation testing tool for ruby.
 
@@ -146,17 +145,6 @@ current prefix level, these example groups *must* kill the mutation.
 
 This test selection strategy is compatible with the old `--rspec-dm2` and `--rspec-unit` strategy.
 The old flags were removed.  It allows to define very fine grained specs, or coarse grained - as you like.
-
-Donations
----------
-
-I ([mbj](https://github.com/mbj)) build this and adjacent tools in my free time.
-LOTS of unaccounted time and fun already went into this project.
-
-You might consider to donate if you like this tool.
-
-* [![Gittip](https://img.shields.io/gittip/mbj.svg)](https://gittip.com/mbj)
-* [![Flattr this](http://api.flattr.com/button/flattr-badge-large.png)](http://flattr.com/thing/1823010/mbjmutant-on-GitHub)
 
 Support
 -------
