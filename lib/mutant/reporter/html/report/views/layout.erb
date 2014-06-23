@@ -42,6 +42,7 @@
 			 <abbr class="timeago" title="<%=Time.now.iso8601%>"><%=Time.now.iso8601%></abbr>
 		 </span> by
 		 <a href="https://github.com/mbj/mutant">Mutant</a> v<%= Mutant::VERSION %>
+		 taking <%= time_in_minutes(result.runtime)%>
       </div>
 
     </div>

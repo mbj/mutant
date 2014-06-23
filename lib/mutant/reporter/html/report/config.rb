@@ -55,6 +55,7 @@ module Mutant
         # Class used for the HTML report, used to gather information about all the subjects run
         class ProjectResult
           attr_reader :scopes, :total, :passed, :project_name
+          attr_accessor :runtime
           def initialize(results)
             @scopes = results
             @total = results.map(&:total).inject(:+)
@@ -111,6 +112,16 @@ module Mutant
             File.join(Config::ASSETS_DIR, filename)
           end
 
+          def time_in_minutes(runtime)
+            if runtime > 60
+              min = runtime / 60
+              sec = runtime % 60
+              "#{min.to_i} minutes and #{sec.to_i} seconds"
+            else
+              "#{runtime.to_i} seconds"
+            end
+          end
+
           # used by the ERB template
           # returns a rgb represeprensation from red (0) to green(100)
           # of the percentage of passed tests
@@ -136,7 +147,7 @@ module Mutant
 
           handle(Mutant::Runner::Config)
 
-          delegate(:subjects)
+          delegate(:subjects, :runtime)
 
           # Runs the current report which will create files with its results
           #
@@ -156,6 +167,7 @@ module Mutant
             end
 
             result = ProjectResult.new(results)
+            result.runtime = runtime
 
             printout(result)
             create_html_report(result)
