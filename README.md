@@ -40,7 +40,7 @@ Blog-Posts
 Integrations
 ------------
 
-Only rspec2 and rspec-3 beta2 is supported currently.
+rspec2 and rspec-3 are supported currently. Minitest support is still *planned*.
 
 Projects using Mutant
 ---------------------
