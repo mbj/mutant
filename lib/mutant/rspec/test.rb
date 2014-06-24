@@ -24,7 +24,7 @@ module Mutant
 
       # Run test, return report
       #
-      # @return [String]
+      # @return [Report]
       #
       # @api private
       #
