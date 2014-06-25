@@ -16,6 +16,7 @@ require 'diff/lcs/hunk'
 require 'anima'
 require 'concord'
 require 'morpher'
+require 'parallel'
 
 # Library namespace
 module Mutant
