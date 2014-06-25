@@ -1,3 +1,7 @@
+# v0.5.23 2014-06-15
+
+* Propagate exceptions from child-isolation-killforks to master
+
 # v0.5.22 2014-06-15
 
 * Fix invalid AST generation on operator method mutation with self as receiver.
