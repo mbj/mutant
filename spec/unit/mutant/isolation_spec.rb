@@ -5,7 +5,7 @@ describe Mutant::Isolation do
     let(:object) { described_class }
 
     it 'isolates global effects from process' do
-      expect { object.call { $global = 1 } }.not_to change { defined?($global) }.from(nil)
+      expect { object.call { ::Foo = 1 } }.not_to change { defined?(Foo) }.from(nil)
     end
 
     it 'return block value' do
