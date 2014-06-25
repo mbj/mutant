@@ -16,7 +16,7 @@ module Mutant
     # @api private
     #
     def self.call(&block)
-      Parallel.map([block], in_processes: 1) do |block|
+      Parallel.map([block], in_processes: 1) do
         block.call
       end.first
     end
