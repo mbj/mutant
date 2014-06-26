@@ -1,7 +1,6 @@
 module Mutant
   # An AST cache
   class Cache
-    # This is explicitly empty! Ask me if you are interested in reasons :D
     include Equalizer.new
 
     # Initialize object
@@ -15,6 +14,8 @@ module Mutant
     end
 
     # Return node for file
+    #
+    # @param [#to_s] path
     #
     # @return [AST::Node]
     #
