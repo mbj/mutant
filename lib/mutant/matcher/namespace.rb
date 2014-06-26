@@ -2,6 +2,8 @@ module Mutant
   class Matcher
 
     # Matcher for specific namespace
+    #
+    # rubocop:disable LineLength
     class Namespace < self
       include Concord::Public.new(:cache, :namespace)
 
@@ -64,14 +66,12 @@ module Mutant
       #
       # @api private
       #
+      # rubocop:disable LineLength
+      #
       def self.scope_name(scope)
         scope.name
       rescue => exception
-        $stderr.puts <<-MESSAGE
-WARNING:
-While optaining #{scope.class}#name from: #{scope.inspect}
-It raised an error: #{exception.inspect} fix your lib!
-        MESSAGE
+        $stderr.puts("WARNING: While optaining #{scope.class}#name from: #{scope.inspect} It raised an error: #{exception.inspect} fix your lib!")
         nil
       end
 
@@ -86,11 +86,7 @@ It raised an error: #{exception.inspect} fix your lib!
       def emit_scope(scope)
         name = self.class.scope_name(scope)
         unless name.nil? or name.kind_of?(String)
-          $stderr.puts <<-MESSAGE
-WARNING:
-#{scope.class}#name from: #{scope.inspect} did not return a String or nil.
-Fix your lib to support normal ruby semantics!
-          MESSAGE
+          $stderr.puts("WARNING: #{scope.class}#name from: #{scope.inspect} did not return a String or nil.  Fix your lib to support normal ruby semantics!")
           return
         end
         yield scope if pattern =~ name
