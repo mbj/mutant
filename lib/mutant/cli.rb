@@ -39,7 +39,7 @@ module Mutant
     # @api private
     #
     def initialize(arguments = [])
-      @builder = Builder.new
+      @builder = Matcher::Builder.new
       @debug = @fail_fast = @zombie = false
       @expected_coverage = 100.0
       @strategy = Strategy::Null.new
@@ -101,13 +101,14 @@ module Mutant
 
     # Parse matchers
     #
-    # @param [Enumerable<String>] patterns
+    # @param [Array<String>] patterns
     #
     # @return [undefined]
     #
     # @api private
     #
     def parse_matchers(patterns)
+      raise Error, 'No patterns given' if patterns.empty?
       patterns.each do |pattern|
         expression = Expression.parse(pattern)
         unless expression

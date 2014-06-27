@@ -1,6 +1,6 @@
 module Mutant
-  class CLI
-    # Builder for configuration components
+  class Matcher
+    # Builder for complex matchers
     class Builder
       include NodeHelpers
 
@@ -63,7 +63,7 @@ module Mutant
       #
       def matcher
         if @matchers.empty?
-          raise(Error, 'No patterns given')
+          return Matcher::Null.new
         end
 
         matcher = Matcher::Chain.build(@matchers)
@@ -135,5 +135,5 @@ module Mutant
       end
 
     end # Builder
-  end # CLI
+  end # Matcher
 end # Mutant
