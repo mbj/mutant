@@ -2,15 +2,18 @@ module Mutant
   class Matcher
     # Builder for complex matchers
     class Builder
-      include NodeHelpers
+      include NodeHelpers, Concord.new(:cache)
 
       # Initalize object
+      #
+      # @param [Cache] cache
       #
       # @return [undefined]
       #
       # @api private
       #
-      def initialize
+      def initialize(cache)
+        super
         @matchers          = []
         @subject_ignores   = []
         @subject_selectors = []
@@ -18,14 +21,14 @@ module Mutant
 
       # Add a subject ignore
       #
-      # @param [Matcher]
+      # @param [Expression] expression
       #
       # @return [self]
       #
       # @api private
       #
-      def add_subject_ignore(matcher)
-        @subject_ignores << matcher
+      def add_subject_ignore(expression)
+        @subject_ignores << expression.matcher(cache)
         self
       end
 
@@ -42,16 +45,16 @@ module Mutant
         self
       end
 
-      # Add a subject matcher
+      # Add a match expression
       #
-      # @param [#call] selector
+      # @param [Expression] expression
       #
       # @return [self]
       #
       # @api private
       #
-      def add_matcher(matcher)
-        @matchers << matcher
+      def add_match_expression(expression)
+        @matchers << expression.matcher(cache)
         self
       end
 

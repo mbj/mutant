@@ -2,7 +2,6 @@ module Mutant
   # The configuration of a mutator run
   class Config
     include Adamantium::Flat, Anima.new(
-      :cache,
       :debug,
       :strategy,
       :matcher,

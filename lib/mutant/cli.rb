@@ -39,14 +39,12 @@ module Mutant
     # @api private
     #
     def initialize(arguments = [])
-      @builder = Matcher::Builder.new
+      @builder = Matcher::Builder.new(Cache.new)
       @debug = @fail_fast = @zombie = false
       @expected_coverage = 100.0
       @strategy = Strategy::Null.new
-      @cache = Mutant::Cache.new
       parse(arguments)
       @config  = Config.new(
-        cache:             @cache,
         zombie:            @zombie,
         debug:             @debug,
         matcher:           @builder.matcher,
@@ -114,7 +112,7 @@ module Mutant
         unless expression
           raise Error, "Invalid mutant expression: #{pattern.inspect}"
         end
-        @builder.add_matcher(expression.matcher(@cache))
+        @builder.add_match_expression(expression)
       end
     end
 
@@ -185,7 +183,7 @@ module Mutant
     #
     def add_filter_options(opts)
       opts.on('--ignore-subject PATTERN', 'Ignore subjects that match PATTERN') do |pattern|
-        @builder.add_subject_ignore(Expression.parse(pattern).matcher(@cache))
+        @builder.add_subject_ignore(Expression.parse(pattern))
       end
       opts.on('--code CODE', 'Scope execution to subjects with CODE') do |code|
         @builder.add_subject_selector(Morpher.compile(s(:eql, s(:attribute, :code), s(:static, code))))

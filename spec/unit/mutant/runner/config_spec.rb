@@ -6,7 +6,6 @@ describe Mutant::Runner::Config do
   let(:config) do
     Mutant::Config.new(
       matcher:           [subject_a, subject_b],
-      cache:             Mutant::Cache.new,
       debug:             false,
       strategy:          strategy,
       reporter:          reporter,
