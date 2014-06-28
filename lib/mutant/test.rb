@@ -22,6 +22,16 @@ module Mutant
     end
     memoize :identification
 
+    # Run test, return report
+    #
+    # @return [Report]
+    #
+    # @api private
+    #
+    def run
+      strategy.run(self)
+    end
+
     # Return expression
     #
     # @return [Expression]

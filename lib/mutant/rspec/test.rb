@@ -8,16 +8,6 @@ module Mutant
 
       PREFIX = :rspec
 
-      # Run test, return report
-      #
-      # @return [Report]
-      #
-      # @api private
-      #
-      def run
-        strategy.run(self)
-      end
-
     end # Test
   end # Rspec
 end # Mutant
