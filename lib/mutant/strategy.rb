@@ -73,7 +73,7 @@ module Mutant
     def tests(subject)
       subject.match_expressions.each do |match_expression|
         tests = all_tests.select do |test|
-          test.expression.prefix?(match_expression)
+          match_expression.prefix?(test.expression)
         end
         return tests if tests.any?
       end

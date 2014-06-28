@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Mutant::Subject do
   let(:class_under_test) do
     Class.new(described_class) do
-      def match_expression
-        'match'
+      def expression
+        Mutant::Expression.parse('Test')
       end
     end
   end
@@ -34,6 +34,6 @@ describe Mutant::Subject do
   describe '#identification' do
     subject { object.identification }
 
-    it { should eql('match:source_path:source_line') }
+    it { should eql('Test:source_path:source_line') }
   end
 end
