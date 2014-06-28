@@ -11,7 +11,7 @@ end
 shared_examples_for 'a cli parser' do
   subject { cli.config }
 
-  it { expect(subject.strategy).to eql(expected_strategy) }
+  it { expect(subject.integration).to eql(expected_integration) }
   it { expect(subject.reporter).to eql(expected_reporter) }
   it { expect(subject.matcher).to eql(expected_matcher)   }
 end
@@ -25,9 +25,9 @@ describe Mutant::CLI, '.new' do
   end
 
   # Defaults
-  let(:expected_filter)   { Morpher.evaluator(s(:true))        }
-  let(:expected_strategy) { Mutant::Strategy::Null.new         }
-  let(:expected_reporter) { Mutant::Reporter::CLI.new($stdout) }
+  let(:expected_filter)      { Morpher.evaluator(s(:true))        }
+  let(:expected_integration) { Mutant::Integration::Null.new      }
+  let(:expected_reporter)    { Mutant::Reporter::CLI.new($stdout) }
 
   let(:ns)    { Mutant::Matcher   }
   let(:cache) { Mutant::Cache.new }

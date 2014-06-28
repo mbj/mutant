@@ -7,7 +7,7 @@ describe Mutant::Runner::Config do
     Mutant::Config.new(
       matcher:           [subject_a, subject_b],
       debug:             false,
-      strategy:          strategy,
+      integration:       integration,
       reporter:          reporter,
       fail_fast:         fail_fast,
       expected_coverage: expected_coverage,
@@ -18,13 +18,13 @@ describe Mutant::Runner::Config do
   let(:fail_fast)         { false                       }
   let(:expected_coverage) { 100.0                       }
   let(:reporter)          { Mutant::Reporter::Trace.new }
-  let(:strategy)          { double('Strategy')          }
+  let(:integration)       { double('Integration')       }
   let(:subject_a)         { double('Subject A')         }
   let(:subject_b)         { double('Subject B')         }
 
   before do
-    strategy.stub(:setup)
-    strategy.stub(:teardown)
+    integration.stub(:setup)
+    integration.stub(:teardown)
     Mutant::Runner.stub(:run).with(config, subject_a).and_return(runner_a)
     Mutant::Runner.stub(:run).with(config, subject_b).and_return(runner_b)
   end

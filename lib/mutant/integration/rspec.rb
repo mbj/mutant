@@ -1,14 +1,13 @@
 module Mutant
-  module Rspec
-
-    # Rspec killer strategy
-    class Strategy < Mutant::Strategy
-
-      RSPEC_2_VERSION_PREFIX = '2.'.freeze
+  class Integration
+    # Rspec integration
+    class Rspec < self
 
       register 'rspec'
 
-      # Setup rspec strategy
+      RSPEC_2_VERSION_PREFIX = '2.'.freeze
+
+      # Setup rspec integration
       #
       # @return [self]
       #
@@ -150,6 +149,6 @@ module Mutant
       end
       memoize :options, freezer: :noop
 
-    end # Strategy
-  end # Rspec
+    end # Rspec
+  end # Integration
 end # Mutant

@@ -3,7 +3,7 @@ module Mutant
   class Config
     include Adamantium::Flat, Anima.new(
       :debug,
-      :strategy,
+      :integration,
       :matcher,
       :reporter,
       :fail_fast,
@@ -41,7 +41,7 @@ module Mutant
     #
     def tests(subject)
       subject.match_expressions.each do |match_expression|
-        tests = strategy.all_tests.select do |test|
+        tests = integration.all_tests.select do |test|
           match_expression.prefix?(test.expression)
         end
         return tests if tests.any?

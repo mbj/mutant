@@ -13,11 +13,11 @@ describe Mutant::Runner::Subject, '#success?' do
     )
   end
 
-  let(:reporter)   { Mutant::Reporter::Trace.new                              }
-  let(:config)     { double('Config', reporter: reporter, strategy: strategy) }
-  let(:mutation_a) { double('Mutation A')                                     }
-  let(:mutation_b) { double('Mutation B')                                     }
-  let(:strategy)   { double('Strategy')                                       }
+  let(:reporter)    { Mutant::Reporter::Trace.new                                    }
+  let(:config)      { double('Config', reporter: reporter, integration: integration) }
+  let(:mutation_a)  { double('Mutation A')                                           }
+  let(:mutation_b)  { double('Mutation B')                                           }
+  let(:integration) { double('Integration')                                          }
 
   let(:runner_a) do
     double('Runner A', success?: success_a, stop?: stop_a)

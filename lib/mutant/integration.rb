@@ -1,16 +1,16 @@
 module Mutant
 
-  # Abstract base class for killing strategies
-  class Strategy
+  # Abstract base class mutant test framework integrations
+  class Integration
     include AbstractType, Adamantium::Flat, Equalizer.new
 
     REGISTRY = {}
 
-    # Lookup strategy for name
+    # Lookup integration for name
     #
     # @param [String] name
     #
-    # @return [Strategy]
+    # @return [Integration]
     #   if found
     #
     # @api private
@@ -19,7 +19,7 @@ module Mutant
       REGISTRY.fetch(name)
     end
 
-    # Register strategy
+    # Register integration
     #
     # @param [String] name
     #
@@ -34,7 +34,7 @@ module Mutant
     end
     private_class_method :register
 
-    # Perform strategy setup
+    # Perform integration setup
     #
     # @return [self]
     #
@@ -44,7 +44,7 @@ module Mutant
       self
     end
 
-    # Perform strategy teardown
+    # Perform integration teardown
     #
     # @return [self]
     #
@@ -54,7 +54,7 @@ module Mutant
       self
     end
 
-    # Return all available tests by strategy
+    # Return all available tests by integration
     #
     # @return [Enumerable<Test>]
     #
@@ -62,7 +62,7 @@ module Mutant
     #
     abstract_method :all_tests
 
-    # Null strategy that never kills a mutation
+    # Null integration that never kills a mutation
     class Null < self
 
       register('null')
@@ -79,5 +79,5 @@ module Mutant
 
     end # Null
 
-  end # Strategy
+  end # Integration
 end # Mutant

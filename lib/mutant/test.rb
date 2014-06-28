@@ -1,7 +1,7 @@
 module Mutant
   # Abstract base class for test that might kill a mutation
   class Test
-    include Adamantium::Flat, Concord::Public.new(:strategy, :expression)
+    include Adamantium::Flat, Concord::Public.new(:integration, :expression)
 
     # Return test identification
     #
@@ -10,7 +10,7 @@ module Mutant
     # @api private
     #
     def identification
-      "#{strategy.name}:#{expression.syntax}"
+      "#{integration.name}:#{expression.syntax}"
     end
     memoize :identification
 
@@ -21,7 +21,7 @@ module Mutant
     # @api private
     #
     def run
-      strategy.run(self)
+      integration.run(self)
     end
 
   end # Test

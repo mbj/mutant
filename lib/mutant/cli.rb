@@ -42,13 +42,13 @@ module Mutant
       @builder = Matcher::Builder.new(Cache.new)
       @debug = @fail_fast = @zombie = false
       @expected_coverage = 100.0
-      @strategy = Strategy::Null.new
+      @integration = Integration::Null.new
       parse(arguments)
       @config  = Config.new(
         zombie:            @zombie,
         debug:             @debug,
         matcher:           @builder.matcher,
-        strategy:          @strategy,
+        integration:       @integration,
         fail_fast:         @fail_fast,
         reporter:          Reporter::CLI.new($stdout),
         expected_coverage: @expected_coverage
@@ -148,7 +148,7 @@ module Mutant
     #
     def use(name)
       require "mutant/#{name}"
-      @strategy = Strategy.lookup(name).new
+      @integration = Integration.lookup(name).new
     rescue LoadError
       $stderr.puts("Cannot load plugin: #{name.inspect}")
       raise

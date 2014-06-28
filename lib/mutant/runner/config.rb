@@ -52,14 +52,14 @@ module Mutant
       end
       memoize :success?
 
-      # Return strategy
+      # Return integration
       #
-      # @return [Strategy]
+      # @return [Integration]
       #
       # @api private
       #
-      def strategy
-        config.strategy
+      def integration
+        config.integration
       end
 
       # Return coverage
@@ -115,13 +115,13 @@ module Mutant
       # @api private
       #
       def run_subjects
-        strategy = self.strategy
-        strategy.setup
+        integration = self.integration
+        integration.setup
         @subjects = visit_collection(config.subjects)
-        strategy.teardown
+        integration.teardown
       end
 
-      # Run with strategy management
+      # Run configuration
       #
       # @return [undefined]
       #

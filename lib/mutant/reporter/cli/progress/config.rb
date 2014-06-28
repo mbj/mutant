@@ -21,7 +21,7 @@ module Mutant
             if running?
               info 'Mutant configuration:'
               info 'Matcher:         %s',      config.matcher.inspect
-              info 'Strategy:        %s',      config.strategy.inspect
+              info 'Integration:     %s',      config.integration.name
               info 'Expect Coverage: %0.2f%%', config.expected_coverage.inspect
             end
             self

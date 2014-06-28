@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mutant::Strategy do
+describe Mutant::Integration do
 
   let(:class_under_test) do
     Class.new(described_class)
