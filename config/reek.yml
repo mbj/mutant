@@ -25,12 +25,12 @@ DuplicateMethodCall:
 FeatureEnvy:
   enabled: true
   exclude:
+  - Mutant::Integration::Rspec#full_description
   - Mutant::Matcher::Method::Instance#match?
   - Mutant::Matcher::Method::Singleton#receiver?
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
   - Mutant::Reporter::CLI#subject_results
-  - Mutant::Rspec::Strategy#options
   # Nature of OptionParser :(
   - Mutant::CLI#add_environmental_options
   - Mutant::CLI#parse
@@ -61,7 +61,7 @@ NestedIterators:
   - Mutant::RequireHighjack#infect
   - Mutant::RequireHighjack#desinfect
   - Mutant::Reporter::CLI::Registry#included
-  - Mutant::Strategy#tests
+  - Mutant::Config#tests
   - Parser::Lexer#self.new
   max_allowed_nesting: 1
   ignore_iterators: []
@@ -71,7 +71,7 @@ RepeatedConditional:
   enabled: true
   exclude:
   - Mutant::Mutator
-  - Mutant::Rspec::Strategy
+  - Mutant::Integration::Rspec
   - Mutant::Reporter::CLI
   - Mutant::Meta::Example::DSL
   max_ifs: 1
@@ -95,18 +95,16 @@ TooManyStatements:
   enabled: true
   exclude:
   - Mutant#self.singleton_subclass_instance
-  - Mutant::Isolation#self.call
-  - Mutant::Rspec::Killer#run
-  - Mutant::Reporter::CLI#colorized_diff
+  - Mutant::Integration::Rspec#new_reporter
   - Mutant::Reporter::CLI::Report::Config#run
+  - Mutant::Reporter::CLI::Registry#included
+  - Mutant::Reporter::CLI#colorized_diff
+  - Mutant::RequireHighjack#infect
+  - Mutant::Rspec::Killer#run
   - Mutant::Runner#visit_collection
   - Mutant::Runner#initialize
   - Mutant::Runner::Mutation#run
   - Mutant::Zombifier::File#self.find
-  - Mutant::RequireHighjack#infect
-  - Mutant::Reporter::CLI::Registry#included
-  - Mutant::Rspec::Strategy#new_reporter
-  - Mutant::Rspec::Strategy#run
   # How mutant does CLI parsing is shit
   - Mutant::CLI#parse
   - Mutant::CLI#initialize
@@ -152,13 +150,10 @@ UtilityFunction:
   enabled: true
   exclude:
   - Mutant::CLI#reporter
+  - Mutant::Integration::Rspec#configuration
+  - Mutant::Integration::Rspec#rspec2?
+  - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
   - Mutant::NodeHelpers#s
-  - Mutant::Rspec::Strategy#configuration
-  - Mutant::Rspec::Strategy#example_groups
-  - Mutant::Rspec::Strategy#options
-  - Mutant::Rspec::Strategy#world
-  - Mutant::Rspec::Strategy#rspec2
-  - Mutant::Meta::Example::Verification#format_mutation
   max_helper_calls: 0
