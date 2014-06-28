@@ -62,27 +62,6 @@ module Mutant
     #
     abstract_method :all_tests
 
-    # Return tests for mutation
-    #
-    # TODO: This logic is now centralized but still fucked.
-    #
-    # @param [Mutation] mutation
-    #
-    # @return [Enumerable<Test>]
-    #
-    # @api private
-    #
-    def tests(subject)
-      subject.match_expressions.each do |match_expression|
-        tests = all_tests.select do |test|
-          match_expression.prefix?(test.expression)
-        end
-        return tests if tests.any?
-      end
-
-      EMPTY_ARRAY
-    end
-
     # Null strategy that never kills a mutation
     class Null < self
 

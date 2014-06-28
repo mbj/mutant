@@ -30,7 +30,7 @@ describe Mutant::Runner::Subject, '#success?' do
   let(:tests) { [double('test a'), double('test b')] }
 
   before do
-    expect(strategy).to receive(:tests).with(mutation_subject).and_return(tests)
+    expect(config).to receive(:tests).with(mutation_subject).and_return(tests)
     expect(Mutant::Runner).to receive(:run).with(config, mutation_a, tests).and_return(runner_a)
     expect(Mutant::Runner).to receive(:run).with(config, mutation_b, tests).and_return(runner_b)
   end

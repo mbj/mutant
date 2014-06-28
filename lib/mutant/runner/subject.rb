@@ -64,7 +64,7 @@ module Mutant
       # @api private
       #
       def tests
-        config.strategy.tests(subject)
+        config.tests(subject)
       end
       memoize :tests
 
