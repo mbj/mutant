@@ -29,6 +29,8 @@ module Mutant
     #
     def self.register(name)
       REGISTRY[name] = self
+
+      define_method(:name) { name }
     end
     private_class_method :register
 

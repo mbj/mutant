@@ -34,7 +34,7 @@ module Mutant
         success = false
         reporter = new_reporter(output)
         reporter.report(1) do
-          success = test.example_group.run(reporter)
+          success = example_group_index.fetch(test.expression.syntax).run(reporter)
         end
         output.rewind
         Test::Report.new(
@@ -51,43 +51,28 @@ module Mutant
       # @api private
       #
       def all_tests
-        all_example_groups.each_with_object([]) do |example_group, aggregate|
-          full_description = full_description(example_group)
+        example_group_index.keys.each_with_object([]) do |full_description, aggregate|
+          expression = Expression.parse(full_description) or next
 
-          expression = Expression.parse(full_description)
-
-          next unless expression
-
-          aggregate << Test.new(
-            strategy:      self,
-            expression:    expression,
-            example_group: example_group
-          )
+          aggregate << Test.new(self, expression)
         end
       end
       memoize :all_tests
 
     private
 
-      # Return example groups
-      #
-      # @return [Enumerable<RSpec::Core::ExampleGroup>]
-      #
-      # @api private
-      #
-      def example_groups
-        RSpec.world.example_groups
-      end
-
       # Return all example groups
       #
-      # @return [Enumerable<RSpec::Core::ExampleGroup>]
+      # @return [Hash<String, RSpec::Core::ExampleGroup]
       #
       # @api private
       #
-      def all_example_groups
-        example_groups.flat_map(&:descendants)
+      def example_group_index
+        Hash[RSpec.world.example_groups.flat_map(&:descendants).map do |example_group|
+          [full_description(example_group), example_group]
+        end]
       end
+      memoize :example_group_index
 
       # Return new reporter
       #
