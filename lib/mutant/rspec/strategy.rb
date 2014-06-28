@@ -56,13 +56,13 @@ module Mutant
 
           expression = Expression.parse(full_description)
 
-          if expression
-            aggregate << Test.new(
-              strategy:      self,
-              expression:    expression,
-              example_group: example_group
-            )
-          end
+          next unless expression
+
+          aggregate << Test.new(
+            strategy:      self,
+            expression:    expression,
+            example_group: example_group
+          )
         end
       end
       memoize :all_tests
