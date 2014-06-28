@@ -25,7 +25,8 @@ DuplicateMethodCall:
 FeatureEnvy:
   enabled: true
   exclude:
-  - Mutant::Integration::Rspec#full_description
+  - Mutant::Integration::Rspec2#full_description
+  - Mutant::Integration::Rspec3#full_description
   - Mutant::Matcher::Method::Instance#match?
   - Mutant::Matcher::Method::Singleton#receiver?
   - Mutant::Mutation::Evil#success?
@@ -71,7 +72,6 @@ RepeatedConditional:
   enabled: true
   exclude:
   - Mutant::Mutator
-  - Mutant::Integration::Rspec
   - Mutant::Reporter::CLI
   - Mutant::Meta::Example::DSL
   max_ifs: 1
@@ -95,7 +95,6 @@ TooManyStatements:
   enabled: true
   exclude:
   - Mutant#self.singleton_subclass_instance
-  - Mutant::Integration::Rspec#new_reporter
   - Mutant::Reporter::CLI::Report::Config#run
   - Mutant::Reporter::CLI::Registry#included
   - Mutant::Reporter::CLI#colorized_diff
@@ -122,7 +121,9 @@ UncommunicativeMethodName:
   accept: []
 UncommunicativeModuleName:
   enabled: true
-  exclude: []
+  exclude:
+  - Rspec2
+  - Rspec3
   reject:
   - !ruby/regexp /^.$/
   - !ruby/regexp /[0-9]$/
@@ -151,7 +152,10 @@ UtilityFunction:
   exclude:
   - Mutant::CLI#reporter
   - Mutant::Integration::Rspec#configuration
-  - Mutant::Integration::Rspec#rspec2?
+  - Mutant::Integration::Rspec#options
+  - Mutant::Integration::Rspec2#full_description
+  - Mutant::Integration::Rspec2#new_reporter
+  - Mutant::Integration::Rspec3#full_description
   - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?

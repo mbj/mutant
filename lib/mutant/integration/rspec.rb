@@ -1,11 +1,8 @@
 module Mutant
   class Integration
-    # Rspec integration
+    # Shared parts of rspec2/3 integration
     class Rspec < self
-
-      register 'rspec'
-
-      RSPEC_2_VERSION_PREFIX = '2.'.freeze
+      include AbstractType
 
       # Setup rspec integration
       #
@@ -73,58 +70,6 @@ module Mutant
       end
       memoize :example_group_index
 
-      # Return new reporter
-      #
-      # @param [StringIO] output
-      #
-      # @return [RSpec::Core::Reporter]
-      #
-      # @api private
-      #
-      def new_reporter(output)
-        reporter_class = RSpec::Core::Reporter
-
-        # rspec3 does require that one via a very indirect autoload setup
-        require 'rspec/core/formatters/base_text_formatter'
-        formatter = RSpec::Core::Formatters::BaseTextFormatter.new(output)
-
-        if rspec2?
-          reporter_class.new(formatter)
-        else
-          notifications = RSpec::Core::Formatters::Loader.allocate.send(:notifications_for, formatter.class)
-          reporter = reporter_class.new(configuration)
-          reporter.register_listener(formatter, *notifications)
-          reporter
-        end
-      end
-
-      # Test for rspec2
-      #
-      # @return [Boolean]
-      #
-      # @api private
-      #
-      def rspec2?
-        RSpec::Core::Version::STRING.start_with?(RSPEC_2_VERSION_PREFIX)
-      end
-
-      # Return full description for example group
-      #
-      # @param [RSpec::Core::ExampleGroup] example_group
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def full_description(example_group)
-        metadata = example_group.metadata
-        if rspec2?
-          metadata.fetch(:example_group).fetch(:full_description)
-        else
-          metadata.fetch(:full_description)
-        end
-      end
-
       # Return configuration
       #
       # @return [RSpec::Core::Configuration]
@@ -143,9 +88,7 @@ module Mutant
       # @api private
       #
       def options
-        options = RSpec::Core::ConfigurationOptions.new(%w[--fail-fast spec])
-        options.parse_options if rspec2?
-        options
+        RSpec::Core::ConfigurationOptions.new(%w[--fail-fast spec])
       end
       memoize :options, freezer: :noop
 
