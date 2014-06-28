@@ -27,9 +27,10 @@ module Mutant
       #
       # @api private
       #
-      def match_expression
-        "#{context.identification}#{self.class::SYMBOL}#{name}"
+      def expression
+        Expression.parse_strict("#{context.identification}#{self.class::SYMBOL}#{name}")
       end
+      memoize :expression
 
     private
 

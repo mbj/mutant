@@ -21,16 +21,6 @@ module Mutant
       end
       memoize :setup
 
-      # Test for rspec2
-      #
-      # @return [Boolean]
-      #
-      # @api private
-      #
-      def rspec2?
-        RSpec::Core::Version::STRING.start_with?(RSPEC_2_VERSION_PREFIX)
-      end
-
       # Return report for test
       #
       # @param [Rspec::Test] test
@@ -59,13 +49,19 @@ module Mutant
       # @api private
       #
       def all_tests
-        example_groups
-          .flat_map(&:descendants)
-          .map do |example_group|
-            Test.new(self, example_group)
-          end.select do |test|
-            test.identification.split(' ', 2).first.eql?(test.identification)
+        all_example_groups.each_with_object([]) do |example_group, aggregate|
+          full_description = full_description(example_group)
+
+          expression = Expression.parse(full_description)
+
+          if expression
+            aggregate << Test.new(
+              strategy:      self,
+              expression:    expression,
+              example_group: example_group
+            )
           end
+        end
       end
       memoize :all_tests
 
@@ -81,6 +77,16 @@ module Mutant
         RSpec.world.example_groups
       end
 
+      # Return all example groups
+      #
+      # @return [Enumerable<RSpec::Core::ExampleGroup>]
+      #
+      # @api private
+      #
+      def all_example_groups
+        example_groups.flat_map(&:descendants)
+      end
+
       # Return new reporter
       #
       # @param [StringIO] output
@@ -92,7 +98,7 @@ module Mutant
       def new_reporter(output)
         reporter_class = RSpec::Core::Reporter
 
-        # rspec3 does not require that one via a very indirect autoload setup
+        # rspec3 does require that one via a very indirect autoload setup
         require 'rspec/core/formatters/base_text_formatter'
         formatter = RSpec::Core::Formatters::BaseTextFormatter.new(output)
 
@@ -103,6 +109,33 @@ module Mutant
           reporter = reporter_class.new(configuration)
           reporter.register_listener(formatter, *notifications)
           reporter
+        end
+      end
+
+      # Test for rspec2
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
+      def rspec2?
+        RSpec::Core::Version::STRING.start_with?(RSPEC_2_VERSION_PREFIX)
+      end
+
+      # Return full description for example group
+      #
+      # @param [RSpec::Core::ExampleGroup] example_group
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def full_description(example_group)
+        metadata = example_group.metadata
+        if rspec2?
+          metadata.fetch(:example_group).fetch(:full_description)
+        else
+          metadata.fetch(:full_description)
         end
       end
 

@@ -68,19 +68,17 @@ module Mutant
     # @api private
     #
     def identification
-      "#{self.class::PREFIX}:#{subject_identification}"
+      "#{self.class::PREFIX}:#{expression.syntax}"
     end
     memoize :identification
 
-    # Return subject identification
+    # Return expression
     #
-    # This method is used for current mutants primitive test selection.
-    #
-    # @return [String]
+    # @return [Expression]
     #
     # @api private
     #
-    abstract_method :subject_identification
+    abstract_method :expression
 
   end # Test
 end # Mutant

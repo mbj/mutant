@@ -2,8 +2,10 @@ module Mutant
   class Context
     # Scope context for mutation (Class or Module)
     class Scope < self
-      include Adamantium::Flat, Equalizer.new(:scope, :source_path)
+      include Adamantium::Flat, Concord::Public.new(:scope, :source_path)
       extend NodeHelpers
+
+      NAMESPACE_DELIMITER = '::'.freeze
 
       # Return AST wrapping mutated node
       #
@@ -41,7 +43,7 @@ module Mutant
       # @api private
       #
       def self.wrap(scope, node)
-        name = s(:const, nil, scope.name.split('::').last.to_sym)
+        name = s(:const, nil, scope.name.split(NAMESPACE_DELIMITER).last.to_sym)
         case scope
         when ::Class
           s(:class, name, nil, node)
@@ -87,18 +89,18 @@ module Mutant
         scope.name
       end
 
-      # Return match prefixes
+      # Return match expressions
       #
-      # @return [Enumerable<String>]
+      # @return [Enumerable<Expression>]
       #
       # @api private
       #
-      def match_prefixes
+      def match_expressions
         name_nesting.each_index.reverse_each.map do |index|
-          name_nesting.take(index.succ).join('::')
+          Expression.parse_strict(name_nesting.take(index.succ).join(NAMESPACE_DELIMITER))
         end
       end
-      memoize :match_prefixes
+      memoize :match_expressions
 
       # Return scope wrapped by context
       #
@@ -110,18 +112,6 @@ module Mutant
 
     private
 
-      # Initialize object
-      #
-      # @param [Object] scope
-      # @param [String] source_path
-      #
-      # @api private
-      #
-      def initialize(scope, source_path)
-        super(source_path)
-        @scope = scope
-      end
-
       # Return nesting of names of scope
       #
       # @return [Array<String>]
@@ -129,7 +119,7 @@ module Mutant
       # @api private
       #
       def name_nesting
-        scope.name.split('::')
+        scope.name.split(NAMESPACE_DELIMITER)
       end
       memoize :name_nesting
 

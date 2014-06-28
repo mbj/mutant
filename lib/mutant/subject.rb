@@ -54,7 +54,7 @@ module Mutant
     # @api private
     #
     def identification
-      "#{match_expression}:#{source_path}:#{source_line}"
+      "#{expression.syntax}:#{source_path}:#{source_line}"
     end
     memoize :identification
 
@@ -94,22 +94,22 @@ module Mutant
 
     # Return match expression
     #
-    # @return [String]
+    # @return [Expression]
     #
     # @api private
     #
-    abstract_method :match_expression
+    abstract_method :expression
 
-    # Return match prefixes
+    # Return match expressions
     #
-    # @return [Enumerable<String>]
+    # @return [Enumerable<Expression>]
     #
     # @api private
     #
-    def match_prefixes
-      [match_expression].concat(context.match_prefixes)
+    def match_expressions
+      [expression].concat(context.match_expressions)
     end
-    memoize :match_prefixes
+    memoize :match_expressions
 
   private
 

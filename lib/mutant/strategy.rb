@@ -71,9 +71,9 @@ module Mutant
     # @api private
     #
     def tests(subject)
-      subject.match_prefixes.map do |match_expression|
+      subject.match_expressions.each do |match_expression|
         tests = all_tests.select do |test|
-          test.subject_identification.start_with?(match_expression)
+          test.expression.prefix?(match_expression)
         end
         return tests if tests.any?
       end

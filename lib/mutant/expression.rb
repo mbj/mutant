@@ -38,18 +38,30 @@ module Mutant
 
     # Return match length for expression
     #
-    # @param [Expression] neddle
+    # @param [Expression] other
     #
     # @return [Fixnum]
     #
     # @api private
     #
-    def match_length(neddle)
-      if eql?(neddle)
+    def match_length(other)
+      if eql?(other)
         syntax.length
       else
         0
       end
+    end
+
+    # Test if expression is prefix
+    #
+    # @param [Expression] other
+    #
+    # @return [Boolean]
+    #
+    # @api private
+    #
+    def prefix?(other)
+      !match_length(other).zero?
     end
 
     # Register expression
@@ -63,9 +75,25 @@ module Mutant
     end
     private_class_method :register
 
+    # Parse input into expression or raise
+    #
+    # @param [String] syntax
+    #
+    # @return [Expression]
+    #   if expression is valid
+    #
+    # @raise [RuntimeError]
+    #   otherwise
+    #
+    # @api private
+    #
+    def self.parse_strict(input)
+      parse(input) or raise "Expression: #{input.inspect} is not valid"
+    end
+
     # Parse input into expression
     #
-    # @param [String] pattern
+    # @param [String] input
     #
     # @return [Expression]
     #   if expression is valid
@@ -75,14 +103,14 @@ module Mutant
     #
     # @api private
     #
-    def self.parse(pattern)
-      expressions = expressions(pattern)
+    def self.parse(input)
+      expressions = expressions(input)
       case expressions.length
       when 0
       when 1
         expressions.first
       else
-        fail "Ambigous expression: #{pattern.inspect}"
+        fail "Ambigous expression: #{input.inspect}"
       end
     end
 
