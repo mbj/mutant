@@ -28,6 +28,7 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
+      #
       def success?
         @report.success?
       end
@@ -35,6 +36,8 @@ module Mutant
       # Test if this killer ALONE can determine if mutation is dead
       #
       # @return [Boolean]
+      #
+      # @api private
       #
       def mutation_dead?
         test_report = report.test_report
@@ -58,6 +61,8 @@ module Mutant
     private
 
       # Run killer
+      #
+      # @return [undefined]
       #
       # @api private
       #

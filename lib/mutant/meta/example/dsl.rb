@@ -51,6 +51,8 @@ module Mutant
         #
         # @return [self]
         #
+        # @api private
+        #
         def source(input)
           raise 'source already defined' if @source
           @source = node(input)
@@ -63,6 +65,8 @@ module Mutant
         # @param [String,Parser::AST::Node] input
         #
         # @return [self]
+        #
+        # @api private
         #
         def mutation(input)
           node = node(input)

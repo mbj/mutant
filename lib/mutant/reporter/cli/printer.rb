@@ -13,6 +13,8 @@ module Mutant
         #
         # @return [self]
         #
+        # @api private
+        #
         def self.run(output, object)
           handler = lookup(object.class)
           handler.new(output, object).run

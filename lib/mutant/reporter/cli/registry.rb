@@ -58,6 +58,8 @@ module Mutant
         #
         # @return [undefined]
         #
+        # @api private
+        #
         def included(host)
           object = self
           host.class_eval do

@@ -11,6 +11,8 @@ module Mutant
           #
           # @return [self]
           #
+          # @api private
+          #
           def run
             self
           end

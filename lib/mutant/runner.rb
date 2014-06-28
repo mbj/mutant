@@ -57,6 +57,8 @@ module Mutant
     #
     # @return [Boolean]
     #
+    # @api private
+    #
     def running?
       @running
     end

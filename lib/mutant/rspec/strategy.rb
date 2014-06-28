@@ -25,6 +25,8 @@ module Mutant
       #
       # @param [Rspec::Test] test
       #
+      # @return [Test::Report]
+      #
       # @api private
       #
       def run(test)

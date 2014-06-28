@@ -37,6 +37,8 @@ module Mutant
     #
     # @param [Class,Module] host
     #
+    # @return [undefined]
+    #
     # @api private
     #
     def self.included(host)

@@ -11,6 +11,12 @@ module Mutant
         :success
       )
 
+      # Test if test was successful
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
       alias_method :success?, :success
 
       # Test if test failed

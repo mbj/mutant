@@ -15,7 +15,7 @@ module Mutant
     #
     # @return [self]
     #
-    # @api pivate
+    # @api private
     #
     def run
       infect
@@ -29,7 +29,7 @@ module Mutant
     #
     # @return [self]
     #
-    # @api pivate
+    # @api private
     #
     def infect
       callback = @callback

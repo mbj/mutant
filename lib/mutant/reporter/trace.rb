@@ -20,6 +20,8 @@ module Mutant
       #
       # @return [self]
       #
+      # @api private
+      #
       def report(object)
         report_calls << object
         self
@@ -30,6 +32,8 @@ module Mutant
       # @param [Object] object
       #
       # @return [self]
+      #
+      # @api private
       #
       def progress(object)
         progress_calls << object
