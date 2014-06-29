@@ -23,7 +23,7 @@ module Mutant
         return to_enum unless block_given?
 
         MATCHERS.each do |matcher|
-          matcher.each(cache, scope, &block)
+          matcher.new(cache, scope).each(&block)
         end
 
         self
