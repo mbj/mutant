@@ -33,9 +33,23 @@ describe Mutant::Expression::Namespace::Recursive do
     end
 
     context 'when other expression describes a longer prefix' do
-      let(:other) { described_class.parse('TestApp::Literal::Deep') }
+      context 'on constants' do
+        let(:other) { described_class.parse('TestApp::Literal::Deep') }
 
-      it { should be(input[0..-2].length) }
+        it { should be(input[0..-2].length) }
+      end
+
+      context 'on singleton method' do
+        let(:other) { described_class.parse('TestApp::Literal.foo') }
+
+        it { should be(input[0..-2].length) }
+      end
+
+      context 'on instance method' do
+        let(:other) { described_class.parse('TestApp::Literal#foo') }
+
+        it { should be(input[0..-2].length) }
+      end
     end
   end
 end

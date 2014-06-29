@@ -43,7 +43,11 @@ module Mutant
         def initialize(*)
           super
           namespace_src = Regexp.escape(namespace)
-          @recursion_pattern = Regexp.union(/\A#{namespace_src}\z/, /\A#{namespace_src}::/)
+          @recursion_pattern = Regexp.union(
+            /\A#{namespace_src}\z/,
+            /\A#{namespace_src}::/,
+            /\A#{namespace_src}[.#]/
+          )
         end
 
         # Return length of match
