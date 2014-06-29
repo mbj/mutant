@@ -18,7 +18,6 @@ module Mutant
 
         RECEIVER_INDEX   = 0
         NAME_INDEX       = 1
-        CONST_NAME_INDEX = 1
 
       private
 
@@ -94,7 +93,7 @@ module Mutant
         # @api private
         #
         def receiver_name?(node)
-          name = node.children[CONST_NAME_INDEX]
+          name = node.children[NAME_INDEX]
           name.to_s.eql?(context.unqualified_name)
         end
 
