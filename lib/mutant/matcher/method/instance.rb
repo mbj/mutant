@@ -47,8 +47,9 @@ module Mutant
         # @api private
         #
         def match?(node)
-          location                  = node.location       || return
-          expression                = location.expression || return
+          location   = node.location       || return
+          expression = location.expression || return
+
           expression.line.equal?(source_line)           &&
           node.type.equal?(:def)                        &&
           node.children[NAME_INDEX].equal?(method_name)
