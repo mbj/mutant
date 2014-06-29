@@ -259,7 +259,7 @@ Mutant::Meta::Example.add do
   mutation 'self[*bar]'
 end
 
-(Mutant::BINARY_METHOD_OPERATORS - [:==, :eql?]).each do |operator|
+(Mutant::AST::Types::BINARY_METHOD_OPERATORS - [:==, :eql?]).each do |operator|
   Mutant::Meta::Example.add do
     source "true #{operator} false"
 

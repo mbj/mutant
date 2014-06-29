@@ -22,7 +22,7 @@ module Mutant
           emit_right_mutations
           return if n_ivasgn?(left)
           emit_left_mutations do |node|
-            !n_self?(node)
+            AST::Meta.for(node).assignment?
           end
         end
 

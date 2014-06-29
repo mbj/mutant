@@ -3,7 +3,7 @@ module Mutant
     # Scope context for mutation (Class or Module)
     class Scope < self
       include Adamantium::Flat, Concord::Public.new(:scope, :source_path)
-      extend NodeHelpers
+      extend AST::Sexp
 
       NAMESPACE_DELIMITER = '::'.freeze
 

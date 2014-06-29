@@ -46,7 +46,8 @@ end
 RSpec.configure do |config|
   config.include(CompressHelper)
   config.include(ParserHelper)
-  config.include(Mutant::NodeHelpers)
+  config.include(Mutant::AST::Sexp)
+
   config.expect_with :rspec do |rspec|
     rspec.syntax = :expect
   end

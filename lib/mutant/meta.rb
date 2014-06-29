@@ -1,7 +1,6 @@
 module Mutant
   # Namespace for mutant metadata
   module Meta
-
     require 'mutant/meta/example'
     require 'mutant/meta/example/dsl'
 

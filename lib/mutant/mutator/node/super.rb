@@ -7,9 +7,6 @@ module Mutant
 
         handle(:super)
 
-        Z_SUPER = NodeHelpers.s(:zsuper)
-        EMPTY_SUPER = NodeHelpers.s(:super)
-
       private
 
         # Emit mutations
@@ -20,8 +17,8 @@ module Mutant
         #
         def dispatch
           emit_singletons
-          emit(Z_SUPER)
-          emit(EMPTY_SUPER)
+          emit(N_ZSUPER)
+          emit(N_EMPTY_SUPER)
           children.each_index do |index|
             mutate_child(index)
             delete_child(index)

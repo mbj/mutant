@@ -3,8 +3,6 @@
 require 'spec_helper'
 
 describe Mutant::Subject::Method::Instance do
-  include Mutant::NodeHelpers
-
   let(:object)  { described_class.new(context, node) }
   let(:context) { double }
 
@@ -73,8 +71,6 @@ describe Mutant::Subject::Method::Instance do
 end
 
 describe Mutant::Subject::Method::Instance::Memoized do
-  include Mutant::NodeHelpers
-
   let(:object)  { described_class.new(context, node) }
   let(:context) { double }
 

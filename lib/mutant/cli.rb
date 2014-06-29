@@ -4,7 +4,7 @@ module Mutant
 
   # Comandline parser
   class CLI
-    include Adamantium::Flat, Equalizer.new(:config), NodeHelpers
+    include Adamantium::Flat, Equalizer.new(:config)
 
     # Error raised when CLI argv is invalid
     Error = Class.new(RuntimeError)
@@ -186,7 +186,7 @@ module Mutant
         @builder.add_subject_ignore(Expression.parse(pattern))
       end
       opts.on('--code CODE', 'Scope execution to subjects with CODE') do |code|
-        @builder.add_subject_selector(Morpher.compile(s(:eql, s(:attribute, :code), s(:static, code))))
+        @builder.add_subject_selector(:code, code)
       end
     end
 

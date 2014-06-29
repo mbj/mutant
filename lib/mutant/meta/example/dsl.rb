@@ -4,7 +4,7 @@ module Mutant
 
       # Example DSL
       class DSL
-        include NodeHelpers
+        include AST::Sexp
 
         # Run DSL on block
         #

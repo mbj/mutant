@@ -2,7 +2,7 @@ module Mutant
   class Zombifier
     # File containing source beeing zombified
     class File
-      include NodeHelpers, Adamantium::Flat, Concord::Public.new(:path)
+      include Adamantium::Flat, Concord::Public.new(:path), AST::Sexp
 
       # Zombify contents of file
       #

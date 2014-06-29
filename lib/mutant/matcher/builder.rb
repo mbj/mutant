@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Builder for complex matchers
     class Builder
-      include NodeHelpers, Concord.new(:cache)
+      include Concord.new(:cache), AST::Sexp
 
       # Initalize object
       #
@@ -40,8 +40,8 @@ module Mutant
       #
       # @api private
       #
-      def add_subject_selector(selector)
-        @subject_selectors << selector
+      def add_subject_selector(attribute, value)
+        @subject_selectors << Morpher.compile(s(:eql, s(:attribute, attribute), s(:static, value)))
         self
       end
 

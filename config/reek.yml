@@ -113,7 +113,7 @@ UncommunicativeMethodName:
   enabled: true
   exclude:
   - Mutant::Mutation#sha1
-  - Mutant::NodeHelpers#s
+  - Mutant::AST::Sexp#s
   reject:
   - !ruby/regexp /^[a-z]$/
   - !ruby/regexp /[0-9]$/
@@ -159,5 +159,5 @@ UtilityFunction:
   - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
-  - Mutant::NodeHelpers#s
+  - Mutant::AST::Sexp#s
   max_helper_calls: 0

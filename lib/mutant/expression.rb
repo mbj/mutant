@@ -10,7 +10,7 @@ module Mutant
 
     METHOD_NAME_PATTERN = Regexp.union(
       /[A-Za-z_][A-Za-z\d_]*[!?=]?/,
-      *OPERATOR_METHODS.map(&:to_s)
+      *AST::Types::OPERATOR_METHODS.map(&:to_s)
     ).freeze
 
     SCOPE_PATTERN = /#{SCOPE_NAME_PATTERN}(?:#{SCOPE_OPERATOR}#{SCOPE_NAME_PATTERN})*/.freeze

@@ -6,7 +6,7 @@ describe Mutant::Mutation do
     SYMBOL = 'test'.freeze
   end
 
-  let(:object)           { TestMutation.new(mutation_subject, Mutant::NodeHelpers::N_NIL)   }
+  let(:object)           { TestMutation.new(mutation_subject, Mutant::AST::Nodes::N_NIL)    }
   let(:mutation_subject) { double('Subject', identification: 'subject', source: 'original') }
   let(:node)             { double('Node')                                                   }
 
