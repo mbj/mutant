@@ -87,8 +87,8 @@ module Mutant
     #
     # @api private
     #
-    def self.parse_strict(input)
-      parse(input) or raise "Expression: #{input.inspect} is not valid"
+    def self.parse(input)
+      try_parse(input) or raise "Expression: #{input.inspect} is not valid"
     end
 
     # Parse input into expression
@@ -103,7 +103,7 @@ module Mutant
     #
     # @api private
     #
-    def self.parse(input)
+    def self.try_parse(input)
       expressions = expressions(input)
       case expressions.length
       when 0

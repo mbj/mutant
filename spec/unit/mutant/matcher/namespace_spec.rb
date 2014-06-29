@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Mutant::Matcher::Namespace do
-  let(:object) { described_class.new(cache, Mutant::Expression.parse_strict('TestApp::Literal')) }
+  let(:object) { described_class.new(cache, Mutant::Expression.parse('TestApp::Literal')) }
   let(:yields) { []                                             }
 
   let(:cache) { Mutant::Cache.new }

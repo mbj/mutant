@@ -108,11 +108,7 @@ module Mutant
     def parse_matchers(patterns)
       raise Error, 'No patterns given' if patterns.empty?
       patterns.each do |pattern|
-        expression = Expression.parse(pattern)
-        unless expression
-          raise Error, "Invalid mutant expression: #{pattern.inspect}"
-        end
-        @builder.add_match_expression(expression)
+        @builder.add_match_expression(Expression.parse(pattern))
       end
     end
 

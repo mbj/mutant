@@ -82,7 +82,7 @@ module Mutant
           return
         end
 
-        scope_expression = Expression.parse(name)
+        scope_expression = Expression.try_parse(name)
 
         unless scope_expression
           $stderr.puts("WARNING: #{name.inspect} is not an identifiable ruby class name.")

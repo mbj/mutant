@@ -48,7 +48,7 @@ module Mutant
       #
       def all_tests
         example_group_index.keys.each_with_object([]) do |full_description, aggregate|
-          expression = Expression.parse(full_description) or next
+          expression = Expression.try_parse(full_description) or next
 
           aggregate << Test.new(self, expression)
         end

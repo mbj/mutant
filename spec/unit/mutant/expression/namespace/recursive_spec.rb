@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Mutant::Expression::Namespace::Recursive do
 
-  let(:object) { described_class.parse_strict(input) }
+  let(:object) { described_class.parse(input) }
   let(:cache)  { Mutant::Cache.new                   }
   let(:input)  { 'TestApp::Literal*'                 }
 
