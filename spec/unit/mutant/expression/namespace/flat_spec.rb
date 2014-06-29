@@ -9,7 +9,7 @@ describe Mutant::Expression::Namespace::Exact do
   describe '#matcher' do
     subject { object.matcher(cache) }
 
-    it { should eql(Mutant::Matcher::Namespace::Scope.new(cache, TestApp::Literal)) }
+    it { should eql(Mutant::Matcher::Scope.new(cache, TestApp::Literal)) }
   end
 
   describe '#match_length' do

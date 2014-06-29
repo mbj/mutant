@@ -5,7 +5,7 @@ module Mutant
     #
     # rubocop:disable LineLength
     class Namespace < self
-      include Concord::Public.new(:cache, :namespace)
+      include Concord::Public.new(:cache, :expression)
 
       # Enumerate subjects
       #
@@ -28,17 +28,6 @@ module Mutant
       end
 
     private
-
-      # Return pattern
-      #
-      # @return [Regexp]
-      #
-      # @api private
-      #
-      def pattern
-        /\A#{Regexp.escape(namespace)}(?:\z|::)/
-      end
-      memoize :pattern
 
       # Return scope enumerator
       #
@@ -85,11 +74,22 @@ module Mutant
       #
       def emit_scope(scope)
         name = self.class.scope_name(scope)
-        unless name.nil? or name.kind_of?(String)
+
+        return if name.nil?
+
+        unless name.kind_of?(String)
           $stderr.puts("WARNING: #{scope.class}#name from: #{scope.inspect} did not return a String or nil.  Fix your lib to support normal ruby semantics!")
           return
         end
-        yield scope if pattern =~ name
+
+        scope_expression = Expression.parse(name)
+
+        unless scope_expression
+          $stderr.puts("WARNING: #{name.inspect} is not an identifiable ruby class name.")
+          return
+        end
+
+        yield scope if expression.prefix?(scope_expression)
       end
 
     end # Namespace

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Mutant::Matcher::Namespace do
-  let(:object) { described_class.new(cache, 'TestApp::Literal') }
+  let(:object) { described_class.new(cache, Mutant::Expression.parse_strict('TestApp::Literal')) }
   let(:yields) { []                                             }
 
   let(:cache) { Mutant::Cache.new }
@@ -19,7 +19,8 @@ describe Mutant::Matcher::Namespace do
     before do
       allow(Mutant::Matcher::Methods::Singleton).to receive(:new).with(cache, singleton_a).and_return([subject_a])
       allow(Mutant::Matcher::Methods::Instance).to receive(:new).with(cache, singleton_a).and_return([subject_b])
-      ObjectSpace.stub(each_object: [singleton_a, singleton_b, singleton_c])
+
+      allow(ObjectSpace).to receive(:each_object).with(Module).and_return([singleton_a, singleton_b, singleton_c])
     end
 
     context 'with no block' do

@@ -4,36 +4,12 @@ module Mutant
     class Namespace < self
       include AbstractType
 
-      # Return matcher
-      #
-      # @param [Cache] cache
-      #
-      # @return [Matcher]
-      #
-      # @api private
-      #
-      def matcher(cache)
-        self.class::MATCHER.new(cache, namespace)
-      end
-
     private
-
-      # Return namespace
-      #
-      # @return [Class, Module]
-      #
-      # @api private
-      #
-      def namespace
-        Mutant.constant_lookup(match[__method__].to_s)
-      end
 
       # Recursive namespace expression
       class Recursive < self
 
         register(/\A(?<namespace>#{SCOPE_PATTERN})?\*\z/)
-
-        MATCHER = Matcher::Namespace
 
         # Initialize object
         #
@@ -48,6 +24,18 @@ module Mutant
             /\A#{namespace_src}::/,
             /\A#{namespace_src}[.#]/
           )
+        end
+
+        # Return matcher
+        #
+        # @param [Cache] cache
+        #
+        # @return [Matcher]
+        #
+        # @api private
+        #
+        def matcher(cache)
+          Matcher::Namespace.new(cache, self)
         end
 
         # Return length of match
@@ -87,8 +75,31 @@ module Mutant
 
         MATCHER = Matcher::Scope
 
-      end # Exact
+        # Return matcher
+        #
+        # @param [Cache] cache
+        #
+        # @return [Matcher]
+        #
+        # @api private
+        #
+        def matcher(cache)
+          Matcher::Scope.new(cache, Mutant.constant_lookup(namespace))
+        end
 
+      private
+
+        # Return namespace
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        def namespace
+          match[__method__].to_s
+        end
+
+      end # Exact
     end # Namespace
   end # Namespace
 end # Mutant
