@@ -1,6 +1,6 @@
 # encoding: UTF-8
 require 'rspec/core'
-require 'rspec/version'
+require 'rspec/core/version'
 
 require 'rspec/core/formatters/base_text_formatter'
 
