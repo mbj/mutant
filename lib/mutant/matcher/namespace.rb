@@ -21,7 +21,7 @@ module Mutant
         return to_enum unless block_given?
 
         scopes.each do |scope|
-          Scope.each(cache, scope, &block)
+          Scope.new(cache, scope).each(&block)
         end
 
         self

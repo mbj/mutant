@@ -17,12 +17,8 @@ describe Mutant::Matcher::Namespace do
     let(:subject_b)   { double('SubjectB')                                  }
 
     before do
-      Mutant::Matcher::Methods::Singleton.stub(:each)
-        .with(cache, singleton_a)
-        .and_yield(subject_a)
-      Mutant::Matcher::Methods::Instance.stub(:each)
-        .with(cache, singleton_a)
-        .and_yield(subject_b)
+      allow(Mutant::Matcher::Methods::Singleton).to receive(:new).with(cache, singleton_a).and_return([subject_a])
+      allow(Mutant::Matcher::Methods::Instance).to receive(:new).with(cache, singleton_a).and_return([subject_b])
       ObjectSpace.stub(each_object: [singleton_a, singleton_b, singleton_c])
     end
 
