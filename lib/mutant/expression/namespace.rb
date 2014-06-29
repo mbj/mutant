@@ -4,8 +4,6 @@ module Mutant
     class Namespace < self
       include AbstractType
 
-    private
-
       # Recursive namespace expression
       class Recursive < self
 
