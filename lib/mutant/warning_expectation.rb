@@ -1,11 +1,11 @@
 module Mutant
-  # A class to expect some warning message raising on absence of unexpected warnings
+  # A class to ignore some warning message raising on unexpected warnings
   class WarningExpectation
-    include Adamantium::Flat, Concord.new(:expected)
+    include Adamantium::Flat, Concord.new(:ignore)
 
-    # Error raised on expectation miss
+    # Error raised on unexpected errors
     class ExpectationError < RuntimeError
-      include Concord.new(:unexpected, :missing)
+      include Concord.new(:unexpected)
 
       # Return exception message
       #
@@ -14,9 +14,10 @@ module Mutant
       # @api private
       #
       def message
-        "Unexpected warnings: #{unexpected.inspect} missing warnigns: #{missing.inspect}"
+        "Unexpected warnings: #{unexpected.inspect}"
       end
-    end
+
+    end # ExpectationError
 
     # Execute blocks with warning expectations
     #
@@ -25,13 +26,9 @@ module Mutant
     # @api private
     #
     def execute(&block)
-      warnings = WarningFilter.use do
-        block.call
-      end
-      missing = expected - warnings
-      unexpected = warnings - expected
-      if missing.any? or unexpected.any?
-        fail ExpectationError.new(unexpected, missing)
+      unexpected = WarningFilter.use(&block) - ignore
+      if unexpected.any?
+        fail ExpectationError, unexpected
       end
       self
     end

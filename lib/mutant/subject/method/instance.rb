@@ -25,13 +25,7 @@ module Mutant
         # @api private
         #
         def prepare
-          expected_warnings =
-            if RUBY_ENGINE.eql?('ruby') && name.equal?(:initialize)
-              ["#{__FILE__}:#{__LINE__ + 5}: warning: undefining `initialize' may cause serious problems\n"]
-            else
-              []
-            end
-          WarningExpectation.new(expected_warnings).execute do
+          WarningExpectation.new(["#{__FILE__}:#{__LINE__ + 1}: warning: undefining `#{name}' may cause serious problems\n"]).execute do
             scope.send(:undef_method, name)
           end
           self
