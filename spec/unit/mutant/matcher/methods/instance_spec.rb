@@ -46,12 +46,9 @@ describe Mutant::Matcher::Methods::Instance, '#each' do
 
   before do
     matcher = Mutant::Matcher::Method::Instance
-    matcher.stub(:new)
-      .with(cache, Foo, Foo.instance_method(:method_a)).and_return([subject_a])
-    matcher.stub(:new)
-      .with(cache, Foo, Foo.instance_method(:method_b)).and_return([subject_b])
-    matcher.stub(:new)
-      .with(cache, Foo, Foo.instance_method(:method_c)).and_return([subject_c])
+    allow(matcher).to receive(:new).with(cache, Foo, Foo.instance_method(:method_a)).and_return([subject_a])
+    allow(matcher).to receive(:new).with(cache, Foo, Foo.instance_method(:method_b)).and_return([subject_b])
+    allow(matcher).to receive(:new).with(cache, Foo, Foo.instance_method(:method_c)).and_return([subject_c])
   end
 
   it 'should yield expected subjects' do

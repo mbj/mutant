@@ -17,9 +17,7 @@ module Mutant
       def each(&block)
         return to_enum unless block_given?
 
-        methods.each do |method|
-          emit_matches(method, &block)
-        end
+        subjects.each(&block)
 
         self
       end
@@ -50,19 +48,18 @@ module Mutant
 
     private
 
-      # Emit matches for method
+      # Return subjects
       #
-      # @param [UnboundMethod, Method] method
-      #
-      # @return [undefined]
+      # @return [Array<Subject>]
       #
       # @api private
       #
-      def emit_matches(method)
-        matcher.build(cache, scope, method).each do |subject|
-          yield subject
-        end
+      def subjects
+        methods.map do |method|
+          matcher.build(cache, scope, method)
+        end.flat_map(&:to_a)
       end
+      memoize :subjects
 
       # Return candidate names
       #
@@ -73,11 +70,11 @@ module Mutant
       # @api private
       #
       def candidate_names
-        names =
+        (
           candidate_scope.public_instance_methods(false)   +
           candidate_scope.private_instance_methods(false)  +
           candidate_scope.protected_instance_methods(false)
-        names.sort
+        ).sort
       end
 
       # Return candidate scope
