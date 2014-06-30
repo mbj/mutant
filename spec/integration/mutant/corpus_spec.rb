@@ -42,6 +42,8 @@ describe 'Mutant on ruby corpus' do
         devtools << "gem 'mutant', path: '#{relative}'\n"
         devtools << "gem 'mutant-rspec', path: '#{relative}'\n"
         File.write(repo_path.join('Gemfile.devtools'), devtools)
+        lockfile = repo_path.join('Gemfile.lock')
+        lockfile.delete if lockfile.exist?
         Bundler.with_clean_env do
           system('bundle install')
           system(%W[bundle exec mutant -I lib -r #{name} --score #{expect_coverage} --use rspec #{namespace}*])

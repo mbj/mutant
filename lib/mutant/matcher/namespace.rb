@@ -19,9 +19,8 @@ module Mutant
       #
       def each(&block)
         return to_enum unless block_given?
-
         scopes.each do |scope|
-          Scope.new(cache, scope).each(&block)
+          scope.each(&block)
         end
 
         self
@@ -31,17 +30,16 @@ module Mutant
 
       # Return scope enumerator
       #
-      # @return [Enumerable<Object>]
+      # @return [Array<Class, Module>]
       #
       # @api private
       #
-      def scopes(&block)
-        return to_enum(__method__) unless block_given?
-
-        ::ObjectSpace.each_object(Module).each do |scope|
-          emit_scope(scope, &block)
-        end
+      def scopes
+        ::ObjectSpace.each_object(Module).each_with_object([]) do |scope, aggregate|
+          aggregate << Scope.new(cache, scope) if match?(scope)
+        end.sort_by(&:identification)
       end
+      memoize :scopes
 
       # Return scope name
       #
@@ -57,39 +55,37 @@ module Mutant
       #
       # rubocop:disable LineLength
       #
-      def self.scope_name(scope)
+      def scope_name(scope)
         scope.name
       rescue => exception
         $stderr.puts("WARNING: While optaining #{scope.class}#name from: #{scope.inspect} It raised an error: #{exception.inspect} fix your lib!")
         nil
       end
 
-      # Yield scope if name matches pattern
+      # Test scope if name matches expresion
       #
       # @param [Module,Class] scope
       #
-      # @return [undefined]
+      # @return [Boolean]
       #
       # @api private
       #
-      def emit_scope(scope)
-        name = self.class.scope_name(scope)
-
-        return if name.nil?
+      def match?(scope)
+        name = scope_name(scope) or return false
 
         unless name.kind_of?(String)
           $stderr.puts("WARNING: #{scope.class}#name from: #{scope.inspect} did not return a String or nil.  Fix your lib to support normal ruby semantics!")
-          return
+          return false
         end
 
         scope_expression = Expression.try_parse(name)
 
         unless scope_expression
           $stderr.puts("WARNING: #{name.inspect} is not an identifiable ruby class name.")
-          return
+          return false
         end
 
-        yield scope if expression.prefix?(scope_expression)
+        expression.prefix?(scope_expression)
       end
 
     end # Namespace

@@ -9,6 +9,17 @@ module Mutant
         Matcher::Methods::Instance
       ].freeze
 
+      # Return identification
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def identification
+        scope.name
+      end
+      memoize :identification
+
       # Enumerate subjects
       #
       # @return [self]
