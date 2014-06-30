@@ -13,7 +13,7 @@ module Mutant
       #
       # @api private
       #
-      def report(_message)
+      def warn(_message)
         self
       end
 
