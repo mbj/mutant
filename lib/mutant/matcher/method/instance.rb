@@ -7,7 +7,7 @@ module Mutant
 
         # Dispatching builder, detects memoizable case
         #
-        # @param [Cache] cache
+        # @param [Env] env
         # @param [Class, Module] scope
         # @param [UnboundMethod] method
         #
@@ -15,10 +15,10 @@ module Mutant
         #
         # @api private
         #
-        def self.build(cache, scope, method)
+        def self.build(env, scope, method)
           name = method.name
           if scope.ancestors.include?(::Memoizable) && scope.memoized?(name)
-            return Memoized.new(cache, scope, method)
+            return Memoized.new(env, scope, method)
           end
           super
         end

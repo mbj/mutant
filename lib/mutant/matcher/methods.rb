@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Abstract base class for matcher that returns method subjects from scope
     class Methods < self
-      include AbstractType, Concord::Public.new(:cache, :scope)
+      include AbstractType, Concord::Public.new(:env, :scope)
 
       # Enumerate subjects
       #
@@ -56,7 +56,7 @@ module Mutant
       #
       def subjects
         methods.map do |method|
-          matcher.build(cache, scope, method)
+          matcher.build(env, scope, method)
         end.flat_map(&:to_a)
       end
       memoize :subjects

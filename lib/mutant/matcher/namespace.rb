@@ -5,7 +5,7 @@ module Mutant
     #
     # rubocop:disable LineLength
     class Namespace < self
-      include Concord::Public.new(:cache, :expression)
+      include Concord::Public.new(:env, :expression)
 
       # Enumerate subjects
       #
@@ -36,7 +36,7 @@ module Mutant
       #
       def scopes
         ::ObjectSpace.each_object(Module).each_with_object([]) do |scope, aggregate|
-          aggregate << Scope.new(cache, scope) if match?(scope)
+          aggregate << Scope.new(env, scope) if match?(scope)
         end.sort_by(&:identification)
       end
       memoize :scopes

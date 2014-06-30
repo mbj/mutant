@@ -2,17 +2,17 @@ module Mutant
   class Matcher
     # Builder for complex matchers
     class Builder
-      include Concord.new(:cache), AST::Sexp
+      include Concord.new(:env), AST::Sexp
 
       # Initalize object
       #
-      # @param [Cache] cache
+      # @param [Cache] env
       #
       # @return [undefined]
       #
       # @api private
       #
-      def initialize(cache)
+      def initialize(env)
         super
         @matchers          = []
         @subject_ignores   = []
@@ -28,7 +28,7 @@ module Mutant
       # @api private
       #
       def add_subject_ignore(expression)
-        @subject_ignores << expression.matcher(cache)
+        @subject_ignores << expression.matcher(env)
         self
       end
 
@@ -54,7 +54,7 @@ module Mutant
       # @api private
       #
       def add_match_expression(expression)
-        @matchers << expression.matcher(cache)
+        @matchers << expression.matcher(env)
         self
       end
 

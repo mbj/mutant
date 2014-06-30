@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Matcher for specific namespace
     class Scope < self
-      include Concord::Public.new(:cache, :scope)
+      include Concord::Public.new(:env, :scope)
 
       MATCHERS = [
         Matcher::Methods::Singleton,
@@ -34,7 +34,7 @@ module Mutant
         return to_enum unless block_given?
 
         MATCHERS.each do |matcher|
-          matcher.new(cache, scope).each(&block)
+          matcher.new(env, scope).each(&block)
         end
 
         self

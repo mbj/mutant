@@ -1,7 +1,7 @@
 module Mutant
   # An AST cache
   class Cache
-    include Equalizer.new
+    include Equalizer.new, Adamantium::Mutable
 
     # Initialize object
     #

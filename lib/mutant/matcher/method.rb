@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Matcher for subjects that are a specific method
     class Method < self
-      include Adamantium::Flat, Concord::Public.new(:cache, :scope, :method)
+      include Adamantium::Flat, Concord::Public.new(:env, :scope, :method)
       include Equalizer.new(:identification)
 
       # Methods within rbx kernel directory are precompiled and their source
@@ -78,7 +78,7 @@ module Mutant
       # @api private
       #
       def ast
-        cache.parse(source_path)
+        env.cache.parse(source_path)
       end
 
       # Return path to source

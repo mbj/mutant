@@ -29,8 +29,8 @@ describe Mutant::CLI, '.new' do
   let(:expected_integration) { Mutant::Integration::Null.new      }
   let(:expected_reporter)    { Mutant::Reporter::CLI.new($stdout) }
 
-  let(:ns)    { Mutant::Matcher   }
-  let(:cache) { Mutant::Cache.new }
+  let(:ns)    { Mutant::Matcher    }
+  let(:env)   { Fixtures::BOOT_ENV }
 
   let(:cli) { object.new(arguments) }
 
@@ -71,7 +71,7 @@ describe Mutant::CLI, '.new' do
     let(:arguments)        { %w[TestApp::Literal#float] }
 
     let(:expected_matcher) do
-      ns::Method::Instance.new(cache, TestApp::Literal, TestApp::Literal.instance_method(:float))
+      ns::Method::Instance.new(env, TestApp::Literal, TestApp::Literal.instance_method(:float))
     end
 
     it_should_behave_like 'a cli parser'
@@ -80,7 +80,7 @@ describe Mutant::CLI, '.new' do
   context 'with debug flag' do
     let(:pattern)          { 'TestApp*'           }
     let(:arguments)        { %W[--debug #{pattern}] }
-    let(:expected_matcher) { ns::Namespace.new(cache, Mutant::Expression.parse(pattern)) }
+    let(:expected_matcher) { ns::Namespace.new(env, Mutant::Expression.parse(pattern)) }
 
     it_should_behave_like 'a cli parser'
 
@@ -92,7 +92,7 @@ describe Mutant::CLI, '.new' do
   context 'with zombie flag' do
     let(:pattern)          { 'TestApp*'            }
     let(:arguments)        { %W[--zombie #{pattern}] }
-    let(:expected_matcher) { ns::Namespace.new(cache, Mutant::Expression.parse(pattern)) }
+    let(:expected_matcher) { ns::Namespace.new(env, Mutant::Expression.parse(pattern)) }
 
     it_should_behave_like 'a cli parser'
 
@@ -104,7 +104,7 @@ describe Mutant::CLI, '.new' do
   context 'with namespace pattern' do
     let(:pattern)          { 'TestApp*' }
     let(:arguments)        { [pattern]    }
-    let(:expected_matcher) { ns::Namespace.new(cache, Mutant::Expression.parse(pattern)) }
+    let(:expected_matcher) { ns::Namespace.new(env, Mutant::Expression.parse(pattern)) }
 
     it_should_behave_like 'a cli parser'
   end
@@ -124,7 +124,7 @@ describe Mutant::CLI, '.new' do
 
     let(:expected_matcher) do
       matcher = ns::Method::Instance.new(
-        cache,
+        env,
         TestApp::Literal, TestApp::Literal.instance_method(:float)
       )
       predicate = Morpher.compile(

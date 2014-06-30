@@ -3,12 +3,12 @@ require 'spec_helper'
 # rubocop:disable ClassAndModuleChildren
 describe Mutant::Matcher::Method::Instance do
 
-  let(:cache) { Fixtures::AST_CACHE }
+  let(:env) { Fixtures::BOOT_ENV }
 
   describe '#each' do
     subject { object.each { |subject| yields << subject } }
 
-    let(:object)       { described_class.new(cache, scope, method) }
+    let(:object)       { described_class.new(env, scope, method) }
     let(:method)       { scope.instance_method(method_name)        }
     let(:yields)       { []                                        }
     let(:namespace)    { self.class                                }
@@ -118,7 +118,7 @@ describe Mutant::Matcher::Method::Instance do
   describe '.build' do
     let(:object) { described_class }
 
-    subject { object.build(cache, scope, method) }
+    subject { object.build(env, scope, method) }
 
     let(:scope) do
       Class.new do
@@ -141,13 +141,13 @@ describe Mutant::Matcher::Method::Instance do
       context 'with unmemoized method' do
         let(:method_name) { :bar }
 
-        it { should eql(described_class.new(cache, scope, method)) }
+        it { should eql(described_class.new(env, scope, method)) }
       end
 
       context 'with memoized method' do
         let(:method_name) { :foo }
 
-        it { should eql(described_class::Memoized.new(cache, scope, method)) }
+        it { should eql(described_class::Memoized.new(env, scope, method)) }
       end
     end
   end

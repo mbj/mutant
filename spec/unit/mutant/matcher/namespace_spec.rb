@@ -1,10 +1,9 @@
 require 'spec_helper'
 
 describe Mutant::Matcher::Namespace do
-  let(:object) { described_class.new(cache, Mutant::Expression.parse('TestApp*')) }
-  let(:yields) { []                                             }
-
-  let(:cache) { Mutant::Cache.new }
+  let(:object) { described_class.new(env, Mutant::Expression.parse('TestApp*')) }
+  let(:yields) { []                                                             }
+  let(:env)    { Fixtures::BOOT_ENV                                             }
 
   subject { object.each { |item| yields << item } }
 
@@ -17,11 +16,11 @@ describe Mutant::Matcher::Namespace do
     let(:subject_b)   { double('SubjectB')                             }
 
     before do
-      allow(Mutant::Matcher::Methods::Singleton).to receive(:new).with(cache, singleton_a).and_return([subject_a])
-      allow(Mutant::Matcher::Methods::Instance).to receive(:new).with(cache, singleton_a).and_return([])
+      allow(Mutant::Matcher::Methods::Singleton).to receive(:new).with(env, singleton_a).and_return([subject_a])
+      allow(Mutant::Matcher::Methods::Instance).to receive(:new).with(env, singleton_a).and_return([])
 
-      allow(Mutant::Matcher::Methods::Singleton).to receive(:new).with(cache, singleton_b).and_return([subject_b])
-      allow(Mutant::Matcher::Methods::Instance).to receive(:new).with(cache, singleton_b).and_return([])
+      allow(Mutant::Matcher::Methods::Singleton).to receive(:new).with(env, singleton_b).and_return([subject_b])
+      allow(Mutant::Matcher::Methods::Instance).to receive(:new).with(env, singleton_b).and_return([])
 
       allow(ObjectSpace).to receive(:each_object).with(Module).and_return([singleton_a, singleton_b, singleton_c])
     end

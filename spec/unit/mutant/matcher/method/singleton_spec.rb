@@ -4,14 +4,14 @@ require 'spec_helper'
 describe Mutant::Matcher::Method::Singleton, '#each' do
   subject { object.each { |subject| yields << subject } }
 
-  let(:object)       { described_class.new(cache, scope, method) }
-  let(:method)       { scope.method(method_name)                 }
-  let(:cache)        { Fixtures::AST_CACHE                       }
-  let(:yields)       { []                                        }
-  let(:namespace)    { self.class                                }
-  let(:scope)        { self.class::Foo                           }
-  let(:type)         { :defs                                     }
-  let(:method_arity) { 0                                         }
+  let(:object)       { described_class.new(env, scope, method) }
+  let(:method)       { scope.method(method_name)               }
+  let(:env)          { Fixtures::BOOT_ENV                      }
+  let(:yields)       { []                                      }
+  let(:namespace)    { self.class                              }
+  let(:scope)        { self.class::Foo                         }
+  let(:type)         { :defs                                   }
+  let(:method_arity) { 0                                       }
 
   def name
     node.children[1]

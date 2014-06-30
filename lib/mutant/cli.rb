@@ -39,7 +39,7 @@ module Mutant
     # @api private
     #
     def initialize(arguments = [])
-      @builder = Matcher::Builder.new(Cache.new)
+      @builder = Matcher::Builder.new(Env::Boot.new(Reporter::CLI.new($stderr), Cache.new))
       @debug = @fail_fast = @zombie = false
       @expected_coverage = 100.0
       @integration = Integration::Null.new

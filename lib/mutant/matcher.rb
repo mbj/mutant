@@ -5,7 +5,7 @@ module Mutant
 
     # Default matcher build implementation
     #
-    # @param [Cache] cache
+    # @param [Env] env
     # @param [Object] input
     #
     # @return [undefined]

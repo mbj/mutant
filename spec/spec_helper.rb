@@ -30,8 +30,8 @@ $LOAD_PATH << File.join(TestApp.root, 'lib')
 require 'test_app'
 
 module Fixtures
-  AST_CACHE = Mutant::Cache.new
-end
+  BOOT_ENV = Mutant::Env::Boot.new(Mutant::Reporter::CLI.new(STDERR), Mutant::Cache.new)
+end # Fixtures
 
 module ParserHelper
   def generate(node)
