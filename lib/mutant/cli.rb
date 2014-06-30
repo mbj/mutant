@@ -143,7 +143,7 @@ module Mutant
     # @api private
     #
     def use(name)
-      require "mutant/#{name}"
+      require "mutant/integration/#{name}"
       @integration = Integration.lookup(name).new
     rescue LoadError
       $stderr.puts("Cannot load plugin: #{name.inspect}")

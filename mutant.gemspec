@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
 
   gem.require_paths    = %w[lib]
 
-  mutant_rspec_files = `git ls-files -- lib/mutant{-,/}rspec.rb lib/mutant/rspec`.split("\n")
+  mutant_rspec_files   = `git ls-files -- lib/mutant/integration/rspec{,2,3}.rb`.split("\n")
 
   gem.files            = `git ls-files`.split("\n") - mutant_rspec_files
   gem.test_files       = `git ls-files -- spec/{unit,integration}`.split("\n")

@@ -1,3 +1,9 @@
+# encoding: UTF-8
+require 'rspec/core'
+require 'rspec/core/version'
+
+require 'rspec/core/formatters/base_text_formatter'
+
 module Mutant
   class Integration
     # Shared parts of rspec2/3 integration
@@ -95,3 +101,11 @@ module Mutant
     end # Rspec
   end # Integration
 end # Mutant
+
+RSPEC_2_VERSION_PREFIX = '2.'.freeze
+
+if RSpec::Core::Version::STRING.start_with?(RSPEC_2_VERSION_PREFIX)
+  require 'mutant/integration/rspec2'
+else
+  require 'mutant/integration/rspec3'
+end
