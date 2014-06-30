@@ -5,6 +5,18 @@ module Mutant
     class Null < self
       include Equalizer.new
 
+      # Write warning message
+      #
+      # @param [String] _message
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def report(_message)
+        self
+      end
+
       # Report object
       #
       # @param [Object] _object
