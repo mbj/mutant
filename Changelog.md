@@ -1,3 +1,13 @@
+# v0.5.24 2014-06-30
+
+* Fix invalid AST on op_assign mutations
+* Make subject matching result order deterministic
+* Improve internals a bit for more consistency.
+* Add instance methods expression 'Foo#'
+* Add singleton methods expression 'Foo.'
+* Split rspec2 and rspec3 integration with minimal duplication
+* Move test matching outside of integrations.
+
 # v0.5.23 2014-06-15
 
 * Propagate exceptions from child-isolation-killforks to master
