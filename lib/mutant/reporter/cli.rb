@@ -19,6 +19,19 @@ module Mutant
         self
       end
 
+      # Report warning
+      #
+      # @param [String] message
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def warn(message)
+        output.puts(message)
+        self
+      end
+
       # Report object
       #
       # @param [Object] object

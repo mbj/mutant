@@ -58,7 +58,7 @@ module Mutant
       def scope_name(scope)
         scope.name
       rescue => exception
-        $stderr.puts("WARNING: While optaining #{scope.class}#name from: #{scope.inspect} It raised an error: #{exception.inspect} fix your lib!")
+        env.warn("While optaining #{scope.class}#name from: #{scope.inspect} It raised an error: #{exception.inspect} fix your lib!")
         nil
       end
 
@@ -74,7 +74,7 @@ module Mutant
         name = scope_name(scope) or return false
 
         unless name.kind_of?(String)
-          $stderr.puts("WARNING: #{scope.class}#name from: #{scope.inspect} did not return a String or nil.  Fix your lib to support normal ruby semantics!")
+          env.warn("#{scope.class}#name from: #{scope.inspect} did not return a String or nil.  Fix your lib to support normal ruby semantics!")
           return false
         end
 

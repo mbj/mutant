@@ -27,6 +27,19 @@ module Mutant
     #
     abstract_method :reporter
 
+    # Print warning message
+    #
+    # @param [String]
+    #
+    # @return [self]
+    #
+    # @api private
+    #
+    def warn(message)
+      reporter.warn(message)
+      self
+    end
+
     # Boot environment used for matching
     class Boot < self
       include Concord::Public.new(:reporter, :cache)

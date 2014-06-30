@@ -75,11 +75,7 @@ module Mutant
           when :const
             receiver_name?(receiver)
           else
-            message = format(
-              'Can only match :defs on :self or :const got %s unable to match',
-              receiver.type.inspect
-            )
-            $stderr.puts(message)
+            env.warn(format('Can only match :defs on :self or :const got %s unable to match', receiver.type.inspect))
             false
           end
         end
