@@ -29,6 +29,7 @@ FeatureEnvy:
   - Mutant::Integration::Rspec3#full_description
   - Mutant::Matcher::Method::Instance#match?
   - Mutant::Matcher::Method::Singleton#receiver?
+  - Mutant::Matcher::Namespace#scope_name
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
   - Mutant::Reporter::CLI#subject_results
@@ -156,6 +157,7 @@ UtilityFunction:
   - Mutant::Integration::Rspec2#full_description
   - Mutant::Integration::Rspec2#new_reporter
   - Mutant::Integration::Rspec3#full_description
+  - Mutant::Matcher::Namespace#scope_name
   - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
