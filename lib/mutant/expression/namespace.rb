@@ -82,7 +82,7 @@ module Mutant
         # @api private
         #
         def matcher(cache)
-          Matcher::Scope.new(cache, Mutant.constant_lookup(namespace))
+          Matcher::Scope.new(cache, Mutant.constant_lookup(namespace), self)
         end
 
       private

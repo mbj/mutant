@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mutant::Matcher::Namespace do
   let(:object) { described_class.new(env, Mutant::Expression.parse('TestApp*')) }
   let(:yields) { []                                                             }
-  let(:env)    { Fixtures::BOOT_ENV                                             }
+  let(:env)    { double('Env')                                                  }
 
   subject { object.each { |item| yields << item } }
 
@@ -16,13 +16,17 @@ describe Mutant::Matcher::Namespace do
     let(:subject_b)   { double('SubjectB')                             }
 
     before do
-      allow(Mutant::Matcher::Methods::Singleton).to receive(:new).with(env, singleton_a).and_return([subject_a])
-      allow(Mutant::Matcher::Methods::Instance).to receive(:new).with(env, singleton_a).and_return([])
-
       allow(Mutant::Matcher::Methods::Singleton).to receive(:new).with(env, singleton_b).and_return([subject_b])
       allow(Mutant::Matcher::Methods::Instance).to receive(:new).with(env, singleton_b).and_return([])
 
-      allow(ObjectSpace).to receive(:each_object).with(Module).and_return([singleton_a, singleton_b, singleton_c])
+      allow(Mutant::Matcher::Methods::Singleton).to receive(:new).with(env, singleton_a).and_return([subject_a])
+      allow(Mutant::Matcher::Methods::Instance).to receive(:new).with(env, singleton_a).and_return([])
+
+      allow(env).to receive(:matchable_scopes).and_return(
+        [singleton_a, singleton_b, singleton_c].map do |scope|
+          Mutant::Matcher::Scope.new(env, scope, Mutant::Expression.parse(scope.name))
+        end
+      )
     end
 
     context 'with no block' do
@@ -36,7 +40,7 @@ describe Mutant::Matcher::Namespace do
     end
 
     it 'should yield subjects' do
-      expect { subject }.to change { yields }.from([]).to([subject_b, subject_a])
+      expect { subject }.to change { yields }.from([]).to([subject_a, subject_b])
     end
   end
 end
