@@ -32,16 +32,21 @@ module Mutant
       #
       def run(test)
         output = StringIO.new
-        success = false
+        failed = false
         reporter = new_reporter(output)
         reporter.report(1) do
-          success = example_group_index.fetch(test.expression.syntax).run(reporter)
+          example_group_index.fetch(test.expression.syntax).each do |example_group|
+            unless example_group.run(reporter)
+              failed = true
+              break
+            end
+          end
         end
         output.rewind
         Test::Report.new(
           test:    self,
           output:  output.read,
-          success: success
+          success: !failed
         )
       end
 
@@ -69,9 +74,14 @@ module Mutant
       # @api private
       #
       def example_group_index
-        Hash[RSpec.world.example_groups.flat_map(&:descendants).map do |example_group|
-          [full_description(example_group), example_group]
-        end]
+        index = Hash.new { |hash, key| hash[key] = [] }
+
+        RSpec.world.example_groups.flat_map(&:descendants).each do |example_group|
+          full_description = full_description(example_group)
+          index[full_description] << example_group
+        end
+
+        index
       end
       memoize :example_group_index
 
