@@ -2,7 +2,7 @@ module Mutant
   class Runner
     # Mutation runner
     class Mutation < self
-      include Equalizer.new(:config, :mutation, :tests)
+      include Equalizer.new(:config, :mutation)
 
       register Mutant::Mutation
 
