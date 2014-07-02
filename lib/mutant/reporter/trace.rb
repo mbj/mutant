@@ -2,7 +2,7 @@ module Mutant
   class Reporter
     # Reporter to trace report calls, used as a spec adapter
     class Trace
-      include Concord::Public.new(:progress_calls, :report_calls)
+      include Concord::Public.new(:progress_calls, :report_calls, :warn_calls)
 
       # Return new trace reporter
       #
@@ -11,7 +11,20 @@ module Mutant
       # @api private
       #
       def self.new
-        super([], [])
+        super([], [], [])
+      end
+
+      # Warn with message
+      #
+      # @param [String] message
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def warn(message)
+        warn_calls << message
+        self
       end
 
       # Report object
