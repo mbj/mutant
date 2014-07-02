@@ -47,7 +47,7 @@ module Mutant
         mutation.insert
         test.run
       end
-    rescue Exception => exception
+    rescue Parallel::DeadWorker => exception
       Test::Report.new(
         test: test,
         output: exception.message,
