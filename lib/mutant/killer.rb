@@ -29,14 +29,29 @@ module Mutant
     # @api private
     #
     def run
-      test_report = Isolation.call do
-        mutation.insert
-        test.run
-      end
 
       Report.new(
         killer:      self,
         test_report: test_report.update(test: test)
+      )
+    end
+
+    # Return test report
+    #
+    # @return [Test::Report]
+    #
+    # @api private
+    #
+    def test_report
+      Isolation.call do
+        mutation.insert
+        test.run
+      end
+    rescue Parallel::DeadWorker => exception
+      Test::Report.new(
+        test: test,
+        output: exception.message,
+        success: true
       )
     end
 
