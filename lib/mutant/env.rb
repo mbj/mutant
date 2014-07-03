@@ -1,31 +1,43 @@
 module Mutant
   # Abstract base class for mutant environments
   class Env
-    include AbstractType, Adamantium
+    include Adamantium, Concord::Public.new(:config, :cache), Procto.call(:run)
 
-    # Return config
+    # Return new env
     #
-    # @return [Config]
+    # @param [Config] config
+    #
+    # @return [Env]
     #
     # @api private
     #
-    abstract_method :config
+    def self.new(config)
+      super(config, Cache.new)
+    end
 
-    # Return cache
+    # Initialize env
     #
-    # @return [Cache]
+    # @return [undefined]
     #
     # @api private
     #
-    abstract_method :cache
+    def initialize(*)
+      super
 
-    # Return reporter
+      infect
+      initialize_matchable_scopes
+      initialize_subjects
+    end
+
+    # Run mutant producing a report on configured env
     #
-    # @return [Reporter]
+    # @return [Report]
     #
     # @api private
     #
-    abstract_method :reporter
+    def run
+      Runner.call(self)
+    end
 
     # Print warning message
     #
@@ -36,23 +48,25 @@ module Mutant
     # @api private
     #
     def warn(message)
-      reporter.warn(message)
+      config.reporter.warn(message)
       self
     end
 
-    # Return all usable match scopes
+    # Return subjects
     #
-    # @return [Enumerable<Mutant::Matcher::Scope>]
+    # @return [Array<Subject>]
     #
     # @api private
     #
-    def matchable_scopes
-      ObjectSpace.each_object(Module).each_with_object([]) do |scope, aggregate|
-        expression = expression(scope)
-        aggregate << Matcher::Scope.new(self, scope, expression) if expression
-      end.sort_by(&:identification)
-    end
-    memoize :matchable_scopes, freezer: :noop
+    attr_reader :subjects
+
+    # Return all usable match scopes
+    #
+    # @return [Array<Matcher::Scope>]
+    #
+    # @api private
+    #
+    attr_reader :matchable_scopes
 
   private
 
@@ -100,10 +114,39 @@ module Mutant
       Expression.try_parse(name)
     end
 
-    # Boot environment used for matching
-    class Boot < self
-      include Concord::Public.new(:reporter, :cache)
-    end # Boot
+    # Initialize subjects
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def initialize_subjects
+      @subjects = Matcher::Compiler.call(self, config.matcher_config).to_a
+    end
 
-  end # ENV
+    # Infect environment
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def infect
+      config.includes.each(&$LOAD_PATH.method(:<<))
+      config.requires.each(&method(:require))
+    end
+
+    # Initialize matchable scopes
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def initialize_matchable_scopes
+      @matchable_scopes = ObjectSpace.each_object(Module).each_with_object([]) do |scope, aggregate|
+        expression = expression(scope)
+        aggregate << Matcher::Scope.new(self, scope, expression) if expression
+      end.sort_by(&:identification)
+    end
+
+  end # Env
 end # Mutant

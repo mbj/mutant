@@ -19,6 +19,8 @@ module Mutant
       Parallel.map([block], in_processes: 1) do
         block.call
       end.first
+    rescue Parallel::DeadWorker => exception
+      fail Error, exception
     end
 
   end # Isolator

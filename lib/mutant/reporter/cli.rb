@@ -4,8 +4,6 @@ module Mutant
     class CLI < self
       include Concord.new(:output)
 
-      NL = "\n".freeze
-
       # Report progress object
       #
       # @param [Object] object

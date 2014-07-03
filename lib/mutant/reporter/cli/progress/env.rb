@@ -3,9 +3,11 @@ module Mutant
     class CLI
       class Progress
         # Progress printer for configuration
-        class Config < self
+        class Env < self
 
-          handle(Mutant::Config)
+          handle Mutant::Env
+
+          delegate :config
 
           # Report configuration
           #
@@ -16,11 +18,9 @@ module Mutant
           # @api private
           #
           def run
-            info 'Mutant configuration:'
-            info 'Matcher:            %s',      object.matcher_config.inspect
-            info 'Integration:        %s',      object.integration.name
-            info 'Expect Coverage:    %0.2f%%', object.expected_coverage.inspect
-            self
+            visit(config)
+            info 'Available Subjects: %d', object.matchable_scopes.length
+            info 'Subjects:           %d', object.subjects.length
           end
 
         end # Progress

@@ -1,6 +1,5 @@
 # encoding: UTF-8
 require 'rspec/core'
-
 require 'rspec/core/formatters/base_text_formatter'
 
 module Mutant
@@ -26,27 +25,31 @@ module Mutant
       #
       # @param [Rspec::Test] test
       #
-      # @return [Test::Report]
+      # @return [Test::Result]
       #
       # @api private
+      #
+      # rubocop:disable MethodLength
       #
       def run(test)
         output = StringIO.new
         failed = false
+        start = Time.now
         reporter = new_reporter(output)
         reporter.report(1) do
           example_group_index.fetch(test.expression.syntax).each do |example_group|
-            unless example_group.run(reporter)
-              failed = true
-              break
-            end
+            next if example_group.run(reporter)
+            failed = true
+            break
           end
         end
         output.rewind
-        Test::Report.new(
-          test:    self,
-          output:  output.read,
-          success: !failed
+        Result::Test.new(
+          test:     self,
+          output:   output.read,
+          runtime:  Time.now - start,
+          mutation: nil,
+          passed:   !failed
         )
       end
 

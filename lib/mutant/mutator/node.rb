@@ -65,6 +65,8 @@ module Mutant
       #
       # @return [AST::Meta]
       #
+      # @api private
+      #
       def meta
         AST::Meta.for(node)
       end

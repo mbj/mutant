@@ -44,16 +44,6 @@ module Mutant
       self
     end
 
-    # Perform integration teardown
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    def teardown
-      self
-    end
-
     # Return all available tests by integration
     #
     # @return [Enumerable<Test>]

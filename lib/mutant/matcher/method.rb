@@ -120,7 +120,7 @@ module Mutant
       def subject
         node = matched_node
         return unless node
-        self.class::SUBJECT_CLASS.new(context, node)
+        self.class::SUBJECT_CLASS.new(env.config, context, node)
       end
       memoize :subject
 

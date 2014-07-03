@@ -4,8 +4,9 @@ require 'spec_helper'
 
 describe Mutant::Subject::Method::Singleton do
 
-  let(:object)  { described_class.new(context, node) }
-  let(:context) { double }
+  let(:object)  { described_class.new(config, context, node) }
+  let(:config)  { Mutant::Config::DEFAULT                    }
+  let(:context) { double                                     }
 
   let(:node) do
     s(:defs, s(:self), :foo, s(:args))

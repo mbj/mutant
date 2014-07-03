@@ -2,16 +2,16 @@ module Mutant
   class Reporter
     # Reporter to trace report calls, used as a spec adapter
     class Trace
-      include Concord::Public.new(:progress_calls, :report_calls, :warn_calls)
+      include Adamantium::Mutable, Anima.new(:progress_calls, :report_calls, :warn_calls)
 
       # Return new trace reporter
       #
-      # @return [Tracer]
+      # @return [Trace]
       #
       # @api private
       #
       def self.new
-        super([], [], [])
+        super(Hash[anima.attribute_names.map { |name| [name, []] }])
       end
 
       # Warn with message

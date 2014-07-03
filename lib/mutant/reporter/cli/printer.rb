@@ -6,6 +6,8 @@ module Mutant
       class Printer
         include AbstractType, Delegator, Adamantium::Flat, Concord.new(:output, :object)
 
+        NL = "\n".freeze
+
         # Run printer on object to output
         #
         # @param [IO] output
@@ -39,6 +41,18 @@ module Mutant
         #
         def status_color
           success? ? Color::GREEN : Color::RED
+        end
+
+        # Visit a collection of objects
+        #
+        # @return [Enumerable<Object>] collection
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def visit_collection(collection)
+          collection.each(&method(:visit))
         end
 
         # Visit object

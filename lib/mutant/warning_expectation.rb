@@ -33,7 +33,7 @@ module Mutant
       unexpected = warnings - expected
 
       if unexpected.any?
-        fail ExpectationError.new(unexpected)
+        fail ExpectationError, unexpected
       end
 
       if missing.any?

@@ -96,8 +96,6 @@ require 'mutant/require_highjack'
 require 'mutant/isolation'
 require 'mutant/mutator'
 require 'mutant/mutation'
-require 'mutant/mutation/evil'
-require 'mutant/mutation/neutral'
 require 'mutant/mutator/registry'
 require 'mutant/mutator/util'
 require 'mutant/mutator/util/array'
@@ -165,7 +163,8 @@ require 'mutant/subject/method'
 require 'mutant/subject/method/instance'
 require 'mutant/subject/method/singleton'
 require 'mutant/matcher'
-require 'mutant/matcher/builder'
+require 'mutant/matcher/config'
+require 'mutant/matcher/compiler'
 require 'mutant/matcher/chain'
 require 'mutant/matcher/method'
 require 'mutant/matcher/method/finder'
@@ -180,18 +179,13 @@ require 'mutant/expression'
 require 'mutant/expression/method'
 require 'mutant/expression/methods'
 require 'mutant/expression/namespace'
-require 'mutant/killer'
 require 'mutant/test'
-require 'mutant/test/report'
+require 'mutant/test/result'
 require 'mutant/integration'
-require 'mutant/runner'
-require 'mutant/runner/config'
-require 'mutant/runner/subject'
-require 'mutant/runner/mutation'
-require 'mutant/runner/killer'
 require 'mutant/cli'
 require 'mutant/color'
 require 'mutant/diff'
+require 'mutant/result'
 require 'mutant/reporter'
 require 'mutant/reporter/null'
 require 'mutant/reporter/trace'
@@ -199,13 +193,34 @@ require 'mutant/reporter/cli'
 require 'mutant/reporter/cli/registry'
 require 'mutant/reporter/cli/printer'
 require 'mutant/reporter/cli/report'
-require 'mutant/reporter/cli/report/config'
+require 'mutant/reporter/cli/report/env'
 require 'mutant/reporter/cli/report/subject'
 require 'mutant/reporter/cli/report/mutation'
 require 'mutant/reporter/cli/progress'
+require 'mutant/reporter/cli/progress/env'
 require 'mutant/reporter/cli/progress/config'
 require 'mutant/reporter/cli/progress/subject'
-require 'mutant/reporter/cli/progress/mutation'
 require 'mutant/reporter/cli/progress/noop'
+require 'mutant/reporter/cli/progress/result'
+require 'mutant/reporter/cli/progress/result/mutation'
+require 'mutant/reporter/cli/progress/result/subject'
+require 'mutant/runner'
 require 'mutant/zombifier'
 require 'mutant/zombifier/file'
+
+module Mutant
+  # Repoen class to initialize constant to avoid dep circle
+  class Config
+    DEFAULT = new(
+      debug:             false,
+      fail_fast:         false,
+      integration:       Integration::Null.new,
+      matcher_config:    Matcher::Config::DEFAULT,
+      includes:          [],
+      requires:          [],
+      reporter:          Reporter::CLI.new($stdout),
+      zombie:            false,
+      expected_coverage: 100.0
+    )
+  end # Config
+end # Mutant

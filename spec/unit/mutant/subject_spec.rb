@@ -9,7 +9,9 @@ describe Mutant::Subject do
     end
   end
 
-  let(:object) { class_under_test.new(context, node) }
+  let(:object) { class_under_test.new(config, context, node) }
+
+  let(:config) { Mutant::Config::DEFAULT }
 
   let(:node) do
     double('Node', location: location)
@@ -35,5 +37,13 @@ describe Mutant::Subject do
     subject { object.identification }
 
     it { should eql('Test:source_path:source_line') }
+  end
+
+  describe '#node' do
+    subject { object.node }
+
+    it { should be(node) }
+
+    it_should_behave_like 'an idempotent method'
   end
 end

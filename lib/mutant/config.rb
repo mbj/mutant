@@ -1,53 +1,20 @@
 module Mutant
   # The configuration of a mutator run
   class Config
-    include Adamantium::Flat, Anima.new(
+    include Adamantium, Anima::Update, Anima.new(
       :debug,
       :integration,
-      :matcher,
+      :matcher_config,
+      :includes,
+      :requires,
       :reporter,
       :fail_fast,
       :zombie,
       :expected_coverage
     )
 
-    # Enumerate subjects
-    #
-    # @api private
-    #
-    # @return [self]
-    #   if block given
-    #
-    # @return [Enumerator<Subject>]
-    #   otherwise
-    #
-    # @api private
-    #
-    def subjects(&block)
-      return to_enum(__method__) unless block_given?
-      matcher.each(&block)
-      self
-    end
-
-    # Return tests for mutation
-    #
-    # TODO: This logic is now centralized but still fucked.
-    #
-    # @param [Mutation] mutation
-    #
-    # @return [Enumerable<Test>]
-    #
-    # @api private
-    #
-    def tests(subject)
-      subject.match_expressions.each do |match_expression|
-        tests = integration.all_tests.select do |test|
-          match_expression.prefix?(test.expression)
-        end
-        return tests if tests.any?
-      end
-
-      EMPTY_ARRAY
+    [:fail_fast, :zombie, :debug].each do |name|
+      define_method(:"#{name}?") { public_send(name) }
     end
 
   end # Config

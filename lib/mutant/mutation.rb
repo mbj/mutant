@@ -18,16 +18,6 @@ module Mutant
     end
     memoize :root
 
-    # Test if killer is successful
-    #
-    # @param [Killer] killer
-    #
-    # @return [Boolean]
-    #
-    # @api private
-    #
-    abstract_method :success?
-
     # Insert mutated node
     #
     # FIXME: Cache subject visibility in a better way! Ideally dont mutate it
@@ -87,14 +77,16 @@ module Mutant
       subject.source
     end
 
-    # Test if test should fail under mutation
+    # Test if mutation is killed by test report
+    #
+    # @param [Report::Test] test_report
     #
     # @return [Boolean]
     #
     # @api private
     #
-    def should_fail?
-      self.class::SHOULD_FAIL
+    def killed_by?(test_report)
+      self.class::SHOULD_PASS.equal?(test_report.passed)
     end
 
   private
@@ -109,6 +101,30 @@ module Mutant
       Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
     end
     memoize :sha1
+
+    # Evil mutation that should case mutations to fail tests
+    class Evil < self
+
+      SHOULD_PASS = false
+      SYMBOL      = 'evil'.freeze
+
+    end # Evil
+
+    # Neutral mutation that should not cause mutations to fail tests
+    class Neutral < self
+
+      SYMBOL      = 'neutral'.freeze
+      SHOULD_PASS = true
+
+    end # Neutral
+
+    # Noop mutation, special case of neutral
+    class Noop < self
+
+      SYMBOL      = 'noop'.freeze
+      SHOULD_PASS = true
+
+    end # Noop
 
   end # Mutation
 end # Mutant

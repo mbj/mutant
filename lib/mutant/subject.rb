@@ -2,11 +2,12 @@ module Mutant
   # Subject of a mutation
   class Subject
     include AbstractType, Adamantium::Flat, Enumerable
-    include Concord::Public.new(:context, :node)
+    include Concord::Public.new(:config, :context, :node)
 
     # Return mutations
     #
     # @return [Enumerable<Mutation>]
+    # @return [undefined]
     #
     # @api private
     #
@@ -26,6 +27,28 @@ module Mutant
     def source_path
       context.source_path
     end
+
+    # Return tests for mutation
+    #
+    # TODO: This logic is now centralized but still fucked.
+    #
+    # @param [Mutation] mutation
+    #
+    # @return [Array<Test>]
+    #
+    # @api private
+    #
+    def tests
+      match_expressions.each do |match_expression|
+        tests = config.integration.all_tests.select do |test|
+          match_expression.prefix?(test.expression)
+        end
+        return tests if tests.any?
+      end
+
+      EMPTY_ARRAY
+    end
+    memoize :tests
 
     # Prepare the subject for the insertion of mutation
     #

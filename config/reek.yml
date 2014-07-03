@@ -25,19 +25,20 @@ DuplicateMethodCall:
 FeatureEnvy:
   enabled: true
   exclude:
+  # Nature of OptionParser :(
+  - Mutant::CLI#add_environment_options
+  - Mutant::Env#scope_name
+  - Mutant::Integration::Rspec#run
   - Mutant::Integration::Rspec2#full_description
   - Mutant::Integration::Rspec3#full_description
   - Mutant::Matcher::Method::Instance#match?
   - Mutant::Matcher::Method::Singleton#receiver?
-  - Mutant::Matcher::Namespace#scope_name
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
-  - Mutant::Reporter::CLI#subject_results
-  # Nature of OptionParser :(
-  - Mutant::CLI#add_environmental_options
-  - Mutant::CLI#parse
   # False positive, its a utility
   - Mutant::Meta::Example::Verification#format_mutation
+  - Mutant::Reporter::CLI#subject_results
+  - Mutant::Runner#run_mutation_test
 IrresponsibleModule:
   enabled: true
   exclude: []
@@ -56,14 +57,15 @@ NestedIterators:
   exclude:
   - Mutant#self.singleton_subclass_instance
   - Mutant::CLI#parse
+  - Mutant::Integration::Rspec#run
   - Mutant::Mutator::Util::Array::Element#dispatch
   - Mutant::Mutator::Node::Resbody#mutate_captures
   - Mutant::Mutator::Node::Arguments#emit_argument_mutations
-  - Mutant::Reporter::CLI::Report::Config#generic_stats
+  - Mutant::Reporter::CLI::Report::Env#generic_stats
   - Mutant::RequireHighjack#infect
   - Mutant::RequireHighjack#desinfect
   - Mutant::Reporter::CLI::Registry#included
-  - Mutant::Config#tests
+  - Mutant::Subject#tests
   - Parser::Lexer#self.new
   max_allowed_nesting: 1
   ignore_iterators: []
@@ -82,12 +84,12 @@ TooManyInstanceVariables:
   - Mutant::CLI     # 4 vars
   - Mutant::Killer  # 4 vars
   - Mutant::Mutator # 4 vars
-  - Mutant::Runner  # 4 vars
   max_instance_variables: 3
 TooManyMethods:
   enabled: true
   exclude:
   - Mutant::CLI
+  - Mutant::Subject
   - Mutant::Mutator::Node
   - Mutant::Reporter::CLI
   - Mutant::Meta::Example::Verification
@@ -96,7 +98,8 @@ TooManyStatements:
   enabled: true
   exclude:
   - Mutant#self.singleton_subclass_instance
-  - Mutant::Reporter::CLI::Report::Config#run
+  - Mutant::Integration::Rspec#run
+  - Mutant::Reporter::CLI::Report::Env#run
   - Mutant::Reporter::CLI::Registry#included
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::RequireHighjack#infect
@@ -105,10 +108,8 @@ TooManyStatements:
   - Mutant::Runner#initialize
   - Mutant::Runner::Mutation#run
   - Mutant::Zombifier::File#self.find
-  # How mutant does CLI parsing is shit
-  - Mutant::CLI#parse
-  - Mutant::CLI#initialize
   - Mutant::CLI#add_debug_options
+  - Mutant::CLI#add_environment_options
   max_statements: 7
 UncommunicativeMethodName:
   enabled: true
@@ -151,6 +152,7 @@ UnusedParameters:
 UtilityFunction:
   enabled: true
   exclude:
+  - Mutant::AST::Sexp#s
   - Mutant::CLI#reporter
   - Mutant::Integration::Rspec#configuration
   - Mutant::Integration::Rspec#options
@@ -160,5 +162,5 @@ UtilityFunction:
   - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
-  - Mutant::AST::Sexp#s
+  - Mutant::Runner#run_mutation_test
   max_helper_calls: 0

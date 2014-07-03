@@ -1,62 +1,9 @@
 module Mutant
   class Matcher
-    # Builder for complex matchers
-    class Builder
-      include Concord.new(:env), AST::Sexp
 
-      # Initalize object
-      #
-      # @param [Cache] env
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(env)
-        super
-        @matchers          = []
-        @subject_ignores   = []
-        @subject_selectors = []
-      end
-
-      # Add a subject ignore
-      #
-      # @param [Expression] expression
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def add_subject_ignore(expression)
-        @subject_ignores << expression.matcher(env)
-        self
-      end
-
-      # Add a subject selector
-      #
-      # @param [#call] selector
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def add_subject_selector(attribute, value)
-        @subject_selectors << Morpher.compile(s(:eql, s(:attribute, attribute), s(:static, value)))
-        self
-      end
-
-      # Add a match expression
-      #
-      # @param [Expression] expression
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def add_match_expression(expression)
-        @matchers << expression.matcher(env)
-        self
-      end
+    # Compiler for complex matchers
+    class Compiler
+      include Concord.new(:env, :config), AST::Sexp, Procto.call(:result)
 
       # Return generated matcher
       #
@@ -64,12 +11,14 @@ module Mutant
       #
       # @api private
       #
-      def matcher
-        if @matchers.empty?
+      def result
+        matchers = config.match_expressions.map(&method(:matcher))
+
+        if matchers.empty?
           return Matcher::Null.new
         end
 
-        matcher = Matcher::Chain.build(@matchers)
+        matcher = Matcher::Chain.build(matchers)
 
         if predicate
           Matcher::Filter.new(matcher, predicate)
@@ -91,7 +40,11 @@ module Mutant
       # @api private
       #
       def subject_selector
-        Morpher::Evaluator::Predicate::Boolean::Or.new(@subject_selectors) if @subject_selectors.any?
+        selectors = config.subject_selects.map do |attribute, value|
+          Morpher.compile(s(:eql, s(:attribute, attribute), s(:static, value)))
+        end
+
+        Morpher::Evaluator::Predicate::Boolean::Or.new(selectors) if selectors.any?
       end
 
       # Return predicate
@@ -130,13 +83,25 @@ module Mutant
       # @api private
       #
       def subject_rejector
-        rejectors = @subject_ignores.flat_map(&:to_a).map do |subject|
+        rejectors = config.subject_ignores.map(&method(:matcher)).flat_map(&:to_a).map do |subject|
           Morpher.compile(s(:eql, s(:attribute, :identification), s(:static, subject.identification)))
         end
 
         Morpher::Evaluator::Predicate::Boolean::Or.new(rejectors) if rejectors.any?
       end
 
-    end # Builder
+      # Return a matcher from expression
+      #
+      # @param [Mutant::Expression] expression
+      #
+      # @return [Matcher]
+      #
+      # @api private
+      #
+      def matcher(expression)
+        expression.matcher(env)
+      end
+
+    end # Compiler
   end # Matcher
 end # Mutant

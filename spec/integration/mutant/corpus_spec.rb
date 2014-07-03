@@ -160,7 +160,7 @@ describe 'Mutant on ruby corpus' do
       if block_given?
         yield
       else
-        raise 'System command failed!'
+        fail 'System command failed!'
       end
     end
 

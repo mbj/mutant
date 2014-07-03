@@ -37,7 +37,7 @@ describe Mutant::WarningExpectation do
         let(:expected_warnings) { [warning_a] }
 
         before do
-          expect($stderr).to receive(:puts).with("Expected but missing warnings: #{[warning_a]}")
+          expect($stderr).to receive(:puts).with("Expected but missing warnings: #{expected_warnings}")
         end
 
         it_should_behave_like 'a command method'
@@ -51,7 +51,7 @@ describe Mutant::WarningExpectation do
         let(:expected_warnings) { [warning_a] }
 
         it 'raises an expectation error' do
-          expect { subject }.to raise_error(Mutant::WarningExpectation::ExpectationError.new([warning_b]))
+          expect { subject }.to raise_error(Mutant::WarningExpectation::ExpectationError.new(expected_warnings))
         end
       end
 
