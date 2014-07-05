@@ -46,4 +46,23 @@ describe Mutant::Subject do
 
     it_should_behave_like 'an idempotent method'
   end
+
+  describe '#mutations' do
+    subject { object.mutations }
+
+    before do
+      expect(Mutant::Mutator).to receive(:each).with(node).and_yield(mutation_a).and_yield(mutation_b)
+    end
+
+    let(:mutation_a) { double('Mutation A') }
+    let(:mutation_b) { double('Mutation B') }
+
+    it 'generates neutral and evil mutations' do
+      should eql([
+        Mutant::Mutation::Neutral.new(object, node),
+        Mutant::Mutation::Evil.new(object, mutation_a),
+        Mutant::Mutation::Evil.new(object, mutation_b)
+      ])
+    end
+  end
 end

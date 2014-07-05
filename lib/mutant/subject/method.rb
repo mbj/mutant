@@ -34,21 +34,6 @@ module Mutant
 
     private
 
-      # Return mutations
-      #
-      # @param [#<<] emitter
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def generate_mutations(emitter)
-        emitter << noop_mutation
-        Mutator.each(node) do |mutant|
-          emitter << Mutation::Evil.new(self, mutant)
-        end
-      end
-
       # Return scope
       #
       # @return [Class, Module]

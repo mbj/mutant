@@ -12,7 +12,7 @@ module Mutant
     # @api private
     #
     def mutations
-      mutations = []
+      mutations = [neutral_mutation]
       generate_mutations(mutations)
       mutations
     end
@@ -142,8 +142,8 @@ module Mutant
     #
     # @api private
     #
-    def noop_mutation
-      Mutation::Neutral::Noop.new(self, node)
+    def neutral_mutation
+      Mutation::Neutral.new(self, node)
     end
 
     # Generate mutations
@@ -154,7 +154,11 @@ module Mutant
     #
     # @api private
     #
-    abstract_method :generate_mutations
+    def generate_mutations(emitter)
+      Mutator.each(node) do |mutant|
+        emitter << Mutation::Evil.new(self, mutant)
+      end
+    end
 
   end # Subject
 end # Mutant
