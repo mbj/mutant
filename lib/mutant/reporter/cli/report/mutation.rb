@@ -10,7 +10,7 @@ module Mutant
 
           delegate :mutation
 
-          DIFF_ERROR_MESSAGE = 'BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction'.freeze
+          DIFF_ERROR_MESSAGE = 'BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction!'.freeze
 
           MAP = {
             Mutant::Mutation::Evil    => :evil_details,

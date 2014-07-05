@@ -108,25 +108,50 @@ describe Mutant::Reporter::CLI do
         let(:mutation_result_success) { false }
 
         context 'on evil mutation' do
-          it 'writes report to output' do
-            subject
-            expect(contents).to eql(strip_indent(<<-REPORT))
-              subject_id
-              - test_id
-              mutation_id
-              @@ -1,2 +1,2 @@
-              -true
-              +false
-              Subjects:  1
-              Mutations: 1
-              Kills:     0
-              Alive:     1
-              Runtime:   1.10s
-              Killtime:  0.50s
-              Overhead:  120.00%
-              Coverage:  0.00%
-              Expected:  100.00%
-            REPORT
+          context 'with a diff' do
+            it 'writes report to output' do
+              subject
+              expect(contents).to eql(strip_indent(<<-REPORT))
+                subject_id
+                - test_id
+                mutation_id
+                @@ -1,2 +1,2 @@
+                -true
+                +false
+                Subjects:  1
+                Mutations: 1
+                Kills:     0
+                Alive:     1
+                Runtime:   1.10s
+                Killtime:  0.50s
+                Overhead:  120.00%
+                Coverage:  0.00%
+                Expected:  100.00%
+              REPORT
+            end
+          end
+
+          context 'without a diff' do
+            let(:mutation_source) { 'true' }
+
+            it 'writes report to output' do
+              subject
+              expect(contents).to eql(strip_indent(<<-REPORT))
+                subject_id
+                - test_id
+                mutation_id
+                BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction!
+                Subjects:  1
+                Mutations: 1
+                Kills:     0
+                Alive:     1
+                Runtime:   1.10s
+                Killtime:  0.50s
+                Overhead:  120.00%
+                Coverage:  0.00%
+                Expected:  100.00%
+              REPORT
+            end
           end
         end
 
