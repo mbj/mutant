@@ -49,18 +49,6 @@ module Mutant
       #
       alias_method :dup_node, :dup_input
 
-      # Emit children mutations
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def emit_children_mutations
-        Mutator::Util::Array.each(children, self) do |children|
-          emit_type(*children)
-        end
-      end
-
       # Return ast meta description
       #
       # @return [AST::Meta]

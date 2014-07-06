@@ -76,16 +76,6 @@ module Mutant
           arguments.one? && Types::BINARY_METHOD_OPERATORS.include?(selector)
         end
 
-        # Test if node is part of an mlhs
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        #
-        def mlhs?
-          (index_assignment_selector? && arguments.one?) || (arguments.empty? && attribute_assignment_selector?)
-        end
-
       private
 
         # Test for index assignment operator
