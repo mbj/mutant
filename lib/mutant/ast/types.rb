@@ -24,13 +24,13 @@ module Mutant
         >> ** * % / | ^ & < > + - ~@ +@ -@ !
       ])
 
-      BINARY_METHOD_OPERATORS = (
+      BINARY_METHOD_OPERATORS = symbolset.(
         METHOD_OPERATORS - (INDEX_OPERATORS + UNARY_METHOD_OPERATORS)
-      ).to_set.freeze
+      )
 
-      OPERATOR_METHODS = (
+      OPERATOR_METHODS = symbolset.(
         METHOD_OPERATORS + INDEX_OPERATORS + UNARY_METHOD_OPERATORS
-      ).to_set.freeze
+      )
 
       # Nodes that are NOT handled by mutant.
       #
@@ -42,7 +42,7 @@ module Mutant
       EXTRA = symbolset.(%w[empty])
 
       # All node types mutant handles
-      ALL = ((Parser::Meta::NODE_TYPES + EXTRA) - BLACKLIST).to_set.freeze
+      ALL = symbolset.((Parser::Meta::NODE_TYPES + EXTRA) - BLACKLIST)
     end # Types
   end # AST
 end # Mutant
