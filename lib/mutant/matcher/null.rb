@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # A null matcher, that does not match any subjects
     class Null < self
-      include Equalizer.new
+      include Concord.new
 
       # Enumerate subjects
       #

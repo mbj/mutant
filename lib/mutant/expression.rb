@@ -17,7 +17,10 @@ module Mutant
 
     REGISTRY = {}
 
+    # Error raised on invalid expressions
     class InvalidExpressionError < RuntimeError; end
+
+    # Error raised on ambigous expressions
     class AmbigousExpressionError < RuntimeError; end
 
     # Initialize expression

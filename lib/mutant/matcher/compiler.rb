@@ -12,22 +12,50 @@ module Mutant
       # @api private
       #
       def result
-        matchers = config.match_expressions.map(&method(:matcher))
-
-        if matchers.empty?
-          return Matcher::Null.new
-        end
-
-        matcher = Matcher::Chain.build(matchers)
-
-        if predicate
-          Matcher::Filter.new(matcher, predicate)
-        else
-          matcher
-        end
+        Filter.new(
+          Chain.build(config.match_expressions.map(&method(:matcher))),
+          predicate
+        )
       end
 
+      # Subject expression prefix predicate
+      class SubjectPrefix
+        include Concord.new(:expression)
+
+        # Test if subject expression is matched by prefix
+        #
+        # @return [Boolean]
+        #
+        # @api private
+        #
+        def call(subject)
+          expression.prefix?(subject.expression)
+        end
+
+      end # SubjectPrefix
+
     private
+
+      # Return predicate
+      #
+      # @return [#call]
+      #
+      # @api private
+      #
+      def predicate
+        if subject_selector && subject_rejector
+          Morpher::Evaluator::Predicate::Boolean::And.new([
+            subject_selector,
+            Morpher::Evaluator::Predicate::Negation.new(subject_rejector)
+          ])
+        elsif subject_selector
+          subject_selector
+        elsif subject_rejector
+          Morpher::Evaluator::Predicate::Negation.new(subject_rejector)
+        else
+          Morpher::Evaluator::Predicate::Tautology.new
+        end
+      end
 
       # Return subject selector
       #
@@ -47,31 +75,6 @@ module Mutant
         Morpher::Evaluator::Predicate::Boolean::Or.new(selectors) if selectors.any?
       end
 
-      # Return predicate
-      #
-      # @return [#call]
-      #   if filter is needed
-      #
-      # @return [nil]
-      #   othrwise
-      #
-      # @api private
-      #
-      def predicate
-        if subject_selector && subject_rejector
-          Morpher::Evaluator::Predicate::Boolean::And.new([
-            subject_selector,
-            Morpher::Evaluator::Predicate::Negation.new(subject_rejector)
-          ])
-        elsif subject_selector
-          subject_selector
-        elsif subject_rejector
-          Morpher::Evaluator::Predicate::Negation.new(subject_rejector)
-        else
-          nil
-        end
-      end
-
       # Return subject rejector
       #
       # @return [#call]
@@ -83,9 +86,7 @@ module Mutant
       # @api private
       #
       def subject_rejector
-        rejectors = config.subject_ignores.map(&method(:matcher)).flat_map(&:to_a).map do |subject|
-          Morpher.compile(s(:eql, s(:attribute, :identification), s(:static, subject.identification)))
-        end
+        rejectors = config.subject_ignores.map(&SubjectPrefix.method(:new))
 
         Morpher::Evaluator::Predicate::Boolean::Or.new(rejectors) if rejectors.any?
       end

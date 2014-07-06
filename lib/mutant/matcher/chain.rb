@@ -24,22 +24,6 @@ module Mutant
         self
       end
 
-      # Build matcher chain
-      #
-      # @param [Enumerable<Matcher>] matchers
-      #
-      # @return [Matcher]
-      #
-      # @api private
-      #
-      def self.build(matchers)
-        if matchers.length.equal?(1)
-          return matchers.first
-        end
-
-        new(matchers)
-      end
-
     end # Chain
   end # Matcher
 end # Mutant

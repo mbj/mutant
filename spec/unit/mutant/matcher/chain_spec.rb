@@ -42,19 +42,4 @@ describe Mutant::Matcher::Chain do
 
     it_should_behave_like 'an idempotent method'
   end
-
-  describe '.build' do
-    subject { described_class.build(matchers) }
-
-    context 'when one matcher given' do
-      let(:matchers) { [double('Matcher A')] }
-      it { should be(matchers.first) }
-    end
-
-    context 'when matchers given' do
-      let(:matchers) { [double('Matcher A'), double('Matcher B')] }
-      it { should eql(described_class.new(matchers)) }
-    end
-  end
-
 end
