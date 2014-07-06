@@ -13,6 +13,8 @@ if ENV['COVERAGE'] == 'true'
     add_filter 'vendor'
     add_filter 'test_app'
     add_filter 'lib/mutant/meta/*'
+    add_filter 'lib/mutant/zombifier'
+    add_filter 'lib/mutant/zombifier/*'
 
     minimum_coverage 89.77  # TODO: raise this to 100, then mutation test
   end
