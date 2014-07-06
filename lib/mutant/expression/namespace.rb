@@ -61,7 +61,7 @@ module Mutant
         # @api private
         #
         def namespace
-          match[__method__] || ''
+          match[__method__] || EMPTY_STRING
         end
 
       end # Recursive
