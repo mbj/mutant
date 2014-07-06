@@ -8,6 +8,7 @@ module Mutant
       :includes,
       :requires,
       :reporter,
+      :isolation,
       :fail_fast,
       :zombie,
       :expected_coverage

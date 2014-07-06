@@ -218,6 +218,7 @@ module Mutant
       matcher_config:    Matcher::Config::DEFAULT,
       includes:          [],
       requires:          [],
+      isolation:         Mutant::Isolation::Fork,
       reporter:          Reporter::CLI.new($stdout),
       zombie:            false,
       expected_coverage: 100.0

@@ -121,10 +121,10 @@ module Mutant
     # @api private
     #
     def run_mutation_test(mutation, test)
-      Isolation.call do
+      config.isolation.call do
         mutation.insert
         test.run
-      end.update(test: test, mutation: mutation)
+      end
     rescue Isolation::Error
       Result::Test.new(
         test:   test,
