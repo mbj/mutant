@@ -17,6 +17,9 @@ module Mutant
 
     REGISTRY = {}
 
+    class InvalidExpressionError < RuntimeError; end
+    class AmbigousExpressionError < RuntimeError; end
+
     # Initialize expression
     #
     # @param [MatchData] match
@@ -88,7 +91,7 @@ module Mutant
     # @api private
     #
     def self.parse(input)
-      try_parse(input) or raise "Expression: #{input.inspect} is not valid"
+      try_parse(input) or fail InvalidExpressionError, "Expression: #{input.inspect} is not valid"
     end
 
     # Parse input into expression
@@ -110,7 +113,7 @@ module Mutant
       when 1
         expressions.first
       else
-        fail "Ambigous expression: #{input.inspect}"
+        fail AmbigousExpressionError, "Ambigous expression: #{input.inspect}"
       end
     end
 
