@@ -45,6 +45,20 @@ describe Mutant::CLI do
         expect(subject).to be(1)
       end
     end
+
+    context 'when execution raises an Mutant::CLI::Error' do
+      let(:exception) { Mutant::CLI::Error.new('test-error') }
+      let(:report_success) { nil }
+
+      before do
+        expect(report).to receive(:success?).and_raise(exception)
+      end
+
+      it 'exits failure' do
+        expect($stderr).to receive(:puts).with('test-error')
+        expect(subject).to be(1)
+      end
+    end
   end
 
   describe '.new' do
