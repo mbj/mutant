@@ -69,6 +69,37 @@ describe Mutant::CLI do
       it_should_behave_like 'an invalid cli run'
     end
 
+    context 'with include help flag' do
+      let(:flags) { %w[--help] }
+
+      before do
+        expect($stdout).to receive(:puts).with(expected_message)
+        expect(Kernel).to receive(:exit).with(0)
+      end
+
+      it_should_behave_like 'a cli parser'
+
+      let(:expected_message) do
+        strip_indent(<<-MESSAGE)
+usage: mutant [options] MATCH_EXPRESSION ...
+Environment:
+        --zombie                     Run mutant zombified
+    -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
+    -r, --require NAME               Require file with NAME
+
+Options:
+        --score COVERAGE             Fail unless COVERAGE is not reached exactly
+        --use STRATEGY               Use STRATEGY for killing mutations
+        --ignore-subject PATTERN     Ignore subjects that match PATTERN
+        --code CODE                  Scope execution to subjects with CODE
+        --fail-fast                  Fail fast
+        --version                    Print mutants version
+    -d, --debug                      Enable debugging output
+    -h, --help                       Show this message
+        MESSAGE
+      end
+    end
+
     context 'with include flag' do
       let(:flags) { %w[--include foo] }
 
@@ -79,6 +110,35 @@ describe Mutant::CLI do
       end
     end
 
+    context 'with use flag' do
+      let(:flags) { %w[--use rspec] }
+
+      it_should_behave_like 'a cli parser'
+
+      let(:expected_integration) { Mutant::Integration::Rspec2.new }
+    end
+
+    context 'with version flag' do
+      let(:flags) { %w[--version] }
+
+      before do
+        expect(Kernel).to receive(:exit).with(0)
+        expect($stdout).to receive(:puts).with("mutant-#{Mutant::VERSION}")
+      end
+
+      it_should_behave_like 'a cli parser'
+    end
+
+    context 'with score flag' do
+      let(:flags) { %w[--score 99.5] }
+
+      it_should_behave_like 'a cli parser'
+
+      it 'configures expected coverage' do
+        expect(subject.config.expected_coverage).to eql(99.5)
+      end
+    end
+
     context 'with require flag' do
       let(:flags) { %w[--require foo] }
 
@@ -86,6 +146,26 @@ describe Mutant::CLI do
 
       it 'configures requires' do
         expect(subject.config.requires).to eql(%w[foo])
+      end
+    end
+
+    context 'with subject-ignore flag' do
+      let(:flags) { %w[--ignore-subject Foo::Bar] }
+
+      let(:expected_matcher_config) do
+        default_matcher_config.update(subject_ignores: [Mutant::Expression.parse('Foo::Bar')])
+      end
+
+      it_should_behave_like 'a cli parser'
+    end
+
+    context 'with fail-fast flag' do
+      let(:flags) { %w[--fail-fast] }
+
+      it_should_behave_like 'a cli parser'
+
+      it 'sets the fail fast option' do
+        expect(subject.config.fail_fast).to be(true)
       end
     end
 

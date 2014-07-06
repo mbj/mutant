@@ -66,7 +66,7 @@ module Mutant
     #
     def parse(arguments)
       opts = OptionParser.new do |builder|
-        builder.banner = 'usage: mutant STRATEGY [options] PATTERN ...'
+        builder.banner = 'usage: mutant [options] MATCH_EXPRESSION ...'
         %w[add_environment_options add_mutation_options add_filter_options add_debug_options].each do |name|
           send(name, builder)
         end
@@ -125,9 +125,6 @@ module Mutant
     def setup_integration(name)
       require "mutant/integration/#{name}"
       update(integration: Integration.lookup(name).new)
-    rescue LoadError
-      $stderr.puts("Cannot load plugin: #{name.inspect}")
-      raise
     end
 
     # Add options
@@ -177,12 +174,12 @@ module Mutant
         update(fail_fast: true)
       end.on('--version', 'Print mutants version') do
         puts("mutant-#{Mutant::VERSION}")
-        Kernel.exit(0)
+        Kernel.exit(EXIT_SUCCESS)
       end.on('-d', '--debug', 'Enable debugging output') do
         update(debug: true)
       end.on_tail('-h', '--help', 'Show this message') do
-        puts(opts)
-        exit
+        puts(opts.to_s)
+        Kernel.exit(EXIT_SUCCESS)
       end
     end
 
