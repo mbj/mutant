@@ -1,9 +1,18 @@
 require 'spec_helper'
 
 describe Mutant do
-  describe '.singleton_subclass_instance' do
-    let(:object) { described_class }
+  let(:object) { described_class }
 
+  describe '.zombify' do
+    subject { object.zombify }
+
+    it 'calls the zombifier' do
+      expect(Mutant::Zombifier).to receive(:run).with('mutant', :Zombie)
+      subject
+    end
+  end
+
+  describe '.singleton_subclass_instance' do
     subject { object.singleton_subclass_instance(name, superclass, &block) }
 
     before { subject }
