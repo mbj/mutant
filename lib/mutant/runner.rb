@@ -124,7 +124,7 @@ module Mutant
       config.isolation.call do
         mutation.insert
         test.run
-      end
+      end.update(test: test, mutation: mutation)
     rescue Isolation::Error
       Result::Test.new(
         test:   test,

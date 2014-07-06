@@ -14,6 +14,10 @@ describe Mutant::Runner do
       super
     end
 
+    def update(attributes)
+      self
+    end
+
     def method_missing(name, *arguments)
       super unless attributes.key?(name)
       fail "Arguments provided for #{name}" if arguments.any?
