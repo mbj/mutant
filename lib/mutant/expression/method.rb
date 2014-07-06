@@ -4,10 +4,10 @@ module Mutant
     # Explicit method expression
     class Method < self
 
-      MATCHERS = {
+      MATCHERS = IceNine.deep_freeze(
         '.' => Matcher::Methods::Singleton,
         '#' => Matcher::Methods::Instance
-      }.freeze
+      )
 
       register(
         /\A(?<scope_name>#{SCOPE_PATTERN})(?<scope_symbol>[.#])(?<method_name>#{METHOD_NAME_PATTERN})\z/
