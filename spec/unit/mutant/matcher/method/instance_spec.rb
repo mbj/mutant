@@ -8,7 +8,7 @@ describe Mutant::Matcher::Method::Instance do
   describe '#each' do
     subject { object.each { |subject| yields << subject } }
 
-    let(:object)       { described_class.new(env, scope, method) }
+    let(:object)       { described_class.build(env, scope, method) }
     let(:method)       { scope.instance_method(method_name)        }
     let(:yields)       { []                                        }
     let(:namespace)    { self.class                                }
@@ -29,6 +29,19 @@ describe Mutant::Matcher::Method::Instance do
       let(:base) { __LINE__ }
       class self::Foo
         def bar; end
+      end
+
+      let(:method_line) { 2 }
+
+      it_should_behave_like 'a method matcher'
+    end
+
+    context 'when method is defined once with a memoizer' do
+      let(:base) { __LINE__ }
+      class self::Foo
+        def bar; end
+        include Adamantium
+        memoize :bar
       end
 
       let(:method_line) { 2 }
