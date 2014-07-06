@@ -39,6 +39,12 @@ describe Mutant::Subject do
     it { should eql('Test:source_path:source_line') }
   end
 
+  describe '#prepare' do
+    subject { object.prepare }
+
+    it_should_behave_like 'a command method'
+  end
+
   describe '#node' do
     subject { object.node }
 
