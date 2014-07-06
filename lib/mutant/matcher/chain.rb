@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # A chain of matchers
     class Chain < self
-      include Concord::Public.new(:matchers)
+      include Concord.new(:matchers)
 
       # Enumerate subjects
       #

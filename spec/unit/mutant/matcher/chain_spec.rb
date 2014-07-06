@@ -32,14 +32,4 @@ describe Mutant::Matcher::Chain do
       expect { subject }.to change { yields }.from([]).to([subject_a, subject_b])
     end
   end
-
-  describe '#matchers' do
-    subject { object.matchers }
-
-    let(:matchers) { double('Matchers')            }
-
-    it { should be(matchers) }
-
-    it_should_behave_like 'an idempotent method'
-  end
 end
