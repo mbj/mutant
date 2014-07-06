@@ -57,7 +57,11 @@ module Mutant
         #
         # @return [undefined]
         #
+        # @api private
+        #
         def included(host)
+          super
+
           object = self
           host.class_eval do
             define_singleton_method(:lookup, &object.method(:lookup))

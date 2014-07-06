@@ -2,12 +2,23 @@ module Mutant
   class Matcher
     # Matcher for specific namespace
     class Scope < self
-      include Concord::Public.new(:cache, :scope)
+      include Concord::Public.new(:env, :scope, :expression)
 
       MATCHERS = [
         Matcher::Methods::Singleton,
         Matcher::Methods::Instance
       ].freeze
+
+      # Return identification
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def identification
+        scope.name
+      end
+      memoize :identification
 
       # Enumerate subjects
       #
@@ -23,7 +34,7 @@ module Mutant
         return to_enum unless block_given?
 
         MATCHERS.each do |matcher|
-          matcher.each(cache, scope, &block)
+          matcher.new(env, scope).each(&block)
         end
 
         self

@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.license     = 'MIT'
 
   gem.require_paths    = %w[lib]
-  gem.files            = `git ls-files -- lib/mutant/rspec.rb lib/mutant/rspec`.split("\n")
+  gem.files            = `git ls-files -- lib/mutant/integration/rspec{,2,3}.rb`.split("\n")
   gem.test_files       = `git ls-files -- spec/{unit/mutant/rspec,integration/rspec}`.split("\n")
   gem.extra_rdoc_files = %w[TODO LICENSE]
 

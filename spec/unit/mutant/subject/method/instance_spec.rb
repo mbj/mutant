@@ -3,10 +3,9 @@
 require 'spec_helper'
 
 describe Mutant::Subject::Method::Instance do
-  include Mutant::NodeHelpers
-
-  let(:object)  { described_class.new(context, node) }
+  let(:object)  { described_class.new(config, context, node) }
   let(:context) { double }
+  let(:config)  { Mutant::Config::DEFAULT }
 
   let(:node) do
     s(:def, :foo, s(:args))
@@ -73,10 +72,9 @@ describe Mutant::Subject::Method::Instance do
 end
 
 describe Mutant::Subject::Method::Instance::Memoized do
-  include Mutant::NodeHelpers
-
-  let(:object)  { described_class.new(context, node) }
-  let(:context) { double }
+  let(:object)  { described_class.new(config, context, node) }
+  let(:context) { double                                     }
+  let(:config)  { Mutant::Config::DEFAULT                    }
 
   let(:node) do
     s(:def, :foo, s(:args))

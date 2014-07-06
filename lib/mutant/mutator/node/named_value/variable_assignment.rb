@@ -12,7 +12,7 @@ module Mutant
             gvasgn: '$',
             cvasgn: '@@',
             ivasgn: '@',
-            lvasgn: ''
+            lvasgn: EMPTY_STRING
           }
 
           MAP = IceNine.deep_freeze(

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Mutant::Matcher::Methods::Instance, '#each' do
-  let(:object) { described_class.new(cache, Foo) }
-  let(:cache)  { Mutant::Cache.new               }
+  let(:object) { described_class.new(env, Foo) }
+  let(:env)    { Fixtures::TEST_ENV            }
 
   subject { object.each { |matcher| yields << matcher } }
 
@@ -46,12 +46,9 @@ describe Mutant::Matcher::Methods::Instance, '#each' do
 
   before do
     matcher = Mutant::Matcher::Method::Instance
-    matcher.stub(:new)
-      .with(cache, Foo, Foo.instance_method(:method_a)).and_return([subject_a])
-    matcher.stub(:new)
-      .with(cache, Foo, Foo.instance_method(:method_b)).and_return([subject_b])
-    matcher.stub(:new)
-      .with(cache, Foo, Foo.instance_method(:method_c)).and_return([subject_c])
+    allow(matcher).to receive(:new).with(env, Foo, Foo.instance_method(:method_a)).and_return([subject_a])
+    allow(matcher).to receive(:new).with(env, Foo, Foo.instance_method(:method_b)).and_return([subject_b])
+    allow(matcher).to receive(:new).with(env, Foo, Foo.instance_method(:method_c)).and_return([subject_c])
   end
 
   it 'should yield expected subjects' do

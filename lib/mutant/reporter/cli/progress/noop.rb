@@ -5,11 +5,16 @@ module Mutant
         # Noop CLI progress reporter
         class Noop < self
 
-          handle(Mutant::Runner::Killer)
+          handle(Mutant::Test)
+          handle(Mutant::Mutation)
+          handle(Mutant::Result::Env)
+          handle(Mutant::Result::Test)
 
           # Noop progress report
           #
           # @return [self]
+          #
+          # @api private
           #
           def run
             self

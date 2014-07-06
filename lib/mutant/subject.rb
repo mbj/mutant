@@ -2,16 +2,17 @@ module Mutant
   # Subject of a mutation
   class Subject
     include AbstractType, Adamantium::Flat, Enumerable
-    include Concord::Public.new(:context, :node)
+    include Concord::Public.new(:config, :context, :node)
 
     # Return mutations
     #
     # @return [Enumerable<Mutation>]
+    # @return [undefined]
     #
     # @api private
     #
     def mutations
-      mutations = []
+      mutations = [neutral_mutation]
       generate_mutations(mutations)
       mutations
     end
@@ -26,6 +27,28 @@ module Mutant
     def source_path
       context.source_path
     end
+
+    # Return tests for mutation
+    #
+    # TODO: This logic is now centralized but still fucked.
+    #
+    # @param [Mutation] mutation
+    #
+    # @return [Array<Test>]
+    #
+    # @api private
+    #
+    def tests
+      match_expressions.each do |match_expression|
+        tests = config.integration.all_tests.select do |test|
+          match_expression.prefix?(test.expression)
+        end
+        return tests if tests.any?
+      end
+
+      EMPTY_ARRAY
+    end
+    memoize :tests
 
     # Prepare the subject for the insertion of mutation
     #
@@ -54,7 +77,7 @@ module Mutant
     # @api private
     #
     def identification
-      "#{match_expression}:#{source_path}:#{source_line}"
+      "#{expression.syntax}:#{source_path}:#{source_line}"
     end
     memoize :identification
 
@@ -94,22 +117,22 @@ module Mutant
 
     # Return match expression
     #
-    # @return [String]
+    # @return [Expression]
     #
     # @api private
     #
-    abstract_method :match_expression
+    abstract_method :expression
 
-    # Return match prefixes
+    # Return match expressions
     #
-    # @return [Enumerable<String>]
+    # @return [Enumerable<Expression>]
     #
     # @api private
     #
-    def match_prefixes
-      [match_expression].concat(context.match_prefixes)
+    def match_expressions
+      [expression].concat(context.match_expressions)
     end
-    memoize :match_prefixes
+    memoize :match_expressions
 
   private
 
@@ -119,8 +142,8 @@ module Mutant
     #
     # @api private
     #
-    def noop_mutation
-      Mutation::Neutral::Noop.new(self, node)
+    def neutral_mutation
+      Mutation::Neutral.new(self, node)
     end
 
     # Generate mutations
@@ -131,7 +154,11 @@ module Mutant
     #
     # @api private
     #
-    abstract_method :generate_mutations
+    def generate_mutations(emitter)
+      Mutator.each(node) do |mutant|
+        emitter << Mutation::Evil.new(self, mutant)
+      end
+    end
 
   end # Subject
 end # Mutant

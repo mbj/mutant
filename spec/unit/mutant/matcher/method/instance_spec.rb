@@ -3,12 +3,13 @@ require 'spec_helper'
 # rubocop:disable ClassAndModuleChildren
 describe Mutant::Matcher::Method::Instance do
 
-  let(:cache) { Fixtures::AST_CACHE }
+  let(:env)      { Fixtures::TEST_ENV             }
+  let(:reporter) { Fixtures::TEST_CONFIG.reporter }
 
   describe '#each' do
     subject { object.each { |subject| yields << subject } }
 
-    let(:object)       { described_class.new(cache, scope, method) }
+    let(:object)       { described_class.build(env, scope, method) }
     let(:method)       { scope.instance_method(method_name)        }
     let(:yields)       { []                                        }
     let(:namespace)    { self.class                                }
@@ -25,10 +26,38 @@ describe Mutant::Matcher::Method::Instance do
       node.children[1]
     end
 
+    context 'when method is defined without source location' do
+      let(:scope) { Module }
+      let(:method) { scope.instance_method(:object_id) }
+
+      it 'does not emit matcher' do
+        subject
+        expect(yields.length).to be(0)
+      end
+
+      it 'does warn' do
+        subject
+        expect(reporter.warn_calls.last).to eql('#<UnboundMethod: Module(Kernel)#object_id> does not have valid source location unable to emit matcher')
+      end
+    end
+
     context 'when method is defined once' do
       let(:base) { __LINE__ }
       class self::Foo
         def bar; end
+      end
+
+      let(:method_line) { 2 }
+
+      it_should_behave_like 'a method matcher'
+    end
+
+    context 'when method is defined once with a memoizer' do
+      let(:base) { __LINE__ }
+      class self::Foo
+        def bar; end
+        include Adamantium
+        memoize :bar
       end
 
       let(:method_line) { 2 }
@@ -118,7 +147,7 @@ describe Mutant::Matcher::Method::Instance do
   describe '.build' do
     let(:object) { described_class }
 
-    subject { object.build(cache, scope, method) }
+    subject { object.build(env, scope, method) }
 
     let(:scope) do
       Class.new do
@@ -141,13 +170,13 @@ describe Mutant::Matcher::Method::Instance do
       context 'with unmemoized method' do
         let(:method_name) { :bar }
 
-        it { should eql(described_class.new(cache, scope, method)) }
+        it { should eql(described_class.new(env, scope, method)) }
       end
 
       context 'with memoized method' do
         let(:method_name) { :foo }
 
-        it { should eql(described_class::Memoized.new(cache, scope, method)) }
+        it { should eql(described_class::Memoized.new(env, scope, method)) }
       end
     end
   end

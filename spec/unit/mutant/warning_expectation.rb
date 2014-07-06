@@ -4,7 +4,7 @@ describe Mutant::WarningExpectation do
   let(:object) { described_class.new(expected_warnings) }
 
   let(:expected_warnings) { [] }
-  let(:warnings) { [] }
+  let(:actual_warnings)   { [] }
 
   let(:warning_a) { "foo.rb:10: warning: We have a problem!\n" }
   let(:warning_b) { "bar.rb:10: warning: We have an other problem!\n" }
@@ -19,7 +19,7 @@ describe Mutant::WarningExpectation do
     let(:block) do
       lambda do
         @called = true
-        warnings.each(&Kernel.method(:warn))
+        actual_warnings.each(&Kernel.method(:warn))
       end
     end
 
@@ -28,6 +28,7 @@ describe Mutant::WarningExpectation do
     end
 
     context 'when no warnings occur during block execution' do
+
       context 'and no warnings are expected' do
         it_should_behave_like 'a command method'
       end
@@ -35,20 +36,22 @@ describe Mutant::WarningExpectation do
       context 'and warnings are expected' do
         let(:expected_warnings) { [warning_a] }
 
-        it 'raises an expectation error' do
-          expect { subject }.to raise_error(Mutant::WarningExpectation::ExpectationError.new([], [warning_a]))
+        before do
+          expect($stderr).to receive(:puts).with("Expected but missing warnings: #{expected_warnings}")
         end
+
+        it_should_behave_like 'a command method'
       end
     end
 
     context 'when warnings occur during block execution' do
-      let(:warnings) { [warning_a, warning_b] }
+      let(:actual_warnings) { [warning_a, warning_b] }
 
       context 'and only some no warnings are expected' do
         let(:expected_warnings) { [warning_a] }
 
         it 'raises an expectation error' do
-          expect { subject }.to raise_error(Mutant::WarningExpectation::ExpectationError.new([warning_b], []))
+          expect { subject }.to raise_error(Mutant::WarningExpectation::ExpectationError.new(expected_warnings))
         end
       end
 
@@ -60,10 +63,10 @@ describe Mutant::WarningExpectation do
 
       context 'and there is an expected warning missing' do
         let(:expected_warnings) { [warning_a] }
-        let(:warnings)          { [warning_b] }
+        let(:actual_warnings)   { [warning_b] }
 
         it 'raises an expectation error' do
-          expect { subject }.to raise_error(Mutant::WarningExpectation::ExpectationError.new([warning_b], [warning_a]))
+          expect { subject }.to raise_error(Mutant::WarningExpectation::ExpectationError.new([warning_b]))
         end
       end
     end

@@ -5,11 +5,13 @@ module Mutant
 
     # Abstract base class for node mutators
     class Node < self
-      include AbstractType, NodeHelpers, Unparser::Constants
+      include AbstractType, Unparser::Constants
+      include AST::NamedChildren, AST::NodePredicates, AST::Sexp, AST::Nodes
 
-      # Define named child
+      # Helper to define a named child
       #
-      # @param [Symbol] name
+      # @param [Parser::AST::Node] node
+      #
       # @param [Fixnum] index
       #
       # @return [undefined]
@@ -17,9 +19,7 @@ module Mutant
       # @api private
       #
       def self.define_named_child(name, index)
-        define_method(name) do
-          children.at(index)
-        end
+        super
 
         define_method("emit_#{name}_mutations") do |&block|
           mutate_child(index, &block)
@@ -28,43 +28,6 @@ module Mutant
         define_method("emit_#{name}") do |node|
           emit_child_update(index, node)
         end
-      end
-      private_class_method :define_named_child
-
-      # Define remaining children
-      #
-      # @param [Array<Symbol>] names
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def self.define_remaining_children(names)
-        define_method(:remaining_children_with_index) do
-          children.each_with_index.drop(names.length)
-        end
-
-        define_method(:remaining_children_indices) do
-          children.each_index.drop(names.length)
-        end
-
-        define_method(:remaining_children) do
-          children.drop(names.length)
-        end
-      end
-      private_class_method :define_remaining_children
-
-      # Create name helpers
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def self.children(*names)
-        names.each_with_index do |name, index|
-          define_named_child(name, index)
-        end
-        define_remaining_children(names)
       end
       private_class_method :children
 
@@ -86,17 +49,16 @@ module Mutant
       #
       alias_method :dup_node, :dup_input
 
-      # Emit children mutations
+      # Return ast meta description
       #
-      # @return [undefined]
+      # @return [AST::Meta]
       #
       # @api private
       #
-      def emit_children_mutations
-        Mutator::Util::Array.each(children, self) do |children|
-          emit_type(*children)
-        end
+      def meta
+        AST::Meta.for(node)
       end
+      memoize :meta
 
       # Return children
       #
@@ -246,7 +208,7 @@ module Mutant
       # @api private
       #
       def asgn_left?
-        OP_ASSIGN.include?(parent_type) && parent.node.children.first.equal?(node)
+        AST::Types::OP_ASSIGN.include?(parent_type) && parent.node.children.first.equal?(node)
       end
 
     end # Node

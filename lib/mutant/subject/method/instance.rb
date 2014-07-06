@@ -39,7 +39,7 @@ module Mutant
 
         # Mutator for memoized instance methods
         class Memoized < self
-          include NodeHelpers
+          include AST::Sexp
 
           # Return source
           #
@@ -75,7 +75,7 @@ module Mutant
           # @api private
           #
           def generate_mutations(emitter)
-            emitter << noop_mutation
+            emitter << neutral_mutation
             Mutator.each(node) do |mutant|
               emitter << Mutation::Evil.new(self, memoizer_node(mutant))
             end
@@ -87,8 +87,8 @@ module Mutant
           #
           # @api private
           #
-          def noop_mutation
-            Mutation::Neutral::Noop.new(self, memoizer_node(node))
+          def neutral_mutation
+            Mutation::Neutral.new(self, memoizer_node(node))
           end
 
           # Return memoizer node for mutant

@@ -3,63 +3,49 @@ module Mutant
   module Isolation
     Error = Class.new(RuntimeError)
 
-    # Call block in isolation
-    #
-    # This isolation implements the fork strategy.
-    # Future strategies will probably use a process pool that can
-    # handle multiple mutation kills, in-isolation at once.
-    #
-    # @return [Object]
-    #
-    # @raise [Error]
-    #
-    # @api private
-    #
-    def self.call(&block)
-      reader, writer = IO.pipe.each(&:binmode)
+    module None
 
-      pid = fork
-
-      if pid.nil?
-        begin
-          reader.close
-          writer.write(Marshal.dump(block.call))
-          Kernel.exit!(0)
-        ensure
-          Kernel.exit!(1)
-        end
+      # Call block in isolation
+      #
+      # @return [Object]
+      #
+      # @raise [Error]
+      #   if block terminates abnormal
+      #
+      # @api private
+      #
+      def self.call(&block)
+        block.call
+      rescue => exception
+        fail Error, exception
       end
-
-      writer.close
-
-      read_result(reader, pid)
     end
 
-    # Read result from child process
-    #
-    # @param [IO] reader
-    # @param [Fixnum] pid
-    #
-    # @return [Object]
-    #
-    # @raise [Error]
-    #
-    def self.read_result(reader, pid)
-      begin
-        data = Marshal.load(reader.read)
-      rescue ArgumentError, TypeError
-        raise Error, 'Childprocess wrote un-unmarshallable data'
+    module Fork
+
+      # Call block in isolation
+      #
+      # This isolation implements the fork strategy.
+      # Future strategies will probably use a process pool that can
+      # handle multiple mutation kills, in-isolation at once.
+      #
+      # @return [Object]
+      #   returns block execution result
+      #
+      # @raise [Error]
+      #   if block terminates abnormal
+      #
+      # @api private
+      #
+      def self.call(&block)
+        Parallel.map([block], in_processes: 1) do
+          block.call
+        end.first
+      rescue Parallel::DeadWorker => exception
+        fail Error, exception
       end
 
-      status = Process.waitpid2(pid).last
-
-      unless status.exitstatus.zero?
-        raise Error, "Childprocess exited with nonzero exit status: #{status.exitstatus}"
-      end
-
-      data
-    end
-    private_class_method :read_result
+    end # Fork
 
   end # Isolator
 end # Mutant

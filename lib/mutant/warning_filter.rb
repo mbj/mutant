@@ -45,6 +45,8 @@ module Mutant
     #
     # @return [self]
     #
+    # @api private
+    #
     def write(message)
       if WARNING_PATTERN =~ message
         warnings << message

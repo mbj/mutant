@@ -3,13 +3,15 @@ require 'spec_helper'
 describe Mutant::Subject do
   let(:class_under_test) do
     Class.new(described_class) do
-      def match_expression
-        'match'
+      def expression
+        Mutant::Expression.parse('Test')
       end
     end
   end
 
-  let(:object) { class_under_test.new(context, node) }
+  let(:object) { class_under_test.new(config, context, node) }
+
+  let(:config) { Mutant::Config::DEFAULT }
 
   let(:node) do
     double('Node', location: location)
@@ -34,6 +36,33 @@ describe Mutant::Subject do
   describe '#identification' do
     subject { object.identification }
 
-    it { should eql('match:source_path:source_line') }
+    it { should eql('Test:source_path:source_line') }
+  end
+
+  describe '#node' do
+    subject { object.node }
+
+    it { should be(node) }
+
+    it_should_behave_like 'an idempotent method'
+  end
+
+  describe '#mutations' do
+    subject { object.mutations }
+
+    before do
+      expect(Mutant::Mutator).to receive(:each).with(node).and_yield(mutation_a).and_yield(mutation_b)
+    end
+
+    let(:mutation_a) { double('Mutation A') }
+    let(:mutation_b) { double('Mutation B') }
+
+    it 'generates neutral and evil mutations' do
+      should eql([
+        Mutant::Mutation::Neutral.new(object, node),
+        Mutant::Mutation::Evil.new(object, mutation_a),
+        Mutant::Mutation::Evil.new(object, mutation_b)
+      ])
+    end
   end
 end

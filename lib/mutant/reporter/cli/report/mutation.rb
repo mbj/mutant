@@ -6,6 +6,34 @@ module Mutant
         # Reporter for mutations
         class Mutation < self
 
+          handle Mutant::Result::Mutation
+
+          delegate :mutation
+
+          DIFF_ERROR_MESSAGE = 'BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction!'.freeze
+
+          MAP = {
+            Mutant::Mutation::Evil    => :evil_details,
+            Mutant::Mutation::Neutral => :neutral_details,
+            Mutant::Mutation::Noop    => :noop_details
+          }.freeze
+
+          NEUTRAL_MESSAGE =
+            "--- Neutral failure ---\n" \
+            "Original code was inserted unmutated. And the test did NOT PASS.\n" \
+            "Your tests do not pass initially or you found a bug in mutant / unparser.\n" \
+            "Subject AST:\n" \
+            "%s\n" \
+            "Unparsed Source:\n" \
+            "%s\n" \
+            "-----------------------\n".freeze
+
+          NOOP_MESSAGE    =
+            "--- Noop failure ---\n" \
+            "No code was inserted. And the test did NOT PASS.\n" \
+            "This is typically a problem of your specs not passing unmutated.\n" \
+            "--------------------\n".freeze
+
           # Run report printer
           #
           # @return [self]
@@ -13,106 +41,54 @@ module Mutant
           # @api private
           #
           def run
-            puts(object.identification)
+            puts(mutation.identification)
             puts(details)
             self
           end
 
-          # Reporter for noop mutations
-          class Noop < self
-            handle(Mutant::Mutation::Neutral::Noop)
-
-            MESSAGE = [
-              'Parsed subject AST:',
-              '%s',
-              'Unparsed source:',
-              '%s'
-            ].join("\n").freeze
-
-            delegate :killers
-
-          private
-
-            # Return details
-            #
-            # @return [self]
-            #
-            # @api private
-            #
-            def details
-              info(MESSAGE, object.subject.node.inspect, object.original_source)
-            end
-
-          end # Noop
-
-          # Reporter for mutations producing a diff
-          class Diff < self
-            handle(Mutant::Mutation::Evil)
-            handle(Mutant::Mutation::Neutral)
-
-            DIFF_ERROR_MESSAGE = 'BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction'.freeze
-
-          private
-
-            # Run report printer
-            #
-            # @return [String]
-            #
-            # @api private
-            #
-            def details
-              original, current = object.original_source, object.source
-              diff = Mutant::Diff.build(original, current)
-              diff = color? ? diff.colorized_diff : diff.diff
-              diff || DIFF_ERROR_MESSAGE
-            end
-          end # Diff
-        end # Mutation
-
-        # Subject report printer
-        class MutationRunner < self
-          handle(Mutant::Runner::Mutation)
-
-          # Run report printer
-          #
-          # @return [self]
-          #
-          # @api private
-          #
-          def run
-            visit(object.mutation)
-            if object.mutation.kind_of?(Mutant::Mutation::Neutral::Noop)
-              report_noop
-            end
-            self
-          end
-
-          delegate :killers
-
         private
 
-          # Report noop output
+          # Return details
           #
-          # @return [undefined]
+          # @return [String]
           #
           # @api private
           #
-          def report_noop
-            info('NOOP MUTATION TESTS FAILED!')
-            noop_reports.each do |report|
-              puts(report.test.identification)
-              puts(report.output)
-            end
+          def details
+            send(MAP.fetch(mutation.class))
           end
 
-          # Return test noop reports
+          # Return evil details
           #
-          # @return [Enumerable<Test::Report>]
+          # @return [String]
           #
           # @api private
           #
-          def noop_reports
-            killers.reject(&:success?).map(&:report).map(&:test_report)
+          def evil_details
+            original, current = mutation.original_source, mutation.source
+            diff = Mutant::Diff.build(original, current)
+            diff = color? ? diff.colorized_diff : diff.diff
+            diff || DIFF_ERROR_MESSAGE
+          end
+
+          # Noop details
+          #
+          # @return [String]
+          #
+          # @api private
+          #
+          def noop_details
+            NOOP_MESSAGE
+          end
+
+          # Neutral details
+          #
+          # @return [String]
+          #
+          # @api private
+          #
+          def neutral_details
+            format(NEUTRAL_MESSAGE, mutation.subject.node.inspect, mutation.source)
           end
 
         end # Mutation

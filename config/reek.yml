@@ -25,17 +25,20 @@ DuplicateMethodCall:
 FeatureEnvy:
   enabled: true
   exclude:
+  # Nature of OptionParser :(
+  - Mutant::CLI#add_environment_options
+  - Mutant::Env#scope_name
+  - Mutant::Integration::Rspec#run
+  - Mutant::Integration::Rspec2#full_description
+  - Mutant::Integration::Rspec3#full_description
   - Mutant::Matcher::Method::Instance#match?
   - Mutant::Matcher::Method::Singleton#receiver?
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
-  - Mutant::Reporter::CLI#subject_results
-  - Mutant::Rspec::Strategy#options
-  # Nature of OptionParser :(
-  - Mutant::CLI#add_environmental_options
-  - Mutant::CLI#parse
   # False positive, its a utility
   - Mutant::Meta::Example::Verification#format_mutation
+  - Mutant::Reporter::CLI#subject_results
+  - Mutant::Runner#run_mutation_test
 IrresponsibleModule:
   enabled: true
   exclude: []
@@ -54,14 +57,15 @@ NestedIterators:
   exclude:
   - Mutant#self.singleton_subclass_instance
   - Mutant::CLI#parse
+  - Mutant::Integration::Rspec#run
   - Mutant::Mutator::Util::Array::Element#dispatch
   - Mutant::Mutator::Node::Resbody#mutate_captures
   - Mutant::Mutator::Node::Arguments#emit_argument_mutations
-  - Mutant::Reporter::CLI::Report::Config#generic_stats
+  - Mutant::Reporter::CLI::Report::Env#generic_stats
   - Mutant::RequireHighjack#infect
   - Mutant::RequireHighjack#desinfect
   - Mutant::Reporter::CLI::Registry#included
-  - Mutant::Strategy#tests
+  - Mutant::Subject#tests
   - Parser::Lexer#self.new
   max_allowed_nesting: 1
   ignore_iterators: []
@@ -71,7 +75,6 @@ RepeatedConditional:
   enabled: true
   exclude:
   - Mutant::Mutator
-  - Mutant::Rspec::Strategy
   - Mutant::Reporter::CLI
   - Mutant::Meta::Example::DSL
   max_ifs: 1
@@ -81,12 +84,12 @@ TooManyInstanceVariables:
   - Mutant::CLI     # 4 vars
   - Mutant::Killer  # 4 vars
   - Mutant::Mutator # 4 vars
-  - Mutant::Runner  # 4 vars
   max_instance_variables: 3
 TooManyMethods:
   enabled: true
   exclude:
   - Mutant::CLI
+  - Mutant::Subject
   - Mutant::Mutator::Node
   - Mutant::Reporter::CLI
   - Mutant::Meta::Example::Verification
@@ -95,28 +98,24 @@ TooManyStatements:
   enabled: true
   exclude:
   - Mutant#self.singleton_subclass_instance
-  - Mutant::Isolation#self.call
-  - Mutant::Rspec::Killer#run
+  - Mutant::Integration::Rspec#run
+  - Mutant::Reporter::CLI::Report::Env#run
+  - Mutant::Reporter::CLI::Registry#included
   - Mutant::Reporter::CLI#colorized_diff
-  - Mutant::Reporter::CLI::Report::Config#run
+  - Mutant::RequireHighjack#infect
+  - Mutant::Rspec::Killer#run
   - Mutant::Runner#visit_collection
   - Mutant::Runner#initialize
   - Mutant::Runner::Mutation#run
   - Mutant::Zombifier::File#self.find
-  - Mutant::RequireHighjack#infect
-  - Mutant::Reporter::CLI::Registry#included
-  - Mutant::Rspec::Strategy#new_reporter
-  - Mutant::Rspec::Strategy#run
-  # How mutant does CLI parsing is shit
-  - Mutant::CLI#parse
-  - Mutant::CLI#initialize
   - Mutant::CLI#add_debug_options
+  - Mutant::CLI#add_environment_options
   max_statements: 7
 UncommunicativeMethodName:
   enabled: true
   exclude:
   - Mutant::Mutation#sha1
-  - Mutant::NodeHelpers#s
+  - Mutant::AST::Sexp#s
   reject:
   - !ruby/regexp /^[a-z]$/
   - !ruby/regexp /[0-9]$/
@@ -124,7 +123,9 @@ UncommunicativeMethodName:
   accept: []
 UncommunicativeModuleName:
   enabled: true
-  exclude: []
+  exclude:
+  - Rspec2
+  - Rspec3
   reject:
   - !ruby/regexp /^.$/
   - !ruby/regexp /[0-9]$/
@@ -151,14 +152,15 @@ UnusedParameters:
 UtilityFunction:
   enabled: true
   exclude:
+  - Mutant::AST::Sexp#s
   - Mutant::CLI#reporter
+  - Mutant::Integration::Rspec#configuration
+  - Mutant::Integration::Rspec#options
+  - Mutant::Integration::Rspec2#full_description
+  - Mutant::Integration::Rspec2#new_reporter
+  - Mutant::Integration::Rspec3#full_description
+  - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
-  - Mutant::NodeHelpers#s
-  - Mutant::Rspec::Strategy#configuration
-  - Mutant::Rspec::Strategy#example_groups
-  - Mutant::Rspec::Strategy#options
-  - Mutant::Rspec::Strategy#world
-  - Mutant::Rspec::Strategy#rspec2
-  - Mutant::Meta::Example::Verification#format_mutation
+  - Mutant::Runner#run_mutation_test
   max_helper_calls: 0

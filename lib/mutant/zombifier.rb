@@ -34,10 +34,13 @@ module Mutant
     # @param [String] logical_name
     # @param [Symbol] namespace
     #
+    # @return [self]
+    #
     # @api private
     #
     def self.run(logical_name, namespace)
       new(namespace).run(logical_name)
+      self
     end
 
     # Run zombifier

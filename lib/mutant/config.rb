@@ -1,33 +1,21 @@
 module Mutant
   # The configuration of a mutator run
   class Config
-    include Adamantium::Flat, Anima.new(
-      :cache,
+    include Adamantium, Anima::Update, Anima.new(
       :debug,
-      :strategy,
-      :matcher,
+      :integration,
+      :matcher_config,
+      :includes,
+      :requires,
       :reporter,
+      :isolation,
       :fail_fast,
       :zombie,
       :expected_coverage
     )
 
-    # Enumerate subjects
-    #
-    # @api private
-    #
-    # @return [self]
-    #   if block given
-    #
-    # @return [Enumerator<Subject>]
-    #   otherwise
-    #
-    # @api private
-    #
-    def subjects(&block)
-      return to_enum(__method__) unless block_given?
-      matcher.each(&block)
-      self
+    [:fail_fast, :zombie, :debug].each do |name|
+      define_method(:"#{name}?") { public_send(name) }
     end
 
   end # Config

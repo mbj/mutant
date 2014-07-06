@@ -3,29 +3,9 @@ module Mutant
   class Matcher
     include Adamantium::Flat, Enumerable, AbstractType
 
-    # Enumerate subjects
-    #
-    # @param [Object] input
-    #
-    # @return [self]
-    #   if block given
-    #
-    # @return [Enumerable<Subject>]
-    #   otherwise
-    #
-    # @api private
-    #
-    def self.each(cache, input, &block)
-      return to_enum(__method__, cache, input) unless block_given?
-
-      build(cache, input).each(&block)
-
-      self
-    end
-
     # Default matcher build implementation
     #
-    # @param [Cache] cache
+    # @param [Env] env
     # @param [Object] input
     #
     # @return [undefined]

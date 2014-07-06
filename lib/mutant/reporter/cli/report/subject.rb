@@ -5,9 +5,10 @@ module Mutant
 
         # Subject report printer
         class Subject < self
-          handle(Mutant::Runner::Subject)
 
           delegate :subject, :failed_mutations
+
+          handle(Mutant::Result::Subject)
 
           # Run report printer
           #
@@ -17,10 +18,10 @@ module Mutant
           #
           def run
             status(subject.identification)
-            object.tests.each do |test|
+            subject.tests.each do |test|
               puts("- #{test.identification}")
             end
-            object.failed_mutations.each(&method(:visit))
+            visit_collection(object.alive_mutation_results)
             self
           end
 

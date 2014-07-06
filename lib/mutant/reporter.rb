@@ -3,6 +3,16 @@ module Mutant
   class Reporter
     include Adamantium::Flat, AbstractType
 
+    # Write warning message
+    #
+    # @param [String] message
+    #
+    # @return [self]
+    #
+    # @api private
+    #
+    abstract_method :warn
+
     # Report object
     #
     # @param [Object] object

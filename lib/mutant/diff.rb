@@ -3,6 +3,10 @@ module Mutant
   class Diff
     include Adamantium::Flat, Concord.new(:old, :new)
 
+    ADDITION = '+'.freeze
+    DELETION = '-'.freeze
+    NEWLINE  = "\n".freeze
+
     # Return source diff
     #
     # @return [String]
@@ -16,7 +20,7 @@ module Mutant
     def diff
       return unless diffs.length.equal?(1)
       ::Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0)
-        .diff(:unified) << "\n"
+        .diff(:unified) << NEWLINE
     end
     memoize :diff
 
@@ -97,9 +101,9 @@ module Mutant
     #
     def self.colorize_line(line)
       case line[0]
-      when '+'
+      when ADDITION
         Color::GREEN
-      when '-'
+      when DELETION
         Color::RED
       else
         Color::NONE

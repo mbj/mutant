@@ -4,36 +4,10 @@ module Mutant
     class Namespace < self
       include AbstractType
 
-      # Return matcher
-      #
-      # @param [Cache] cache
-      #
-      # @return [Matcher]
-      #
-      # @api private
-      #
-      def matcher(cache)
-        self.class::MATCHER.new(cache, namespace)
-      end
-
-    private
-
-      # Return namespace
-      #
-      # @return [Class, Module]
-      #
-      # @api private
-      #
-      def namespace
-        Mutant.constant_lookup(match[__method__].to_s)
-      end
-
       # Recursive namespace expression
       class Recursive < self
 
         register(/\A(?<namespace>#{SCOPE_PATTERN})?\*\z/)
-
-        MATCHER = Matcher::Namespace
 
         # Initialize object
         #
@@ -43,7 +17,23 @@ module Mutant
         def initialize(*)
           super
           namespace_src = Regexp.escape(namespace)
-          @recursion_pattern = Regexp.union(/\A#{namespace_src}\z/, /\A#{namespace_src}::/)
+          @recursion_pattern = Regexp.union(
+            /\A#{namespace_src}\z/,
+            /\A#{namespace_src}::/,
+            /\A#{namespace_src}[.#]/
+          )
+        end
+
+        # Return matcher
+        #
+        # @param [Env] env
+        #
+        # @return [Matcher]
+        #
+        # @api private
+        #
+        def matcher(env)
+          Matcher::Namespace.new(env, self)
         end
 
         # Return length of match
@@ -71,7 +61,7 @@ module Mutant
         # @api private
         #
         def namespace
-          match[__method__] || ''
+          match[__method__] || EMPTY_STRING
         end
 
       end # Recursive
@@ -83,8 +73,31 @@ module Mutant
 
         MATCHER = Matcher::Scope
 
-      end # Exact
+        # Return matcher
+        #
+        # @param [Cache] env
+        #
+        # @return [Matcher]
+        #
+        # @api private
+        #
+        def matcher(env)
+          Matcher::Scope.new(env, Mutant.constant_lookup(namespace), self)
+        end
 
+      private
+
+        # Return namespace
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        def namespace
+          match[__method__].to_s
+        end
+
+      end # Exact
     end # Namespace
   end # Namespace
 end # Mutant

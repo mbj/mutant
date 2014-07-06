@@ -1,133 +1,108 @@
 module Mutant
   # Runner baseclass
   class Runner
-    include Adamantium::Flat, AbstractType
+    include Adamantium, Concord.new(:env), Procto.call(:result)
 
-    REGISTRY = {}
-
-    # Register handler
-    #
-    # @param [Class] klass
+    # Initialize object
     #
     # @return [undefined]
     #
     # @api private
     #
-    def self.register(klass)
-      REGISTRY[klass] = self
+    def initialize(env)
+      super
+
+      @stop = false
+
+      config.integration.setup
+
+      progress(env)
+
+      start = Time.now
+
+      @result = Result::Env.new(
+        env: env,
+        subject_results: visit_collection(env.subjects, &method(:run_subject)),
+        runtime: Time.now - start
+      ).tap do |report|
+        config.reporter.report(report)
+      end
     end
-    private_class_method :register
 
-    # Lookup runner
+    # Return result
     #
-    # @param [Class] klass
-    #
-    # @return [undefined]
+    # @return [Result::Env]
     #
     # @api private
     #
-    def self.lookup(klass)
-      current = klass
-      while current
-        return REGISTRY.fetch(current) if REGISTRY.key?(current)
-        current = current.superclass
+    attr_reader :result
+
+  private
+
+    # Run subject
+    #
+    # @return [Report::Subject]
+    #
+    # @api private
+    #
+    def run_subject(subject)
+      Result::Subject.new(
+        subject:          subject,
+        mutation_results: visit_collection(subject.mutations, &method(:run_mutation)),
+        runtime:          nil
+      )
+    end
+
+    # Run mutation
+    #
+    # @return [Report::Mutation]
+    #
+    # @api private
+    #
+    def run_mutation(mutation)
+      start = Time.now
+      test_results = mutation.subject.tests.each_with_object([]) do |test, results|
+        results << result = run_mutation_test(mutation, test).tap(&method(:progress))
+        break results if mutation.killed_by?(result)
       end
 
-      raise ArgumentError, "No handler for: #{klass}"
-    end
-    private_class_method :lookup
-
-    # Run runner for object
-    #
-    # @param [Config] config
-    # @param [Object] object
-    #
-    # @return [Runner]
-    #
-    # @api private
-    #
-    def self.run(config, object, *arguments)
-      handler = lookup(object.class)
-      handler.new(config, object, *arguments)
-    end
-
-    # Test if runner is running
-    #
-    # Yeah this is evil. Should be refactored away
-    #
-    # @return [Boolean]
-    #
-    def running?
-      @running
+      Result::Mutation.new(
+        mutation:     mutation,
+        runtime:      Time.now - start,
+        test_results: test_results
+      )
     end
 
     # Return config
     #
-    # @return [Mutant::Config]
+    # @return [Config]
     #
     # @api private
     #
-    attr_reader :config
-
-    # Initialize object
-    #
-    # @param [Config] config
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def initialize(config)
-      @config = config
-      @stop   = false
-      @start  = Time.now
-      @running = true
-      progress(self)
-      run
-      @running = false
-      progress(self)
-      @end = Time.now
+    def config
+      env.config
     end
 
-    # Test if runner should stop
+    # Visit collection
     #
-    # @return [Boolean]
+    # @return [Array<Result>]
     #
     # @api private
     #
-    def stop?
-      @stop
+    def visit_collection(collection)
+      results = []
+
+      collection.each do |item|
+        progress(item)
+        start = Time.now
+        results << result = yield(item).update(runtime: Time.now - start).tap(&method(:progress))
+        break if @stop ||= config.fail_fast? && result.fail?
+      end
+
+      results
     end
 
-    # Return runtime
-    #
-    # @return [Float]
-    #
-    # @api private
-    #
-    def runtime
-      (@end || Time.now) - @start
-    end
-
-    # Test if runner is successful
-    #
-    # @return [Boolean]
-    #
-    # @api private
-    #
-    abstract_method :success?
-
-  private
-
-    # Perform operation
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    abstract_method :run
-
-    # Run reporter on object
+    # Report progress
     #
     # @param [Object] object
     #
@@ -136,48 +111,26 @@ module Mutant
     # @api private
     #
     def progress(object)
-      reporter.progress(object)
+      config.reporter.progress(object)
     end
 
-    # Return reporter
+    # Return test result
     #
-    # @return [Reporter]
+    # @return [Report::Test]
     #
     # @api private
     #
-    def reporter
-      config.reporter
-    end
-
-    # Perform dispatch on multiple inputs
-    #
-    # @param [Enumerable<Object>] input
-    #
-    # @return [Enumerable<Runner>]
-    #
-    # @api private
-    #
-    def visit_collection(input, *arguments)
-      collection = []
-      input.each do |object|
-        runner = visit(object, *arguments)
-        collection << runner
-        @stop = runner.stop?
-        break if @stop
+    def run_mutation_test(mutation, test)
+      config.isolation.call do
+        mutation.insert
+        test.run
       end
-      collection
-    end
-
-    # Visit object
-    #
-    # @param [Object] object
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def visit(object, *arguments)
-      Runner.run(config, object, *arguments)
+    rescue Isolation::Error
+      Result::Test.new(
+        test:   test,
+        output: exception.message,
+        passed: false
+      )
     end
 
   end # Runner

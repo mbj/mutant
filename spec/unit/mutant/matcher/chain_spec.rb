@@ -5,6 +5,7 @@ describe Mutant::Matcher::Chain do
   let(:object) { described_class.new(matchers) }
 
   describe '#each' do
+    let(:yields) { [] }
     subject { object.each { |entry| yields << entry } }
 
     let(:matchers) { [matcher_a, matcher_b] }
@@ -26,7 +27,6 @@ describe Mutant::Matcher::Chain do
       end
     end
 
-    let(:yields) { [] }
 
     it 'should yield subjects' do
       expect { subject }.to change { yields }.from([]).to([subject_a, subject_b])
@@ -41,6 +41,20 @@ describe Mutant::Matcher::Chain do
     it { should be(matchers) }
 
     it_should_behave_like 'an idempotent method'
+  end
+
+  describe '.build' do
+    subject { described_class.build(matchers) }
+
+    context 'when one matcher given' do
+      let(:matchers) { [double('Matcher A')] }
+      it { should be(matchers.first) }
+    end
+
+    context 'when matchers given' do
+      let(:matchers) { [double('Matcher A'), double('Matcher B')] }
+      it { should eql(described_class.new(matchers)) }
+    end
   end
 
 end

@@ -3,12 +3,12 @@ require 'spec_helper'
 describe Mutant::Expression::Namespace::Recursive do
 
   let(:object) { described_class.parse(input) }
-  let(:cache)  { Mutant::Cache.new            }
-  let(:input)  { 'TestApp::Literal*'          }
+  let(:cache)  { Mutant::Cache.new                   }
+  let(:input)  { 'TestApp::Literal*'                 }
 
   describe '#matcher' do
     subject { object.matcher(cache) }
-    it { should eql(Mutant::Matcher::Namespace.new(cache, 'TestApp::Literal')) }
+    it { should eql(Mutant::Matcher::Namespace.new(cache, object)) }
   end
 
   describe '#match_length' do
@@ -33,9 +33,23 @@ describe Mutant::Expression::Namespace::Recursive do
     end
 
     context 'when other expression describes a longer prefix' do
-      let(:other) { described_class.parse('TestApp::Literal::Deep') }
+      context 'on constants' do
+        let(:other) { described_class.parse('TestApp::Literal::Deep') }
 
-      it { should be(input[0..-2].length) }
+        it { should be(input[0..-2].length) }
+      end
+
+      context 'on singleton method' do
+        let(:other) { described_class.parse('TestApp::Literal.foo') }
+
+        it { should be(input[0..-2].length) }
+      end
+
+      context 'on instance method' do
+        let(:other) { described_class.parse('TestApp::Literal#foo') }
+
+        it { should be(input[0..-2].length) }
+      end
     end
   end
 end

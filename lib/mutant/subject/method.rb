@@ -27,26 +27,12 @@ module Mutant
       #
       # @api private
       #
-      def match_expression
-        "#{context.identification}#{self.class::SYMBOL}#{name}"
+      def expression
+        Expression.parse("#{context.identification}#{self.class::SYMBOL}#{name}")
       end
+      memoize :expression
 
     private
-
-      # Return mutations
-      #
-      # @param [#<<] emitter
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def generate_mutations(emitter)
-        emitter << noop_mutation
-        Mutator.each(node) do |mutant|
-          emitter << Mutation::Evil.new(self, mutant)
-        end
-      end
 
       # Return scope
       #

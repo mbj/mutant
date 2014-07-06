@@ -7,9 +7,10 @@ describe Mutant::Subject, '#context' do
     Class.new(described_class)
   end
 
-  let(:object)  { class_under_test.new(context, node) }
-  let(:node)    { double('Node')                      }
-  let(:context) { double('Context')                   }
+  let(:object)  { class_under_test.new(config, context, node) }
+  let(:config)  { Mutant::Config::DEFAULT                     }
+  let(:node)    { double('Node')                              }
+  let(:context) { double('Context')                           }
 
   it { should be(context) }
 

@@ -8,4 +8,16 @@ describe Mutant::Reporter::Null do
 
     it_should_behave_like 'a command method'
   end
+
+  describe '#warn' do
+    subject { object.warn(double('some input')) }
+
+    it_should_behave_like 'a command method'
+  end
+
+  describe '#progress' do
+    subject { object.progress(double('some input')) }
+
+    it_should_behave_like 'a command method'
+  end
 end

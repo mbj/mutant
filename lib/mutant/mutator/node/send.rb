@@ -4,6 +4,7 @@ module Mutant
 
       # Namespace for send mutators
       class Send < self
+        include AST::Types
 
         handle(:send)
 
@@ -19,12 +20,6 @@ module Mutant
           :== =>        [:eql?, :equal?]
         )
 
-        INDEX_REFERENCE      = :[]
-        INDEX_ASSIGN         = :[]=
-        VARIABLE_ASSIGN      = :'='
-        ASSIGNMENT_OPERATORS = [INDEX_ASSIGN, VARIABLE_ASSIGN].to_set.freeze
-        ATTRIBUTE_ASSIGNMENT = /\A[a-z\d_]+=\z/.freeze
-
       private
 
         # Perform dispatch
@@ -35,7 +30,7 @@ module Mutant
         #
         def dispatch
           emit_singletons
-          if selector.equal?(INDEX_ASSIGN)
+          if meta.index_assignment?
             run(Index::Assign)
           else
             non_index_dispatch
@@ -50,9 +45,9 @@ module Mutant
         #
         def non_index_dispatch
           case
-          when binary_operator?
+          when meta.binary_method_operator?
             run(Binary)
-          when attribute_assignment?
+          when meta.attribute_assignment?
             run(AttributeAssignment)
           else
             normal_dispatch
@@ -101,26 +96,6 @@ module Mutant
         #
         def emit_naked_receiver
           emit(receiver) if receiver && !NOT_ASSIGNABLE.include?(receiver.type)
-        end
-
-        # Test for binary operator
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        #
-        def binary_operator?
-          arguments.one? && BINARY_METHOD_OPERATORS.include?(selector)
-        end
-
-        # Test for attribute assignment
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        #
-        def attribute_assignment?
-          arguments.one? && ATTRIBUTE_ASSIGNMENT =~ selector
         end
 
         # Mutate arguments
@@ -173,38 +148,8 @@ module Mutant
             KEYWORDS.include?(selector)         ||
             METHOD_OPERATORS.include?(selector) ||
             OP_ASSIGN.include?(parent_type)     ||
-            attribute_assignment?
+            meta.attribute_assignment?
           )
-        end
-
-        # Test for assignment
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        #
-        def assignment?
-          arguments.one? && (ASSIGNMENT_OPERATORS.include?(selector) || attribute_assignment?)
-        end
-
-        # Test if node is part of an mlhs
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        #
-        def mlhs?
-          assignment? && !arguments?
-        end
-
-        # Test for empty arguments
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        #
-        def arguments?
-          arguments.any?
         end
 
       end # Send

@@ -145,7 +145,7 @@ module Mutant
           MUTANT_HTML_REPORT_FILE = 'mutant_report.html'
           ASSETS_DIR = 'assets'
 
-          handle(Mutant::Runner::Config)
+          handle(Result::Env)
 
           delegate(:subjects, :runtime)
 

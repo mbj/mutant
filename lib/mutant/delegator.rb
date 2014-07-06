@@ -25,6 +25,7 @@ module Mutant
       # @api private
       #
       def define_delegator(name)
+        fail if instance_methods.include?(name)
         define_method(name) do
           object.public_send(name)
         end
@@ -37,10 +38,13 @@ module Mutant
     #
     # @param [Class,Module] host
     #
+    # @return [undefined]
+    #
     # @api private
     #
     def self.included(host)
       super
+
       host.extend(ClassMethods)
     end
 

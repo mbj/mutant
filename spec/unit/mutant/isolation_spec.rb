@@ -1,62 +1,49 @@
 require 'spec_helper'
 
-describe Mutant::Isolation do
-  describe '.isolate' do
+describe Mutant::Isolation::None do
+  before do
+    @initial = 1
+  end
+
+  describe '.run' do
     let(:object) { described_class }
 
-    before do
-      unless RUBY_VERSION.eql?('2.1.2')
-        skip 'Series of events is indeterministic cross ruby implementations. Skipping this test under non 2.1.2'
-      end
-      if ENV['COVERAGE']
-        skip 'Simplecov inferences with these tests, skipping'
-      end
+    it 'does not isolate side effects' do
+      object.call { @initial = 2 }
+      expect(@initial).to be(2)
     end
 
-    let(:expected_return) { :foo }
-
-    subject { object.call(&block) }
-
-    def redirect_stderr
-      $stderr = File.open('/dev/null')
+    it 'return block value' do
+      expect(object.call { :foo }).to be(:foo)
     end
 
-    context 'when block returns mashallable data, and process exists zero' do
-      let(:block) do
-        lambda do
-          :data_from_child_process
-        end
-      end
-
-      it { should eql(:data_from_child_process) }
+    it 'wraps *all* exceptions' do
+      expect { object.call { fail  } }.to raise_error(Mutant::Isolation::Error)
     end
 
-    context 'when block does NOT return marshallable data' do
-      let(:block) do
-        lambda do
-          redirect_stderr
-          $stderr # not mashallable, nothing written to pipe and raises exception in child
-        end
-      end
+  end
+end
 
-      it 'raises an exception' do
-        expect { subject }.to raise_error(described_class::Error, 'Childprocess wrote un-unmarshallable data')
-      end
+describe Mutant::Isolation::Fork do
+  before do
+    @initial = 1
+  end
+
+  describe '.run' do
+    let(:object) { described_class }
+
+    it 'does isolate side effects' do
+      object.call { @initial = 2  }
+      expect(@initial).to be(1)
     end
 
-    context 'when block causes the child to exit nonzero' do
-      let(:block) do
-        lambda do
-          method = Kernel.method(:exit!)
-          Kernel.define_singleton_method(:exit!) do |_status|
-            method.call(1)
-          end
-        end
-      end
-
-      it 'raises an exception' do
-        expect { subject }.to raise_error(described_class::Error, 'Childprocess exited with nonzero exit status: 1')
-      end
+    it 'return block value' do
+      expect(object.call { :foo }).to be(:foo)
     end
+
+    it 'wraps Parallel::DeadWorker exceptions' do
+      expect { object.call { fail Parallel::DeadWorker } }.to raise_error(Mutant::Isolation::Error)
+    end
+
   end
 end

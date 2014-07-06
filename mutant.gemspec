@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
 
   gem.require_paths    = %w[lib]
 
-  mutant_rspec_files = `git ls-files -- lib/mutant{-,/}rspec.rb lib/mutant/rspec`.split("\n")
+  mutant_rspec_files   = `git ls-files -- lib/mutant/integration/rspec{,2,3}.rb`.split("\n")
 
   gem.files            = `git ls-files`.split("\n") - mutant_rspec_files
   gem.test_files       = `git ls-files -- spec/{unit,integration}`.split("\n")
@@ -37,7 +37,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('inflecto',      '~> 0.0.2')
   gem.add_runtime_dependency('anima',         '~> 0.2.0')
   gem.add_runtime_dependency('concord',       '~> 0.1.5')
+  gem.add_runtime_dependency('parallel',      '~> 1.0.0')
 
   gem.add_development_dependency('bundler', '~> 1.3', '>= 1.3.5')
-  gem.add_development_dependency('parallel', '~> 1.0.0')
 end

@@ -5,7 +5,7 @@ module Mutant
 
     # Error raised on expectation miss
     class ExpectationError < RuntimeError
-      include Concord.new(:unexpected, :missing)
+      include Concord.new(:unexpected)
 
       # Return exception message
       #
@@ -14,7 +14,7 @@ module Mutant
       # @api private
       #
       def message
-        "Unexpected warnings: #{unexpected.inspect} missing warnigns: #{missing.inspect}"
+        "Unexpected warnings: #{unexpected.inspect}"
       end
     end
 
@@ -28,11 +28,18 @@ module Mutant
       warnings = WarningFilter.use do
         block.call
       end
-      missing = expected - warnings
+
+      missing    = expected - warnings
       unexpected = warnings - expected
-      if missing.any? or unexpected.any?
-        fail ExpectationError.new(unexpected, missing)
+
+      if unexpected.any?
+        fail ExpectationError, unexpected
       end
+
+      if missing.any?
+        $stderr.puts("Expected but missing warnings: #{missing}")
+      end
+
       self
     end
 
