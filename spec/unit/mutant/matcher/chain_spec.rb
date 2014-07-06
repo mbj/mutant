@@ -5,6 +5,7 @@ describe Mutant::Matcher::Chain do
   let(:object) { described_class.new(matchers) }
 
   describe '#each' do
+    let(:yields) { [] }
     subject { object.each { |entry| yields << entry } }
 
     let(:matchers) { [matcher_a, matcher_b] }
@@ -26,7 +27,6 @@ describe Mutant::Matcher::Chain do
       end
     end
 
-    let(:yields) { [] }
 
     it 'should yield subjects' do
       expect { subject }.to change { yields }.from([]).to([subject_a, subject_b])
