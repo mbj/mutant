@@ -27,7 +27,6 @@ describe Mutant::Matcher::Chain do
       end
     end
 
-
     it 'should yield subjects' do
       expect { subject }.to change { yields }.from([]).to([subject_a, subject_b])
     end
