@@ -15,6 +15,38 @@ shared_examples_for 'a cli parser' do
 end
 
 describe Mutant::CLI do
+  let(:object) { described_class }
+
+  describe '.run' do
+    subject { object.run(arguments) }
+
+    let(:arguments) { double('arguments') }
+
+    let(:report) { double('Report', success?: report_success) }
+    let(:config) { double('Config') }
+
+    before do
+      expect(Mutant::CLI).to receive(:call).with(arguments).and_return(config)
+      expect(Mutant::Env).to receive(:call).with(config).and_return(report)
+    end
+
+    context 'when report signalls success' do
+      let(:report_success) { true }
+
+      it 'exits failure' do
+        expect(subject).to be(0)
+      end
+    end
+
+    context 'when report signalls error' do
+      let(:report_success) { false }
+
+      it 'exits failure' do
+        expect(subject).to be(1)
+      end
+    end
+  end
+
   describe '.new' do
     let(:object) { described_class }
 
