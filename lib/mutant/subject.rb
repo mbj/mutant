@@ -104,17 +104,6 @@ module Mutant
       context.root(node)
     end
 
-    # Return root AST node for original AST ndoe
-    #
-    # @return [Parser::AST::Node]
-    #
-    # @api private
-    #
-    def original_root
-      root(node)
-    end
-    memoize :original_root
-
     # Return match expression
     #
     # @return [Expression]
