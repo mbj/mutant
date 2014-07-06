@@ -1,7 +1,7 @@
 module Mutant
   # The configuration of a mutator run
   class Config
-    include Adamantium, Anima::Update, Anima.new(
+    include Adamantium::Flat, Anima::Update, Anima.new(
       :debug,
       :integration,
       :matcher_config,
