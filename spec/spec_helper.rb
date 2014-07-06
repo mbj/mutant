@@ -32,8 +32,9 @@ $LOAD_PATH << File.join(TestApp.root, 'lib')
 require 'test_app'
 
 module Fixtures
-  TEST_CACHE = Mutant::Cache.new
-  TEST_ENV   = Mutant::Env.new(Mutant::Config::DEFAULT, TEST_CACHE)
+  TEST_CONFIG = Mutant::Config::DEFAULT.update(reporter: Mutant::Reporter::Trace.new)
+  TEST_CACHE  = Mutant::Cache.new
+  TEST_ENV    = Mutant::Env.new(TEST_CONFIG, TEST_CACHE)
 end # Fixtures
 
 module ParserHelper

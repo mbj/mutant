@@ -3,9 +3,8 @@ require 'spec_helper'
 # rubocop:disable ClassAndModuleChildren
 describe Mutant::Matcher::Method::Instance do
 
-  let(:config)   { Mutant::Config::DEFAULT.update(reporter: reporter) }
-  let(:env)      { Mutant::Env.new(config, Fixtures::TEST_CACHE)      }
-  let(:reporter) { Mutant::Reporter::Trace.new                        }
+  let(:env)      { Fixtures::TEST_ENV             }
+  let(:reporter) { Fixtures::TEST_CONFIG.reporter }
 
   describe '#each' do
     subject { object.each { |subject| yields << subject } }
