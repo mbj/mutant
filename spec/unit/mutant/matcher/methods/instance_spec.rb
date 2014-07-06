@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Mutant::Matcher::Methods::Instance, '#each' do
   let(:object) { described_class.new(env, Foo) }
-  let(:env)    { Fixtures::BOOT_ENV            }
+  let(:env)    { Fixtures::TEST_ENV            }
 
   subject { object.each { |matcher| yields << matcher } }
 

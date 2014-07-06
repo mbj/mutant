@@ -11,8 +11,8 @@ module Mutant
     #
     # @api private
     #
-    def self.new(config)
-      super(config, Cache.new)
+    def self.new(config, cache = Cache.new)
+      super(config, cache)
     end
 
     # Initialize env

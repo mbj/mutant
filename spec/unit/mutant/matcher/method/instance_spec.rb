@@ -3,7 +3,9 @@ require 'spec_helper'
 # rubocop:disable ClassAndModuleChildren
 describe Mutant::Matcher::Method::Instance do
 
-  let(:env) { Fixtures::BOOT_ENV }
+  let(:config)   { Mutant::Config::DEFAULT.update(reporter: reporter) }
+  let(:env)      { Mutant::Env.new(config, Fixtures::TEST_CACHE)      }
+  let(:reporter) { Mutant::Reporter::Trace.new                        }
 
   describe '#each' do
     subject { object.each { |subject| yields << subject } }
@@ -23,6 +25,21 @@ describe Mutant::Matcher::Method::Instance do
 
     def arguments
       node.children[1]
+    end
+
+    context 'when method is defined without source location' do
+      let(:scope) { Module }
+      let(:method) { scope.instance_method(:object_id) }
+
+      it 'does not emit matcher' do
+        subject
+        expect(yields.length).to be(0)
+      end
+
+      it 'does warn' do
+        subject
+        expect(reporter.warn_calls.last).to eql('#<UnboundMethod: Module(Kernel)#object_id> does not have valid source location unable to emit matcher')
+      end
     end
 
     context 'when method is defined once' do

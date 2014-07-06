@@ -6,7 +6,7 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
 
   let(:object)       { described_class.new(env, scope, method) }
   let(:method)       { scope.method(method_name)               }
-  let(:env)          { Fixtures::BOOT_ENV                      }
+  let(:env)          { Fixtures::TEST_ENV                      }
   let(:yields)       { []                                      }
   let(:namespace)    { self.class                              }
   let(:scope)        { self.class::Foo                         }
