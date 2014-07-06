@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <title>Mutant coverage for <%= result.project_name %></title>
+    <script src='<%= assets_path('jquery.js') %>' type='text/javascript'></script>
+    <script src='<%= assets_path('application.js') %>' type='text/javascript'></script>
+    <link href='<%= assets_path('application.css') %>' media='screen, projection, print' rel='stylesheet' type='text/css'>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <div id="content">
+
+		<h1> All mutations for <%= result.project_name%>
+			<span class='percentage' style="color:<%= rgb_values(result.percentage)%>">
+				<%= result.percentage %>%
+			</span>
+			<span class='mutant_ratio'><%=result.passed%>/<%=result.total%></span>
+		</h1>
+
+        <% result.scopes.each do |scope| %>
+		 <div class='scope' style="background-color: <%= rgb_values(scope.percentage)%>">
+		 +
+		  <span class='name'><%= scope.name %></span>
+		  <span class='percentage'><%= scope.percentage%>%</span>
+		  <span class='mutants_ratio'><%=scope.passed%>/<%=scope.total%></span>
+		  <% scope.subjects.each do |subject| %>
+		    <div class='subject' style="background-color: <%= rgb_values(subject.percentage)%>">
+			 -
+			  <span class='name'> <%= subject.name %></span>
+		  	  <span class='percentage'><%= subject.percentage %>%</span>
+  	    	  <span class='mutants_ratio'><%=subject.passed%>/<%=subject.total%></span>
+			</div>
+		  <% end %>
+		 </div>
+        <% end %>
+      </div>
+
+      <div id="footer">
+         <span class="timestamp">Generated
+			 <abbr class="timeago" title="<%=Time.now.iso8601%>"><%=Time.now.iso8601%></abbr>
+		 </span> by
+		 <a href="https://github.com/mbj/mutant">Mutant</a> v<%= Mutant::VERSION %>
+		 taking <%= time_in_minutes(result.runtime)%>
+      </div>
+
+    </div>
+  </body>
+</html>

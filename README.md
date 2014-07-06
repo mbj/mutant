@@ -123,6 +123,8 @@ mutant --include lib --require virtus --use rspec Virtus::Attribute
 mutant --include lib --require virtus --use rspec Virtus::Attribute.build
 # Run mutant on specific virtus instance method
 mutant --include lib --require virtus --use rspec Virtus::Attribute#type
+# Run mutant on your whole project and get a HTML report (very slow)
+mutant --include lib --require virtus --reporting html --use rspec Virtus::*
 ```
 
 Subjects

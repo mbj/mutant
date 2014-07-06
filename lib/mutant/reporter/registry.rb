@@ -1,6 +1,5 @@
 module Mutant
   class Reporter
-    class CLI
       # Mixin to generate registry semantics
       class Registry < Module
         include Concord.new(:registry)
@@ -76,6 +75,5 @@ module Mutant
         end
 
       end # Registry
-    end # CLI
   end # Reporter
 end # Mutant

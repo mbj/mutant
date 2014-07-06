@@ -67,7 +67,7 @@ module Mutant
     def parse(arguments)
       opts = OptionParser.new do |builder|
         builder.banner = 'usage: mutant STRATEGY [options] PATTERN ...'
-        %w[add_environment_options add_mutation_options add_filter_options add_debug_options].each do |name|
+        %w[add_environment_options add_mutation_options add_filter_options add_reporting_options add_debug_options].each do |name|
           send(name, builder)
         end
       end
@@ -161,6 +161,25 @@ module Mutant
       end
       opts.on('--code CODE', 'Scope execution to subjects with CODE') do |code|
         add_matcher(:subject_selects, [:code, code])
+      end
+    end
+
+    # Add reporting options
+    #
+    # @param [OptionParser] opts
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def add_reporting_options(opts)
+      opts.on('--reporting OUTPUT', 'use OUTPUT to print the results (cli or html)') do |output_name|
+        if output_name.downcase == 'html'
+          # stdout so it can give some feedback to the user
+          @reporter = Reporter::HTML.new($stdout)
+        else # default
+          @reporter = Reporter::CLI.new($stdout)
+        end
       end
     end
 
