@@ -17,6 +17,10 @@ describe Mutant::Isolation::None do
       expect(object.call { :foo }).to be(:foo)
     end
 
+    it 'wraps *all* exceptions' do
+      expect { object.call { fail  } }.to raise_error(Mutant::Isolation::Error)
+    end
+
   end
 end
 
@@ -35,6 +39,10 @@ describe Mutant::Isolation::Fork do
 
     it 'return block value' do
       expect(object.call { :foo }).to be(:foo)
+    end
+
+    it 'wraps Parallel::DeadWorker exceptions' do
+      expect { object.call { fail Parallel::DeadWorker } }.to raise_error(Mutant::Isolation::Error)
     end
 
   end
