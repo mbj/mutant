@@ -15,14 +15,14 @@ module Mutant
 
       # Return method matcher
       #
-      # @param [Cache] cache
+      # @param [Env] env
       #
       # @return [Matcher::Method]
       #
       # @api private
       #
-      def matcher(cache)
-        MATCHERS.fetch(scope_symbol).new(cache, scope)
+      def matcher(env)
+        MATCHERS.fetch(scope_symbol).new(env, scope)
       end
 
     private

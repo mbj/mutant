@@ -26,14 +26,14 @@ module Mutant
 
         # Return matcher
         #
-        # @param [Cache] cache
+        # @param [Env] env
         #
         # @return [Matcher]
         #
         # @api private
         #
-        def matcher(cache)
-          Matcher::Namespace.new(cache, self)
+        def matcher(env)
+          Matcher::Namespace.new(env, self)
         end
 
         # Return length of match
@@ -75,14 +75,14 @@ module Mutant
 
         # Return matcher
         #
-        # @param [Cache] cache
+        # @param [Cache] env
         #
         # @return [Matcher]
         #
         # @api private
         #
-        def matcher(cache)
-          Matcher::Scope.new(cache, Mutant.constant_lookup(namespace), self)
+        def matcher(env)
+          Matcher::Scope.new(env, Mutant.constant_lookup(namespace), self)
         end
 
       private

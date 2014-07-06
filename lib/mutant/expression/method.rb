@@ -15,18 +15,18 @@ module Mutant
 
       # Return method matcher
       #
-      # @param [Cache] cache
+      # @param [Env] env
       #
       # @return [Matcher::Method]
       #
       # @api private
       #
-      def matcher(cache)
-        methods_matcher = MATCHERS.fetch(scope_symbol).new(cache, scope)
+      def matcher(env)
+        methods_matcher = MATCHERS.fetch(scope_symbol).new(env, scope)
         method = methods_matcher.methods.detect do |meth|
           meth.name.equal?(method_name)
         end or raise NameError, "Cannot find method #{identifier}"
-        methods_matcher.matcher.build(cache, scope, method)
+        methods_matcher.matcher.build(env, scope, method)
       end
 
     private
@@ -69,16 +69,6 @@ module Mutant
       #
       def scope_symbol
         match[__method__]
-      end
-
-      # Return matcher class
-      #
-      # @return [Class:Mutant::Matcher]
-      #
-      # @api private
-      #
-      def methods_matcher(cache)
-        MATCHERS.fetch(scope_symbol).new(cache, scope)
       end
 
     end # Method
