@@ -37,7 +37,7 @@ describe Mutant::Matcher::Method::Instance do
 
       it 'does warn' do
         subject
-        expect(reporter.warn_calls.last).to eql('#<UnboundMethod: Module(Kernel)#object_id> does not have valid source location unable to emit matcher')
+        expect(reporter.warn_calls.last).to eql("#{method.inspect} does not have valid source location unable to emit matcher")
       end
     end
 
