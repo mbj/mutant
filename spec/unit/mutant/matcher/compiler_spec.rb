@@ -24,7 +24,6 @@ describe Mutant::Matcher::Compiler do
 
     let(:matcher_config) { Mutant::Matcher::Config::DEFAULT }
 
-
     context 'on empty config' do
       let(:attributes) { {} }
 
@@ -54,13 +53,13 @@ describe Mutant::Matcher::Compiler do
 
         let(:expected_positive_matcher) { Mutant::Matcher::Chain.new([matcher_a]) }
 
-        let(:expected_predicate) {
+        let(:expected_predicate) do
           Morpher::Evaluator::Predicate::Negation.new(
             Morpher::Evaluator::Predicate::Boolean::Or.new([
               described_class::SubjectPrefix.new(expression_b)
             ])
           )
-        }
+        end
 
         it { should eql(expected_matcher) }
       end
@@ -75,11 +74,11 @@ describe Mutant::Matcher::Compiler do
 
         let(:expected_positive_matcher) { Mutant::Matcher::Chain.new([matcher_a]) }
 
-        let(:expected_predicate) {
+        let(:expected_predicate) do
           Morpher::Evaluator::Predicate::Boolean::Or.new([
             Morpher.compile(s(:eql, s(:attribute, :code), s(:static, 'foo')))
           ])
-        }
+        end
 
         it { should eql(expected_matcher) }
       end

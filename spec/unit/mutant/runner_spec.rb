@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+# FIXME: This is not even close to a mutation covering spec.
 describe Mutant::Runner do
   let(:object) { described_class.new(env) }
 
@@ -14,7 +15,7 @@ describe Mutant::Runner do
       super
     end
 
-    def update(attributes)
+    def update(_attributes)
       self
     end
 
@@ -104,7 +105,9 @@ describe Mutant::Runner do
       its(:subject_results) { should eql(expected_subject_results) }
 
       before do
-        expect(Mutant::Isolation::None).to receive(:call).and_raise(Mutant::Isolation::Error.new('test-exception-message')).twice
+        expect(Mutant::Isolation::None).to receive(:call)
+          .twice
+          .and_raise(Mutant::Isolation::Error.new('test-exception-message'))
 
         expect(Mutant::Result::Test).to receive(:new).with(
           test:     test_a1,

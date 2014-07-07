@@ -8,7 +8,7 @@ describe Mutant::Matcher::Filter do
     subject { object.each { |entry| yields << entry } }
 
     let(:matcher)   { [subject_a, subject_b] }
-    let(:predicate) { lambda { |subject| subject.eql?(subject_a) } }
+    let(:predicate) { ->(subject) { subject.eql?(subject_a) } }
 
     let(:subject_a) { double('Subject A') }
     let(:subject_b) { double('Subject B') }
@@ -23,7 +23,6 @@ describe Mutant::Matcher::Filter do
         expect(subject.to_a).to eql(object.to_a)
       end
     end
-
 
     it 'should yield subjects' do
       expect { subject }.to change { yields }.from([]).to([subject_a])
