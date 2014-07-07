@@ -8,7 +8,7 @@ module Mutant
 
           handle Mutant::Result::Mutation
 
-          delegate :mutation
+          delegate :mutation, :failed_test_results
 
           DIFF_ERROR_MESSAGE = 'BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction!'.freeze
 
@@ -26,13 +26,15 @@ module Mutant
             "%s\n" \
             "Unparsed Source:\n" \
             "%s\n" \
-            "-----------------------\n".freeze
+            "Test Reports: %d\n"
 
           NOOP_MESSAGE    =
-            "--- Noop failure ---\n" \
+            "---- Noop failure -----\n" \
             "No code was inserted. And the test did NOT PASS.\n" \
             "This is typically a problem of your specs not passing unmutated.\n" \
-            "--------------------\n".freeze
+            "Test Reports: %d\n"
+
+          FOOTER = '-----------------------'.freeze
 
           # Run report printer
           #
@@ -42,7 +44,8 @@ module Mutant
           #
           def run
             puts(mutation.identification)
-            puts(details)
+            print_details
+            puts(FOOTER)
             self
           end
 
@@ -50,11 +53,11 @@ module Mutant
 
           # Return details
           #
-          # @return [String]
+          # @return [undefined]
           #
           # @api private
           #
-          def details
+          def print_details
             send(MAP.fetch(mutation.class))
           end
 
@@ -68,7 +71,7 @@ module Mutant
             original, current = mutation.original_source, mutation.source
             diff = Mutant::Diff.build(original, current)
             diff = color? ? diff.colorized_diff : diff.diff
-            diff || DIFF_ERROR_MESSAGE
+            info(diff || DIFF_ERROR_MESSAGE)
           end
 
           # Noop details
@@ -78,7 +81,8 @@ module Mutant
           # @api private
           #
           def noop_details
-            NOOP_MESSAGE
+            info(NOOP_MESSAGE, failed_test_results.length)
+            visit_collection(failed_test_results)
           end
 
           # Neutral details
@@ -88,7 +92,8 @@ module Mutant
           # @api private
           #
           def neutral_details
-            format(NEUTRAL_MESSAGE, mutation.subject.node.inspect, mutation.source)
+            info(NEUTRAL_MESSAGE, mutation.subject.node.inspect, mutation.source, failed_test_results.length)
+            visit_collection(failed_test_results)
           end
 
         end # Mutation

@@ -70,6 +70,19 @@ describe Mutant::Reporter::CLI do
     )
   end
 
+  let(:test_results) do
+    [
+      double(
+        'Test Result',
+        class: Mutant::Result::Test,
+        test: _subject.tests.first,
+        runtime: 1.0,
+        output: 'test-output',
+        success?: mutation_result_success
+      )
+    ]
+  end
+
   let(:subject_results) do
     [
       Mutant::Result::Subject.new(
@@ -81,7 +94,9 @@ describe Mutant::Reporter::CLI do
             class: Mutant::Result::Mutation,
             mutation: mutation,
             killtime: 0.5,
-            success?: mutation_result_success
+            success?: mutation_result_success,
+            test_results: test_results,
+            failed_test_results: mutation_result_success ? [] : test_results
           )
         ]
       )
@@ -192,6 +207,7 @@ describe Mutant::Reporter::CLI do
                 @@ -1,2 +1,2 @@
                 -true
                 +false
+                -----------------------
                 Subjects:  1
                 Mutations: 1
                 Kills:     0
@@ -215,6 +231,7 @@ describe Mutant::Reporter::CLI do
                 - test_id
                 mutation_id
                 BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction!
+                -----------------------
                 Subjects:  1
                 Mutations: 1
                 Kills:     0
@@ -246,6 +263,10 @@ describe Mutant::Reporter::CLI do
               (true)
               Unparsed Source:
               true
+              Test Reports: 1
+              - test_id / runtime: 1.0
+              Test Output:
+              test-output
               -----------------------
               Subjects:  1
               Mutations: 1
@@ -269,10 +290,14 @@ describe Mutant::Reporter::CLI do
               subject_id
               - test_id
               mutation_id
-              --- Noop failure ---
+              ---- Noop failure -----
               No code was inserted. And the test did NOT PASS.
               This is typically a problem of your specs not passing unmutated.
-              --------------------
+              Test Reports: 1
+              - test_id / runtime: 1.0
+              Test Output:
+              test-output
+              -----------------------
               Subjects:  1
               Mutations: 1
               Kills:     0

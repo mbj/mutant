@@ -25,7 +25,7 @@ module Mutant
       # @api private
       #
       def define_delegator(name)
-        fail if instance_methods.include?(name)
+        fail "method #{name} already defined" if instance_methods.include?(name)
         define_method(name) do
           object.public_send(name)
         end

@@ -284,6 +284,16 @@ module Mutant
         test_results.any?(&:success?)
       end
 
+      # Return failed test results
+      #
+      # @return [Array]
+      #
+      # @api private
+      #
+      def failed_test_results
+        test_results.select(&:fail?)
+      end
+
       sum :killtime, :test_results
 
     end # Mutation
