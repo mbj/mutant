@@ -71,7 +71,7 @@ module Mutant
             original, current = mutation.original_source, mutation.source
             diff = Mutant::Diff.build(original, current)
             diff = color? ? diff.colorized_diff : diff.diff
-            info(diff || DIFF_ERROR_MESSAGE)
+            puts(diff || DIFF_ERROR_MESSAGE)
           end
 
           # Noop details
