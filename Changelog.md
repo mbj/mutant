@@ -1,3 +1,8 @@
+# v0.5.26 2014-07-07
+
+* Fix exceptions generation matcher errors
+* Fix report generation with formatted string as payload of diffs.
+
 # v0.5.25 2014-07-07
 
 * Make ordering of subjects and tests deterministic
