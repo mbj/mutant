@@ -121,15 +121,18 @@ module Mutant
     # @api private
     #
     def run_mutation_test(mutation, test)
+      time = Time.now
       config.isolation.call do
         mutation.insert
         test.run
       end.update(test: test, mutation: mutation)
-    rescue Isolation::Error
+    rescue Isolation::Error => exception
       Result::Test.new(
-        test:   test,
-        output: exception.message,
-        passed: false
+        test:     test,
+        mutation: mutation,
+        runtime:  Time.now - time,
+        output:   exception.message,
+        passed:   false
       )
     end
 

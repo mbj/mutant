@@ -4,7 +4,7 @@ describe Mutant::Runner do
   let(:object) { described_class.new(env) }
 
   let(:reporter) { Mutant::Reporter::Trace.new                        }
-  let(:config)   { Mutant::Config::DEFAULT.update(reporter: reporter) }
+  let(:config)   { Mutant::Config::DEFAULT.update(reporter: reporter, isolation: Mutant::Isolation::None) }
   let(:subjects) { [subject_a, subject_b]                             }
 
   class Double
@@ -63,36 +63,65 @@ describe Mutant::Runner do
     allow(Time).to receive(:now).and_return(time)
   end
 
+  let(:expected_subject_results) do
+    [
+      Mutant::Result::Subject.new(
+        subject:          subject_a,
+        mutation_results: [
+          Mutant::Result::Mutation.new(
+            mutation: mutation_a1,
+            runtime: 0.0,
+            test_results: [test_report_a1]
+          ),
+          Mutant::Result::Mutation.new(
+            mutation: mutation_a2,
+            runtime: 0.0,
+            test_results: [test_report_a1]
+          )
+        ],
+        runtime:          0.0
+      ),
+      Mutant::Result::Subject.new(
+        subject:          subject_b,
+        mutation_results: [],
+        runtime:          0.0
+      )
+    ]
+  end
+
   describe '#result' do
-    subject { object.result }
+    context 'on normal execution' do
+      subject { object.result }
 
-    its(:env)             { should be(env)                       }
-    its(:subject_results) { should eql(expected_subject_results) }
+      its(:env)             { should be(env)                       }
+      its(:subject_results) { should eql(expected_subject_results) }
+    end
 
-    let(:expected_subject_results) do
-      [
-        Mutant::Result::Subject.new(
-          subject:          subject_a,
-          mutation_results: [
-            Mutant::Result::Mutation.new(
-              mutation: mutation_a1,
-              runtime: 0.0,
-              test_results: [test_report_a1]
-            ),
-            Mutant::Result::Mutation.new(
-              mutation: mutation_a2,
-              runtime: 0.0,
-              test_results: [test_report_a1]
-            )
-          ],
-          runtime:          0.0
-        ),
-        Mutant::Result::Subject.new(
-          subject:          subject_b,
-          mutation_results: [],
-          runtime:          0.0
-        )
-      ]
+    context 'when isolation raises error' do
+      subject { object.result }
+
+      its(:env)             { should be(env)                       }
+      its(:subject_results) { should eql(expected_subject_results) }
+
+      before do
+        expect(Mutant::Isolation::None).to receive(:call).and_raise(Mutant::Isolation::Error.new('test-exception-message')).twice
+
+        expect(Mutant::Result::Test).to receive(:new).with(
+          test:     test_a1,
+          mutation: mutation_a1,
+          runtime:  0.0,
+          output:   'test-exception-message',
+          passed:   false
+        ).and_return(test_report_a1)
+        expect(Mutant::Result::Test).to receive(:new).with(
+          test:     test_a1,
+          mutation: mutation_a2,
+          runtime:  0.0,
+          output:   'test-exception-message',
+          passed:   false
+        ).and_return(test_report_a1)
+      end
+
     end
   end
 end
