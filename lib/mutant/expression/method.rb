@@ -25,7 +25,7 @@ module Mutant
         methods_matcher = MATCHERS.fetch(scope_symbol).new(env, scope)
         method = methods_matcher.methods.detect do |meth|
           meth.name.equal?(method_name)
-        end or raise NameError, "Cannot find method #{identifier}"
+        end or raise NameError, "Cannot find method #{method_name}"
         methods_matcher.matcher.build(env, scope, method)
       end
 
