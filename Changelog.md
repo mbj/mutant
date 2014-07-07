@@ -1,3 +1,11 @@
+# v0.5.25 2014-07-07
+
+* Make ordering of subjects and tests deterministic
+* Fix performance of subject selection
+* Improve noop and neutral reporting.
+* Rename noop mutations to neutral mutations
+* Simplify code nuked around 1kloc.
+
 # v0.5.24 2014-06-30
 
 * Fix invalid AST on op_assign mutations
