@@ -5,7 +5,7 @@ module Mutant
       class Instance < self
 
         NAME_INDEX = 0
-        SYMBOL = '#'.freeze
+        SYMBOL     = '#'.freeze
 
         # Test if method is public
         #
