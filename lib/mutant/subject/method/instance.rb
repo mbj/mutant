@@ -8,7 +8,11 @@ module Mutant
         SYMBOL     = '#'.freeze
 
         # A list of methods that will warn when they are undefined
-        WARN_METHODS_UNDEFINED = [:initialize, :__send__, :object_id].freeze
+        WARN_METHODS_UNDEFINED = if RUBY_ENGINE.eql?('ruby')
+          [:initialize, :__send__, :object_id].freeze
+        else
+          [].freeze
+        end
 
         # Test if method is public
         #
@@ -29,7 +33,7 @@ module Mutant
         #
         def prepare
           expected_warnings =
-            if RUBY_ENGINE.eql?('ruby') && WARN_METHODS_UNDEFINED.include?(name)
+            if WARN_METHODS_UNDEFINED.include?(name)
               ["#{__FILE__}:#{__LINE__ + 5}: warning: undefining `#{name}' may cause serious problems\n"]
             else
               []
