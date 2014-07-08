@@ -62,7 +62,7 @@ module Mutant
         def dispatch
           run(Element)
           run(Presence)
-          emit([])
+          emit(EMPTY_ARRAY)
         end
 
       end # Array

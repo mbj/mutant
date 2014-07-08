@@ -11,7 +11,7 @@ module Mutant
         WARN_METHODS_UNDEFINED = if RUBY_ENGINE.eql?('ruby')
           [:initialize, :__send__, :object_id].freeze
         else
-          [].freeze
+          EMPTY_ARRAY
         end
 
         # Test if method is public
@@ -36,7 +36,7 @@ module Mutant
             if WARN_METHODS_UNDEFINED.include?(name)
               ["#{__FILE__}:#{__LINE__ + 5}: warning: undefining `#{name}' may cause serious problems\n"]
             else
-              []
+              EMPTY_ARRAY
             end
           WarningExpectation.new(expected_warnings).execute do
             scope.send(:undef_method, name)
