@@ -75,7 +75,7 @@ module Mutant
     # @param [Class, Module] scope
     #
     # @return [String]
-    #   if scope has a name and does not raise exceptions optaining it
+    #   if scope has a name and does not raise exceptions obtaining it
     #
     # @return [nil]
     #   otherwise
@@ -87,7 +87,7 @@ module Mutant
     def scope_name(scope)
       scope.name
     rescue => exception
-      warn("While optaining #{scope.class}#name from: #{scope.inspect} It raised an error: #{exception.inspect} fix your lib!")
+      warn("While obtaining #{scope.class}#name from: #{scope.inspect} It raised an error: #{exception.inspect} fix your lib!")
       nil
     end
 

@@ -46,7 +46,7 @@ module Mutant
     # Class level mixin
     module ClassMethods
 
-      # Generate a sum messot from name and collection
+      # Generate a sum method from name and collection
       #
       # @param [Symbol] name
       #   the attribute name on collection item and method name to use
