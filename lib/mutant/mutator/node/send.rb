@@ -17,6 +17,9 @@ module Mutant
           send:         [:public_send],
           gsub:         [:sub],
           eql?:         [:equal?],
+          to_s:         [:to_str],
+          to_i:         [:to_int],
+          to_a:         [:to_ary],
           :== =>        [:eql?, :equal?]
         )
 

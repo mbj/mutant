@@ -23,6 +23,33 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
+  source 'foo.to_s'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'self.to_s'
+  mutation 'foo.to_str'
+end
+
+Mutant::Meta::Example.add do
+  source 'foo.to_a'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'self.to_a'
+  mutation 'foo.to_ary'
+end
+
+Mutant::Meta::Example.add do
+  source 'foo.to_i'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'self.to_i'
+  mutation 'foo.to_int'
+end
+
+Mutant::Meta::Example.add do
   source 'foo == bar'
 
   singleton_mutations
