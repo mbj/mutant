@@ -31,17 +31,7 @@ module Mutant
         host.memoize :coverage
       end
 
-    end
-
-    # Test if operation is failing
-    #
-    # @return [Boolean]
-    #
-    # @api private
-    #
-    def fail?
-      !success?
-    end
+    end # Coverage
 
     # Class level mixin
     module ClassMethods
@@ -64,6 +54,16 @@ module Mutant
         end
         memoize name
       end
+    end # ClassMethods
+
+    # Test if operation is failing
+    #
+    # @return [Boolean]
+    #
+    # @api private
+    #
+    def fail?
+      !success?
     end
 
     # Return overhead
