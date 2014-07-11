@@ -32,3 +32,10 @@
   mutation_generation: true
   exclude: []
   expect_coverage: 100.0
+- name: axiom
+  namespace: Axiom
+  repo_uri: 'https://github.com/dkubb/axiom.git'
+  mutation_coverage: false
+  mutation_generation: true
+  exclude: []
+  expect_coverage: 100.0

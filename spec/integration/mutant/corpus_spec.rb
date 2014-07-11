@@ -37,15 +37,8 @@ describe 'Mutant on ruby corpus' do
     def verify_mutation_coverage
       checkout
       Dir.chdir(repo_path) do
-        relative = ROOT.relative_path_from(repo_path)
-        devtools = ROOT.join('Gemfile.devtools').read
-        devtools << "gem 'mutant', path: '#{relative}'\n"
-        devtools << "gem 'mutant-rspec', path: '#{relative}'\n"
-        File.write(repo_path.join('Gemfile.devtools'), devtools)
-        lockfile = repo_path.join('Gemfile.lock')
-        lockfile.delete if lockfile.exist?
         Bundler.with_clean_env do
-          system('bundle install')
+          install_mutant
           system(%W[bundle exec mutant -I lib -r #{name} --score #{expect_coverage} --use rspec #{namespace}*])
         end
       end
@@ -96,6 +89,7 @@ describe 'Mutant on ruby corpus' do
     # @api private
     #
     def checkout
+      return self if noinstall?
       TMP.mkdir unless TMP.directory?
       if repo_path.exist?
         Dir.chdir(repo_path) do
@@ -111,6 +105,25 @@ describe 'Mutant on ruby corpus' do
 
   private
 
+
+    # Install mutant
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def install_mutant
+      return if noinstall?
+      relative = ROOT.relative_path_from(repo_path)
+      devtools = ROOT.join('Gemfile.devtools').read
+      devtools << "gem 'mutant', path: '#{relative}'\n"
+      devtools << "gem 'mutant-rspec', path: '#{relative}'\n"
+      File.write(repo_path.join('Gemfile.devtools'), devtools)
+      lockfile = repo_path.join('Gemfile.lock')
+      lockfile.delete if lockfile.exist?
+      system('bundle install')
+    end
+
     # Return repository path
     #
     # @return [Pathname]
@@ -119,6 +132,16 @@ describe 'Mutant on ruby corpus' do
     #
     def repo_path
       TMP.join(name)
+    end
+
+    # Test if installation should be skipped
+    #
+    # @return [Boolean]
+    #
+    # @api private
+    #
+    def noinstall?
+      ENV.key?('NOINSTALL')
     end
 
     # Print start progress
@@ -203,7 +226,7 @@ describe 'Mutant on ruby corpus' do
   end
 
   Project::ALL.select(&:mutation_coverage).each do |project|
-    specify "#{project.name} does have expected mutaiton coverage" do
+    specify "#{project.name} does have expected mutation coverage" do
       project.verify_mutation_coverage
     end
   end
