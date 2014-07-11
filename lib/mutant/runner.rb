@@ -24,9 +24,7 @@ module Mutant
         env: env,
         subject_results: visit_collection(env.subjects, &method(:run_subject)),
         runtime: Time.now - start
-      ).tap do |report|
-        config.reporter.report(report)
-      end
+      ).tap(&config.reporter.method(:report))
     end
 
     # Return result
