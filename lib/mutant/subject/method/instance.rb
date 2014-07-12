@@ -8,11 +8,12 @@ module Mutant
         SYMBOL     = '#'.freeze
 
         # A list of methods that will warn when they are undefined
-        WARN_METHODS_UNDEFINED = if RUBY_ENGINE.eql?('ruby')
-          [:initialize, :__send__, :object_id].freeze
-        else
-          EMPTY_ARRAY
-        end
+        WARN_METHODS_UNDEFINED =
+          if RUBY_ENGINE.eql?('ruby')
+            [:initialize, :__send__, :object_id].freeze
+          else
+            EMPTY_ARRAY
+          end
 
         # Test if method is public
         #
