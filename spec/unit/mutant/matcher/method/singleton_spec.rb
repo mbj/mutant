@@ -23,6 +23,24 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
 
   context 'on singleton methods' do
 
+    context 'when also defined on lvar' do
+      let(:base) { __LINE__ }
+      class self::Foo
+        a = Object.new
+        def a.bar; end; def self.bar; end
+      end
+
+      let(:method_name) { :bar }
+      let(:method_line) { 3    }
+
+      it_should_behave_like 'a method matcher'
+
+      it 'warns about definition on non const/self' do
+        subject
+        expect(env.config.reporter.warn_calls).to eql(['Can only match :defs on :self or :const got :lvar unable to match'])
+      end
+    end
+
     context 'when defined on self' do
       let(:base) { __LINE__ }
       class self::Foo
