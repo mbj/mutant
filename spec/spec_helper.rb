@@ -26,6 +26,7 @@ require 'devtools/spec_helper'
 require 'unparser/cli'
 require 'mutant'
 require 'mutant/meta'
+require 'rspec/its'
 
 $LOAD_PATH << File.join(TestApp.root, 'lib')
 
