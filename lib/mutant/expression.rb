@@ -13,6 +13,8 @@ module Mutant
       *AST::Types::OPERATOR_METHODS.map(&:to_s)
     ).freeze
 
+    INSPECT_FORMAT = '<Mutant::Expression: %s>'.freeze
+
     SCOPE_PATTERN = /#{SCOPE_NAME_PATTERN}(?:#{SCOPE_OPERATOR}#{SCOPE_NAME_PATTERN})*/.freeze
 
     REGISTRY = {}
@@ -32,7 +34,16 @@ module Mutant
     def initialize(*)
       super
       @syntax = match.to_s
+      @inspect = format(INSPECT_FORMAT, syntax)
     end
+
+    # Return inspection
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    attr_reader :inspect
 
     # Return syntax
     #

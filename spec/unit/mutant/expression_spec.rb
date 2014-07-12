@@ -35,6 +35,14 @@ describe Mutant::Expression do
     end
   end
 
+  describe '#inspect' do
+    let(:object) { described_class.parse('Foo') }
+    subject { object.inspect }
+
+    it { should eql('<Mutant::Expression: Foo>') }
+    it_should_behave_like 'an idempotent method'
+  end
+
   describe '.parse' do
     subject { object.parse(input) }
 
