@@ -1,7 +1,13 @@
+require 'morpher'
+require 'anima'
+
 # Namespace module for corpus testing
 module Corpus
   # Project under corpus test
   # rubocop:disable ClassLength
+  ROOT = Pathname.new(__FILE__).parent.parent.parent
+  TMP = ROOT.join('tmp').freeze
+
   class Project
     MUTEX = Mutex.new
     include Adamantium, Anima.new(

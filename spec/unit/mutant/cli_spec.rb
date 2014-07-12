@@ -161,7 +161,7 @@ Options:
 
       it_should_behave_like 'a cli parser'
 
-      let(:expected_integration) { Mutant::Integration::Rspec2.new }
+      let(:expected_integration) { Mutant::Integration::Rspec::Rspec2.new }
     end
 
     context 'with version flag' do

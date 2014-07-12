@@ -16,7 +16,7 @@ module Mutant
     # @api private
     #
     def self.lookup(name)
-      REGISTRY.fetch(name)
+      REGISTRY.fetch(name).build
     end
 
     # Register integration

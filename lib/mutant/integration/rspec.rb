@@ -8,6 +8,24 @@ module Mutant
     class Rspec < self
       include AbstractType
 
+      register 'rspec'
+
+      RSPEC_2_VERSION_PREFIX = '2.'.freeze
+
+      # Return integration compatible to currently loaded rspec
+      #
+      # @return [Integration]
+      #
+      # @api private
+      #
+      def self.build
+        if RSpec::Core::Version::STRING.start_with?(RSPEC_2_VERSION_PREFIX)
+          Rspec2.new
+        else
+          Rspec3.new
+        end
+      end
+
       # Setup rspec integration
       #
       # @return [self]
@@ -110,14 +128,86 @@ module Mutant
       end
       memoize :options, freezer: :noop
 
+      # Rspec2 integration
+      class Rspec2 < self
+
+        register 'rspec'
+
+      private
+
+        # Return options
+        #
+        # @return [RSpec::Core::ConfigurationOptions]
+        #
+        # @api private
+        #
+        def options
+          super.tap(&:parse_options)
+        end
+
+        # Return full description of example group
+        #
+        # @param [RSpec::Core::ExampleGroup] example_group
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        def full_description(example_group)
+          example_group.metadata.fetch(:example_group).fetch(:full_description)
+        end
+
+        # Return new reporter
+        #
+        # @param [StringIO] output
+        #
+        # @return [RSpec::Core::Reporter]
+        #
+        # @api private
+        #
+        def new_reporter(output)
+          formatter = RSpec::Core::Formatters::BaseTextFormatter.new(output)
+
+          RSpec::Core::Reporter.new(formatter)
+        end
+
+      end # Rspec2
+
+      # Rspec 3 integration
+      class Rspec3 < self
+
+      private
+
+        # Return full description for example group
+        #
+        # @param [RSpec::Core::ExampleGroup] example_group
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        def full_description(example_group)
+          example_group.metadata.fetch(:full_description)
+        end
+
+        # Return new reporter
+        #
+        # @param [StringIO] output
+        #
+        # @return [RSpec::Core::Reporter]
+        #
+        # @api private
+        #
+        def new_reporter(output)
+          formatter = RSpec::Core::Formatters::BaseTextFormatter.new(output)
+          notifications = RSpec::Core::Formatters::Loader.allocate.send(:notifications_for, formatter.class)
+
+          RSpec::Core::Reporter.new(configuration).tap do |reporter|
+            reporter.register_listener(formatter, *notifications)
+          end
+        end
+
+      end # Rspec3
     end # Rspec
   end # Integration
 end # Mutant
-
-RSPEC_2_VERSION_PREFIX = '2.'.freeze
-
-if RSpec::Core::Version::STRING.start_with?(RSPEC_2_VERSION_PREFIX)
-  require 'mutant/integration/rspec2'
-else
-  require 'mutant/integration/rspec3'
-end

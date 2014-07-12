@@ -124,7 +124,7 @@ module Mutant
     #
     def setup_integration(name)
       require "mutant/integration/#{name}"
-      update(integration: Integration.lookup(name).new)
+      update(integration: Integration.lookup(name))
     end
 
     # Add options
