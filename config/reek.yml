@@ -29,8 +29,8 @@ FeatureEnvy:
   - Mutant::CLI#add_environment_options
   - Mutant::Env#scope_name
   - Mutant::Integration::Rspec#run
-  - Mutant::Integration::Rspec2#full_description
-  - Mutant::Integration::Rspec3#full_description
+  - Mutant::Integration::Rspec::Rspec2#full_description
+  - Mutant::Integration::Rspec::Rspec3#full_description
   - Mutant::Matcher::Method::Instance#match?
   - Mutant::Matcher::Method::Singleton#receiver?
   - Mutant::Mutation::Evil#success?
@@ -156,9 +156,9 @@ UtilityFunction:
   - Mutant::CLI#reporter
   - Mutant::Integration::Rspec#configuration
   - Mutant::Integration::Rspec#options
-  - Mutant::Integration::Rspec2#full_description
-  - Mutant::Integration::Rspec2#new_reporter
-  - Mutant::Integration::Rspec3#full_description
+  - Mutant::Integration::Rspec::Rspec2#full_description
+  - Mutant::Integration::Rspec::Rspec2#new_reporter
+  - Mutant::Integration::Rspec::Rspec3#full_description
   - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
