@@ -135,7 +135,7 @@ module Mutant
       # @api private
       #
       def matched_node
-        Finder.run(ast) do |node|
+        AST.find_last(ast) do |node|
           match?(node)
         end
       end

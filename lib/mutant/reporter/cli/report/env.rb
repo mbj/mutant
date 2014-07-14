@@ -79,7 +79,7 @@ module Mutant
           #
           def generic_stats
             object.subject_results.each_with_object(Hash.new(0)) do |result, stats|
-              Walker.run(result.subject.node) do |node|
+              AST.walk(result.subject.node) do |node|
                 stats[node.type] += 1 if Mutator::Registry.lookup(node).equal?(Mutator::Node::Generic)
               end
             end
