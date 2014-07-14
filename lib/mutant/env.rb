@@ -1,7 +1,7 @@
 module Mutant
   # Abstract base class for mutant environments
   class Env
-    include Adamantium, Concord::Public.new(:config, :cache), Procto.call(:run)
+    include Adamantium::Flat, Concord::Public.new(:config, :cache), Procto.call(:run)
 
     # Return new env
     #
@@ -27,6 +27,7 @@ module Mutant
       infect
       initialize_matchable_scopes
       initialize_subjects
+      initialize_mutations
     end
 
     # Run mutant producing a report on configured env
@@ -59,6 +60,14 @@ module Mutant
     # @api private
     #
     attr_reader :subjects
+
+    # Return mutations
+    #
+    # @return [Array<Mutation>]
+    #
+    # @api private
+    #
+    attr_reader :mutations
 
     # Return all usable match scopes
     #
@@ -122,6 +131,16 @@ module Mutant
     #
     def initialize_subjects
       @subjects = Matcher::Compiler.call(self, config.matcher_config).to_a
+    end
+
+    # Initialize mutations
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def initialize_mutations
+      @mutations = subjects.flat_map(&:mutations)
     end
 
     # Infect environment
