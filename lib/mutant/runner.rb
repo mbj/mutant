@@ -53,22 +53,37 @@ module Mutant
 
     # Run mutation
     #
+    # @param [Mutation]
+    #
     # @return [Report::Mutation]
     #
     # @api private
     #
     def run_mutation(mutation)
       start = Time.now
-      test_results = mutation.subject.tests.each_with_object([]) do |test, results|
-        results << result = run_mutation_test(mutation, test).tap(&method(:progress))
-        break results if mutation.killed_by?(result)
-      end
+
+      test_results = kill_mutation(mutation)
 
       Result::Mutation.new(
         mutation:     mutation,
         runtime:      Time.now - start,
         test_results: test_results
       )
+    end
+
+    # Kill mutation
+    #
+    # @param [Mutation] mutation
+    #
+    # @return [Array<Result::Test>]
+    #
+    # @api private
+    #
+    def kill_mutation(mutation)
+      mutation.subject.tests.each_with_object([]) do |test, results|
+        results << result = run_mutation_test(mutation, test).tap(&method(:progress))
+        return results if mutation.killed_by?(result)
+      end
     end
 
     # Return config
@@ -88,16 +103,12 @@ module Mutant
     # @api private
     #
     def visit_collection(collection)
-      results = []
-
-      collection.each do |item|
+      collection.each_with_object([]) do |item, results|
         progress(item)
         start = Time.now
         results << result = yield(item).update(runtime: Time.now - start).tap(&method(:progress))
-        break if @stop ||= config.fail_fast? && result.fail?
+        return results if @stop ||= config.fail_fast? && result.fail?
       end
-
-      results
     end
 
     # Report progress
