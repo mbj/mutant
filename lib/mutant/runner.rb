@@ -18,13 +18,12 @@ module Mutant
 
       progress(env)
 
-      start = Time.now
-
-      @result = Result::Env.new(
-        env: env,
-        subject_results: visit_collection(env.subjects, &method(:run_subject)),
-        runtime: Time.now - start
-      ).tap(&config.reporter.method(:report))
+      @result = Result::Env.compute do
+        {
+          env: env,
+          subject_results: visit_collection(env.subjects, &method(:run_subject))
+        }
+      end
     end
 
     # Return result
@@ -44,11 +43,12 @@ module Mutant
     # @api private
     #
     def run_subject(subject)
-      Result::Subject.new(
-        subject:          subject,
-        mutation_results: visit_collection(subject.mutations, &method(:run_mutation)),
-        runtime:          nil
-      )
+      Result::Subject.compute do
+        {
+          subject:          subject,
+          mutation_results: visit_collection(subject.mutations, &method(:run_mutation))
+        }
+      end
     end
 
     # Run mutation
@@ -60,15 +60,12 @@ module Mutant
     # @api private
     #
     def run_mutation(mutation)
-      start = Time.now
-
-      test_results = kill_mutation(mutation)
-
-      Result::Mutation.new(
-        mutation:     mutation,
-        runtime:      Time.now - start,
-        test_results: test_results
-      )
+      Result::Mutation.compute do
+        {
+          mutation:     mutation,
+          test_results: kill_mutation(mutation)
+        }
+      end
     end
 
     # Kill mutation

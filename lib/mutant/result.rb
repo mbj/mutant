@@ -54,6 +54,18 @@ module Mutant
         end
         memoize name
       end
+
+      # Compute result tracking runtime
+      #
+      # @return [Result]
+      #
+      # @api private
+      #
+      def compute
+        start = Time.now
+        new(yield.merge(runtime: Time.now - start))
+      end
+
     end # ClassMethods
 
     # Test if operation is failing
