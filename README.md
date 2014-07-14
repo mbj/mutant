@@ -36,11 +36,6 @@ Blog-Posts
 * http://www.sitepoint.com/mutation-testing-mutant/
 * http://solnic.eu/2013/01/23/mutation-testing-with-mutant.html
 
-Integrations
-------------
-
-rspec2 and rspec-3 are supported currently. Minitest support is still *planned*.
-
 Projects using Mutant
 ---------------------
 
@@ -76,6 +71,8 @@ Please add an explicit dependency to `rspec-core` for the rspec version you want
 ```ruby
 gem install mutant-rspec
 ```
+
+The minitest integration is still in the works.
 
 Mutations
 ---------
