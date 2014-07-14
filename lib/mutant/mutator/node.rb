@@ -29,7 +29,7 @@ module Mutant
           emit_child_update(index, node)
         end
       end
-      private_class_method :children
+      private_class_method :define_named_child
 
     private
 
