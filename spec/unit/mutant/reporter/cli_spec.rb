@@ -109,6 +109,8 @@ describe Mutant::Reporter::CLI do
   describe '#progress' do
     subject { object.progress(reportable) }
 
+    let(:config) { Mutant::Config::DEFAULT.update(includes: %w(include-dir), requires: %w(require-name)) }
+
     context 'with env' do
       let(:reportable) { env }
 
@@ -119,6 +121,8 @@ describe Mutant::Reporter::CLI do
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
           Integration:        null
           Expect Coverage:    100.00%
+          Includes:           ["include-dir"]
+          Requires:           ["require-name"]
           Available Subjects: 10
           Subjects:           1
           Mutations:          1
