@@ -21,6 +21,7 @@ module Mutant
             visit(config)
             info 'Available Subjects: %d', object.matchable_scopes.length
             info 'Subjects:           %d', object.subjects.length
+            info 'Mutations:          %d', object.mutations.length
           end
 
         end # Progress

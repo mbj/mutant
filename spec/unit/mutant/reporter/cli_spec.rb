@@ -33,7 +33,8 @@ describe Mutant::Reporter::CLI do
       class: Mutant::Env,
       matchable_scopes: matchable_scopes,
       config: config,
-      subjects: subjects
+      subjects: subjects,
+      mutations: subjects.flat_map(&:mutations)
     )
   end
 
@@ -120,6 +121,7 @@ describe Mutant::Reporter::CLI do
           Expect Coverage:    100.00%
           Available Subjects: 10
           Subjects:           1
+          Mutations:          1
         REPORT
       end
     end
