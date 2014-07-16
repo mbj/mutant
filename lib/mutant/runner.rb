@@ -24,6 +24,8 @@ module Mutant
           subject_results: visit_collection(env.subjects, &method(:run_subject))
         }
       end
+
+      config.reporter.report(result)
     end
 
     # Return result

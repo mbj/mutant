@@ -91,11 +91,23 @@ describe Mutant::Runner do
   end
 
   describe '#result' do
+    let(:expected_result) do
+      Mutant::Result::Env.new(
+        env:             env,
+        runtime:         0.0,
+        subject_results: expected_subject_results
+      )
+    end
+
     context 'on normal execution' do
       subject { object.result }
 
-      its(:env)             { should be(env)                       }
-      its(:subject_results) { should eql(expected_subject_results) }
+      its(:env) { should be(env) }
+      it { should eql(expected_result) }
+
+      it 'reports result' do
+        expect { subject }.to change { config.reporter.report_calls }.from([]).to([expected_result])
+      end
     end
 
     context 'when isolation raises error' do
@@ -103,6 +115,8 @@ describe Mutant::Runner do
 
       its(:env)             { should be(env)                       }
       its(:subject_results) { should eql(expected_subject_results) }
+
+      it { should eql(expected_result) }
 
       before do
         expect(Mutant::Isolation::None).to receive(:call)
