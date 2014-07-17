@@ -5,8 +5,6 @@ module Mutant
       class Printer
         include AbstractType, Delegator, Adamantium::Flat, Concord.new(:output, :object)
 
-        NL = "\n".freeze
-
         # Run printer on object to output
         #
         # @param [IO] output

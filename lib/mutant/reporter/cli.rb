@@ -4,6 +4,7 @@ module Mutant
     class CLI < self
       include Concord.new(:output)
 
+      NL = "\n".freeze
       CLEAR_PREV_LINE = "\e[1A\e[2K".freeze
 
       # Output abstraction to decouple tty? from buffer
@@ -112,7 +113,7 @@ module Mutant
       #
       def swap(frame)
         output.write(frame)
-        @last_length = frame.lines.length
+        @last_length = frame.split(NL).length
       end
 
       # Call block throttled
