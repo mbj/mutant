@@ -32,7 +32,7 @@ module Corpus
       Dir.chdir(repo_path) do
         Bundler.with_clean_env do
           install_mutant
-          system(%W[bundle exec mutant -I lib -r #{name} --score #{expect_coverage} --use rspec #{namespace}*])
+          system(%W[bundle exec mutant --use rspec -I lib -r #{name} --score #{expect_coverage} #{namespace}*])
         end
       end
     end

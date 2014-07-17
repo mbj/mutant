@@ -132,6 +132,7 @@ Environment:
         --zombie                     Run mutant zombified
     -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
     -r, --require NAME               Require file with NAME
+    -j, --jobs NUMBER                Number of kill processes. Defaults to number of processors.
 
 Options:
         --score COVERAGE             Fail unless COVERAGE is not reached exactly
@@ -173,6 +174,16 @@ Options:
       end
 
       it_should_behave_like 'a cli parser'
+    end
+
+    context 'with jobs flag' do
+      let(:flags) { %w[--jobs 0] }
+
+      it_should_behave_like 'a cli parser'
+
+      it 'configures expected coverage' do
+        expect(subject.config.processes).to eql(0)
+      end
     end
 
     context 'with score flag' do

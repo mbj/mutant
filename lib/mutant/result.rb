@@ -12,9 +12,9 @@ module Mutant
       # @api private
       #
       def coverage
-        return Rational(0) if amount_mutations.zero?
+        return Rational(0) if amount_mutation_results.zero?
 
-        Rational(amount_mutations_killed, amount_mutations)
+        Rational(amount_mutations_killed, amount_mutation_results)
       end
 
       # Hook called when module gets included
@@ -105,11 +105,11 @@ module Mutant
 
     # Env result object
     class Env
-      include Coverage, Result, Anima.new(:runtime, :env, :subject_results)
+      include Coverage, Result, Anima.new(:runtime, :env, :subject_results, :done)
 
       COVERAGE_PRECISION = 1
 
-      # Test if run was successful
+      # Test if run is successful
       #
       # @return [Boolean]
       #
@@ -131,6 +131,7 @@ module Mutant
       end
 
       sum :amount_mutations,        :subject_results
+      sum :amount_mutation_results, :subject_results
       sum :amount_mutations_alive,  :subject_results
       sum :amount_mutations_killed, :subject_results
       sum :killtime,                :subject_results
@@ -157,16 +158,6 @@ module Mutant
         :runtime
       )
 
-      # NOTE:
-      #
-      #  The test is intentionally NOT part of the mashalled data.
-      #  In rspec the example group cannot deterministically being marshalled, because
-      #  they reference a crazy mix of IO objects, global objects etc.
-      #
-      MARSHALLED_IVARS = (anima.attribute_names - [:test]).map do |name|
-        :"@#{name}"
-      end
-
       # Return killtime
       #
       # @return [Float]
@@ -183,31 +174,6 @@ module Mutant
       #
       def success?
         mutation.killed_by?(self)
-      end
-
-      # Return marshallable data
-      #
-      #
-      # @return [Array]
-      #
-      # @api private
-      #
-      def marshal_dump
-        MARSHALLED_IVARS.map(&method(:instance_variable_get))
-      end
-
-      # Load marshalled data
-      #
-      # @param [Array] array
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def marshal_load(array)
-        MARSHALLED_IVARS.zip(array) do |instance_variable_name, value|
-          instance_variable_set(instance_variable_name, value)
-        end
       end
 
     end # Test
@@ -245,6 +211,16 @@ module Mutant
       #
       # @api private
       #
+      def amount_mutation_results
+        mutation_results.length
+      end
+
+      # Return amount of mutations
+      #
+      # @return [Fixnum]
+      #
+      # @api private
+      #
       def amount_mutations
         subject.mutations.length
       end
@@ -266,7 +242,7 @@ module Mutant
       # @api private
       #
       def amount_mutations_alive
-        amount_mutations - amount_mutations_killed
+        alive_mutation_results.length
       end
 
       # Return alive mutations
@@ -284,7 +260,7 @@ module Mutant
 
     # Mutation result
     class Mutation
-      include Result, Anima.new(:runtime, :mutation, :test_results)
+      include Result, Anima.new(:runtime, :mutation, :test_results, :index)
 
       # Test if mutation was handeled successfully
       #

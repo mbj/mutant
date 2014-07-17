@@ -112,6 +112,9 @@ module Mutant
       opts.on('-r', '--require NAME', 'Require file with NAME') do |name|
         add(:requires, name)
       end
+      opts.on('-j', '--jobs NUMBER', 'Number of kill processes. Defaults to number of processors.') do |number|
+        update(processes: Integer(number))
+      end
     end
 
     # Use integration

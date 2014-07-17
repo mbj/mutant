@@ -1,7 +1,7 @@
 module Mutant
   # Runner baseclass
   class Runner
-    include Adamantium, Concord.new(:env), Procto.call(:result)
+    include Adamantium::Flat, Concord.new(:env), Procto.call(:result)
 
     # Initialize object
     #
@@ -12,18 +12,14 @@ module Mutant
     def initialize(env)
       super
 
-      @stop = false
+      @collector   = Collector.new(env)
+      @mutex       = Mutex.new
+      @mutations   = env.mutations.dup
 
       config.integration.setup
+      run
 
-      progress(env)
-
-      @result = Result::Env.compute do
-        {
-          env: env,
-          subject_results: visit_collection(env.subjects, &method(:run_subject))
-        }
-      end
+      @result = @collector.result.update(done: true)
 
       config.reporter.report(result)
     end
@@ -38,24 +34,91 @@ module Mutant
 
   private
 
-    # Run subject
+    # Run mutation analysis
     #
     # @return [Report::Subject]
     #
     # @api private
     #
-    def run_subject(subject)
-      Result::Subject.compute do
-        {
-          subject:          subject,
-          mutation_results: visit_collection(subject.mutations, &method(:run_mutation))
-        }
+    def run
+      Parallel.map(
+        @mutations,
+        in_processes: config.processes,
+        finish:       method(:finish),
+        start:        method(:start),
+        &method(:run_mutation)
+      )
+    end
+
+    # Handle started mutation
+    #
+    # @param [Mutation] mutation
+    # @param [Fixnum] _index
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def start(mutation, _index)
+      @mutex.synchronize do
+        @collector.start(mutation)
       end
+    end
+
+    # Handle finished mutation
+    #
+    # @param [Mutation] mutation
+    # @param [Fixnum] index
+    # @param [Object] result
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def finish(mutation, index, result)
+      return unless result.kind_of?(Mutant::Result::Mutation)
+
+      test_results = result.test_results.zip(mutation.subject.tests).map do |test_result, test|
+        test_result.update(test: test, mutation: mutation) if test_result
+      end.compact
+
+      @mutex.synchronize do
+        process_result(result.update(index: index, mutation: mutation, test_results: test_results))
+      end
+    end
+
+    # Process result
+    #
+    # @param [Result::Mutation] result
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def process_result(result)
+      @collector.finish(result)
+      config.reporter.progress(@collector)
+      handle_exit(result)
+    end
+
+    # Handle exit if needed
+    #
+    # @param [Result::Mutation] mutation
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def handle_exit(result)
+      return if !config.fail_fast || result.success?
+
+      @mutations.clear
     end
 
     # Run mutation
     #
-    # @param [Mutation]
+    # @param [Mutation] mutation
+    # @param [Fixnum] index
     #
     # @return [Report::Mutation]
     #
@@ -64,7 +127,8 @@ module Mutant
     def run_mutation(mutation)
       Result::Mutation.compute do
         {
-          mutation:     mutation,
+          index:        nil,
+          mutation:     nil,
           test_results: kill_mutation(mutation)
         }
       end
@@ -80,7 +144,7 @@ module Mutant
     #
     def kill_mutation(mutation)
       mutation.subject.tests.each_with_object([]) do |test, results|
-        results << result = run_mutation_test(mutation, test).tap(&method(:progress))
+        results << result = run_mutation_test(mutation, test)
         return results if mutation.killed_by?(result)
       end
     end
@@ -95,33 +159,6 @@ module Mutant
       env.config
     end
 
-    # Visit collection
-    #
-    # @return [Array<Result>]
-    #
-    # @api private
-    #
-    def visit_collection(collection)
-      collection.each_with_object([]) do |item, results|
-        progress(item)
-        start = Time.now
-        results << result = yield(item).update(runtime: Time.now - start).tap(&method(:progress))
-        return results if @stop ||= config.fail_fast? && result.fail?
-      end
-    end
-
-    # Report progress
-    #
-    # @param [Object] object
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def progress(object)
-      config.reporter.progress(object)
-    end
-
     # Return test result
     #
     # @return [Report::Test]
@@ -133,11 +170,11 @@ module Mutant
       config.isolation.call do
         mutation.insert
         test.run
-      end.update(test: test, mutation: mutation)
+      end
     rescue Isolation::Error => exception
       Result::Test.new(
-        test:     test,
-        mutation: mutation,
+        test:     nil,
+        mutation: nil,
         runtime:  Time.now - time,
         output:   exception.message,
         passed:   false

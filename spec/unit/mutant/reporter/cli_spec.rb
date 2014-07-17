@@ -9,6 +9,10 @@ describe Mutant::Reporter::CLI do
     output.read
   end
 
+  before do
+    allow(Time).to receive(:now).and_return(Time.now)
+  end
+
   describe '#warn' do
     subject { object.warn(message) }
 
@@ -21,6 +25,7 @@ describe Mutant::Reporter::CLI do
 
   let(:result) do
     Mutant::Result::Env.new(
+      done:            true,
       env:             env,
       runtime:         1.1,
       subject_results: subject_results
@@ -43,13 +48,24 @@ describe Mutant::Reporter::CLI do
   let(:matchable_scopes) { double('Matchable Scopes', length: 10) }
 
   before do
-    allow(mutation).to receive(:subject).and_return(_subject)
+    allow(mutation_a).to receive(:subject).and_return(_subject)
+    allow(mutation_b).to receive(:subject).and_return(_subject)
   end
 
-  let(:mutation) do
+  let(:mutation_a) do
     double(
       'Mutation',
-      identification:  'mutation_id',
+      identification:  'mutation_id-a',
+      class:           mutation_class,
+      original_source: 'true',
+      source:          mutation_source
+    )
+  end
+
+  let(:mutation_b) do
+    double(
+      'Mutation',
+      identification:  'mutation_id-b',
       class:           mutation_class,
       original_source: 'true',
       source:          mutation_source
@@ -64,12 +80,14 @@ describe Mutant::Reporter::CLI do
       class:          Mutant::Subject,
       node:           s(:true),
       identification: 'subject_id',
-      mutations:      [mutation],
+      mutations:      subject_mutations,
       tests: [
         double('Test', identification: 'test_id')
       ]
     )
   end
+
+  let(:subject_mutations) { [mutation_a] }
 
   let(:test_results) do
     [
@@ -84,22 +102,26 @@ describe Mutant::Reporter::CLI do
     ]
   end
 
+  let(:mutation_a_result) do
+    double(
+      'Mutation Result',
+      class: Mutant::Result::Mutation,
+      mutation: mutation_a,
+      killtime: 0.5,
+      runtime:  1.0,
+      index:    0,
+      success?: mutation_result_success,
+      test_results: test_results,
+      failed_test_results: mutation_result_success ? [] : test_results
+    )
+  end
+
   let(:subject_results) do
     [
       Mutant::Result::Subject.new(
         subject: _subject,
         runtime: 1.0,
-        mutation_results: [
-          double(
-            'Mutation Result',
-            class: Mutant::Result::Mutation,
-            mutation: mutation,
-            killtime: 0.5,
-            success?: mutation_result_success,
-            test_results: test_results,
-            failed_test_results: mutation_result_success ? [] : test_results
-          )
-        ]
+        mutation_results: [mutation_a_result]
       )
     ]
   end
@@ -107,12 +129,342 @@ describe Mutant::Reporter::CLI do
   let(:subjects) { [_subject] }
 
   describe '#progress' do
-    subject { object.progress(reportable) }
+    subject { object.progress(collector) }
 
-    let(:config) { Mutant::Config::DEFAULT.update(includes: %w(include-dir), requires: %w(require-name)) }
+    let(:collector) do
+      Mutant::Runner::Collector.new(env)
+    end
 
-    context 'with env' do
-      let(:reportable) { env }
+    let(:mutation_result_success) { true }
+
+    context 'with empty collector' do
+      it 'writes expected output' do
+        subject
+        expect(contents).to eql(expected_output)
+      end
+
+      let(:expected_output) do
+        strip_indent(<<-REPORT)
+          Mutant configuration:
+          Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+          Integration:        null
+          Expect Coverage:    100.00%
+          Includes:           []
+          Requires:           []
+          Available Subjects: 1
+          Subjects:           1
+          Mutations:          1
+          Kills:              0
+          Alive:              0
+          Runtime:            0.00s
+          Killtime:           0.00s
+          Overhead:           NaN%
+          Coverage:           0.00%
+          Expected:           100.00%
+          Active subjects:    0
+        REPORT
+      end
+    end
+
+    context 'with collector active on one subject' do
+      before do
+        collector.start(mutation_a)
+      end
+
+      context 'without progress' do
+
+        it 'writes expected output' do
+          subject
+          expect(contents).to eql(expected_output)
+        end
+
+        let(:expected_output) do
+          strip_indent(<<-REPORT)
+            Mutant configuration:
+            Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+            Integration:        null
+            Expect Coverage:    100.00%
+            Includes:           []
+            Requires:           []
+            Available Subjects: 1
+            Subjects:           1
+            Mutations:          1
+            Kills:              0
+            Alive:              0
+            Runtime:            0.00s
+            Killtime:           0.00s
+            Overhead:           NaN%
+            Coverage:           0.00%
+            Expected:           100.00%
+            Active subjects:    1
+            subject_id mutations: 1
+            - test_id
+            (00/01)   0% - killtime: 0.00s runtime: 0.00s overhead: 0.00s
+          REPORT
+        end
+      end
+
+      context 'with progress' do
+
+        let(:subject_mutations) { [mutation_a, mutation_b] }
+
+        before do
+          collector.start(mutation_b)
+          collector.finish(mutation_a_result)
+        end
+
+        context 'on failure' do
+          let(:mutation_result_success) { false }
+
+          it 'writes expected output' do
+            subject
+            expect(contents).to eql(expected_output)
+          end
+
+          let(:expected_output) do
+            strip_indent(<<-REPORT)
+              Mutant configuration:
+              Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+              Integration:        null
+              Expect Coverage:    100.00%
+              Includes:           []
+              Requires:           []
+              Available Subjects: 1
+              Subjects:           1
+              Mutations:          2
+              Kills:              0
+              Alive:              1
+              Runtime:            0.00s
+              Killtime:           0.50s
+              Overhead:           -100.00%
+              Coverage:           0.00%
+              Expected:           100.00%
+              Active subjects:    1
+              subject_id mutations: 2
+              - test_id
+              F
+              (00/02)   0% - killtime: 0.50s runtime: 1.00s overhead: 0.50s
+            REPORT
+          end
+        end
+
+        context 'on success' do
+          it 'writes expected output' do
+            subject
+            expect(contents).to eql(expected_output)
+          end
+
+          let(:expected_output) do
+            strip_indent(<<-REPORT)
+              Mutant configuration:
+              Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+              Integration:        null
+              Expect Coverage:    100.00%
+              Includes:           []
+              Requires:           []
+              Available Subjects: 1
+              Subjects:           1
+              Mutations:          2
+              Kills:              1
+              Alive:              0
+              Runtime:            0.00s
+              Killtime:           0.50s
+              Overhead:           -100.00%
+              Coverage:           100.00%
+              Expected:           100.00%
+              Active subjects:    1
+              subject_id mutations: 2
+              - test_id
+              .
+              (01/02) 100% - killtime: 0.50s runtime: 1.00s overhead: 0.50s
+            REPORT
+          end
+        end
+      end
+    end
+  end
+
+  describe '#report' do
+    subject { object.report(result) }
+
+    context 'with full covergage' do
+      let(:mutation_result_success) { true }
+
+      it 'writes report to output' do
+        subject
+        expect(contents).to eql(strip_indent(<<-REPORT))
+          Mutant configuration:
+          Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+          Integration:        null
+          Expect Coverage:    100.00%
+          Includes:           []
+          Requires:           []
+          Available Subjects: 1
+          Subjects:           1
+          Mutations:          1
+          Kills:              1
+          Alive:              0
+          Runtime:            1.10s
+          Killtime:           0.50s
+          Overhead:           120.00%
+          Coverage:           100.00%
+          Expected:           100.00%
+        REPORT
+      end
+    end
+
+    context 'and partial coverage' do
+      let(:mutation_result_success) { false }
+
+      context 'on evil mutation' do
+        context 'with a diff' do
+          it 'writes report to output' do
+            subject
+            expect(contents).to eql(strip_indent(<<-REPORT))
+              subject_id
+              - test_id
+              mutation_id-a
+              @@ -1,2 +1,2 @@
+              -true
+              +false
+              -----------------------
+              Mutant configuration:
+              Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+              Integration:        null
+              Expect Coverage:    100.00%
+              Includes:           []
+              Requires:           []
+              Available Subjects: 1
+              Subjects:           1
+              Mutations:          1
+              Kills:              0
+              Alive:              1
+              Runtime:            1.10s
+              Killtime:           0.50s
+              Overhead:           120.00%
+              Coverage:           0.00%
+              Expected:           100.00%
+            REPORT
+          end
+        end
+
+        context 'without a diff' do
+          let(:mutation_source) { 'true' }
+
+          it 'writes report to output' do
+            subject
+            expect(contents).to eql(strip_indent(<<-REPORT))
+              subject_id
+              - test_id
+              mutation_id-a
+              BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction!
+              -----------------------
+              Mutant configuration:
+              Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+              Integration:        null
+              Expect Coverage:    100.00%
+              Includes:           []
+              Requires:           []
+              Available Subjects: 1
+              Subjects:           1
+              Mutations:          1
+              Kills:              0
+              Alive:              1
+              Runtime:            1.10s
+              Killtime:           0.50s
+              Overhead:           120.00%
+              Coverage:           0.00%
+              Expected:           100.00%
+            REPORT
+          end
+        end
+      end
+
+      context 'on neutral mutation' do
+        let(:mutation_class)  { Mutant::Mutation::Neutral }
+        let(:mutation_source) { 'true' }
+
+        it 'writes report to output' do
+          subject
+          expect(contents).to eql(strip_indent(<<-REPORT))
+            subject_id
+            - test_id
+            mutation_id-a
+            --- Neutral failure ---
+            Original code was inserted unmutated. And the test did NOT PASS.
+            Your tests do not pass initially or you found a bug in mutant / unparser.
+            Subject AST:
+            (true)
+            Unparsed Source:
+            true
+            Test Reports: 1
+            - test_id / runtime: 1.0
+            Test Output:
+            test-output
+            -----------------------
+            Mutant configuration:
+            Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+            Integration:        null
+            Expect Coverage:    100.00%
+            Includes:           []
+            Requires:           []
+            Available Subjects: 1
+            Subjects:           1
+            Mutations:          1
+            Kills:              0
+            Alive:              1
+            Runtime:            1.10s
+            Killtime:           0.50s
+            Overhead:           120.00%
+            Coverage:           0.00%
+            Expected:           100.00%
+          REPORT
+        end
+      end
+
+      context 'on noop mutation' do
+        let(:mutation_class) { Mutant::Mutation::Noop }
+
+        it 'writes report to output' do
+          subject
+          expect(contents).to eql(strip_indent(<<-REPORT))
+            subject_id
+            - test_id
+            mutation_id-a
+            ---- Noop failure -----
+            No code was inserted. And the test did NOT PASS.
+            This is typically a problem of your specs not passing unmutated.
+            Test Reports: 1
+            - test_id / runtime: 1.0
+            Test Output:
+            test-output
+            -----------------------
+            Mutant configuration:
+            Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+            Integration:        null
+            Expect Coverage:    100.00%
+            Includes:           []
+            Requires:           []
+            Available Subjects: 1
+            Subjects:           1
+            Mutations:          1
+            Kills:              0
+            Alive:              1
+            Runtime:            1.10s
+            Killtime:           0.50s
+            Overhead:           120.00%
+            Coverage:           0.00%
+            Expected:           100.00%
+          REPORT
+        end
+      end
+    end
+
+    context 'without subjects' do
+      let(:subjects)        { [] }
+      let(:subject_results) { [] }
+
+      let(:config) { Mutant::Config::DEFAULT.update(includes: %w[include-dir], requires: %w[require-name]) }
 
       it 'writes report to output' do
         subject
@@ -123,219 +475,16 @@ describe Mutant::Reporter::CLI do
           Expect Coverage:    100.00%
           Includes:           ["include-dir"]
           Requires:           ["require-name"]
-          Available Subjects: 10
-          Subjects:           1
-          Mutations:          1
-        REPORT
-      end
-    end
-
-    context 'with subject' do
-      let(:reportable) { _subject }
-
-      it 'writes report to output' do
-        subject
-        expect(contents).to eql(strip_indent(<<-REPORT))
-          subject_id mutations: 1
-          - test_id
-        REPORT
-      end
-    end
-
-    context 'with subject report' do
-      let(:reportable) { subject_results.first }
-      let(:mutation_result_success) { true }
-
-      it 'writes report to output' do
-        subject
-        expect(contents).to eql("\n(01/01) 100% - killtime: 0.50s runtime: 1.00s overhead: 0.50s\n")
-      end
-    end
-
-    context 'with mutation result' do
-      let(:reportable) { subject_results.first.mutation_results.first }
-
-      context 'when mutation results in success' do
-        let(:mutation_result_success) { true }
-
-        it 'writes report to output' do
-          subject
-          expect(contents).to eql('.')
-        end
-      end
-
-      context 'when mutation results in failure' do
-        let(:mutation_result_success) { false }
-
-        it 'writes report to output' do
-          subject
-          expect(contents).to eql('F')
-        end
-      end
-    end
-  end
-
-  describe '#report' do
-    subject { object.report(result) }
-
-    context 'with subjects' do
-
-      context 'and full covergage' do
-        let(:mutation_result_success) { true }
-
-        it 'writes report to output' do
-          subject
-          expect(contents).to eql(strip_indent(<<-REPORT))
-            Subjects:  1
-            Mutations: 1
-            Kills:     1
-            Alive:     0
-            Runtime:   1.10s
-            Killtime:  0.50s
-            Overhead:  120.00%
-            Coverage:  100.00%
-            Expected:  100.00%
-          REPORT
-        end
-      end
-
-      context 'and partial covergage' do
-        let(:mutation_result_success) { false }
-
-        context 'on evil mutation' do
-          context 'with a diff' do
-            it 'writes report to output' do
-              subject
-              expect(contents).to eql(strip_indent(<<-REPORT))
-                subject_id
-                - test_id
-                mutation_id
-                @@ -1,2 +1,2 @@
-                -true
-                +false
-                -----------------------
-                Subjects:  1
-                Mutations: 1
-                Kills:     0
-                Alive:     1
-                Runtime:   1.10s
-                Killtime:  0.50s
-                Overhead:  120.00%
-                Coverage:  0.00%
-                Expected:  100.00%
-              REPORT
-            end
-          end
-
-          context 'without a diff' do
-            let(:mutation_source) { 'true' }
-
-            it 'writes report to output' do
-              subject
-              expect(contents).to eql(strip_indent(<<-REPORT))
-                subject_id
-                - test_id
-                mutation_id
-                BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction!
-                -----------------------
-                Subjects:  1
-                Mutations: 1
-                Kills:     0
-                Alive:     1
-                Runtime:   1.10s
-                Killtime:  0.50s
-                Overhead:  120.00%
-                Coverage:  0.00%
-                Expected:  100.00%
-              REPORT
-            end
-          end
-        end
-
-        context 'on neutral mutation' do
-          let(:mutation_class)  { Mutant::Mutation::Neutral }
-          let(:mutation_source) { 'true' }
-
-          it 'writes report to output' do
-            subject
-            expect(contents).to eql(strip_indent(<<-REPORT))
-              subject_id
-              - test_id
-              mutation_id
-              --- Neutral failure ---
-              Original code was inserted unmutated. And the test did NOT PASS.
-              Your tests do not pass initially or you found a bug in mutant / unparser.
-              Subject AST:
-              (true)
-              Unparsed Source:
-              true
-              Test Reports: 1
-              - test_id / runtime: 1.0
-              Test Output:
-              test-output
-              -----------------------
-              Subjects:  1
-              Mutations: 1
-              Kills:     0
-              Alive:     1
-              Runtime:   1.10s
-              Killtime:  0.50s
-              Overhead:  120.00%
-              Coverage:  0.00%
-              Expected:  100.00%
-            REPORT
-          end
-        end
-
-        context 'on neutral mutation' do
-          let(:mutation_class) { Mutant::Mutation::Noop }
-
-          it 'writes report to output' do
-            subject
-            expect(contents).to eql(strip_indent(<<-REPORT))
-              subject_id
-              - test_id
-              mutation_id
-              ---- Noop failure -----
-              No code was inserted. And the test did NOT PASS.
-              This is typically a problem of your specs not passing unmutated.
-              Test Reports: 1
-              - test_id / runtime: 1.0
-              Test Output:
-              test-output
-              -----------------------
-              Subjects:  1
-              Mutations: 1
-              Kills:     0
-              Alive:     1
-              Runtime:   1.10s
-              Killtime:  0.50s
-              Overhead:  120.00%
-              Coverage:  0.00%
-              Expected:  100.00%
-            REPORT
-          end
-        end
-      end
-    end
-
-    context 'without subjects' do
-
-      let(:subjects)        { [] }
-      let(:subject_results) { [] }
-
-      it 'writes report to output' do
-        subject
-        expect(contents).to eql(strip_indent(<<-REPORT))
-          Subjects:  0
-          Mutations: 0
-          Kills:     0
-          Alive:     0
-          Runtime:   1.10s
-          Killtime:  0.00s
-          Overhead:  Inf%
-          Coverage:  0.00%
-          Expected:  100.00%
+          Available Subjects: 0
+          Subjects:           0
+          Mutations:          0
+          Kills:              0
+          Alive:              0
+          Runtime:            1.10s
+          Killtime:           0.00s
+          Overhead:           Inf%
+          Coverage:           0.00%
+          Expected:           100.00%
         REPORT
       end
     end

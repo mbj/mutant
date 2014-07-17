@@ -1,7 +1,7 @@
 module Mutant
   # Abstract base class for reporters
   class Reporter
-    include Adamantium::Flat, AbstractType
+    include AbstractType
 
     # Write warning message
     #
@@ -13,9 +13,9 @@ module Mutant
     #
     abstract_method :warn
 
-    # Report object
+    # Report collector state
     #
-    # @param [Object] object
+    # @param [Runner::Collector] collector
     #
     # @return [self]
     #

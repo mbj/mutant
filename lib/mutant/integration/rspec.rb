@@ -63,10 +63,10 @@ module Mutant
         end
         output.rewind
         Result::Test.new(
-          test:     self,
+          test:     nil,
+          mutation: nil,
           output:   output.read,
           runtime:  Time.now - start,
-          mutation: nil,
           passed:   !failed
         )
       end

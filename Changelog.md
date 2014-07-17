@@ -1,3 +1,8 @@
+# v0.6.0 2014-07-17
+
+* Parallel execution / reporting.
+* Add -j, --jobs flag to control concurrency.
+
 # v0.5.26 2014-07-07
 
 * Fix exceptions generation matcher errors

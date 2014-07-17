@@ -12,6 +12,7 @@ ControlParameter:
   enabled: true
   exclude:
   - Mutant::Expression#match_length
+  - Mutant::Reporter::CLI::Printer::SubjectProgress#print_mutation_result
 DataClump:
   enabled: true
   exclude: []
@@ -39,6 +40,8 @@ FeatureEnvy:
   - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Reporter::CLI#subject_results
   - Mutant::Runner#run_mutation_test
+  - Mutant::Runner#kill_mutation
+  - Mutant::Runner#finish
 IrresponsibleModule:
   enabled: true
   exclude: []
@@ -46,6 +49,7 @@ LongParameterList:
   enabled: true
   exclude:
   - Mutant::Matcher::Method::Instance#self.build?
+  - Mutant::Runner#finish # API client of parallel, one gets _ignored.
   - Mutant::Runner#self.run
   max_params: 2
 LongYieldList:
@@ -61,10 +65,8 @@ NestedIterators:
   - Mutant::Mutator::Util::Array::Element#dispatch
   - Mutant::Mutator::Node::Resbody#mutate_captures
   - Mutant::Mutator::Node::Arguments#emit_argument_mutations
-  - Mutant::Reporter::CLI::Report::Env#generic_stats
   - Mutant::RequireHighjack#infect
   - Mutant::RequireHighjack#desinfect
-  - Mutant::Reporter::CLI::Registry#included
   - Mutant::Subject#tests
   - Parser::Lexer#self.new
   max_allowed_nesting: 1
@@ -81,9 +83,8 @@ RepeatedConditional:
 TooManyInstanceVariables:
   enabled: true
   exclude:
-  - Mutant::CLI     # 4 vars
-  - Mutant::Killer  # 4 vars
   - Mutant::Mutator # 4 vars
+  - Mutant::Runner  # 4 vars
   max_instance_variables: 3
 TooManyMethods:
   enabled: true
@@ -99,9 +100,8 @@ TooManyStatements:
   exclude:
   - Mutant#self.singleton_subclass_instance
   - Mutant::Integration::Rspec#run
-  - Mutant::Reporter::CLI::Report::Env#run
-  - Mutant::Reporter::CLI::Registry#included
   - Mutant::Reporter::CLI#colorized_diff
+  - Mutant::Reporter::CLI::Printer::EnvProgress#run
   - Mutant::RequireHighjack#infect
   - Mutant::Rspec::Killer#run
   - Mutant::Runner#visit_collection

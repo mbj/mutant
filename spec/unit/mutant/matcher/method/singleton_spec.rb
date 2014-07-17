@@ -37,7 +37,9 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
 
       it 'warns about definition on non const/self' do
         subject
-        expect(env.config.reporter.warn_calls).to include('Can only match :defs on :self or :const got :lvar unable to match')
+        expect(env.config.reporter.warn_calls).to(
+          include('Can only match :defs on :self or :const got :lvar unable to match')
+        )
       end
     end
 
