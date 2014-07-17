@@ -43,9 +43,9 @@ describe Mutant::Reporter::CLI do
     )
   end
 
-  let(:config)           { Mutant::Config::DEFAULT                }
-  let(:mutation_class)   { Mutant::Mutation::Evil                 }
-  let(:matchable_scopes) { double('Matchable Scopes', length: 10) }
+  let(:config)           { Mutant::Config::DEFAULT.update(processes: 1) }
+  let(:mutation_class)   { Mutant::Mutation::Evil                       }
+  let(:matchable_scopes) { double('Matchable Scopes', length: 10)       }
 
   before do
     allow(mutation_a).to receive(:subject).and_return(_subject)
@@ -149,6 +149,7 @@ describe Mutant::Reporter::CLI do
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
           Integration:        null
           Expect Coverage:    100.00%
+          Processes:          1
           Includes:           []
           Requires:           []
           Available Subjects: 1
@@ -184,6 +185,7 @@ describe Mutant::Reporter::CLI do
             Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
             Integration:        null
             Expect Coverage:    100.00%
+            Processes:          1
             Includes:           []
             Requires:           []
             Available Subjects: 1
@@ -227,6 +229,7 @@ describe Mutant::Reporter::CLI do
               Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:        null
               Expect Coverage:    100.00%
+              Processes:          1
               Includes:           []
               Requires:           []
               Available Subjects: 1
@@ -260,6 +263,7 @@ describe Mutant::Reporter::CLI do
               Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:        null
               Expect Coverage:    100.00%
+              Processes:          1
               Includes:           []
               Requires:           []
               Available Subjects: 1
@@ -297,6 +301,7 @@ describe Mutant::Reporter::CLI do
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
           Integration:        null
           Expect Coverage:    100.00%
+          Processes:          1
           Includes:           []
           Requires:           []
           Available Subjects: 1
@@ -332,6 +337,7 @@ describe Mutant::Reporter::CLI do
               Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:        null
               Expect Coverage:    100.00%
+              Processes:          1
               Includes:           []
               Requires:           []
               Available Subjects: 1
@@ -363,6 +369,7 @@ describe Mutant::Reporter::CLI do
               Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:        null
               Expect Coverage:    100.00%
+              Processes:          1
               Includes:           []
               Requires:           []
               Available Subjects: 1
@@ -406,6 +413,7 @@ describe Mutant::Reporter::CLI do
             Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
             Integration:        null
             Expect Coverage:    100.00%
+            Processes:          1
             Includes:           []
             Requires:           []
             Available Subjects: 1
@@ -443,6 +451,7 @@ describe Mutant::Reporter::CLI do
             Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
             Integration:        null
             Expect Coverage:    100.00%
+            Processes:          1
             Includes:           []
             Requires:           []
             Available Subjects: 1
@@ -464,7 +473,7 @@ describe Mutant::Reporter::CLI do
       let(:subjects)        { [] }
       let(:subject_results) { [] }
 
-      let(:config) { Mutant::Config::DEFAULT.update(includes: %w[include-dir], requires: %w[require-name]) }
+      let(:config) { Mutant::Config::DEFAULT.update(processes: 1, includes: %w[include-dir], requires: %w[require-name]) }
 
       it 'writes report to output' do
         subject
@@ -473,6 +482,7 @@ describe Mutant::Reporter::CLI do
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
           Integration:        null
           Expect Coverage:    100.00%
+          Processes:          1
           Includes:           ["include-dir"]
           Requires:           ["require-name"]
           Available Subjects: 0
