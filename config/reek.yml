@@ -102,6 +102,7 @@ TooManyStatements:
   - Mutant::Integration::Rspec#run
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI::Printer::EnvProgress#run
+  - Mutant::Reporter::CLI::Printer::Config#run
   - Mutant::RequireHighjack#infect
   - Mutant::Rspec::Killer#run
   - Mutant::Runner#visit_collection
