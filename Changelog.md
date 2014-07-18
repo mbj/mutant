@@ -2,6 +2,7 @@
 
 * Parallel execution / reporting.
 * Add -j, --jobs flag to control concurrency.
+* Fix blind spots on send with block.
 
 # v0.5.26 2014-07-07
 

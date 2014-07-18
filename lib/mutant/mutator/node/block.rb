@@ -19,6 +19,7 @@ module Mutant
         def dispatch
           emit_singletons
           emit(send)
+          emit_send_mutations(&method(:n_send?))
           emit_arguments_mutations
           if body
             emit_body_mutations
