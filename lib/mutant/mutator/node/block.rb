@@ -22,6 +22,7 @@ module Mutant
           emit_send_mutations(&method(:n_send?))
           emit_arguments_mutations
           if body
+            emit(body)
             emit_body_mutations
           end
           emit_body(nil)

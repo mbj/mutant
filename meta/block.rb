@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 Mutant::Meta::Example.add do
-  source 'foo() { a; b }'
+  source 'foo { a; b }'
 
   singleton_mutations
   mutation 'foo { a }'
@@ -13,6 +13,7 @@ Mutant::Meta::Example.add do
   mutation 'foo { nil; b }'
   mutation 'foo { self; b }'
   mutation 'foo'
+  mutation 'a; b'
 end
 
 Mutant::Meta::Example.add do
