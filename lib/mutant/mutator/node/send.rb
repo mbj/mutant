@@ -12,6 +12,8 @@ module Mutant
 
         SELECTOR_REPLACEMENTS = IceNine.deep_freeze(
           reverse_map:  [:map, :each],
+          kind_of?:     [:instance_of?],
+          is_a?:        [:instance_of?],
           reverse_each: [:each],
           map:          [:each],
           send:         [:public_send],
