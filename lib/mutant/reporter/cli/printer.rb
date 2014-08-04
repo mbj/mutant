@@ -484,7 +484,7 @@ module Mutant
             original, current = mutation.original_source, mutation.source
             diff = Mutant::Diff.build(original, current)
             diff = color? ? diff.colorized_diff : diff.diff
-            puts(diff || DIFF_ERROR_MESSAGE)
+            puts(diff || ['Original source:',original, 'Mutated Source:', current,DIFF_ERROR_MESSAGE])
           end
 
           # Noop details
