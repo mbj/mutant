@@ -363,6 +363,10 @@ describe Mutant::Reporter::CLI do
               subject_id
               - test_id
               mutation_id-a
+              Original source:
+              true
+              Mutated Source:
+              true
               BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction!
               -----------------------
               Mutant configuration:
