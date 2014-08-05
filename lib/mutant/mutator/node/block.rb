@@ -35,10 +35,9 @@ module Mutant
           emit_body(nil)
           emit_body(N_RAISE)
 
-          if body
-            emit(body)
-            emit_body_mutations
-          end
+          return unless body
+          emit(body)
+          emit_body_mutations
         end
 
       end # Block
