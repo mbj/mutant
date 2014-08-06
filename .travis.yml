@@ -9,7 +9,7 @@ rvm:
   - rbx-2
 gemfile:
   - Gemfile
-  - gemfiles/rspec3.gemfile
+  - rspec3.gemfile
 matrix:
   allow_failures:
     - rvm: 2.1.2 # still segfaults on stack overflow on define_method
