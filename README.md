@@ -153,7 +153,7 @@ Your options:
 * Ping me on [twitter](https://twitter.com/_m_b_j_)
 
 There is also the [#mutant] channel on freenode. As my OSS time budged is very limited I cannot
-join it often. Please perfer to use github issues with a `question` tag.
+join it often. Please prefer to use github issues with a `question` tag.
 
 Credits
 -------
