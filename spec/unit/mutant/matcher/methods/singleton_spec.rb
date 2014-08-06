@@ -40,12 +40,12 @@ describe Mutant::Matcher::Methods::Singleton, '#each' do
 
   before do
     matcher = Mutant::Matcher::Method::Singleton
-    matcher.stub(:new)
-      .with(env, Foo, Foo.method(:method_a)).and_return([subject_a])
-    matcher.stub(:new)
-      .with(env, Foo, Foo.method(:method_b)).and_return([subject_b])
-    matcher.stub(:new)
-      .with(env, Foo, Foo.method(:method_c)).and_return([subject_c])
+    allow(matcher).to receive(:new).
+                          with(env, Foo, Foo.method(:method_a)).and_return([subject_a])
+    allow(matcher).to receive(:new).
+                          with(env, Foo, Foo.method(:method_b)).and_return([subject_b])
+    allow(matcher).to receive(:new).
+                          with(env, Foo, Foo.method(:method_c)).and_return([subject_c])
   end
 
   it 'should yield expected subjects' do
