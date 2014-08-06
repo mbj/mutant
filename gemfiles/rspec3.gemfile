@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gemspec name: 'mutant'
+gemspec name: 'mutant', :path => '../mutant.gemspec'
 
 gem 'devtools', git: 'https://github.com/rom-rb/devtools.git'
 eval_gemfile 'Gemfile.rspec3.devtools'
