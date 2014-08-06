@@ -50,7 +50,7 @@ module Corpus
       checkout
       start = Time.now
       paths = Pathname.glob(repo_path.join('**/*.rb')).sort_by(&:size).reverse
-      total = Parallel.map(paths, finish: method(:finish), start: method(:start)) do |path|
+      total = Parallel.map(paths, finish: method(:finish), start: method(:start), in_processes: parallel_processes) do |path|
         count = 0
         node =
           begin
@@ -116,6 +116,24 @@ module Corpus
       lockfile = repo_path.join('Gemfile.lock')
       lockfile.delete if lockfile.exist?
       system('bundle install')
+    end
+
+    # Not in the docs. Number from chatting with their support.
+    CIRCLE_CI_CONTAINER_PROCESSES = 2
+
+    # Return number of parallel processes to use
+    #
+    # @return [Fixnum]
+    #
+    # @api private
+    #
+    def parallel_processes
+      case
+      when Devtools.circle_ci?
+        CIRCLE_CI_CONTAINER_PROCESSES
+      else
+        Parallel.processor_count
+      end
     end
 
     # Return repository path
