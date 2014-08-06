@@ -149,10 +149,11 @@ I'm very happy to receive/answer feedback/questions and critism.
 
 Your options:
 
-* GitHub Issues https://github.com/mbj/mutant/issues
-* Ping me on https://twitter.com/_m_b_j_
-* #mutant channel on freenode, I hang around on CET daytimes. (nick mbj)
-  You'll also find others [ROM](https://github.com/rom-rb) team members here that can answer questions.
+* [GitHub Issues](https://github.com/mbj/mutant/issues)
+* Ping me on [twitter](https://twitter.com/_m_b_j_)
+
+There is also the [#mutant] channel on freenode. As my OSS time budged is very limited I cannot
+join it often. Please perfer to use github issues with a `question` tag.
 
 Credits
 -------
