@@ -139,9 +139,6 @@ Example for a subject like `Foo::Bar#baz` it will run all example groups with de
 `Foo::Bar#baz`, `Foo::Bar` and `Foo`. The order is important, so if mutant finds example groups in the
 current prefix level, these example groups *must* kill the mutation.
 
-This test selection strategy is compatible with the old `--rspec-dm2` and `--rspec-unit` strategy.
-The old flags were removed.  It allows to define very fine grained specs, or coarse grained - as you like.
-
 Support
 -------
 
