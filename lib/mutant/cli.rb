@@ -79,7 +79,7 @@ module Mutant
 
     # Parse matchers
     #
-    # @param [Array<String>] patterns
+    # @param [Array<String>] expressions
     #
     # @return [undefined]
     #

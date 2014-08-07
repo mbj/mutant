@@ -27,7 +27,7 @@ module Mutant
 
         # Emit child subset
         #
-        # @param [Array<Parser::AST::Node>] nodes
+        # @param [Array<Parser::AST::Node>] children
         #
         # @return [undefined]
         #
