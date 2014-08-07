@@ -90,7 +90,7 @@ module Mutant
 
     # Hook called when module gets included
     #
-    # @param [Class, Module] hosto
+    # @param [Class, Module] host
     #
     # @return [undefined]
     #
@@ -262,7 +262,7 @@ module Mutant
     class Mutation
       include Result, Anima.new(:runtime, :mutation, :test_results, :index)
 
-      # Test if mutation was handeled successfully
+      # Test if mutation was handled successfully
       #
       # @return [Boolean]
       #

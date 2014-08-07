@@ -69,7 +69,7 @@ module Mutant
       dispatch
     end
 
-    # Test if generated object is not guarded from emmitting
+    # Test if generated object is not guarded from emitting
     #
     # @param [Object] object
     #

@@ -18,7 +18,7 @@ describe Mutant::Expression do
       it { should eql(Mutant::Expression::Namespace::Exact.new('Foo')) }
     end
 
-    context 'on ambigious expression' do
+    context 'on ambiguous expression' do
       class ExpressionA < Mutant::Expression
         register(/\Atest-syntax\z/)
       end
@@ -30,7 +30,7 @@ describe Mutant::Expression do
       let(:input) { 'test-syntax' }
 
       it 'raises an exception' do
-        expect { subject }.to raise_error(Mutant::Expression::AmbigousExpressionError, 'Ambigous expression: "test-syntax"')
+        expect { subject }.to raise_error(Mutant::Expression::AmbiguousExpressionError, 'Ambiguous expression: "test-syntax"')
       end
     end
   end

@@ -23,7 +23,7 @@ module Corpus
     # Verify mutation coverage
     #
     # @return [self]
-    #   if successufl
+    #   if successful
     #
     # @raise [Exception]
     #
@@ -160,7 +160,6 @@ module Corpus
     #
     # @param [Pathname] path
     # @param [Fixnum] _index
-    # @param [Fixnum] count
     #
     # @return [undefined]
     #

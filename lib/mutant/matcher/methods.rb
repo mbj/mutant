@@ -63,8 +63,6 @@ module Mutant
 
       # Return candidate names
       #
-      # @param [Object] object
-      #
       # @return [Enumerable<Symbol>]
       #
       # @api private

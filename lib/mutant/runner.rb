@@ -118,7 +118,6 @@ module Mutant
     # Run mutation
     #
     # @param [Mutation] mutation
-    # @param [Fixnum] index
     #
     # @return [Report::Mutation]
     #

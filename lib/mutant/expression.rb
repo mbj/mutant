@@ -22,8 +22,8 @@ module Mutant
     # Error raised on invalid expressions
     class InvalidExpressionError < RuntimeError; end
 
-    # Error raised on ambigous expressions
-    class AmbigousExpressionError < RuntimeError; end
+    # Error raised on ambiguous expressions
+    class AmbiguousExpressionError < RuntimeError; end
 
     # Initialize expression
     #
@@ -127,7 +127,7 @@ module Mutant
       when 1
         expressions.first
       else
-        fail AmbigousExpressionError, "Ambigous expression: #{input.inspect}"
+        fail AmbiguousExpressionError, "Ambiguous expression: #{input.inspect}"
       end
     end
 

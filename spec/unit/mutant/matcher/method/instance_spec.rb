@@ -68,7 +68,7 @@ describe Mutant::Matcher::Method::Instance do
     end
 
     context 'when method is defined multiple times' do
-      context 'on differend lines' do
+      context 'on different lines' do
         let(:base) { __LINE__ }
         class self::Foo
           def bar
@@ -96,7 +96,7 @@ describe Mutant::Matcher::Method::Instance do
         it_should_behave_like 'a method matcher'
       end
 
-      context 'on the same line with differend scope' do
+      context 'on the same line with different scope' do
         let(:base) { __LINE__ }
         class self::Foo
           def self.bar; end; def bar(_arg); end

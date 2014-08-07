@@ -176,7 +176,7 @@ module Mutant
       # Return parent node
       #
       # @return [Parser::AST::Node] node
-      #   if parent with node is presnet
+      #   if parent with node is present
       #
       # @return [nil]
       #   otherwise
@@ -190,7 +190,7 @@ module Mutant
       # Return parent type
       #
       # @return [Symbol] type
-      #   if parent with type is presnet
+      #   if parent with type is present
       #
       # @return [nil]
       #   otherwise

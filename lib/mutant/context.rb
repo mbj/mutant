@@ -1,5 +1,5 @@
 module Mutant
-  # An abstract context where mutations can be appied to.
+  # An abstract context where mutations can be applied to.
   class Context
     include Adamantium::Flat, AbstractType, Concord::Public.new(:source_path)
 

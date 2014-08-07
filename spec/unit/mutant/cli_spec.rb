@@ -38,7 +38,7 @@ describe Mutant::CLI do
       end
     end
 
-    context 'when report signalls error' do
+    context 'when report signals error' do
       let(:report_success) { false }
 
       it 'exits failure' do

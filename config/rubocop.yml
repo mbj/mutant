@@ -89,7 +89,7 @@ ConstantName:
 TrivialAccessors:
   Enabled: false
 
-# And also have a differend opinion here
+# And also have a different opinion here
 AndOr:
   Enabled: false
 

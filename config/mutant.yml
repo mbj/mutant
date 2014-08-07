@@ -5,7 +5,7 @@ expect_coverage: 62.08
 ignore_subjects:
 # Mutation causes infinite runtime
 - Mutant::Runner.lookup
-# Suboptimal test selection stragegy (will be fixed soon) causes timeouts on CI
+# Suboptimal test selection strategy (will be fixed soon) causes timeouts on CI
 - Mutant::Zombifier*
 - Mutant::Reporter*
 - Mutant::CLI*

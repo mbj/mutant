@@ -78,7 +78,7 @@ module Mutant
           self
         end
 
-        # Add singleotn mutations
+        # Add singleton mutations
         #
         # @return [undefined]
         #
