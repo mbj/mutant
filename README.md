@@ -142,7 +142,7 @@ current prefix level, these example groups *must* kill the mutation.
 Support
 -------
 
-I'm very happy to receive/answer feedback/questions and critism.
+I'm very happy to receive/answer feedback/questions and criticism.
 
 Your options:
 

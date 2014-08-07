@@ -194,7 +194,7 @@ require 'mutant/zombifier'
 require 'mutant/zombifier/file'
 
 module Mutant
-  # Repoen class to initialize constant to avoid dep circle
+  # Reopen class to initialize constant to avoid dep circle
   class Config
     DEFAULT = new(
       debug:             false,

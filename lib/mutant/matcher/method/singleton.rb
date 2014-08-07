@@ -80,7 +80,7 @@ module Mutant
           end
         end
 
-        # Test if reciver name matches context
+        # Test if receiver name matches context
         #
         # @param [Parser::AST::Node] node
         #

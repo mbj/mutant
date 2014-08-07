@@ -23,7 +23,7 @@ module Corpus
     # Verify mutation coverage
     #
     # @return [self]
-    #   if successufl
+    #   if successful
     #
     # @raise [Exception]
     #

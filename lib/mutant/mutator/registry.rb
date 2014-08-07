@@ -74,7 +74,7 @@ module Mutant
       #
       # @return [undefined]
       #
-      # @raise [DuplcateTypeError]
+      # @raise [DuplicateTypeError]
       #   raised when the node type is a duplicate
       #
       # @api private

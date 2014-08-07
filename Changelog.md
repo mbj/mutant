@@ -71,7 +71,7 @@ Changes:
 
 * Report selected tests in progress runner
 * Fix scope of rspec selections to include meaningful parents.
-* Add short circuts on already dead mutations under multiple test selections.
+* Add short circuits on already dead mutations under multiple test selections.
 
 # v0.5.16 2014-05-27
 
@@ -98,7 +98,7 @@ Changes:
 
 Changes:
 
-* Imporve reporting of isolation problems
+* Improve reporting of isolation problems
 * Centralize test selection
 * Report selected tests
 * Report rspec output on noop failures
@@ -117,7 +117,7 @@ Changes:
 * Fix crash on while and until without body
 * Better require highjack based zombifier
 * Do not mutate nthref $1 to gvar $0
-* Use faster duplicate guarding hashing AST::Node intances
+* Use faster duplicate guarding hashing AST::Node instances
 * Fix lots of shadowed invalid ASTs
 * Fix undefine initialize warnings, Closes #175
 

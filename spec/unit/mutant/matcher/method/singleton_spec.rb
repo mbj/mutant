@@ -92,7 +92,7 @@ describe Mutant::Matcher::Method::Singleton, '#each' do
     end
 
     context 'when defined multiple times in the same line' do
-      context 'with method on differend scope' do
+      context 'with method on different scope' do
         let(:base) { __LINE__ }
         module self::Namespace
           module Foo; end
