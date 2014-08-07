@@ -160,7 +160,6 @@ module Corpus
     #
     # @param [Pathname] path
     # @param [Fixnum] _index
-    # @param [Fixnum] count
     #
     # @return [undefined]
     #
