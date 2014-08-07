@@ -18,7 +18,7 @@ describe Mutant::Expression do
       it { should eql(Mutant::Expression::Namespace::Exact.new('Foo')) }
     end
 
-    context 'on ambigious expression' do
+    context 'on ambiguous expression' do
       class ExpressionA < Mutant::Expression
         register(/\Atest-syntax\z/)
       end
