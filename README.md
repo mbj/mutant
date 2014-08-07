@@ -145,7 +145,7 @@ The old flags were removed.  It allows to define very fine grained specs, or coa
 Support
 -------
 
-I'm very happy to receive/answer feedback/questions and critism.
+I'm very happy to receive/answer feedback/questions and criticism.
 
 Your options:
 

@@ -23,7 +23,7 @@ module Mutant
     # @return [self]
     #   if block given
     #
-    # @return [Enumerabe<Subject>]
+    # @return [Enumerable<Subject>]
     #   otherwise
     #
     abstract_method :each

@@ -2,11 +2,11 @@ require 'optparse'
 
 module Mutant
 
-  # Comandline parser
+  # Commandline parser
   class CLI
     include Adamantium::Flat, Equalizer.new(:config), Procto.call(:config)
 
-    # Error faild when CLI argv is invalid
+    # Error failed when CLI argv is invalid
     Error = Class.new(RuntimeError)
 
     EXIT_FAILURE = 1

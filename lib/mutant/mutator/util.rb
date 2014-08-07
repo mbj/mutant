@@ -3,7 +3,7 @@ module Mutant
     # Namespace for utility mutators
     class Util < self
 
-      # Run ulitity mutator
+      # Run utility mutator
       #
       # @param [Object] object
       # @param [Object] parent

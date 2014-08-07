@@ -40,7 +40,7 @@ module Mutant
             children.first
           end
 
-        end # Fixnuma
+        end # Fixnum
       end # Literal
     end # Node
   end # Mutator

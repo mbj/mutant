@@ -28,7 +28,7 @@ class MutationVerifier
 
 private
 
-  # Return unexpected mutationso
+  # Return unexpected mutations
   #
   # @return [Array<Parser::AST::Node>]
   #
@@ -71,7 +71,7 @@ private
     ].join("\n")
   end
 
-  # Return missing mutationso
+  # Return missing mutations
   #
   # @return [Array<Parser::AST::Node>]
   #

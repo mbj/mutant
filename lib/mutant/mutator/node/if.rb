@@ -23,7 +23,7 @@ module Mutant
           mutate_else_branch
         end
 
-        # Emit conditon mutations
+        # Emit condition mutations
         #
         # @return [undefined]
         #

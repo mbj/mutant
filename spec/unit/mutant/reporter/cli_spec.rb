@@ -291,7 +291,7 @@ describe Mutant::Reporter::CLI do
   describe '#report' do
     subject { object.report(result) }
 
-    context 'with full covergage' do
+    context 'with full coverage' do
       let(:mutation_result_success) { true }
 
       it 'writes report to output' do

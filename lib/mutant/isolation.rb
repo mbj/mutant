@@ -1,5 +1,5 @@
 module Mutant
-  # Module providing isolationg
+  # Module providing isolation
   module Isolation
     Error = Class.new(RuntimeError)
 

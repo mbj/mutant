@@ -190,7 +190,7 @@ module Mutant
       # Return parent type
       #
       # @return [Symbol] type
-      #   if parent with type is presnet
+      #   if parent with type is present
       #
       # @return [nil]
       #   otherwise
