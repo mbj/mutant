@@ -231,16 +231,6 @@ module Mutant
             coverage * 100
           end
 
-          # Return overhead percent
-          #
-          # @return [Float]
-          #
-          # @api private
-          #
-          def overhead_percent
-            (overhead / killtime) * 100
-          end
-
         end # EnvProgress
 
         # Full env result reporter
@@ -261,16 +251,6 @@ module Mutant
           end
 
         private
-
-          # Return coverage percent
-          #
-          # @return [Float]
-          #
-          # @api private
-          #
-          def coverage_percent
-            coverage * 100
-          end
 
           # Return overhead percent
           #
