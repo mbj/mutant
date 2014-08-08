@@ -2,8 +2,7 @@
 
 group :development do
   gem 'rake',       '~> 10.3.2'
-  gem 'rspec',      '~> 2.99.0'
-  gem 'rspec-core', '~> 2.99.0'
+  gem 'rspec',      '~> 3.0.0'
   gem 'rspec-its',  '~> 1.0.1'
   gem 'yard',       '~> 0.8.7.4'
 
