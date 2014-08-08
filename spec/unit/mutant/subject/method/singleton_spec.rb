@@ -6,24 +6,20 @@ describe Mutant::Subject::Method::Singleton do
 
   let(:object)  { described_class.new(config, context, node) }
   let(:config)  { Mutant::Config::DEFAULT                    }
-  let(:context) { double                                     }
+  let(:node)    { s(:defs, s(:self), :foo, s(:args))         }
 
-  let(:node) do
-    s(:defs, s(:self), :foo, s(:args))
+  let(:context) do
+    Mutant::Context::Scope.new(scope, double('Source Path'))
+  end
+
+  let(:scope) do
+    Class.new do
+      def self.foo
+      end
+    end
   end
 
   describe '#prepare' do
-
-    let(:context) do
-      Mutant::Context::Scope.new(scope, double('Source Path'))
-    end
-
-    let(:scope) do
-      Class.new do
-        def self.foo
-        end
-      end
-    end
 
     subject { object.prepare }
 
@@ -38,5 +34,33 @@ describe Mutant::Subject::Method::Singleton do
     subject { object.source }
 
     it { should eql("def self.foo\nend") }
+  end
+
+  describe '#public?' do
+    subject { object.public? }
+
+    context 'when method is public' do
+      it { should be(true) }
+    end
+
+    context 'when method is private' do
+      before do
+        scope.class_eval do
+          private_class_method :foo
+        end
+      end
+
+      it { should be(false) }
+    end
+
+    context 'when method is protected' do
+      before do
+        class << scope
+          protected :foo
+        end
+      end
+
+      it { should be(false) }
+    end
   end
 end
