@@ -50,7 +50,12 @@ module Corpus
       checkout
       start = Time.now
       paths = Pathname.glob(repo_path.join('**/*.rb')).sort_by(&:size).reverse
-      total = Parallel.map(paths, finish: method(:finish), start: method(:start), in_processes: parallel_processes) do |path|
+      options = {
+        finish: method(:finish),
+        start: method(:start),
+        in_processes: parallel_processes
+      }
+      total = Parallel.map(paths, options) do |path|
         count = 0
         node =
           begin

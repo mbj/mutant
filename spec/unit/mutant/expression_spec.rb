@@ -28,7 +28,10 @@ RSpec.describe Mutant::Expression do
       let(:input) { 'test-syntax' }
 
       it 'raises an exception' do
-        expect { subject }.to raise_error(Mutant::Expression::AmbiguousExpressionError, 'Ambiguous expression: "test-syntax"')
+        expect { subject }.to raise_error(
+          Mutant::Expression::AmbiguousExpressionError,
+          'Ambiguous expression: "test-syntax"'
+        )
       end
     end
   end
