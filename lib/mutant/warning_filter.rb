@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 module Mutant
   # Stream filter for warnings
   class WarningFilter

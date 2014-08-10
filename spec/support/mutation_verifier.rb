@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 class MutationVerifier
   include Adamantium::Flat, Concord.new(:original_node, :expected, :generated)
 
