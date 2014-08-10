@@ -87,6 +87,8 @@ module Corpus
       if repo_path.exist?
         Dir.chdir(repo_path) do
           system(%w[git fetch])
+          system(%w[git reset --hard])
+          system(%w[git clean -f -d -x])
           system(%w[git checkout origin/master])
           system(%w[git reset --hard])
           system(%w[git clean -f -d -x])
