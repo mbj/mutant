@@ -57,9 +57,7 @@ module Mutant
       # @api private
       #
       def progress(collector)
-        format.throttle do
-          write(format.progress(collector))
-        end
+        write(format.progress(collector))
 
         self
       end

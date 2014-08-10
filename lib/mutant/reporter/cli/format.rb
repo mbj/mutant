@@ -15,14 +15,6 @@ module Mutant
         #
         abstract_method :progress
 
-        # Throttle report execution
-        #
-        # @return [self]
-        #
-        # @api private
-        #
-        abstract_method :throttle
-
         # Format result
         #
         # @param [Result::Env] env
@@ -54,7 +46,6 @@ module Mutant
               buffer.public_send(name, *args, &block)
             end
           end
-
         end # Output
 
       private
@@ -116,21 +107,9 @@ module Mutant
           # @api private
           #
           def progress(collector)
-            format(Printer::Collector, collector)
-          end
-
-          # Call block throttled
-          #
-          # @return [self]
-          #
-          # @api private
-          #
-          def throttle
-            now = Time.now
-            return if @last_frame && (now - @last_frame) < OUTPUT_RATE
-            yield
-            @last_frame = now
-            self
+            throttle do
+              format(Printer::Collector, collector)
+            end.to_s
           end
 
         private
@@ -146,8 +125,20 @@ module Mutant
             #
             #  StringIO.new(Tput::INSTANCE.restore, BUFFER_FLAGS)
             #
-            buffer =  StringIO.new
+            buffer = StringIO.new
             buffer << tput.restore
+          end
+
+          # Call block throttled
+          #
+          # @return [self]
+          #
+          # @api private
+          #
+          def throttle
+            now = Time.now
+            return if @last_frame && (now - @last_frame) < OUTPUT_RATE
+            yield.tap { @last_frame = now }
           end
 
         end # Framed
