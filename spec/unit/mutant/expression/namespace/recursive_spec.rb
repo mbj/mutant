@@ -3,12 +3,13 @@ require 'spec_helper'
 describe Mutant::Expression::Namespace::Recursive do
 
   let(:object) { described_class.parse(input) }
-  let(:cache)  { Mutant::Cache.new                   }
-  let(:input)  { 'TestApp::Literal*'                 }
+  let(:input)  { 'TestApp::Literal*'          }
+  let(:env)    { Fixtures::TEST_ENV           }
 
   describe '#matcher' do
-    subject { object.matcher(cache) }
-    it { should eql(Mutant::Matcher::Namespace.new(cache, object)) }
+    subject { object.matcher(env) }
+
+    it { should eql(Mutant::Matcher::Namespace.new(env, object)) }
   end
 
   describe '#match_length' do

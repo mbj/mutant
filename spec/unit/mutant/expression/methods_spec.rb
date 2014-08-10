@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mutant::Expression::Methods do
 
   let(:object)            { described_class.parse(input) }
-  let(:cache)             { Mutant::Cache.new            }
+  let(:env)               { Fixtures::TEST_ENV           }
   let(:instance_methods)  { 'TestApp::Literal#'          }
   let(:singleton_methods) { 'TestApp::Literal.'          }
 
@@ -26,18 +26,18 @@ describe Mutant::Expression::Methods do
   end
 
   describe '#matcher' do
-    subject { object.matcher(cache) }
+    subject { object.matcher(env) }
 
     context 'with an instance method' do
       let(:input) { instance_methods }
 
-      it { should eql(Mutant::Matcher::Methods::Instance.new(cache, TestApp::Literal)) }
+      it { should eql(Mutant::Matcher::Methods::Instance.new(env, TestApp::Literal)) }
     end
 
     context 'with a singleton method' do
       let(:input) { singleton_methods }
 
-      it { should eql(Mutant::Matcher::Methods::Singleton.new(cache, TestApp::Literal)) }
+      it { should eql(Mutant::Matcher::Methods::Singleton.new(env, TestApp::Literal)) }
     end
   end
 end

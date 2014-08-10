@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe Mutant::Expression::Namespace::Exact do
 
-  let(:object)            { described_class.parse(input) }
-  let(:cache)             { Mutant::Cache.new            }
-  let(:input)             { 'TestApp::Literal'           }
+  let(:object) { described_class.parse(input) }
+  let(:env)    { Fixtures::TEST_ENV           }
+  let(:input)  { 'TestApp::Literal'           }
 
   describe '#matcher' do
-    subject { object.matcher(cache) }
+    subject { object.matcher(env) }
 
-    it { should eql(Mutant::Matcher::Scope.new(cache, TestApp::Literal, object)) }
+    it { should eql(Mutant::Matcher::Scope.new(env, TestApp::Literal, object)) }
   end
 
   describe '#match_length' do
