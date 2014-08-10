@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Loader::Eval, '.call' do
+RSpec.describe Mutant::Loader::Eval, '.call' do
 
   subject { object.call(node, mutation_subject) }
 

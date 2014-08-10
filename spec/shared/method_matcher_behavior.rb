@@ -1,4 +1,4 @@
-shared_examples_for 'a method matcher' do
+RSpec.shared_examples_for 'a method matcher' do
 
   before { subject }
 

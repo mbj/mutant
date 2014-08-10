@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Reporter::CLI do
+RSpec.describe Mutant::Reporter::CLI do
   let(:object) { described_class.new(output) }
   let(:output) { StringIO.new }
 

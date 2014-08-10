@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Expression do
+RSpec.describe Mutant::Expression do
   let(:object) { described_class }
 
   describe '.try_parse' do

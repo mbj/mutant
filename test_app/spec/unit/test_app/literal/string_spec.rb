@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe TestApp::Literal, '#string' do
+RSpec.describe TestApp::Literal, '#string' do
   subject { object.string }
 
   let(:object) { described_class.new }

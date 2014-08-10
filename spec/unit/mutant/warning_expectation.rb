@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::WarningExpectation do
+RSpec.describe Mutant::WarningExpectation do
   let(:object) { described_class.new(expected_warnings) }
 
   let(:expected_warnings) { [] }

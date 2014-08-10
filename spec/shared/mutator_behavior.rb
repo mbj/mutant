@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-shared_examples_for 'a mutator' do
+RSpec.shared_examples_for 'a mutator' do
   subject { object.each(node, &yields.method(:<<)) }
 
   let(:yields) { []              }
@@ -48,7 +48,7 @@ shared_examples_for 'a mutator' do
   end
 end
 
-shared_examples_for 'a noop mutator' do
+RSpec.shared_examples_for 'a noop mutator' do
   let(:mutations) { [] }
 
   it_should_behave_like 'a mutator'

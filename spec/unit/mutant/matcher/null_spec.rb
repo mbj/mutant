@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Matcher::Null do
+RSpec.describe Mutant::Matcher::Null do
   let(:object) { described_class.new }
 
   describe '#each' do

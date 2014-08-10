@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Matcher::Compiler::SubjectPrefix do
+RSpec.describe Mutant::Matcher::Compiler::SubjectPrefix do
   let(:object) { described_class.new(Mutant::Expression.parse('Foo*')) }
 
   let(:_subject) { double('Subject', expression: Mutant::Expression.parse(subject_expression)) }

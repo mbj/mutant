@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe 'rspec integration' do
+RSpec.describe 'rspec integration' do
 
   let(:base_cmd) { 'bundle exec mutant -I lib --require test_app --use rspec' }
 

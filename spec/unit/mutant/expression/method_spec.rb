@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Expression::Method do
+RSpec.describe Mutant::Expression::Method do
 
   let(:object)           { described_class.parse(input) }
   let(:env)              { Fixtures::TEST_ENV           }

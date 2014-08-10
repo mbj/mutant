@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Mutation do
+RSpec.describe Mutant::Mutation do
 
   class TestMutation < Mutant::Mutation
     SYMBOL = 'test'.freeze

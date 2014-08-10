@@ -1,8 +1,4 @@
-# encoding: UTF-8
-
-require 'spec_helper'
-
-describe Mutant::Subject::Method::Singleton do
+RSpec.describe Mutant::Subject::Method::Singleton do
 
   let(:object)  { described_class.new(config, context, node) }
   let(:config)  { Mutant::Config::DEFAULT                    }

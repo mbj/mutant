@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Test do
+RSpec.describe Mutant::Test do
   let(:object) { described_class.new(integration, expression) }
 
   let(:integration) { double('Integration', name: 'test-integration') }

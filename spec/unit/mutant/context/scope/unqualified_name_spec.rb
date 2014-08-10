@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Context::Scope, '#unqualified_name' do
+RSpec.describe Mutant::Context::Scope, '#unqualified_name' do
   subject { object.unqualified_name }
 
   let(:path)   { double('Path') }

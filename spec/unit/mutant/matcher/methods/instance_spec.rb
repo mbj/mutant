@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Matcher::Methods::Instance, '#each' do
+RSpec.describe Mutant::Matcher::Methods::Instance, '#each' do
   let(:object) { described_class.new(env, Foo) }
   let(:env)    { Fixtures::TEST_ENV            }
 

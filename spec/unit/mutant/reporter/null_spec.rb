@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Reporter::Null do
+RSpec.describe Mutant::Reporter::Null do
   let(:object) { described_class.new }
 
   describe '#report' do

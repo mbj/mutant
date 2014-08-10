@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant do
+RSpec.describe Mutant do
   let(:object) { described_class }
 
   describe '.zombify' do

@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Matcher::Filter do
+RSpec.describe Mutant::Matcher::Filter do
   let(:object) { described_class.new(matcher, predicate) }
 
   describe '#each' do

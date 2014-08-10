@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 class Double
   include Concord.new(:name, :attributes)
 
@@ -19,7 +17,7 @@ class Double
 end
 
 # FIXME: This is not even close to a mutation covering spec.
-describe Mutant::Runner do
+RSpec.describe Mutant::Runner do
   let(:object) { described_class.new(env) }
 
   let(:reporter) { Mutant::Reporter::Trace.new                        }

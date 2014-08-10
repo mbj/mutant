@@ -1,9 +1,4 @@
-# encoding: UTF-8
-
-require 'parallel'
-require 'spec_helper'
-
-describe 'Mutant on ruby corpus' do
+RSpec.describe 'Mutant on ruby corpus' do
 
   before do
     skip 'Corpus test is deactivated on 1.9.3' if RUBY_VERSION.eql?('1.9.3')

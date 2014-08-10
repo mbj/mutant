@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-shared_examples_for 'an invalid cli run' do
+RSpec.shared_examples_for 'an invalid cli run' do
   it 'raises error' do
     expect do
       subject
@@ -8,13 +6,13 @@ shared_examples_for 'an invalid cli run' do
   end
 end
 
-shared_examples_for 'a cli parser' do
+RSpec.shared_examples_for 'a cli parser' do
   it { expect(subject.config.integration).to eql(expected_integration)       }
   it { expect(subject.config.reporter).to eql(expected_reporter)             }
   it { expect(subject.config.matcher_config).to eql(expected_matcher_config) }
 end
 
-describe Mutant::CLI do
+RSpec.describe Mutant::CLI do
   let(:object) { described_class }
 
   describe '.run' do

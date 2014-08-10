@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Matcher::Compiler do
+RSpec.describe Mutant::Matcher::Compiler do
   let(:object) { described_class }
 
   let(:env) { Fixtures::TEST_ENV }

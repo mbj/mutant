@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Matcher::Namespace do
+RSpec.describe Mutant::Matcher::Namespace do
   let(:object) { described_class.new(env, Mutant::Expression.parse('TestApp*')) }
   let(:yields) { []                                                             }
   let(:env)    { double('Env')                                                  }

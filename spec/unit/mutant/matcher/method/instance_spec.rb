@@ -1,7 +1,5 @@
-require 'spec_helper'
-
 # rubocop:disable ClassAndModuleChildren
-describe Mutant::Matcher::Method::Instance do
+RSpec.describe Mutant::Matcher::Method::Instance do
 
   let(:env)      { Fixtures::TEST_ENV             }
   let(:reporter) { Fixtures::TEST_CONFIG.reporter }

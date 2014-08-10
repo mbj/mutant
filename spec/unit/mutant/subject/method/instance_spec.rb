@@ -1,8 +1,4 @@
-# encoding: UTF-8
-
-require 'spec_helper'
-
-describe Mutant::Subject::Method::Instance do
+RSpec.describe Mutant::Subject::Method::Instance do
   let(:object)  { described_class.new(config, context, node) }
   let(:context) { double }
   let(:config)  { Mutant::Config::DEFAULT }
@@ -71,7 +67,7 @@ describe Mutant::Subject::Method::Instance do
   end
 end
 
-describe Mutant::Subject::Method::Instance::Memoized do
+RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   let(:object)  { described_class.new(config, context, node) }
   let(:context) { double                                     }
   let(:config)  { Mutant::Config::DEFAULT                    }

@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::WarningFilter do
+RSpec.describe Mutant::WarningFilter do
   before do
     if RUBY_ENGINE.eql?('rbx')
       skip 'Disabled because expected warnings are from MRI'

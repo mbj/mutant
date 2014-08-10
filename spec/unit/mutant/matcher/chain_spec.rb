@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Matcher::Chain do
+RSpec.describe Mutant::Matcher::Chain do
 
   let(:object) { described_class.new(matchers) }
 

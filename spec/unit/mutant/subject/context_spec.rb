@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Subject, '#context' do
+RSpec.describe Mutant::Subject, '#context' do
   subject { object.context }
 
   let(:class_under_test) do

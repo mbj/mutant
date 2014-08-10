@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Integration do
+RSpec.describe Mutant::Integration do
 
   let(:class_under_test) do
     Class.new(described_class)
@@ -14,7 +12,7 @@ describe Mutant::Integration do
   end
 end
 
-describe Mutant::Integration::Null do
+RSpec.describe Mutant::Integration::Null do
 
   let(:object) { described_class.new }
 

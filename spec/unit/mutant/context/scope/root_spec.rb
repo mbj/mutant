@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Context::Scope, '#root' do
+RSpec.describe Mutant::Context::Scope, '#root' do
   subject { object.root(node) }
 
   let(:object) { described_class.new(TestApp::Literal, path) }

@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Expression::Namespace::Recursive do
+RSpec.describe Mutant::Expression::Namespace::Recursive do
 
   let(:object) { described_class.parse(input) }
   let(:input)  { 'TestApp::Literal*'          }

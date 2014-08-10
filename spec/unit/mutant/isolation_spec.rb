@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Isolation::None do
+RSpec.describe Mutant::Isolation::None do
   before do
     @initial = 1
   end
@@ -24,7 +22,7 @@ describe Mutant::Isolation::None do
   end
 end
 
-describe Mutant::Isolation::Fork do
+RSpec.describe Mutant::Isolation::Fork do
   before do
     @initial = 1
   end

@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Mutator::Node do
+RSpec.describe Mutant::Mutator::Node do
   Mutant::Meta::Example::ALL.each do |example|
     context "on #{example.node.type.inspect}" do
       it 'generates the correct mutations' do

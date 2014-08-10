@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Diff do
+RSpec.describe Mutant::Diff do
   let(:object) { described_class }
 
   describe '.build' do

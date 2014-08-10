@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe 'null integration' do
+RSpec.describe 'null integration' do
 
   let(:base_cmd) { 'bundle exec mutant -I lib --require test_app "TestApp*"' }
 

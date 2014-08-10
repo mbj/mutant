@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::RequireHighjack do
+RSpec.describe Mutant::RequireHighjack do
   let(:object) { described_class.new(target, highjacked_calls.method(:push)) }
 
   let(:highjacked_calls) { [] }
