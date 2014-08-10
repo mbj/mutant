@@ -163,5 +163,6 @@ UtilityFunction:
   - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
+  - Mutant::Reporter::CLI::Format::Progressive#new_buffer
   - Mutant::Runner#run_mutation_test
   max_helper_calls: 0
