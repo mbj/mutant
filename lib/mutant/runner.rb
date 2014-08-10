@@ -17,6 +17,9 @@ module Mutant
       @mutations   = env.mutations.dup
 
       config.integration.setup
+
+      config.reporter.start(env)
+
       run
 
       @result = @collector.result.update(done: true)

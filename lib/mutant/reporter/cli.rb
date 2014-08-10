@@ -2,47 +2,50 @@ module Mutant
   class Reporter
     # Reporter that reports in human readable format
     class CLI < self
-      include Concord.new(:output)
+      include Concord.new(:output, :format)
 
-      NL = "\n".freeze
-      CLEAR_PREV_LINE = "\e[1A\e[2K".freeze
-
-      # Output abstraction to decouple tty? from buffer
-      class Output
-        include Concord.new(:tty, :buffer)
-
-        # Test if output is a tty
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        #
-        def tty?
-          @tty
-        end
-
-        [:puts, :write].each do |name|
-          define_method(name) do |*args, &block|
-            buffer.public_send(name, *args, &block)
-          end
-        end
-
-      end # Output
-
-      # Rate per second progress report fires
-      OUTPUT_RATE = 1.0 / 20
-
-      # Initialize object
+      # Build reporter
       #
-      # @return [undefined]
+      # @param [IO] output
+      #
+      # @return [Reporter::CLI]
       #
       # @api private
       #
-      def initialize(*)
-        super
-        @last_frame = nil
-        @last_length = 0
-        @tty = output.respond_to?(:tty?) && output.tty?
+      def self.build(output)
+        ci = ENV.key?('CI')
+        tty = output.respond_to?(:tty?) && output.tty?
+        format = Format::Framed.new(
+          tty:  tty,
+          tput: Tput::INSTANCE,
+        )
+
+        # Upcoming commits implementing progressive format will change this to
+        # the equivalent of:
+        #
+        # if !ci && tty && Tput::INSTANCE.available
+        #   Format::Framed.new(
+        #     tty:  tty,
+        #     tput: Tput::INSTANCE,
+        #   )
+        # else
+        #   Format::Progressive.new(
+        #     tty: tty,
+        #   )
+        # end
+
+        new(output, format)
+      end
+
+      # Report start
+      #
+      # @param [Env] env
+      #
+      # @api private
+      #
+      def start(env)
+        write(format.start(env))
+        self
       end
 
       # Report progress object
@@ -54,8 +57,8 @@ module Mutant
       # @api private
       #
       def progress(collector)
-        throttle do
-          swap(frame(Printer::Collector, collector))
+        format.throttle do
+          write(format.progress(collector))
         end
 
         self
@@ -83,27 +86,13 @@ module Mutant
       # @api private
       #
       def report(env)
-        swap(frame(Printer::EnvResult, env))
+        write(format.report(env))
         self
       end
 
     private
 
-      # Compute progress frame
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def frame(reporter, object)
-        buffer = StringIO.new
-        buffer.write(clear_command) if @tty
-        reporter.run(Output.new(@tty, buffer), object)
-        buffer.rewind
-        buffer.read
-      end
-
-      # Swap output frame
+      # Write output frame
       #
       # @param [String] frame
       #
@@ -111,32 +100,8 @@ module Mutant
       #
       # @api private
       #
-      def swap(frame)
+      def write(frame)
         output.write(frame)
-        @last_length = frame.split(NL).length
-      end
-
-      # Call block throttled
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def throttle
-        now = Time.now
-        return if @last_frame && (now - @last_frame) < OUTPUT_RATE
-        yield
-        @last_frame = now
-      end
-
-      # Return clear command for last frame length
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def clear_command
-        CLEAR_PREV_LINE * @last_length
       end
 
     end # CLI

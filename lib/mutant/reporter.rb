@@ -13,6 +13,16 @@ module Mutant
     #
     abstract_method :warn
 
+    # Report start
+    #
+    # @param [Env] env
+    #
+    # @return [self]
+    #
+    # @api private
+    #
+    abstract_method :start
+
     # Report collector state
     #
     # @param [Runner::Collector] collector

@@ -17,6 +17,7 @@ require 'anima'
 require 'concord'
 require 'morpher'
 require 'parallel'
+require 'open3'
 
 # Library namespace
 module Mutant
@@ -190,6 +191,8 @@ require 'mutant/reporter/null'
 require 'mutant/reporter/trace'
 require 'mutant/reporter/cli'
 require 'mutant/reporter/cli/printer'
+require 'mutant/reporter/cli/tput'
+require 'mutant/reporter/cli/format'
 require 'mutant/zombifier'
 require 'mutant/zombifier/file'
 
@@ -204,7 +207,7 @@ module Mutant
       includes:          EMPTY_ARRAY,
       requires:          EMPTY_ARRAY,
       isolation:         Mutant::Isolation::Fork,
-      reporter:          Reporter::CLI.new($stdout),
+      reporter:          Reporter::CLI.build($stdout),
       zombie:            false,
       processes:         Parallel.processor_count,
       expected_coverage: 100.0

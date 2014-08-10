@@ -1,6 +1,13 @@
 RSpec.describe Mutant::Reporter::CLI do
-  let(:object) { described_class.new(output) }
+  let(:object) { described_class.new(output, format) }
   let(:output) { StringIO.new }
+
+  let(:format) do
+    described_class::Format::Framed.new(
+      tty:  false,
+      tput: described_class::Tput::UNAVAILABLE
+    )
+  end
 
   def contents
     output.rewind

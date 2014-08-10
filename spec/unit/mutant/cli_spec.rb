@@ -65,17 +65,15 @@ RSpec.describe Mutant::CLI do
     subject { object.new(arguments) }
 
     # Defaults
-    let(:expected_filter)         { Morpher.evaluator(s(:true))        }
-    let(:expected_integration)    { Mutant::Integration::Null.new      }
-    let(:expected_reporter)       { Mutant::Reporter::CLI.new($stdout) }
-    let(:expected_matcher_config) { default_matcher_config             }
+    let(:expected_filter)         { Morpher.evaluator(s(:true))      }
+    let(:expected_integration)    { Mutant::Integration::Null.new    }
+    let(:expected_reporter)       { Mutant::Config::DEFAULT.reporter }
+    let(:expected_matcher_config) { default_matcher_config           }
 
     let(:default_matcher_config) do
       Mutant::Matcher::Config::DEFAULT
         .update(match_expressions: expressions.map(&Mutant::Expression.method(:parse)))
     end
-
-    let(:ns)    { Mutant::Matcher    }
 
     let(:flags)       { []           }
     let(:expressions) { %w[TestApp*] }

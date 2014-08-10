@@ -29,6 +29,18 @@ module Mutant
         self
       end
 
+      # Report start
+      #
+      # @param [Object] _object
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def start(_object)
+        self
+      end
+
       # Report progress on object
       #
       # @param [Object] _object

@@ -2,7 +2,7 @@ module Mutant
   class Reporter
     # Reporter to trace report calls, used as a spec adapter
     class Trace
-      include Adamantium::Mutable, Anima.new(:progress_calls, :report_calls, :warn_calls)
+      include Adamantium::Mutable, Anima.new(:start_calls, :progress_calls, :report_calls, :warn_calls)
 
       # Return new trace reporter
       #
@@ -37,6 +37,19 @@ module Mutant
       #
       def report(object)
         report_calls << object
+        self
+      end
+
+      # Report new progress on object
+      #
+      # @param [Object] object
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def start(object)
+        start_calls << object
         self
       end
 
