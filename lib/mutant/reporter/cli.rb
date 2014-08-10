@@ -15,24 +15,12 @@ module Mutant
       def self.build(output)
         ci = ENV.key?('CI')
         tty = output.respond_to?(:tty?) && output.tty?
-        format = Format::Framed.new(
-          tty:  tty,
-          tput: Tput::INSTANCE,
-        )
-
-        # Upcoming commits implementing progressive format will change this to
-        # the equivalent of:
-        #
-        # if !ci && tty && Tput::INSTANCE.available
-        #   Format::Framed.new(
-        #     tty:  tty,
-        #     tput: Tput::INSTANCE,
-        #   )
-        # else
-        #   Format::Progressive.new(
-        #     tty: tty,
-        #   )
-        # end
+        format =
+          if !ci && tty && Tput::INSTANCE.available
+            Format::Framed.new(tty:  tty, tput: Tput::INSTANCE)
+          else
+            Format::Progressive.new(tty: tty)
+          end
 
         new(output, format)
       end

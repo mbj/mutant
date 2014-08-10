@@ -308,13 +308,42 @@ module Mutant
 
         end # Subject
 
+        # Printer for mutation progress results
+        class MutationProgressResult < self
+
+          SUCCESS = '.'.freeze
+          FAILURE = 'F'.freeze
+
+          # Run printer
+          #
+          # @return [self]
+          #
+          # @api private
+          #
+          def run
+            char(success? ? SUCCESS : FAILURE)
+          end
+
+        private
+
+          # Write colorized char
+          #
+          # @param [String] char
+          #
+          # @return [undefined]
+          #
+          # @api private
+          #
+          def char(char)
+            output.write(colorize(status_color, char))
+          end
+
+        end # MutationProgressResult
+
         # Reporter for subject progress
         class SubjectProgress < self
 
           FORMAT = '(%02d/%02d) %3d%% - killtime: %0.02fs runtime: %0.02fs overhead: %0.02fs'.freeze
-
-          SUCCESS = '.'.freeze
-          FAILURE = 'F'.freeze
 
           delegate(
             :subject,
@@ -391,31 +420,7 @@ module Mutant
           # @api private
           #
           def print_mutation_results
-            object.mutation_results.each(&method(:print_mutation_result))
-          end
-
-          # Print mutation result
-          #
-          # @param [Result::Mutation] mutation_result
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def print_mutation_result(mutation_result)
-            char(mutation_result.success? ? SUCCESS : FAILURE)
-          end
-
-          # Write colorized char
-          #
-          # @param [String] char
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def char(char)
-            output.write(colorize(status_color, char))
+            visit_collection(MutationProgressResult, object.mutation_results)
           end
 
         end # Subject

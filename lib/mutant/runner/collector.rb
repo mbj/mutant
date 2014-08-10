@@ -12,10 +12,23 @@ module Mutant
       #
       def initialize(*)
         super
-        @start = Time.now
-        @aggregate = Hash.new { |hash, key| hash[key] = [] }
-        @activity  = Hash.new(0)
+        @start                = Time.now
+        @aggregate            = Hash.new { |hash, key| hash[key] = [] }
+        @activity             = Hash.new(0)
+        @last_mutation_result = nil
       end
+
+      # Return last mutation result
+      #
+      # @return [Result::Mutation]
+      #   if there is a last mutation result
+      #
+      # @return [nil]
+      #   otherwise
+      #
+      # @api private
+      #
+      attr_reader :last_mutation_result
 
       # Return active subject results
       #
@@ -64,6 +77,8 @@ module Mutant
       # @api private
       #
       def finish(mutation_result)
+        @last_mutation_result = mutation_result
+
         subject = mutation_result.mutation.subject
 
         @activity[subject] -= 1

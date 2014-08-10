@@ -5,6 +5,16 @@ module Mutant
       class Format
         include AbstractType, Anima.new(:tty)
 
+        # Return start representation
+        #
+        # @param [Env] env
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        abstract_method :start
+
         # Return progress representation
         #
         # @param [Runner::Collector] collector
@@ -65,6 +75,43 @@ module Mutant
           buffer.rewind
           buffer.read
         end
+
+        # Format for progressive non rewindable output
+        class Progressive < self
+
+          # Return start representation
+          #
+          # @return [String]
+          #
+          # @api private
+          #
+          def start(env)
+            format(Printer::Config, env.config)
+          end
+
+          # Return progress representation
+          #
+          # @return [String]
+          #
+          # @api private
+          #
+          def progress(collector)
+            format(Printer::MutationProgressResult, collector.last_mutation_result)
+          end
+
+        private
+
+          # Return new buffer
+          #
+          # @return [StringIO]
+          #
+          # @api private
+          #
+          def new_buffer
+            StringIO.new
+          end
+
+        end # Progressive
 
         # Format for framed rewindable output
         class Framed < self
