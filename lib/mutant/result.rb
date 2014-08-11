@@ -150,7 +150,7 @@ module Mutant
 
     # Test result
     class Test
-      include Result, Adamantium::Flat, Anima::Update, Anima.new(
+      include Result, Anima.new(
         :test,
         :output,
         :mutation,
