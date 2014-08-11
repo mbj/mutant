@@ -8,6 +8,13 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
+  source 'reverse_merge'
+
+  singleton_mutations
+  mutation 'merge'
+end
+
+Mutant::Meta::Example.add do
   source 'reverse_map'
 
   singleton_mutations

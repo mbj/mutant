@@ -11,18 +11,19 @@ module Mutant
         children :receiver, :selector
 
         SELECTOR_REPLACEMENTS = IceNine.deep_freeze(
-          reverse_map:  [:map, :each],
-          kind_of?:     [:instance_of?],
-          is_a?:        [:instance_of?],
-          reverse_each: [:each],
-          map:          [:each],
-          send:         [:public_send],
-          gsub:         [:sub],
-          eql?:         [:equal?],
-          to_s:         [:to_str],
-          to_i:         [:to_int],
-          to_a:         [:to_ary],
-          :== =>        [:eql?, :equal?]
+          reverse_map:   [:map, :each],
+          kind_of?:      [:instance_of?],
+          is_a?:         [:instance_of?],
+          reverse_each:  [:each],
+          reverse_merge: [:merge],
+          map:           [:each],
+          send:          [:public_send],
+          gsub:          [:sub],
+          eql?:          [:equal?],
+          to_s:          [:to_str],
+          to_i:          [:to_int],
+          to_a:          [:to_ary],
+          :== =>         [:eql?, :equal?]
         )
 
       private
