@@ -136,6 +136,52 @@ RSpec.describe Mutant::Reporter::CLI do
 
   let(:subjects) { [_subject] }
 
+  describe '.build' do
+    subject { described_class.build(output) }
+
+    let(:progressive_format) do
+      described_class::Format::Progressive.new(
+        tty: tty?,
+      )
+    end
+
+    let(:framed_format) do
+      described_class::Format::Framed.new(
+        tty:  true,
+        tput: described_class::Tput::INSTANCE
+      )
+    end
+
+    before do
+      expect(ENV).to receive(:key?).with('CI').and_return(ci?)
+    end
+
+    let(:output) { double('Output', tty?: tty?) }
+    let(:tty?)   { true                         }
+    let(:ci?)    { false                        }
+
+    context 'when not on CI and on a tty' do
+      it { should eql(described_class.new(output, framed_format)) }
+    end
+
+    context 'when on CI' do
+      let(:ci?) { true }
+      it { should eql(described_class.new(output, progressive_format)) }
+    end
+
+    context 'when output is not a tty?' do
+      let(:tty?) { false }
+      it { should eql(described_class.new(output, progressive_format)) }
+    end
+
+    context 'when output does not respond to #tty?' do
+      let(:output) { double('Output') }
+      let(:tty?)   { false }
+
+      it { should eql(described_class.new(output, progressive_format)) }
+    end
+  end
+
   describe '#warn' do
     subject { object.warn(message) }
 
