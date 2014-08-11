@@ -5,52 +5,10 @@ module Mutant
     class Null < self
       include Equalizer.new
 
-      # Write warning message
-      #
-      # @param [String] _message
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def warn(_message)
-        self
-      end
-
-      # Report object
-      #
-      # @param [Object] _object
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def report(_object)
-        self
-      end
-
-      # Report start
-      #
-      # @param [Object] _object
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def start(_object)
-        self
-      end
-
-      # Report progress on object
-      #
-      # @param [Object] _object
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def progress(_object)
-        self
+      %w[warn report start progress].each do |name|
+        define_method name do |_object|
+          self
+        end
       end
 
     end # Null
