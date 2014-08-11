@@ -41,6 +41,26 @@ RSpec.describe Mutant::Diff do
 
     subject { object.diff }
 
+    context 'when there is a diff at begin and end' do
+      let(:old) { %w[foo bar foo] }
+      let(:new) { %w[baz bar baz] }
+
+      let(:expectation) do
+        strip_indent(<<-STR)
+          @@ -1,4 +1,4 @@
+          -foo
+          +baz
+           bar
+          -foo
+          +baz
+        STR
+      end
+
+      it { should eql(expectation) }
+
+      it_should_behave_like 'an idempotent method'
+    end
+
     context 'when there is a diff at begin of hunk' do
       let(:old) { %w[foo bar] }
       let(:new) { %w[baz bar] }

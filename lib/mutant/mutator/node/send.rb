@@ -27,7 +27,7 @@ module Mutant
           :>= =>         [:>, :==, :eql?, :equal?],
           :<= =>         [:<, :==, :eql?, :equal?],
           :> =>          [:==, :eql?, :equal?],
-          :< =>          [:==, :eql?, :equal?],
+          :< =>          [:==, :eql?, :equal?]
         )
 
       private

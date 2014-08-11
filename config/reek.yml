@@ -29,6 +29,7 @@ FeatureEnvy:
   # Nature of OptionParser :(
   - Mutant::CLI#add_environment_options
   - Mutant::Env#scope_name
+  - Mutant::Diff#minimized_hunks
   - Mutant::Integration::Rspec#run
   - Mutant::Integration::Rspec::Rspec2#full_description
   - Mutant::Integration::Rspec::Rspec3#full_description

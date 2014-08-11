@@ -18,9 +18,11 @@ module Mutant
     # @api private
     #
     def diff
-      return unless diffs.length.equal?(1)
-      ::Diff::LCS::Hunk.new(old, new, diffs.first, max_length, 0)
-        .diff(:unified) << NEWLINE
+      return if diffs.length.equal?(0)
+
+      minimized_hunks.map do |hunk|
+        hunk.diff(:unified) << NEWLINE
+      end.join
     end
     memoize :diff
 
@@ -77,7 +79,41 @@ module Mutant
     def diffs
       ::Diff::LCS.diff(old, new)
     end
-    memoize :diffs
+
+    # Return hunks
+    #
+    # @return [Array<Diff::LCS::Hunk>]
+    #
+    # @api private
+    #
+    def hunks
+      diffs.map do |diff|
+        ::Diff::LCS::Hunk.new(old, new, diff, max_length, 0)
+      end
+    end
+
+    # Return minimized hunks
+    #
+    # @return [Array<Diff::LCS::Hunk>]
+    #
+    # @api pirvate
+    #
+    # rubocop gets that one wrong. hunks = hunks() iS NOT equivalent to hunks = hunks, unparser does this right ;)
+    #
+    # rubocop:disable MethodCallParentheses
+    #
+    def minimized_hunks
+      hunks = hunks()
+
+      hunks.drop(1).each_with_object([hunks.first]) do |right, aggregate|
+        left = aggregate.last
+        if right.overlaps?(left)
+          right.merge(left)
+          aggregate.pop
+        end
+        aggregate << right
+      end
+    end
 
     # Return max length
     #

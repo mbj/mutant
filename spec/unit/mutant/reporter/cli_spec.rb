@@ -140,9 +140,7 @@ RSpec.describe Mutant::Reporter::CLI do
     subject { described_class.build(output) }
 
     let(:progressive_format) do
-      described_class::Format::Progressive.new(
-        tty: tty?,
-      )
+      described_class::Format::Progressive.new(tty: tty?)
     end
 
     let(:framed_format) do
