@@ -28,6 +28,16 @@ module Mutant
 
   SCOPE_OPERATOR = '::'.freeze
 
+  # Test if CI is detected via environment
+  #
+  # @return [Boolean]
+  #
+  # @api private
+  #
+  def self.ci?
+    ENV.key?('CI')
+  end
+
   # Lookup constant for location
   #
   # @param [String] location
@@ -199,6 +209,8 @@ require 'mutant/zombifier/file'
 module Mutant
   # Reopen class to initialize constant to avoid dep circle
   class Config
+    CI_DEFAULT_PROCESSOR_COUNT = 2
+
     DEFAULT = new(
       debug:             false,
       fail_fast:         false,
@@ -209,7 +221,7 @@ module Mutant
       isolation:         Mutant::Isolation::Fork,
       reporter:          Reporter::CLI.build($stdout),
       zombie:            false,
-      processes:         Parallel.processor_count,
+      processes:         Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : Parallel.processor_count,
       expected_coverage: 100.0
     )
   end # Config

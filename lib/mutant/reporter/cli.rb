@@ -13,10 +13,9 @@ module Mutant
       # @api private
       #
       def self.build(output)
-        ci = ENV.key?('CI')
         tty = output.respond_to?(:tty?) && output.tty?
         format =
-          if !ci && tty && Tput::INSTANCE.available
+          if !Mutant.ci? && tty && Tput::INSTANCE.available
             Format::Framed.new(tty:  tty, tput: Tput::INSTANCE)
           else
             Format::Progressive.new(tty: tty)
