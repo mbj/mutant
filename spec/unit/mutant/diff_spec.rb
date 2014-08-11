@@ -12,27 +12,27 @@ RSpec.describe Mutant::Diff do
 
   end
 
-  describe '.colorize_line' do
-    let(:object) { described_class }
+  describe '#colorized_diff' do
+    let(:object) { described_class.new(old, new) }
 
-    subject { object.colorize_line(line) }
+    subject { object.colorized_diff }
 
-    context 'line beginning with "+"' do
-      let(:line) { '+line' }
+    context 'when there is a diff at begin of hunk' do
+      let(:old) { %w[foo bar] }
+      let(:new) { %w[baz bar] }
 
-      it { should eql(Mutant::Color::GREEN.format(line)) }
-    end
+      let(:expectation) do
+        [
+          "@@ -1,3 +1,3 @@\n",
+          Mutant::Color::RED.format("-foo\n"),
+          Mutant::Color::GREEN.format("+baz\n"),
+          " bar\n"
+        ].join
+      end
 
-    context 'line beginning with "-"' do
-      let(:line) { '-line' }
+      it { should eql(expectation) }
 
-      it { should eql(Mutant::Color::RED.format(line)) }
-    end
-
-    context 'line beginning in other char' do
-      let(:line) { ' line' }
-
-      it { should eql(line) }
+      it_should_behave_like 'an idempotent method'
     end
   end
 

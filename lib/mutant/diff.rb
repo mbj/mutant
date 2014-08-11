@@ -36,9 +36,7 @@ module Mutant
     #
     def colorized_diff
       return unless diff
-      diff.lines.map do |line|
-        self.class.colorize_line(line)
-      end.join
+      diff.lines.map(&self.class.method(:colorize_line)).join
     end
     memoize :colorized_diff
 
@@ -109,6 +107,7 @@ module Mutant
         Color::NONE
       end.format(line)
     end
+    private_class_method :colorize_line
 
   end # Diff
 end # Mutant
