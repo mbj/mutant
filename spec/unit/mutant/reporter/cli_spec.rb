@@ -2,30 +2,33 @@ RSpec.describe Mutant::Reporter::CLI do
   let(:object) { described_class.new(output, format) }
   let(:output) { StringIO.new }
 
-  let(:format) do
+  let(:framed_format) do
     described_class::Format::Framed.new(
       tty:  false,
       tput: described_class::Tput::UNAVAILABLE
     )
   end
 
+  let(:progressive_format) do
+    described_class::Format::Progressive.new(tty: false)
+  end
+
+  let(:format) { framed_format }
+
   def contents
     output.rewind
     output.read
   end
 
-  before do
-    allow(Time).to receive(:now).and_return(Time.now)
+  def self.it_reports(expected_content)
+    it 'writes expected report to output' do
+      subject
+      expect(contents).to eql(strip_indent(expected_content))
+    end
   end
 
-  describe '#warn' do
-    subject { object.warn(message) }
-
-    let(:message) { 'message' }
-
-    it 'writes message to output' do
-      expect { subject }.to change { contents }.from('').to("message\n")
-    end
+  before do
+    allow(Time).to receive(:now).and_return(Time.now)
   end
 
   let(:result) do
@@ -133,6 +136,36 @@ RSpec.describe Mutant::Reporter::CLI do
 
   let(:subjects) { [_subject] }
 
+  describe '#warn' do
+    subject { object.warn(message) }
+
+    let(:message) { 'message' }
+
+    it_reports("message\n")
+  end
+
+  describe '#start' do
+    subject { object.start(env) }
+
+    context 'on progressive format' do
+      let(:format) { progressive_format }
+
+      it_reports(<<-REPORT)
+        Mutant configuration:
+        Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Integration:        null
+        Expect Coverage:    100.00%
+        Processes:          1
+        Includes:           []
+        Requires:           []
+      REPORT
+    end
+
+    context 'on framed format' do
+      it_reports ''
+    end
+  end
+
   describe '#progress' do
     subject { object.progress(collector) }
 
@@ -142,14 +175,40 @@ RSpec.describe Mutant::Reporter::CLI do
 
     let(:mutation_result_success) { true }
 
-    context 'with empty collector' do
-      it 'writes expected output' do
-        subject
-        expect(contents).to eql(expected_output)
+    context 'on progressive format' do
+
+      let(:format) { progressive_format }
+
+      context 'with empty collector' do
+
+        it_reports ''
       end
 
-      let(:expected_output) do
-        strip_indent(<<-REPORT)
+      context 'with last mutation present' do
+
+        before do
+          collector.start(mutation_a)
+          collector.finish(mutation_a_result)
+        end
+
+        context 'when mutation is successful' do
+          it_reports '.'
+        end
+
+        context 'when mutation is NOT successful' do
+          let(:mutation_result_success) { false }
+
+          it_reports 'F'
+        end
+      end
+    end
+
+    context 'on framed format' do
+
+      let(:mutation_result_success) { true }
+
+      context 'with empty collector' do
+        it_reports <<-REPORT
           Mutant configuration:
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
           Integration:        null
@@ -170,22 +229,15 @@ RSpec.describe Mutant::Reporter::CLI do
           Active subjects:    0
         REPORT
       end
-    end
 
-    context 'with collector active on one subject' do
-      before do
-        collector.start(mutation_a)
-      end
-
-      context 'without progress' do
-
-        it 'writes expected output' do
-          subject
-          expect(contents).to eql(expected_output)
+      context 'with collector active on one subject' do
+        before do
+          collector.start(mutation_a)
         end
 
-        let(:expected_output) do
-          strip_indent(<<-REPORT)
+        context 'without progress' do
+
+          it_reports(<<-REPORT)
             Mutant configuration:
             Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
             Integration:        null
@@ -209,27 +261,20 @@ RSpec.describe Mutant::Reporter::CLI do
             (00/01)   0% - killtime: 0.00s runtime: 0.00s overhead: 0.00s
           REPORT
         end
-      end
 
-      context 'with progress' do
+        context 'with progress' do
 
-        let(:subject_mutations) { [mutation_a, mutation_b] }
+          let(:subject_mutations) { [mutation_a, mutation_b] }
 
-        before do
-          collector.start(mutation_b)
-          collector.finish(mutation_a_result)
-        end
-
-        context 'on failure' do
-          let(:mutation_result_success) { false }
-
-          it 'writes expected output' do
-            subject
-            expect(contents).to eql(expected_output)
+          before do
+            collector.start(mutation_b)
+            collector.finish(mutation_a_result)
           end
 
-          let(:expected_output) do
-            strip_indent(<<-REPORT)
+          context 'on failure' do
+            let(:mutation_result_success) { false }
+
+            it_reports(<<-REPORT)
               Mutant configuration:
               Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:        null
@@ -254,16 +299,9 @@ RSpec.describe Mutant::Reporter::CLI do
               (00/02)   0% - killtime: 0.50s runtime: 1.00s overhead: 0.50s
             REPORT
           end
-        end
 
-        context 'on success' do
-          it 'writes expected output' do
-            subject
-            expect(contents).to eql(expected_output)
-          end
-
-          let(:expected_output) do
-            strip_indent(<<-REPORT)
+          context 'on success' do
+            it_reports(<<-REPORT)
               Mutant configuration:
               Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:        null
@@ -291,17 +329,14 @@ RSpec.describe Mutant::Reporter::CLI do
         end
       end
     end
-  end
 
-  describe '#report' do
-    subject { object.report(result) }
+    describe '#report' do
+      subject { object.report(result) }
 
-    context 'with full coverage' do
-      let(:mutation_result_success) { true }
+      context 'with full coverage' do
+        let(:mutation_result_success) { true }
 
-      it 'writes report to output' do
-        subject
-        expect(contents).to eql(strip_indent(<<-REPORT))
+        it_reports(<<-REPORT)
           Mutant configuration:
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
           Integration:        null
@@ -321,16 +356,13 @@ RSpec.describe Mutant::Reporter::CLI do
           Expected:           100.00%
         REPORT
       end
-    end
 
-    context 'and partial coverage' do
-      let(:mutation_result_success) { false }
+      context 'and partial coverage' do
+        let(:mutation_result_success) { false }
 
-      context 'on evil mutation' do
-        context 'with a diff' do
-          it 'writes report to output' do
-            subject
-            expect(contents).to eql(strip_indent(<<-REPORT))
+        context 'on evil mutation' do
+          context 'with a diff' do
+            it_reports(<<-REPORT)
               subject_id
               - test_id
               mutation_id-a
@@ -357,14 +389,11 @@ RSpec.describe Mutant::Reporter::CLI do
               Expected:           100.00%
             REPORT
           end
-        end
 
-        context 'without a diff' do
-          let(:mutation_source) { 'true' }
+          context 'without a diff' do
+            let(:mutation_source) { 'true' }
 
-          it 'writes report to output' do
-            subject
-            expect(contents).to eql(strip_indent(<<-REPORT))
+            it_reports(<<-REPORT)
               subject_id
               - test_id
               mutation_id-a
@@ -394,15 +423,12 @@ RSpec.describe Mutant::Reporter::CLI do
             REPORT
           end
         end
-      end
 
-      context 'on neutral mutation' do
-        let(:mutation_class)  { Mutant::Mutation::Neutral }
-        let(:mutation_source) { 'true' }
+        context 'on neutral mutation' do
+          let(:mutation_class)  { Mutant::Mutation::Neutral }
+          let(:mutation_source) { 'true' }
 
-        it 'writes report to output' do
-          subject
-          expect(contents).to eql(strip_indent(<<-REPORT))
+          it_reports(<<-REPORT)
             subject_id
             - test_id
             mutation_id-a
@@ -437,14 +463,11 @@ RSpec.describe Mutant::Reporter::CLI do
             Expected:           100.00%
           REPORT
         end
-      end
 
-      context 'on noop mutation' do
-        let(:mutation_class) { Mutant::Mutation::Noop }
+        context 'on noop mutation' do
+          let(:mutation_class) { Mutant::Mutation::Noop }
 
-        it 'writes report to output' do
-          subject
-          expect(contents).to eql(strip_indent(<<-REPORT))
+          it_reports(<<-REPORT)
             subject_id
             - test_id
             mutation_id-a
@@ -476,17 +499,14 @@ RSpec.describe Mutant::Reporter::CLI do
           REPORT
         end
       end
-    end
 
-    context 'without subjects' do
-      let(:subjects)        { [] }
-      let(:subject_results) { [] }
+      context 'without subjects' do
+        let(:subjects)        { [] }
+        let(:subject_results) { [] }
 
-      let(:config) { Mutant::Config::DEFAULT.update(processes: 1, includes: %w[include-dir], requires: %w[require-name]) }
+        let(:config) { Mutant::Config::DEFAULT.update(processes: 1, includes: %w[include-dir], requires: %w[require-name]) }
 
-      it 'writes report to output' do
-        subject
-        expect(contents).to eql(strip_indent(<<-REPORT))
+        it_reports(<<-REPORT)
           Mutant configuration:
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
           Integration:        null

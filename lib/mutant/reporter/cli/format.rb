@@ -96,7 +96,9 @@ module Mutant
           # @api private
           #
           def progress(collector)
-            format(Printer::MutationProgressResult, collector.last_mutation_result)
+            last_mutation_result = collector.last_mutation_result
+            return EMPTY_STRING unless last_mutation_result
+            format(Printer::MutationProgressResult, last_mutation_result)
           end
 
         private
