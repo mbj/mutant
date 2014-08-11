@@ -1,4 +1,4 @@
-# v0.6.0 2014-07-17
+# v0.6.0 2014-08-11
 
 * Parallel execution / reporting.
 * Add -j, --jobs flag to control concurrency.
