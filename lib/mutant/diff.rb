@@ -18,7 +18,7 @@ module Mutant
     # @api private
     #
     def diff
-      return if diffs.length.equal?(0)
+      return if diffs.empty?
 
       minimized_hunks.map do |hunk|
         hunk.diff(:unified) << NEWLINE
