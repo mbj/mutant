@@ -38,9 +38,7 @@ module Mutant
       # @api private
       #
       def self.call(&block)
-        Parallel.map([block], in_processes: 1) do
-          block.call
-        end.first
+        Parallel.map([block], in_processes: 1, &block.method(:call)).first
       rescue Parallel::DeadWorker => exception
         fail Error, exception
       end
