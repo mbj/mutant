@@ -1,6 +1,68 @@
 # encoding: utf-8
 
 Mutant::Meta::Example.add do
+  source 'a > b'
+
+  singleton_mutations
+  mutation 'a == b'
+  mutation 'a.eql?(b)'
+  mutation 'a.equal?(b)'
+  mutation 'nil > b'
+  mutation 'self > b'
+  mutation 'a > nil'
+  mutation 'a > self'
+  mutation 'a'
+  mutation 'b'
+end
+
+Mutant::Meta::Example.add do
+  source 'a >= b'
+
+  singleton_mutations
+  mutation 'a > b'
+  mutation 'a == b'
+  mutation 'a.eql?(b)'
+  mutation 'a.equal?(b)'
+  mutation 'nil >= b'
+  mutation 'self >= b'
+  mutation 'a >= nil'
+  mutation 'a >= self'
+  mutation 'a'
+  mutation 'b'
+end
+
+Mutant::Meta::Example.add do
+  source 'a <= b'
+
+  singleton_mutations
+  mutation 'a < b'
+  mutation 'a == b'
+  mutation 'a.eql?(b)'
+  mutation 'a.equal?(b)'
+  mutation 'nil <= b'
+  mutation 'self <= b'
+  mutation 'a <= nil'
+  mutation 'a <= self'
+  mutation 'a'
+  mutation 'b'
+end
+
+Mutant::Meta::Example.add do
+  source 'a < b'
+
+  singleton_mutations
+  mutation 'a == b'
+  mutation 'a.eql?(b)'
+  mutation 'a.equal?(b)'
+  mutation 'nil < b'
+  mutation 'self < b'
+  mutation 'a < nil'
+  mutation 'a < self'
+  mutation 'a'
+  mutation 'b'
+end
+
+Mutant::Meta::Example.add do
   source 'reverse_each'
 
   singleton_mutations
@@ -319,7 +381,7 @@ Mutant::Meta::Example.add do
   mutation 'self[*bar]'
 end
 
-(Mutant::AST::Types::BINARY_METHOD_OPERATORS - [:==, :eql?]).each do |operator|
+(Mutant::AST::Types::BINARY_METHOD_OPERATORS - [:<=, :>=, :<, :>, :==, :eql?]).each do |operator|
   Mutant::Meta::Example.add do
     source "true #{operator} false"
 

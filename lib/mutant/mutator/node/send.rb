@@ -23,7 +23,11 @@ module Mutant
           to_s:          [:to_str],
           to_i:          [:to_int],
           to_a:          [:to_ary],
-          :== =>         [:eql?, :equal?]
+          :== =>         [:eql?, :equal?],
+          :>= =>         [:>, :==, :eql?, :equal?],
+          :<= =>         [:<, :==, :eql?, :equal?],
+          :> =>          [:==, :eql?, :equal?],
+          :< =>          [:==, :eql?, :equal?],
         )
 
       private

@@ -4,7 +4,11 @@
 * Add -j, --jobs flag to control concurrency.
 * Fix blind spots on send with block.
 * Add mutation from `foo { bar }` to `bar`
-* Add mutation from `reverse_merge` to `merge`
+* Add mutation from `#reverse_merge` to `#merge`
+* Add mutation from `#<=` to `#<`, `#==`, `#eql?`, `#equal?`
+* Add mutation from `#>=` to `#>`, `#==`, `#eql?`, `#equal?`
+* Add mutation from `#>` to `#==`, `#eql?`, `#equal?`
+* Add mutation from `#<` to `#==`, `#eql?`, `#equal?`
 * Fix reporting of diff errors to include context [tjchambers]
 
 # v0.5.26 2014-07-07
