@@ -96,16 +96,12 @@ module Mutant
     #
     # @return [Array<Diff::LCS::Hunk>]
     #
-    # @api pirvate
-    #
-    # rubocop gets that one wrong. hunks = hunks() iS NOT equivalent to hunks = hunks, unparser does this right ;)
-    #
-    # rubocop:disable MethodCallParentheses
+    # @api private
     #
     def minimized_hunks
-      hunks = hunks()
+      head, *tail = hunks()
 
-      hunks.drop(1).each_with_object([hunks.first]) do |right, aggregate|
+      tail.each_with_object([head]) do |right, aggregate|
         left = aggregate.last
         if right.overlaps?(left)
           right.merge(left)
