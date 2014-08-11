@@ -2,7 +2,7 @@ module Mutant
 
   # Abstract base class for match expression
   class Expression
-    include AbstractType, Adamantium, Concord::Public.new(:match)
+    include AbstractType, Adamantium::Flat, Concord::Public.new(:match)
 
     include Equalizer.new(:syntax)
 
