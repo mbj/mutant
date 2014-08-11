@@ -1,29 +1,41 @@
 RSpec.describe Mutant::Subject::Method::Instance do
   let(:object)  { described_class.new(config, context, node) }
-  let(:context) { double }
+  let(:context) { Mutant::Context::Scope.new(scope, double('Source Path')) }
   let(:config)  { Mutant::Config::DEFAULT }
 
   let(:node) do
     s(:def, :foo, s(:args))
   end
 
+  let(:scope) do
+    Class.new do
+      attr_reader :bar
+
+      def initialize
+        @bar = :boo
+      end
+
+      def foo
+      end
+
+      def self.name
+        'Test'
+      end
+    end
+  end
+
+  describe '#expression' do
+    subject { object.expression }
+
+    it { should eql(Mutant::Expression.parse('Test#foo')) }
+
+    it_should_behave_like 'an idempotent method'
+  end
+
   describe '#prepare' do
 
     let(:context) do
       Mutant::Context::Scope.new(scope, double('Source Path'))
-    end
-
-    let(:scope) do
-      Class.new do
-        attr_reader :bar
-
-        def initialize
-          @bar = :boo
-        end
-
-        def foo
-        end
-      end
     end
 
     subject { object.prepare }

@@ -12,7 +12,19 @@ RSpec.describe Mutant::Subject::Method::Singleton do
     Class.new do
       def self.foo
       end
+
+      def self.name
+        'Test'
+      end
     end
+  end
+
+  describe '#expression' do
+    subject { object.expression }
+
+    it { should eql(Mutant::Expression.parse('Test.foo')) }
+
+    it_should_behave_like 'an idempotent method'
   end
 
   describe '#prepare' do
