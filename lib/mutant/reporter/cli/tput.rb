@@ -19,12 +19,7 @@ module Mutant
 
         UNAVAILABLE = new(false, nil, nil)
 
-        INSTANCE =
-          if save && restore && clean
-            new(true, reset + save, restore + clean)
-          else
-            UNAVAILABLE
-          end
+        INSTANCE = clean ? new(true, reset + save, restore + clean) : UNAVAILABLE
 
       end # TPUT
     end # CLI
