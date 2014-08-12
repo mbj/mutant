@@ -100,7 +100,7 @@ module Mutant
 
       end # Send
 
-      # Generic node metatada
+      # Generic node metadata
       class Generic
         include Adamantium, Concord.new(:node)
 
