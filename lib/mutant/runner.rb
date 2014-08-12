@@ -103,7 +103,7 @@ module Mutant
 
     # Handle exit if needed
     #
-    # @param [Result::Mutation] mutation
+    # @param [Result::Mutation] result
     #
     # @return [undefined]
     #
