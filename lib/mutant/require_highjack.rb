@@ -22,7 +22,7 @@ module Mutant
       yield
       self
     ensure
-      desinfect
+      disinfect
     end
 
     # Infect kernel with highjack
@@ -43,13 +43,13 @@ module Mutant
       end
     end
 
-    # Imperfectly desinfect kernel from highjack
+    # Imperfectly disinfect kernel from highjack
     #
     # @return [self]
     #
     # @api private
     #
-    def desinfect
+    def disinfect
       original = @original
       target.module_eval do
         undef :require
