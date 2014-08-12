@@ -28,5 +28,5 @@ module Mutant
         end # Boolean
       end # Literal
     end # Node
-  end # Mutatork
+  end # Mutator
 end # Mutant
