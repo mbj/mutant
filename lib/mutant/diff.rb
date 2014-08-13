@@ -99,7 +99,7 @@ module Mutant
     # @api private
     #
     def minimized_hunks
-      head, *tail = hunks()
+      head, *tail = hunks
 
       tail.each_with_object([head]) do |right, aggregate|
         left = aggregate.last
