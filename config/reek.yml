@@ -66,7 +66,7 @@ NestedIterators:
   - Mutant::Mutator::Node::Resbody#mutate_captures
   - Mutant::Mutator::Node::Arguments#emit_argument_mutations
   - Mutant::RequireHighjack#infect
-  - Mutant::RequireHighjack#desinfect
+  - Mutant::RequireHighjack#disinfect
   - Mutant::Subject#tests
   - Parser::Lexer#self.new
   max_allowed_nesting: 1
