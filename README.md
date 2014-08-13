@@ -7,15 +7,15 @@ mutant
 [![Inline docs](http://inch-ci.org/github/mbj/mutant.png)](http://inch-ci.org/github/mbj/mutant)
 [![Gem Version](https://img.shields.io/gem/v/mutant.svg)](https://rubygems.org/gems/mutant)
 
-Mutant is a mutation testing tool for ruby.
+Mutant is a mutation testing tool for Ruby.
 
 The idea is that if code can be changed and your tests do not notice, either that code isn't being covered
 or it does not have a speced side effect.
 
-Mutant supports MRI and RBX 1.9, 2.0 and 2.1, while support for jruby is planned.
-It should also work under any ruby engine that supports POSIX-fork(2) semantics.
+Mutant supports MRI and RBX 1.9, 2.0 and 2.1, while support for JRuby is planned.
+It should also work under any Ruby engine that supports POSIX-fork(2) semantics.
 
-Mutant uses a pure ruby [parser](https://github.com/whitequark/parser) and an [unparser](https://github.com/mbj/unparser)
+Mutant uses a pure Ruby [parser](https://github.com/whitequark/parser) and an [unparser](https://github.com/mbj/unparser)
 to do its magic.
 
 Mutant does not have really good "getting started" documentation currently so please refer to presentations and blog posts below.
@@ -39,7 +39,7 @@ Blog-Posts
 Projects using Mutant
 ---------------------
 
-The following projects adopted mutant, and aim 100% mutation coverage:
+The following projects adopted mutant, and aim for 100% mutation coverage:
 
 * [axiom](https://github.com/dkubb/axiom)
 * [axiom-types](https://github.com/dkubb/axiom-types)
@@ -65,8 +65,8 @@ Install the gem `mutant` via your preferred method.
 gem install mutant
 ```
 
-If you plan to use the rspec integration you'll have to install `mutant-rspec` also. 
-Please add an explicit dependency to `rspec-core` for the rspec version you want to use.
+If you plan to use the RSpec integration you'll have to install `mutant-rspec` also. 
+Please add an explicit dependency to `rspec-core` for the RSpec version you want to use.
 
 ```ruby
 gem install mutant-rspec
@@ -80,12 +80,12 @@ Mutations
 Mutant supports a very wide range of mutation operators. Listing them all in detail would blow this document up.
 
 It is planned to parse a list of mutation operators from the source. In the meantime please refer to the
-[code](https://github.com/mbj/mutant/tree/master/lib/mutant/mutator/node) each subclass of `Mutant::Mutator::Node`
+[code](https://github.com/mbj/mutant/tree/master/lib/mutant/mutator/node). Each subclass of `Mutant::Mutator::Node`
 emits around 3-6 mutations.
 
-Currently mutant covers the majority of ruby's complex nodes that often occur in method bodies.
+Currently mutant covers the majority of Ruby's complex nodes that often occur in method bodies.
 
-NOTE: The textbook examples you find on mutation testing are intentionally not implemented. This is subjected to change.
+NOTE: The textbook examples you find on mutation testing are intentionally not implemented. This is subject to change.
 
 Some stats from the [axiom](https://github.com/dkubb/axiom) library:
 
@@ -103,8 +103,7 @@ Alive:     96        # Amount of alive mutations.
 
 Nodes still missing a dedicated mutator are handled via the
 [Generic](https://github.com/mbj/mutant/blob/master/lib/mutant/mutator/node/generic.rb) mutator.
-The goal is to remove this mutator and have dedicated mutator for every type of node and removing
-the Generic handler altogether.
+The goal is to remove this Generic mutator and have dedicated mutator for every type of node.
 
 Examples
 --------
@@ -150,7 +149,7 @@ Your options:
 * Ping me on [twitter](https://twitter.com/_m_b_j_)
 
 There is also the [#mutant] channel on freenode. As my OSS time budged is very limited I cannot
-join it often. Please prefer to use github issues with a 'Question: ' prefix in title.
+join it often. Please prefer to use GitHub issues with a 'Question: ' prefix in title.
 
 Credits
 -------
