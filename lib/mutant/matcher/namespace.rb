@@ -29,7 +29,7 @@ module Mutant
 
     private
 
-      # Test scope if name matches expresion
+      # Test scope if name matches expression
       #
       # @param [Module, Class] scope
       #

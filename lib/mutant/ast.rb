@@ -24,10 +24,10 @@ module Mutant
       self
     end
 
-    # Find last node satisfing predicate (as block)
+    # Find last node satisfying predicate (as block)
     #
     # @return [Parser::AST::Node]
-    #   if satisfing node is found
+    #   if satisfying node is found
     #
     # @yield [Parser::AST::Node]
     #

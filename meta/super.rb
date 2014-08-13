@@ -10,7 +10,7 @@ Mutant::Meta::Example.add do
   source 'super()'
 
   singleton_mutations
-  # this is zsuper a totally differend node thant super()
+  # this is zsuper a totally different node than super()
   mutation 'super'
 end
 

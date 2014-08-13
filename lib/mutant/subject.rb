@@ -32,8 +32,6 @@ module Mutant
     #
     # TODO: This logic is now centralized but still fucked.
     #
-    # @param [Mutation] mutation
-    #
     # @return [Array<Test>]
     #
     # @api private

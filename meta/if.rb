@@ -14,7 +14,7 @@ Mutant::Meta::Example.add do
   # Deleted else branch
   mutation 'if condition; true end'
 
-  # Deleted if branch resuting in unless rendering
+  # Deleted if branch resulting in unless rendering
   mutation 'unless condition; false; end'
 
   # Deleted if branch with promoting else branch to if branch

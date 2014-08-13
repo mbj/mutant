@@ -26,7 +26,7 @@ module Mutant
 
       # Return generated mutations
       #
-      # @return [Emumerable<Mutant::Mutation>]
+      # @return [Enumerable<Mutant::Mutation>]
       #
       # @api private
       #
