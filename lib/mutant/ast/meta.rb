@@ -17,13 +17,41 @@ module Mutant
         REGISTRY.fetch(node.type, Generic).new(node)
       end
 
-      # Generic metadata for send nodes
+      # Mixin to define meta nodes
+      class Node < Module
+        include Concord.new(:type)
+
+        CONCORD = Concord.new(:node)
+
+        # Hook called when module gets included
+        #
+        # @param [Class, Module] host
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def included(host)
+          REGISTRY[type] = host
+          host.class_eval do
+            include CONCORD, NamedChildren
+          end
+        end
+
+      end # Node
+
+      # Metadata for resbody nods
+      class Resbody
+        include Node.new(:resbody)
+
+        children :captures, :assignment, :body
+      end # Resbody
+
+      # Metadata for send nodes
       class Send
-        include Concord.new(:node), NamedChildren
+        include Node.new(:send)
 
         children :receiver, :selector
-
-        REGISTRY[:send] = self
 
         INDEX_ASSIGNMENT_SELECTOR            = :[]=
         ATTRIBUTE_ASSIGNMENT_SELECTOR_SUFFIX = '='.freeze

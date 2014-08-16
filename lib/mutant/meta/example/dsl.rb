@@ -12,8 +12,8 @@ module Mutant
         #
         # @api private
         #
-        def self.run(block)
-          instance = new
+        def self.run(file, block)
+          instance = new(file)
           instance.instance_eval(&block)
           instance.example
         end
@@ -24,7 +24,8 @@ module Mutant
         #
         # @api private
         #
-        def initialize
+        def initialize(file)
+          @file = file
           @source = nil
           @expected = []
         end
@@ -40,7 +41,7 @@ module Mutant
         #
         def example
           raise 'source not defined' unless @source
-          Example.new(@source, @expected)
+          Example.new(@file, @source, @expected)
         end
 
       private

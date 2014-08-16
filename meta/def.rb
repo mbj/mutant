@@ -14,7 +14,7 @@ Mutant::Meta::Example.add do
   mutation 'def foo; self; rescue; end'
   mutation 'def foo; end'
 
-  # Promote rescue body
+  # Promote rescue resbody bodies
   mutation 'def foo; foo; end'
 end
 
@@ -29,10 +29,13 @@ Mutant::Meta::Example.add do
   mutation 'def a; foo; rescue; bar; else; nil; end'
   mutation 'def a; foo; rescue; bar; else; self; end'
 
+  # Promote and concat rescue resbody bodies
+  mutation 'def a; foo; bar; end'
+
   # Promote and concat else body
   mutation 'def a; foo; baz; end'
 
-  # Promote body
+  # Promote rescue body
   mutation 'def a; foo; end'
 
   # Empty body

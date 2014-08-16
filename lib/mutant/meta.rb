@@ -16,7 +16,8 @@ module Mutant
       # @api private
       #
       def self.add(&block)
-        ALL << DSL.run(block)
+        file = caller.first.split(':in', 2).first
+        ALL << DSL.run(file, block)
       end
 
       Pathname.glob(Pathname.new(__FILE__).parent.parent.parent.join('meta', '**/*.rb'))

@@ -34,8 +34,11 @@ module Mutant
         #
         def mutate_rescue_bodies
           children_indices(RESCUE_INDICES).each do |index|
-            next unless children.at(index)
+            rescue_body = children.at(index)
+            next unless rescue_body
             mutate_child(index)
+            resbody_body = AST::Meta.for(rescue_body).body
+            emit_concat(resbody_body) if resbody_body
           end
         end
 
@@ -48,8 +51,11 @@ module Mutant
         # @api private
         #
         def emit_concat(child)
-          raise unless body
-          emit(s(:begin, body, child))
+          if body
+            emit(s(:begin, body, child))
+          else
+            emit(child)
+          end
         end
 
         # Emit body mutations

@@ -1,7 +1,7 @@
 module Mutant
   module Meta
     class Example
-      include Adamantium, Concord::Public.new(:node, :mutations)
+      include Adamantium, Concord::Public.new(:file, :node, :mutations)
 
       # Return a verification instance
       #
@@ -97,7 +97,7 @@ module Mutant
         def mutation_report
           original_node = example.node
           [
-            'Original-AST:',
+            "#{example.file}, Original-AST:",
             original_node.inspect,
             'Original-Source:',
             example.source,
