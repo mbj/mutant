@@ -13,6 +13,33 @@ Mutant::Meta::Example.add do
   mutation 'def foo; nil; rescue; end'
   mutation 'def foo; self; rescue; end'
   mutation 'def foo; end'
+
+  # Promote rescue body
+  mutation 'def foo; foo; end'
+end
+
+Mutant::Meta::Example.add do
+  source 'def a; foo; rescue; bar; else; baz; end'
+
+  # Mutate all bodies
+  mutation 'def a; nil;  rescue; bar; else; baz; end'
+  mutation 'def a; self; rescue; bar; else; baz; end'
+  mutation 'def a; foo; rescue; nil;  else; baz; end'
+  mutation 'def a; foo; rescue; self; else; baz; end'
+  mutation 'def a; foo; rescue; bar; else; nil; end'
+  mutation 'def a; foo; rescue; bar; else; self; end'
+
+  # Promote and concat else body
+  mutation 'def a; foo; baz; end'
+
+  # Promote body
+  mutation 'def a; foo; end'
+
+  # Empty body
+  mutation 'def a; end'
+
+  # Failing body
+  mutation 'def a; raise; end'
 end
 
 Mutant::Meta::Example.add do

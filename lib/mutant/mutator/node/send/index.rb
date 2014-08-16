@@ -35,7 +35,7 @@ module Mutant
             # @api private
             #
             def mutate_indices
-              INDEX_RANGE.begin.upto(children.length + INDEX_RANGE.end).each do |index|
+              children_indices(INDEX_RANGE).each do |index|
                 delete_child(index)
                 mutate_child(index)
               end

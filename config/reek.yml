@@ -37,6 +37,7 @@ FeatureEnvy:
   - Mutant::Matcher::Method::Singleton#receiver?
   - Mutant::Mutation::Evil#success?
   - Mutant::Mutation::Neutral#success?
+  - Mutant::Mutator::Node#children_indices
   # False positive, its a utility
   - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Reporter::CLI#subject_results

@@ -8,6 +8,8 @@ module Mutant
       include AbstractType, Unparser::Constants
       include AST::NamedChildren, AST::NodePredicates, AST::Sexp, AST::Nodes
 
+      TAUTOLOGY = ->(_input) { true }
+
       # Helper to define a named child
       #
       # @param [Parser::AST::Node] node
@@ -79,7 +81,7 @@ module Mutant
       # @api private
       #
       def mutate_child(index, mutator = Mutator, &block)
-        block ||= ->(_node) { true }
+        block ||= TAUTOLOGY
         child = children.at(index)
         mutator.each(child, self) do |mutation|
           next unless block.call(mutation)
@@ -209,6 +211,20 @@ module Mutant
       #
       def asgn_left?
         AST::Types::OP_ASSIGN.include?(parent_type) && parent.node.children.first.equal?(node)
+      end
+
+      # Return children indices
+      #
+      # @param [Range] range
+      #
+      # @return [Enumerable<Fixnum>]
+      #
+      # @api pirvate
+      #
+      def children_indices(range)
+        range_end = range.end
+        last_index = range_end >= 0 ? range_end : children.length + range_end
+        range.begin.upto(last_index)
       end
 
     end # Node

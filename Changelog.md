@@ -1,3 +1,7 @@
+# v0.6.1 2014-08-16
+
+* Add rescue else body promotion/concatenation mutation
+
 # v0.6.0 2014-08-11
 
 * Parallel execution / reporting.
