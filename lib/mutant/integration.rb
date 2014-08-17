@@ -14,8 +14,12 @@ module Mutant
     #
     # @api private
     def self.setup(name)
-      require "mutant/integration/#{name}"
+      require "mutant/integration/#{name}" unless name.eql?('null')
       lookup(name)
+    end
+
+    class << self
+      alias_method :build, :new
     end
 
     # Lookup integration for name
