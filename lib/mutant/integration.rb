@@ -6,6 +6,19 @@ module Mutant
 
     REGISTRY = {}
 
+    # Setup integration
+    #
+    # @param [String] name
+    #
+    # @return [Integration]
+    #
+    # @api private
+    #
+    def self.setup(name)
+      require "mutant/integration/#{name}"
+      lookup(name)
+    end
+
     # Lookup integration for name
     #
     # @param [String] name
