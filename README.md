@@ -20,6 +20,14 @@ to do its magic.
 
 Mutant does not have really good "getting started" documentation currently so please refer to presentations and blog posts below.
 
+Mutation-Operators:
+-------------------
+
+Mutant supports a wide range of mutation operators. An exhaustive list can be found in the [mutant-meta](https://github.com/mbj/mutant/tree/master/meta).
+The `mutant-meta` is arranged to the AST-Node-Types of parser. Refer to parsers [AST documentation](https://github.com/whitequark/parser/blob/master/doc/AST_FORMAT.md) in doubt.
+
+There is no easy and universal way to count the number of mutation operators a tool supports.
+
 Presentations
 -------------
 
