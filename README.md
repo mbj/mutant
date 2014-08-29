@@ -146,6 +146,24 @@ Example for a subject like `Foo::Bar#baz` it will run all example groups with de
 `Foo::Bar#baz`, `Foo::Bar` and `Foo`. The order is important, so if mutant finds example groups in the
 current prefix level, these example groups *must* kill the mutation.
 
+Rails
+-------
+
+Assuming you are using rspec, you can mutation test Rails models by adding the following lines to your Gemfile:
+
+```ruby
+group :test do
+  gem 'mutant'
+  gem 'mutant-rspec'
+end  
+```
+
+Next, run bundle and comment out ```require 'rspec/autorun'``` from your spec_helper.rb file.  Having done so you should be able to use commands like the following:
+
+```sh
+RAILS_ENV=test mutant -r ./config/environment --use rspec User
+```
+
 Support
 -------
 
