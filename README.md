@@ -161,7 +161,7 @@ end
 Next, run bundle and comment out ```require 'rspec/autorun'``` from your spec_helper.rb file.  Having done so you should be able to use commands like the following:
 
 ```sh
-RAILS_ENV=test mutant -r ./config/environment --use rspec User
+RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec User
 ```
 
 Support
