@@ -82,37 +82,6 @@ gem install mutant-rspec
 
 The minitest integration is still in the works.
 
-Mutations
----------
-
-Mutant supports a very wide range of mutation operators. Listing them all in detail would blow this document up.
-
-It is planned to parse a list of mutation operators from the source. In the meantime please refer to the
-[code](https://github.com/mbj/mutant/tree/master/lib/mutant/mutator/node). Each subclass of `Mutant::Mutator::Node`
-emits around 3-6 mutations.
-
-Currently mutant covers the majority of Ruby's complex nodes that often occur in method bodies.
-
-NOTE: The textbook examples you find on mutation testing are intentionally not implemented. This is subject to change.
-
-Some stats from the [axiom](https://github.com/dkubb/axiom) library:
-
-```
-Subjects:  424       # Amount of subjects being mutated (currently only methods)
-Mutations: 6760      # Amount of mutations mutant generated (~13 mutations per method)
-Kills:     6664      # Amount of successfully killed mutations
-Runtime:   5123.13s  # Total runtime
-Killtime:  5092.63s  # Time spend killing mutations
-Overhead:  0.60%
-Coverage:  98.58%    # Coverage score
-Alive:     96        # Amount of alive mutations.
-```
-
-
-Nodes still missing a dedicated mutator are handled via the
-[Generic](https://github.com/mbj/mutant/blob/master/lib/mutant/mutator/node/generic.rb) mutator.
-The goal is to remove this Generic mutator and have dedicated mutator for every type of node.
-
 Examples
 --------
 
