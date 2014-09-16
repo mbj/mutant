@@ -30,8 +30,6 @@ module Mutant
 
     # Return tests for mutation
     #
-    # TODO: This logic is now centralized but still fucked.
-    #
     # @return [Array<Test>]
     #
     # @api private
