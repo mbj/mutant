@@ -17,7 +17,7 @@ RSpec.shared_examples_for 'a method matcher' do
   end
 
   it 'should have correct line number' do
-    expect(node.location.expression.line - base).to eql(method_line)
+    expect(node.location.expression.line).to eql(method_line)
   end
 
   it 'should have correct arity' do
