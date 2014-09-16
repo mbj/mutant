@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Matcher for subjects that are a specific method
     class Method < self
-      include Adamantium::Flat, Concord::Public.new(:env, :scope, :method)
+      include Adamantium::Flat, Concord::Public.new(:env, :scope, :target_method)
       include Equalizer.new(:identification)
 
       # Methods within rbx kernel directory are precompiled and their source
@@ -40,7 +40,7 @@ module Mutant
       def skip?
         location = source_location
         if location.nil? || BLACKLIST.match(location.first)
-          env.warn(format('%s does not have valid source location unable to emit matcher', method.inspect))
+          env.warn(format('%s does not have valid source location unable to emit matcher', target_method.inspect))
           true
         else
           false
@@ -54,7 +54,7 @@ module Mutant
       # @api private
       #
       def method_name
-        method.name
+        target_method.name
       end
 
       # Return context
@@ -104,7 +104,7 @@ module Mutant
       # @api private
       #
       def source_location
-        method.source_location
+        target_method.source_location
       end
 
       # Return subject
@@ -118,27 +118,22 @@ module Mutant
       # @api private
       #
       def subject
-        node = matched_node
+        node = matched_node_path.last
         return unless node
         self.class::SUBJECT_CLASS.new(env.config, context, node)
       end
       memoize :subject
 
-      # Return matched node
+      # Return matched node path
       #
-      # @return [Parser::AST::Node]
-      #   if node could be found
-      #
-      # @return [nil]
-      #   otherwise
+      # @return [Array<Parser::AST::Node>]
       #
       # @api private
       #
-      def matched_node
-        AST.find_last(ast) do |node|
-          match?(node)
-        end
+      def matched_node_path
+        AST.find_last_path(ast, &method(:match?))
       end
+      memoize :matched_node_path
 
     end # Method
   end # Matcher

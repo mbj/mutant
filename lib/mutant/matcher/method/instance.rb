@@ -15,10 +15,10 @@ module Mutant
         #
         # @api private
         #
-        def self.build(env, scope, method)
-          name = method.name
+        def self.build(env, scope, target_method)
+          name = target_method.name
           if scope.ancestors.include?(::Memoizable) && scope.memoized?(name)
-            return Memoized.new(env, scope, method)
+            return Memoized.new(env, scope, target_method)
           end
           super
         end
@@ -68,7 +68,7 @@ module Mutant
           # @api private
           #
           def source_location
-            scope.unmemoized_instance_method(method.name).source_location
+            scope.unmemoized_instance_method(method_name).source_location
           end
 
         end # Memoized
