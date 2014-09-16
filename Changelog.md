@@ -1,10 +1,10 @@
-# v0.6.2 2014-08-16
+# v0.6.2 2014-09-16
 
 * Fix matcher to ignore metaprogrammed defines [#254](https://github.com/mbj/mutant/issues/254)
 * Add rescue resbody body concat-promotion mutation
 * Add rescue else body concat-promotion mutation #245
 
-# v0.6.1 2014-08-16
+# v0.6.1 2014-09-16
 
 * Incorrectly released on partial state. Yanked.
 
