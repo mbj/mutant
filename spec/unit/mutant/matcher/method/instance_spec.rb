@@ -11,10 +11,10 @@ RSpec.describe Mutant::Matcher::Method::Instance do
     let(:method)       { scope.instance_method(method_name)        }
     let(:yields)       { []                                        }
     let(:namespace)    { self.class                                }
-    let(:scope)        { self.class::Foo                           }
     let(:type)         { :def                                      }
-    let(:method_name)  { :bar                                      }
+    let(:method_name)  { :foo                                      }
     let(:method_arity) { 0                                         }
+    let(:base)         { TestApp::InstanceMethodTests              }
 
     def name
       node.children[0]
@@ -36,109 +36,79 @@ RSpec.describe Mutant::Matcher::Method::Instance do
       it 'does warn' do
         subject
         expect(reporter.warn_calls.last).to(
-          eql("#{method.inspect} does not have valid source location unable to emit matcher")
+          eql("#{method.inspect} does not have valid source location unable to emit subject")
         )
       end
     end
 
     context 'when method is defined once' do
-      let(:base) { __LINE__ }
-      class self::Foo
-        def bar; end
-      end
-
-      let(:method_line) { 2 }
+      let(:scope)       { base::DefinedOnce }
+      let(:method_line) { 7                 }
 
       it_should_behave_like 'a method matcher'
     end
 
     context 'when method is defined once with a memoizer' do
-      let(:base) { __LINE__ }
-      class self::Foo
-        def bar; end
-        include Adamantium
-        memoize :bar
-      end
-
-      let(:method_line) { 2 }
+      let(:scope)       { base::WithMemoizer }
+      let(:method_line) { 12                 }
 
       it_should_behave_like 'a method matcher'
     end
 
     context 'when method is defined multiple times' do
       context 'on different lines' do
-        let(:base) { __LINE__ }
-        class self::Foo
-          def bar
-          end
-
-          def bar(_arg)
-          end
-        end
-
-        let(:method_line)  { 5 }
-        let(:method_arity) { 1 }
+        let(:scope)        { base::DefinedMultipleTimes::DifferentLines }
+        let(:method_line)  { 21                                         }
+        let(:method_arity) { 1                                          }
 
         it_should_behave_like 'a method matcher'
       end
 
       context 'on the same line' do
-        let(:base) { __LINE__ }
-        class self::Foo
-          def bar; end; def bar(_arg); end
-        end
-
-        let(:method_line)  { 2 }
-        let(:method_arity) { 1 }
+        let(:scope)        { base::DefinedMultipleTimes::SameLineSameScope }
+        let(:method_line)  { 26                                            }
+        let(:method_arity) { 1                                             }
 
         it_should_behave_like 'a method matcher'
       end
 
       context 'on the same line with different scope' do
-        let(:base) { __LINE__ }
-        class self::Foo
-          def self.bar; end; def bar(_arg); end
-        end
-
-        let(:method_line)  { 2 }
-        let(:method_arity) { 1 }
+        let(:scope)        { base::DefinedMultipleTimes::SameLineDifferentScope }
+        let(:method_line)  { 30                                                 }
+        let(:method_arity) { 1                                                  }
 
         it_should_behave_like 'a method matcher'
       end
 
-      context 'when nested' do
-        let(:pattern) { 'Foo::Bar#baz' }
+      context 'in module eval' do
+        let(:scope) { base::InModuleEval }
 
-        context 'in class' do
-          let(:base) { __LINE__ }
-          class self::Foo
-            class Bar
-              def baz
-              end
-            end
-          end
-
-          let(:method_line) { 3                    }
-          let(:method_name) { :baz                 }
-          let(:scope)       { self.class::Foo::Bar }
-
-          it_should_behave_like 'a method matcher'
+        it 'does not emit matcher' do
+          subject
+          expect(yields.length).to be(0)
         end
 
-        context 'in module' do
-          let(:base) { __LINE__ }
-          module self::Foo
-            class Bar
-              def baz
-              end
-            end
-          end
+        it 'does warn' do
+          subject
+          expect(reporter.warn_calls.last).to(
+            eql("#{method.inspect} is defined from a 3rd party lib unable to emit subject")
+          )
+        end
+      end
 
-          let(:method_line) { 3                    }
-          let(:method_name) { :baz                 }
-          let(:scope)       { self.class::Foo::Bar }
+      context 'in class eval' do
+        let(:scope) { base::InClassEval }
 
-          it_should_behave_like 'a method matcher'
+        it 'does not emit matcher' do
+          subject
+          expect(yields.length).to be(0)
+        end
+
+        it 'does warn' do
+          subject
+          expect(reporter.warn_calls.last).to(
+            eql("#{method.inspect} is defined from a 3rd party lib unable to emit subject")
+          )
         end
       end
     end

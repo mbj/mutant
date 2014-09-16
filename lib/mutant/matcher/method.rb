@@ -3,7 +3,7 @@ module Mutant
     # Matcher for subjects that are a specific method
     class Method < self
       include Adamantium::Flat, Concord::Public.new(:env, :scope, :target_method)
-      include Equalizer.new(:identification)
+      include AST::NodePredicates, Equalizer.new(:identification)
 
       # Methods within rbx kernel directory are precompiled and their source
       # cannot be accessed via reading source location. Same for methods created by eval.
@@ -40,7 +40,10 @@ module Mutant
       def skip?
         location = source_location
         if location.nil? || BLACKLIST.match(location.first)
-          env.warn(format('%s does not have valid source location unable to emit matcher', target_method.inspect))
+          env.warn(format('%s does not have valid source location unable to emit subject', target_method.inspect))
+          true
+        elsif matched_node_path.any?(&method(:n_block?))
+          env.warn(format('%s is defined from a 3rd party lib unable to emit subject', target_method.inspect))
           true
         else
           false
