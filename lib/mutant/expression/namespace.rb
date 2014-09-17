@@ -4,6 +4,18 @@ module Mutant
     class Namespace < self
       include AbstractType
 
+    private
+
+      # Return matched namespace
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def namespace
+        match[__method__]
+      end
+
       # Recursive namespace expression
       class Recursive < self
 
@@ -52,18 +64,6 @@ module Mutant
           end
         end
 
-      private
-
-        # Return matched namespace
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def namespace
-          match[__method__] || EMPTY_STRING
-        end
-
       end # Recursive
 
       # Exact namespace expression
@@ -83,18 +83,6 @@ module Mutant
         #
         def matcher(env)
           Matcher::Scope.new(env, Mutant.constant_lookup(namespace), self)
-        end
-
-      private
-
-        # Return namespace
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def namespace
-          match[__method__].to_s
         end
 
       end # Exact
