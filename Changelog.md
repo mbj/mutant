@@ -1,3 +1,7 @@
+# v0.6.3 2014-09-22
+
+* Add support for rspec-3.1.
+
 # v0.6.2 2014-09-16
 
 * Fix matcher to ignore metaprogrammed defines [#254](https://github.com/mbj/mutant/issues/254)
