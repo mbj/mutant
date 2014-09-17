@@ -31,6 +31,12 @@ RSpec.describe Mutant::Expression::Namespace::Recursive do
       it { should be(0) }
     end
 
+    context 'when other expression describes root namespace' do
+      let(:other) { described_class.parse('TestApp::Literal') }
+
+      it { should be(16) }
+    end
+
     context 'when other expression describes a longer prefix' do
       context 'on constants' do
         let(:other) { described_class.parse('TestApp::Literal::Deep') }
