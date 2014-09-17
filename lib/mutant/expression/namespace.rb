@@ -28,11 +28,10 @@ module Mutant
         # @api private
         def initialize(*)
           super
-          namespace_src = Regexp.escape(namespace)
           @recursion_pattern = Regexp.union(
-            /\A#{namespace_src}\z/,
-            /\A#{namespace_src}::/,
-            /\A#{namespace_src}[.#]/
+            /\A#{namespace}\z/,
+            /\A#{namespace}::/,
+            /\A#{namespace}[.#]/
           )
         end
 
