@@ -61,7 +61,7 @@ module Mutant
       # @api private
       #
       def node
-        Parser::CurrentRuby.parse(path.read)
+        Parser::CurrentRuby.parse(path.read, path.to_s)
       end
 
       # Return namespaced root

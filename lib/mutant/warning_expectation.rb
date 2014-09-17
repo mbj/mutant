@@ -5,7 +5,7 @@ module Mutant
 
     # Error raised on expectation miss
     class ExpectationError < RuntimeError
-      include Concord.new(:unexpected)
+      include Concord.new(:unexpected, :expected)
 
       # Return exception message
       #
@@ -14,7 +14,7 @@ module Mutant
       # @api private
       #
       def message
-        "Unexpected warnings: #{unexpected.inspect}"
+        "Unexpected warnings: #{unexpected.inspect}, expected: #{expected.inspect}"
       end
     end
 
@@ -33,7 +33,7 @@ module Mutant
       unexpected = warnings - expected
 
       if unexpected.any?
-        fail ExpectationError, unexpected
+        fail ExpectationError.new(unexpected, expected)
       end
 
       if missing.any?

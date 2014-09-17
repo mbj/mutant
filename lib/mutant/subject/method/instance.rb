@@ -26,6 +26,8 @@ module Mutant
         end
         memoize :public?
 
+        LINE_INCREMENT = defined?(Zombie) ? -11 : 5
+
         # Prepare subject for mutation insertion
         #
         # @return [self]
@@ -35,7 +37,7 @@ module Mutant
         def prepare
           expected_warnings =
             if WARN_METHODS_UNDEFINED.include?(name)
-              ["#{__FILE__}:#{__LINE__ + 5}: warning: undefining `#{name}' may cause serious problems\n"]
+              ["#{__FILE__}:#{__LINE__ + LINE_INCREMENT}: warning: undefining `#{name}' may cause serious problems\n"]
             else
               EMPTY_ARRAY
             end
