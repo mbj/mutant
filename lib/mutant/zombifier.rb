@@ -6,6 +6,7 @@ module Mutant
     # Excluded into zombification
     includes = %w[
       mutant
+      unparser
       morpher
       adamantium
       equalizer
