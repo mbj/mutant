@@ -11,6 +11,7 @@ rvm:
 matrix:
   allow_failures:
     - rvm: 2.1.3 # unparser needs to be patched for 2.1.3 parser changes
+    - rvm: rbx-2 # travis does not maintain rbx setup correctly
 notifications:
   irc:
     channels:
