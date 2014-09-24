@@ -221,7 +221,7 @@ module Mutant
       isolation:         Mutant::Isolation::Fork,
       reporter:          Reporter::CLI.build($stdout),
       zombie:            false,
-      processes:         Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : Parallel.processor_count,
+      jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : Parallel.processor_count,
       expected_coverage: 100.0
     )
   end # Config

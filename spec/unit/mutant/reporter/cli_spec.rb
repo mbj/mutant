@@ -51,7 +51,7 @@ RSpec.describe Mutant::Reporter::CLI do
     )
   end
 
-  let(:config)           { Mutant::Config::DEFAULT.update(processes: 1) }
+  let(:config)           { Mutant::Config::DEFAULT.update(jobs: 1) }
   let(:mutation_class)   { Mutant::Mutation::Evil                       }
   let(:matchable_scopes) { double('Matchable Scopes', length: 10)       }
 
@@ -199,7 +199,7 @@ RSpec.describe Mutant::Reporter::CLI do
         Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
         Integration:        null
         Expect Coverage:    100.00%
-        Processes:          1
+        Jobs:               1
         Includes:           []
         Requires:           []
       REPORT
@@ -257,7 +257,7 @@ RSpec.describe Mutant::Reporter::CLI do
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
           Integration:        null
           Expect Coverage:    100.00%
-          Processes:          1
+          Jobs:               1
           Includes:           []
           Requires:           []
           Available Subjects: 1
@@ -286,7 +286,7 @@ RSpec.describe Mutant::Reporter::CLI do
             Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
             Integration:        null
             Expect Coverage:    100.00%
-            Processes:          1
+            Jobs:               1
             Includes:           []
             Requires:           []
             Available Subjects: 1
@@ -323,7 +323,7 @@ RSpec.describe Mutant::Reporter::CLI do
               Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:        null
               Expect Coverage:    100.00%
-              Processes:          1
+              Jobs:               1
               Includes:           []
               Requires:           []
               Available Subjects: 1
@@ -350,7 +350,7 @@ RSpec.describe Mutant::Reporter::CLI do
               Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:        null
               Expect Coverage:    100.00%
-              Processes:          1
+              Jobs:               1
               Includes:           []
               Requires:           []
               Available Subjects: 1
@@ -385,7 +385,7 @@ RSpec.describe Mutant::Reporter::CLI do
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
           Integration:        null
           Expect Coverage:    100.00%
-          Processes:          1
+          Jobs:               1
           Includes:           []
           Requires:           []
           Available Subjects: 1
@@ -418,7 +418,7 @@ RSpec.describe Mutant::Reporter::CLI do
               Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:        null
               Expect Coverage:    100.00%
-              Processes:          1
+              Jobs:               1
               Includes:           []
               Requires:           []
               Available Subjects: 1
@@ -451,7 +451,7 @@ RSpec.describe Mutant::Reporter::CLI do
               Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:        null
               Expect Coverage:    100.00%
-              Processes:          1
+              Jobs:               1
               Includes:           []
               Requires:           []
               Available Subjects: 1
@@ -492,7 +492,7 @@ RSpec.describe Mutant::Reporter::CLI do
             Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
             Integration:        null
             Expect Coverage:    100.00%
-            Processes:          1
+            Jobs:               1
             Includes:           []
             Requires:           []
             Available Subjects: 1
@@ -527,7 +527,7 @@ RSpec.describe Mutant::Reporter::CLI do
             Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
             Integration:        null
             Expect Coverage:    100.00%
-            Processes:          1
+            Jobs:               1
             Includes:           []
             Requires:           []
             Available Subjects: 1
@@ -548,14 +548,14 @@ RSpec.describe Mutant::Reporter::CLI do
         let(:subjects)        { [] }
         let(:subject_results) { [] }
 
-        let(:config) { Mutant::Config::DEFAULT.update(processes: 1, includes: %w[include-dir], requires: %w[require-name]) }
+        let(:config) { Mutant::Config::DEFAULT.update(jobs: 1, includes: %w[include-dir], requires: %w[require-name]) }
 
         it_reports(<<-REPORT)
           Mutant configuration:
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
           Integration:        null
           Expect Coverage:    100.00%
-          Processes:          1
+          Jobs:               1
           Includes:           ["include-dir"]
           Requires:           ["require-name"]
           Available Subjects: 0
