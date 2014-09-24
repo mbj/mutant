@@ -46,9 +46,9 @@ module Mutant
     def run
       Parallel.map(
         @mutations,
-        in_threads: config.jobs,
-        finish:     method(:finish),
-        start:      method(:start),
+        in_processes: config.processes,
+        finish:       method(:finish),
+        start:        method(:start),
         &method(:run_mutation)
       )
     end

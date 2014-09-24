@@ -10,7 +10,7 @@ module Mutant
       :reporter,
       :isolation,
       :fail_fast,
-      :jobs,
+      :processes,
       :zombie,
       :expected_coverage
     )

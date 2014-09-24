@@ -177,7 +177,7 @@ module Mutant
             info 'Matcher:            %s',      object.matcher_config.inspect
             info 'Integration:        %s',      object.integration.name
             info 'Expect Coverage:    %0.2f%%', object.expected_coverage.inspect
-            info 'Jobs:               %d',      object.jobs
+            info 'Processes:          %d',      object.processes
             info 'Includes:           %s',      object.includes.inspect
             info 'Requires:           %s',      object.requires.inspect
             self
