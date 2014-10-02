@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 trap('INT') do |status|
-  exit! 128 + status
+  effective_status = status ? status + 128 : 128
+  exit! effective_status
 end
 
 require 'mutant'
