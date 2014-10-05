@@ -16,7 +16,10 @@ RSpec.describe Mutant::Subject do
   let(:config) { Mutant::Config::DEFAULT }
 
   let(:node) do
-    double('Node', location: location)
+    Parser::CurrentRuby.parse(<<-RUBY)
+      def foo
+      end
+    RUBY
   end
 
   let(:location) do
@@ -38,7 +41,19 @@ RSpec.describe Mutant::Subject do
   describe '#identification' do
     subject { object.identification }
 
-    it { should eql('SubjectA:source_path:source_line') }
+    it { should eql('SubjectA:source_path:1') }
+  end
+
+  describe '#source_line' do
+    subject { object.source_line }
+
+    it { should be(1) }
+  end
+
+  describe '#source_lines' do
+    subject { object.source_lines }
+
+    it { should eql(1..2) }
   end
 
   describe '#prepare' do

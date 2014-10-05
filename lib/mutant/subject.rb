@@ -56,6 +56,18 @@ module Mutant
       self
     end
 
+    # Return source lines
+    #
+    # @return [Range<Fixnum>]
+    #
+    # @api private
+    #
+    def source_lines
+      expression = node.location.expression
+      expression.line..expression.source_buffer.decompose_position(expression.end_pos).first
+    end
+    memoize :source_lines
+
     # Return source line
     #
     # @return [Fixnum]
@@ -63,7 +75,7 @@ module Mutant
     # @api private
     #
     def source_line
-      node.location.expression.line
+      source_lines.begin
     end
 
     # Return subject identification
