@@ -37,6 +37,7 @@ FeatureEnvy:
   - Mutant::Runner::Master#stop_worker
   - Mutant::Runner::Worker#run_mutation
   - Mutant::Runner::Worker#handle
+  - Mutant::Subject#source_lines
 IrresponsibleModule:
   enabled: true
   exclude: []

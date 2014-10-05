@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
   gem.extra_rdoc_files = %w[TODO LICENSE]
   gem.executables      = %w[mutant]
 
-  gem.required_ruby_version = '>= 1.9.3'
+  gem.required_ruby_version = '>= 2.0.0'
 
   gem.add_runtime_dependency('parser',        '~> 2.2.pre.7')
   gem.add_runtime_dependency('ast',           '~> 2.0')
