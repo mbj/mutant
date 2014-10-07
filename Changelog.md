@@ -1,3 +1,7 @@
+# v0.6.4 2014-10-xx
+
+* Do not buffer report prints, speedup large report generation.
+
 # v0.6.3 2014-09-22
 
 * Add support for rspec-3.1.

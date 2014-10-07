@@ -25,16 +25,17 @@ module Mutant
         #
         abstract_method :progress
 
-        # Format result
+        # Write report
         #
         # @param [Result::Env] env
+        # @param [IO] output
         #
         # @return [String]
         #
         # @api private
         #
-        def report(env)
-          format(Printer::EnvResult, env)
+        def write_report(env, output)
+          Printer::EnvResult.run(output, env)
         end
 
         # Output abstraction to decouple tty? from buffer
