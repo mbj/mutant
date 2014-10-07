@@ -12,19 +12,21 @@ module Mutant
     def initialize(env)
       super
 
-      @collector   = Collector.new(env)
-      @mutex       = Mutex.new
-      @mutations   = env.mutations.dup
+      @collector = Collector.new(env)
+      @mutex     = Mutex.new
+      @mutations = env.mutations.dup
+      @index     = 0
+      @continue  = true
 
       config.integration.setup
 
-      config.reporter.start(env)
+      reporter.start(env)
 
       run
 
       @result = @collector.result.update(done: true)
 
-      config.reporter.report(result)
+      reporter.report(result)
     end
 
     # Return result
@@ -45,12 +47,34 @@ module Mutant
     #
     def run
       Parallel.map(
-        @mutations,
+        method(:next),
         in_threads: config.jobs,
         finish:     method(:finish),
         start:      method(:start),
         &method(:run_mutation)
       )
+    end
+
+    # Return next mutation or stop
+    #
+    # @return [Mutation]
+    #   in case there is a next mutation
+    #
+    # @return [Parallel::Stop]
+    #   in case there is no next mutation or runner should stop early
+    #
+    #
+    # @api private
+    def next
+      @mutex.synchronize do
+        mutation = @mutations.at(@index)
+        if @continue && mutation
+          @index += 1
+          mutation
+        else
+          Parallel::Stop
+        end
+      end
     end
 
     # Handle started mutation
@@ -100,22 +124,10 @@ module Mutant
     #
     def process_result(result)
       @collector.finish(result)
-      config.reporter.progress(@collector)
-      handle_exit(result)
-    end
-
-    # Handle exit if needed
-    #
-    # @param [Result::Mutation] result
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def handle_exit(result)
-      return if !config.fail_fast || result.success?
-
-      @mutations.clear
+      reporter.progress(@collector)
+      if !result.success? && config.fail_fast
+        @continue = false
+      end
     end
 
     # Run mutation
@@ -181,6 +193,16 @@ module Mutant
         output:   exception.message,
         passed:   false
       )
+    end
+
+    # Return reporter
+    #
+    # @return [Reporter]
+    #
+    # @api private
+    #
+    def reporter
+      config.reporter
     end
 
   end # Runner

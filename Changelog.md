@@ -1,6 +1,7 @@
 # v0.6.4 2014-10-xx
 
 * Do not buffer report prints, speedup large report generation.
+* Fix some cases where --fail-fast semantics stopped far to late.
 
 # v0.6.3 2014-09-22
 
