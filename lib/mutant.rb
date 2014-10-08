@@ -17,6 +17,13 @@ require 'morpher'
 require 'parallel'
 require 'open3'
 
+# Mutant uses parallel with the `:in_threads` option.
+# By default ruby does silently ignore errors raised in threads.
+#
+# This setting is done to make errors within the parallel
+# reporter / execution visible in the main thread.
+Thread.abort_on_exception = true
+
 # Library namespace
 module Mutant
   # The frozen empty string used within mutant
