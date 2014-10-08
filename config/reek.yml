@@ -95,6 +95,7 @@ TooManyMethods:
   - Mutant::Subject
   - Mutant::Mutator::Node
   - Mutant::Reporter::CLI
+  - Mutant::Runner
   - Mutant::Meta::Example::Verification
   max_methods: 10
 TooManyStatements:
