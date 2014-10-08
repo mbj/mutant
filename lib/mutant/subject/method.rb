@@ -32,6 +32,17 @@ module Mutant
       end
       memoize :expression
 
+      # Return match expressions
+      #
+      # @return [Array<Expression>]
+      #
+      # @api private
+      #
+      def match_expressions
+        [expression].concat(context.match_expressions)
+      end
+      memoize :match_expressions
+
     private
 
       # Return scope

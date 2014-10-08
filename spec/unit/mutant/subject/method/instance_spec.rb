@@ -32,6 +32,14 @@ RSpec.describe Mutant::Subject::Method::Instance do
     it_should_behave_like 'an idempotent method'
   end
 
+  describe '#match_expression' do
+    subject { object.match_expressions }
+
+    it { should eql(%w(Test#foo Test*).map(&Mutant::Expression.method(:parse))) }
+
+    it_should_behave_like 'an idempotent method'
+  end
+
   describe '#prepare' do
 
     let(:context) do

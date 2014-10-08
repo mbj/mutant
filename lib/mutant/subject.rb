@@ -114,10 +114,7 @@ module Mutant
     #
     # @api private
     #
-    def match_expressions
-      [expression].concat(context.match_expressions)
-    end
-    memoize :match_expressions
+    abstract_method :match_expressions
 
   private
 
