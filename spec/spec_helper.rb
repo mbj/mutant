@@ -1,10 +1,6 @@
 if ENV['COVERAGE'] == 'true'
   require 'simplecov'
 
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-    SimpleCov::Formatter::HTMLFormatter,
- ]
-
   SimpleCov.start do
     command_name 'spec:unit'
 
