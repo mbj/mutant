@@ -71,7 +71,7 @@ module Mutant
       # @api private
       #
       def report(env)
-        format.write_report(env, output)
+        Printer::EnvResult.run(output, env)
         self
       end
 

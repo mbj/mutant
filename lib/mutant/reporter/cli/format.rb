@@ -25,19 +25,6 @@ module Mutant
         #
         abstract_method :progress
 
-        # Write report
-        #
-        # @param [Result::Env] env
-        # @param [IO] output
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def write_report(env, output)
-          Printer::EnvResult.run(output, env)
-        end
-
         # Output abstraction to decouple tty? from buffer
         class Output
           include Concord.new(:tty, :buffer)
