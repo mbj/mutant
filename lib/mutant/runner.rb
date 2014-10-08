@@ -103,7 +103,7 @@ module Mutant
     # @api private
     #
     def finish(mutation, index, result)
-      return unless result.kind_of?(Mutant::Result::Mutation)
+      return unless result.is_a?(Mutant::Result::Mutation)
 
       test_results = result.test_results.zip(mutation.subject.tests).map do |test_result, test|
         test_result.update(test: test, mutation: mutation) if test_result

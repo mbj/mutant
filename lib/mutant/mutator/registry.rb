@@ -64,7 +64,7 @@ module Mutant
       # @api private
       #
       def self.assert_valid_type(type)
-        unless AST::Types::ALL.include?(type) || type.kind_of?(Class)
+        unless AST::Types::ALL.include?(type) || type.is_a?(Class)
           raise InvalidTypeError, "invalid type registration: #{type}"
         end
       end

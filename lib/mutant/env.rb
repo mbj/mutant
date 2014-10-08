@@ -115,7 +115,7 @@ module Mutant
     def expression(scope)
       name = scope_name(scope) or return
 
-      unless name.kind_of?(String)
+      unless name.is_a?(String)
         warn("#{scope.class}#name from: #{scope.inspect} did not return a String or nil. Fix your lib to support normal ruby semantics!")
         return
       end
