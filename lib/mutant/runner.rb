@@ -24,7 +24,7 @@ module Mutant
 
       run
 
-      @result = @collector.result.update(done: true)
+      @result = @collector.result
 
       reporter.report(result)
     end

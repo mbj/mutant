@@ -105,7 +105,7 @@ module Mutant
 
     # Env result object
     class Env
-      include Coverage, Result, Anima.new(:runtime, :env, :subject_results, :done)
+      include Coverage, Result, Anima.new(:runtime, :env, :subject_results)
 
       COVERAGE_PRECISION = 1
 

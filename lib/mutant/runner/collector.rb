@@ -14,7 +14,7 @@ module Mutant
         super
         @start                = Time.now
         @aggregate            = Hash.new { |hash, key| hash[key] = [] }
-        @activity             = Hash.new(0)
+        @active               = Set.new
         @last_mutation_result = nil
       end
 
@@ -50,12 +50,11 @@ module Mutant
         Result::Env.new(
           env:             env,
           runtime:         Time.now - @start,
-          subject_results: subject_results,
-          done:            false
+          subject_results: subject_results
         )
       end
 
-      # Handle mutation start
+      # Register mutation start
       #
       # @param [Mutation] mutation
       #
@@ -64,7 +63,7 @@ module Mutant
       # @api private
       #
       def start(mutation)
-        @activity[mutation.subject] += 1
+        @active << mutation
         self
       end
 
@@ -79,10 +78,10 @@ module Mutant
       def finish(mutation_result)
         @last_mutation_result = mutation_result
 
-        subject = mutation_result.mutation.subject
+        mutation = mutation_result.mutation
+        @active.delete(mutation)
 
-        @activity[subject] -= 1
-        @aggregate[subject] << mutation_result
+        @aggregate[mutation.subject] << mutation_result
 
         self
       end
@@ -106,9 +105,9 @@ module Mutant
       # @api private
       #
       def active_subjects
-        @activity.select do |_subject, count|
-          count > 0
-        end.map(&:first)
+        @active.each_with_object(Set.new) do |mutation, subjects|
+          subjects << mutation.subject
+        end.sort_by(&:identification)
       end
 
       # Return current subject result

@@ -33,7 +33,6 @@ RSpec.describe Mutant::Reporter::CLI do
 
   let(:result) do
     Mutant::Result::Env.new(
-      done:            true,
       env:             env,
       runtime:         1.1,
       subject_results: subject_results
