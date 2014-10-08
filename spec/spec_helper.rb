@@ -12,7 +12,7 @@ if ENV['COVERAGE'] == 'true'
     add_filter 'lib/mutant/zombifier'
     add_filter 'lib/mutant/zombifier/*'
 
-    minimum_coverage 89.77  # TODO: raise this to 100, then mutation test
+    minimum_coverage 97.64  # TODO: raise this to 100, then mutation test
   end
 end
 
