@@ -125,9 +125,8 @@ module Mutant
     def process_result(result)
       @collector.finish(result)
       reporter.progress(@collector)
-      if !result.success? && config.fail_fast
-        @continue = false
-      end
+      return unless config.fail_fast && !result.success?
+      @continue = false
     end
 
     # Run mutation
