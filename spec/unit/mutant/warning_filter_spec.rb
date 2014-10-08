@@ -54,7 +54,7 @@ RSpec.describe Mutant::WarningFilter do
     it 'executes block with warning filter enabled' do
       found = false
       object.use do
-        found = $stderr.kind_of?(described_class)
+        found = $stderr.is_a?(described_class)
       end
       expect(found).to be(true)
     end
