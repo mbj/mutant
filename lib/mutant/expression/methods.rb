@@ -25,6 +25,22 @@ module Mutant
         MATCHERS.fetch(scope_symbol).new(env, scope)
       end
 
+      # Return length of match
+      #
+      # @param [Expression] expression
+      #
+      # @return [Fixnum]
+      #
+      # @api private
+      #
+      def match_length(expression)
+        if expression.syntax.start_with?(syntax)
+          syntax.length
+        else
+          0
+        end
+      end
+
     private
 
       # Return scope name

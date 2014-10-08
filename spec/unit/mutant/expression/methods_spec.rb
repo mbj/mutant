@@ -16,7 +16,13 @@ RSpec.describe Mutant::Expression::Methods do
       it { should be(object.syntax.length) }
     end
 
-    context 'when other is an unequivalent expression' do
+    context 'when other is matched' do
+      let(:other) { described_class.parse('TestApp::Literal#foo') }
+
+      it { should be(object.syntax.length) }
+    end
+
+    context 'when other is an not matched expression' do
       let(:other) { described_class.parse('Foo*') }
 
       it { should be(0) }
