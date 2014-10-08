@@ -64,7 +64,7 @@ module Mutant
     # @api private
     #
     def self.lines(source)
-      source.lines.map { |line| line.chomp }
+      source.lines.map(&:chomp)
     end
     private_class_method :lines
 
