@@ -95,12 +95,11 @@ RSpec.describe Mutant::Runner do
       Mutant::Result::Env.new(
         env:             env,
         runtime:         0.0,
-        done:            false,
         subject_results: expected_subject_results
       )
     end
 
-    pending 'on normal execution' do
+    context 'on error free execution' do
       subject { object.result }
 
       its(:env) { should be(env) }
@@ -110,7 +109,7 @@ RSpec.describe Mutant::Runner do
       end
     end
 
-    skip 'when isolation raises error' do
+    context 'when isolation raises error' do
       subject { object.result }
 
       its(:env)             { should be(env)                       }

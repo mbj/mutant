@@ -186,8 +186,8 @@ module Mutant
       end
     rescue Isolation::Error => exception
       Result::Test.new(
-        test:     nil,
-        mutation: nil,
+        test:     test,
+        mutation: mutation,
         runtime:  Time.now - time,
         output:   exception.message,
         passed:   false
