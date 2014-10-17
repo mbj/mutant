@@ -1,6 +1,9 @@
 # encoding: utf-8
 
+original = $VERBOSE
 # Namespace for test application
+# Silence intentional violations
+$VERBOSE = false
 module TestApp
   module InstanceMethodTests
     module DefinedOnce
@@ -99,3 +102,4 @@ module TestApp
 end
 
 require 'test_app/literal'
+$VERBOSE = original
