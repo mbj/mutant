@@ -43,5 +43,15 @@ RSpec.describe Mutant::Isolation::Fork do
       expect { object.call { fail Parallel::DeadWorker } }.to raise_error(Mutant::Isolation::Error)
     end
 
+    it 'wraps Parallel::DeadWorker exceptions caused by crashing ruby' do
+      expect do
+        object.call do
+          # Silence rb_bug writes
+          $stderr.reopen(File.open('/dev/null', 'w'))
+          fail RbBug.call
+        end
+      end.to raise_error(Mutant::Isolation::Error)
+    end
+
   end
 end

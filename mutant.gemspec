@@ -39,4 +39,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('concord',       '~> 0.1.5')
 
   gem.add_development_dependency('bundler', '~> 1.3', '>= 1.3.5')
+  gem.add_development_dependency('ffi',     '~> 1.9.6')
 end
