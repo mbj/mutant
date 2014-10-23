@@ -54,29 +54,7 @@ module Mutant
         end
         memoize name
       end
-
-      # Compute result tracking runtime
-      #
-      # @return [Result]
-      #
-      # @api private
-      #
-      def compute
-        start = Time.now
-        new(yield.merge(runtime: Time.now - start))
-      end
-
     end # ClassMethods
-
-    # Test if operation is failing
-    #
-    # @return [Boolean]
-    #
-    # @api private
-    #
-    def fail?
-      !success?
-    end
 
     # Return overhead
     #
@@ -98,7 +76,7 @@ module Mutant
     #
     def self.included(host)
       host.class_eval do
-        include Adamantium::Flat, Anima::Update
+        include Adamantium, Anima::Update
         extend ClassMethods
       end
     end
@@ -120,6 +98,16 @@ module Mutant
       end
       memoize :success?
 
+      # Test if runner should continue on env
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
+      def continue?
+        !env.config.fail_fast || subject_results.all?(&:success?)
+      end
+
       # Return failed subject results
       #
       # @return [Array<Result::Subject>]
@@ -130,11 +118,20 @@ module Mutant
         subject_results.reject(&:success?)
       end
 
-      sum :amount_mutations,        :subject_results
       sum :amount_mutation_results, :subject_results
       sum :amount_mutations_alive,  :subject_results
       sum :amount_mutations_killed, :subject_results
       sum :killtime,                :subject_results
+
+      # Return amount of mutations
+      #
+      # @return [Fixnum]
+      #
+      # @api private
+      #
+      def amount_mutations
+        env.mutations.length
+      end
 
       # Return amount of subjects
       #
@@ -166,23 +163,14 @@ module Mutant
       #
       alias_method :killtime, :runtime
 
-      # Test if mutation test result is successful
-      #
-      # @return [Boolean]
-      #
-      # @api private
-      #
-      def success?
-        mutation.killed_by?(self)
-      end
-
     end # Test
 
     # Subject result
     class Subject
-      include Coverage, Result, Anima.new(:subject, :mutation_results, :runtime)
+      include Coverage, Result, Anima.new(:subject, :mutation_results)
 
       sum :killtime, :mutation_results
+      sum :runtime,  :mutation_results
 
       # Test if subject was processed successful
       #
@@ -192,6 +180,16 @@ module Mutant
       #
       def success?
         alive_mutation_results.empty?
+      end
+
+      # Test if runner should continue on subject
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
+      def continue?
+        mutation_results.all?(&:success?)
       end
 
       # Return killed mutations
@@ -260,7 +258,20 @@ module Mutant
 
     # Mutation result
     class Mutation
-      include Result, Anima.new(:runtime, :mutation, :test_results, :index)
+      include Result, Anima.new(:mutation, :test_results, :index)
+
+      sum :runtime, :test_results
+
+      # Return failed test results
+      #
+      # @return [Array<Result::Test>]
+      #
+      # @api private
+      #
+      def failed_test_results
+        test_results.reject(&:passed)
+      end
+      memoize :failed_test_results
 
       # Test if mutation was handled successfully
       #
@@ -269,17 +280,17 @@ module Mutant
       # @api private
       #
       def success?
-        test_results.any?(&:success?)
+        mutation.class.success?(test_results)
       end
 
-      # Return failed test results
+      # Test if execution on mutation can be stopped
       #
-      # @return [Array]
+      # @return [Boolean]
       #
       # @api private
       #
-      def failed_test_results
-        test_results.select(&:fail?)
+      def continue?
+        mutation.class.continue?(test_results)
       end
 
       sum :killtime, :test_results

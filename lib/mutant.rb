@@ -100,6 +100,12 @@ require 'mutant/ast/nodes'
 require 'mutant/ast/named_children'
 require 'mutant/ast/node_predicates'
 require 'mutant/ast/meta'
+require 'mutant/actor'
+require 'mutant/actor/receiver'
+require 'mutant/actor/sender'
+require 'mutant/actor/mailbox'
+require 'mutant/actor/actor'
+require 'mutant/actor/env'
 require 'mutant/cache'
 require 'mutant/delegator'
 require 'mutant/warning_filter'
@@ -195,7 +201,9 @@ require 'mutant/cli'
 require 'mutant/color'
 require 'mutant/diff'
 require 'mutant/runner'
-require 'mutant/runner/collector'
+require 'mutant/runner/scheduler'
+require 'mutant/runner/master'
+require 'mutant/runner/worker'
 require 'mutant/result'
 require 'mutant/reporter'
 require 'mutant/reporter/null'
@@ -223,6 +231,7 @@ module Mutant
       reporter:          Reporter::CLI.build($stdout),
       zombie:            false,
       jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : Parallel.processor_count,
+      actor_env:         Mutant::Actor::Env.new(Thread),
       expected_coverage: 100.0
     )
   end # Config

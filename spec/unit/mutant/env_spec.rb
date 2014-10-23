@@ -12,7 +12,7 @@ RSpec.describe Mutant::Env do
           end
         end
 
-        expected_warnings = ["Class#name from: #{klass} raised an error: RuntimeError fix your lib to follow normal ruby semantics!"]
+        expected_warnings = ["Class#name from: #{klass} raised an error: RuntimeError. #{Mutant::Env::SEMANTICS_MESSAGE}"]
 
         expect { subject }.to change { config.reporter.warn_calls }.from([]).to(expected_warnings)
 
@@ -33,7 +33,7 @@ RSpec.describe Mutant::Env do
           end
         end
 
-        expected_warnings = ["Class#name from: #{klass.inspect} returned #{Object.inspect} instead String or nil. Fix your lib to follow normal ruby semantics!"]
+        expected_warnings = ["Class#name from: #{klass.inspect} returned Object. #{Mutant::Env::SEMANTICS_MESSAGE}"]
 
         expect { subject }.to change { config.reporter.warn_calls }.from([]).to(expected_warnings)
 

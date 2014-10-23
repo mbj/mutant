@@ -12,7 +12,7 @@ if ENV['COVERAGE'] == 'true'
     add_filter 'lib/mutant/zombifier'
     add_filter 'lib/mutant/zombifier/*'
 
-    minimum_coverage 97.64  # TODO: raise this to 100, then mutation test
+    minimum_coverage 100
   end
 end
 
@@ -45,8 +45,16 @@ module ParserHelper
   end
 end
 
+module MessageHelper
+  def message(*arguments)
+    Mutant::Actor::Message.new(*arguments)
+  end
+end
+
 RSpec.configure do |config|
+  config.extend(SharedContext)
   config.include(CompressHelper)
+  config.include(MessageHelper)
   config.include(ParserHelper)
   config.include(Mutant::AST::Sexp)
 end

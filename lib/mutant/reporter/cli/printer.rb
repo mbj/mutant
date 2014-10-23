@@ -5,6 +5,8 @@ module Mutant
       class Printer
         include AbstractType, Delegator, Adamantium::Flat, Concord.new(:output, :object)
 
+        delegate(:success?)
+
         NL = "\n".freeze
 
         # Run printer on object to output
@@ -98,16 +100,6 @@ module Mutant
           output.puts(string)
         end
 
-        # Test if runner was successful
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        #
-        def success?
-          object.success?
-        end
-
         # Colorize message
         #
         # @param [Color] color
@@ -142,8 +134,10 @@ module Mutant
         #
         alias_method :color?, :tty?
 
-        # Printer for run collector
-        class Collector < self
+        # Printer for runner status
+        class Status < self
+
+          delegate(:active_jobs, :env_result)
 
           # Print progress for collector
           #
@@ -152,14 +146,42 @@ module Mutant
           # @api private
           #
           def run
-            visit(EnvProgress, object.result)
-            active_subject_results = object.active_subject_results
+            visit(EnvProgress, object.env_result)
             info('Active subjects:    %d', active_subject_results.length)
             visit_collection(SubjectProgress, active_subject_results)
+            job_status
             self
           end
 
-        end # Collector
+        private
+
+          # Print worker status
+          #
+          # @return [undefined]
+          #
+          def job_status
+            return if active_jobs.empty?
+            info('Active Jobs:')
+            object.active_jobs.sort_by(&:index).each do |job|
+              info('%d: %s', job.index, job.mutation.identification)
+            end
+          end
+
+          # Return active subject results
+          #
+          # @return [Array<Result::Subject>]
+          #
+          # @api private
+          #
+          def active_subject_results
+            active_subjects = active_jobs.map(&:mutation).flat_map(&:subject).to_set
+
+            env_result.subject_results.select do |subject_result|
+              active_subjects.include?(subject_result.subject)
+            end
+          end
+
+        end # Status
 
         # Progress printer for configuration
         class Config < self
@@ -408,7 +430,7 @@ module Mutant
 
           delegate :mutation, :failed_test_results
 
-          DIFF_ERROR_MESSAGE = 'BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction!'.freeze
+          DIFF_ERROR_MESSAGE = 'BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!'.freeze
 
           MAP = {
             Mutant::Mutation::Evil    => :evil_details,
@@ -509,7 +531,7 @@ module Mutant
         # Test result reporter
         class TestResult < self
 
-          delegate :test, :runtime
+          delegate :test, :runtime, :mutation
 
           # Run test result reporter
           #
@@ -518,9 +540,13 @@ module Mutant
           # @api private
           #
           def run
-            status('- %s / runtime: %s', test.identification, object.runtime)
+            status('- %s / runtime: %s', test.identification, runtime)
             puts('Test Output:')
             puts(object.output)
+          end
+
+          def success?
+            false
           end
 
         end # TestResult

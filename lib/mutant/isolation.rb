@@ -50,8 +50,7 @@ module Mutant
         end
 
         writer.close
-        result = Marshal.load(reader.read)
-        result
+        Marshal.load(reader.read)
       rescue => exception
         fail Error, exception
       ensure

@@ -12,7 +12,6 @@ ControlParameter:
   enabled: true
   exclude:
   - Mutant::Expression#match_length
-  - Mutant::Reporter::CLI::Printer::SubjectProgress#print_mutation_result
 DataClump:
   enabled: true
   exclude: []
@@ -26,8 +25,6 @@ DuplicateMethodCall:
 FeatureEnvy:
   enabled: true
   exclude:
-  # Nature of OptionParser :(
-  - Mutant::CLI#add_environment_options
   - Mutant::Env#scope_name
   - Mutant::Diff#minimized_hunks
   - Mutant::Integration::Rspec#run
@@ -35,15 +32,13 @@ FeatureEnvy:
   - Mutant::Integration::Rspec::Rspec3#full_description
   - Mutant::Matcher::Method::Instance#match?
   - Mutant::Matcher::Method::Singleton#receiver?
-  - Mutant::Mutation::Evil#success?
-  - Mutant::Mutation::Neutral#success?
   - Mutant::Mutator::Node#children_indices
-  # False positive, its a utility
-  - Mutant::Meta::Example::Verification#format_mutation
+  - Mutant::Meta::Example::Verification#format_mutation # False positive, its a utility
   - Mutant::Reporter::CLI#subject_results
-  - Mutant::Runner#run_mutation_test
-  - Mutant::Runner#kill_mutation
   - Mutant::Runner#finish
+  - Mutant::Runner::Master#stop_worker
+  - Mutant::Runner::Worker#run_mutation
+  - Mutant::Runner::Worker#handle
 IrresponsibleModule:
   enabled: true
   exclude: []
@@ -51,8 +46,6 @@ LongParameterList:
   enabled: true
   exclude:
   - Mutant::Matcher::Method::Instance#self.build?
-  - Mutant::Runner#finish # API client of parallel, one gets _ignored.
-  - Mutant::Runner#self.run
   max_params: 2
 LongYieldList:
   enabled: true
@@ -80,41 +73,32 @@ RepeatedConditional:
   enabled: true
   exclude:
   - Mutant::Mutator
-  - Mutant::Reporter::CLI
   - Mutant::Meta::Example::DSL
+  - Mutant::Runner::Master
   max_ifs: 1
 TooManyInstanceVariables:
   enabled: true
   exclude:
   - Mutant::Mutator # 4 vars
-  - Mutant::Runner  # 4 vars
+  - Mutant::Runner::Master # 4 vars
+  - Mutant::Runner::Scheduler # 4 vars
   max_instance_variables: 3
 TooManyMethods:
   enabled: true
   exclude:
   - Mutant::CLI
-  - Mutant::Subject
   - Mutant::Mutator::Node
-  - Mutant::Reporter::CLI
-  - Mutant::Runner
   - Mutant::Meta::Example::Verification
   max_methods: 10
 TooManyStatements:
   enabled: true
   exclude:
-  - Mutant#self.singleton_subclass_instance
   - Mutant::Integration::Rspec#run
   - Mutant::Isolation::Fork#self.call
-  - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI::Printer::EnvProgress#run
   - Mutant::Reporter::CLI::Printer::Config#run
-  - Mutant::RequireHighjack#infect
-  - Mutant::Rspec::Killer#run
-  - Mutant::Runner#visit_collection
   - Mutant::Runner#initialize
-  - Mutant::Runner::Mutation#run
   - Mutant::Zombifier::File#self.find
-  - Mutant::CLI#add_debug_options
   - Mutant::CLI#add_environment_options
   max_statements: 7
 UncommunicativeMethodName:
@@ -166,8 +150,5 @@ UtilityFunction:
   - Mutant::Integration::Rspec::Rspec2#new_reporter
   - Mutant::Integration::Rspec::Rspec3#full_description
   - Mutant::Meta::Example::Verification#format_mutation
-  - Mutant::Mutation::Evil#success?
-  - Mutant::Mutation::Neutral#success?
   - Mutant::Reporter::CLI::Format::Progressive#new_buffer
-  - Mutant::Runner#run_mutation_test
   max_helper_calls: 0

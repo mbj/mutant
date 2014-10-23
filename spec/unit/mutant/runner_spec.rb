@@ -1,143 +1,85 @@
-class Double
-  include Concord.new(:name, :attributes)
-
-  def self.new(name, attributes = {})
-    super
-  end
-
-  def update(_attributes)
-    self
-  end
-
-  def method_missing(name, *arguments)
-    super unless attributes.key?(name)
-    fail "Arguments provided for #{name}" if arguments.any?
-    attributes.fetch(name)
-  end
-end
-
-# FIXME: This is not even close to a mutation covering spec.
 RSpec.describe Mutant::Runner do
-  let(:object) { described_class.new(env) }
+  setup_shared_context
 
-  let(:reporter) { Mutant::Reporter::Trace.new                        }
-  let(:config)   { Mutant::Config::DEFAULT.update(reporter: reporter, isolation: Mutant::Isolation::None) }
-  let(:subjects) { [subject_a, subject_b]                             }
-
-  let(:subject_a) { Double.new('Subject A', mutations: mutations_a, tests: subject_a_tests) }
-  let(:subject_b) { Double.new('Subject B', mutations: mutations_b) }
-
-  let(:subject_a_tests) { [test_a1, test_a2] }
-
-  let(:env) do
-    subjects = self.subjects
-    Class.new(Mutant::Env) do
-      define_method(:subjects) { subjects }
-    end.new(config)
-  end
-
-  let(:mutations_a) { [mutation_a1, mutation_a2] }
-  let(:mutations_b) { [] }
-
-  let(:mutation_a1) { Double.new('Mutation A1') }
-  let(:mutation_a2) { Double.new('Mutation A2') }
-
-  let(:test_a1) { Double.new('Test A1') }
-  let(:test_a2) { Double.new('Test A2') }
-
-  let(:test_report_a1) { Double.new('Test Report A1') }
+  let(:integration)    { double('Integration')    }
+  let(:master_sender)  { actor_env.spawn          }
+  let(:runner_actor)   { actor_env.actor(:runner) }
 
   before do
-    allow(mutation_a1).to receive(:subject).and_return(subject_a)
-    allow(mutation_a1).to receive(:insert)
-    allow(mutation_a2).to receive(:subject).and_return(subject_a)
-    allow(mutation_a2).to receive(:insert)
-    allow(test_a1).to receive(:run).and_return(test_report_a1)
-    allow(mutation_a1).to receive(:killed_by?).with(test_report_a1).and_return(true)
-    allow(mutation_a2).to receive(:killed_by?).with(test_report_a1).and_return(true)
+    expect(integration).to receive(:setup).ordered
+    expect(Mutant::Runner::Master).to receive(:call).with(env).and_return(master_sender).ordered
   end
 
-  before do
-    time = Time.at(0)
-    allow(Time).to receive(:now).and_return(time)
-  end
+  describe '.call' do
+    update(:config) { { integration: integration } }
+    let(:actor_names) { [:runner, :master] }
 
-  let(:expected_subject_results) do
-    [
-      Mutant::Result::Subject.new(
-        subject:          subject_a,
-        mutation_results: [
-          Mutant::Result::Mutation.new(
-            index:        0,
-            mutation:     mutation_a1,
-            runtime:      0.0,
-            test_results: [test_report_a1]
-          ),
-          Mutant::Result::Mutation.new(
-            index:        1,
-            mutation:     mutation_a2,
-            runtime:      0.0,
-            test_results: [test_report_a1]
-          )
-        ],
-        runtime:          0.0
-      ),
-      Mutant::Result::Subject.new(
-        subject:          subject_b,
-        mutation_results: [],
-        runtime:          0.0
-      )
-    ]
-  end
+    subject { described_class.call(env) }
 
-  describe '#result' do
-    let(:expected_result) do
-      Mutant::Result::Env.new(
-        env:             env,
-        runtime:         0.0,
-        subject_results: expected_subject_results
-      )
-    end
+    context 'when status done gets returned immediately' do
+      before do
+        message_sequence.add(:runner, :status, actor_env.actor(:current).sender)
+        message_sequence.add(:current, :status, status)
+        message_sequence.add(:runner, :stop, actor_env.actor(:current).sender)
+        message_sequence.add(:current, :stop)
+      end
 
-    context 'on error free execution' do
-      subject { object.result }
+      it 'returns env result' do
+        should be(status.env_result)
+      end
 
-      its(:env) { should be(env) }
+      it 'logs start' do
+        expect { subject }.to change { config.reporter.start_calls }.from([]).to([env])
+      end
 
-      it 'reports result' do
-        expect { subject }.to change { config.reporter.report_calls }.from([]).to([expected_result])
+      it 'logs process' do
+        expect { subject }.to change { config.reporter.progress_calls }.from([]).to([status])
+      end
+
+      it 'logs result' do
+        expect { subject }.to change { config.reporter.report_calls }.from([]).to([status.env_result])
+      end
+
+      it 'consumes all messages' do
+        expect { subject }.to change(&message_sequence.method(:consumed?)).from(false).to(true)
       end
     end
 
-    context 'when isolation raises error' do
-      subject { object.result }
-
-      its(:env)             { should be(env)                       }
-      its(:subject_results) { should eql(expected_subject_results) }
-
-      it { should eql(expected_result) }
+    context 'when status done gets returned immediately' do
+      let(:incomplete_status) { status.update(done: false) }
 
       before do
-        expect(Mutant::Isolation::None).to receive(:call)
-          .twice
-          .and_raise(Mutant::Isolation::Error.new('test-exception-message'))
-
-        expect(Mutant::Result::Test).to receive(:new).with(
-          test:     test_a1,
-          mutation: mutation_a1,
-          runtime:  0.0,
-          output:   'test-exception-message',
-          passed:   false
-        ).and_return(test_report_a1)
-        expect(Mutant::Result::Test).to receive(:new).with(
-          test:     test_a1,
-          mutation: mutation_a2,
-          runtime:  0.0,
-          output:   'test-exception-message',
-          passed:   false
-        ).and_return(test_report_a1)
+        expect(Kernel).to receive(:sleep).with(1 / 20.0).exactly(2).times.ordered
+        message_sequence.add(:runner,  :status, actor_env.actor(:current).sender)
+        message_sequence.add(:current, :status, incomplete_status)
+        message_sequence.add(:runner,  :status, actor_env.actor(:current).sender)
+        message_sequence.add(:current, :status, incomplete_status)
+        message_sequence.add(:runner,  :status, actor_env.actor(:current).sender)
+        message_sequence.add(:current, :status, status)
+        message_sequence.add(:runner,  :stop,   actor_env.actor(:current).sender)
+        message_sequence.add(:current, :stop)
       end
 
+      it 'returns env result' do
+        should be(status.env_result)
+      end
+
+      it 'logs start' do
+        expect { subject }.to change { config.reporter.start_calls }.from([]).to([env])
+      end
+
+      it 'logs result' do
+        expect { subject }.to change { config.reporter.report_calls }.from([]).to([status.env_result])
+      end
+
+      it 'logs process' do
+        expected = [incomplete_status, incomplete_status, status]
+        expect { subject }.to change { config.reporter.progress_calls }.from([]).to(expected)
+      end
+
+      it 'consumes all messages' do
+        expect { subject }.to change(&message_sequence.method(:consumed?)).from(false).to(true)
+      end
     end
   end
 end
