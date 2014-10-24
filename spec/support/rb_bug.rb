@@ -16,5 +16,3 @@ module RbBug
   end
 
 end # RbBug
-
-

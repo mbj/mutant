@@ -79,7 +79,13 @@ describe Mutant::Runner::Collector do
 
     it 'aggregates results in #result' do
       subject
-      expect(object.result).to eql(Mutant::Result::Env.new(env: object.env, runtime: 0.0, subject_results: [subject_a_result]))
+      expect(object.result).to eql(
+        Mutant::Result::Env.new(
+          env: object.env,
+          runtime: 0.0,
+          subject_results: [subject_a_result]
+        )
+      )
     end
 
     it_should_behave_like 'a command method'
