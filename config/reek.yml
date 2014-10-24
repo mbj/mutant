@@ -104,6 +104,7 @@ TooManyStatements:
   exclude:
   - Mutant#self.singleton_subclass_instance
   - Mutant::Integration::Rspec#run
+  - Mutant::Isolation::Fork#self.call
   - Mutant::Reporter::CLI#colorized_diff
   - Mutant::Reporter::CLI::Printer::EnvProgress#run
   - Mutant::Reporter::CLI::Printer::Config#run
