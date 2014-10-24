@@ -64,6 +64,7 @@ NestedIterators:
   - Mutant#self.singleton_subclass_instance
   - Mutant::CLI#parse
   - Mutant::Integration::Rspec#run
+  - Mutant::Isolation::Fork#self.call
   - Mutant::Mutator::Util::Array::Element#dispatch
   - Mutant::Mutator::Node::Resbody#mutate_captures
   - Mutant::Mutator::Node::Arguments#emit_argument_mutations
