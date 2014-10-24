@@ -16,6 +16,7 @@ if ENV['COVERAGE'] == 'true'
   end
 end
 
+require 'tempfile'
 require 'concord'
 require 'adamantium'
 require 'devtools/spec_helper'

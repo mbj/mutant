@@ -38,8 +38,22 @@ module Mutant
       # @api private
       #
       def self.call(&block)
-        Parallel.map([block], in_processes: 1, &block.method(:call)).first
-      rescue Parallel::DeadWorker => exception
+        reader, writer = IO.pipe
+
+        pid = fork do
+          File.open('/dev/null', 'w') do |file|
+            $stderr.reopen(file)
+            reader.close
+            writer.write(Marshal.dump(block.call))
+            writer.close
+          end
+        end
+
+        writer.close
+        result = Marshal.load(reader.read)
+        Process.waitpid(pid)
+        result
+      rescue => exception
         fail Error, exception
       end
 

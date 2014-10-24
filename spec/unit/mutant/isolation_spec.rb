@@ -39,19 +39,29 @@ RSpec.describe Mutant::Isolation::Fork do
       expect(object.call { :foo }).to be(:foo)
     end
 
-    it 'wraps Parallel::DeadWorker exceptions' do
-      expect { object.call { fail Parallel::DeadWorker } }.to raise_error(Mutant::Isolation::Error)
+    it 'wraps exceptions' do
+      expect { object.call { fail } }.to raise_error(Mutant::Isolation::Error)
     end
 
-    it 'wraps Parallel::DeadWorker exceptions caused by crashing ruby' do
+    it 'wraps exceptions caused by crashing ruby' do
       expect do
         object.call do
-          # Silence rb_bug writes
-          $stderr.reopen(File.open('/dev/null', 'w'))
           fail RbBug.call
         end
       end.to raise_error(Mutant::Isolation::Error)
     end
 
+    it 'redirects $stderr of children to /dev/null' do
+      begin
+        Tempfile.open('mutant-test') do |file|
+          $stderr = file
+          object.call { $stderr.puts('test') }
+          file.rewind
+          expect(file.read).to eql('')
+        end
+      ensure
+        $stderr = STDERR
+      end
+    end
   end
 end
