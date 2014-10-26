@@ -1,5 +1,6 @@
 require 'morpher'
 require 'anima'
+require 'mutant'
 
 # Namespace module for corpus testing
 module Corpus
@@ -51,8 +52,8 @@ module Corpus
       start = Time.now
       paths = Pathname.glob(repo_path.join('**/*.rb')).sort_by(&:size).reverse
       options = {
-        finish: method(:finish),
-        start: method(:start),
+        finish:       method(:finish),
+        start:        method(:start),
         in_processes: parallel_processes
       }
       total = Parallel.map(paths, options) do |path|
@@ -135,9 +136,8 @@ module Corpus
     # @api private
     #
     def parallel_processes
-      case
-      when Devtools.circle_ci?
-        CIRCLE_CI_CONTAINER_PROCESSES
+      if ENV['CI']
+        Mutant::Config::DEFAULT.jobs
       else
         Parallel.processor_count
       end
