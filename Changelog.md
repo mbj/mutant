@@ -2,7 +2,7 @@
 
 * Do not buffer report prints, speedup large report generation.
 * Fix some cases where --fail-fast semantics stopped far to late.
-* Fix crashing / stuckage from using parallel in a nested way. [#265](https://github.com/mbj/mutant/issues/265), [#261](https://github.com/mbj/mutant/issues/261)
+* Fix crashing / stuckage from using parallel in a nested way.
 
 # v0.6.3 2014-09-22
 
