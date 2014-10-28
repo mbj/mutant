@@ -1,8 +1,8 @@
-# v0.6.5 2014-10-29
+# v0.6.5 2014-10-28
 
 * Fix killforks not to leak zombies.
 
-# v0.6.4 2014-10-28
+# v0.6.4 2014-10-27
 
 * Do not buffer report prints, speedup large report generation.
 * Fix some cases where --fail-fast semantics stopped far to late.
