@@ -51,10 +51,11 @@ module Mutant
 
         writer.close
         result = Marshal.load(reader.read)
-        Process.waitpid(pid)
         result
       rescue => exception
         fail Error, exception
+      ensure
+        Process.waitpid(pid) if pid
       end
 
     end # Fork
