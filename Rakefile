@@ -4,14 +4,15 @@ require 'devtools'
 
 Devtools.init_rake_tasks
 
-# Mutant self test is to slow for travis. Fast enough for circle.
-if ENV['TRAVIS']
+# Frequent lookups in MRI make mutation analysis getting stuck on CI
+# See: https://github.com/mbj/mutant/issues/265
+if ENV['CI']
   Rake.application.load_imports
 
   task('metrics:mutant').clear
   namespace :metrics do
     task :mutant => :coverage do
-      $stderr.puts 'Mutant self test via zombie not active on travis CI'
+      $stderr.puts 'Mutant self test via zombie not active on CI'
     end
   end
 end
