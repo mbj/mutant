@@ -56,6 +56,8 @@ module Mutant
 
       # Assert the node type is valid
       #
+      # @param [Symbol] type
+      #
       # @return [undefined]
       #
       # @raise [InvalidTypeError]
