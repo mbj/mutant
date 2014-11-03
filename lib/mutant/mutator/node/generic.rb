@@ -13,7 +13,7 @@ module Mutant
           :alias, :for, :xstr, :back_ref, :class,
           :sclass, :match_with_lvasgn, :while_post,
           :until_post, :preexe, :postexe, :iflipflop, :eflipflop, :kwsplat,
-          :shadowarg
+          :shadowarg, :rational
         )
 
       private
