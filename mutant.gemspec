@@ -23,7 +23,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 1.9.3'
 
-  gem.add_runtime_dependency('parser',        '~> 2.1')
+  gem.add_runtime_dependency('parser',        '~> 2.2.pre.6')
   gem.add_runtime_dependency('ast',           '~> 2.0')
   gem.add_runtime_dependency('diff-lcs',      '~> 1.2')
   gem.add_runtime_dependency('parallel',      '~> 1.3')
