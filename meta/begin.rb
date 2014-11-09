@@ -20,6 +20,6 @@ Mutant::Meta::Example.add do
 
   source s(:begin, s(:true))
   # Mutation of each statement in block
-  mutation s(:begin, s(:false))
   mutation s(:begin, s(:nil))
+  mutation s(:begin, s(:false))
 end

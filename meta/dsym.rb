@@ -4,10 +4,11 @@ Mutant::Meta::Example.add do
   source ':"foo#{bar}baz"'
 
   singleton_mutations
-  mutation ':"#{nil}#{bar}baz"'
-  mutation ':"#{self}#{bar}baz"'
-  mutation ':"foo#{bar}#{nil}"'
-  mutation ':"foo#{bar}#{self}"'
-  mutation ':"foo#{nil}baz"'
-  mutation ':"foo#{self}baz"'
+  # TODO: Unparser imperfection two asts with same source.
+  mutation s(:dsym, s(:nil), s(:begin, s(:send, nil, :bar)), s(:str, 'baz'))
+  mutation s(:dsym, s(:self), s(:begin, s(:send, nil, :bar)), s(:str, 'baz'))
+  mutation s(:dsym, s(:str, 'foo'), s(:begin, s(:self)), s(:str, 'baz'))
+  mutation s(:dsym, s(:str, 'foo'), s(:begin, s(:nil)), s(:str, 'baz'))
+  mutation s(:dsym, s(:str, 'foo'), s(:begin, s(:send, nil, :bar)), s(:nil))
+  mutation s(:dsym, s(:str, 'foo'), s(:begin, s(:send, nil, :bar)), s(:self))
 end
