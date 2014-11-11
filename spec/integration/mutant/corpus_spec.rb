@@ -1,7 +1,7 @@
 RSpec.describe 'Mutant on ruby corpus' do
 
   before do
-    skip 'Corpus test is deactivated on 1.9.3' if RUBY_VERSION.eql?('1.9.3')
+    skip 'Corpus test is deactivated on < 2.1' if RUBY_VERSION < '2.1'
     skip 'Corpus test is deactivated on RBX' if RUBY_ENGINE.eql?('rbx')
   end
 
