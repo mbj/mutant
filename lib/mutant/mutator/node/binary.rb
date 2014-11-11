@@ -27,6 +27,8 @@ module Mutant
           emit(right)
           mutate_operator
           mutate_operands
+          emit_left_mutations
+          emit_right_mutations
         end
 
         # Emit operator mutations

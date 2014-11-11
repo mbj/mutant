@@ -1,3 +1,7 @@
+# v0.6.6 2014-11-11
+
+* Fix emitter to recurse into left and right of binary nodes.
+
 # v0.6.5 2014-10-28
 
 * Fix killforks not to leak zombies.
