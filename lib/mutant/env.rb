@@ -1,7 +1,7 @@
 module Mutant
   # Abstract base class for mutant environments
   class Env
-    include Adamantium::Flat, Concord::Public.new(:config, :cache), Procto.call(:run)
+    include Adamantium::Flat, Concord::Public.new(:config, :cache)
 
     # Return new env
     #
@@ -28,16 +28,6 @@ module Mutant
       initialize_matchable_scopes
       initialize_subjects
       initialize_mutations
-    end
-
-    # Run mutant producing a report on configured env
-    #
-    # @return [Report]
-    #
-    # @api private
-    #
-    def run
-      Runner.call(self)
     end
 
     # Print warning message

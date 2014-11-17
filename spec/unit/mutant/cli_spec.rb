@@ -18,14 +18,15 @@ RSpec.describe Mutant::CLI do
   describe '.run' do
     subject { object.run(arguments) }
 
-    let(:arguments) { double('arguments') }
-
-    let(:report) { double('Report', success?: report_success) }
-    let(:config) { double('Config') }
+    let(:arguments) { double('arguments')                        }
+    let(:report)    { double('Report', success?: report_success) }
+    let(:config)    { double('Config')                           }
+    let(:env)       { double('env')                              }
 
     before do
       expect(Mutant::CLI).to receive(:call).with(arguments).and_return(config)
-      expect(Mutant::Env).to receive(:call).with(config).and_return(report)
+      expect(Mutant::Env).to receive(:new).with(config).and_return(env)
+      expect(Mutant::Runner).to receive(:call).with(env).and_return(report)
     end
 
     context 'when report signalls success' do
