@@ -40,7 +40,7 @@ module Mutant
       def self.call(&block)
         reader, writer = IO.pipe
 
-        pid = fork do
+        pid = Process.fork do
           File.open('/dev/null', 'w') do |file|
             $stderr.reopen(file)
             reader.close

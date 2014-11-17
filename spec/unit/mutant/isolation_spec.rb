@@ -63,5 +63,25 @@ RSpec.describe Mutant::Isolation::Fork do
         $stderr = STDERR
       end
     end
+
+    # Spec stubbing out the fork to ensure all lines are covered
+    # with expectations
+    it 'covers all lines' do
+      reader, writer = double('reader'), double('writer')
+      expect(IO).to receive(:pipe).ordered.and_return([reader, writer])
+      pid = double('PID')
+      expect(Process).to receive(:fork).ordered.and_yield.and_return(pid)
+      file = double('file')
+      expect(File).to receive(:open).ordered.with('/dev/null', 'w').and_yield(file)
+      expect($stderr).to receive(:reopen).ordered.with(file)
+      expect(reader).to receive(:close).ordered
+      expect(writer).to receive(:write).ordered.with(Marshal.dump(:foo))
+      expect(writer).to receive(:close).ordered
+      expect(writer).to receive(:close).ordered
+      expect(reader).to receive(:read).ordered.and_return(Marshal.dump(:foo))
+      expect(Process).to receive(:waitpid).with(pid)
+
+      expect(object.call { :foo }).to be(:foo)
+    end
   end
 end
