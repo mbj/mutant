@@ -86,7 +86,7 @@ module Mutant
     def scope_name(scope)
       scope.name
     rescue => exception
-      warn("While obtaining #{scope.class}#name from: #{scope.inspect} It raised an error: #{exception.inspect} fix your lib!")
+      warn("#{scope.class}#name from: #{scope.inspect} raised an error: #{exception.inspect} fix your lib to follow normal ruby semantics!")
       nil
     end
 
@@ -106,7 +106,7 @@ module Mutant
       name = scope_name(scope) or return
 
       unless name.is_a?(String)
-        warn("#{scope.class}#name from: #{scope.inspect} did not return a String or nil. Fix your lib to support normal ruby semantics!")
+        warn("#{scope.class}#name from: #{scope.inspect} returned #{name.inspect} instead String or nil. Fix your lib to follow normal ruby semantics!")
         return
       end
 
