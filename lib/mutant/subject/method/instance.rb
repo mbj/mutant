@@ -85,7 +85,6 @@ module Mutant
           # @api private
           #
           def generate_mutations(emitter)
-            emitter << neutral_mutation
             Mutator.each(node) do |mutant|
               emitter << Mutation::Evil.new(self, memoizer_node(mutant))
             end

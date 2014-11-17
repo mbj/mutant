@@ -124,6 +124,20 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     it_should_behave_like 'a command method'
   end
 
+  describe '#mutations' do
+    subject { object.mutations }
+
+    let(:expected) do
+      [
+        Mutant::Mutation::Neutral.new(object, s(:begin, s(:def, :foo, s(:args)), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))),
+        Mutant::Mutation::Evil.new(object, s(:begin, s(:def, :foo, s(:args), s(:send, nil, :raise)), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))),
+        Mutant::Mutation::Evil.new(object, s(:begin, s(:def, :foo, s(:args), nil), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))),
+      ]
+    end
+
+    it { should eql(expected) }
+  end
+
   describe '#source' do
     subject { object.source }
 
