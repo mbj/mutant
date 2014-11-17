@@ -49,7 +49,7 @@ RSpec.describe Mutant::WarningExpectation do
         let(:expected_warnings) { [warning_a] }
 
         it 'raises an expectation error' do
-          expect { subject }.to raise_error(Mutant::WarningExpectation::ExpectationError.new(expected_warnings))
+          expect { subject }.to raise_error(Mutant::WarningExpectation::ExpectationError.new([warning_b], expected_warnings))
         end
       end
 
@@ -64,9 +64,17 @@ RSpec.describe Mutant::WarningExpectation do
         let(:actual_warnings)   { [warning_b] }
 
         it 'raises an expectation error' do
-          expect { subject }.to raise_error(Mutant::WarningExpectation::ExpectationError.new([warning_b]))
+          expect { subject }.to raise_error(Mutant::WarningExpectation::ExpectationError.new([warning_b], expected_warnings))
         end
       end
     end
+  end
+end
+
+RSpec.describe Mutant::WarningExpectation::ExpectationError do
+  describe '#message' do
+    subject { described_class.new(['unexpected-a'], ['expected-b']).message }
+
+    it { should eql('Unexpected warnings: ["unexpected-a"], expected: ["expected-b"]') }
   end
 end
