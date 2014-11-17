@@ -79,16 +79,6 @@ module Mutant
         name_nesting.last
       end
 
-      # Return name
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def name
-        scope.name
-      end
-
       # Return match expressions
       #
       # @return [Enumerable<Expression>]
