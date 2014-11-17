@@ -45,9 +45,9 @@ module Mutant
       def self.wrap(scope, node)
         name = s(:const, nil, scope.name.split(NAMESPACE_DELIMITER).last.to_sym)
         case scope
-        when ::Class
+        when Class
           s(:class, name, nil, node)
-        when ::Module
+        when Module
           s(:module, name, node)
         else
           fail "Cannot wrap scope: #{scope.inspect}"
