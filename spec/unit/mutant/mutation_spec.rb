@@ -6,7 +6,6 @@ RSpec.describe Mutant::Mutation do
 
   let(:object)           { TestMutation.new(mutation_subject, Mutant::AST::Nodes::N_NIL)    }
   let(:mutation_subject) { double('Subject', identification: 'subject', source: 'original') }
-  let(:node)             { double('Node')                                                   }
 
   describe '#code' do
     subject { object.code }
@@ -22,6 +21,21 @@ RSpec.describe Mutant::Mutation do
     it { should eql('original') }
 
     it_should_behave_like 'an idempotent method'
+  end
+
+  describe '#insert' do
+    subject { object.insert }
+
+    let(:wrapped_node) { double('Wrapped Node') }
+
+    before do
+      expect(mutation_subject).to receive(:public?).ordered.and_return(true)
+      expect(mutation_subject).to receive(:prepare).ordered
+      expect(mutation_subject).to receive(:root).ordered.with(s(:nil)).and_return(wrapped_node)
+      expect(Mutant::Loader::Eval).to receive(:call).ordered.with(wrapped_node, mutation_subject).and_return(nil)
+    end
+
+    it_should_behave_like 'a command method'
   end
 
   describe '#source' do

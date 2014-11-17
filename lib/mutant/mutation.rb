@@ -7,17 +7,6 @@ module Mutant
     CODE_DELIMITER = "\0".freeze
     CODE_RANGE     = (0..4).freeze
 
-    # Return mutated root node
-    #
-    # @return [Parser::AST::Node]
-    #
-    # @api private
-    #
-    def root
-      subject.root(node)
-    end
-    memoize :root
-
     # Insert mutated node
     #
     # FIXME: Cache subject visibility in a better way! Ideally dont mutate it
@@ -30,6 +19,7 @@ module Mutant
     #
     def insert
       subject.public?
+      subject.prepare
       Loader::Eval.call(root, subject)
       self
     end
@@ -101,6 +91,16 @@ module Mutant
       Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
     end
     memoize :sha1
+
+    # Return mutated root node
+    #
+    # @return [Parser::AST::Node]
+    #
+    # @api private
+    #
+    def root
+      subject.root(node)
+    end
 
     # Evil mutation that should case mutations to fail tests
     class Evil < self
