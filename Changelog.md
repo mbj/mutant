@@ -1,3 +1,8 @@
+# v0.6.7 2014-11-17
+
+* Fix duplicate neutral emit for memoized instance method subjects
+* Fix neutral error detection edge cases
+
 # v0.6.6 2014-11-11
 
 * Fix emitter to recurse into left and right of binary nodes.
