@@ -16,7 +16,7 @@ module Mutant
     #
     def self.each(input, parent = nil, &block)
       return to_enum(__method__, input, parent) unless block_given?
-      Registry.lookup(input).new(input, parent, block)
+      REGISTRY.lookup(input).new(input, parent, block)
 
       self
     end
@@ -29,7 +29,7 @@ module Mutant
     #
     def self.handle(*types)
       types.each do |type|
-        Registry.register(type, self)
+        REGISTRY.register(type, self)
       end
     end
     private_class_method :handle

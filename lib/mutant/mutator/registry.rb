@@ -1,27 +1,34 @@
 module Mutant
   class Mutator
     # Registry for mutators
-    module Registry
+    class Registry
+
+      # Initialize object
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def initialize
+        @registry = {}
+      end
 
       # Raised when the type is an invalid type
-      InvalidTypeError = Class.new(TypeError)
-
-      # Raised when the type is a duplicate
-      DuplicateTypeError = Class.new(ArgumentError)
+      RegistryError = Class.new(TypeError)
 
       # Register mutator class for AST node class
       #
       # @param [Symbol] type
-      # @param [Class] mutator_class
+      # @param [Class:Mutator] mutator
       #
       # @api private
       #
       # @return [self]
       #
-      def self.register(type, mutator_class)
-        assert_valid_type(type)
-        assert_unique_type(type)
-        registry[type] = mutator_class
+      def register(type, mutator)
+        fail RegistryError, "Invalid type registration: #{type}" unless AST::Types::ALL.include?(type)
+        fail RegistryError, "Duplicate type registration: #{type}" if @registry.key?(type)
+        @registry[type] = mutator
         self
       end
 
@@ -36,58 +43,16 @@ module Mutant
       #
       # @api private
       #
-      def self.lookup(node)
+      def lookup(node)
         type = node.type
-        registry.fetch(type) do
-          fail ArgumentError, "No mutator to handle: #{type.inspect}"
+        @registry.fetch(type) do
+          fail RegistryError, "No mutator to handle: #{type.inspect}"
         end
       end
-
-      # Return registry state
-      #
-      # @return [Hash]
-      #
-      # @api private
-      #
-      def self.registry
-        @registry ||= {}
-      end
-      private_class_method :registry
-
-      # Assert the node type is valid
-      #
-      # @param [Symbol] type
-      #
-      # @return [undefined]
-      #
-      # @raise [InvalidTypeError]
-      #   raised when the node type is invalid
-      #
-      # @api private
-      #
-      def self.assert_valid_type(type)
-        unless AST::Types::ALL.include?(type) || type.is_a?(Class)
-          fail InvalidTypeError, "invalid type registration: #{type}"
-        end
-      end
-      private_class_method :assert_valid_type
-
-      # Assert the node type is unique and not already registered
-      #
-      # @return [undefined]
-      #
-      # @raise [DuplicateTypeError]
-      #   raised when the node type is a duplicate
-      #
-      # @api private
-      #
-      def self.assert_unique_type(type)
-        if registry.key?(type)
-          fail DuplicateTypeError, "duplicate type registration: #{type}"
-        end
-      end
-      private_class_method :assert_unique_type
 
     end # Registry
+
+    REGISTRY = Registry.new
+
   end # Mutator
 end # Mutant

@@ -5,8 +5,6 @@ module Mutant
       # Utility symbol mutator
       class Symbol < self
 
-        handle(::Symbol)
-
         POSTFIX = '__mutant__'.freeze
 
       private

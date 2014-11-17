@@ -5,8 +5,6 @@ module Mutant
       # Mutators that mutates an array of inputs
       class Array < self
 
-        handle(::Array)
-
         # Element presence mutator
         class Presence < Util
 
