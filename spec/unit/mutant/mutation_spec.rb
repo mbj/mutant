@@ -4,8 +4,9 @@ RSpec.describe Mutant::Mutation do
     SYMBOL = 'test'.freeze
   end
 
-  let(:object)           { TestMutation.new(mutation_subject, Mutant::AST::Nodes::N_NIL)    }
-  let(:mutation_subject) { double('Subject', identification: 'subject', source: 'original') }
+  let(:object)           { TestMutation.new(mutation_subject, Mutant::AST::Nodes::N_NIL)                      }
+  let(:mutation_subject) { double('Subject', identification: 'subject', context: context, source: 'original') }
+  let(:context)          { double('Context')                                                                  }
 
   describe '#code' do
     subject { object.code }
@@ -31,7 +32,7 @@ RSpec.describe Mutant::Mutation do
     before do
       expect(mutation_subject).to receive(:public?).ordered.and_return(true)
       expect(mutation_subject).to receive(:prepare).ordered
-      expect(mutation_subject).to receive(:root).ordered.with(s(:nil)).and_return(wrapped_node)
+      expect(context).to receive(:root).ordered.with(s(:nil)).and_return(wrapped_node)
       expect(Mutant::Loader::Eval).to receive(:call).ordered.with(wrapped_node, mutation_subject).and_return(nil)
     end
 

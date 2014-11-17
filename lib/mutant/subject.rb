@@ -88,18 +88,6 @@ module Mutant
     end
     memoize :source
 
-    # Return root AST for node
-    #
-    # @param [Parser::AST::Node] node
-    #
-    # @return [Parser::AST::Node]
-    #
-    # @api private
-    #
-    def root(node)
-      context.root(node)
-    end
-
     # Return match expression
     #
     # @return [Expression]

@@ -99,7 +99,7 @@ module Mutant
     # @api private
     #
     def root
-      subject.root(node)
+      subject.context.root(node)
     end
 
     # Evil mutation that should case mutations to fail tests
