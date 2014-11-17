@@ -40,7 +40,7 @@ module Mutant
         # @api private
         #
         def example
-          raise 'source not defined' unless @source
+          fail 'source not defined' unless @source
           Example.new(@file, @source, @expected)
         end
 
@@ -55,7 +55,7 @@ module Mutant
         # @api private
         #
         def source(input)
-          raise 'source already defined' if @source
+          fail 'source already defined' if @source
           @source = node(input)
 
           self
@@ -72,7 +72,7 @@ module Mutant
         def mutation(input)
           node = node(input)
           if @expected.include?(node)
-            raise "Node for input: #{input.inspect} is already expected"
+            fail "Node for input: #{input.inspect} is already expected"
           end
           @expected << node
 
@@ -108,7 +108,7 @@ module Mutant
           when Parser::AST::Node
             input
           else
-            raise "Cannot coerce to node: #{source.inspect}"
+            fail "Cannot coerce to node: #{source.inspect}"
           end
         end
 

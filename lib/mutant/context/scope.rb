@@ -50,7 +50,7 @@ module Mutant
         when ::Module
           s(:module, name, node)
         else
-          raise "Cannot wrap scope: #{scope.inspect}"
+          fail "Cannot wrap scope: #{scope.inspect}"
         end
       end
 

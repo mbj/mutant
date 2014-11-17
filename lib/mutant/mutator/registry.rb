@@ -39,7 +39,7 @@ module Mutant
       def self.lookup(node)
         type = node.type
         registry.fetch(type) do
-          raise ArgumentError, "No mutator to handle: #{type.inspect}"
+          fail ArgumentError, "No mutator to handle: #{type.inspect}"
         end
       end
 
@@ -67,7 +67,7 @@ module Mutant
       #
       def self.assert_valid_type(type)
         unless AST::Types::ALL.include?(type) || type.is_a?(Class)
-          raise InvalidTypeError, "invalid type registration: #{type}"
+          fail InvalidTypeError, "invalid type registration: #{type}"
         end
       end
       private_class_method :assert_valid_type
@@ -83,7 +83,7 @@ module Mutant
       #
       def self.assert_unique_type(type)
         if registry.key?(type)
-          raise DuplicateTypeError, "duplicate type registration: #{type}"
+          fail DuplicateTypeError, "duplicate type registration: #{type}"
         end
       end
       private_class_method :assert_unique_type

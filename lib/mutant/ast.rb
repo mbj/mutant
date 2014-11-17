@@ -44,7 +44,7 @@ module Mutant
     # @api private
     #
     def self.find_last_path(node, &predicate)
-      raise ArgumentError, 'block expected' unless block_given?
+      fail ArgumentError, 'block expected' unless block_given?
       path = []
       walk(node, [node]) do |candidate, stack|
         if predicate.call(candidate, &predicate)
