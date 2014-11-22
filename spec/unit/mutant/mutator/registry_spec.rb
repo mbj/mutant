@@ -12,7 +12,7 @@ RSpec.describe Mutant::Mutator::Registry do
       let(:node) { s(:unknown) }
 
       it 'raises error' do
-        expect { subject }.to raise_error(described_class::RegistryError, "No mutator to handle: :unknown")
+        expect { subject }.to raise_error(described_class::RegistryError, 'No mutator to handle: :unknown')
       end
     end
   end
