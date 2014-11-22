@@ -59,7 +59,7 @@ RSpec.describe Mutant::WarningFilter do
       expect(found).to be(true)
     end
 
-    it 'resets to original stderr after execution with exeception ' do
+    it 'resets to original stderr after execution with exception ' do
       original = $stderr
       begin
         object.use { fail }

@@ -1,7 +1,7 @@
 module Mutant
   class Expression
 
-    # Abstrat base class for methods expression
+    # Abstract base class for methods expression
     class Methods < self
 
       MATCHERS = IceNine.deep_freeze(

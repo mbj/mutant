@@ -2,7 +2,7 @@ RSpec.describe Mutant::Mutator::Registry do
   describe '#lookup' do
     subject { Mutant::Mutator::REGISTRY.lookup(node) }
 
-    context 'on registred node' do
+    context 'on registered node' do
       let(:node) { s(:true) }
 
       it { should eql(Mutant::Mutator::Node::Literal::Boolean) }
@@ -24,7 +24,7 @@ RSpec.describe Mutant::Mutator::Registry do
 
     subject { object.register(type, mutator) }
 
-    context 'when registring an invalid node type' do
+    context 'when registering an invalid node type' do
       let(:type) { :invalid }
 
       it 'raises error' do
@@ -32,7 +32,7 @@ RSpec.describe Mutant::Mutator::Registry do
       end
     end
 
-    context 'when registring a valid node type' do
+    context 'when registering a valid node type' do
       let(:type) { :true }
 
       it 'allows to lookup mutator' do

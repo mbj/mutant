@@ -13,7 +13,7 @@ module Mutant
 
         private
 
-          # Emit mutatns
+          # Emit mutants
           #
           # @return [undefined]
           #

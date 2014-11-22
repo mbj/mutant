@@ -3,7 +3,7 @@ inherit_from: ../.rubocop.yml
 # General note about rubocop.
 # It does NOT allow to silence a specific rule violation.
 # For that reason I sometimes have to disable a whole cop where
-# I just tried to whitelist a specific occurence.
+# I just tried to whitelist a specific occurrence.
 
 
 AllCops:

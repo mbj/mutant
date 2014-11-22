@@ -66,7 +66,7 @@ module Mutant
 
       private
 
-        # Return unexpected mutationso
+        # Return unexpected mutations
         #
         # @return [Array<Parser::AST::Node>]
         #
