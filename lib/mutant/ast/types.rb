@@ -18,7 +18,7 @@ module Mutant
       INDEX_OPERATORS        = symbolset.(%w[[] []=])
       UNARY_METHOD_OPERATORS = symbolset.(%w[~@ +@ -@ !])
 
-      # Operators ruby implementeds as methods
+      # Operators ruby implements as methods
       METHOD_OPERATORS = symbolset.(%w[
         <=> === []= [] <= >= == !~ != =~ <<
         >> ** * % / | ^ & < > + - ~@ +@ -@ !

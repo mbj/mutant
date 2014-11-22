@@ -97,7 +97,7 @@ This can have the following unintended effects:
   counts the mutation as killed.
 
 * MRI crashes with a segfault and gets stuck when handling the segfault.
-  Depending on the number of active kill jobs mutant might appear to continue normally untill
+  Depending on the number of active kill jobs mutant might appear to continue normally until
   all workers are stuck into this state when it begins to hang.
   Currently mutant must assume that your test suite simply not terminated yet as from the outside
   (parent process) the difference between a long running test and a stuck MRI is not observable.

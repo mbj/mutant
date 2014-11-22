@@ -55,7 +55,7 @@ describe Mutant::Runner::Collector do
   describe '#start' do
     subject { object.start(mutation_a) }
 
-    it 'tracs the mutation as active' do
+    it 'tracks the mutation as active' do
       expect { subject }.to change { object.active_subject_results }.from([]).to(active_subject_results)
     end
 

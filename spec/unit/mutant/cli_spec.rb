@@ -29,7 +29,7 @@ RSpec.describe Mutant::CLI do
       expect(Mutant::Runner).to receive(:call).with(env).and_return(report)
     end
 
-    context 'when report signalls success' do
+    context 'when report signals success' do
       let(:report_success) { true }
 
       it 'exits failure' do
