@@ -190,11 +190,25 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
+  source 'foo.__send__(bar)'
+
+  singleton_mutations
+  mutation 'foo.__send__'
+  mutation 'foo.public_send(bar)'
+  mutation 'bar'
+  mutation 'foo'
+  mutation 'self.__send__(bar)'
+  mutation 'foo.__send__(nil)'
+  mutation 'foo.__send__(self)'
+end
+
+Mutant::Meta::Example.add do
   source 'foo.send(bar)'
 
   singleton_mutations
   mutation 'foo.send'
   mutation 'foo.public_send(bar)'
+  mutation 'foo.__send__(bar)'
   mutation 'bar'
   mutation 'foo'
   mutation 'self.send(bar)'
