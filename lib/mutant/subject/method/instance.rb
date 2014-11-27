@@ -7,10 +7,6 @@ module Mutant
         NAME_INDEX = 0
         SYMBOL     = '#'.freeze
 
-        # A list of methods that will warn when they are undefined
-        WARN_METHODS_UNDEFINED =
-          RUBY_ENGINE.eql?('ruby') ? [:initialize, :__send__, :object_id].freeze : EMPTY_ARRAY
-
         # Test if method is public
         #
         # @return [Boolean]
@@ -22,8 +18,6 @@ module Mutant
         end
         memoize :public?
 
-        LINE_INCREMENT = defined?(Zombie) ? -11 : 5
-
         # Prepare subject for mutation insertion
         #
         # @return [self]
@@ -31,15 +25,7 @@ module Mutant
         # @api private
         #
         def prepare
-          expected_warnings =
-            if WARN_METHODS_UNDEFINED.include?(name)
-              ["#{__FILE__}:#{__LINE__ + LINE_INCREMENT}: warning: undefining `#{name}' may cause serious problems\n"]
-            else
-              EMPTY_ARRAY
-            end
-          WarningExpectation.new(expected_warnings).execute do
-            scope.send(:undef_method, name)
-          end
+          scope.send(:undef_method, name)
           self
         end
 

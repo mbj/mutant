@@ -48,36 +48,11 @@ RSpec.describe Mutant::Subject::Method::Instance do
 
     subject { object.prepare }
 
-    context 'on non initialize methods' do
-
-      it 'undefines method on scope' do
-        expect { subject }.to change { scope.instance_methods.include?(:foo) }.from(true).to(false)
-      end
-
-      it_should_behave_like 'a command method'
-
+    it 'undefines method on scope' do
+      expect { subject }.to change { scope.instance_methods.include?(:foo) }.from(true).to(false)
     end
 
-    context 'on initialize method' do
-
-      let(:node) do
-        s(:def, :initialize, s(:args))
-      end
-
-      it 'does not write warnings' do
-        warnings = Mutant::WarningFilter.use do
-          subject
-        end
-        expect(warnings).to eql([])
-      end
-
-      it 'undefines method on scope' do
-        subject
-        expect { scope.new }.to raise_error(NoMethodError)
-      end
-
-      it_should_behave_like 'a command method'
-    end
+    it_should_behave_like 'a command method'
   end
 
   describe '#source' do
