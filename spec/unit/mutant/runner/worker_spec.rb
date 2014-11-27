@@ -23,9 +23,10 @@ RSpec.describe Mutant::Runner::Worker do
 
     context 'when receving :job command' do
 
+      let(:test_result) { double('Test Result') }
+
       before do
-        expect(mutation).to receive(:kill).with(config.isolation).and_return(mutation_result).ordered
-        expect(mutation_result).to receive(:update).with(index: job.index).and_return(mutation_result).ordered
+        expect(mutation).to receive(:kill).with(config.isolation, config.integration).and_return(test_result).ordered
 
         message_sequence.add(:worker, :job, job)
         message_sequence.add(:parent, :result, job_result)
@@ -37,9 +38,16 @@ RSpec.describe Mutant::Runner::Worker do
       let(:index)           { double('Index')                                                  }
       let(:test_result)     { double('Test Result')                                            }
       let(:mutation)        { double('Mutation')                                               }
-      let(:mutation_result) { double('Mutation Result')                                        }
       let(:job_result)      { Mutant::Runner::JobResult.new(job: job, result: mutation_result) }
       let(:job)             { Mutant::Runner::Job.new(index: index, mutation: mutation)        }
+
+      let(:mutation_result) do
+        Mutant::Result::Mutation.new(
+          mutation:    mutation,
+          index:       job.index,
+          test_result: test_result
+        )
+      end
 
       it 'signals ready and status to parent' do
         subject

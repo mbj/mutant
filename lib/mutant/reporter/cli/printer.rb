@@ -430,7 +430,7 @@ module Mutant
         # Reporter for mutation results
         class MutationResult < self
 
-          delegate :mutation, :failed_test_results
+          delegate :mutation, :test_result
 
           DIFF_ERROR_MESSAGE = 'BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!'.freeze
 
@@ -448,13 +448,13 @@ module Mutant
             "%s\n" \
             "Unparsed Source:\n" \
             "%s\n" \
-            "Test Reports: %d\n"
+            "Test Result:\n".freeze
 
           NOOP_MESSAGE    =
             "---- Noop failure -----\n" \
             "No code was inserted. And the test did NOT PASS.\n" \
             "This is typically a problem of your specs not passing unmutated.\n" \
-            "Test Reports: %d\n"
+            "Test Result:\n".freeze
 
           FOOTER = '-----------------------'.freeze
 
@@ -503,8 +503,8 @@ module Mutant
           # @api private
           #
           def noop_details
-            info(NOOP_MESSAGE, failed_test_results.length)
-            visit_failed_test_results
+            info(NOOP_MESSAGE)
+            visit_test_result
           end
 
           # Neutral details
@@ -514,8 +514,8 @@ module Mutant
           # @api private
           #
           def neutral_details
-            info(NEUTRAL_MESSAGE, mutation.subject.node.inspect, mutation.source, failed_test_results.length)
-            visit_failed_test_results
+            info(NEUTRAL_MESSAGE, mutation.subject.node.inspect, mutation.source)
+            visit_test_result
           end
 
           # Visit failed test results
@@ -524,8 +524,8 @@ module Mutant
           #
           # @api private
           #
-          def visit_failed_test_results
-            visit_collection(TestResult, failed_test_results)
+          def visit_test_result
+            visit(TestResult, test_result)
           end
 
         end # MutationResult
@@ -533,7 +533,7 @@ module Mutant
         # Test result reporter
         class TestResult < self
 
-          delegate :test, :runtime, :mutation
+          delegate :tests, :runtime
 
           # Run test result reporter
           #
@@ -542,7 +542,10 @@ module Mutant
           # @api private
           #
           def run
-            status('- %s / runtime: %s', test.identification, runtime)
+            status('- %d @ runtime: %s', tests.length, runtime)
+            tests.each do |test|
+              puts("  - #{test.identification}")
+            end
             puts('Test Output:')
             puts(object.output)
           end

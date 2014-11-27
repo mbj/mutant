@@ -38,12 +38,6 @@ RSpec.describe 'rspec integration' do
     end
   end
 
-  context 'RSpec 2' do
-    let(:gemfile) { 'Gemfile.rspec2' }
-
-    it_behaves_like 'rspec integration'
-  end
-
   context 'RSpec 3.0' do
     let(:gemfile) { 'Gemfile.rspec3.0' }
 

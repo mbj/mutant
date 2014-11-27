@@ -16,7 +16,7 @@ module Mutant
     # @api private
     #
     def self.lookup(name)
-      REGISTRY.fetch(name).build
+      REGISTRY.fetch(name).new
     end
 
     # Register integration
@@ -43,6 +43,16 @@ module Mutant
     def setup
       self
     end
+
+    # Return test result for tests
+    #
+    # @param [Enumerable<Test>] tests
+    #
+    # @return [Result::Test]
+    #
+    # @api private
+    #
+    abstract_method :call
 
     # Return all available tests by integration
     #

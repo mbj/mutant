@@ -54,9 +54,8 @@ RSpec.describe Mutant::Runner::Master do
     end
 
     context 'stop by fail fast trigger first' do
-      update(:config)                   { { fail_fast: true } }
-      update(:mutation_b_test_a_result) { { passed: true }    }
-      update(:mutation_b_test_b_result) { { passed: true }    }
+      update(:config)                 { { fail_fast: true } }
+      update(:mutation_b_test_result) { { passed: true }    }
 
       before do
         message_sequence.add(:master,   :ready,  worker_a)
@@ -82,9 +81,8 @@ RSpec.describe Mutant::Runner::Master do
     end
 
     context 'stop by fail fast trigger last' do
-      update(:config)                   { { fail_fast: true } }
-      update(:mutation_a_test_a_result) { { passed: true }    }
-      update(:mutation_a_test_b_result) { { passed: true }    }
+      update(:config)                 { { fail_fast: true } }
+      update(:mutation_a_test_result) { { passed: true }    }
 
       before do
         message_sequence.add(:master,   :ready,  worker_a)

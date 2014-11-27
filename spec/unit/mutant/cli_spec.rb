@@ -160,7 +160,7 @@ Options:
 
         it_should_behave_like 'a cli parser'
 
-        let(:expected_integration) { Mutant::Integration::Rspec.build }
+        let(:expected_integration) { Mutant::Integration::Rspec.new }
       end
 
       context 'when integration does NOT exist' do

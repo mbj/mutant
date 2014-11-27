@@ -85,57 +85,35 @@ module SharedContext
 
     let(:mutation_a_result) do
       Mutant::Result::Mutation.new(
-        index:        1,
-        mutation:     mutation_a,
-        test_results: [mutation_a_test_a_result, mutation_a_test_b_result]
+        index:       1,
+        mutation:    mutation_a,
+        test_result: mutation_a_test_result
       )
     end
 
     let(:mutation_b_result) do
       Mutant::Result::Mutation.new(
-        index:        1,
-        mutation:     mutation_a,
-        test_results: [mutation_b_test_a_result, mutation_b_test_b_result]
+        index:       1,
+        mutation:    mutation_a,
+        test_result: mutation_b_test_result
       )
     end
 
-    let(:mutation_a_test_a_result) do
+    let(:mutation_a_test_result) do
       Mutant::Result::Test.new(
-        mutation: mutation_a,
-        test:     test_a,
+        tests:    [test_a],
         passed:   false,
         runtime:  1.0,
-        output:  'mutation a test a result output'
+        output:  'mutation a test result output'
       )
     end
 
-    let(:mutation_a_test_b_result) do
+    let(:mutation_b_test_result) do
       Mutant::Result::Test.new(
-        mutation: mutation_b,
-        test:     test_b,
+        tests:    [test_a],
         passed:   false,
         runtime:  1.0,
-        output:   'mutation a test b result output'
-      )
-    end
-
-    let(:mutation_b_test_a_result) do
-      Mutant::Result::Test.new(
-        mutation: mutation_b,
-        test:     test_a,
-        passed:   false,
-        runtime:  1.0,
-        output:   'mutation b test a result output'
-      )
-    end
-
-    let(:mutation_b_test_b_result) do
-      Mutant::Result::Test.new(
-        mutation: mutation_b,
-        test:     test_b,
-        passed:   false,
-        runtime:  1.0,
-        output:   'mutation b test b result output'
+        output:   'mutation b test result output'
       )
     end
 

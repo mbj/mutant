@@ -7,45 +7,30 @@ module Mutant
     CODE_DELIMITER = "\0".freeze
     CODE_RANGE     = (0..4).freeze
 
-    # Kill mutation via isolation
+    # Kill mutation under isolation with integration
     #
     # @param [Isolation] isolation
+    # @param [Integration] integration
     #
-    # @return [Result::Mutation]
+    # @return [Result::Test]
     #
     # @api private
     #
-    def kill(isolation)
-      result = Result::Mutation.new(
-        index:        nil,
-        mutation:     self,
-        test_results: []
+    def kill(isolation, integration)
+      start = Time.now
+      tests = subject.tests
+
+      isolation.call do
+        insert
+        integration.call(tests)
+      end.update(tests: tests)
+    rescue Isolation::Error => error
+      Result::Test.new(
+        tests:   tests,
+        output:  error.message,
+        runtime: Time.now - start,
+        passed:  false
       )
-
-      subject.tests.reduce(result) do |current, test|
-        return current unless current.continue?
-        test_result = test.kill(isolation, self)
-        current.update(
-          test_results: current.test_results.dup << test_result
-        )
-      end
-    end
-
-    # Insert mutated node
-    #
-    # FIXME: Cache subject visibility in a better way! Ideally dont mutate it
-    #   implicitly. Also subject.public? should NOT be a public interface it
-    #   is a detail of method mutations.
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    def insert
-      subject.public?
-      subject.prepare
-      Loader::Eval.call(root, subject)
-      self
     end
 
     # Return identification
@@ -99,17 +84,28 @@ module Mutant
     #
     # @api private
     #
-    abstract_singleton_method :success?
+    def self.success?(test_result)
+      self::TEST_PASS_SUCCESS.equal?(test_result.passed)
+    end
 
-    # Test if execution can be continued
+  private
+
+    # Insert mutated node
     #
-    # @return [Boolean]
+    # FIXME: Cache subject visibility in a better way! Ideally dont mutate it
+    #   implicitly. Also subject.public? should NOT be a public interface it
+    #   is a detail of method mutations.
+    #
+    # @return [self]
     #
     # @api private
     #
-    abstract_singleton_method :continue?
-
-  private
+    def insert
+      subject.public?
+      subject.prepare
+      Loader::Eval.call(root, subject)
+      self
+    end
 
     # Return sha1 sum of source and subject identification
     #
@@ -135,65 +131,24 @@ module Mutant
     # Evil mutation that should case mutations to fail tests
     class Evil < self
 
-      SYMBOL = 'evil'.freeze
-
-      # Test if mutation is killed by test reports
-      #
-      # @param [Array<Report::Test>] test_reports
-      #
-      # @return [Boolean]
-      #
-      # @api private
-      #
-      def self.success?(test_results)
-        !test_results.all?(&:passed)
-      end
-
-      # Test if mutation execution can be continued
-      #
-      # @return [Boolean]
-      #
-      # @api private
-      #
-      def self.continue?(test_results)
-        !success?(test_results)
-      end
+      SYMBOL            = 'evil'.freeze
+      TEST_PASS_SUCCESS = false
 
     end # Evil
 
     # Neutral mutation that should not cause mutations to fail tests
     class Neutral < self
 
-      SYMBOL = 'neutral'.freeze
-
-      # Test if mutation is killed by test reports
-      #
-      # @param [Array<Report::Test>] test_reports
-      #
-      # @return [Boolean]
-      #
-      # @api private
-      #
-      def self.success?(test_results)
-        test_results.any? && test_results.all?(&:passed)
-      end
-
-      # Test if mutation execution can be continued
-      #
-      # @return [Boolean] _test_results
-      #
-      # @api private
-      #
-      def self.continue?(_test_results)
-        true
-      end
+      SYMBOL            = 'neutral'.freeze
+      TEST_PASS_SUCCESS = true
 
     end # Neutral
 
     # Noop mutation, special case of neutral
     class Noop < Neutral
 
-      SYMBOL = 'noop'.freeze
+      SYMBOL            = 'noop'.freeze
+      TEST_PASS_SUCCESS = true
 
     end # Noop
 

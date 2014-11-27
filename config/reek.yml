@@ -27,9 +27,7 @@ FeatureEnvy:
   exclude:
   - Mutant::Env#scope_name
   - Mutant::Diff#minimized_hunks
-  - Mutant::Integration::Rspec#run
-  - Mutant::Integration::Rspec::Rspec2#full_description
-  - Mutant::Integration::Rspec::Rspec3#full_description
+  - Mutant::Integration::Rspec#parse_example
   - Mutant::Matcher::Method::Instance#match?
   - Mutant::Matcher::Method::Singleton#receiver?
   - Mutant::Mutator::Node#children_indices
@@ -56,7 +54,6 @@ NestedIterators:
   exclude:
   - Mutant#self.singleton_subclass_instance
   - Mutant::CLI#parse
-  - Mutant::Integration::Rspec#run
   - Mutant::Isolation::Fork#self.call
   - Mutant::Mutator::Util::Array::Element#dispatch
   - Mutant::Mutator::Node::Resbody#mutate_captures
@@ -93,7 +90,6 @@ TooManyMethods:
 TooManyStatements:
   enabled: true
   exclude:
-  - Mutant::Integration::Rspec#run
   - Mutant::Isolation::Fork#self.call
   - Mutant::Reporter::CLI::Printer::EnvProgress#run
   - Mutant::Reporter::CLI::Printer::Config#run
@@ -113,9 +109,7 @@ UncommunicativeMethodName:
   accept: []
 UncommunicativeModuleName:
   enabled: true
-  exclude:
-  - Rspec2
-  - Rspec3
+  exclude: []
   reject:
   - !ruby/regexp /^.$/
   - !ruby/regexp /[0-9]$/
@@ -144,11 +138,7 @@ UtilityFunction:
   exclude:
   - Mutant::AST::Sexp#s
   - Mutant::CLI#reporter
-  - Mutant::Integration::Rspec#configuration
-  - Mutant::Integration::Rspec#options
-  - Mutant::Integration::Rspec::Rspec2#full_description
-  - Mutant::Integration::Rspec::Rspec2#new_reporter
-  - Mutant::Integration::Rspec::Rspec3#full_description
-  - Mutant::Meta::Example::Verification#format_mutation
+  - Mutant::Integration::Rspec#parse_example
+  - Mutant::Meta::Example::Verification#format_mutation # False positive, its a utility
   - Mutant::Reporter::CLI::Format::Progressive#new_buffer
   max_helper_calls: 0
