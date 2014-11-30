@@ -155,11 +155,24 @@ Options:
     end
 
     context 'with use flag' do
-      let(:flags) { %w[--use rspec] }
+      context 'when integration exists' do
+        let(:flags) { %w[--use rspec] }
 
-      it_should_behave_like 'a cli parser'
+        it_should_behave_like 'a cli parser'
 
-      let(:expected_integration) { Mutant::Integration::Rspec.build }
+        let(:expected_integration) { Mutant::Integration::Rspec.build }
+      end
+
+      context 'when integration does NOT exist' do
+        let(:flags) { %w[--use other] }
+
+        it 'raises error' do
+          expect { subject }.to raise_error(
+            Mutant::CLI::Error,
+            'Could not load integration "other" (you may want to try installing the gem mutant-other)'
+          )
+        end
+      end
     end
 
     context 'with version flag' do

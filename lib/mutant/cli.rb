@@ -128,6 +128,8 @@ module Mutant
     def setup_integration(name)
       require "mutant/integration/#{name}"
       update(integration: Integration.lookup(name))
+    rescue LoadError
+      fail Error, "Could not load integration #{name.inspect} (you may want to try installing the gem mutant-#{name})"
     end
 
     # Add options
