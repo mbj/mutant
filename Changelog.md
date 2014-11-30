@@ -1,3 +1,7 @@
+# v0.7.0 2014-11-xx
+
+* Use homegrown actor based parallelization
+
 # v0.6.7 2014-11-17
 
 * Fix duplicate neutral emit for memoized instance method subjects

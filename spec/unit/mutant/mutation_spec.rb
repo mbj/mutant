@@ -4,9 +4,36 @@ RSpec.describe Mutant::Mutation do
     SYMBOL = 'test'.freeze
   end
 
-  let(:object)           { TestMutation.new(mutation_subject, Mutant::AST::Nodes::N_NIL)                      }
-  let(:mutation_subject) { double('Subject', identification: 'subject', context: context, source: 'original') }
-  let(:context)          { double('Context')                                                                  }
+  let(:object)  { TestMutation.new(mutation_subject, Mutant::AST::Nodes::N_NIL) }
+  let(:context) { double('Context')                                             }
+
+  let(:mutation_subject) do
+    double(
+      'Subject',
+      identification: 'subject',
+      context: context,
+      source: 'original',
+      tests:  [test_a, test_b]
+    )
+  end
+
+  let(:test_a) { double('Test A') }
+  let(:test_b) { double('Test B') }
+
+  describe '#kill' do
+    let(:isolation) { double('Isolation')                                                     }
+    let(:object)    { Mutant::Mutation::Evil.new(mutation_subject, Mutant::AST::Nodes::N_NIL) }
+
+    let(:test_result_a) { double('Test Result A', passed: false) }
+
+    before do
+      expect(test_a).to receive(:kill).with(isolation, object).and_return(test_result_a)
+    end
+
+    subject { object.kill(isolation) }
+
+    it { should eql(Mutant::Result::Mutation.new(index: nil, mutation: object, test_results: [test_result_a])) }
+  end
 
   describe '#code' do
     subject { object.code }

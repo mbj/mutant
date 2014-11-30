@@ -1,4 +1,6 @@
 RSpec.describe Mutant::Reporter::CLI do
+  setup_shared_context
+
   let(:object) { described_class.new(output, format) }
   let(:output) { StringIO.new }
 
@@ -30,110 +32,6 @@ RSpec.describe Mutant::Reporter::CLI do
   before do
     allow(Time).to receive(:now).and_return(Time.now)
   end
-
-  let(:result) do
-    Mutant::Result::Env.new(
-      env:             env,
-      runtime:         1.1,
-      subject_results: subject_results
-    )
-  end
-
-  let(:env) do
-    double(
-      'Env',
-      class: Mutant::Env,
-      matchable_scopes: matchable_scopes,
-      config: config,
-      subjects: subjects,
-      mutations: subjects.flat_map(&:mutations)
-    )
-  end
-
-  let(:config)           { Mutant::Config::DEFAULT.update(jobs: 1) }
-  let(:mutation_class)   { Mutant::Mutation::Evil                       }
-  let(:matchable_scopes) { double('Matchable Scopes', length: 10)       }
-
-  before do
-    allow(mutation_a).to receive(:subject).and_return(_subject)
-    allow(mutation_b).to receive(:subject).and_return(_subject)
-  end
-
-  let(:mutation_a) do
-    double(
-      'Mutation',
-      identification:  'mutation_id-a',
-      class:           mutation_class,
-      original_source: 'true',
-      source:          mutation_source
-    )
-  end
-
-  let(:mutation_b) do
-    double(
-      'Mutation',
-      identification:  'mutation_id-b',
-      class:           mutation_class,
-      original_source: 'true',
-      source:          mutation_source
-    )
-  end
-
-  let(:mutation_source) { 'false' }
-
-  let(:_subject) do
-    double(
-      'Subject',
-      class:          Mutant::Subject,
-      node:           s(:true),
-      identification: 'subject_id',
-      mutations:      subject_mutations,
-      tests: [
-        double('Test', identification: 'test_id')
-      ]
-    )
-  end
-
-  let(:subject_mutations) { [mutation_a] }
-
-  let(:test_results) do
-    [
-      double(
-        'Test Result',
-        class: Mutant::Result::Test,
-        test: _subject.tests.first,
-        runtime: 1.0,
-        output: 'test-output',
-        success?: mutation_result_success
-      )
-    ]
-  end
-
-  let(:mutation_a_result) do
-    double(
-      'Mutation Result',
-      class: Mutant::Result::Mutation,
-      mutation: mutation_a,
-      killtime: 0.5,
-      runtime:  1.0,
-      index:    0,
-      success?: mutation_result_success,
-      test_results: test_results,
-      failed_test_results: mutation_result_success ? [] : test_results
-    )
-  end
-
-  let(:subject_results) do
-    [
-      Mutant::Result::Subject.new(
-        subject: _subject,
-        runtime: 1.0,
-        mutation_results: [mutation_a_result]
-      )
-    ]
-  end
-
-  let(:subjects) { [_subject] }
 
   describe '.build' do
     subject { described_class.build(output) }
@@ -210,47 +108,36 @@ RSpec.describe Mutant::Reporter::CLI do
   end
 
   describe '#progress' do
-    subject { object.progress(collector) }
-
-    let(:collector) do
-      Mutant::Runner::Collector.new(env)
-    end
-
-    let(:mutation_result_success) { true }
+    subject { object.progress(status) }
 
     context 'on progressive format' do
-
       let(:format) { progressive_format }
 
-      context 'with empty collector' do
+      context 'with empty scheduler' do
+        update(:env_result) { { subject_results: [] } }
 
         it_reports ''
       end
 
       context 'with last mutation present' do
-
-        before do
-          collector.start(mutation_a)
-          collector.finish(mutation_a_result)
-        end
+        update(:env_result) { { subject_results: [subject_a_result] } }
 
         context 'when mutation is successful' do
-          it_reports '.'
+          it_reports '..'
         end
 
         context 'when mutation is NOT successful' do
-          let(:mutation_result_success) { false }
-
-          it_reports 'F'
+          update(:mutation_a_test_a_result) { { passed: true } }
+          update(:mutation_a_test_b_result) { { passed: true } }
+          it_reports 'F.'
         end
       end
     end
 
     context 'on framed format' do
+      context 'with empty scheduler' do
+        update(:env_result) { { subject_results: [] } }
 
-      let(:mutation_result_success) { true }
-
-      context 'with empty collector' do
         it_reports <<-REPORT
           Mutant configuration:
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
@@ -261,24 +148,21 @@ RSpec.describe Mutant::Reporter::CLI do
           Requires:           []
           Available Subjects: 1
           Subjects:           1
-          Mutations:          1
+          Mutations:          2
           Kills:              0
           Alive:              0
-          Runtime:            0.00s
+          Runtime:            4.00s
           Killtime:           0.00s
-          Overhead:           NaN%
+          Overhead:           Inf%
           Coverage:           0.00%
           Expected:           100.00%
           Active subjects:    0
         REPORT
       end
 
-      context 'with collector active on one subject' do
-        before do
-          collector.start(mutation_a)
-        end
-
+      context 'with scheduler active on one subject' do
         context 'without progress' do
+          update(:status) { { active_jobs: [].to_set } }
 
           it_reports(<<-REPORT)
             Mutant configuration:
@@ -290,32 +174,24 @@ RSpec.describe Mutant::Reporter::CLI do
             Requires:           []
             Available Subjects: 1
             Subjects:           1
-            Mutations:          1
-            Kills:              0
+            Mutations:          2
+            Kills:              2
             Alive:              0
-            Runtime:            0.00s
-            Killtime:           0.00s
-            Overhead:           NaN%
-            Coverage:           0.00%
+            Runtime:            4.00s
+            Killtime:           4.00s
+            Overhead:           0.00%
+            Coverage:           100.00%
             Expected:           100.00%
-            Active subjects:    1
-            subject_id mutations: 1
-            - test_id
-            (00/01)   0% - killtime: 0.00s runtime: 0.00s overhead: 0.00s
+            Active subjects:    0
           REPORT
         end
 
         context 'with progress' do
-
-          let(:subject_mutations) { [mutation_a, mutation_b] }
-
-          before do
-            collector.start(mutation_b)
-            collector.finish(mutation_a_result)
-          end
+          update(:status) { { active_jobs: [job_a].to_set } }
 
           context 'on failure' do
-            let(:mutation_result_success) { false }
+            update(:mutation_a_test_a_result) { { passed: true } }
+            update(:mutation_a_test_b_result) { { passed: true } }
 
             it_reports(<<-REPORT)
               Mutant configuration:
@@ -328,18 +204,20 @@ RSpec.describe Mutant::Reporter::CLI do
               Available Subjects: 1
               Subjects:           1
               Mutations:          2
-              Kills:              0
+              Kills:              1
               Alive:              1
-              Runtime:            0.00s
-              Killtime:           0.50s
-              Overhead:           -100.00%
-              Coverage:           0.00%
+              Runtime:            4.00s
+              Killtime:           4.00s
+              Overhead:           0.00%
+              Coverage:           50.00%
               Expected:           100.00%
               Active subjects:    1
-              subject_id mutations: 2
-              - test_id
-              F
-              (00/02)   0% - killtime: 0.50s runtime: 1.00s overhead: 0.50s
+              subject-a mutations: 2
+              - test-a
+              F.
+              (01/02)  50% - killtime: 4.00s runtime: 4.00s overhead: 0.00s
+              Active Jobs:
+              0: evil:subject-a:d27d2
             REPORT
           end
 
@@ -355,18 +233,20 @@ RSpec.describe Mutant::Reporter::CLI do
               Available Subjects: 1
               Subjects:           1
               Mutations:          2
-              Kills:              1
+              Kills:              2
               Alive:              0
-              Runtime:            0.00s
-              Killtime:           0.50s
-              Overhead:           -100.00%
+              Runtime:            4.00s
+              Killtime:           4.00s
+              Overhead:           0.00%
               Coverage:           100.00%
               Expected:           100.00%
               Active subjects:    1
-              subject_id mutations: 2
-              - test_id
-              .
-              (01/02) 100% - killtime: 0.50s runtime: 1.00s overhead: 0.50s
+              subject-a mutations: 2
+              - test-a
+              ..
+              (02/02) 100% - killtime: 4.00s runtime: 4.00s overhead: 0.00s
+              Active Jobs:
+              0: evil:subject-a:d27d2
             REPORT
           end
         end
@@ -374,11 +254,9 @@ RSpec.describe Mutant::Reporter::CLI do
     end
 
     describe '#report' do
-      subject { object.report(result) }
+      subject { object.report(status.env_result) }
 
       context 'with full coverage' do
-        let(:mutation_result_success) { true }
-
         it_reports(<<-REPORT)
           Mutant configuration:
           Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
@@ -389,26 +267,27 @@ RSpec.describe Mutant::Reporter::CLI do
           Requires:           []
           Available Subjects: 1
           Subjects:           1
-          Mutations:          1
-          Kills:              1
+          Mutations:          2
+          Kills:              2
           Alive:              0
-          Runtime:            1.10s
-          Killtime:           0.50s
-          Overhead:           120.00%
+          Runtime:            4.00s
+          Killtime:           4.00s
+          Overhead:           0.00%
           Coverage:           100.00%
           Expected:           100.00%
         REPORT
       end
 
       context 'and partial coverage' do
-        let(:mutation_result_success) { false }
+        update(:mutation_a_test_a_result) { { passed: true } }
+        update(:mutation_a_test_b_result) { { passed: true } }
 
         context 'on evil mutation' do
           context 'with a diff' do
             it_reports(<<-REPORT)
-              subject_id
-              - test_id
-              mutation_id-a
+              subject-a
+              - test-a
+              evil:subject-a:d27d2
               @@ -1,2 +1,2 @@
               -true
               +false
@@ -422,29 +301,29 @@ RSpec.describe Mutant::Reporter::CLI do
               Requires:           []
               Available Subjects: 1
               Subjects:           1
-              Mutations:          1
-              Kills:              0
+              Mutations:          2
+              Kills:              1
               Alive:              1
-              Runtime:            1.10s
-              Killtime:           0.50s
-              Overhead:           120.00%
-              Coverage:           0.00%
+              Runtime:            4.00s
+              Killtime:           4.00s
+              Overhead:           0.00%
+              Coverage:           50.00%
               Expected:           100.00%
             REPORT
           end
 
           context 'without a diff' do
-            let(:mutation_source) { 'true' }
+            let(:mutation_a_node) { s(:true) }
 
             it_reports(<<-REPORT)
-              subject_id
-              - test_id
-              mutation_id-a
+              subject-a
+              - test-a
+              evil:subject-a:d5318
               Original source:
               true
               Mutated Source:
               true
-              BUG: Mutation NOT resulted in exactly one diff. Please report a reproduction!
+              BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!
               -----------------------
               Mutant configuration:
               Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
@@ -455,26 +334,30 @@ RSpec.describe Mutant::Reporter::CLI do
               Requires:           []
               Available Subjects: 1
               Subjects:           1
-              Mutations:          1
-              Kills:              0
+              Mutations:          2
+              Kills:              1
               Alive:              1
-              Runtime:            1.10s
-              Killtime:           0.50s
-              Overhead:           120.00%
-              Coverage:           0.00%
+              Runtime:            4.00s
+              Killtime:           4.00s
+              Overhead:           0.00%
+              Coverage:           50.00%
               Expected:           100.00%
             REPORT
           end
         end
 
         context 'on neutral mutation' do
-          let(:mutation_class)  { Mutant::Mutation::Neutral }
-          let(:mutation_source) { 'true' }
+          update(:mutation_a_test_a_result) { { passed: false } }
+          update(:mutation_a_test_b_result) { { passed: false } }
+
+          let(:mutation_a) do
+            Mutant::Mutation::Neutral.new(subject_a, s(:true))
+          end
 
           it_reports(<<-REPORT)
-            subject_id
-            - test_id
-            mutation_id-a
+            subject-a
+            - test-a
+            neutral:subject-a:d5318
             --- Neutral failure ---
             Original code was inserted unmutated. And the test did NOT PASS.
             Your tests do not pass initially or you found a bug in mutant / unparser.
@@ -482,10 +365,29 @@ RSpec.describe Mutant::Reporter::CLI do
             (true)
             Unparsed Source:
             true
-            Test Reports: 1
-            - test_id / runtime: 1.0
+            Test Reports: 2
+            - test-a / runtime: 1.0
             Test Output:
-            test-output
+            mutation a test a result output
+            - test-b / runtime: 1.0
+            Test Output:
+            mutation a test b result output
+            -----------------------
+            neutral:subject-a:d5318
+            --- Neutral failure ---
+            Original code was inserted unmutated. And the test did NOT PASS.
+            Your tests do not pass initially or you found a bug in mutant / unparser.
+            Subject AST:
+            (true)
+            Unparsed Source:
+            true
+            Test Reports: 2
+            - test-a / runtime: 1.0
+            Test Output:
+            mutation b test a result output
+            - test-b / runtime: 1.0
+            Test Output:
+            mutation b test b result output
             -----------------------
             Mutant configuration:
             Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
@@ -496,31 +398,51 @@ RSpec.describe Mutant::Reporter::CLI do
             Requires:           []
             Available Subjects: 1
             Subjects:           1
-            Mutations:          1
+            Mutations:          2
             Kills:              0
-            Alive:              1
-            Runtime:            1.10s
-            Killtime:           0.50s
-            Overhead:           120.00%
+            Alive:              2
+            Runtime:            4.00s
+            Killtime:           4.00s
+            Overhead:           0.00%
             Coverage:           0.00%
             Expected:           100.00%
           REPORT
         end
 
         context 'on noop mutation' do
-          let(:mutation_class) { Mutant::Mutation::Noop }
+          update(:mutation_a_test_a_result) { { passed: false } }
+          update(:mutation_a_test_b_result) { { passed: false } }
+
+          let(:mutation_a) do
+            Mutant::Mutation::Noop.new(subject_a, s(:true))
+          end
 
           it_reports(<<-REPORT)
-            subject_id
-            - test_id
-            mutation_id-a
+            subject-a
+            - test-a
+            noop:subject-a:d5318
             ---- Noop failure -----
             No code was inserted. And the test did NOT PASS.
             This is typically a problem of your specs not passing unmutated.
-            Test Reports: 1
-            - test_id / runtime: 1.0
+            Test Reports: 2
+            - test-a / runtime: 1.0
             Test Output:
-            test-output
+            mutation a test a result output
+            - test-b / runtime: 1.0
+            Test Output:
+            mutation a test b result output
+            -----------------------
+            noop:subject-a:d5318
+            ---- Noop failure -----
+            No code was inserted. And the test did NOT PASS.
+            This is typically a problem of your specs not passing unmutated.
+            Test Reports: 2
+            - test-a / runtime: 1.0
+            Test Output:
+            mutation b test a result output
+            - test-b / runtime: 1.0
+            Test Output:
+            mutation b test b result output
             -----------------------
             Mutant configuration:
             Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
@@ -531,43 +453,16 @@ RSpec.describe Mutant::Reporter::CLI do
             Requires:           []
             Available Subjects: 1
             Subjects:           1
-            Mutations:          1
+            Mutations:          2
             Kills:              0
-            Alive:              1
-            Runtime:            1.10s
-            Killtime:           0.50s
-            Overhead:           120.00%
+            Alive:              2
+            Runtime:            4.00s
+            Killtime:           4.00s
+            Overhead:           0.00%
             Coverage:           0.00%
             Expected:           100.00%
           REPORT
         end
-      end
-
-      context 'without subjects' do
-        let(:subjects)        { [] }
-        let(:subject_results) { [] }
-
-        let(:config) { Mutant::Config::DEFAULT.update(jobs: 1, includes: %w[include-dir], requires: %w[require-name]) }
-
-        it_reports(<<-REPORT)
-          Mutant configuration:
-          Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-          Integration:        null
-          Expect Coverage:    100.00%
-          Jobs:               1
-          Includes:           ["include-dir"]
-          Requires:           ["require-name"]
-          Available Subjects: 0
-          Subjects:           0
-          Mutations:          0
-          Kills:              0
-          Alive:              0
-          Runtime:            1.10s
-          Killtime:           0.00s
-          Overhead:           Inf%
-          Coverage:           0.00%
-          Expected:           100.00%
-        REPORT
       end
     end
   end

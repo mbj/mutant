@@ -17,7 +17,7 @@ module Mutant
 
         # Return progress representation
         #
-        # @param [Runner::Collector] collector
+        # @param [Runner::Status] status
         #
         # @return [String]
         #
@@ -67,6 +67,18 @@ module Mutant
         # Format for progressive non rewindable output
         class Progressive < self
 
+          # Initialize object
+          #
+          # @return [undefined]
+          #
+          # @api private
+          #
+          def initialize(*)
+            @seen = Set.new
+
+            super
+          end
+
           # Return start representation
           #
           # @return [String]
@@ -83,10 +95,13 @@ module Mutant
           #
           # @api private
           #
-          def progress(collector)
-            last_mutation_result = collector.last_mutation_result
-            return EMPTY_STRING unless last_mutation_result
-            format(Printer::MutationProgressResult, last_mutation_result)
+          def progress(status)
+            current = status.env_result.subject_results.flat_map(&:mutation_results)
+            new = current.reject(&@seen.method(:include?))
+            @seen = current.to_set
+            new.map do |mutation_result|
+              format(Printer::MutationProgressResult, mutation_result)
+            end.join(EMPTY_STRING)
           end
 
         private
@@ -109,20 +124,6 @@ module Mutant
 
           BUFFER_FLAGS = 'a+'.freeze
 
-          # Rate per second progress report fires
-          OUTPUT_RATE = 1.0 / 20
-
-          # Initialize object
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def initialize(*)
-            super
-            @last_frame = nil
-          end
-
           # Format start
           #
           # @param [Env] env
@@ -137,16 +138,14 @@ module Mutant
 
           # Format progress
           #
-          # @param [Runner::Collector] collector
+          # @param [Runner::Status] status
           #
           # @return [String]
           #
           # @api private
           #
-          def progress(collector)
-            throttle do
-              format(Printer::Collector, collector)
-            end.to_s
+          def progress(status)
+            format(Printer::Status, status)
           end
 
         private
@@ -164,18 +163,6 @@ module Mutant
             #
             buffer = StringIO.new
             buffer << tput.restore
-          end
-
-          # Call block throttled
-          #
-          # @return [self]
-          #
-          # @api private
-          #
-          def throttle
-            now = Time.now
-            return if @last_frame && (now - @last_frame) < OUTPUT_RATE
-            yield.tap { @last_frame = now }
           end
 
         end # Framed

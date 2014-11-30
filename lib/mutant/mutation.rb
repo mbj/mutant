@@ -7,6 +7,30 @@ module Mutant
     CODE_DELIMITER = "\0".freeze
     CODE_RANGE     = (0..4).freeze
 
+    # Kill mutation via isolation
+    #
+    # @param [Isolation] isolation
+    #
+    # @return [Result::Mutation]
+    #
+    # @api private
+    #
+    def kill(isolation)
+      result = Result::Mutation.new(
+        index:        nil,
+        mutation:     self,
+        test_results: []
+      )
+
+      subject.tests.reduce(result) do |current, test|
+        return current unless current.continue?
+        test_result = test.kill(isolation, self)
+        current.update(
+          test_results: current.test_results.dup << test_result
+        )
+      end
+    end
+
     # Insert mutated node
     #
     # FIXME: Cache subject visibility in a better way! Ideally dont mutate it
@@ -67,17 +91,23 @@ module Mutant
       subject.source
     end
 
-    # Test if mutation is killed by test report
+    # Test if mutation is killed by test reports
     #
-    # @param [Report::Test] test_report
+    # @param [Array<Report::Test>] test_reports
     #
     # @return [Boolean]
     #
     # @api private
     #
-    def killed_by?(test_report)
-      self.class::SHOULD_PASS.equal?(test_report.passed)
-    end
+    abstract_singleton_method :success?
+
+    # Test if execution can be continued
+    #
+    # @return [Boolean]
+    #
+    # @api private
+    #
+    abstract_singleton_method :continue?
 
   private
 
@@ -105,24 +135,65 @@ module Mutant
     # Evil mutation that should case mutations to fail tests
     class Evil < self
 
-      SHOULD_PASS = false
-      SYMBOL      = 'evil'.freeze
+      SYMBOL = 'evil'.freeze
+
+      # Test if mutation is killed by test reports
+      #
+      # @param [Array<Report::Test>] test_reports
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
+      def self.success?(test_results)
+        !test_results.all?(&:passed)
+      end
+
+      # Test if mutation execution can be continued
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
+      def self.continue?(test_results)
+        !success?(test_results)
+      end
 
     end # Evil
 
     # Neutral mutation that should not cause mutations to fail tests
     class Neutral < self
 
-      SYMBOL      = 'neutral'.freeze
-      SHOULD_PASS = true
+      SYMBOL = 'neutral'.freeze
+
+      # Test if mutation is killed by test reports
+      #
+      # @param [Array<Report::Test>] test_reports
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
+      def self.success?(test_results)
+        test_results.any? && test_results.all?(&:passed)
+      end
+
+      # Test if mutation execution can be continued
+      #
+      # @return [Boolean] _test_results
+      #
+      # @api private
+      #
+      def self.continue?(_test_results)
+        true
+      end
 
     end # Neutral
 
     # Noop mutation, special case of neutral
-    class Noop < self
+    class Noop < Neutral
 
-      SYMBOL      = 'noop'.freeze
-      SHOULD_PASS = true
+      SYMBOL = 'noop'.freeze
 
     end # Noop
 

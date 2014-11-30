@@ -3,30 +3,58 @@ module Mutant
   class Runner
     include Adamantium::Flat, Concord.new(:env), Procto.call(:result)
 
+    # Status of the runner execution
+    class Status
+      include Adamantium, Anima::Update, Anima.new(
+        :env_result,
+        :active_jobs,
+        :done
+      )
+    end # Status
+
+    # Job to push to workers
+    class Job
+      include Adamantium::Flat, Anima.new(:index, :mutation)
+    end # Job
+
+    # Job result object received from workers
+    class JobResult
+      include Adamantium::Flat, Anima.new(:job, :result)
+    end
+
+    REPORT_FREQUENCY = 20.0
+    REPORT_DELAY     = 1 / REPORT_FREQUENCY
+
     # Initialize object
     #
     # @return [undefined]
     #
     # @api private
     #
-    def initialize(env)
+    def initialize(*)
       super
 
-      @collector = Collector.new(env)
-      @mutex     = Mutex.new
-      @mutations = env.mutations.dup
-      @index     = 0
-      @continue  = true
-
+      reporter.start(env)
       config.integration.setup
 
-      reporter.start(env)
+      @master = config.actor_env.current.bind(Master.call(env))
 
-      run
+      status = nil
 
-      @result = @collector.result
+      loop do
+        status = current_status
+        break if status.done
+        reporter.progress(status)
+        Kernel.sleep(REPORT_DELAY)
+      end
 
-      reporter.report(result)
+      reporter.progress(status)
+
+      @master.call(:stop)
+
+      @result = status.env_result
+
+      reporter.report(@result)
     end
 
     # Return result
@@ -39,127 +67,14 @@ module Mutant
 
   private
 
-    # Run mutation analysis
+    # Return reporter
     #
-    # @return [Report::Subject]
-    #
-    # @api private
-    #
-    def run
-      Parallel.map(
-        method(:next),
-        in_threads: config.jobs,
-        finish:     method(:finish),
-        start:      method(:start),
-        &method(:run_mutation)
-      )
-    end
-
-    # Return next mutation or stop
-    #
-    # @return [Mutation]
-    #   in case there is a next mutation
-    #
-    # @return [Parallel::Stop]
-    #   in case there is no next mutation or runner should stop early
-    #
-    #
-    # @api private
-    def next
-      @mutex.synchronize do
-        mutation = @mutations.at(@index)
-        if @continue && mutation
-          @index += 1
-          mutation
-        else
-          Parallel::Stop
-        end
-      end
-    end
-
-    # Handle started mutation
-    #
-    # @param [Mutation] mutation
-    # @param [Fixnum] _index
-    #
-    # @return [undefined]
+    # @return [Reporter]
     #
     # @api private
     #
-    def start(mutation, _index)
-      @mutex.synchronize do
-        @collector.start(mutation)
-      end
-    end
-
-    # Handle finished mutation
-    #
-    # @param [Mutation] mutation
-    # @param [Fixnum] index
-    # @param [Object] result
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def finish(mutation, index, result)
-      return unless result.is_a?(Mutant::Result::Mutation)
-
-      test_results = result.test_results.zip(mutation.subject.tests).map do |test_result, test|
-        test_result.update(test: test, mutation: mutation) if test_result
-      end.compact
-
-      @mutex.synchronize do
-        process_result(result.update(index: index, mutation: mutation, test_results: test_results))
-      end
-    end
-
-    # Process result
-    #
-    # @param [Result::Mutation] result
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def process_result(result)
-      @collector.finish(result)
-      reporter.progress(@collector)
-      return unless config.fail_fast && !result.success?
-      @continue = false
-    end
-
-    # Run mutation
-    #
-    # @param [Mutation] mutation
-    #
-    # @return [Report::Mutation]
-    #
-    # @api private
-    #
-    def run_mutation(mutation)
-      Result::Mutation.compute do
-        {
-          index:        nil,
-          mutation:     nil,
-          test_results: kill_mutation(mutation)
-        }
-      end
-    end
-
-    # Kill mutation
-    #
-    # @param [Mutation] mutation
-    #
-    # @return [Array<Result::Test>]
-    #
-    # @api private
-    #
-    def kill_mutation(mutation)
-      mutation.subject.tests.each_with_object([]) do |test, results|
-        results << result = run_mutation_test(mutation, test)
-        return results if mutation.killed_by?(result)
-      end
+    def reporter
+      env.config.reporter
     end
 
     # Return config
@@ -172,36 +87,14 @@ module Mutant
       env.config
     end
 
-    # Return test result
+    # Return current status
     #
-    # @return [Report::Test]
-    #
-    # @api private
-    #
-    def run_mutation_test(mutation, test)
-      time = Time.now
-      config.isolation.call do
-        mutation.insert
-        test.run
-      end
-    rescue Isolation::Error => exception
-      Result::Test.new(
-        test:     test,
-        mutation: mutation,
-        runtime:  Time.now - time,
-        output:   exception.message,
-        passed:   false
-      )
-    end
-
-    # Return reporter
-    #
-    # @return [Reporter]
+    # @return [Status]
     #
     # @api private
     #
-    def reporter
-      config.reporter
+    def current_status
+      @master.call(:status)
     end
 
   end # Runner
