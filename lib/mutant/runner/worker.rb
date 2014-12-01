@@ -43,6 +43,8 @@ module Mutant
       #
       # @return [Boolean]
       #
+      # @api private
+      #
       def handle(message)
         type, payload = message.type, message.payload
         case message.type

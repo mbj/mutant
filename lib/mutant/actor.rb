@@ -32,6 +32,8 @@ module Mutant
       #
       # @return [Message]
       #
+      # @api private
+      #
       def self.new(_type, _payload = Undefined)
         super
       end
@@ -47,6 +49,8 @@ module Mutant
       # @param [Symbol] type
       #
       # @return [Object]
+      #
+      # @api private
       #
       def call(type)
         other.call(Message.new(type, actor.sender))

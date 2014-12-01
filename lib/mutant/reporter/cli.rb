@@ -28,6 +28,8 @@ module Mutant
       #
       # @param [Env] env
       #
+      # @return [self]
+      #
       # @api private
       #
       def start(env)

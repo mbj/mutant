@@ -96,6 +96,10 @@ module Mutant
       #
       # @param [Actor::Sender] sender
       #
+      # @return [undefined]
+      #
+      # @api private
+      #
       def handle_status(sender)
         sender.call(Actor::Message.new(:status, @scheduler.status))
       end
@@ -105,6 +109,8 @@ module Mutant
       # @param [JobResult] job_result
       #
       # @return [undefined]
+      #
+      # @api private
       #
       def handle_result(job_result)
         return if @stopping

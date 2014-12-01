@@ -39,6 +39,8 @@ module Mutant
       #
       # @return [Binding]
       #
+      # @api private
+      #
       def bind(other)
         Binding.new(self, other)
       end

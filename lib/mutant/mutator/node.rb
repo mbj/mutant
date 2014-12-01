@@ -219,7 +219,7 @@ module Mutant
       #
       # @return [Enumerable<Fixnum>]
       #
-      # @api pirvate
+      # @api private
       #
       def children_indices(range)
         range_end = range.end

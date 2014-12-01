@@ -159,6 +159,8 @@ module Mutant
           #
           # @return [undefined]
           #
+          # @api private
+          #
           def job_status
             return if active_jobs.empty?
             info('Active Jobs:')
@@ -545,6 +547,14 @@ module Mutant
             puts(object.output)
           end
 
+          # Test if test result is successful
+          #
+          # Only used to determine color.
+          #
+          # @return [false]
+          #
+          # @api private
+          #
           def success?
             false
           end
