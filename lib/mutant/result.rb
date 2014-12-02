@@ -148,21 +148,11 @@ module Mutant
     # Test result
     class Test
       include Result, Anima.new(
-        :test,
+        :tests,
         :output,
-        :mutation,
         :passed,
         :runtime
       )
-
-      # Return killtime
-      #
-      # @return [Float]
-      #
-      # @api private
-      #
-      alias_method :killtime, :runtime
-
     end # Test
 
     # Subject result
@@ -258,20 +248,19 @@ module Mutant
 
     # Mutation result
     class Mutation
-      include Result, Anima.new(:mutation, :test_results, :index)
+      include Result, Anima.new(:mutation, :test_result, :index)
 
-      sum :runtime, :test_results
-
-      # Return failed test results
+      # Return runtime
       #
-      # @return [Array<Result::Test>]
+      # @return [Float]
       #
       # @api private
       #
-      def failed_test_results
-        test_results.reject(&:passed)
+      def runtime
+        test_result.runtime
       end
-      memoize :failed_test_results
+
+      alias_method :killtime, :runtime
 
       # Test if mutation was handled successfully
       #
@@ -280,22 +269,9 @@ module Mutant
       # @api private
       #
       def success?
-        mutation.class.success?(test_results)
+        mutation.class.success?(test_result)
       end
-
-      # Test if execution on mutation can be stopped
-      #
-      # @return [Boolean]
-      #
-      # @api private
-      #
-      def continue?
-        mutation.class.continue?(test_results)
-      end
-
-      sum :killtime, :test_results
 
     end # Mutation
-
   end # Result
 end # Mutant

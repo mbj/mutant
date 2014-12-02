@@ -5,24 +5,25 @@ module Mutant
   class Integration
     # Shared parts of rspec2/3 integration
     class Rspec < self
-      include AbstractType
+
+      ALL                  = Mutant::Expression.parse('*')
+      EXPRESSION_DELIMITER = ' '.freeze
+      LOCATION_DELIMITER   = ':'.freeze
+      EXIT_SUCCESS         = 0
+      CLI_OPTIONS          = IceNine.deep_freeze(%w[spec --fail-fast])
 
       register 'rspec'
 
-      RSPEC_2_VERSION_PREFIX = '2.'.freeze
-
-      # Return integration compatible to currently loaded rspec
+      # Initialize rspec integration
       #
-      # @return [Integration]
+      # @return [undefined]
       #
       # @api private
       #
-      def self.build
-        if RSpec::Core::Version::STRING.start_with?(RSPEC_2_VERSION_PREFIX)
-          Rspec2.new
-        else
-          Rspec3.new
-        end
+      def initialize
+        @output = StringIO.new
+        @runner = RSpec::Core::Runner.new(RSpec::Core::ConfigurationOptions.new(CLI_OPTIONS))
+        @world  = RSpec.world
       end
 
       # Setup rspec integration
@@ -32,15 +33,14 @@ module Mutant
       # @api private
       #
       def setup
-        options.configure(configuration)
-        configuration.load_spec_files
+        @runner.setup($stderr, @output)
         self
       end
       memoize :setup
 
       # Return report for test
       #
-      # @param [Rspec::Test] test
+      # @param [Enumerable<Mutant::Test>] tests
       #
       # @return [Test::Result]
       #
@@ -48,25 +48,17 @@ module Mutant
       #
       # rubocop:disable MethodLength
       #
-      def run(test)
-        output = StringIO.new
-        failed = false
+      def call(tests)
+        examples = tests.map(&all_tests_index.method(:fetch)).to_set
+        filter_examples(&examples.method(:include?))
         start = Time.now
-        reporter = new_reporter(output)
-        reporter.report(1) do
-          example_group_index.fetch(test.expression.syntax).each do |example_group|
-            next if example_group.run(reporter)
-            failed = true
-            break
-          end
-        end
-        output.rewind
+        passed = @runner.run_specs(RSpec.world.ordered_example_groups).equal?(EXIT_SUCCESS)
+        @output.rewind
         Result::Test.new(
-          test:     nil,
-          mutation: nil,
-          output:   output.read,
+          tests:    nil,
+          output:   @output.read,
           runtime:  Time.now - start,
-          passed:   !failed
+          passed:   passed
         )
       end
 
@@ -77,136 +69,69 @@ module Mutant
       # @api private
       #
       def all_tests
-        example_group_index.keys.each_with_object([]) do |full_description, aggregate|
-          expression = Expression.try_parse(full_description) or next
-
-          aggregate << Test.new(self, expression)
-        end
+        all_tests_index.keys
       end
       memoize :all_tests
 
     private
 
-      # Return all example groups
+      # Return all tests index
       #
-      # @return [Hash<String, RSpec::Core::ExampleGroup]
-      #
-      # @api private
-      #
-      def example_group_index
-        index = Hash.new { |hash, key| hash[key] = [] }
-
-        RSpec.world.example_groups.flat_map(&:descendants).each do |example_group|
-          full_description = full_description(example_group)
-          index[full_description] << example_group
-        end
-
-        index
-      end
-      memoize :example_group_index
-
-      # Return configuration
-      #
-      # @return [RSpec::Core::Configuration]
+      # @return [Hash<Test, RSpec::Core::Example]
       #
       # @api private
       #
-      def configuration
-        RSpec::Core::Configuration.new
+      def all_tests_index
+        all_examples.each_with_object({}) do |example, index|
+          index[parse_example(example)] = example
+        end
       end
-      memoize :configuration, freezer: :noop
+      memoize :all_tests_index
 
-      # Return options
+      # Parse example into test
       #
-      # @return [RSpec::Core::ConfigurationOptions]
+      # @param [RSpec::Core::Example]
+      #
+      # @return [Test]
       #
       # @api private
       #
-      def options
-        RSpec::Core::ConfigurationOptions.new(%w[--fail-fast spec])
+      def parse_example(example)
+        metadata = example.metadata
+        location = metadata.fetch(:location)
+        full_description = metadata.fetch(:full_description)
+        expression = Expression.try_parse(full_description.split(EXPRESSION_DELIMITER, 2).first) || ALL
+
+        Test.new(
+          id:         "rspec:#{location} / #{full_description}",
+          expression: expression
+        )
       end
-      memoize :options, freezer: :noop
 
-      # Rspec2 integration
-      class Rspec2 < self
+      # Return all examples
+      #
+      # @return [Array<String, RSpec::Core::Example]
+      #
+      # @api private
+      #
+      def all_examples
+        @world.example_groups.flat_map(&:descendants).flat_map(&:examples)
+      end
 
-        register 'rspec'
-
-      private
-
-        # Return options
-        #
-        # @return [RSpec::Core::ConfigurationOptions]
-        #
-        # @api private
-        #
-        def options
-          super.tap(&:parse_options)
+      # Filter examples
+      #
+      # @param [#call] predicate
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def filter_examples(&predicate)
+        @world.filtered_examples.each_value do |examples|
+          examples.keep_if(&predicate)
         end
+      end
 
-        # Return full description of example group
-        #
-        # @param [RSpec::Core::ExampleGroup] example_group
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def full_description(example_group)
-          example_group.metadata.fetch(:example_group).fetch(:full_description)
-        end
-
-        # Return new reporter
-        #
-        # @param [StringIO] output
-        #
-        # @return [RSpec::Core::Reporter]
-        #
-        # @api private
-        #
-        def new_reporter(output)
-          formatter = RSpec::Core::Formatters::BaseTextFormatter.new(output)
-
-          RSpec::Core::Reporter.new(formatter)
-        end
-
-      end # Rspec2
-
-      # Rspec 3 integration
-      class Rspec3 < self
-
-      private
-
-        # Return full description for example group
-        #
-        # @param [RSpec::Core::ExampleGroup] example_group
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def full_description(example_group)
-          example_group.metadata.fetch(:full_description)
-        end
-
-        # Return new reporter
-        #
-        # @param [StringIO] output
-        #
-        # @return [RSpec::Core::Reporter]
-        #
-        # @api private
-        #
-        def new_reporter(output)
-          formatter = RSpec::Core::Formatters::BaseTextFormatter.new(output)
-          notifications = RSpec::Core::Formatters::Loader.allocate.send(:notifications_for, formatter.class)
-
-          RSpec::Core::Reporter.new(configuration).tap do |reporter|
-            reporter.register_listener(formatter, *notifications)
-          end
-        end
-
-      end # Rspec3
     end # Rspec
   end # Integration
 end # Mutant

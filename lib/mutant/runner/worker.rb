@@ -79,8 +79,12 @@ module Mutant
       # @api private
       #
       def run_mutation(job)
-        job.mutation.kill(config.isolation).update(
-          index: job.index
+        mutation = job.mutation
+        test_result = mutation.kill(config.isolation, config.integration)
+        Result::Mutation.new(
+          index:       job.index,
+          mutation:    mutation,
+          test_result: test_result
         )
       end
 

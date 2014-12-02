@@ -127,8 +127,7 @@ RSpec.describe Mutant::Reporter::CLI do
         end
 
         context 'when mutation is NOT successful' do
-          update(:mutation_a_test_a_result) { { passed: true } }
-          update(:mutation_a_test_b_result) { { passed: true } }
+          update(:mutation_a_test_result) { { passed: true } }
           it_reports 'F.'
         end
       end
@@ -178,8 +177,8 @@ RSpec.describe Mutant::Reporter::CLI do
             Kills:              2
             Alive:              0
             Runtime:            4.00s
-            Killtime:           4.00s
-            Overhead:           0.00%
+            Killtime:           2.00s
+            Overhead:           100.00%
             Coverage:           100.00%
             Expected:           100.00%
             Active subjects:    0
@@ -190,8 +189,7 @@ RSpec.describe Mutant::Reporter::CLI do
           update(:status) { { active_jobs: [job_a].to_set } }
 
           context 'on failure' do
-            update(:mutation_a_test_a_result) { { passed: true } }
-            update(:mutation_a_test_b_result) { { passed: true } }
+            update(:mutation_a_test_result) { { passed: true } }
 
             it_reports(<<-REPORT)
               Mutant configuration:
@@ -207,15 +205,15 @@ RSpec.describe Mutant::Reporter::CLI do
               Kills:              1
               Alive:              1
               Runtime:            4.00s
-              Killtime:           4.00s
-              Overhead:           0.00%
+              Killtime:           2.00s
+              Overhead:           100.00%
               Coverage:           50.00%
               Expected:           100.00%
               Active subjects:    1
               subject-a mutations: 2
               - test-a
               F.
-              (01/02)  50% - killtime: 4.00s runtime: 4.00s overhead: 0.00s
+              (01/02)  50% - killtime: 2.00s runtime: 2.00s overhead: 0.00s
               Active Jobs:
               0: evil:subject-a:d27d2
             REPORT
@@ -236,15 +234,15 @@ RSpec.describe Mutant::Reporter::CLI do
               Kills:              2
               Alive:              0
               Runtime:            4.00s
-              Killtime:           4.00s
-              Overhead:           0.00%
+              Killtime:           2.00s
+              Overhead:           100.00%
               Coverage:           100.00%
               Expected:           100.00%
               Active subjects:    1
               subject-a mutations: 2
               - test-a
               ..
-              (02/02) 100% - killtime: 4.00s runtime: 4.00s overhead: 0.00s
+              (02/02) 100% - killtime: 2.00s runtime: 2.00s overhead: 0.00s
               Active Jobs:
               0: evil:subject-a:d27d2
             REPORT
@@ -271,16 +269,15 @@ RSpec.describe Mutant::Reporter::CLI do
           Kills:              2
           Alive:              0
           Runtime:            4.00s
-          Killtime:           4.00s
-          Overhead:           0.00%
+          Killtime:           2.00s
+          Overhead:           100.00%
           Coverage:           100.00%
           Expected:           100.00%
         REPORT
       end
 
       context 'and partial coverage' do
-        update(:mutation_a_test_a_result) { { passed: true } }
-        update(:mutation_a_test_b_result) { { passed: true } }
+        update(:mutation_a_test_result) { { passed: true } }
 
         context 'on evil mutation' do
           context 'with a diff' do
@@ -305,8 +302,8 @@ RSpec.describe Mutant::Reporter::CLI do
               Kills:              1
               Alive:              1
               Runtime:            4.00s
-              Killtime:           4.00s
-              Overhead:           0.00%
+              Killtime:           2.00s
+              Overhead:           100.00%
               Coverage:           50.00%
               Expected:           100.00%
             REPORT
@@ -338,8 +335,8 @@ RSpec.describe Mutant::Reporter::CLI do
               Kills:              1
               Alive:              1
               Runtime:            4.00s
-              Killtime:           4.00s
-              Overhead:           0.00%
+              Killtime:           2.00s
+              Overhead:           100.00%
               Coverage:           50.00%
               Expected:           100.00%
             REPORT
@@ -347,8 +344,7 @@ RSpec.describe Mutant::Reporter::CLI do
         end
 
         context 'on neutral mutation' do
-          update(:mutation_a_test_a_result) { { passed: false } }
-          update(:mutation_a_test_b_result) { { passed: false } }
+          update(:mutation_a_test_result) { { passed: false } }
 
           let(:mutation_a) do
             Mutant::Mutation::Neutral.new(subject_a, s(:true))
@@ -365,13 +361,11 @@ RSpec.describe Mutant::Reporter::CLI do
             (true)
             Unparsed Source:
             true
-            Test Reports: 2
-            - test-a / runtime: 1.0
+            Test Result:
+            - 1 @ runtime: 1.0
+              - test-a
             Test Output:
-            mutation a test a result output
-            - test-b / runtime: 1.0
-            Test Output:
-            mutation a test b result output
+            mutation a test result output
             -----------------------
             neutral:subject-a:d5318
             --- Neutral failure ---
@@ -381,13 +375,11 @@ RSpec.describe Mutant::Reporter::CLI do
             (true)
             Unparsed Source:
             true
-            Test Reports: 2
-            - test-a / runtime: 1.0
+            Test Result:
+            - 1 @ runtime: 1.0
+              - test-a
             Test Output:
-            mutation b test a result output
-            - test-b / runtime: 1.0
-            Test Output:
-            mutation b test b result output
+            mutation b test result output
             -----------------------
             Mutant configuration:
             Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
@@ -402,16 +394,15 @@ RSpec.describe Mutant::Reporter::CLI do
             Kills:              0
             Alive:              2
             Runtime:            4.00s
-            Killtime:           4.00s
-            Overhead:           0.00%
+            Killtime:           2.00s
+            Overhead:           100.00%
             Coverage:           0.00%
             Expected:           100.00%
           REPORT
         end
 
         context 'on noop mutation' do
-          update(:mutation_a_test_a_result) { { passed: false } }
-          update(:mutation_a_test_b_result) { { passed: false } }
+          update(:mutation_a_test_result) { { passed: false } }
 
           let(:mutation_a) do
             Mutant::Mutation::Noop.new(subject_a, s(:true))
@@ -424,25 +415,21 @@ RSpec.describe Mutant::Reporter::CLI do
             ---- Noop failure -----
             No code was inserted. And the test did NOT PASS.
             This is typically a problem of your specs not passing unmutated.
-            Test Reports: 2
-            - test-a / runtime: 1.0
+            Test Result:
+            - 1 @ runtime: 1.0
+              - test-a
             Test Output:
-            mutation a test a result output
-            - test-b / runtime: 1.0
-            Test Output:
-            mutation a test b result output
+            mutation a test result output
             -----------------------
             noop:subject-a:d5318
             ---- Noop failure -----
             No code was inserted. And the test did NOT PASS.
             This is typically a problem of your specs not passing unmutated.
-            Test Reports: 2
-            - test-a / runtime: 1.0
+            Test Result:
+            - 1 @ runtime: 1.0
+              - test-a
             Test Output:
-            mutation b test a result output
-            - test-b / runtime: 1.0
-            Test Output:
-            mutation b test b result output
+            mutation b test result output
             -----------------------
             Mutant configuration:
             Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
@@ -457,8 +444,8 @@ RSpec.describe Mutant::Reporter::CLI do
             Kills:              0
             Alive:              2
             Runtime:            4.00s
-            Killtime:           4.00s
-            Overhead:           0.00%
+            Killtime:           2.00s
+            Overhead:           100.00%
             Coverage:           0.00%
             Expected:           100.00%
           REPORT

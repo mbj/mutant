@@ -123,10 +123,9 @@ describe Mutant::Runner::Scheduler do
         object.job_result(job_a_result)
       end
 
-      update(:subject_a_result)         { { mutation_results: [mutation_a_result] } }
-      update(:mutation_a_test_a_result) { { passed:           true                } }
-      update(:mutation_a_test_b_result) { { passed:           true                } }
-      update(:config)                   { { fail_fast:        true                } }
+      update(:subject_a_result)       { { mutation_results: [mutation_a_result] } }
+      update(:mutation_a_test_result) { { passed:           true                } }
+      update(:config)                 { { fail_fast:        true                } }
 
       let(:expected_status) do
         Mutant::Runner::Status.new(
