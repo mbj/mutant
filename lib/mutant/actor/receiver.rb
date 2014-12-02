@@ -31,14 +31,14 @@ module Mutant
       # @api private
       #
       def try_blocking_receive
-        @mutex.lock
-        if @mailbox.empty?
-          @mutex.unlock
+        mutex.lock
+        if mailbox.empty?
+          mutex.unlock
           Thread.stop
           Undefined
         else
-          @mailbox.shift.tap do
-            @mutex.unlock
+          mailbox.shift.tap do
+            mutex.unlock
           end
         end
       end
