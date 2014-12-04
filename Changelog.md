@@ -1,6 +1,8 @@
-# v0.7.0 2014-11-xx
+# v0.7.0 2014-12-04
 
 * Use homegrown actor based parallelization
+* Fix redundant spec execution in rspec integration
+* Add mutation from #send to #__send__ (the canonical form).
 
 # v0.6.7 2014-11-17
 
