@@ -1,3 +1,7 @@
+# v0.7.1 2014-12-04
+
+* Fix invalid dependencies on rspec for mutant-rspec
+
 # v0.7.0 2014-12-04
 
 * Use homegrown actor based parallelization
