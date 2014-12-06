@@ -11,23 +11,23 @@ module Mutant
       # @api private
       #
       def spawn
-        mailbox = Mailbox.new
+        mailbox = new_mailbox
 
-        thread = thread_root.new do
-          yield mailbox.actor(thread_root.current)
+        thread_root.new do
+          yield mailbox
         end
 
-        mailbox.sender(thread)
+        mailbox.sender
       end
 
-      # Return an private actor for current thread
+      # Return new unbound mailbox
       #
-      # @return [Actor::Private]
+      # @return [Mailbox]
       #
       # @api private
       #
-      def current
-        Mailbox.new.actor(thread_root.current)
+      def new_mailbox
+        Mailbox.new
       end
 
     end # Env

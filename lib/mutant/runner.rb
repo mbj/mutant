@@ -37,7 +37,7 @@ module Mutant
       reporter.start(env)
       config.integration.setup
 
-      @master = config.actor_env.current.bind(Master.call(env))
+      @master = config.actor_env.new_mailbox.bind(Master.call(env))
 
       status = nil
 

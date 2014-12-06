@@ -12,9 +12,9 @@ RSpec.describe Mutant::Runner::Master do
 
   describe '.call' do
     let(:actor_names) { [:master, :worker_a]              }
-    let(:worker_a)    { actor_env.actor(:worker_a).sender }
-    let(:worker_b)    { actor_env.actor(:worker_b).sender }
-    let(:parent)      { actor_env.actor(:parent).sender   }
+    let(:worker_a)    { actor_env.mailbox(:worker_a).sender }
+    let(:worker_b)    { actor_env.mailbox(:worker_b).sender }
+    let(:parent)      { actor_env.mailbox(:parent).sender   }
 
     let(:job) { double('Job') }
 
@@ -23,7 +23,7 @@ RSpec.describe Mutant::Runner::Master do
       expect(Mutant::Runner::Worker).to receive(:run).with(
         id: 0,
         config: env.config,
-        parent: actor_env.actor(:master).sender
+        parent: actor_env.mailbox(:master).sender
       ).and_return(worker_a)
     end
 
@@ -46,7 +46,7 @@ RSpec.describe Mutant::Runner::Master do
         message_sequence.add(:parent,   :stop)
       end
 
-      it { should eql(actor_env.actor(:master).sender) }
+      it { should eql(actor_env.mailbox(:master).sender) }
 
       it 'consumes all messages' do
         expect { subject }.to change(&message_sequence.method(:consumed?)).from(false).to(true)
@@ -73,7 +73,7 @@ RSpec.describe Mutant::Runner::Master do
         message_sequence.add(:parent,   :stop)
       end
 
-      it { should eql(actor_env.actor(:master).sender) }
+      it { should eql(actor_env.mailbox(:master).sender) }
 
       it 'consumes all messages' do
         expect { subject }.to change(&message_sequence.method(:consumed?)).from(false).to(true)
@@ -96,7 +96,7 @@ RSpec.describe Mutant::Runner::Master do
         message_sequence.add(:parent,   :stop)
       end
 
-      it { should eql(actor_env.actor(:master).sender) }
+      it { should eql(actor_env.mailbox(:master).sender) }
 
       it 'consumes all messages' do
         expect { subject }.to change(&message_sequence.method(:consumed?)).from(false).to(true)
@@ -119,7 +119,7 @@ RSpec.describe Mutant::Runner::Master do
         message_sequence.add(:parent,   :stop)
       end
 
-      it { should eql(actor_env.actor(:master).sender) }
+      it { should eql(actor_env.mailbox(:master).sender) }
 
       it 'consumes all messages' do
         expect { subject }.to change(&message_sequence.method(:consumed?)).from(false).to(true)
@@ -134,7 +134,7 @@ RSpec.describe Mutant::Runner::Master do
         message_sequence.add(:parent,   :stop)
       end
 
-      it { should eql(actor_env.actor(:master).sender) }
+      it { should eql(actor_env.mailbox(:master).sender) }
 
       it 'consumes all messages' do
         expect { subject }.to change(&message_sequence.method(:consumed?)).from(false).to(true)
@@ -172,7 +172,7 @@ RSpec.describe Mutant::Runner::Master do
         message_sequence.add(:parent,   :stop)
       end
 
-      it { should eql(actor_env.actor(:master).sender) }
+      it { should eql(actor_env.mailbox(:master).sender) }
 
       it 'consumes all messages' do
         expect { subject }.to change(&message_sequence.method(:consumed?)).from(false).to(true)
@@ -189,7 +189,7 @@ RSpec.describe Mutant::Runner::Master do
         message_sequence.add(:parent,   :stop)
       end
 
-      it { should eql(actor_env.actor(:master).sender) }
+      it { should eql(actor_env.mailbox(:master).sender) }
 
       it 'consumes all messages' do
         expect { subject }.to change(&message_sequence.method(:consumed?)).from(false).to(true)

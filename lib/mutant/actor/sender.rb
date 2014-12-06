@@ -3,7 +3,7 @@ module Mutant
 
     # Sender for messages to acting thread
     class Sender
-      include Concord.new(:thread, :mutex, :mailbox)
+      include Adamantium::Flat, Concord.new(:condition_variable, :mutex, :messages)
 
       # Send a message to actor
       #
@@ -15,8 +15,8 @@ module Mutant
       #
       def call(message)
         mutex.synchronize do
-          mailbox << message
-          thread.run
+          messages << message
+          condition_variable.signal
         end
 
         self

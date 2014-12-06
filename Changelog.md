@@ -1,3 +1,7 @@
+# v0.7.2 2014-12-06
+
+* Fix synthetic race conditon in actor implementation
+
 # v0.7.1 2014-12-04
 
 * Fix invalid dependencies on rspec for mutant-rspec

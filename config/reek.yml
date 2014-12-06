@@ -136,6 +136,7 @@ UnusedParameters:
 UtilityFunction:
   enabled: true
   exclude:
+  - Mutant::Actor::Env#new_mailbox
   - Mutant::AST::Sexp#s
   - Mutant::CLI#reporter
   - Mutant::Integration::Rspec#parse_example

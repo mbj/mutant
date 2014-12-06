@@ -40,26 +40,32 @@ module FakeActor
   end
 
   class Env
-    include Concord.new(:messages, :actor_names)
+    include Concord.new(:messages, :mailbox_names)
 
     def spawn
-      name = @actor_names.shift
-      raise 'Tried to spawn actor when no name available' unless name
-      actor = actor(name)
-      yield actor if block_given?
-      actor.sender
+      mailbox = mailbox(next_name)
+      yield mailbox if block_given?
+      mailbox.sender
     end
 
-    def current
-      actor(:current)
+    def mailbox(name)
+      Mailbox.new(name, @messages)
     end
 
-    def actor(name)
-      Actor.new(name, @messages)
+    def new_mailbox
+      mailbox(:current)
+    end
+
+  private
+
+    def next_name
+      @mailbox_names.shift.tap do |name|
+        name or fail 'Tried to spawn actor when no name available'
+      end
     end
   end # Env
 
-  class Actor
+  class Mailbox
     include Concord.new(:name, :messages)
 
     def receiver

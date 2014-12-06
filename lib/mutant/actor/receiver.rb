@@ -2,7 +2,7 @@ module Mutant
   module Actor
     # Receiver side of an actor
     class Receiver
-      include Concord.new(:mutex, :mailbox)
+      include Adamantium::Flat, Concord.new(:condition_variable, :mutex, :messages)
 
       # Receives a message, blocking
       #
@@ -31,14 +31,12 @@ module Mutant
       # @api private
       #
       def try_blocking_receive
-        mutex.lock
-        if mailbox.empty?
-          mutex.unlock
-          Thread.stop
-          Undefined
-        else
-          mailbox.shift.tap do
-            mutex.unlock
+        mutex.synchronize do
+          if messages.empty?
+            condition_variable.wait(mutex)
+            Undefined
+          else
+            messages.shift
           end
         end
       end

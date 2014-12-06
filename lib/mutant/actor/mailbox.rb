@@ -2,50 +2,35 @@ module Mutant
   module Actor
     # Unbound mailbox
     class Mailbox
+      include Adamantium::Flat, Concord::Public.new(:receiver, :sender)
 
-      # Initialize new unbound mailbox
+      # Return new mailbox
       #
-      # @return [undefined]
+      # @return [Mailbox]
       #
       # @api private
       #
-      def initialize
-        @mutex    = Mutex.new
-        @messages = []
-        @receiver = Receiver.new(@mutex, @messages)
-        freeze
+      def self.new
+        mutex              = Mutex.new
+        condition_variable = ConditionVariable.new
+        messages           = []
+
+        super(
+          Receiver.new(condition_variable, mutex, messages),
+          Sender.new(condition_variable, mutex, messages)
+        )
       end
 
-      # Return receiver
+      # Return binding for RPC to other actors
       #
-      # @return [Receiver]
+      # @param [Actor::Sender] other
       #
-      # @api private
-      #
-      attr_reader :receiver
-
-      # Return actor that is able to read mailbox
-      #
-      # @param [Thread] thread
-      #
-      # @return [Actor]
+      # @return [Binding]
       #
       # @api private
       #
-      def actor(thread)
-        Actor.new(thread, self)
-      end
-
-      # Return sender to mailbox
-      #
-      # @param [Thread] thread
-      #
-      # @return [Sender]
-      #
-      # @api private
-      #
-      def sender(thread)
-        Sender.new(thread, @mutex, @messages)
+      def bind(other)
+        Binding.new(self, other)
       end
 
     end # Mailbox

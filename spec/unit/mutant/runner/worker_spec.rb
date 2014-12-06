@@ -1,8 +1,8 @@
 RSpec.describe Mutant::Runner::Worker do
   setup_shared_context
 
-  let(:actor)  { actor_env.actor(:worker)         }
-  let(:parent) { actor_env.actor(:parent).sender  }
+  let(:actor)  { actor_env.mailbox(:worker)        }
+  let(:parent) { actor_env.mailbox(:parent).sender }
 
   before do
     message_sequence.add(:parent, :ready, actor.sender)

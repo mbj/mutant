@@ -1,9 +1,9 @@
 RSpec.describe Mutant::Runner do
   setup_shared_context
 
-  let(:integration)    { double('Integration')    }
-  let(:master_sender)  { actor_env.spawn          }
-  let(:runner_actor)   { actor_env.actor(:runner) }
+  let(:integration)    { double('Integration')      }
+  let(:master_sender)  { actor_env.spawn            }
+  let(:runner_actor)   { actor_env.mailbox(:runner) }
 
   before do
     expect(integration).to receive(:setup).ordered
@@ -18,9 +18,9 @@ RSpec.describe Mutant::Runner do
 
     context 'when status done gets returned immediately' do
       before do
-        message_sequence.add(:runner, :status, actor_env.actor(:current).sender)
+        message_sequence.add(:runner, :status, actor_env.mailbox(:current).sender)
         message_sequence.add(:current, :status, status)
-        message_sequence.add(:runner, :stop, actor_env.actor(:current).sender)
+        message_sequence.add(:runner, :stop, actor_env.mailbox(:current).sender)
         message_sequence.add(:current, :stop)
       end
 
@@ -50,13 +50,16 @@ RSpec.describe Mutant::Runner do
 
       before do
         expect(Kernel).to receive(:sleep).with(1 / 20.0).exactly(2).times.ordered
-        message_sequence.add(:runner,  :status, actor_env.actor(:current).sender)
+
+        current_sender = actor_env.mailbox(:current).sender
+
+        message_sequence.add(:runner,  :status, current_sender)
         message_sequence.add(:current, :status, incomplete_status)
-        message_sequence.add(:runner,  :status, actor_env.actor(:current).sender)
+        message_sequence.add(:runner,  :status, current_sender)
         message_sequence.add(:current, :status, incomplete_status)
-        message_sequence.add(:runner,  :status, actor_env.actor(:current).sender)
+        message_sequence.add(:runner,  :status, current_sender)
         message_sequence.add(:current, :status, status)
-        message_sequence.add(:runner,  :stop,   actor_env.actor(:current).sender)
+        message_sequence.add(:runner,  :stop,   current_sender)
         message_sequence.add(:current, :stop)
       end
 
