@@ -1,22 +1,14 @@
 Code:
   * Test mutant with dynamically created zombie.
-  * Log all warnings through reporter, so remove random $stderr.puts calls
 
 Mutations:
   * Add true masgn mutations
-  * Add binary operator specific mutations (YAY, finally reached this point)
   * Add some kind of a "do not touch me object" that raises on all messages.
     It can be used to make sure each literal value is touched.
   * Replace nil or add "do not touch me object" to literal mutations.
   * Mutate options on Regexp literals
   * Add mutations for dynamic regexp symbol and string literals
-  * Mutate Block catch "def foo(&block)" and block pass "foo(&block)"
-  * Binary operator mutations
   * Add timeout to terminate infinite loops
-
-    Example of a negative mutation:
-      Mutations on local variables and arguments prefixed with an underscore would be emitted as
-      negative mutations that must be alive.
 
 Loader:
   * Make sure loader does not change visibility of injected mutants
