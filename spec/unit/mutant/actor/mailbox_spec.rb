@@ -3,7 +3,7 @@ RSpec.describe Mutant::Actor::Mailbox do
   let(:condition_variable) { double('Mutex') }
 
   before do
-    allow(Mutex).to             receive(:new).and_return(mutex)
+    allow(Mutex).to receive(:new).and_return(mutex)
     allow(ConditionVariable).to receive(:new).and_return(condition_variable)
   end
 
