@@ -248,7 +248,7 @@ module Mutant
 
     # Mutation result
     class Mutation
-      include Result, Anima.new(:mutation, :test_result, :index)
+      include Result, Anima.new(:mutation, :test_result)
 
       # Return runtime
       #

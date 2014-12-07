@@ -85,7 +85,6 @@ module SharedContext
 
     let(:mutation_a_result) do
       Mutant::Result::Mutation.new(
-        index:       1,
         mutation:    mutation_a,
         test_result: mutation_a_test_result
       )
@@ -93,7 +92,6 @@ module SharedContext
 
     let(:mutation_b_result) do
       Mutant::Result::Mutation.new(
-        index:       1,
         mutation:    mutation_a,
         test_result: mutation_b_test_result
       )

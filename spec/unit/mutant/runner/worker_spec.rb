@@ -44,7 +44,6 @@ RSpec.describe Mutant::Runner::Worker do
       let(:mutation_result) do
         Mutant::Result::Mutation.new(
           mutation:    mutation,
-          index:       job.index,
           test_result: test_result
         )
       end
