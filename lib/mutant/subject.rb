@@ -13,7 +13,9 @@ module Mutant
     #
     def mutations
       mutations = [neutral_mutation]
-      generate_mutations(mutations)
+      Mutator.each(node) do |mutant|
+        mutations << Mutation::Evil.new(self, wrap_node(mutant))
+      end
       mutations
     end
     memoize :mutations
@@ -96,7 +98,7 @@ module Mutant
     # @api private
     #
     def source
-      Unparser.unparse(node)
+      Unparser.unparse(wrap_node(node))
     end
     memoize :source
 
@@ -125,21 +127,19 @@ module Mutant
     # @api private
     #
     def neutral_mutation
-      Mutation::Neutral.new(self, node)
+      Mutation::Neutral.new(self, wrap_node(node))
     end
 
-    # Generate mutations
+    # Wrap node into subject specific container
     #
-    # @param [#<<] emitter
+    # @param [Parser::AST::Node] node
     #
-    # @return [undefined]
+    # @return [Parser::AST::Node]
     #
     # @api private
     #
-    def generate_mutations(emitter)
-      Mutator.each(node) do |mutant|
-        emitter << Mutation::Evil.new(self, mutant)
-      end
+    def wrap_node(node)
+      node
     end
 
   end # Subject

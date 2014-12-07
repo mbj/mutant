@@ -33,17 +33,6 @@ module Mutant
         class Memoized < self
           include AST::Sexp
 
-          # Return source
-          #
-          # @return [String]
-          #
-          # @api private
-          #
-          def source
-            Unparser.unparse(memoizer_node(node))
-          end
-          memoize :source
-
           # Prepare subject for mutation insertion
           #
           # @return [self]
@@ -58,30 +47,6 @@ module Mutant
 
         private
 
-          # Return mutations
-          #
-          # @param [#<<] emitter
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def generate_mutations(emitter)
-            Mutator.each(node) do |mutant|
-              emitter << Mutation::Evil.new(self, memoizer_node(mutant))
-            end
-          end
-
-          # Return neutral mutation
-          #
-          # @return [Mutation::Neutral]
-          #
-          # @api private
-          #
-          def neutral_mutation
-            Mutation::Neutral.new(self, memoizer_node(node))
-          end
-
           # Return memoizer node for mutant
           #
           # @param [Parser::AST::Node] mutant
@@ -90,7 +55,7 @@ module Mutant
           #
           # @api private
           #
-          def memoizer_node(mutant)
+          def wrap_node(mutant)
             s(:begin, mutant, s(:send, nil, :memoize, s(:args, s(:sym, name))))
           end
 
