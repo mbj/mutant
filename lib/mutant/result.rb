@@ -2,39 +2,96 @@ module Mutant
   # Namespace and mixon module for results
   module Result
 
-    # Coverage mixin
-    module Coverage
+    # Hook called when module gets included
+    #
+    # @param [Class, Module] host
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    def self.included(host)
+      host.class_eval do
+        include Adamantium::Flat, Anima::Update
+        extend ClassMethods
+      end
+    end
 
-      # Return coverage
+    # Mixin generator for relative measurments in result
+    class Relative < Module
+      include Concord.new(:method_name, :left, :right)
+
+    private
+
+      def included(host)
+        define_relative_method(host)
+        define_relative_percent_method(host)
+      end
+
+      def define_relative_method(host)
+        left, right = left(), right()
+
+        host.__send__(:define_method, method_name) do
+          left_value = public_send(left)
+          right_value = public_send(right)
+
+          return Rational(0) if left_value.zero?
+
+          Rational(left_value, right_value)
+        end
+      end
+
+      def define_relative_percent_method(host)
+        method_name = method_name()
+
+        host.__send__(:define_method, "#{method_name}_percent") do
+          public_send(method_name) * 100
+        end
+      end
+    end
+
+    Coverage = Relative.new(:coverage, :amount_mutations_killed, :amount_mutation_results)
+
+    # Overhead module
+    module Overhead
+
+      # Return overhead
       #
-      # @return [Rational]
+      # @return [Float]
       #
       # @api private
       #
-      def coverage
-        return Rational(0) if amount_mutation_results.zero?
-
-        Rational(amount_mutations_killed, amount_mutation_results)
+      def overhead
+        return 0.0 if worktime.zero?
+        overhead_time / worktime
       end
 
-      # Hook called when module gets included
+      # Return time spend in addition to runtime
       #
-      # @param [Class, Module] host
-      #
-      # @return [undefined]
+      # @return [Float]
       #
       # @api private
       #
-      def self.included(host)
-        super
-
-        host.memoize(:coverage)
+      def overhead_time
+        runtime - worktime
       end
 
-    end # Coverage
+      # Return overhead percent
+      #
+      # @return [Float]
+      #
+      # @api private
+      #
+      def overhead_percent
+        overhead * 100
+      end
+
+    end # Overhead
 
     # Class level mixin
     module ClassMethods
+
+    private
 
       # Generate a sum method from name and collection
       #
@@ -56,34 +113,15 @@ module Mutant
       end
     end # ClassMethods
 
-    # Return overhead
-    #
-    # @return [Float]
-    #
-    # @api private
-    #
-    def overhead
-      runtime - killtime
-    end
-
-    # Hook called when module gets included
-    #
-    # @param [Class, Module] host
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def self.included(host)
-      host.class_eval do
-        include Adamantium, Anima::Update
-        extend ClassMethods
-      end
-    end
-
     # Env result object
     class Env
-      include Coverage, Result, Anima.new(:runtime, :env, :subject_results)
+      include(
+        Result,
+        Coverage,
+        Overhead,
+        Relative.new(:progress, :amount_mutation_results, :amount_mutations),
+        Anima.new(:runtime, :env, :subject_results)
+      )
 
       COVERAGE_PRECISION = 1
 
@@ -108,10 +146,11 @@ module Mutant
         subject_results.reject(&:success?)
       end
 
+      sum :amount_tests_tried,        :subject_results
       sum :amount_mutation_results, :subject_results
       sum :amount_mutations_alive,  :subject_results
       sum :amount_mutations_killed, :subject_results
-      sum :killtime,                :subject_results
+      sum :worktime,                :subject_results
 
       # Return amount of mutations
       #
@@ -143,14 +182,23 @@ module Mutant
         :passed,
         :runtime
       )
+
+      EMPTY = new(
+        tests:   EMPTY_ARRAY,
+        output:  'No tests executed',
+        passed:  true,
+        runtime: 0.0
+      )
+
     end # Test
 
     # Subject result
     class Subject
-      include Coverage, Result, Anima.new(:subject, :tests, :mutation_results)
+      include Result, Coverage, Overhead, Anima.new(:subject, :tests, :mutation_results)
 
-      sum :killtime, :mutation_results
-      sum :runtime,  :mutation_results
+      sum :amount_tests_tried, :mutation_results
+      sum :worktime,         :mutation_results
+      sum :runtime,          :mutation_results
 
       # Test if subject was processed successful
       #
@@ -238,7 +286,7 @@ module Mutant
 
     # Mutation result
     class Mutation
-      include Result, Anima.new(:mutation, :test_result)
+      include Result, Overhead, Anima.new(:mutation, :test_result)
 
       # Return runtime
       #
@@ -250,7 +298,17 @@ module Mutant
         test_result.runtime
       end
 
-      alias_method :killtime, :runtime
+      alias_method :worktime, :runtime
+
+      # Return tests
+      #
+      # @return [Enumerable<Test>]
+      #
+      # @api private
+      #
+      def tests
+        test_result.tests
+      end
 
       # Test if mutation was handled successfully
       #
@@ -262,6 +320,97 @@ module Mutant
         mutation.class.success?(test_result)
       end
 
+      # Return amount tests run
+      #
+      # @return [Fixnum]
+      #
+      # @api private
+      #
+      def amount_tests_tried
+        test_result.tests.length
+      end
+
     end # Mutation
+
+    # Test trace result
+    class TestTrace
+      include Result, Overhead, Anima.new(:test, :test_result, :trace)
+
+      # Return time to produce the test trace
+      #
+      # @return [Float]
+      #
+      # @api private
+      #
+      def worktime
+        test_result.runtime
+      end
+
+      # Test if trace is sucessful
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
+      def success?
+        test_result.passed
+      end
+
+    end # LineTrace
+
+    # Env trace result
+    class EnvTrace
+      include(
+        SimpleInspect,
+        Result,
+        Overhead,
+        Relative.new(:progress, :amount_test_traces, :amount_tests),
+        Anima.new(:env, :runtime, :test_traces)
+      )
+
+      sum :worktime, :test_traces
+
+      # Return amount of test results
+      #
+      # @return [Fixnum]
+      #
+      # @api private
+      #
+      def amount_test_traces
+        test_traces.length
+      end
+
+      # Return failed test traces
+      #
+      # @return [Array<Result::Subject>]
+      #
+      # @api private
+      #
+      def failed_test_traces
+        test_traces.reject(&:success?)
+      end
+      memoize :failed_test_traces
+
+      # Return amount of tests
+      #
+      # @return [Fixnum]
+      #
+      # @api private
+      #
+      def amount_tests
+        env.config.integration.all_tests.length
+      end
+
+      # Test if tracing is successful
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
+      def success?
+        test_traces.all?(&:success?)
+      end
+
+    end # Trace
   end # Result
 end # Mutant

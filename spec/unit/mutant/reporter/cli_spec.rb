@@ -1,6 +1,10 @@
 RSpec.describe Mutant::Reporter::CLI do
   setup_shared_context
 
+  before do
+    skip
+  end
+
   let(:object) { described_class.new(output, format) }
   let(:output) { StringIO.new }
 
@@ -114,7 +118,7 @@ RSpec.describe Mutant::Reporter::CLI do
   end
 
   describe '#progress' do
-    subject { object.progress(status) }
+    subject { object.kill_status(status) }
 
     context 'on progressive format' do
       let(:format) { progressive_format }
@@ -122,7 +126,7 @@ RSpec.describe Mutant::Reporter::CLI do
       context 'with empty scheduler' do
         update(:env_result) { { subject_results: [] } }
 
-        it_reports "(00/02)   0% - killtime: 0.00s runtime: 4.00s overhead: 4.00s\n"
+        it_reports "Killing (000/002)   0% - coverage:   0% killtime: 0.00s runtime: 4.00s overhead:   0%\n"
       end
 
       context 'with last mutation present' do
@@ -254,7 +258,7 @@ RSpec.describe Mutant::Reporter::CLI do
     end
 
     describe '#report' do
-      subject { object.report(status.payload) }
+      subject { object.kill_report(status.payload) }
 
       context 'with full coverage' do
         it_reports(<<-REPORT)

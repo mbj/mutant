@@ -108,8 +108,64 @@ module Mutant
             subject_results: @subject_results.values
           )
         end
-
       end # Mutation
+
+      # Trace computation sink
+      class Trace < self
+        include Concord.new(:env)
+
+        # Initialize
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def initialize(*)
+          super
+
+          @start       = Time.now
+          @test_traces = []
+          @stop        = false
+        end
+
+        # Handle line trace result
+        #
+        # @param [Result::LineTrace] result
+        #
+        # @api private
+        #
+        def result(result)
+          @test_traces << result
+          @stop = !result.test_result.passed
+
+          self
+        end
+
+        # Return status
+        #
+        # @return [EnvTrace]
+        #
+        # @api private
+        #
+        def status
+          Result::EnvTrace.new(
+            env:         env,
+            runtime:     Time.now - @start,
+            test_traces: @test_traces.dup,
+          )
+        end
+
+        # Test if processing should stop
+        #
+        # @return [Boolean]
+        #
+        # @api private
+        #
+        def stop?
+          @stop
+        end
+
+      end # Trace
     end # Sink
   end # Runner
 end # Mutant

@@ -1,4 +1,4 @@
-RSpec.describe Mutant::LineTrace do
+RSpec.describe Mutant::Trace do
   let(:object) { described_class }
 
   test_a_line = __LINE__ + 2
@@ -8,6 +8,7 @@ RSpec.describe Mutant::LineTrace do
 
   test_b_line = __LINE__ + 2
   def test_b
+    __method__
   end
 
   test_c_line = __LINE__ + 2
@@ -24,15 +25,19 @@ RSpec.describe Mutant::LineTrace do
     end
   end
 
-  describe '.cover?' do
-    subject { object.call { test_a } }
-
-    include_examples 'line trace'
-  end
-
   describe '.call' do
     subject { object.call { test_a } }
 
-    include_examples 'line trace'
+    let(:expected_trace) do
+      described_class.send(
+        :new,
+        :test_b,
+        {
+          __FILE__ => [29, 6, 11, 12, 7].to_set,
+        }
+      )
+    end
+
+    it { should eql(expected_trace) }
   end
 end

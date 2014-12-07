@@ -5,6 +5,7 @@ module Mutant
       :debug,
       :integration,
       :matcher_config,
+      :trace,
       :includes,
       :requires,
       :reporter,

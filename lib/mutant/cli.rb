@@ -149,6 +149,9 @@ module Mutant
       opts.on('--score COVERAGE', 'Fail unless COVERAGE is not reached exactly') do |coverage|
         update(expected_coverage: Float(coverage))
       end
+      opts.on('--trace', 'Use tracing for additional test selection') do
+        update(trace: true)
+      end
       opts.on('--use STRATEGY', 'Use STRATEGY for killing mutations', &method(:setup_integration))
     end
 

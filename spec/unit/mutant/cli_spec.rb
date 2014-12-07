@@ -133,6 +133,7 @@ Environment:
 
 Options:
         --score COVERAGE             Fail unless COVERAGE is not reached exactly
+        --trace                      Use tracing for additional test selection
         --use STRATEGY               Use STRATEGY for killing mutations
         --ignore-subject PATTERN     Ignore subjects that match PATTERN
         --code CODE                  Scope execution to subjects with CODE
@@ -224,6 +225,16 @@ Options:
       end
 
       it_should_behave_like 'a cli parser'
+    end
+
+    context 'with trace flag' do
+      let(:flags) { %w[--trace] }
+
+      it_should_behave_like 'a cli parser'
+
+      it 'sets the trace flag' do
+        expect(subject.config.trace).to be(true)
+      end
     end
 
     context 'with fail-fast flag' do
