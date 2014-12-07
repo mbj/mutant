@@ -93,12 +93,12 @@ RSpec.describe Mutant::Reporter::CLI do
 
       it_reports(<<-REPORT)
         Mutant configuration:
-        Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-        Integration:        null
-        Expect Coverage:    100.00%
-        Jobs:               1
-        Includes:           []
-        Requires:           []
+        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Integration:     null
+        Expect Coverage: 100.00%
+        Jobs:            1
+        Includes:        []
+        Requires:        []
       REPORT
     end
 
@@ -139,23 +139,22 @@ RSpec.describe Mutant::Reporter::CLI do
 
         it_reports <<-REPORT
           Mutant configuration:
-          Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-          Integration:        null
-          Expect Coverage:    100.00%
-          Jobs:               1
-          Includes:           []
-          Requires:           []
-          Available Subjects: 1
-          Subjects:           1
-          Mutations:          2
-          Kills:              0
-          Alive:              0
-          Runtime:            4.00s
-          Killtime:           0.00s
-          Overhead:           Inf%
-          Coverage:           0.00%
-          Expected:           100.00%
-          Active subjects:    0
+          Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+          Integration:     null
+          Expect Coverage: 100.00%
+          Jobs:            1
+          Includes:        []
+          Requires:        []
+          Subjects:        1
+          Mutations:       2
+          Kills:           0
+          Alive:           0
+          Runtime:         4.00s
+          Killtime:        0.00s
+          Overhead:        Inf%
+          Coverage:        0.00%
+          Expected:        100.00%
+          Active subjects: 0
         REPORT
       end
 
@@ -165,23 +164,22 @@ RSpec.describe Mutant::Reporter::CLI do
 
           it_reports(<<-REPORT)
             Mutant configuration:
-            Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-            Integration:        null
-            Expect Coverage:    100.00%
-            Jobs:               1
-            Includes:           []
-            Requires:           []
-            Available Subjects: 1
-            Subjects:           1
-            Mutations:          2
-            Kills:              2
-            Alive:              0
-            Runtime:            4.00s
-            Killtime:           2.00s
-            Overhead:           100.00%
-            Coverage:           100.00%
-            Expected:           100.00%
-            Active subjects:    0
+            Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+            Integration:     null
+            Expect Coverage: 100.00%
+            Jobs:            1
+            Includes:        []
+            Requires:        []
+            Subjects:        1
+            Mutations:       2
+            Kills:           2
+            Alive:           0
+            Runtime:         4.00s
+            Killtime:        2.00s
+            Overhead:        100.00%
+            Coverage:        100.00%
+            Expected:        100.00%
+            Active subjects: 0
           REPORT
         end
 
@@ -193,23 +191,22 @@ RSpec.describe Mutant::Reporter::CLI do
 
             it_reports(<<-REPORT)
               Mutant configuration:
-              Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-              Integration:        null
-              Expect Coverage:    100.00%
-              Jobs:               1
-              Includes:           []
-              Requires:           []
-              Available Subjects: 1
-              Subjects:           1
-              Mutations:          2
-              Kills:              1
-              Alive:              1
-              Runtime:            4.00s
-              Killtime:           2.00s
-              Overhead:           100.00%
-              Coverage:           50.00%
-              Expected:           100.00%
-              Active subjects:    1
+              Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+              Integration:     null
+              Expect Coverage: 100.00%
+              Jobs:            1
+              Includes:        []
+              Requires:        []
+              Subjects:        1
+              Mutations:       2
+              Kills:           1
+              Alive:           1
+              Runtime:         4.00s
+              Killtime:        2.00s
+              Overhead:        100.00%
+              Coverage:        50.00%
+              Expected:        100.00%
+              Active subjects: 1
               subject-a mutations: 2
               - test-a
               F.
@@ -222,23 +219,22 @@ RSpec.describe Mutant::Reporter::CLI do
           context 'on success' do
             it_reports(<<-REPORT)
               Mutant configuration:
-              Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-              Integration:        null
-              Expect Coverage:    100.00%
-              Jobs:               1
-              Includes:           []
-              Requires:           []
-              Available Subjects: 1
-              Subjects:           1
-              Mutations:          2
-              Kills:              2
-              Alive:              0
-              Runtime:            4.00s
-              Killtime:           2.00s
-              Overhead:           100.00%
-              Coverage:           100.00%
-              Expected:           100.00%
-              Active subjects:    1
+              Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+              Integration:     null
+              Expect Coverage: 100.00%
+              Jobs:            1
+              Includes:        []
+              Requires:        []
+              Subjects:        1
+              Mutations:       2
+              Kills:           2
+              Alive:           0
+              Runtime:         4.00s
+              Killtime:        2.00s
+              Overhead:        100.00%
+              Coverage:        100.00%
+              Expected:        100.00%
+              Active subjects: 1
               subject-a mutations: 2
               - test-a
               ..
@@ -257,22 +253,21 @@ RSpec.describe Mutant::Reporter::CLI do
       context 'with full coverage' do
         it_reports(<<-REPORT)
           Mutant configuration:
-          Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-          Integration:        null
-          Expect Coverage:    100.00%
-          Jobs:               1
-          Includes:           []
-          Requires:           []
-          Available Subjects: 1
-          Subjects:           1
-          Mutations:          2
-          Kills:              2
-          Alive:              0
-          Runtime:            4.00s
-          Killtime:           2.00s
-          Overhead:           100.00%
-          Coverage:           100.00%
-          Expected:           100.00%
+          Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+          Integration:     null
+          Expect Coverage: 100.00%
+          Jobs:            1
+          Includes:        []
+          Requires:        []
+          Subjects:        1
+          Mutations:       2
+          Kills:           2
+          Alive:           0
+          Runtime:         4.00s
+          Killtime:        2.00s
+          Overhead:        100.00%
+          Coverage:        100.00%
+          Expected:        100.00%
         REPORT
       end
 
@@ -290,22 +285,21 @@ RSpec.describe Mutant::Reporter::CLI do
               +false
               -----------------------
               Mutant configuration:
-              Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-              Integration:        null
-              Expect Coverage:    100.00%
-              Jobs:               1
-              Includes:           []
-              Requires:           []
-              Available Subjects: 1
-              Subjects:           1
-              Mutations:          2
-              Kills:              1
-              Alive:              1
-              Runtime:            4.00s
-              Killtime:           2.00s
-              Overhead:           100.00%
-              Coverage:           50.00%
-              Expected:           100.00%
+              Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+              Integration:     null
+              Expect Coverage: 100.00%
+              Jobs:            1
+              Includes:        []
+              Requires:        []
+              Subjects:        1
+              Mutations:       2
+              Kills:           1
+              Alive:           1
+              Runtime:         4.00s
+              Killtime:        2.00s
+              Overhead:        100.00%
+              Coverage:        50.00%
+              Expected:        100.00%
             REPORT
           end
 
@@ -323,22 +317,21 @@ RSpec.describe Mutant::Reporter::CLI do
               BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!
               -----------------------
               Mutant configuration:
-              Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-              Integration:        null
-              Expect Coverage:    100.00%
-              Jobs:               1
-              Includes:           []
-              Requires:           []
-              Available Subjects: 1
-              Subjects:           1
-              Mutations:          2
-              Kills:              1
-              Alive:              1
-              Runtime:            4.00s
-              Killtime:           2.00s
-              Overhead:           100.00%
-              Coverage:           50.00%
-              Expected:           100.00%
+              Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+              Integration:     null
+              Expect Coverage: 100.00%
+              Jobs:            1
+              Includes:        []
+              Requires:        []
+              Subjects:        1
+              Mutations:       2
+              Kills:           1
+              Alive:           1
+              Runtime:         4.00s
+              Killtime:        2.00s
+              Overhead:        100.00%
+              Coverage:        50.00%
+              Expected:        100.00%
             REPORT
           end
         end
@@ -382,22 +375,21 @@ RSpec.describe Mutant::Reporter::CLI do
             mutation b test result output
             -----------------------
             Mutant configuration:
-            Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-            Integration:        null
-            Expect Coverage:    100.00%
-            Jobs:               1
-            Includes:           []
-            Requires:           []
-            Available Subjects: 1
-            Subjects:           1
-            Mutations:          2
-            Kills:              0
-            Alive:              2
-            Runtime:            4.00s
-            Killtime:           2.00s
-            Overhead:           100.00%
-            Coverage:           0.00%
-            Expected:           100.00%
+            Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+            Integration:     null
+            Expect Coverage: 100.00%
+            Jobs:            1
+            Includes:        []
+            Requires:        []
+            Subjects:        1
+            Mutations:       2
+            Kills:           0
+            Alive:           2
+            Runtime:         4.00s
+            Killtime:        2.00s
+            Overhead:        100.00%
+            Coverage:        0.00%
+            Expected:        100.00%
           REPORT
         end
 
@@ -432,22 +424,21 @@ RSpec.describe Mutant::Reporter::CLI do
             mutation b test result output
             -----------------------
             Mutant configuration:
-            Matcher:            #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-            Integration:        null
-            Expect Coverage:    100.00%
-            Jobs:               1
-            Includes:           []
-            Requires:           []
-            Available Subjects: 1
-            Subjects:           1
-            Mutations:          2
-            Kills:              0
-            Alive:              2
-            Runtime:            4.00s
-            Killtime:           2.00s
-            Overhead:           100.00%
-            Coverage:           0.00%
-            Expected:           100.00%
+            Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+            Integration:     null
+            Expect Coverage: 100.00%
+            Jobs:            1
+            Includes:        []
+            Requires:        []
+            Subjects:        1
+            Mutations:       2
+            Kills:           0
+            Alive:           2
+            Runtime:         4.00s
+            Killtime:        2.00s
+            Overhead:        100.00%
+            Coverage:        0.00%
+            Expected:        100.00%
           REPORT
         end
       end
