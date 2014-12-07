@@ -67,7 +67,7 @@ module Mutant
       # @api private
       #
       def handle_job(job)
-        parent.call(Actor::Message.new(:result, JobResult.new(job: job, result: run_mutation(job))))
+        parent.call(Actor::Message.new(:result, JobResult.new(job: job, result: run_mutation(job.mutation))))
       end
 
       # Run mutation
@@ -78,8 +78,7 @@ module Mutant
       #
       # @api private
       #
-      def run_mutation(job)
-        mutation = job.mutation
+      def run_mutation(mutation)
         test_result = mutation.kill(config.isolation, config.integration)
         Result::Mutation.new(
           mutation:    mutation,
