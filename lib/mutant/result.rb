@@ -28,7 +28,7 @@ module Mutant
       def self.included(host)
         super
 
-        host.memoize :coverage
+        host.memoize(:coverage)
       end
 
     end # Coverage
@@ -52,7 +52,7 @@ module Mutant
         define_method(name) do
           public_send(collection).map(&name).reduce(0, :+)
         end
-        memoize name
+        memoize(name)
       end
     end # ClassMethods
 
