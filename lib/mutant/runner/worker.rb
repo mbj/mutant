@@ -74,7 +74,7 @@ module Mutant
       #
       # @param [Mutation] mutation
       #
-      # @return [Report::Mutation]
+      # @return [Result::Mutation]
       #
       # @api private
       #
