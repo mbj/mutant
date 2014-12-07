@@ -25,7 +25,7 @@ module Mutant
         # @api private
         #
         def prepare
-          scope.singleton_class.send(:undef_method, name)
+          scope.singleton_class.__send__(:undef_method, name)
           self
         end
 

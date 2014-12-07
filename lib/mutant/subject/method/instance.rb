@@ -25,7 +25,7 @@ module Mutant
         # @api private
         #
         def prepare
-          scope.send(:undef_method, name)
+          scope.__send__(:undef_method, name)
           self
         end
 
@@ -51,7 +51,7 @@ module Mutant
           # @api private
           #
           def prepare
-            scope.send(:memoized_methods).instance_variable_get(:@memory).delete(name)
+            scope.__send__(:memoized_methods).instance_variable_get(:@memory).delete(name)
             super
             self
           end

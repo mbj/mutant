@@ -17,7 +17,7 @@ module Mutant
       def self.run(attributes)
         attributes.fetch(:config).actor_env.spawn do |actor|
           worker = new(attributes)
-          worker.send(:run, actor)
+          worker.__send__(:run, actor)
         end
       end
 
