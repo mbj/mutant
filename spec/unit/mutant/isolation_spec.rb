@@ -64,9 +64,7 @@ RSpec.describe Mutant::Isolation::Fork do
       end
     end
 
-    # Spec stubbing out the fork to ensure all lines are covered
-    # with expectations
-    it 'covers all lines' do
+    it 'uses primitives in correct order when fork succeeds' do
       reader, writer = double('reader'), double('writer')
       expect(IO).to receive(:pipe).ordered.and_return([reader, writer])
       expect(reader).to receive(:binmode).and_return(reader).ordered
@@ -84,6 +82,19 @@ RSpec.describe Mutant::Isolation::Fork do
       expect(Process).to receive(:waitpid).with(pid)
 
       expect(object.call { :foo }).to be(:foo)
+    end
+
+    it 'uses primitives in correct order when fork fails' do
+      reader, writer = double('reader'), double('writer')
+      expect(IO).to receive(:pipe).ordered.and_return([reader, writer])
+      expect(reader).to receive(:binmode).and_return(reader).ordered
+      expect(writer).to receive(:binmode).and_return(writer).ordered
+      expect(Process).to receive(:fork).ordered.and_return(nil)
+      expect(Process).to_not receive(:waitpid)
+
+      expect(writer).to receive(:close).ordered
+      expect(reader).to receive(:read).ordered.and_return(Marshal.dump(:foo))
+      expect(object.call).to be(:foo)
     end
   end
 end
