@@ -40,7 +40,7 @@ RSpec.describe Mutant::Isolation::Fork do
     end
 
     it 'wraps exceptions' do
-      expect { object.call { fail } }.to raise_error(Mutant::Isolation::Error)
+      expect { object.call { fail } }.to raise_error(Mutant::Isolation::Error, 'marshal data too short')
     end
 
     it 'wraps exceptions caused by crashing ruby' do
