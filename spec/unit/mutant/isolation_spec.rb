@@ -69,6 +69,8 @@ RSpec.describe Mutant::Isolation::Fork do
     it 'covers all lines' do
       reader, writer = double('reader'), double('writer')
       expect(IO).to receive(:pipe).ordered.and_return([reader, writer])
+      expect(reader).to receive(:binmode).and_return(reader).ordered
+      expect(writer).to receive(:binmode).and_return(writer).ordered
       pid = double('PID')
       expect(Process).to receive(:fork).ordered.and_yield.and_return(pid)
       file = double('file')
