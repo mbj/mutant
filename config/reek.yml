@@ -141,6 +141,7 @@ UtilityFunction:
   - Mutant::AST::Sexp#s
   - Mutant::CLI#reporter
   - Mutant::Integration::Rspec#parse_example
-  - Mutant::Meta::Example::Verification#format_mutation # False positive, its a utility
+  - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Reporter::CLI::Format::Progressive#new_buffer
+  - Mutant::Reporter::CLI::Printer::StatusProgressive#object # False positive calls super
   max_helper_calls: 0

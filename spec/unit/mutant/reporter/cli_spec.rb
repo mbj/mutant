@@ -85,6 +85,12 @@ RSpec.describe Mutant::Reporter::CLI do
     it_reports("message\n")
   end
 
+  describe '#delay' do
+    subject { object.delay }
+
+    it { should eql(0.05) }
+  end
+
   describe '#start' do
     subject { object.start(env) }
 
@@ -116,19 +122,19 @@ RSpec.describe Mutant::Reporter::CLI do
       context 'with empty scheduler' do
         update(:env_result) { { subject_results: [] } }
 
-        it_reports ''
+        it_reports "(00/02)   0% - killtime: 0.00s runtime: 4.00s overhead: 4.00s\n"
       end
 
       context 'with last mutation present' do
         update(:env_result) { { subject_results: [subject_a_result] } }
 
         context 'when mutation is successful' do
-          it_reports '..'
+          it_reports "(02/02) 100% - killtime: 2.00s runtime: 4.00s overhead: 2.00s\n"
         end
 
         context 'when mutation is NOT successful' do
           update(:mutation_a_test_result) { { passed: true } }
-          it_reports 'F.'
+          it_reports "(01/02)  50% - killtime: 2.00s runtime: 4.00s overhead: 2.00s\n"
         end
       end
     end

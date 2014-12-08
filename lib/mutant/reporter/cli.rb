@@ -51,6 +51,23 @@ module Mutant
         self
       end
 
+      # Return report delay in seconds
+      #
+      # TODO: Move this to a callback registration
+      #
+      #   Reporters other than CLI that might exist in futures
+      #   may only the final report. So providing a noop callback
+      #   registration makes more sense than. As only CLI reporters
+      #   exist currently I do not really care right now.
+      #
+      # @return [Float]
+      #
+      # @api private
+      #
+      def delay
+        format.delay
+      end
+
       # Report warning
       #
       # @param [String] message

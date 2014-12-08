@@ -1,6 +1,7 @@
-# v0.7.2 2014-12-06
+# v0.7.2 2014-12-08
 
 * Fix synthetic race conditon in actor implementation
+* Fix progressive reporter slowdown
 
 # v0.7.1 2014-12-04
 

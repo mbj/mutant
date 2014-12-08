@@ -49,7 +49,7 @@ RSpec.describe Mutant::Runner do
       let(:incomplete_status) { status.update(done: false) }
 
       before do
-        expect(Kernel).to receive(:sleep).with(1 / 20.0).exactly(2).times.ordered
+        expect(Kernel).to receive(:sleep).with(0.0).exactly(2).times.ordered
 
         current_sender = actor_env.mailbox(:current).sender
 

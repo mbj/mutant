@@ -21,6 +21,18 @@ module Mutant
         end
       end
 
+      REPORT_DELAY = 0.0
+
+      # Return report delay
+      #
+      # @return [Float]
+      #
+      # @api private
+      #
+      def delay
+        REPORT_DELAY
+      end
+
     end # Tracker
   end # reporter
 end # Mutant

@@ -25,6 +25,16 @@ module Mutant
         #
         abstract_method :progress
 
+        # Return report delay in seconds
+        #
+        # @return [Float]
+        #
+        # @api private
+        #
+        def delay
+          self.class::REPORT_DELAY
+        end
+
         # Output abstraction to decouple tty? from buffer
         class Output
           include Concord.new(:tty, :buffer)
@@ -67,17 +77,8 @@ module Mutant
         # Format for progressive non rewindable output
         class Progressive < self
 
-          # Initialize object
-          #
-          # @return [undefined]
-          #
-          # @api private
-          #
-          def initialize(*)
-            @seen = Set.new
-
-            super
-          end
+          REPORT_FREQUENCY = 1.0
+          REPORT_DELAY     = 1 / REPORT_FREQUENCY
 
           # Return start representation
           #
@@ -96,12 +97,7 @@ module Mutant
           # @api private
           #
           def progress(status)
-            current = status.env_result.subject_results.flat_map(&:mutation_results)
-            new = current.reject(&@seen.method(:include?))
-            @seen = current.to_set
-            new.map do |mutation_result|
-              format(Printer::MutationProgressResult, mutation_result)
-            end.join(EMPTY_STRING)
+            format(Printer::StatusProgressive, status)
           end
 
         private
@@ -123,6 +119,9 @@ module Mutant
           include anima.add(:tput)
 
           BUFFER_FLAGS = 'a+'.freeze
+
+          REPORT_FREQUENCY = 20.0
+          REPORT_DELAY     = 1 / REPORT_FREQUENCY
 
           # Format start
           #

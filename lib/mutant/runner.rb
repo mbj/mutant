@@ -22,9 +22,6 @@ module Mutant
       include Adamantium::Flat, Anima.new(:job, :result)
     end
 
-    REPORT_FREQUENCY = 20.0
-    REPORT_DELAY     = 1 / REPORT_FREQUENCY
-
     # Initialize object
     #
     # @return [undefined]
@@ -45,7 +42,7 @@ module Mutant
         status = current_status
         break if status.done
         reporter.progress(status)
-        Kernel.sleep(REPORT_DELAY)
+        Kernel.sleep(reporter.delay)
       end
 
       reporter.progress(status)
