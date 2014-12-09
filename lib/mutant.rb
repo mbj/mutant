@@ -105,6 +105,10 @@ require 'mutant/actor/receiver'
 require 'mutant/actor/sender'
 require 'mutant/actor/mailbox'
 require 'mutant/actor/env'
+require 'mutant/parallel'
+require 'mutant/parallel/master'
+require 'mutant/parallel/worker'
+require 'mutant/parallel/source'
 require 'mutant/cache'
 require 'mutant/delegator'
 require 'mutant/warning_filter'
@@ -200,9 +204,7 @@ require 'mutant/cli'
 require 'mutant/color'
 require 'mutant/diff'
 require 'mutant/runner'
-require 'mutant/runner/scheduler'
-require 'mutant/runner/master'
-require 'mutant/runner/worker'
+require 'mutant/runner/sink'
 require 'mutant/result'
 require 'mutant/reporter'
 require 'mutant/reporter/null'
@@ -230,7 +232,7 @@ module Mutant
       isolation:         Mutant::Isolation::Fork,
       reporter:          Reporter::CLI.build($stdout),
       zombie:            false,
-      jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : Parallel.processor_count,
+      jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : ::Parallel.processor_count,
       actor_env:         Mutant::Actor::Env.new(Thread),
       expected_coverage: 100.0
     )

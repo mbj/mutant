@@ -1,27 +1,23 @@
 module Mutant
-  class Runner
-    # Mutation killing worker receiving work from parent
+  module Parallel
+    # Parallel execution worker
     class Worker
-      include Adamantium::Flat, Anima.new(:config, :id, :parent)
-
-      private_class_method :new
+      include Adamantium::Flat, Anima.new(:actor, :processor, :parent)
 
       # Run worker
       #
       # @param [Hash<Symbol, Object] attributes
       #
-      # @return [Actor::Sender]
+      # @return [self]
       #
       # @api private
       #
       def self.run(attributes)
-        attributes.fetch(:config).actor_env.spawn do |actor|
-          worker = new(attributes)
-          worker.__send__(:run, actor)
-        end
+        new(attributes).run
+        self
       end
 
-    private
+      private_class_method :new
 
       # Worker loop
       #
@@ -31,11 +27,13 @@ module Mutant
       #
       # rubocop:disable Lint/Loop
       #
-      def run(actor)
+      def run
         begin
           parent.call(Actor::Message.new(:ready, actor.sender))
         end until handle(actor.receiver.call)
       end
+
+    private
 
       # Handle job
       #
@@ -67,25 +65,10 @@ module Mutant
       # @api private
       #
       def handle_job(job)
-        parent.call(Actor::Message.new(:result, JobResult.new(job: job, result: run_mutation(job.mutation))))
-      end
-
-      # Run mutation
-      #
-      # @param [Mutation] mutation
-      #
-      # @return [Result::Mutation]
-      #
-      # @api private
-      #
-      def run_mutation(mutation)
-        test_result = mutation.kill(config.isolation, config.integration)
-        Result::Mutation.new(
-          mutation:    mutation,
-          test_result: test_result
-        )
+        result = processor.call(job.payload)
+        parent.call(Actor::Message.new(:result, JobResult.new(job: job, payload: result)))
       end
 
     end # Worker
-  end # Runner
+  end # Parallel
 end # Mutant

@@ -3,27 +3,37 @@ require 'mutant/actor'
 # A fake actor used from specs
 module FakeActor
   class Expectation
-    include Concord::Public.new(:name, :message)
+    include Concord::Public.new(:name, :message, :block)
+    include Equalizer.new(:name, :message)
+
+    def self.new(_name, _message, _block = nil)
+      super
+    end
+
+    def verify(other)
+      unless eql?(other)
+        raise "Got:\n#{other.inspect}\nExpected:\n#{inspect}"
+      end
+      block.call(other.message) if block
+    end
   end
 
   class MessageSequence
-    include Adamantium::Flat, Concord.new(:messages)
+    include Adamantium::Flat, Concord::Public.new(:messages)
 
     def self.new
       super([])
     end
 
-    def add(name, *message_arguments)
-      messages << Expectation.new(name, Mutant::Actor::Message.new(*message_arguments))
+    def add(name, *message_arguments, &block)
+      messages << Expectation.new(name, Mutant::Actor::Message.new(*message_arguments), block)
       self
     end
 
     def sending(expectation)
       raise "Unexpected send: #{expectation.inspect}" if messages.empty?
       expected = messages.shift
-      unless expectation.eql?(expected)
-        raise "Got:\n#{expectation.inspect}\nExpected:\n#{expected.inspect}"
-      end
+      expected.verify(expectation)
       self
     end
 

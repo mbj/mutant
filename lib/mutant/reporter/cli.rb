@@ -39,15 +39,14 @@ module Mutant
 
       # Report progress object
       #
-      # @param [Runner::Collector] collector
+      # @param [Parallel::Status] status
       #
       # @return [self]
       #
       # @api private
       #
-      def progress(collector)
-        write(format.progress(collector))
-
+      def progress(status)
+        write(format.progress(status))
         self
       end
 

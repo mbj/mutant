@@ -98,16 +98,6 @@ module Mutant
       end
       memoize :success?
 
-      # Test if runner should continue on env
-      #
-      # @return [Boolean]
-      #
-      # @api private
-      #
-      def continue?
-        !env.config.fail_fast || subject_results.all?(&:success?)
-      end
-
       # Return failed subject results
       #
       # @return [Array<Result::Subject>]

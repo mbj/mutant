@@ -16,8 +16,8 @@ module SharedContext
   # rubocop:disable MethodLength
   def setup_shared_context
     let(:env)              { double('env', config: config, subjects: [subject_a], mutations: mutations) }
-    let(:job_a)            { Mutant::Runner::Job.new(index: 0, mutation: mutation_a)                    }
-    let(:job_b)            { Mutant::Runner::Job.new(index: 1, mutation: mutation_b)                    }
+    let(:job_a)            { Mutant::Parallel::Job.new(index: 0, payload: mutation_a)                   }
+    let(:job_b)            { Mutant::Parallel::Job.new(index: 1, payload: mutation_b)                   }
     let(:job_a_result)     { Mutant::Runner::JobResult.new(job: job_a, result: mutation_a_result)       }
     let(:job_b_result)     { Mutant::Runner::JobResult.new(job: job_b, result: mutation_b_result)       }
     let(:mutations)        { [mutation_a, mutation_b]                                                   }
@@ -26,6 +26,14 @@ module SharedContext
     let(:test_b)           { double('test b', identification: 'test-b')                                 }
     let(:actor_names)      { []                                                                         }
     let(:message_sequence) { FakeActor::MessageSequence.new                                             }
+
+    let(:status) do
+      Mutant::Parallel::Status.new(
+        active_jobs: [].to_set,
+        payload:     env_result,
+        done:        true
+      )
+    end
 
     let(:config) do
       Mutant::Config::DEFAULT.update(
@@ -51,22 +59,6 @@ module SharedContext
 
     before do
       allow(subject_a).to receive(:mutations).and_return([mutation_a, mutation_b])
-    end
-
-    let(:empty_status) do
-      Mutant::Runner::Status.new(
-        active_jobs: Set.new,
-        env_result:  env_result.update(subject_results: [], runtime: 0.0),
-        done:        false
-      )
-    end
-
-    let(:status) do
-      Mutant::Runner::Status.new(
-        active_jobs: Set.new,
-        env_result:  env_result,
-        done:        true
-      )
     end
 
     let(:env_result) do

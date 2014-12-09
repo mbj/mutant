@@ -46,4 +46,20 @@ RSpec.describe Mutant::Env do
       end
     end
   end
+
+  context '#kill_mutation' do
+    let(:object)   { described_class.new(config) }
+    let(:result)   { double('Result')            }
+    let(:mutation) { double('Mutation')          }
+
+    subject { object.kill_mutation(mutation) }
+
+    before do
+      expect(mutation).to receive(:kill).with(config.isolation, config.integration).and_return(result)
+    end
+
+    it 'uses the configured integration and isolation to kill mutation' do
+      should eql(Mutant::Result::Mutation.new(mutation: mutation, test_result: result))
+    end
+  end
 end

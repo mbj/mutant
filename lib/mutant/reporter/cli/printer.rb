@@ -137,7 +137,7 @@ module Mutant
         # Printer for runner status
         class Status < self
 
-          delegate(:active_jobs, :env_result)
+          delegate(:active_jobs, :payload)
 
           # Print progress for collector
           #
@@ -146,7 +146,7 @@ module Mutant
           # @api private
           #
           def run
-            visit(EnvProgress, object.env_result)
+            visit(EnvProgress, payload)
             info('Active subjects: %d', active_subject_results.length)
             visit_collection(SubjectProgress, active_subject_results)
             job_status
@@ -164,8 +164,8 @@ module Mutant
           def job_status
             return if active_jobs.empty?
             info('Active Jobs:')
-            object.active_jobs.sort_by(&:index).each do |job|
-              info('%d: %s', job.index, job.mutation.identification)
+            active_jobs.sort_by(&:index).each do |job|
+              info('%d: %s', job.index, job.payload.identification)
             end
           end
 
@@ -176,9 +176,10 @@ module Mutant
           # @api private
           #
           def active_subject_results
-            active_subjects = active_jobs.map(&:mutation).flat_map(&:subject).to_set
+            active_mutation_jobs = active_jobs.select { |job| job.payload.is_a?(Mutant::Mutation) }
+            active_subjects = active_mutation_jobs.map(&:payload).flat_map(&:subject).to_set
 
-            env_result.subject_results.select do |subject_result|
+            payload.subject_results.select do |subject_result|
               active_subjects.include?(subject_result.subject)
             end
           end
@@ -385,7 +386,7 @@ module Mutant
           # @api private
           #
           def object
-            super().env_result
+            super().payload
           end
         end
 

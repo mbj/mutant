@@ -1,8 +1,8 @@
 module Mutant
-  class Runner
-    # Master actor to control workers
+  module Parallel
+    # Master parallel worker
     class Master
-      include Concord.new(:env, :actor)
+      include Concord.new(:config, :actor)
 
       private_class_method :new
 
@@ -14,13 +14,11 @@ module Mutant
       #
       # @api private
       #
-      def self.call(env)
-        env.config.actor_env.spawn do |actor|
-          new(env, actor).__send__(:run)
+      def self.call(config)
+        config.env.spawn do |actor|
+          new(config, actor).__send__(:run)
         end
       end
-
-    private
 
       # Initialize object
       #
@@ -31,11 +29,13 @@ module Mutant
       def initialize(*)
         super
 
-        @scheduler = Scheduler.new(env)
-        @workers   = env.config.jobs
-        @stop      = false
-        @stopping  = false
+        @stop        = false
+        @workers     = 0
+        @active_jobs = Set.new
+        @index       = 0
       end
+
+    private
 
       # Run work loop
       #
@@ -44,16 +44,26 @@ module Mutant
       # @api private
       #
       def run
-        @workers.times do |id|
-          Worker.run(
-            id:     id,
-            config: env.config,
-            parent: actor.sender
-          )
+        config.jobs.times do
+          @workers += 1
+          config.env.spawn do |worker_actor|
+            Worker.run(
+              actor:     worker_actor,
+              processor: config.processor,
+              parent:    actor.sender
+            )
+          end
         end
 
         receive_loop
       end
+
+      MAP = IceNine.deep_freeze(
+        ready:  :handle_ready,
+        status: :handle_status,
+        result: :handle_result,
+        stop:   :handle_stop
+      )
 
       # Handle messages
       #
@@ -65,18 +75,10 @@ module Mutant
       #
       def handle(message)
         type, payload = message.type, message.payload
-        case type
-        when :ready
-          ready_worker(payload)
-        when :status
-          handle_status(payload)
-        when :result
-          handle_result(payload)
-        when :stop
-          handle_stop(payload)
-        else
+        method = MAP.fetch(type) do
           fail Actor::ProtocolError, "Unexpected message: #{type.inspect}"
         end
+        __send__(method, payload)
       end
 
       # Run receive loop
@@ -86,10 +88,7 @@ module Mutant
       # @api private
       #
       def receive_loop
-        loop do
-          break if @workers.zero? && @stop
-          handle(actor.receiver.call)
-        end
+        handle(actor.receiver.call) until @workers.zero? && @stop
       end
 
       # Handle status
@@ -101,7 +100,12 @@ module Mutant
       # @api private
       #
       def handle_status(sender)
-        sender.call(Actor::Message.new(:status, @scheduler.status))
+        status = Status.new(
+          payload:     sink.status,
+          done:        sink.stop? || @workers.zero?,
+          active_jobs: @active_jobs.dup.freeze
+        )
+        sender.call(Actor::Message.new(:status, status))
       end
 
       # Handle result
@@ -113,9 +117,8 @@ module Mutant
       # @api private
       #
       def handle_result(job_result)
-        return if @stopping
-        @scheduler.job_result(job_result)
-        @stopping = env.config.fail_fast && @scheduler.status.done
+        @active_jobs.delete(job_result.job)
+        sink.result(job_result.payload)
       end
 
       # Handle stop
@@ -127,7 +130,6 @@ module Mutant
       # @api private
       #
       def handle_stop(sender)
-        @stopping = true
         @stop = true
         receive_loop
         sender.call(Actor::Message.new(:stop))
@@ -141,18 +143,29 @@ module Mutant
       #
       # @api private
       #
-      def ready_worker(sender)
-        if @stopping
+      def handle_ready(sender)
+        if stop_work?
           stop_worker(sender)
           return
         end
 
-        job = @scheduler.next_job
+        sender.call(Actor::Message.new(:job, next_job))
+      end
 
-        if job
-          sender.call(Actor::Message.new(:job, job))
-        else
-          stop_worker(sender)
+      # Return next job if any
+      #
+      # @return [Job]
+      #   if next job is available
+      #
+      # @return [nil]
+      #
+      def next_job
+        Job.new(
+          index:   @index,
+          payload: source.next
+        ).tap do |job|
+          @index += 1
+          @active_jobs << job
         end
       end
 
@@ -169,6 +182,36 @@ module Mutant
         sender.call(Actor::Message.new(:stop))
       end
 
+      # Test if scheduling stopped
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      #
+      def stop_work?
+        @stop || !source.next? || sink.stop?
+      end
+
+      # Return source
+      #
+      # @return [Source]
+      #
+      # @api private
+      #
+      def source
+        config.source
+      end
+
+      # Return source
+      #
+      # @return [Sink]
+      #
+      # @api private
+      #
+      def sink
+        config.sink
+      end
+
     end # Master
-  end # Runner
+  end # Parallel
 end # Mutant

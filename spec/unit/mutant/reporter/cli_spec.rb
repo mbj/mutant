@@ -254,7 +254,7 @@ RSpec.describe Mutant::Reporter::CLI do
     end
 
     describe '#report' do
-      subject { object.report(status.env_result) }
+      subject { object.report(status.payload) }
 
       context 'with full coverage' do
         it_reports(<<-REPORT)

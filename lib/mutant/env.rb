@@ -71,6 +71,22 @@ module Mutant
     #
     attr_reader :matchable_scopes
 
+    # Kill mutation
+    #
+    # @param [Mutation] mutation
+    #
+    # @return [Result::Mutation]
+    #
+    # @api private
+    #
+    def kill_mutation(mutation)
+      test_result = mutation.kill(config.isolation, config.integration)
+      Result::Mutation.new(
+        mutation:    mutation,
+        test_result: test_result
+      )
+    end
+
   private
 
     # Return scope name

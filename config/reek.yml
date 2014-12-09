@@ -33,10 +33,7 @@ FeatureEnvy:
   - Mutant::Mutator::Node#children_indices
   - Mutant::Meta::Example::Verification#format_mutation # False positive, its a utility
   - Mutant::Reporter::CLI#subject_results
-  - Mutant::Runner#finish
-  - Mutant::Runner::Master#stop_worker
-  - Mutant::Runner::Worker#run_mutation
-  - Mutant::Runner::Worker#handle
+  - Mutant::Parallel::Worker#handle
   - Mutant::Subject#source_lines
 IrresponsibleModule:
   enabled: true
@@ -62,6 +59,7 @@ NestedIterators:
   - Mutant::RequireHighjack#infect
   - Mutant::RequireHighjack#disinfect
   - Mutant::Subject#tests
+  - Mutant::Parallel::Master#run
   - Parser::Lexer#self.new
   max_allowed_nesting: 1
   ignore_iterators: []
@@ -72,14 +70,12 @@ RepeatedConditional:
   exclude:
   - Mutant::Mutator
   - Mutant::Meta::Example::DSL
-  - Mutant::Runner::Master
   max_ifs: 1
 TooManyInstanceVariables:
   enabled: true
   exclude:
   - Mutant::Mutator # 4 vars
-  - Mutant::Runner::Master # 4 vars
-  - Mutant::Runner::Scheduler # 4 vars
+  - Mutant::Parallel::Master # 4 vars
   max_instance_variables: 3
 TooManyMethods:
   enabled: true
@@ -87,6 +83,7 @@ TooManyMethods:
   - Mutant::CLI
   - Mutant::Mutator::Node
   - Mutant::Meta::Example::Verification
+  - Mutant::Parallel::Master
   max_methods: 10
 TooManyStatements:
   enabled: true
@@ -94,7 +91,6 @@ TooManyStatements:
   - Mutant::Isolation::Fork#self.call
   - Mutant::Reporter::CLI::Printer::EnvProgress#run
   - Mutant::Reporter::CLI::Printer::Config#run
-  - Mutant::Runner#initialize
   - Mutant::Zombifier::File#self.find
   - Mutant::CLI#add_environment_options
   max_statements: 7
