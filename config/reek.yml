@@ -93,6 +93,7 @@ TooManyStatements:
   - Mutant::Reporter::CLI::Printer::Config#run
   - Mutant::Zombifier::File#self.find
   - Mutant::CLI#add_environment_options
+  - Mutant::Runner#run_driver
   max_statements: 7
 UncommunicativeMethodName:
   enabled: true
