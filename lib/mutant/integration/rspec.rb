@@ -114,7 +114,9 @@ module Mutant
       # @api private
       #
       def all_examples
-        @world.example_groups.flat_map(&:descendants).flat_map(&:examples)
+        @world.example_groups.flat_map(&:descendants).flat_map(&:examples).select do |example|
+          example.metadata.fetch(:mutant, true)
+        end
       end
 
       # Filter examples

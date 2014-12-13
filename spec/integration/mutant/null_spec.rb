@@ -1,4 +1,4 @@
-RSpec.describe 'null integration' do
+RSpec.describe 'null integration', mutant: false do
 
   let(:base_cmd) { 'bundle exec mutant -I lib --require test_app "TestApp*"' }
 

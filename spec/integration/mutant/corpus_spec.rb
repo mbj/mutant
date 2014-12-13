@@ -1,4 +1,4 @@
-RSpec.describe 'Mutant on ruby corpus' do
+RSpec.describe 'Mutant on ruby corpus', mutant: false do
 
   before do
     skip 'Corpus test is deactivated on < 2.1' if RUBY_VERSION < '2.1'
