@@ -1,6 +1,6 @@
 # v0.7.3 2014-12-09
 
-* Fix communication between workers and killworks to work for all binaries.
+* Fix communication between workers and killforks to work for all binaries.
 
 # v0.7.2 2014-12-08
 
