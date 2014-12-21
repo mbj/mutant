@@ -102,7 +102,7 @@ module Mutant
         expression = Expression.try_parse(full_description.split(EXPRESSION_DELIMITER, 2).first) || ALL
 
         Test.new(
-          id:         "rspec:#{location} / #{full_description}",
+          id:         "rspec:#{example.object_id}/#{location}/#{full_description}",
           expression: expression
         )
       end
