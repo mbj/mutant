@@ -11,4 +11,5 @@ Mutant::Meta::Example.add do
   mutation 'true if false'
   mutation 'true if nil'
   mutation 'true if /a\A/'
+  mutation 'true'
 end

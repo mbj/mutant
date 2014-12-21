@@ -14,6 +14,12 @@ Mutant::Meta::Example.add do
   # Deleted else branch
   mutation 'if condition; true end'
 
+  # Promote if branch
+  mutation 'true'
+
+  # Promote else branch
+  mutation 'false'
+
   # Deleted if branch resulting in unless rendering
   mutation 'unless condition; false; end'
 
@@ -39,6 +45,7 @@ Mutant::Meta::Example.add do
   mutation 'if true;       true;  end'
   mutation 'if false;      true;  end'
   mutation 'if nil;        true;  end'
+  mutation 'true'
 end
 
 Mutant::Meta::Example.add do
@@ -52,4 +59,5 @@ Mutant::Meta::Example.add do
   mutation 'unless condition;  false; end'
   mutation 'unless condition;  nil;   end'
   mutation 'if     condition;  true;  end'
+  mutation 'true'
 end
