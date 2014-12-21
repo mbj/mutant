@@ -81,28 +81,29 @@ module Mutant
       # @api private
       #
       def all_tests_index
-        all_examples.each_with_object({}) do |example, index|
-          index[parse_example(example)] = example
+        all_examples.each_with_index.each_with_object({}) do |(example, example_index), index|
+          index[parse_example(example, example_index)] = example
         end
       end
       memoize :all_tests_index
 
       # Parse example into test
       #
-      # @param [RSpec::Core::Example]
+      # @param [RSpec::Core::Example] example
+      # @param [Fixnum] index
       #
       # @return [Test]
       #
       # @api private
       #
-      def parse_example(example)
+      def parse_example(example, index)
         metadata = example.metadata
         location = metadata.fetch(:location)
         full_description = metadata.fetch(:full_description)
         expression = Expression.try_parse(full_description.split(EXPRESSION_DELIMITER, 2).first) || ALL
 
         Test.new(
-          id:         "rspec:#{example.object_id}/#{location}/#{full_description}",
+          id:         "rspec:#{index}:#{location}/#{full_description}",
           expression: expression
         )
       end
