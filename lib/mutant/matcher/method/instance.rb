@@ -7,7 +7,7 @@ module Mutant
 
         # Dispatching builder, detects memoizable case
         #
-        # @param [Env] env
+        # @param [Env::Boostrap] env
         # @param [Class, Module] scope
         # @param [UnboundMethod] method
         #
