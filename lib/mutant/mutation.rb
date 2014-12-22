@@ -7,34 +7,6 @@ module Mutant
     CODE_DELIMITER = "\0".freeze
     CODE_RANGE     = (0..4).freeze
 
-    # Kill mutation under isolation with integration
-    #
-    # @param [Isolation] isolation
-    # @param [Integration] integration
-    #
-    # @return [Result::Test]
-    #
-    # @api private
-    #
-    # rubocop:disable MethodLength
-    #
-    def kill(isolation, integration)
-      start = Time.now
-      tests = subject.tests
-
-      isolation.call do
-        insert
-        integration.call(tests)
-      end.update(tests: tests)
-    rescue Isolation::Error => error
-      Result::Test.new(
-        tests:   tests,
-        output:  error.message,
-        runtime: Time.now - start,
-        passed:  false
-      )
-    end
-
     # Return identification
     #
     # @return [String]
@@ -90,8 +62,6 @@ module Mutant
       self::TEST_PASS_SUCCESS.equal?(test_result.passed)
     end
 
-  private
-
     # Insert mutated node
     #
     # FIXME: Cache subject visibility in a better way! Ideally dont mutate it
@@ -108,6 +78,8 @@ module Mutant
       Loader::Eval.call(root, subject)
       self
     end
+
+  private
 
     # Return sha1 sum of source and subject identification
     #

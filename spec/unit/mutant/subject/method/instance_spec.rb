@@ -1,7 +1,6 @@
 RSpec.describe Mutant::Subject::Method::Instance do
-  let(:object)  { described_class.new(config, context, node) }
+  let(:object)  { described_class.new(context, node)                       }
   let(:context) { Mutant::Context::Scope.new(scope, double('Source Path')) }
-  let(:config)  { Mutant::Config::DEFAULT }
 
   let(:node) do
     s(:def, :foo, s(:args))
@@ -91,9 +90,8 @@ RSpec.describe Mutant::Subject::Method::Instance do
 end
 
 RSpec.describe Mutant::Subject::Method::Instance::Memoized do
-  let(:object)  { described_class.new(config, context, node) }
-  let(:context) { double                                     }
-  let(:config)  { Mutant::Config::DEFAULT                    }
+  let(:object)  { described_class.new(context, node) }
+  let(:context) { double('Context')                  }
 
   let(:node) do
     s(:def, :foo, s(:args))

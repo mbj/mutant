@@ -11,9 +11,7 @@ RSpec.describe Mutant::Subject do
     end
   end
 
-  let(:object) { class_under_test.new(config, context, node) }
-
-  let(:config) { Mutant::Config::DEFAULT }
+  let(:object) { class_under_test.new(context, node) }
 
   let(:node) do
     Parser::CurrentRuby.parse(<<-RUBY)
@@ -60,56 +58,6 @@ RSpec.describe Mutant::Subject do
     subject { object.prepare }
 
     it_should_behave_like 'a command method'
-  end
-
-  describe '#tests' do
-    let(:config)      { Mutant::Config::DEFAULT.update(integration: integration)         }
-    let(:integration) { double('Integration', all_tests: all_tests)                      }
-    let(:test_a)      { double('test', expression: Mutant::Expression.parse('SubjectA')) }
-    let(:test_b)      { double('test', expression: Mutant::Expression.parse('SubjectB')) }
-    let(:test_c)      { double('test', expression: Mutant::Expression.parse('SubjectC')) }
-
-    subject { object.tests }
-
-    context 'without available tests' do
-      let(:all_tests) { [] }
-
-      it { should eql([]) }
-
-      it_should_behave_like 'an idempotent method'
-    end
-
-    context 'without qualifying tests' do
-      let(:all_tests) { [test_c] }
-
-      it { should eql([]) }
-
-      it_should_behave_like 'an idempotent method'
-    end
-
-    context 'with qualifying tests for first match expression' do
-      let(:all_tests) { [test_a] }
-
-      it { should eql([test_a]) }
-
-      it_should_behave_like 'an idempotent method'
-    end
-
-    context 'with qualifying tests for second match expression' do
-      let(:all_tests) { [test_b] }
-
-      it { should eql([test_b]) }
-
-      it_should_behave_like 'an idempotent method'
-    end
-
-    context 'with qualifying tests for the first and second match expression' do
-      let(:all_tests) { [test_a, test_b] }
-
-      it { should eql([test_a]) }
-
-      it_should_behave_like 'an idempotent method'
-    end
   end
 
   describe '#node' do

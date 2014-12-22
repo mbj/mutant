@@ -16,6 +16,7 @@ RSpec.describe Mutant::Env::Bootstrap do
       matchable_scopes: [],
       mutations:        [],
       config:           config,
+      selector:         Mutant::Selector::Expression.new(config.integration.all_tests),
       actor_env:        Mutant::Actor::Env.new(Thread)
     )
   end

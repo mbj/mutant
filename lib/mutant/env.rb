@@ -7,6 +7,7 @@ module Mutant
       :cache,
       :subjects,
       :matchable_scopes,
+      :selector,
       :mutations
     )
 
@@ -36,10 +37,40 @@ module Mutant
     # @api private
     #
     def kill_mutation(mutation)
-      test_result = mutation.kill(config.isolation, config.integration)
+      test_result = run_mutation_tests(mutation)
       Result::Mutation.new(
         mutation:    mutation,
         test_result: test_result
+      )
+    end
+
+  private
+
+    # Kill mutation under isolation with integration
+    #
+    # @param [Isolation] isolation
+    # @param [Integration] integration
+    #
+    # @return [Result::Test]
+    #
+    # @api private
+    #
+    # rubocop:disable MethodLength
+    #
+    def run_mutation_tests(mutation)
+      start = Time.now
+      tests = selector.call(mutation.subject)
+
+      config.isolation.call do
+        mutation.insert
+        config.integration.call(tests)
+      end.update(tests: tests)
+    rescue Isolation::Error => error
+      Result::Test.new(
+        tests:   tests,
+        output:  error.message,
+        runtime: Time.now - start,
+        passed:  false
       )
     end
 
