@@ -72,7 +72,7 @@ module Mutant
     #
     def mutation_test_config
       Parallel::Config.new(
-        env:       config.actor_env,
+        env:       env.actor_env,
         jobs:      config.jobs,
         source:    Parallel::Source::Array.new(env.mutations),
         sink:      Sink::Mutation.new(env),

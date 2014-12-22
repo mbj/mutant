@@ -12,8 +12,7 @@ module Mutant
       :fail_fast,
       :jobs,
       :zombie,
-      :expected_coverage,
-      :actor_env
+      :expected_coverage
     )
 
     [:fail_fast, :zombie, :debug].each do |name|

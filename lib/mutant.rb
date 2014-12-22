@@ -238,7 +238,6 @@ module Mutant
       reporter:          Reporter::CLI.build($stdout),
       zombie:            false,
       jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : ::Parallel.processor_count,
-      actor_env:         Mutant::Actor::Env.new(Thread),
       expected_coverage: 100.0
     )
   end # Config

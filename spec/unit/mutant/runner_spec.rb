@@ -30,6 +30,7 @@ RSpec.describe Mutant::Runner do
 
     before do
       allow(FakeEnv).to receive(:config).and_return(config)
+      allow(FakeEnv).to receive(:actor_env).and_return(actor_env)
     end
 
     let(:parallel_config) do

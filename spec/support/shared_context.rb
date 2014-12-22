@@ -25,7 +25,6 @@ module SharedContext
     let(:matchable_scopes) { double('matchable scopes', length: 10)                                     }
     let(:test_a)           { double('test a', identification: 'test-a')                                 }
     let(:test_b)           { double('test b', identification: 'test-b')                                 }
-    let(:actor_names)      { []                                                                         }
     let(:message_sequence) { FakeActor::MessageSequence.new                                             }
 
     let(:status) do
@@ -38,14 +37,9 @@ module SharedContext
 
     let(:config) do
       Mutant::Config::DEFAULT.update(
-        actor_env: actor_env,
         jobs:      1,
         reporter:  Mutant::Reporter::Trace.new
       )
-    end
-
-    let(:actor_env) do
-      FakeActor::Env.new(message_sequence, actor_names)
     end
 
     let(:subject_a) do
