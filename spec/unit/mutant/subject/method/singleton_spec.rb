@@ -1,8 +1,7 @@
 RSpec.describe Mutant::Subject::Method::Singleton do
 
-  let(:object)  { described_class.new(config, context, node) }
-  let(:config)  { Mutant::Config::DEFAULT                    }
-  let(:node)    { s(:defs, s(:self), :foo, s(:args))         }
+  let(:object)  { described_class.new(context, node) }
+  let(:node)    { s(:defs, s(:self), :foo, s(:args)) }
 
   let(:context) do
     Mutant::Context::Scope.new(scope, double('Source Path'))
