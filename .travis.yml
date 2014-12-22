@@ -1,10 +1,11 @@
+sudo: false
 language: ruby
 script: "bundle exec rake ci"
 env:
   - TRAVIS=true
 rvm:
-  - 2.0.0
-  - 2.1.4
+  - '2.0'
+  - '2.1'
   - rbx-2
 matrix:
   allow_failures:
