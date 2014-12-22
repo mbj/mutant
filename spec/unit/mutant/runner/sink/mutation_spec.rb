@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Mutant::Runner::Sink do
+describe Mutant::Runner::Sink::Mutation do
   setup_shared_context
 
   shared_context 'one result' do
