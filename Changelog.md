@@ -1,3 +1,8 @@
+# v0.7.4 2014-12-22
+
+* Fix rspec example visibility on duplicate metadata examples
+* Add naked if/else body emitter
+
 # v0.7.3 2014-12-09
 
 * Fix communication between workers and killforks to work for all binaries.
