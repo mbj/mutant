@@ -111,6 +111,7 @@ module SharedContext
     let(:subject_a_result) do
       Mutant::Result::Subject.new(
         subject:          subject_a,
+        tests:            [test_a],
         mutation_results: [mutation_a_result, mutation_b_result]
       )
     end

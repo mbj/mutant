@@ -147,7 +147,7 @@ module Mutant
 
     # Subject result
     class Subject
-      include Coverage, Result, Anima.new(:subject, :mutation_results)
+      include Coverage, Result, Anima.new(:subject, :tests, :mutation_results)
 
       sum :killtime, :mutation_results
       sum :runtime,  :mutation_results

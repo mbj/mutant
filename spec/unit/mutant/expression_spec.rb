@@ -44,6 +44,13 @@ RSpec.describe Mutant::Expression do
     it_should_behave_like 'an idempotent method'
   end
 
+  describe '#_dump' do
+    let(:object) { described_class.parse('Foo') }
+    subject { object._dump(double('Level')) }
+
+    it { should eql('Foo') }
+  end
+
   describe '.parse' do
     subject { object.parse(input) }
 
@@ -63,5 +70,11 @@ RSpec.describe Mutant::Expression do
 
       it { should eql(Mutant::Expression::Namespace::Exact.new('Foo')) }
     end
+  end
+
+  describe '._load' do
+    subject { described_class._load('Foo') }
+
+    it { should eql(described_class.parse('Foo')) }
   end
 end

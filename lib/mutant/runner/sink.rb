@@ -46,6 +46,7 @@ module Mutant
           @subject_results = Hash.new do |_hash, subject|
             Result::Subject.new(
               subject:          subject,
+              tests:            [],
               mutation_results: []
             )
           end
@@ -85,7 +86,8 @@ module Mutant
           original = @subject_results[mutation.subject]
 
           @subject_results[mutation.subject] = original.update(
-            mutation_results: (original.mutation_results.dup << mutation_result)
+            mutation_results: (original.mutation_results.dup << mutation_result),
+            tests:            mutation_result.test_result.tests
           )
 
           self

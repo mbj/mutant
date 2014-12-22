@@ -1,6 +1,6 @@
 RSpec.describe Mutant::Selector::Expression do
   describe '#call' do
-    let(:object) { described_class.new(all_tests) }
+    let(:object) { described_class.new(integration) }
 
     let(:subject_class) do
       Class.new(Mutant::Subject) do

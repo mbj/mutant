@@ -37,6 +37,33 @@ module Mutant
       @inspect = format(INSPECT_FORMAT, syntax)
     end
 
+    # Return marshallable representation
+    #
+    # FIXME: Remove the need for this.
+    #
+    #   Refactoring Expression objects not to reference a MatchData instance.
+    #   This will make this hack unneeded.
+    #
+    # @return [String]
+    #
+    # @api private
+    #
+    def _dump(_level)
+      syntax
+    end
+
+    # Load serializable representation
+    #
+    # @return [String]
+    #
+    # @return [Expression]
+    #
+    # @api private
+    #
+    def self._load(syntax)
+      parse(syntax)
+    end
+
     # Return inspection
     #
     # @return [String]

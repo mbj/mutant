@@ -66,7 +66,7 @@ module Mutant
           cache:            cache,
           subjects:         subjects,
           matchable_scopes: matchable_scopes,
-          selector:         Selector::Expression.new(config.integration.all_tests),
+          selector:         Selector::Expression.new(config.integration),
           mutations:        subjects.flat_map(&:mutations)
         )
       end

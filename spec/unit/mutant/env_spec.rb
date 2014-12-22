@@ -61,7 +61,6 @@ RSpec.describe Mutant::Env do
         expect(context).to receive(:root).with(s(:nil)).and_return(wrapped_node).ordered
         expect(Mutant::Loader::Eval).to receive(:call).with(wrapped_node, mutation_subject).and_return(nil).ordered
         expect(integration).to receive(:call).with(tests).and_return(test_result).ordered
-        expect(test_result).to receive(:update).with(tests: tests).and_return(test_result).ordered
       end
 
       include_examples 'mutation kill'

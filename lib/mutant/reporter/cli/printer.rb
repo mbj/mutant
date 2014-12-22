@@ -295,7 +295,7 @@ module Mutant
         # Subject report printer
         class SubjectResult < self
 
-          delegate :subject, :failed_mutations
+          delegate :subject, :failed_mutations, :tests
 
           # Run report printer
           #
@@ -305,7 +305,7 @@ module Mutant
           #
           def run
             status(subject.identification)
-            subject.tests.each do |test|
+            tests.each do |test|
               puts("- #{test.identification}")
             end
             visit_collection(MutationResult, object.alive_mutation_results)

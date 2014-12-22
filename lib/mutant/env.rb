@@ -64,7 +64,7 @@ module Mutant
       config.isolation.call do
         mutation.insert
         config.integration.call(tests)
-      end.update(tests: tests)
+      end
     rescue Isolation::Error => error
       Result::Test.new(
         tests:   tests,

@@ -54,7 +54,7 @@ module Mutant
         passed = @runner.run_specs(RSpec.world.ordered_example_groups).equal?(EXIT_SUCCESS)
         @output.rewind
         Result::Test.new(
-          tests:    nil,
+          tests:    tests,
           output:   @output.read,
           runtime:  Time.now - start,
           passed:   passed
