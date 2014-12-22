@@ -176,7 +176,7 @@ module Mutant
           # @api private
           #
           def active_subject_results
-            active_mutation_jobs = active_jobs.select { |job| job.payload.is_a?(Mutant::Mutation) }
+            active_mutation_jobs = active_jobs.select { |job| job.payload.kind_of?(Mutant::Mutation) }
             active_subjects = active_mutation_jobs.map(&:payload).flat_map(&:subject).to_set
 
             payload.subject_results.select do |subject_result|
@@ -196,6 +196,8 @@ module Mutant
           # @return [self]
           #
           # @api private
+          #
+          # rubocop:disable AbcSize
           #
           def run
             info 'Mutant configuration:'
@@ -230,6 +232,8 @@ module Mutant
           # @return [self]
           #
           # @api private
+          #
+          # rubocop:disable MethodLength
           #
           def run
             visit(Config, env.config)
@@ -480,7 +484,8 @@ module Mutant
 
           delegate :mutation, :test_result
 
-          DIFF_ERROR_MESSAGE = 'BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!'.freeze
+          DIFF_ERROR_MESSAGE =
+            'BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!'.freeze
 
           MAP = {
             Mutant::Mutation::Evil    => :evil_details,

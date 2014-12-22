@@ -74,6 +74,8 @@ module Mutant
   #
   # @api private
   #
+  # rubocop:disable MethodLength
+  #
   def self.singleton_subclass_instance(name, superclass, &block)
     klass = Class.new(superclass) do
       def inspect

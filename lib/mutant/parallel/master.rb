@@ -43,6 +43,8 @@ module Mutant
       #
       # @api private
       #
+      # rubocop:disable MethodLength
+      #
       def run
         config.jobs.times do
           @workers += 1

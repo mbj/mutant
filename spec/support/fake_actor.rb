@@ -12,7 +12,7 @@ module FakeActor
 
     def verify(other)
       unless eql?(other)
-        raise "Got:\n#{other.inspect}\nExpected:\n#{inspect}"
+        fail "Got:\n#{other.inspect}\nExpected:\n#{inspect}"
       end
       block.call(other.message) if block
     end
@@ -31,16 +31,16 @@ module FakeActor
     end
 
     def sending(expectation)
-      raise "Unexpected send: #{expectation.inspect}" if messages.empty?
+      fail "Unexpected send: #{expectation.inspect}" if messages.empty?
       expected = messages.shift
       expected.verify(expectation)
       self
     end
 
     def receiving(name)
-      raise "No message to read for #{name.inspect}" if messages.empty?
+      fail "No message to read for #{name.inspect}" if messages.empty?
       expected = messages.shift
-      raise "Unexpected message #{expected.inspect} for #{name.inspect}" unless expected.name.eql?(name)
+      fail "Unexpected message #{expected.inspect} for #{name.inspect}" unless expected.name.eql?(name)
       expected.message
     end
 

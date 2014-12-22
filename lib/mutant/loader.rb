@@ -12,6 +12,10 @@ module Mutant
       #
       # @api private
       #
+      # One off the very few valid uses of eval
+      #
+      # rubocop:disable Lint/Eval
+      #
       def call
         eval(
           source,

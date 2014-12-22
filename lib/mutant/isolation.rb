@@ -17,7 +17,7 @@ module Mutant
       def self.call(&block)
         block.call
       rescue => exception
-        fail Error, exception
+        raise Error, exception
       end
     end
 
@@ -37,6 +37,8 @@ module Mutant
       #
       # @api private
       #
+      # rubocop:disable MethodLength
+      #
       def self.call(&block)
         reader, writer = IO.pipe.map(&:binmode)
 
@@ -52,7 +54,7 @@ module Mutant
         writer.close
         Marshal.load(reader.read)
       rescue => exception
-        fail Error, exception
+        raise Error, exception
       ensure
         Process.waitpid(pid) if pid
       end

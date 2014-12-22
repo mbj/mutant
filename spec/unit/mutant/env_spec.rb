@@ -8,11 +8,13 @@ RSpec.describe Mutant::Env do
       it 'warns via reporter' do
         klass = Class.new do
           def self.name
-            raise
+            fail
           end
         end
 
-        expected_warnings = ["Class#name from: #{klass} raised an error: RuntimeError. #{Mutant::Env::SEMANTICS_MESSAGE}"]
+        expected_warnings = [
+          "Class#name from: #{klass} raised an error: RuntimeError. #{Mutant::Env::SEMANTICS_MESSAGE}"
+        ]
 
         expect { subject }.to change { config.reporter.warn_calls }.from([]).to(expected_warnings)
 

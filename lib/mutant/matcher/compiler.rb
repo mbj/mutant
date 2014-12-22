@@ -42,6 +42,8 @@ module Mutant
       #
       # @api private
       #
+      # rubocop:disable MethodLength
+      #
       def predicate
         if subject_selector && subject_rejector
           Morpher::Evaluator::Predicate::Boolean::And.new([

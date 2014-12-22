@@ -43,6 +43,8 @@ private
   #
   # @api private
   #
+  # rubocop:disable AbcSize
+  #
   def mutation_report
     message = ['Original-AST:', original_node.inspect, 'Original-Source:', Unparser.unparse(original_node)]
     if missing.any?

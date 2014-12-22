@@ -51,7 +51,10 @@ RSpec.describe Mutant::Expression do
       let(:input) { 'foo bar' }
 
       it 'raises an exception' do
-        expect { subject }.to raise_error(Mutant::Expression::InvalidExpressionError, 'Expression: "foo bar" is not valid')
+        expect { subject }.to raise_error(
+          Mutant::Expression::InvalidExpressionError,
+          'Expression: "foo bar" is not valid'
+        )
       end
     end
 

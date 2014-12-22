@@ -15,7 +15,7 @@ module Mutant
     # @api private
     #
     def self.walk(node, stack, &block)
-      raise ArgumentError, 'block expected' unless block_given?
+      fail ArgumentError, 'block expected' unless block_given?
 
       block.call(node, stack)
       node.children.grep(Parser::AST::Node).each do |child|

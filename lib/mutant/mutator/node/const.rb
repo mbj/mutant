@@ -19,7 +19,7 @@ module Mutant
           emit_singletons unless parent_node && n_const?(parent_node)
           emit_type(nil, *children.drop(1))
           children.each_with_index do |child, index|
-            mutate_child(index) if child.is_a?(Parser::AST::Node)
+            mutate_child(index) if child.instance_of?(Parser::AST::Node)
           end
         end
 

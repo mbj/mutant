@@ -125,7 +125,7 @@ module Mutant
     def expression(scope)
       name = scope_name(scope) or return
 
-      unless name.is_a?(String)
+      unless name.instance_of?(String)
         warn("#{scope.class}#name from: #{scope.inspect} returned #{name.inspect}. #{SEMANTICS_MESSAGE}")
         return
       end

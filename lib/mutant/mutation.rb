@@ -16,6 +16,8 @@ module Mutant
     #
     # @api private
     #
+    # rubocop:disable MethodLength
+    #
     def kill(isolation, integration)
       start = Time.now
       tests = subject.tests

@@ -74,7 +74,7 @@ module Mutant
 
       parse_match_expressions(opts.parse!(arguments))
     rescue OptionParser::ParseError => error
-      fail(Error, error.message, error.backtrace)
+      raise(Error, error.message, error.backtrace)
     end
 
     # Parse matchers
@@ -100,6 +100,8 @@ module Mutant
     # @return [undefined]
     #
     # @api private
+    #
+    # rubocop:disable MethodLength
     #
     def add_environment_options(opts)
       opts.separator('Environment:')
@@ -129,7 +131,7 @@ module Mutant
       require "mutant/integration/#{name}"
       update(integration: Integration.lookup(name))
     rescue LoadError
-      fail Error, "Could not load integration #{name.inspect} (you may want to try installing the gem mutant-#{name})"
+      raise Error, "Could not load integration #{name.inspect} (you may want to try installing the gem mutant-#{name})"
     end
 
     # Add options
@@ -146,7 +148,8 @@ module Mutant
 
       opts.on('--score COVERAGE', 'Fail unless COVERAGE is not reached exactly') do |coverage|
         update(expected_coverage: Float(coverage))
-      end.on('--use STRATEGY', 'Use STRATEGY for killing mutations', &method(:setup_integration))
+      end
+      opts.on('--use STRATEGY', 'Use STRATEGY for killing mutations', &method(:setup_integration))
     end
 
     # Add filter options
@@ -177,12 +180,15 @@ module Mutant
     def add_debug_options(opts)
       opts.on('--fail-fast', 'Fail fast') do
         update(fail_fast: true)
-      end.on('--version', 'Print mutants version') do
+      end
+      opts.on('--version', 'Print mutants version') do
         puts("mutant-#{Mutant::VERSION}")
         Kernel.exit(EXIT_SUCCESS)
-      end.on('-d', '--debug', 'Enable debugging output') do
+      end
+      opts.on('-d', '--debug', 'Enable debugging output') do
         update(debug: true)
-      end.on_tail('-h', '--help', 'Show this message') do
+      end
+      opts.on_tail('-h', '--help', 'Show this message') do
         puts(opts.to_s)
         Kernel.exit(EXIT_SUCCESS)
       end

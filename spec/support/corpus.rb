@@ -47,6 +47,8 @@ module Corpus
     #   otherwise
     #
     # rubocop:disable MethodLength
+    # rubocop:disable AbcSize
+    #
     def verify_mutation_generation
       checkout
       start = Time.now

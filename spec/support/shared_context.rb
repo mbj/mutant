@@ -8,12 +8,13 @@ module SharedContext
   def messages(&block)
     let(:message_sequence) do
       FakeActor::MessageSequence.new.tap do |sequence|
-         sequence.instance_eval(&block)
+        sequence.instance_eval(&block)
       end
     end
   end
 
   # rubocop:disable MethodLength
+  # rubocop:disable AbcSize
   def setup_shared_context
     let(:env)              { double('env', config: config, subjects: [subject_a], mutations: mutations) }
     let(:job_a)            { Mutant::Parallel::Job.new(index: 0, payload: mutation_a)                   }

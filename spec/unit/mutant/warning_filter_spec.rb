@@ -54,7 +54,7 @@ RSpec.describe Mutant::WarningFilter do
     it 'executes block with warning filter enabled' do
       found = false
       object.use do
-        found = $stderr.is_a?(described_class)
+        found = $stderr.instance_of?(described_class)
       end
       expect(found).to be(true)
     end
@@ -71,6 +71,7 @@ RSpec.describe Mutant::WarningFilter do
 
     it 'returns warnings generated within block' do
       warnings = object.use do
+        # rubocop:disable Lint/Eval
         eval(<<-RUBY)
           Class.new do
             def foo
