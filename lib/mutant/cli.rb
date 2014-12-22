@@ -22,7 +22,7 @@ module Mutant
     # @api private
     #
     def self.run(arguments)
-      Runner.call(Env.new(call(arguments))).success? ? EXIT_SUCCESS : EXIT_FAILURE
+      Runner.call(Env::Bootstrap.call(call(arguments))).success? ? EXIT_SUCCESS : EXIT_FAILURE
     rescue Error => exception
       $stderr.puts(exception.message)
       EXIT_FAILURE

@@ -25,7 +25,7 @@ RSpec.describe Mutant::CLI do
 
     before do
       expect(Mutant::CLI).to receive(:call).with(arguments).and_return(config)
-      expect(Mutant::Env).to receive(:new).with(config).and_return(env)
+      expect(Mutant::Env::Bootstrap).to receive(:call).with(config).and_return(env)
       expect(Mutant::Runner).to receive(:call).with(env).and_return(report)
     end
 
