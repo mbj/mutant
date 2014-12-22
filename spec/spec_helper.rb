@@ -12,7 +12,7 @@ if ENV['COVERAGE'] == 'true'
     add_filter 'lib/mutant/zombifier'
     add_filter 'lib/mutant/zombifier/*'
     # Trace points shadow each other under 2.0 (fixed in 2.1)
-    add_filter 'lib/mutant/trace.rb' if RUBY_VERSION.eql?('2.0.0')
+    add_filter 'lib/mutant/line_trace.rb' if RUBY_VERSION.eql?('2.0.0')
 
     minimum_coverage 100
   end
