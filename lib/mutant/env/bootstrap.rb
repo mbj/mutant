@@ -16,7 +16,7 @@ module Mutant
       #
       attr_reader :matchable_scopes
 
-      # Return new boostrap env
+      # Return new bootstrap env
       #
       # @return [Env]
       #
@@ -51,7 +51,7 @@ module Mutant
         self
       end
 
-      # Return environment after boostraping
+      # Return environment after bootstraping
       #
       # @return [Env]
       #

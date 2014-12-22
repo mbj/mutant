@@ -37,14 +37,14 @@ module Mutant
 
         # Return matcher
         #
-        # @param [Env::Bootstrap] bootstrap
+        # @param [Env::Bootstrap] env
         #
         # @return [Matcher]
         #
         # @api private
         #
-        def matcher(bootstrap)
-          Matcher::Namespace.new(bootstrap, self)
+        def matcher(env)
+          Matcher::Namespace.new(env, self)
         end
 
         # Return length of match
@@ -74,14 +74,14 @@ module Mutant
 
         # Return matcher
         #
-        # @param [Env::Bootstrap] boostrap
+        # @param [Env::Bootstrap] env
         #
         # @return [Matcher]
         #
         # @api private
         #
-        def matcher(bootstrap)
-          Matcher::Scope.new(bootstrap, Mutant.constant_lookup(namespace), self)
+        def matcher(env)
+          Matcher::Scope.new(env, Mutant.constant_lookup(namespace), self)
         end
 
       end # Exact
