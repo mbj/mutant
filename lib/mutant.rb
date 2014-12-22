@@ -27,6 +27,8 @@ module Mutant
   EMPTY_STRING = ''.freeze
   # The frozen empty array used within mutant
   EMPTY_ARRAY = [].freeze
+  # The frozen empty set used within mutant
+  EMPTY_SET = [].to_set.freeze
 
   SCOPE_OPERATOR = '::'.freeze
 
@@ -94,6 +96,7 @@ module Mutant
 end # Mutant
 
 require 'mutant/version'
+require 'mutant/simple_inspect'
 require 'mutant/env'
 require 'mutant/env/bootstrap'
 require 'mutant/ast'
@@ -216,9 +219,13 @@ require 'mutant/reporter/null'
 require 'mutant/reporter/trace'
 require 'mutant/reporter/cli'
 require 'mutant/reporter/cli/printer'
+require 'mutant/reporter/cli/printer/framed'
+require 'mutant/reporter/cli/printer/progressive'
+require 'mutant/reporter/cli/printer/report'
+require 'mutant/reporter/cli/printer/progress'
 require 'mutant/reporter/cli/tput'
 require 'mutant/reporter/cli/format'
-require 'mutant/line_trace'
+require 'mutant/trace'
 require 'mutant/zombifier'
 require 'mutant/zombifier/file'
 
@@ -236,6 +243,7 @@ module Mutant
       requires:          EMPTY_ARRAY,
       isolation:         Mutant::Isolation::Fork,
       reporter:          Reporter::CLI.build($stdout),
+      trace:             false,
       zombie:            false,
       jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : ::Parallel.processor_count,
       expected_coverage: 100.0

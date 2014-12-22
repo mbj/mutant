@@ -3,45 +3,32 @@ module Mutant
   class Reporter
     include AbstractType
 
-    # Write warning message
-    #
-    # @param [String] message
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    abstract_method :warn
+    TYPES = IceNine.deep_freeze(%i[
+      warn
+      start
+      trace_report
+      trace_status
+      kill_report
+      kill_status
+    ])
 
-    # Report start
-    #
-    # @param [Env] env
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    abstract_method :start
+    TYPES.each do |name|
+      abstract_method(name)
+    end
 
-    # Report collector state
-    #
-    # @param [Runner::Collector] collector
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    abstract_method :report
+    REPORT_DELAY = 0.0
 
-    # Report progress on object
+    # Return report delay
     #
-    # @param [Object] object
+    # FIXME: The need for this API needs to be removed.
     #
-    # @return [self]
+    # @return [Float]
     #
     # @api private
     #
-    abstract_method :progress
+    def delay
+      REPORT_DELAY
+    end
 
   end # Reporter
 end # Mutant

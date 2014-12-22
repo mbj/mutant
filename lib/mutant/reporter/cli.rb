@@ -35,16 +35,35 @@ module Mutant
         self
       end
 
-      # Report progress object
+      %i[trace_status kill_status].each do |name|
+        define_method(name) do |argument|
+          write(format.public_send(name, argument))
+        end
+      end
+
+      # Report kills
       #
-      # @param [Parallel::Status] status
+      # @param [Result::Env] env
       #
       # @return [self]
       #
       # @api private
       #
-      def progress(status)
-        write(format.progress(status))
+      def kill_report(env)
+        Printer::Report::Kill.run(output, env)
+        self
+      end
+
+      # Report trace
+      #
+      # @param [Result::EnvTrace] env
+      #
+      # @return [self]
+      #
+      # @api private
+      #
+      def trace_report(env)
+        Printer::Report::Trace.run(output, env)
         self
       end
 
@@ -75,19 +94,6 @@ module Mutant
       #
       def warn(message)
         output.puts(message)
-        self
-      end
-
-      # Report env
-      #
-      # @param [Result::Env] env
-      #
-      # @return [self]
-      #
-      # @api private
-      #
-      def report(env)
-        Printer::EnvResult.run(output, env)
         self
       end
 

@@ -1,8 +1,8 @@
 module Mutant
   class Reporter
     # Reporter to trace report calls, used as a spec adapter
-    class Trace
-      include Adamantium::Mutable, Anima.new(:start_calls, :progress_calls, :report_calls, :warn_calls)
+    class Trace < self
+      include Adamantium::Mutable, Anima.new(*TYPES.map { |name| :"#{name}_calls" })
 
       # Return new trace reporter
       #
@@ -14,23 +14,11 @@ module Mutant
         super(Hash[anima.attribute_names.map { |name| [name, []] }])
       end
 
-      %w[start progress report warn].each do |name|
-        define_method(name) do |object|
-          public_send(:"#{name}_calls") << object
+      anima.attribute_names.zip(TYPES).each do |attribute_name, method_name|
+        define_method(method_name) do |object|
+          public_send(attribute_name) << object
           self
         end
-      end
-
-      REPORT_DELAY = 0.0
-
-      # Return report delay
-      #
-      # @return [Float]
-      #
-      # @api private
-      #
-      def delay
-        REPORT_DELAY
       end
 
     end # Tracker

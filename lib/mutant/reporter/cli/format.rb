@@ -15,15 +15,7 @@ module Mutant
         #
         abstract_method :start
 
-        # Return progress representation
-        #
-        # @param [Runner::Status] status
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        abstract_method :progress
+        %i[trace_status kill_status trace_report kill_report].each(&method(:abstract_method))
 
         # Return report delay in seconds
         #
@@ -87,17 +79,31 @@ module Mutant
           # @api private
           #
           def start(env)
-            format(Printer::Config, env.config)
+            format(Printer::Report::EnvStart, env)
           end
 
-          # Return progress representation
+          # Format trace status
+          #
+          # @param [Parallel::Status] status
           #
           # @return [String]
           #
           # @api private
           #
-          def progress(status)
-            format(Printer::StatusProgressive, status)
+          def trace_status(status)
+            format(Printer::Progressive::TraceStatus, status)
+          end
+
+          # Format mutation status
+          #
+          # @param [Parallel::Status] status
+          #
+          # @return [String]
+          #
+          # @api private
+          #
+          def kill_status(status)
+            format(Printer::Progressive::KillStatus, status)
           end
 
         private
@@ -135,7 +141,7 @@ module Mutant
             tput.prepare
           end
 
-          # Format progress
+          # Format trace status
           #
           # @param [Runner::Status] status
           #
@@ -143,8 +149,20 @@ module Mutant
           #
           # @api private
           #
-          def progress(status)
-            format(Printer::Status, status)
+          def trace_status(status)
+            format(Printer::Framed::TraceStatus, status)
+          end
+
+          # Format kill status
+          #
+          # @param [Runner::Status] status
+          #
+          # @return [String]
+          #
+          # @api private
+          #
+          def kill_status(status)
+            format(Printer::Framed::KillStatus, status)
           end
 
         private
