@@ -94,7 +94,7 @@ module Corpus
       TMP.mkdir unless TMP.directory?
       if repo_path.exist?
         Dir.chdir(repo_path) do
-          system(%w[git fetch])
+          system(%w[git fetch origin])
           system(%w[git reset --hard])
           system(%w[git clean -f -d -x])
           system(%w[git checkout origin/master])
@@ -119,10 +119,10 @@ module Corpus
     def install_mutant
       return if noinstall?
       relative = ROOT.relative_path_from(repo_path)
-      devtools = ROOT.join('Gemfile.devtools').read
-      devtools << "gem 'mutant', path: '#{relative}'\n"
-      devtools << "gem 'mutant-rspec', path: '#{relative}'\n"
-      File.write(repo_path.join('Gemfile.devtools'), devtools)
+      repo_path.join('Gemfile').open('a') do |file|
+        file << "gem 'mutant', path: '#{relative}'\n"
+        file << "gem 'mutant-rspec', path: '#{relative}'\n"
+      end
       lockfile = repo_path.join('Gemfile.lock')
       lockfile.delete if lockfile.exist?
       system('bundle install')
