@@ -235,7 +235,7 @@ module Mutant
     # @api private
     #
     def add_matcher(attribute, value)
-      update(matcher_config: config.matcher_config.add(attribute, value))
+      update(matcher: config.matcher.add(attribute, value))
     end
 
   end # CLI

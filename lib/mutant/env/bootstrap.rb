@@ -135,7 +135,7 @@ module Mutant
       # @api private
       #
       def matched_subjects
-        Matcher::Compiler.call(self, config.matcher_config).to_a
+        Matcher::Compiler.call(self, config.matcher).to_a
       end
 
       # Initialize matchable scopes

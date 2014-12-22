@@ -9,7 +9,7 @@ end
 RSpec.shared_examples_for 'a cli parser' do
   it { expect(subject.config.integration).to eql(expected_integration)       }
   it { expect(subject.config.reporter).to eql(expected_reporter)             }
-  it { expect(subject.config.matcher_config).to eql(expected_matcher_config) }
+  it { expect(subject.config.matcher).to eql(expected_matcher_config) }
 end
 
 RSpec.describe Mutant::CLI do

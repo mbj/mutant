@@ -5,7 +5,7 @@ RSpec.describe Mutant::Env::Bootstrap do
       reporter: Mutant::Reporter::Trace.new,
       includes: [],
       requires: [],
-      matcher_config: Mutant::Matcher::Config::DEFAULT
+      matcher:  Mutant::Matcher::Config::DEFAULT
     )
   end
 
