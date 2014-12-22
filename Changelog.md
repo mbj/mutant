@@ -1,7 +1,7 @@
 # v0.7.4 2014-12-22
 
-* Fix rspec example visibility on duplicate metadata examples
-* Add naked if/else body emitter
+* Fix rspec example visibility on duplicate metadata examples [#279](https://github.com/mbj/mutant/issues/279).
+* Add naked if/else body emitter [#280](https://github.com/mbj/mutant/issues/280).
 
 # v0.7.3 2014-12-09
 
