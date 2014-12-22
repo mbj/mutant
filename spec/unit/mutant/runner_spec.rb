@@ -1,7 +1,7 @@
 RSpec.describe Mutant::Runner do
   # setup_shared_context
   class FakeEnv
-    def self.kill_mutation
+    def self.kill
     end
 
     def self.mutations
@@ -38,7 +38,7 @@ RSpec.describe Mutant::Runner do
         env:       actor_env,
         source:    Mutant::Parallel::Source::Array.new(env.mutations),
         sink:      Mutant::Runner::Sink.new(env),
-        processor: env.method(:kill_mutation)
+        processor: env.method(:kill)
       )
     end
 

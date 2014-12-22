@@ -36,7 +36,7 @@ module Mutant
     #
     # @api private
     #
-    def kill_mutation(mutation)
+    def kill(mutation)
       test_result = run_mutation_tests(mutation)
       Result::Mutation.new(
         mutation:    mutation,

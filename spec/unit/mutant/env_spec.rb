@@ -1,5 +1,5 @@
 RSpec.describe Mutant::Env do
-  context '#kill_mutation' do
+  context '#kill' do
     let(:object) do
       described_class.new(
         config:           config,
@@ -40,7 +40,7 @@ RSpec.describe Mutant::Env do
       )
     end
 
-    subject { object.kill_mutation(mutation) }
+    subject { object.kill(mutation) }
 
     shared_examples_for 'mutation kill' do
       it { should eql(Mutant::Result::Mutation.new(mutation: mutation, test_result: test_result)) }

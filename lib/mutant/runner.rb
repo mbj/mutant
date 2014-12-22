@@ -76,7 +76,7 @@ module Mutant
         jobs:      config.jobs,
         source:    Parallel::Source::Array.new(env.mutations),
         sink:      Sink.new(env),
-        processor: env.method(:kill_mutation)
+        processor: env.method(:kill)
       )
     end
 
