@@ -8,11 +8,9 @@ RSpec.describe Mutant::WarningFilter do
   let(:object) { described_class.new(target) }
 
   let(:target) do
-    writes = self.writes
+    acc = writes
     Module.new do
-      define_singleton_method :write do |message|
-        writes << message
-      end
+      define_singleton_method(:write, &acc.method(:<<))
     end
   end
 

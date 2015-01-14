@@ -5,11 +5,9 @@ RSpec.describe Mutant::RequireHighjack do
   let(:require_calls)    { [] }
 
   let(:target) do
-    require_calls = self.require_calls
+    acc = require_calls
     Module.new do
-      define_method(:require) do |logical_name|
-        require_calls << logical_name
-      end
+      define_method(:require, &acc.method(:<<))
       module_function :require
     end
   end
