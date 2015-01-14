@@ -16,9 +16,7 @@ module Mutant
         # @api private
         #
         def dispatch
-          Util::Array.each(children, self) do |children|
-            emit_child_subset(children)
-          end
+          Util::Array.each(children, self, &method(:emit_child_subset))
           children.each_with_index do |child, index|
             mutate_child(index)
             emit(child) unless children.eql?([child])

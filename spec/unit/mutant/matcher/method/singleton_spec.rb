@@ -1,6 +1,6 @@
 # rubocop:disable ClassAndModuleChildren
 RSpec.describe Mutant::Matcher::Method::Singleton, '#each' do
-  subject { object.each { |subject| yields << subject } }
+  subject { object.each(&yields.method(:<<)) }
 
   let(:object)       { described_class.new(env, scope, method) }
   let(:method)       { scope.method(method_name)               }

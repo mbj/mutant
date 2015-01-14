@@ -6,7 +6,7 @@ RSpec.describe Mutant::Matcher::Filter do
     subject { object.each { |entry| yields << entry } }
 
     let(:matcher)   { [subject_a, subject_b] }
-    let(:predicate) { ->(subject) { subject.eql?(subject_a) } }
+    let(:predicate) { ->(node) { node.eql?(subject_a) } }
 
     let(:subject_a) { double('Subject A') }
     let(:subject_b) { double('Subject B') }

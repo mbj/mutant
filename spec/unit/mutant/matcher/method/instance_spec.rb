@@ -5,7 +5,7 @@ RSpec.describe Mutant::Matcher::Method::Instance do
   let(:reporter) { Fixtures::TEST_CONFIG.reporter }
 
   describe '#each' do
-    subject { object.each { |subject| yields << subject } }
+    subject { object.each(&yields.method(:<<)) }
 
     let(:object)       { described_class.build(env, scope, method) }
     let(:method)       { scope.instance_method(method_name)        }
