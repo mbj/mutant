@@ -4,12 +4,13 @@ script: "bundle exec rake ci"
 env:
   - TRAVIS=true
 rvm:
+  - '1.9'
   - '2.0'
   - '2.1'
-  - rbx-2
+  - rbx
 matrix:
   allow_failures:
-    - rvm: rbx-2 # travis does not maintain rbx setup correctly
+    - rvm: rbx
 notifications:
   irc:
     channels:
