@@ -218,7 +218,6 @@ require 'mutant/reporter/cli'
 require 'mutant/reporter/cli/printer'
 require 'mutant/reporter/cli/tput'
 require 'mutant/reporter/cli/format'
-require 'mutant/line_trace'
 require 'mutant/zombifier'
 require 'mutant/zombifier/file'
 
