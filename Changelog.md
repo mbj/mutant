@@ -1,3 +1,7 @@
+# v0.7.5 2015-01-14
+
+* Bump deps to support MRI 2.2.
+
 # v0.7.4 2014-12-22
 
 * Fix rspec example visibility on duplicate metadata examples [#279](https://github.com/mbj/mutant/issues/279).
