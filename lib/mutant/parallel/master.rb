@@ -6,9 +6,9 @@ module Mutant
 
       private_class_method :new
 
-      # Run master runner component
+      # Run master
       #
-      # @param [Env] env
+      # @param [Config] config
       #
       # @return [Actor::Sender]
       #
@@ -38,8 +38,6 @@ module Mutant
     private
 
       # Run work loop
-      #
-      # @return [self]
       #
       # @api private
       #
@@ -204,7 +202,7 @@ module Mutant
         config.source
       end
 
-      # Return source
+      # Return sink
       #
       # @return [Sink]
       #
