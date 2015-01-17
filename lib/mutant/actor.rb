@@ -42,7 +42,7 @@ module Mutant
 
     # Binding to othersactors sender for simple RPC
     class Binding
-      include Concord.new(:actor, :other)
+      include Concord.new(:mailbox, :other)
 
       # Send message and wait for reply
       #
@@ -53,8 +53,8 @@ module Mutant
       # @api private
       #
       def call(type)
-        other.call(Message.new(type, actor.sender))
-        message = actor.receiver.call
+        other.call(Message.new(type, mailbox.sender))
+        message = mailbox.receiver.call
         fail ProtocolError, "Expected #{type} but got #{message.type}" unless type.equal?(message.type)
         message.payload
       end

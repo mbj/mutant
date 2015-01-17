@@ -2,7 +2,7 @@ module Mutant
   module Parallel
     # Parallel execution worker
     class Worker
-      include Adamantium::Flat, Anima.new(:actor, :processor, :parent)
+      include Adamantium::Flat, Anima.new(:mailbox, :processor, :parent)
 
       # Run worker
       #
@@ -29,8 +29,8 @@ module Mutant
       #
       def run
         begin
-          parent.call(Actor::Message.new(:ready, actor.sender))
-        end until handle(actor.receiver.call)
+          parent.call(Actor::Message.new(:ready, mailbox.sender))
+        end until handle(mailbox.receiver.call)
       end
 
     private

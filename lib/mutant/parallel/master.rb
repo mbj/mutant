@@ -2,7 +2,7 @@ module Mutant
   module Parallel
     # Master parallel worker
     class Master
-      include Concord.new(:config, :actor)
+      include Concord.new(:config, :mailbox)
 
       private_class_method :new
 
@@ -15,8 +15,8 @@ module Mutant
       # @api private
       #
       def self.call(config)
-        config.env.spawn do |actor|
-          new(config, actor).__send__(:run)
+        config.env.spawn do |mailbox|
+          new(config, mailbox).__send__(:run)
         end
       end
 
@@ -46,11 +46,11 @@ module Mutant
       def run
         config.jobs.times do
           @workers += 1
-          config.env.spawn do |worker_actor|
+          config.env.spawn do |worker_mailbox|
             Worker.run(
-              actor:     worker_actor,
+              mailbox:   worker_mailbox,
               processor: config.processor,
-              parent:    actor.sender
+              parent:    mailbox.sender
             )
           end
         end
@@ -88,7 +88,7 @@ module Mutant
       # @api private
       #
       def receive_loop
-        handle(actor.receiver.call) until @workers.zero? && @stop
+        handle(mailbox.receiver.call) until @workers.zero? && @stop
       end
 
       # Handle status

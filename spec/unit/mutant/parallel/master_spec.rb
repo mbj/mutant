@@ -83,7 +83,7 @@ RSpec.describe Mutant::Parallel::Master do
 
     before do
       expect(Mutant::Parallel::Worker).to receive(:run).with(
-        actor:     actor_env.mailbox(:worker_a),
+        mailbox:   actor_env.mailbox(:worker_a),
         processor: processor,
         parent:    actor_env.mailbox(:master).sender
       ).and_return(worker_a)
@@ -97,7 +97,7 @@ RSpec.describe Mutant::Parallel::Master do
 
       before do
         expect(Mutant::Parallel::Worker).to receive(:run).with(
-          actor:     actor_env.mailbox(:worker_b),
+          mailbox:   actor_env.mailbox(:worker_b),
           processor: processor,
           parent:    actor_env.mailbox(:master).sender
         ).and_return(worker_b)

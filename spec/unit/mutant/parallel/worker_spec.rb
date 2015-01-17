@@ -5,7 +5,7 @@ RSpec.describe Mutant::Parallel::Worker do
 
   let(:message_sequence) { FakeActor::MessageSequence.new    }
   let(:processor)        { double('Processor')               }
-  let(:actor)            { actor_env.mailbox(:worker)        }
+  let(:mailbox)          { actor_env.mailbox(:worker)        }
   let(:parent)           { actor_env.mailbox(:parent).sender }
   let(:payload)          { double('Payload')                 }
   let(:result_payload)   { double('Result Payload')          }
@@ -14,12 +14,12 @@ RSpec.describe Mutant::Parallel::Worker do
     {
       processor: processor,
       parent:    parent,
-      actor:     actor
+      mailbox:   mailbox
     }
   end
 
   before do
-    message_sequence.add(:parent, :ready, actor.sender)
+    message_sequence.add(:parent, :ready, mailbox.sender)
   end
 
   describe '.run' do
@@ -36,7 +36,7 @@ RSpec.describe Mutant::Parallel::Worker do
 
         message_sequence.add(:worker, :job, job)
         message_sequence.add(:parent, :result, job_result)
-        message_sequence.add(:parent, :ready, actor.sender)
+        message_sequence.add(:parent, :ready, mailbox.sender)
         message_sequence.add(:worker, :stop)
       end
 
