@@ -127,6 +127,7 @@ UtilityFunction:
   - Mutant::Actor::Env#new_mailbox
   - Mutant::AST::Sexp#s
   - Mutant::CLI#reporter
+  - Mutant::Integration::Null#call
   - Mutant::Integration::Rspec#parse_example
   - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Reporter::CLI::Format::Progressive#new_buffer

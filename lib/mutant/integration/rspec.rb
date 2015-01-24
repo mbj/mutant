@@ -41,7 +41,7 @@ module Mutant
       #
       # @param [Enumerable<Mutant::Test>] tests
       #
-      # @return [Test::Result]
+      # @return [Result::Test]
       #
       # @api private
       #

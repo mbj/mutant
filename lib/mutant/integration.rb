@@ -77,6 +77,23 @@ module Mutant
         EMPTY_ARRAY
       end
 
+      # Return report for test
+      #
+      # @param [Enumerable<Mutant::Test>] tests
+      #
+      # @return [Result::Test]
+      #
+      # @api private
+      #
+      def call(tests)
+        Result::Test.new(
+          tests:   tests,
+          output:  '',
+          runtime: 0.0,
+          passed:  true
+        )
+      end
+
     end # Null
 
   end # Integration
