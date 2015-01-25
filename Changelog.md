@@ -1,3 +1,7 @@
+# v0.7.6 2015-01-25
+
+* Fix crash on using the null integration.
+
 # v0.7.5 2015-01-14
 
 * Bump deps to support MRI 2.2.
