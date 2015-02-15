@@ -49,4 +49,10 @@ RSpec.describe 'rspec integration', mutant: false do
 
     it_behaves_like 'rspec integration'
   end
+
+  context 'RSpec 3.2' do
+    let(:gemfile) { 'Gemfile.rspec3.2' }
+
+    it_behaves_like 'rspec integration'
+  end
 end
