@@ -1,3 +1,7 @@
+# v0.7.7 2015-02-15
+
+* Add support for rspec-3.2
+
 # v0.7.6 2015-01-25
 
 * Fix crash on using the null integration.
