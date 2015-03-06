@@ -94,7 +94,7 @@ module Mutant
       # @api private
       #
       def success?
-        (coverage * 100).to_f.round(COVERAGE_PRECISION).eql?(env.config.expected_coverage.round(COVERAGE_PRECISION))
+        coverage.eql?(env.config.expected_coverage)
       end
       memoize :success?
 
