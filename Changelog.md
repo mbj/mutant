@@ -1,3 +1,7 @@
+# v0.7.8 2015-03-8
+
+* Kill imperfect float rounding for exact coverage expectations.
+
 # v0.7.7 2015-02-15
 
 * Add support for rspec-3.2
