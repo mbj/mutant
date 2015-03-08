@@ -197,12 +197,12 @@ Options:
     end
 
     context 'with score flag' do
-      let(:flags) { %w[--score 99.5] }
+      let(:flags) { %w[--score 50.0] }
 
       it_should_behave_like 'a cli parser'
 
       it 'configures expected coverage' do
-        expect(subject.config.expected_coverage).to eql(99.5)
+        expect(subject.config.expected_coverage).to eql(Rational(1, 2))
       end
     end
 

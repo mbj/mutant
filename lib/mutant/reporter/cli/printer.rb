@@ -203,7 +203,7 @@ module Mutant
             info 'Mutant configuration:'
             info 'Matcher:         %s',      object.matcher.inspect
             info 'Integration:     %s',      object.integration.name
-            info 'Expect Coverage: %0.2f%%', object.expected_coverage.inspect
+            info 'Expect Coverage: %0.2f%%', (object.expected_coverage * 100)
             info 'Jobs:            %d',      object.jobs
             info 'Includes:        %s',      object.includes.inspect
             info 'Requires:        %s',      object.requires.inspect
@@ -245,7 +245,7 @@ module Mutant
             info 'Killtime:        %0.2fs',    killtime
             info 'Overhead:        %0.2f%%',   overhead_percent
             status 'Coverage:        %0.2f%%', coverage_percent
-            status 'Expected:        %0.2f%%', env.config.expected_coverage
+            status 'Expected:        %0.2f%%', (env.config.expected_coverage * 100)
             self
           end
 
@@ -258,7 +258,7 @@ module Mutant
           # @api private
           #
           def coverage_percent
-            coverage * 100
+            (coverage * 100).to_f
           end
 
           # Return overhead percent

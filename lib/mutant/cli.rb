@@ -134,7 +134,7 @@ module Mutant
       raise Error, "Could not load integration #{name.inspect} (you may want to try installing the gem mutant-#{name})"
     end
 
-    # Add options
+    # Add mutation options
     #
     # @param [OptionParser] opts
     #
@@ -147,7 +147,7 @@ module Mutant
       opts.separator('Options:')
 
       opts.on('--score COVERAGE', 'Fail unless COVERAGE is not reached exactly') do |coverage|
-        update(expected_coverage: Float(coverage))
+        update(expected_coverage: Rational(coverage, 100))
       end
       opts.on('--use STRATEGY', 'Use STRATEGY for killing mutations', &method(:setup_integration))
     end
