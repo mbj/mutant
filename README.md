@@ -105,11 +105,11 @@ This can have the following unintended effects:
 
 References:
 
-* MRI fix: https://github.com/ruby/ruby/commit/8fe95fea9d238a6deb70c8953ceb3a28a67f4636
-* MRI backport (to 2.2.1): https://github.com/ruby/ruby/commit/8fe95fea9d238a6deb70c8953ceb3a28a67f4636
-* Mutant bug: https://github.com/mbj/mutant/issues/265
-* Upstream bug redmine: https://bugs.ruby-lang.org/issues/10460
-* Upstream bug GH: https://github.com/ruby/ruby/pull/822
+* [MRI fix](https://github.com/ruby/ruby/commit/8fe95fea9d238a6deb70c8953ceb3a28a67f4636)
+* [MRI backport to 2.2.1](https://github.com/ruby/ruby/commit/8fe95fea9d238a6deb70c8953ceb3a28a67f4636)
+* [Mutant issue](https://github.com/mbj/mutant/issues/265)
+* [Upstream bug redmine](https://bugs.ruby-lang.org/issues/10460)
+* [Upstream bug github](https://github.com/ruby/ruby/pull/822)
 
 Examples
 --------
