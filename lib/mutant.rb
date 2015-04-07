@@ -225,7 +225,7 @@ require 'mutant/zombifier/file'
 module Mutant
   # Reopen class to initialize constant to avoid dep circle
   class Config
-    CI_DEFAULT_PROCESSOR_COUNT = 2
+    CI_DEFAULT_PROCESSOR_COUNT = 4
 
     DEFAULT = new(
       debug:             false,
