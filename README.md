@@ -45,26 +45,6 @@ Blog-Posts
 * http://www.sitepoint.com/mutation-testing-mutant/
 * http://solnic.eu/2013/01/23/mutation-testing-with-mutant.html
 
-Projects using Mutant
----------------------
-
-The following projects adopted mutant, and aim for 100% mutation coverage:
-
-* [axiom](https://github.com/dkubb/axiom)
-* [axiom-types](https://github.com/dkubb/axiom-types)
-* [rom-mapper](https://github.com/rom-rb/rom-mapper)
-* [rom-session](https://github.com/rom-rb/rom-session)
-* [event_bus](https://github.com/kevinrutherford/event_bus)
-* [virtus](https://github.com/solnic/virtus)
-* [quacky](https://github.com/benmoss/quacky)
-* [substation](https://github.com/snusnu/substation)
-* [large_binomials](https://github.com/filipvanlaenen/large_binomials)
-* [promise.rb](https://github.com/lgierth/promise.rb)
-* [full_name](https://github.com/AGILiDEE/full_name)
-* various small/minor stuff under https://github.com/mbj
-
-Feel free to ping me to add your project to the list!
-
 Installation
 ------------
 
