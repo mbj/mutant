@@ -34,5 +34,15 @@ RSpec.describe Mutant::Reporter::CLI::Tput do
 
       it { should be(nil) }
     end
+
+    context 'when ed fails' do
+      let(:tput_ed?) { false }
+      let(:tput_cd?) { true }
+      before do
+        expect_command('tput cd', '[cd]', tput_cd?)
+      end
+      its(:prepare) { should eql('[reset][sc]') }
+      its(:restore) { should eql('[rc][cd]')    }
+    end
   end
 end
