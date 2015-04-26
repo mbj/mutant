@@ -2,7 +2,7 @@ RSpec.describe Mutant::Loader::Eval, '.call' do
 
   subject { object.call(node, mutation_subject) }
 
-  let(:object) { described_class }
+  let(:object) { Class.new(described_class) }
   let(:path)   { __FILE__        }
   let(:line)   { 1               }
 
