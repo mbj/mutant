@@ -16,10 +16,11 @@ RSpec.shared_examples_for 'framework integration' do
   specify 'it allows to exclude mutations' do
     cli = <<-CMD.split("\n").join(' ')
       #{base_cmd}
+      --ignore-subject TestApp::Literal#uncovered_string
       TestApp::Literal#string
       TestApp::Literal#uncovered_string
-        --ignore-subject TestApp::Literal#uncovered_string
     CMD
+
     expect(Kernel.system(cli)).to be(true)
   end
 
