@@ -1,3 +1,5 @@
+require 'adamantium'
+
 original = $VERBOSE
 # Namespace for test application
 # Silence intentional violations
