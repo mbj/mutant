@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 Mutant::Meta::Example.add do
   source 'while true; foo; bar; end'
 

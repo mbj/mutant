@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module TestApp
   # Class for integration testing literal mutations
   class Literal

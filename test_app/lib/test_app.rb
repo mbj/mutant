@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 original = $VERBOSE
 # Namespace for test application
 # Silence intentional violations
