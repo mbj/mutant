@@ -29,8 +29,6 @@ RSpec.describe Mutant::Parallel::Worker do
 
     context 'when receving :job command' do
 
-      let(:test_result) { double('Test Result') }
-
       before do
         expect(processor).to receive(:call).with(payload).and_return(result_payload)
 

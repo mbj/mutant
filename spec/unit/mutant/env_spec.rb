@@ -19,7 +19,6 @@ RSpec.describe Mutant::Env do
       )
     end
 
-    let(:isolation)    { Mutant::Isolation::None                                                 }
     let(:integration)  { double('Integration')                                                   }
     let(:isolation)    { double('Isolation')                                                     }
     let(:mutation)     { Mutant::Mutation::Evil.new(mutation_subject, Mutant::AST::Nodes::N_NIL) }
