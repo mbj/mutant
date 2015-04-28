@@ -85,8 +85,6 @@ module Mutant
     class Env
       include Coverage, Result, Anima.new(:runtime, :env, :subject_results)
 
-      COVERAGE_PRECISION = 1
-
       # Test if run is successful
       #
       # @return [Boolean]
