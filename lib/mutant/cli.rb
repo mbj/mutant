@@ -143,7 +143,13 @@ module Mutant
       opts.separator(nil)
       opts.separator('Options:')
 
-      opts.on('--score COVERAGE', 'Fail unless COVERAGE is not reached exactly') do |coverage|
+      opts.on(
+        '--expected-coverage COVERAGE',
+        'Fail unless COVERAGE is not reached exactly, parsed via Rational()'
+      ) do |coverage|
+        update(expected_coverage: Rational(coverage))
+      end
+      opts.on('--score COVERAGE', 'Fail unless COVERAGE is not reached exactly [deprecated]') do |coverage|
         update(expected_coverage: Rational(coverage, 100))
       end
       opts.on('--use STRATEGY', 'Use STRATEGY for killing mutations', &method(:setup_integration))

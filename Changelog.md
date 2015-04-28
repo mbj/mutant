@@ -1,5 +1,6 @@
 # v0.7.9 pending
 
+* Deprecate `--score` flag replace with `--expected-coverage`
 * Set default job count to 4 under CI environments.
 
 # v0.7.8 2015-03-8
