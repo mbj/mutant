@@ -132,7 +132,8 @@ Environment:
     -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
 
 Options:
-        --score COVERAGE             Fail unless COVERAGE is not reached exactly
+        --expected-coverage COVERAGE Fail unless COVERAGE is not reached exactly, parsed via Rational()
+        --score COVERAGE             Fail unless COVERAGE is not reached exactly [deprecated]
         --use STRATEGY               Use STRATEGY for killing mutations
         --ignore-subject PATTERN     Ignore subjects that match PATTERN
         --code CODE                  Scope execution to subjects with CODE
@@ -193,6 +194,38 @@ Options:
 
       it 'configures expected coverage' do
         expect(subject.config.jobs).to eql(0)
+      end
+    end
+
+    context 'with expected-coverage flag' do
+      context 'given as decimal' do
+        let(:flags) { %w[--expected-coverage 0.1] }
+
+        it_should_behave_like 'a cli parser'
+
+        it 'configures expected coverage' do
+          expect(subject.config.expected_coverage).to eql(Rational(1, 10))
+        end
+      end
+
+      context 'given as scientific' do
+        let(:flags) { %w[--expected-coverage 1e-1] }
+
+        it_should_behave_like 'a cli parser'
+
+        it 'configures expected coverage' do
+          expect(subject.config.expected_coverage).to eql(Rational(1, 10))
+        end
+      end
+
+      context 'given as rational' do
+        let(:flags) { %w[--expected-coverage 1/10] }
+
+        it_should_behave_like 'a cli parser'
+
+        it 'configures expected coverage' do
+          expect(subject.config.expected_coverage).to eql(Rational(1, 10))
+        end
       end
     end
 
