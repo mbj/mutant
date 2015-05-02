@@ -31,8 +31,8 @@ module Mutant
       # @api private
       #
       def generated
-        Mutant::Mutator.each(node).map do |node|
-          Mutant::Mutation::Evil.new(self, node)
+        Mutator.each(node).map do |node|
+          Mutation::Evil.new(self, node)
         end
       end
       memoize :generated
