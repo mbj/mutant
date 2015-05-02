@@ -66,13 +66,13 @@ module Mutant
       opts = OptionParser.new do |builder|
         builder.banner = 'usage: mutant [options] MATCH_EXPRESSION ...'
         %w[add_environment_options add_mutation_options add_filter_options add_debug_options].each do |name|
-          send(name, builder)
+          __send__(name, builder)
         end
       end
 
       parse_match_expressions(opts.parse!(arguments))
     rescue OptionParser::ParseError => error
-      raise(Error, error.message, error.backtrace)
+      raise(Error, error)
     end
 
     # Parse matchers
@@ -140,10 +140,16 @@ module Mutant
     # @api private
     #
     def add_mutation_options(opts)
-      opts.separator(EMPTY_STRING)
+      opts.separator(nil)
       opts.separator('Options:')
 
-      opts.on('--score COVERAGE', 'Fail unless COVERAGE is not reached exactly') do |coverage|
+      opts.on(
+        '--expected-coverage COVERAGE',
+        'Fail unless COVERAGE is not reached exactly, parsed via Rational()'
+      ) do |coverage|
+        update(expected_coverage: Rational(coverage))
+      end
+      opts.on('--score COVERAGE', 'Fail unless COVERAGE is not reached exactly [deprecated]') do |coverage|
         update(expected_coverage: Rational(coverage, 100))
       end
       opts.on('--use STRATEGY', 'Use STRATEGY for killing mutations', &method(:setup_integration))
@@ -179,7 +185,7 @@ module Mutant
         update(fail_fast: true)
       end
       opts.on('--version', 'Print mutants version') do
-        puts("mutant-#{Mutant::VERSION}")
+        puts("mutant-#{VERSION}")
         Kernel.exit(EXIT_SUCCESS)
       end
       opts.on('-d', '--debug', 'Enable debugging output') do

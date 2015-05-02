@@ -3,23 +3,41 @@ module Mutant
     class CLI
       # Interface to the optionally present tput binary
       class Tput
-        include Adamantium, Concord::Public.new(:available, :prepare, :restore)
+        include Adamantium, Concord::Public.new(:prepare, :restore)
 
         private_class_method :new
 
-        capture = lambda do |command|
+        # Return detected tput support
+        #
+        # @return [Tput]
+        #   if tput support is present
+        #
+        # @return [nil]
+        #   otherwise
+        def self.detect
+          reset   = capture('tput reset')
+          save    = capture('tput sc') if reset
+          restore = capture('tput rc') if save
+          clean   = capture('tput ed') if restore
+          new(reset + save, restore + clean) if clean
+        end
+
+        # Capture output
+        #
+        # @param [String] command
+        #   command to run
+        #
+        # @return [String]
+        #   stdout of command on success
+        #
+        # @return [nil]
+        #   otherwise
+        #
+        def self.capture(command)
           stdout, _stderr, exitstatus = Open3.capture3(command)
           stdout if exitstatus.success?
         end
-
-        reset   = capture.('tput reset')
-        save    = capture.('tput sc') if reset
-        restore = capture.('tput rc') if save
-        clean   = capture.('tput ed') if restore
-
-        UNAVAILABLE = new(false, nil, nil)
-
-        INSTANCE = clean ? new(true, reset + save, restore + clean) : UNAVAILABLE
+        private_class_method :capture
 
       end # TPUT
     end # CLI
