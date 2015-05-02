@@ -232,13 +232,13 @@ RSpec.describe Mutant::Reporter::CLI do
               Overhead:        100.00%
               Coverage:        50.00%
               Expected:        100.00%
-              Active subjects: 1
-              subject-a mutations: 2
-              - test-a
-              F.
-              (01/02)  50% - killtime: 2.00s runtime: 2.00s overhead: 0.00s
               Active Jobs:
               0: evil:subject-a:d27d2
+              Active subjects: 1
+              subject-a mutations: 2
+              F.
+              (01/02)  50% - killtime: 2.00s runtime: 2.00s overhead: 0.00s
+              - test-a
             REPORT
           end
 
@@ -260,13 +260,13 @@ RSpec.describe Mutant::Reporter::CLI do
               Overhead:        100.00%
               Coverage:        100.00%
               Expected:        100.00%
-              Active subjects: 1
-              subject-a mutations: 2
-              - test-a
-              ..
-              (02/02) 100% - killtime: 2.00s runtime: 2.00s overhead: 0.00s
               Active Jobs:
               0: evil:subject-a:d27d2
+              Active subjects: 1
+              subject-a mutations: 2
+              ..
+              (02/02) 100% - killtime: 2.00s runtime: 2.00s overhead: 0.00s
+              - test-a
             REPORT
           end
         end

@@ -147,9 +147,9 @@ module Mutant
           #
           def run
             visit(EnvProgress, payload)
+            job_status
             info('Active subjects: %d', active_subject_results.length)
             visit_collection(SubjectProgress, active_subject_results)
-            job_status
             self
           end
 
@@ -419,10 +419,10 @@ module Mutant
           #
           def run
             puts("#{subject.identification} mutations: #{amount_mutations}")
-            print_tests
             print_mutation_results
             print_progress_bar_finish
             print_stats
+            print_tests
             self
           end
 
