@@ -32,7 +32,7 @@ RSpec.describe Mutant::Reporter::CLI do
 
   def self.it_reports(expected_content)
     it 'writes expected report to output' do
-      subject
+      expect(subject).to be(object)
       expect(contents).to eql(strip_indent(expected_content))
     end
   end
