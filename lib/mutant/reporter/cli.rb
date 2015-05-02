@@ -13,9 +13,10 @@ module Mutant
       # @api private
       #
       def self.build(output)
+        tput = Tput.detect
         tty = output.respond_to?(:tty?) && output.tty?
-        format = if !Mutant.ci? && tty && Tput::INSTANCE.available
-          Format::Framed.new(tty:  tty, tput: Tput::INSTANCE)
+        format = if !Mutant.ci? && tty && tput
+          Format::Framed.new(tty:  tty, tput: tput)
         else
           Format::Progressive.new(tty: tty)
         end

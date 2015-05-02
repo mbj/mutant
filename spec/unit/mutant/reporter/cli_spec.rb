@@ -2,12 +2,20 @@ RSpec.describe Mutant::Reporter::CLI do
   setup_shared_context
 
   let(:object) { described_class.new(output, format) }
-  let(:output) { StringIO.new }
+  let(:output) { StringIO.new                        }
+
+  let(:tput) do
+    double(
+      'tput',
+      restore: '[tput-restore]',
+      prepare: '[tput-prepare]'
+    )
+  end
 
   let(:framed_format) do
     described_class::Format::Framed.new(
       tty:  false,
-      tput: described_class::Tput::UNAVAILABLE
+      tput: tput
     )
   end
 
@@ -43,7 +51,7 @@ RSpec.describe Mutant::Reporter::CLI do
     let(:framed_format) do
       described_class::Format::Framed.new(
         tty:  true,
-        tput: described_class::Tput::INSTANCE
+        tput: tput
       )
     end
 
@@ -56,7 +64,19 @@ RSpec.describe Mutant::Reporter::CLI do
     let(:ci?)    { false                        }
 
     context 'when not on CI and on a tty' do
-      it { should eql(described_class.new(output, framed_format)) }
+      before do
+        expect(described_class::Tput).to receive(:detect).and_return(tput)
+      end
+
+      context 'and tput is available' do
+        it { should eql(described_class.new(output, framed_format)) }
+      end
+
+      context 'and tput is not available' do
+        let(:tput) { nil }
+
+        it { should eql(described_class.new(output, progressive_format)) }
+      end
     end
 
     context 'when on CI' do
@@ -109,7 +129,7 @@ RSpec.describe Mutant::Reporter::CLI do
     end
 
     context 'on framed format' do
-      it_reports ''
+      it_reports '[tput-prepare]'
     end
   end
 
@@ -144,7 +164,7 @@ RSpec.describe Mutant::Reporter::CLI do
         update(:env_result) { { subject_results: [] } }
 
         it_reports <<-REPORT
-          Mutant configuration:
+          [tput-restore]Mutant configuration:
           Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
           Integration:     null
           Expect Coverage: 100.00%
@@ -169,7 +189,7 @@ RSpec.describe Mutant::Reporter::CLI do
           update(:status) { { active_jobs: [].to_set } }
 
           it_reports(<<-REPORT)
-            Mutant configuration:
+            [tput-restore]Mutant configuration:
             Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
             Integration:     null
             Expect Coverage: 100.00%
@@ -196,7 +216,7 @@ RSpec.describe Mutant::Reporter::CLI do
             update(:mutation_a_test_result) { { passed: true } }
 
             it_reports(<<-REPORT)
-              Mutant configuration:
+              [tput-restore]Mutant configuration:
               Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:     null
               Expect Coverage: 100.00%
@@ -224,7 +244,7 @@ RSpec.describe Mutant::Reporter::CLI do
 
           context 'on success' do
             it_reports(<<-REPORT)
-              Mutant configuration:
+              [tput-restore]Mutant configuration:
               Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
               Integration:     null
               Expect Coverage: 100.00%
