@@ -14,6 +14,14 @@ module SharedContext
     end
   end
 
+  def it_reports(expected_content)
+    it 'writes expected report to output' do
+      described_class.call(output, reportable)
+      output.rewind
+      expect(output.read).to eql(strip_indent(expected_content))
+    end
+  end
+
   # rubocop:disable MethodLength
   # rubocop:disable AbcSize
   def setup_shared_context
@@ -24,6 +32,7 @@ module SharedContext
     let(:job_b_result)     { Mutant::Runner::JobResult.new(job: job_b, result: mutation_b_result)       }
     let(:test_a)           { double('test a', identification: 'test-a')                                 }
     let(:test_b)           { double('test b', identification: 'test-b')                                 }
+    let(:output)           { StringIO.new                                                               }
     let(:matchable_scopes) { double('matchable scopes', length: 10)                                     }
     let(:message_sequence) { FakeActor::MessageSequence.new                                             }
     let(:mutations)        { [mutation_a, mutation_b]                                                   }
@@ -31,10 +40,7 @@ module SharedContext
     let(:mutation_b_node)  { s(:nil)                                                                    }
     let(:mutation_b)       { Mutant::Mutation::Evil.new(subject_a, mutation_b_node)                     }
     let(:mutation_a)       { Mutant::Mutation::Evil.new(subject_a, mutation_a_node)                     }
-
-    before do
-      allow(subject_a).to receive(:mutations).and_return([mutation_a, mutation_b])
-    end
+    let(:subject_a_node)   { s(:true)                                                                   }
 
     let(:status) do
       Mutant::Parallel::Status.new(
@@ -54,11 +60,15 @@ module SharedContext
     let(:subject_a) do
       double(
         'subject a',
-        node:           s(:true),
-        source:         'true',
+        node:           subject_a_node,
+        source:         Unparser.unparse(subject_a_node),
         tests:          [test_a],
         identification: 'subject-a'
       )
+    end
+
+    before do
+      allow(subject_a).to receive(:mutations).and_return([mutation_a, mutation_b])
     end
 
     let(:env_result) do
