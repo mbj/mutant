@@ -18,7 +18,7 @@ module Mutant
           reset   = capture('tput reset')
           save    = capture('tput sc') if reset
           restore = capture('tput rc') if save
-          clean   = capture('tput ed') if restore
+          clean   = capture('tput ed') || capture('tput cd') if restore
           new(reset + save, restore + clean) if clean
         end
 
