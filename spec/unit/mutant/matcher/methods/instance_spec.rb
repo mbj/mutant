@@ -1,39 +1,40 @@
 RSpec.describe Mutant::Matcher::Methods::Instance, '#each' do
-  let(:object) { described_class.new(env, Foo) }
+  let(:object) { described_class.new(env, class_under_test) }
   let(:env)    { Fixtures::TEST_ENV            }
 
   subject { object.each { |matcher| yields << matcher } }
 
   let(:yields) { [] }
 
-  module Bar
-    def method_d
+  let(:class_under_test) do
+    parent = Module.new do
+      def method_d
+      end
+
+      def method_e
+      end
     end
 
-    def method_e
+    Class.new do
+      include parent
+
+      private :method_d
+
+      public
+
+      def method_a
+      end
+
+      protected
+
+      def method_b
+      end
+
+      private
+
+      def method_c
+      end
     end
-  end
-
-  class Foo
-    include Bar
-
-    private :method_d
-
-  public
-
-    def method_a
-    end
-
-  protected
-
-    def method_b
-    end
-
-  private
-
-    def method_c
-    end
-
   end
 
   let(:subject_a) { double('Subject A') }
@@ -45,11 +46,11 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#each' do
   before do
     matcher = Mutant::Matcher::Method::Instance
     allow(matcher).to receive(:new)
-      .with(env, Foo, Foo.instance_method(:method_a)).and_return([subject_a])
+      .with(env, class_under_test, class_under_test.instance_method(:method_a)).and_return([subject_a])
     allow(matcher).to receive(:new)
-      .with(env, Foo, Foo.instance_method(:method_b)).and_return([subject_b])
+      .with(env, class_under_test, class_under_test.instance_method(:method_b)).and_return([subject_b])
     allow(matcher).to receive(:new)
-      .with(env, Foo, Foo.instance_method(:method_c)).and_return([subject_c])
+      .with(env, class_under_test, class_under_test.instance_method(:method_c)).and_return([subject_c])
   end
 
   it 'should yield expected subjects' do
