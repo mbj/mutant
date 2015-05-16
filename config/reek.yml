@@ -132,4 +132,5 @@ UtilityFunction:
   - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Reporter::CLI::Format::Progressive#new_buffer
   - Mutant::Reporter::CLI::Printer::StatusProgressive#object # False positive calls super
+  - Mutant::Integration::Rspec#parse_expression # intentional, private
   max_helper_calls: 0
