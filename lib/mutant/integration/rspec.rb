@@ -2,11 +2,25 @@ require 'rspec/core'
 
 module Mutant
   class Integration
-    # Shared parts of rspec2/3 integration
+    # Rspec integration
+    #
+    # This looks so complicated, because rspec:
+    #
+    # * Keeps its state global in RSpec.world and lots of other places
+    # * There is no API to "just run a subset of examples", the examples
+    #   need to be selected in-place via mutating the `RSpec.filtered_examples`
+    #   datastructure
+    # * Does not maintain a unique identification for an example,
+    #   aside the instances of `RSpec::Core::Example` objects itself.
+    #   For that reason identifing examples by:
+    #   * full description
+    #   * location
+    #   Is NOT enough. It would not be uniqe. So we add an "example index"
+    #   for unique reference.
     class Rspec < self
 
       ALL                  = Mutant::Expression.parse('*')
-      EXPRESSION_DELIMITER = ' '.freeze
+      EXPRESSION_CANDIDATE = /\A([^ ]+)(?: )?/.freeze
       LOCATION_DELIMITER   = ':'.freeze
       EXIT_SUCCESS         = 0
       CLI_OPTIONS          = IceNine.deep_freeze(%w[spec --fail-fast])
@@ -48,10 +62,10 @@ module Mutant
       # rubocop:disable MethodLength
       #
       def call(tests)
-        examples = tests.map(&all_tests_index.method(:fetch)).to_set
+        examples = tests.map(&all_tests_index.method(:fetch))
         filter_examples(&examples.method(:include?))
         start = Time.now
-        passed = @runner.run_specs(RSpec.world.ordered_example_groups).equal?(EXIT_SUCCESS)
+        passed = @runner.run_specs(@world.ordered_example_groups).equal?(EXIT_SUCCESS)
         @output.rewind
         Result::Test.new(
           tests:    tests,
@@ -97,15 +111,31 @@ module Mutant
       # @api private
       #
       def parse_example(example, index)
-        metadata = example.metadata
-        location = metadata.fetch(:location)
+        metadata         = example.metadata
+        location         = metadata.fetch(:location)
         full_description = metadata.fetch(:full_description)
-        expression = Expression.try_parse(full_description.split(EXPRESSION_DELIMITER, 2).first) || ALL
 
         Test.new(
           id:         "rspec:#{index}:#{location}/#{full_description}",
-          expression: expression
+          expression: parse_expression(metadata)
         )
+      end
+
+      # Parse metadata into expression
+      #
+      # @param [RSpec::Core::Example::Medatada] metadata
+      #
+      # @return [Expression]
+      #
+      # @api private
+      #
+      def parse_expression(metadata)
+        if metadata.key?(:mutant_expression)
+          Expression.parse(metadata.fetch(:mutant_expression))
+        else
+          match = EXPRESSION_CANDIDATE.match(metadata.fetch(:full_description))
+          Expression.try_parse(match.captures.first) || ALL
+        end
       end
 
       # Return all examples
