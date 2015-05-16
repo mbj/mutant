@@ -111,17 +111,31 @@ module Mutant
       # @api private
       #
       def parse_example(example, index)
-        metadata = example.metadata
-        location = metadata.fetch(:location)
+        metadata         = example.metadata
+        location         = metadata.fetch(:location)
         full_description = metadata.fetch(:full_description)
-
-        match = EXPRESSION_CANDIDATE.match(full_description)
-        expression = Expression.try_parse(match.captures.first) || ALL
 
         Test.new(
           id:         "rspec:#{index}:#{location}/#{full_description}",
-          expression: expression
+          expression: parse_expression(metadata)
         )
+      end
+
+      # Parse metadata into expression
+      #
+      # @param [RSpec::Core::Example::Medatada] metadata
+      #
+      # @return [Expression]
+      #
+      # @api private
+      #
+      def parse_expression(metadata)
+        if metadata.key?(:mutant_expression)
+          Expression.parse(metadata.fetch(:mutant_expression))
+        else
+          match = EXPRESSION_CANDIDATE.match(metadata.fetch(:full_description))
+          Expression.try_parse(match.captures.first) || ALL
+        end
       end
 
       # Return all examples
