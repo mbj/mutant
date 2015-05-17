@@ -19,7 +19,7 @@ RSpec.describe Mutant::Result::Env do
   let(:config) do
     double(
       'Config',
-      expected_coverage: Rational(1, 1)
+      expected_coverage: expected
     )
   end
 
@@ -32,19 +32,29 @@ RSpec.describe Mutant::Result::Env do
     )
   end
 
-  let(:results) { 1 }
-  let(:killed)  { 0 }
+  let(:expected) { Rational(1) }
+  let(:results)  { 9           }
+  let(:killed)   { 0           }
 
   describe '#success?' do
     subject { object.success? }
 
-    context 'when coverage matches expectation' do
-      let(:killed) { 1 }
+    context 'when coverage matches expectation exactly' do
+      let(:killed) { 9 }
+
+      it { should be(true) }
+    end
+
+    context 'when coverage matches expectation approximately' do
+      let(:expected) { Rational('0.8888') }
+      let(:killed)   { 8                  }
 
       it { should be(true) }
     end
 
     context 'when coverage does not match expectation' do
+      let(:killed) { 8 }
+
       it { should be(false) }
     end
   end

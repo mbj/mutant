@@ -85,6 +85,11 @@ module Mutant
     class Env
       include Coverage, Result, Anima.new(:runtime, :env, :subject_results)
 
+      # Number of decimals to round the expected coverage successor for upper
+      # bounds comparison. The scale 2 was chosen to match the reported
+      # coverage amount.
+      ROUND_SCALE = 2
+
       # Test if run is successful
       #
       # @return [Boolean]
@@ -92,7 +97,9 @@ module Mutant
       # @api private
       #
       def success?
-        coverage.eql?(env.config.expected_coverage)
+        expected = env.config.expected_coverage
+        succ     = expected.floor(ROUND_SCALE) + 10**-ROUND_SCALE
+        (expected...succ).cover?(coverage)
       end
       memoize :success?
 
