@@ -11,7 +11,6 @@ rvm:
 matrix:
   allow_failures:
     - rvm: rbx
-    - rvm: '2.0'
 notifications:
   irc:
     channels:
