@@ -1,7 +1,8 @@
-# v0.7.9 pending
+# v0.7.9 2015-05-30
 
 * Deprecate `--score` flag replace with `--expected-coverage`
 * Set default job count to 4 under CI environments.
+* Relax parser dependency to ~>2.2.2
 
 # v0.7.8 2015-03-8
 
