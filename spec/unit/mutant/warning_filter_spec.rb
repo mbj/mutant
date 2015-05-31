@@ -88,6 +88,13 @@ RSpec.describe Mutant::WarningFilter do
       )
     end
 
+    it 'passes through non warning writes' do
+      expect($stderr).to receive(:write).with('foo')
+      object.use do
+        $stderr.write('foo')
+      end
+    end
+
     it 'resets to original stderr after execution' do
       original = $stderr
       object.use {}
