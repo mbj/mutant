@@ -48,20 +48,14 @@ Blog-Posts
 Installation
 ------------
 
-Install the gem `mutant` via your preferred method.
-
-```ruby
-gem install mutant
-```
-
-If you plan to use the RSpec integration you'll have to install `mutant-rspec` also.
-Please add an explicit dependency to `rspec-core` for the RSpec version you want to use.
+As mutant right now only supports rspec, install the gem `mutant-rspec` via your preferred method.
+It'll pull the `mutant` gem (in correct version), that contains the main engine.
 
 ```ruby
 gem install mutant-rspec
 ```
 
-The minitest integration is still in the works.
+The minitest integration is still in the [works](https://github.com/mbj/mutant/pull/330).
 
 The Crash / Stuck Problem (MRI)
 -------------------------------
