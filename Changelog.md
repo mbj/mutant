@@ -1,3 +1,7 @@
+# v0.8.0 pending
+
+* Drop support for ruby < 2.1
+
 # v0.7.9 2015-05-30
 
 * Deprecate `--score` flag replace with `--expected-coverage`
