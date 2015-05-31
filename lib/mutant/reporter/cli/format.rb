@@ -49,7 +49,7 @@ module Mutant
             @tty
           end
 
-          [:puts, :write].each do |name|
+          %i[puts write].each do |name|
             define_method(name) do |*args, &block|
               buffer.public_send(name, *args, &block)
             end

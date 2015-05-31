@@ -1,3 +1,4 @@
+# rubocop:disable ClosingParenthesisIndentation
 RSpec.describe Mutant::Context::Scope do
   describe '.wrap' do
     subject { described_class.wrap(scope, node) }

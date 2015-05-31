@@ -207,6 +207,7 @@ module Corpus
       end
     end
 
+    # rubocop:disable ClosingParenthesisIndentation
     LOADER = Morpher.build do
       s(:block,
         s(:guard, s(:primitive, Array)),
@@ -228,7 +229,7 @@ module Corpus
               # NOTE: The domain param has no DSL currently!
               Morpher::Evaluator::Transformer::Domain::Param.new(
                 Project,
-                [:repo_uri, :name, :exclude, :mutation_coverage, :mutation_generation]
+                %i[repo_uri name exclude mutation_coverage mutation_generation]
               )
             )
           )

@@ -11,24 +11,24 @@ module Mutant
         children :receiver, :selector
 
         SELECTOR_REPLACEMENTS = IceNine.deep_freeze(
-          reverse_map:   [:map, :each],
-          kind_of?:      [:instance_of?],
-          is_a?:         [:instance_of?],
-          reverse_each:  [:each],
-          reverse_merge: [:merge],
-          map:           [:each],
-          send:          [:public_send, :__send__],
-          __send__:      [:public_send],
-          gsub:          [:sub],
-          eql?:          [:equal?],
-          to_s:          [:to_str],
-          to_i:          [:to_int],
-          to_a:          [:to_ary],
-          :== =>         [:eql?, :equal?],
-          :>= =>         [:>, :==, :eql?, :equal?],
-          :<= =>         [:<, :==, :eql?, :equal?],
-          :> =>          [:==, :>=, :eql?, :equal?],
-          :< =>          [:==, :<=, :eql?, :equal?]
+          reverse_map:   %i[map each],
+          kind_of?:      %i[instance_of?],
+          is_a?:         %i[instance_of?],
+          reverse_each:  %i[each],
+          reverse_merge: %i[merge],
+          map:           %i[each],
+          send:          %i[public_send __send__],
+          __send__:      %i[public_send],
+          gsub:          %i[sub],
+          eql?:          %i[equal?],
+          to_s:          %i[to_str],
+          to_i:          %i[to_int],
+          to_a:          %i[to_ary],
+          :== =>         %i[eql? equal?],
+          :>= =>         %i[> == eql? equal?],
+          :<= =>         %i[< == eql? equal?],
+          :> =>          %i[== >= eql? equal?],
+          :< =>          %i[== <= eql? equal?]
         )
 
       private

@@ -23,7 +23,7 @@ RSpec.describe Mutant::AST do
       let(:block) { ->(node) { node.equal?(child_a) } }
 
       it 'returns the full path' do
-        expect(path).to eql([:root, :parent, :child_a])
+        expect(path).to eql(%i[root parent child_a])
       end
     end
 
@@ -31,7 +31,7 @@ RSpec.describe Mutant::AST do
       let(:block) { ->(node) { node.equal?(child_a) || node.equal?(child_b) } }
 
       it 'returns the last full path' do
-        expect(path).to eql([:root, :parent, :child_b])
+        expect(path).to eql(%i[root parent child_b])
       end
     end
   end

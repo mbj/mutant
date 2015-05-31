@@ -87,6 +87,10 @@ PercentLiteralDelimiters:
     '%W': '[]'
     '%x': ()
 
+# Use %i[...] for arrays of symbols
+SymbolArray:
+  Enabled: true
+
 # Align if/else blocks with the variable assignment
 EndAlignment:
   AlignWith: variable
@@ -106,11 +110,25 @@ UnneededPercentQ:
 
 # Allow a maximum ABC score
 Metrics/AbcSize:
-  Max: 18.00
+  Max: 21.02
 
 # Do not prefer lambda.call(...) over lambda.(...)
 LambdaCall:
   Enabled: false
 
-Style/RegexpLiteral:
-  MaxSlashes: 0
+# Buggy cop, returns false positive for our code base
+NonLocalExitFromIterator:
+  Enabled: false
+
+# To allow alignment of similar expressions we want to allow more than one
+# space around operators:
+#
+# let(:a) { bar    + something }
+# let(:b) { foobar + something }
+#
+SpaceAroundOperators:
+  Enabled: false
+
+# We use parallel assignments with great success
+ParallelAssignment:
+  Enabled: false

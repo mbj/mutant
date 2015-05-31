@@ -24,13 +24,14 @@ DuplicateMethodCall:
   allow_calls: []
 FeatureEnvy:
   enabled: false
+# Buggy smell detector
 IrresponsibleModule:
-  enabled: true
+  enabled: false
   exclude: []
 LongParameterList:
   enabled: true
   exclude:
-  - Mutant::Matcher::Method::Instance#self.build?
+  - Mutant::Matcher::Method::Instance#self.build
   max_params: 2
 LongYieldList:
   enabled: true
