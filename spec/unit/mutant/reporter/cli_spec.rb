@@ -19,8 +19,10 @@ RSpec.describe Mutant::Reporter::CLI do
     )
   end
 
+  let(:tty?) { false }
+
   let(:progressive_format) do
-    described_class::Format::Progressive.new(tty: false)
+    described_class::Format::Progressive.new(tty: tty?)
   end
 
   let(:format) { framed_format }
@@ -32,7 +34,7 @@ RSpec.describe Mutant::Reporter::CLI do
 
   def self.it_reports(expected_content)
     it 'writes expected report to output' do
-      subject
+      expect(subject).to be(object)
       expect(contents).to eql(strip_indent(expected_content))
     end
   end
@@ -128,13 +130,75 @@ RSpec.describe Mutant::Reporter::CLI do
       REPORT
     end
 
+    context 'with non default coverage expectation' do
+      let(:format) { progressive_format }
+      update(:config) { { expected_coverage: 0.1r } }
+
+      it_reports(<<-REPORT)
+        Mutant configuration:
+        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Integration:     null
+        Expect Coverage: 10.00%
+        Jobs:            1
+        Includes:        []
+        Requires:        []
+      REPORT
+    end
+
     context 'on framed format' do
       it_reports '[tput-prepare]'
     end
   end
 
+  describe '#report' do
+    subject { object.report(env_result) }
+
+    it_reports(<<-REPORT)
+      Mutant configuration:
+      Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+      Integration:     null
+      Expect Coverage: 100.00%
+      Jobs:            1
+      Includes:        []
+      Requires:        []
+      Subjects:        1
+      Mutations:       2
+      Kills:           2
+      Alive:           0
+      Runtime:         4.00s
+      Killtime:        2.00s
+      Overhead:        100.00%
+      Coverage:        100.00%
+      Expected:        100.00%
+    REPORT
+  end
+
   describe '#progress' do
     subject { object.progress(status) }
+
+    context 'on framed format' do
+      let(:format) { framed_format }
+
+      it_reports(<<-REPORT)
+        [tput-restore]Mutant configuration:
+        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Integration:     null
+        Expect Coverage: 100.00%
+        Jobs:            1
+        Includes:        []
+        Requires:        []
+        Subjects:        1
+        Mutations:       2
+        Kills:           2
+        Alive:           0
+        Runtime:         4.00s
+        Killtime:        2.00s
+        Overhead:        100.00%
+        Coverage:        100.00%
+        Expected:        100.00%
+        Active subjects: 0
+      REPORT
+    end
 
     context 'on progressive format' do
       let(:format) { progressive_format }
@@ -142,7 +206,9 @@ RSpec.describe Mutant::Reporter::CLI do
       context 'with empty scheduler' do
         update(:env_result) { { subject_results: [] } }
 
-        it_reports "(00/02)   0% - killtime: 0.00s runtime: 4.00s overhead: 4.00s\n"
+        let(:tty?) { true }
+
+        it_reports Mutant::Color::RED.format('(00/02)   0% - killtime: 0.00s runtime: 4.00s overhead: 4.00s') << "\n"
       end
 
       context 'with last mutation present' do
@@ -159,315 +225,5 @@ RSpec.describe Mutant::Reporter::CLI do
       end
     end
 
-    context 'on framed format' do
-      context 'with empty scheduler' do
-        update(:env_result) { { subject_results: [] } }
-
-        it_reports <<-REPORT
-          [tput-restore]Mutant configuration:
-          Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-          Integration:     null
-          Expect Coverage: 100.00%
-          Jobs:            1
-          Includes:        []
-          Requires:        []
-          Subjects:        1
-          Mutations:       2
-          Kills:           0
-          Alive:           0
-          Runtime:         4.00s
-          Killtime:        0.00s
-          Overhead:        Inf%
-          Coverage:        0.00%
-          Expected:        100.00%
-          Active subjects: 0
-        REPORT
-      end
-
-      context 'with scheduler active on one subject' do
-        context 'without progress' do
-          update(:status) { { active_jobs: [].to_set } }
-
-          it_reports(<<-REPORT)
-            [tput-restore]Mutant configuration:
-            Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-            Integration:     null
-            Expect Coverage: 100.00%
-            Jobs:            1
-            Includes:        []
-            Requires:        []
-            Subjects:        1
-            Mutations:       2
-            Kills:           2
-            Alive:           0
-            Runtime:         4.00s
-            Killtime:        2.00s
-            Overhead:        100.00%
-            Coverage:        100.00%
-            Expected:        100.00%
-            Active subjects: 0
-          REPORT
-        end
-
-        context 'with progress' do
-          update(:status) { { active_jobs: [job_a].to_set } }
-
-          context 'on failure' do
-            update(:mutation_a_test_result) { { passed: true } }
-
-            it_reports(<<-REPORT)
-              [tput-restore]Mutant configuration:
-              Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-              Integration:     null
-              Expect Coverage: 100.00%
-              Jobs:            1
-              Includes:        []
-              Requires:        []
-              Subjects:        1
-              Mutations:       2
-              Kills:           1
-              Alive:           1
-              Runtime:         4.00s
-              Killtime:        2.00s
-              Overhead:        100.00%
-              Coverage:        50.00%
-              Expected:        100.00%
-              Active subjects: 1
-              subject-a mutations: 2
-              - test-a
-              F.
-              (01/02)  50% - killtime: 2.00s runtime: 2.00s overhead: 0.00s
-              Active Jobs:
-              0: evil:subject-a:d27d2
-            REPORT
-          end
-
-          context 'on success' do
-            it_reports(<<-REPORT)
-              [tput-restore]Mutant configuration:
-              Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-              Integration:     null
-              Expect Coverage: 100.00%
-              Jobs:            1
-              Includes:        []
-              Requires:        []
-              Subjects:        1
-              Mutations:       2
-              Kills:           2
-              Alive:           0
-              Runtime:         4.00s
-              Killtime:        2.00s
-              Overhead:        100.00%
-              Coverage:        100.00%
-              Expected:        100.00%
-              Active subjects: 1
-              subject-a mutations: 2
-              - test-a
-              ..
-              (02/02) 100% - killtime: 2.00s runtime: 2.00s overhead: 0.00s
-              Active Jobs:
-              0: evil:subject-a:d27d2
-            REPORT
-          end
-        end
-      end
-    end
-
-    describe '#report' do
-      subject { object.report(status.payload) }
-
-      context 'with full coverage' do
-        it_reports(<<-REPORT)
-          Mutant configuration:
-          Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-          Integration:     null
-          Expect Coverage: 100.00%
-          Jobs:            1
-          Includes:        []
-          Requires:        []
-          Subjects:        1
-          Mutations:       2
-          Kills:           2
-          Alive:           0
-          Runtime:         4.00s
-          Killtime:        2.00s
-          Overhead:        100.00%
-          Coverage:        100.00%
-          Expected:        100.00%
-        REPORT
-      end
-
-      context 'and partial coverage' do
-        update(:mutation_a_test_result) { { passed: true } }
-
-        context 'on evil mutation' do
-          context 'with a diff' do
-            it_reports(<<-REPORT)
-              subject-a
-              - test-a
-              evil:subject-a:d27d2
-              @@ -1,2 +1,2 @@
-              -true
-              +false
-              -----------------------
-              Mutant configuration:
-              Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-              Integration:     null
-              Expect Coverage: 100.00%
-              Jobs:            1
-              Includes:        []
-              Requires:        []
-              Subjects:        1
-              Mutations:       2
-              Kills:           1
-              Alive:           1
-              Runtime:         4.00s
-              Killtime:        2.00s
-              Overhead:        100.00%
-              Coverage:        50.00%
-              Expected:        100.00%
-            REPORT
-          end
-
-          context 'without a diff' do
-            let(:mutation_a_node) { s(:true) }
-
-            it_reports(<<-REPORT)
-              subject-a
-              - test-a
-              evil:subject-a:d5318
-              Original source:
-              true
-              Mutated Source:
-              true
-              BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!
-              -----------------------
-              Mutant configuration:
-              Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-              Integration:     null
-              Expect Coverage: 100.00%
-              Jobs:            1
-              Includes:        []
-              Requires:        []
-              Subjects:        1
-              Mutations:       2
-              Kills:           1
-              Alive:           1
-              Runtime:         4.00s
-              Killtime:        2.00s
-              Overhead:        100.00%
-              Coverage:        50.00%
-              Expected:        100.00%
-            REPORT
-          end
-        end
-
-        context 'on neutral mutation' do
-          update(:mutation_a_test_result) { { passed: false } }
-
-          let(:mutation_a) do
-            Mutant::Mutation::Neutral.new(subject_a, s(:true))
-          end
-
-          it_reports(<<-REPORT)
-            subject-a
-            - test-a
-            neutral:subject-a:d5318
-            --- Neutral failure ---
-            Original code was inserted unmutated. And the test did NOT PASS.
-            Your tests do not pass initially or you found a bug in mutant / unparser.
-            Subject AST:
-            (true)
-            Unparsed Source:
-            true
-            Test Result:
-            - 1 @ runtime: 1.0
-              - test-a
-            Test Output:
-            mutation a test result output
-            -----------------------
-            neutral:subject-a:d5318
-            --- Neutral failure ---
-            Original code was inserted unmutated. And the test did NOT PASS.
-            Your tests do not pass initially or you found a bug in mutant / unparser.
-            Subject AST:
-            (true)
-            Unparsed Source:
-            true
-            Test Result:
-            - 1 @ runtime: 1.0
-              - test-a
-            Test Output:
-            mutation b test result output
-            -----------------------
-            Mutant configuration:
-            Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-            Integration:     null
-            Expect Coverage: 100.00%
-            Jobs:            1
-            Includes:        []
-            Requires:        []
-            Subjects:        1
-            Mutations:       2
-            Kills:           0
-            Alive:           2
-            Runtime:         4.00s
-            Killtime:        2.00s
-            Overhead:        100.00%
-            Coverage:        0.00%
-            Expected:        100.00%
-          REPORT
-        end
-
-        context 'on noop mutation' do
-          update(:mutation_a_test_result) { { passed: false } }
-
-          let(:mutation_a) do
-            Mutant::Mutation::Noop.new(subject_a, s(:true))
-          end
-
-          it_reports(<<-REPORT)
-            subject-a
-            - test-a
-            noop:subject-a:d5318
-            ---- Noop failure -----
-            No code was inserted. And the test did NOT PASS.
-            This is typically a problem of your specs not passing unmutated.
-            Test Result:
-            - 1 @ runtime: 1.0
-              - test-a
-            Test Output:
-            mutation a test result output
-            -----------------------
-            noop:subject-a:d5318
-            ---- Noop failure -----
-            No code was inserted. And the test did NOT PASS.
-            This is typically a problem of your specs not passing unmutated.
-            Test Result:
-            - 1 @ runtime: 1.0
-              - test-a
-            Test Output:
-            mutation b test result output
-            -----------------------
-            Mutant configuration:
-            Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-            Integration:     null
-            Expect Coverage: 100.00%
-            Jobs:            1
-            Includes:        []
-            Requires:        []
-            Subjects:        1
-            Mutations:       2
-            Kills:           0
-            Alive:           2
-            Runtime:         4.00s
-            Killtime:        2.00s
-            Overhead:        100.00%
-            Coverage:        0.00%
-            Expected:        100.00%
-          REPORT
-        end
-      end
-    end
   end
 end

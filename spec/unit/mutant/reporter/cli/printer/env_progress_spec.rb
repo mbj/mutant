@@ -1,0 +1,76 @@
+RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
+  setup_shared_context
+
+  update(:config) { { expected_coverage: 0.1r } }
+
+  let(:reportable) { env_result }
+
+  describe '.call' do
+    context 'without progress' do
+      update(:subject_a_result) { { mutation_results: [] } }
+
+      it_reports <<-'STR'
+        Mutant configuration:
+        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Integration:     null
+        Expect Coverage: 10.00%
+        Jobs:            1
+        Includes:        []
+        Requires:        []
+        Subjects:        1
+        Mutations:       2
+        Kills:           0
+        Alive:           0
+        Runtime:         4.00s
+        Killtime:        0.00s
+        Overhead:        Inf%
+        Coverage:        0.00%
+        Expected:        10.00%
+      STR
+    end
+
+    context 'on full coverage' do
+      it_reports <<-'STR'
+        Mutant configuration:
+        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Integration:     null
+        Expect Coverage: 10.00%
+        Jobs:            1
+        Includes:        []
+        Requires:        []
+        Subjects:        1
+        Mutations:       2
+        Kills:           2
+        Alive:           0
+        Runtime:         4.00s
+        Killtime:        2.00s
+        Overhead:        100.00%
+        Coverage:        100.00%
+        Expected:        10.00%
+      STR
+    end
+
+    context 'on partial coverage' do
+      update(:mutation_a_test_result) { { passed: true } }
+
+      it_reports <<-'STR'
+        Mutant configuration:
+        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Integration:     null
+        Expect Coverage: 10.00%
+        Jobs:            1
+        Includes:        []
+        Requires:        []
+        Subjects:        1
+        Mutations:       2
+        Kills:           1
+        Alive:           1
+        Runtime:         4.00s
+        Killtime:        2.00s
+        Overhead:        100.00%
+        Coverage:        50.00%
+        Expected:        10.00%
+      STR
+    end
+  end
+end

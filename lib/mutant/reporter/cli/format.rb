@@ -69,7 +69,7 @@ module Mutant
         #
         def format(printer, object)
           buffer = new_buffer
-          printer.run(Output.new(tty, buffer), object)
+          printer.call(Output.new(tty, buffer), object)
           buffer.rewind
           buffer.read
         end

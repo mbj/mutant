@@ -53,11 +53,6 @@ module Mutant
       #
       # TODO: Move this to a callback registration
       #
-      #   Reporters other than CLI that might exist in future
-      #   may only need the final report. So providing a noop callback
-      #   registration makes more sense for these.
-      #   As only CLI reporters exist currently I do not really care right now.
-      #
       # @return [Float]
       #
       # @api private
@@ -88,7 +83,7 @@ module Mutant
       # @api private
       #
       def report(env)
-        Printer::EnvResult.run(output, env)
+        Printer::EnvResult.call(output, env)
         self
       end
 
