@@ -4,7 +4,6 @@ script: "bundle exec rake ci"
 env:
   - TRAVIS=true
 rvm:
-  - '2.0'
   - '2.1'
   - '2.2'
   - rbx

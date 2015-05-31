@@ -1,3 +1,4 @@
+# rubocop:disable ModuleLength
 module SharedContext
   def update(name, &block)
     define_method(name) do
@@ -21,11 +22,19 @@ module SharedContext
     let(:job_b)            { Mutant::Parallel::Job.new(index: 1, payload: mutation_b)                   }
     let(:job_a_result)     { Mutant::Runner::JobResult.new(job: job_a, result: mutation_a_result)       }
     let(:job_b_result)     { Mutant::Runner::JobResult.new(job: job_b, result: mutation_b_result)       }
-    let(:mutations)        { [mutation_a, mutation_b]                                                   }
-    let(:matchable_scopes) { double('matchable scopes', length: 10)                                     }
     let(:test_a)           { double('test a', identification: 'test-a')                                 }
     let(:test_b)           { double('test b', identification: 'test-b')                                 }
+    let(:matchable_scopes) { double('matchable scopes', length: 10)                                     }
     let(:message_sequence) { FakeActor::MessageSequence.new                                             }
+    let(:mutations)        { [mutation_a, mutation_b]                                                   }
+    let(:mutation_a_node)  { s(:false)                                                                  }
+    let(:mutation_b_node)  { s(:nil)                                                                    }
+    let(:mutation_b)       { Mutant::Mutation::Evil.new(subject_a, mutation_b_node)                     }
+    let(:mutation_a)       { Mutant::Mutation::Evil.new(subject_a, mutation_a_node)                     }
+
+    before do
+      allow(subject_a).to receive(:mutations).and_return([mutation_a, mutation_b])
+    end
 
     let(:status) do
       Mutant::Parallel::Status.new(
@@ -52,10 +61,6 @@ module SharedContext
       )
     end
 
-    before do
-      allow(subject_a).to receive(:mutations).and_return([mutation_a, mutation_b])
-    end
-
     let(:env_result) do
       Mutant::Result::Env.new(
         env:             env,
@@ -63,12 +68,6 @@ module SharedContext
         subject_results: [subject_a_result]
       )
     end
-
-    let(:mutation_a_node) { s(:false) }
-    let(:mutation_b_node) { s(:nil)   }
-
-    let(:mutation_b) { Mutant::Mutation::Evil.new(subject_a, mutation_b_node) }
-    let(:mutation_a) { Mutant::Mutation::Evil.new(subject_a, mutation_a_node) }
 
     let(:mutation_a_result) do
       Mutant::Result::Mutation.new(

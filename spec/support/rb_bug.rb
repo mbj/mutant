@@ -3,7 +3,7 @@ require 'ffi'
 module RbBug
   extend FFI::Library
   ffi_lib 'ruby'
-  attach_function :rb_bug, [:string, :varargs], :void
+  attach_function :rb_bug, %i[string varargs], :void
 
   # Call the test bug
   #

@@ -30,10 +30,12 @@ RSpec.describe Mutant::Expression::Method do
       let(:input) { instance_method }
 
       it 'returns correct matcher' do
-        should eql(Mutant::Matcher::Method::Instance.new(
-          env,
-          TestApp::Literal, TestApp::Literal.instance_method(:string)
-        ))
+        should eql(
+          Mutant::Matcher::Method::Instance.new(
+            env,
+            TestApp::Literal, TestApp::Literal.instance_method(:string)
+          )
+        )
       end
     end
 

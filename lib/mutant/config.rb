@@ -15,7 +15,7 @@ module Mutant
       :expected_coverage
     )
 
-    [:fail_fast, :zombie, :debug].each do |name|
+    %i[fail_fast zombie debug].each do |name|
       define_method(:"#{name}?") { public_send(name) }
     end
 
