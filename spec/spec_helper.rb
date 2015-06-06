@@ -20,6 +20,7 @@ end
 
 require 'tempfile'
 require 'concord'
+require 'anima'
 require 'adamantium'
 require 'devtools/spec_helper'
 require 'unparser/cli'

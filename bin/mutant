@@ -10,7 +10,23 @@ require 'mutant'
 namespace =
   if ARGV.include?('--zombie')
     $stderr.puts('Running mutant zombified!')
-    Mutant.zombify
+    Mutant::Zombifier.call(
+      namespace:        :Zombie,
+      load_path:        $LOAD_PATH,
+      kernel:           Kernel,
+      pathname:         Pathname,
+      require_highjack: Mutant::RequireHighjack.method(:call).to_proc.curry.call(Kernel),
+      root_require:     'mutant',
+      includes: %w[
+        mutant
+        unparser
+        morpher
+        adamantium
+        equalizer
+        anima
+        concord
+      ]
+    )
     Zombie::Mutant
   else
     Mutant

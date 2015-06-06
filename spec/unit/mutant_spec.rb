@@ -13,15 +13,6 @@ RSpec.describe Mutant do
     it { should be(result) }
   end
 
-  describe '.zombify' do
-    subject { object.zombify }
-
-    it 'calls the zombifier' do
-      expect(Mutant::Zombifier).to receive(:run).with('mutant', :Zombie)
-      subject
-    end
-  end
-
   describe '.singleton_subclass_instance' do
     subject { object.singleton_subclass_instance(name, superclass, &block) }
 
