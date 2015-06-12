@@ -4,8 +4,8 @@ script: "bundle exec rake ci"
 env:
   - TRAVIS=true
 rvm:
-  - '2.1'
-  - '2.2'
+  - 2.1
+  - 2.2
   - rbx
 matrix:
   allow_failures:
