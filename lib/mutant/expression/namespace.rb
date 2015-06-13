@@ -81,7 +81,7 @@ module Mutant
         # @api private
         #
         def matcher(env)
-          Matcher::Scope.new(env, Mutant.constant_lookup(namespace), self)
+          Matcher::Scope.new(env, Object.const_get(namespace), self)
         end
 
       end # Exact
