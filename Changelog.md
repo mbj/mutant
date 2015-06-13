@@ -1,6 +1,7 @@
 # v0.8.0 pending
 
 * Drop support for ruby < 2.1
+* Remove broken `--code` option
 
 # v0.7.9 2015-05-30
 

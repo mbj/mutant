@@ -105,13 +105,6 @@ RSpec.describe Mutant::CLI do
       it_should_behave_like 'an invalid cli run'
     end
 
-    context 'with code filter and missing argument' do
-      let(:arguments)        { %w[--code]                 }
-      let(:expected_message) { 'missing argument: --code' }
-
-      it_should_behave_like 'an invalid cli run'
-    end
-
     context 'with include help flag' do
       let(:flags) { %w[--help] }
 
@@ -136,7 +129,6 @@ Options:
         --score COVERAGE             Fail unless COVERAGE is not reached exactly [deprecated]
         --use STRATEGY               Use STRATEGY for killing mutations
         --ignore-subject PATTERN     Ignore subjects that match PATTERN
-        --code CODE                  Scope execution to subjects with CODE
         --fail-fast                  Fail fast
         --version                    Print mutants version
     -d, --debug                      Enable debugging output
@@ -287,16 +279,6 @@ Options:
       it 'sets the zombie option' do
         expect(subject.config.zombie).to be(true)
       end
-    end
-
-    context 'with subject code filter' do
-      let(:flags) { %w[--code faa --code bbb] }
-
-      let(:expected_matcher_config) do
-        default_matcher_config.update(subject_selects: [[:code, 'faa'], [:code, 'bbb']])
-      end
-
-      it_should_behave_like 'a cli parser'
     end
   end
 end
