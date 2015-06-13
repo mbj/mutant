@@ -152,7 +152,7 @@ module Mutant
       opts.on('--score COVERAGE', 'Fail unless COVERAGE is not reached exactly [deprecated]') do |coverage|
         update(expected_coverage: Rational(coverage, 100))
       end
-      opts.on('--use STRATEGY', 'Use STRATEGY for killing mutations', &method(:setup_integration))
+      opts.on('--use INTEGRATION', 'Use INTEGRATION to kill mutations', &method(:setup_integration))
     end
 
     # Add filter options
