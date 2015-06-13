@@ -167,9 +167,6 @@ module Mutant
       opts.on('--ignore-subject PATTERN', 'Ignore subjects that match PATTERN') do |pattern|
         add_matcher(:subject_ignores, Expression.parse(pattern))
       end
-      opts.on('--code CODE', 'Scope execution to subjects with CODE') do |code|
-        add_matcher(:subject_selects, [:code, code])
-      end
     end
 
     # Add debug options
