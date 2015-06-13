@@ -5,13 +5,13 @@ RSpec.describe 'Mutant on ruby corpus', mutant: false do
     skip 'Corpus test is deactivated on RBX' if RUBY_ENGINE.eql?('rbx')
   end
 
-  Corpus::Project::ALL.select(&:mutation_generation).each do |project|
+  MutantSpec::Corpus::Project::ALL.select(&:mutation_generation).each do |project|
     specify "#{project.name} does not fail on mutation generation" do
       project.verify_mutation_generation
     end
   end
 
-  Corpus::Project::ALL.select(&:mutation_coverage).each do |project|
+  MutantSpec::Corpus::Project::ALL.select(&:mutation_coverage).each do |project|
     specify "#{project.name} does have expected mutation coverage" do
       project.verify_mutation_coverage
     end
