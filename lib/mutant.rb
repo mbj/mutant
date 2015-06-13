@@ -24,11 +24,8 @@ Thread.abort_on_exception = true
 
 # Library namespace
 module Mutant
-  # The frozen empty string used within mutant
-  EMPTY_STRING = ''.freeze
-  # The frozen empty array used within mutant
-  EMPTY_ARRAY = [].freeze
-
+  EMPTY_STRING   = ''.freeze
+  EMPTY_ARRAY    = [].freeze
   SCOPE_OPERATOR = '::'.freeze
 
   # Test if CI is detected via environment
@@ -39,17 +36,6 @@ module Mutant
   #
   def self.ci?
     ENV.key?('CI')
-  end
-
-  # Perform self zombification
-  #
-  # @return [self]
-  #
-  # @api private
-  #
-  def self.zombify
-    Zombifier.run('mutant', :Zombie)
-    self
   end
 
   # Define instance of subclassed superclass as constant
@@ -216,7 +202,6 @@ require 'mutant/reporter/cli/printer/test_result'
 require 'mutant/reporter/cli/tput'
 require 'mutant/reporter/cli/format'
 require 'mutant/zombifier'
-require 'mutant/zombifier/file'
 
 module Mutant
   # Reopen class to initialize constant to avoid dep circle

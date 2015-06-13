@@ -1,50 +1,47 @@
 RSpec.describe Mutant::RequireHighjack do
-  let(:object) { described_class.new(target, highjacked_calls.method(:push)) }
-
   let(:highjacked_calls) { [] }
   let(:require_calls)    { [] }
 
-  let(:target) do
+  let(:target_module) do
     acc = require_calls
     Module.new do
       define_method(:require, &acc.method(:<<))
+
       module_function :require
+      public :require
     end
   end
 
-  describe '#run' do
-    let(:block)        { -> {}                  }
+  def target_require(logical_name)
+    Object.new.extend(target_module).require(logical_name)
+  end
+
+  describe '.call' do
     let(:logical_name) { double('Logical Name') }
 
-    subject do
-      object.run(&block)
+    def apply
+      described_class.call(target_module, highjacked_calls.method(:<<))
     end
 
-    context 'require calls before run' do
-      it 'does not highjack anything' do
-        target.require(logical_name)
-        expect(require_calls).to eql([logical_name])
-        expect(highjacked_calls).to eql([])
-      end
+    it 'returns the original implementation from singleton' do
+      expect { apply.call(logical_name) }
+        .to change { require_calls }
+        .from([])
+        .to([logical_name])
     end
 
-    context 'require calls during run' do
-      let(:block) { -> { target.require(logical_name) } }
-
-      it 'does highjack the calls' do
-        expect { subject }.to change { highjacked_calls }.from([]).to([logical_name])
-        expect(require_calls).to eql([])
-      end
+    it 'does highjack target object #requires calls' do
+      apply
+      expect { target_require(logical_name) }
+        .to change { highjacked_calls }
+        .from([])
+        .to([logical_name])
     end
 
-    context 'require calls after run' do
-
-      it 'does not the calls anything' do
-        subject
-        target.require(logical_name)
-        expect(require_calls).to eql([logical_name])
-        expect(highjacked_calls).to eql([])
-      end
+    it 'does not call original require' do
+      apply
+      expect { target_require(logical_name) }
+        .not_to change { require_calls }.from([])
     end
   end
 end

@@ -1,20 +1,19 @@
 module Mutant
   # Zombifier namespace
   class Zombifier
-    include Adamantium::Flat, Concord.new(:namespace)
+    include Anima.new(
+      :includes,
+      :namespace,
+      :load_path,
+      :kernel,
+      :require_highjack,
+      :root_require,
+      :pathname
+    )
 
-    # Excluded into zombification
-    includes = %w[
-      mutant
-      unparser
-      morpher
-      adamantium
-      equalizer
-      anima
-      concord
-    ]
+    include AST::Sexp
 
-    INCLUDES = %r{\A#{Regexp.union(includes)}(?:/.*)?\z}.freeze
+    LoadError = Class.new(::LoadError)
 
     # Initialize object
     #
@@ -24,37 +23,28 @@ module Mutant
     #
     # @api private
     #
-    def initialize(namespace)
+    def initialize(*)
+      super
+      @includes = %r{\A#{Regexp.union(includes)}(?:/.*)?\z}
       @zombified = Set.new
-      @highjack = RequireHighjack.new(Kernel, method(:require))
-      super(namespace)
     end
 
-    # Perform zombification of target library
-    #
-    # @param [String] logical_name
-    # @param [Symbol] namespace
-    #
-    # @return [self]
-    #
-    # @api private
-    #
-    def self.run(logical_name, namespace)
-      new(namespace).run(logical_name)
+    def self.call(*args)
+      new(*args).__send__(:call)
       self
     end
 
+  private
+
     # Run zombifier
-    #
-    # @param [String] logical_name
     #
     # @return [undefined]
     #
     # @api private
     #
-    def run(logical_name)
-      @highjack.infect
-      require(logical_name)
+    def call
+      @original = require_highjack.call(method(:require))
+      require(root_require)
     end
 
     # Test if logical name is subjected to zombification
@@ -64,25 +54,77 @@ module Mutant
     # @api private
     #
     def include?(logical_name)
-      !@zombified.include?(logical_name) && INCLUDES =~ logical_name
+      !@zombified.include?(logical_name) && @includes =~ logical_name
     end
 
     # Require file in zombie namespace
     #
     # @param [#to_s] logical_name
     #
-    # @return [self]
+    # @return [undefined]
     #
     # @api private
     #
     def require(logical_name)
       logical_name = logical_name.to_s
-      @highjack.original.call(logical_name)
+      @original.call(logical_name)
       return unless include?(logical_name)
       @zombified << logical_name
-      file = File.find(logical_name)
-      file.zombify(namespace) if file
-      self
+      zombify(find(logical_name))
+    end
+
+    # Find file by logical path
+    #
+    # @param [String] logical_name
+    #
+    # @return [File]
+    #
+    # @raise [LoadError]
+    #   otherwise
+    #
+    # @api private
+    #
+    def find(logical_name)
+      file_name = "#{logical_name}.rb"
+
+      load_path.each do |path|
+        path = pathname.new(path).join(file_name)
+        return path if path.file?
+      end
+
+      fail LoadError, "Cannot find file #{file_name.inspect} in load path"
+    end
+
+    # Zombify contents of file
+    #
+    # Probably the 2nd valid use of eval ever. (First one is inserting mutants!).
+    #
+    # @param [Pathname] source_path
+    #
+    # @return [undefined]
+    #
+    # @api private
+    #
+    # rubocop:disable Lint/Eval
+    #
+    def zombify(source_path)
+      kernel.eval(
+        Unparser.unparse(namespaced_node(source_path)),
+        TOPLEVEL_BINDING,
+        source_path.to_s
+      )
+    end
+
+    # Return namespaced root
+    #
+    # @param [Symbol] namespace
+    #
+    # @return [Parser::AST::Node]
+    #
+    # @api private
+    #
+    def namespaced_node(source_path)
+      s(:module, s(:const, nil, namespace), Parser::CurrentRuby.parse(source_path.read))
     end
 
   end # Zombifier
