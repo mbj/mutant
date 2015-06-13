@@ -15,7 +15,7 @@ module Mutant
       "\e[#{@code}m#{text}\e[0m"
     end
 
-    Mutant.singleton_subclass_instance('NONE', self) do
+    NONE = Class.new(self) do
 
       # Format null color
       #
@@ -41,7 +41,7 @@ module Mutant
       def initialize
       end
 
-    end
+    end.new
 
     RED   = Color.new(31)
     GREEN = Color.new(32)

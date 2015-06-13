@@ -37,33 +37,6 @@ module Mutant
   def self.ci?
     ENV.key?('CI')
   end
-
-  # Define instance of subclassed superclass as constant
-  #
-  # @param [Class] superclass
-  # @param [Symbol] name
-  #
-  # @return [self]
-  #
-  # @api private
-  #
-  # rubocop:disable MethodLength
-  #
-  def self.singleton_subclass_instance(name, superclass, &block)
-    klass = Class.new(superclass) do
-      def inspect
-        self.class.name
-      end
-
-      define_singleton_method(:name) do
-        "#{superclass.name}::#{name}".freeze
-      end
-    end
-    klass.class_eval(&block)
-    superclass.const_set(name, klass.new)
-    self
-  end
-
 end # Mutant
 
 require 'mutant/version'
