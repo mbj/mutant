@@ -127,7 +127,7 @@ Environment:
 Options:
         --expected-coverage COVERAGE Fail unless COVERAGE is not reached exactly, parsed via Rational()
         --score COVERAGE             Fail unless COVERAGE is not reached exactly [deprecated]
-        --use STRATEGY               Use STRATEGY for killing mutations
+        --use INTEGRATION            Use INTEGRATION to kill mutations
         --ignore-subject PATTERN     Ignore subjects that match PATTERN
         --fail-fast                  Fail fast
         --version                    Print mutants version
