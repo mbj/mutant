@@ -55,15 +55,22 @@ module Mutant
         # @api private
         #
         def non_index_dispatch
-          case
-          when meta.binary_method_operator?
+          if meta.binary_method_operator?
             run(Binary)
-          when meta.attribute_assignment?
+          elsif meta.attribute_assignment?
             run(AttributeAssignment)
           else
             normal_dispatch
           end
         end
+
+        # Return AST metadata for node
+        #
+        # @return [AST::Meta::Send]
+        def meta
+          AST::Meta::Send.new(node)
+        end
+        memoize :meta
 
         # Return arguments
         #

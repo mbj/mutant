@@ -37,7 +37,7 @@ module Mutant
             rescue_body = children.at(index)
             next unless rescue_body
             mutate_child(index)
-            resbody_body = AST::Meta.for(rescue_body).body
+            resbody_body = AST::Meta::Resbody.new(rescue_body).body
             emit_concat(resbody_body) if resbody_body
           end
         end
