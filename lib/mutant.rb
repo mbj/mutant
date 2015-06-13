@@ -41,20 +41,6 @@ module Mutant
     ENV.key?('CI')
   end
 
-  # Lookup constant for location
-  #
-  # @param [String] location
-  #
-  # @return [Object]
-  #
-  # @api private
-  #
-  def self.constant_lookup(location)
-    location.split(SCOPE_OPERATOR).reduce(Object) do |parent, name|
-      parent.const_get(name, nil)
-    end
-  end
-
   # Perform self zombification
   #
   # @return [self]

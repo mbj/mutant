@@ -48,7 +48,7 @@ module Mutant
       # @api private
       #
       def scope
-        Mutant.constant_lookup(scope_name)
+        Object.const_get(scope_name)
       end
 
       # Return method name
