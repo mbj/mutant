@@ -19,6 +19,14 @@ RSpec.describe Mutant::AST do
       it { should eql([]) }
     end
 
+    context 'when called without block' do
+      let(:block) { nil }
+
+      it 'raises error' do
+        expect { subject }.to raise_error(ArgumentError, 'block expected')
+      end
+    end
+
     context 'when one node matches' do
       let(:block) { ->(node) { node.equal?(child_a) } }
 
