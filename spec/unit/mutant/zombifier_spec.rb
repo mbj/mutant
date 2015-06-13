@@ -104,7 +104,7 @@ RSpec.describe Mutant::Zombifier do
     end
 
     it 'consumes walks the VM through expected steps' do
-      expect { apply }.to change { ruby_vm.done? }.from(false).to(true)
+      expect { apply }.to change(ruby_vm, :done?).from(false).to(true)
     end
 
     context 'when zombifier require fails' do
