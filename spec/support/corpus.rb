@@ -3,6 +3,8 @@ require 'anima'
 require 'mutant'
 
 # Namespace module for corpus testing
+#
+# rubocop:disable MethodLength
 module Corpus
   # Project under corpus test
   # rubocop:disable ClassLength
@@ -33,7 +35,16 @@ module Corpus
       Dir.chdir(repo_path) do
         Bundler.with_clean_env do
           install_mutant
-          system(%W[bundle exec mutant --use rspec -I lib -r #{name} --score #{expect_coverage} #{namespace}*])
+          system(
+            %W[
+              bundle exec mutant
+              --use rspec
+              --include lib
+              --require #{name}
+              --expected-coverage #{expect_coverage}
+              #{namespace}*
+            ]
+          )
         end
       end
     end
@@ -46,7 +57,6 @@ module Corpus
     # @raise [Exception]
     #   otherwise
     #
-    # rubocop:disable MethodLength
     # rubocop:disable AbcSize
     #
     def verify_mutation_generation
@@ -218,7 +228,7 @@ module Corpus
               s(:key_symbolize, :repo_uri,            s(:guard, s(:primitive, String))),
               s(:key_symbolize, :name,                s(:guard, s(:primitive, String))),
               s(:key_symbolize, :namespace,           s(:guard, s(:primitive, String))),
-              s(:key_symbolize, :expect_coverage,     s(:guard, s(:primitive, Float))),
+              s(:key_symbolize, :expect_coverage,     s(:guard, s(:primitive, Fixnum))),
               s(:key_symbolize, :mutation_coverage,
                 s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
               s(:key_symbolize, :mutation_generation,
