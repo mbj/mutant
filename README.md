@@ -125,7 +125,6 @@ Assuming you are using rspec, you can mutation test Rails models by adding the f
 
 ```ruby
 group :test do
-  gem 'mutant'
   gem 'mutant-rspec'
 end
 ```
