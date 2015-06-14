@@ -1,10 +1,11 @@
-# v0.8.0 pending
+# v0.8.0 2015-06-15
 
 * Drop support for ruby < 2.1
 * Remove broken `--code` option
 * Remove deprecated `--score` option
 * Add support for rspec-3.3
 * End support for rspec-3.{0,1}
+* Internal quality improvements
 
 # v0.7.9 2015-05-30
 
