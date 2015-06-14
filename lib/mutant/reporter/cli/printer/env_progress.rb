@@ -22,7 +22,6 @@ module Mutant
           #
           # @api private
           #
-          # rubocop:disable MethodLength
           # rubocop:disable AbcSize
           #
           def run

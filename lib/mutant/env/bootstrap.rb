@@ -85,8 +85,6 @@ module Mutant
       #
       # @api private
       #
-      # rubocop:disable LineLength
-      #
       def scope_name(scope)
         scope.name
       rescue => exception

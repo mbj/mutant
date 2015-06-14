@@ -2,8 +2,6 @@ module MutantSpec
   # Not a real VM, just kidding. It connects the require / eval triggers
   # require semantics Zombifier relies on in a way we can avoid having to
   # mock around everywhere to test every detail.
-  #
-  # rubocop:disable LineLength
   class RubyVM
     include Concord.new(:expected_events)
 

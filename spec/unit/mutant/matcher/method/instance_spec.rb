@@ -1,4 +1,3 @@
-# rubocop:disable ClassAndModuleChildren
 RSpec.describe Mutant::Matcher::Method::Instance do
 
   let(:env)      { Fixtures::TEST_ENV             }
