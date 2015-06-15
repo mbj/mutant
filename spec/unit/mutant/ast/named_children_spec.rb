@@ -6,7 +6,6 @@ RSpec.describe Mutant::AST::NamedChildren do
 
         children :foo, :bar
       end
-
     end
 
     let(:instance) { klass.new(node) }
