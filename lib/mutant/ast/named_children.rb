@@ -13,8 +13,6 @@ module Mutant
       # @api private
       #
       def self.included(host)
-        super
-
         host.class_eval do
           include InstanceMethods
           extend ClassMethods

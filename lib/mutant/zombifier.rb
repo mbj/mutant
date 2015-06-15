@@ -105,8 +105,6 @@ module Mutant
     #
     # @api private
     #
-    # rubocop:disable Lint/Eval
-    #
     def zombify(source_path)
       kernel.eval(
         Unparser.unparse(namespaced_node(source_path)),

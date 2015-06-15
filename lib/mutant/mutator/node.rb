@@ -51,17 +51,6 @@ module Mutant
       #
       alias_method :dup_node, :dup_input
 
-      # Return ast meta description
-      #
-      # @return [AST::Meta]
-      #
-      # @api private
-      #
-      def meta
-        AST::Meta.for(node)
-      end
-      memoize :meta
-
       # Return children
       #
       # @return [Array<Parser::AST::Node>]

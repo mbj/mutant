@@ -2,8 +2,6 @@ module Mutant
   class Matcher
 
     # Matcher for specific namespace
-    #
-    # rubocop:disable LineLength
     class Namespace < self
       include Concord::Public.new(:env, :expression)
 
