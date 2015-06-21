@@ -36,8 +36,27 @@ RSpec.describe Mutant::Expression do
     end
   end
 
+  describe '#prefix?' do
+    let(:object) { described_class.parse('Foo*') }
+
+    subject { object.prefix?(other) }
+
+    context 'when object is a prefix of other' do
+      let(:other) { described_class.parse('Foo::Bar') }
+
+      it { should be(true) }
+    end
+
+    context 'when other is not a prefix of other' do
+      let(:other) { described_class.parse('Bar') }
+
+      it { should be(false) }
+    end
+  end
+
   describe '#inspect' do
     let(:object) { described_class.parse('Foo') }
+
     subject { object.inspect }
 
     it { should eql('<Mutant::Expression: Foo>') }
