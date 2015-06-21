@@ -106,6 +106,31 @@ module Mutant
         @integration = config.integration.new(config).setup
       end
 
+      # Return matched subjects
+      #
+      # @return [Enumerable<Subject>]
+      #
+      # @api private
+      #
+      def matched_subjects
+        Matcher::Compiler.call(self, config.matcher).to_a
+      end
+
+      # Initialize matchable scopes
+      #
+      # @return [undefined]
+      #
+      # @api private
+      #
+      def initialize_matchable_scopes
+        scopes = ObjectSpace.each_object(Module).each_with_object([]) do |scope, aggregate|
+          expression = expression(scope)
+          aggregate << Matcher::Scope.new(self, scope, expression) if expression
+        end
+
+        @matchable_scopes = scopes.sort_by { |scope| scope.expression.syntax }
+      end
+
       # Try to turn scope into expression
       #
       # @param [Class, Module] scope
@@ -126,30 +151,7 @@ module Mutant
           return
         end
 
-        Expression.try_parse(name)
-      end
-
-      # Return matched subjects
-      #
-      # @return [Enumerable<Subject>]
-      #
-      # @api private
-      #
-      def matched_subjects
-        Matcher::Compiler.call(self, config.matcher).to_a
-      end
-
-      # Initialize matchable scopes
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize_matchable_scopes
-        @matchable_scopes = ObjectSpace.each_object(Module).each_with_object([]) do |scope, aggregate|
-          expression = expression(scope)
-          aggregate << Matcher::Scope.new(self, scope, expression) if expression
-        end.sort_by(&:identification)
+        config.expression_parser.try_parse(name)
       end
     end # Boostrap
   end # Env

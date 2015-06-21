@@ -1,7 +1,7 @@
 RSpec.describe Mutant::Matcher::Compiler::SubjectPrefix do
-  let(:object) { described_class.new(Mutant::Expression.parse('Foo*')) }
+  let(:object) { described_class.new(parse_expression('Foo*')) }
 
-  let(:_subject) { double('Subject', expression: Mutant::Expression.parse(subject_expression)) }
+  let(:_subject) { double('Subject', expression: parse_expression(subject_expression)) }
 
   describe '#call' do
     subject { object.call(_subject) }

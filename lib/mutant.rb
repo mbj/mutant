@@ -143,6 +143,7 @@ require 'mutant/matcher/scope'
 require 'mutant/matcher/filter'
 require 'mutant/matcher/null'
 require 'mutant/expression'
+require 'mutant/expression/parser'
 require 'mutant/expression/method'
 require 'mutant/expression/methods'
 require 'mutant/expression/namespace'
@@ -192,7 +193,13 @@ module Mutant
       reporter:          Reporter::CLI.build($stdout),
       zombie:            false,
       jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : ::Parallel.processor_count,
-      expected_coverage: Rational(1)
+      expected_coverage: Rational(1),
+      expression_parser: Expression::Parser.new([
+        Expression::Method,
+        Expression::Methods,
+        Expression::Namespace::Exact,
+        Expression::Namespace::Recursive
+      ])
     )
   end # Config
 end # Mutant

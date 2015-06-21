@@ -22,6 +22,8 @@ module Mutant
         self
       end
 
+    private
+
       # Return method matcher class
       #
       # @return [Class:Matcher::Method]
@@ -45,8 +47,6 @@ module Mutant
         end
       end
       memoize :methods
-
-    private
 
       # Return subjects
       #

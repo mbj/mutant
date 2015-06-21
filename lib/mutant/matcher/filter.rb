@@ -4,6 +4,18 @@ module Mutant
     class Filter < self
       include Concord.new(:matcher, :predicate)
 
+      # Return new matcher
+      #
+      # @return [Matcher] matcher
+      #
+      # @return [Matcher]
+      #
+      # @api private
+      #
+      def self.build(matcher, &predicate)
+        new(matcher, predicate)
+      end
+
       # Enumerate matches
       #
       # @return [self]

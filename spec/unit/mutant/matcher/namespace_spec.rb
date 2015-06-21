@@ -1,7 +1,7 @@
 RSpec.describe Mutant::Matcher::Namespace do
-  let(:object) { described_class.new(env, Mutant::Expression.parse('TestApp*')) }
-  let(:yields) { []                                                             }
-  let(:env)    { double('Env')                                                  }
+  let(:object) { described_class.new(env, parse_expression('TestApp*')) }
+  let(:yields) { []                                                     }
+  let(:env)    { double('Env')                                          }
 
   subject { object.each { |item| yields << item } }
 
@@ -22,7 +22,7 @@ RSpec.describe Mutant::Matcher::Namespace do
 
       allow(env).to receive(:matchable_scopes).and_return(
         [singleton_a, singleton_b, singleton_c].map do |scope|
-          Mutant::Matcher::Scope.new(env, scope, Mutant::Expression.parse(scope.name))
+          Mutant::Matcher::Scope.new(env, scope, parse_expression(scope.name))
         end
       )
     end

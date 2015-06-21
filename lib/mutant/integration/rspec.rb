@@ -19,11 +19,13 @@ module Mutant
     #   for unique reference.
     class Rspec < self
 
-      ALL_EXPRESSION       = Expression.parse('*').freeze
+      ALL_EXPRESSION       = Expression::Namespace::Recursive.new(scope_name: nil)
       EXPRESSION_CANDIDATE = /\A([^ ]+)(?: )?/.freeze
       LOCATION_DELIMITER   = ':'.freeze
       EXIT_SUCCESS         = 0
       CLI_OPTIONS          = IceNine.deep_freeze(%w[spec --fail-fast])
+
+      private_constant(*constants(false))
 
       register 'rspec'
 
@@ -132,10 +134,10 @@ module Mutant
       #
       def parse_expression(metadata)
         if metadata.key?(:mutant_expression)
-          Expression.parse(metadata.fetch(:mutant_expression))
+          expression_parser.(metadata.fetch(:mutant_expression))
         else
           match = EXPRESSION_CANDIDATE.match(metadata.fetch(:full_description))
-          Expression.try_parse(match.captures.first) || ALL_EXPRESSION
+          expression_parser.try_parse(match.captures.first) || ALL_EXPRESSION
         end
       end
 

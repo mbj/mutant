@@ -97,19 +97,19 @@ RSpec.describe Mutant::Integration::Rspec do
     [
       Mutant::Test.new(
         id:         'rspec:0:example-a-location/example-a-full-description',
-        expression: Mutant::Expression.parse('*')
+        expression: parse_expression('*')
       ),
       Mutant::Test.new(
         id:         'rspec:1:example-c-location/Example::C blah',
-        expression: Mutant::Expression.parse('Example::C')
+        expression: parse_expression('Example::C')
       ),
       Mutant::Test.new(
         id:         "rspec:2:example-d-location/Example::D\nblah",
-        expression: Mutant::Expression.parse('*')
+        expression: parse_expression('*')
       ),
       Mutant::Test.new(
         id:         'rspec:3:example-e-location/Example::E',
-        expression: Mutant::Expression.parse('Foo')
+        expression: parse_expression('Foo')
       )
     ]
   end

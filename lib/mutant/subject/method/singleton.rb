@@ -5,7 +5,7 @@ module Mutant
       class Singleton < self
 
         NAME_INDEX = 1
-        SYMBOL = '.'.freeze
+        SYMBOL     = '.'.freeze
 
         # Test if method is public
         #

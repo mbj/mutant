@@ -3,27 +3,27 @@ RSpec.describe Mutant::Selector::Expression do
     let(:object) { described_class.new(integration) }
 
     let(:subject_class) do
+      parse = method(:parse_expression)
+
       Class.new(Mutant::Subject) do
-        def expression
-          Mutant::Expression.parse('SubjectA')
+        define_method(:expression) do
+          parse.('SubjectA')
         end
 
-        def match_expressions
-          [expression] << Mutant::Expression.parse('SubjectB')
+        define_method(:match_expressions) do
+          [expression] << parse.('SubjectB')
         end
       end
     end
 
-    let(:mutation_subject) { subject_class.new(context, node)                                   }
-    let(:context)          { double('Context')                                                  }
-    let(:node)             { double('Node')                                                     }
-
-    let(:config)           { Mutant::Config::DEFAULT.update(integration: integration)           }
-    let(:integration)      { double('Integration', all_tests: all_tests)                        }
-
-    let(:test_a)           { double('test a', expression: Mutant::Expression.parse('SubjectA')) }
-    let(:test_b)           { double('test b', expression: Mutant::Expression.parse('SubjectB')) }
-    let(:test_c)           { double('test c', expression: Mutant::Expression.parse('SubjectC')) }
+    let(:mutation_subject) { subject_class.new(context, node)                           }
+    let(:context)          { double('Context')                                          }
+    let(:node)             { double('Node')                                             }
+    let(:config)           { Mutant::Config::DEFAULT.update(integration: integration)   }
+    let(:integration)      { double('Integration', all_tests: all_tests)                }
+    let(:test_a)           { double('test a', expression: parse_expression('SubjectA')) }
+    let(:test_b)           { double('test b', expression: parse_expression('SubjectB')) }
+    let(:test_c)           { double('test c', expression: parse_expression('SubjectC')) }
 
     subject { object.call(mutation_subject) }
 

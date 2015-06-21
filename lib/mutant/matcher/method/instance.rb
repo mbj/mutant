@@ -23,17 +23,6 @@ module Mutant
           super
         end
 
-        # Return identification
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def identification
-          "#{scope.name}##{method_name}"
-        end
-        memoize :identification
-
         NAME_INDEX = 0
 
       private

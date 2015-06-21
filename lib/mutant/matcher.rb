@@ -28,13 +28,5 @@ module Mutant
     #
     abstract_method :each
 
-    # Return identification
-    #
-    # @return [String
-    #
-    # @api private
-    #
-    abstract_method :identification
-
   end # Matcher
 end # Mutant
