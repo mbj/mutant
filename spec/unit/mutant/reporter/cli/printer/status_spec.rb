@@ -10,7 +10,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
       it_reports <<-REPORT
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-        Integration:     null
+        Integration:     Mutant::Integration::Null
         Expect Coverage: 100.00%
         Jobs:            1
         Includes:        []
@@ -33,7 +33,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
         it_reports <<-REPORT
           Mutant configuration:
           Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-          Integration:     null
+          Integration:     Mutant::Integration::Null
           Expect Coverage: 10.00%
           Jobs:            1
           Includes:        []
@@ -59,7 +59,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
         it_reports(<<-REPORT)
           Mutant configuration:
           Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-          Integration:     null
+          Integration:     Mutant::Integration::Null
           Expect Coverage: 100.00%
           Jobs:            1
           Includes:        []
@@ -86,7 +86,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
           it_reports(<<-REPORT)
             Mutant configuration:
             Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-            Integration:     null
+            Integration:     Mutant::Integration::Null
             Expect Coverage: 100.00%
             Jobs:            1
             Includes:        []
@@ -115,7 +115,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
           it_reports(<<-REPORT)
             Mutant configuration:
             Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
-            Integration:     null
+            Integration:     Mutant::Integration::Null
             Expect Coverage: 100.00%
             Jobs:            1
             Includes:        []

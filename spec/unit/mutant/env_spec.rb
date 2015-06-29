@@ -8,18 +8,15 @@ RSpec.describe Mutant::Env do
         selector:         selector,
         subjects:         [],
         mutations:        [],
-        matchable_scopes: []
+        matchable_scopes: [],
+        integration:      Mutant::Integration::Null.new(config)
       )
     end
 
     let(:config) do
-      Mutant::Config::DEFAULT.update(
-        isolation:   isolation,
-        integration: integration
-      )
+      Mutant::Config::DEFAULT.update(isolation: isolation)
     end
 
-    let(:integration)  { double('Integration')                                                   }
     let(:isolation)    { double('Isolation')                                                     }
     let(:mutation)     { Mutant::Mutation::Evil.new(mutation_subject, Mutant::AST::Nodes::N_NIL) }
     let(:wrapped_node) { double('Wrapped Node')                                                  }
@@ -59,7 +56,6 @@ RSpec.describe Mutant::Env do
         expect(mutation_subject).to receive(:prepare).and_return(mutation_subject).ordered
         expect(context).to receive(:root).with(s(:nil)).and_return(wrapped_node).ordered
         expect(Mutant::Loader::Eval).to receive(:call).with(wrapped_node, mutation_subject).and_return(nil).ordered
-        expect(integration).to receive(:call).with(tests).and_return(test_result).ordered
       end
 
       include_examples 'mutation kill'

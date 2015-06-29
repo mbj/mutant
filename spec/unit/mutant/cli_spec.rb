@@ -1,19 +1,19 @@
-RSpec.shared_examples_for 'an invalid cli run' do
-  it 'raises error' do
-    expect do
-      subject
-    end.to raise_error(Mutant::CLI::Error, expected_message)
-  end
-end
-
-RSpec.shared_examples_for 'a cli parser' do
-  it { expect(subject.config.integration).to eql(expected_integration)       }
-  it { expect(subject.config.reporter).to eql(expected_reporter)             }
-  it { expect(subject.config.matcher).to eql(expected_matcher_config) }
-end
-
 RSpec.describe Mutant::CLI do
   let(:object) { described_class }
+
+  shared_examples_for 'an invalid cli run' do
+    it 'raises error' do
+      expect do
+        subject
+      end.to raise_error(Mutant::CLI::Error, expected_message)
+    end
+  end
+
+  shared_examples_for 'a cli parser' do
+    it { expect(subject.config.integration).to eql(expected_integration) }
+    it { expect(subject.config.reporter).to eql(expected_reporter)       }
+    it { expect(subject.config.matcher).to eql(expected_matcher_config)  }
+  end
 
   describe '.run' do
     subject { object.run(arguments) }
@@ -67,7 +67,7 @@ RSpec.describe Mutant::CLI do
 
     # Defaults
     let(:expected_filter)         { Morpher.evaluator(s(:true))      }
-    let(:expected_integration)    { Mutant::Integration::Null.new    }
+    let(:expected_integration)    { Mutant::Integration::Null        }
     let(:expected_reporter)       { Mutant::Config::DEFAULT.reporter }
     let(:expected_matcher_config) { default_matcher_config           }
 
@@ -152,7 +152,7 @@ Options:
 
         it_should_behave_like 'a cli parser'
 
-        let(:expected_integration) { Mutant::Integration::Rspec.new }
+        let(:expected_integration) { Mutant::Integration::Rspec }
       end
 
       context 'when integration does NOT exist' do

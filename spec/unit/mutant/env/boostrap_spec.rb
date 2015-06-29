@@ -9,6 +9,8 @@ RSpec.describe Mutant::Env::Bootstrap do
     )
   end
 
+  let(:integration) { Mutant::Integration::Null.new(config) }
+
   let(:expected_env) do
     Mutant::Env.new(
       cache:            Mutant::Cache.new,
@@ -16,8 +18,9 @@ RSpec.describe Mutant::Env::Bootstrap do
       matchable_scopes: [],
       mutations:        [],
       config:           config,
-      selector:         Mutant::Selector::Expression.new(config.integration),
-      actor_env:        Mutant::Actor::Env.new(Thread)
+      selector:         Mutant::Selector::Expression.new(integration),
+      actor_env:        Mutant::Actor::Env.new(Thread),
+      integration:      integration
     )
   end
 

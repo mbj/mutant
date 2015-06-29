@@ -57,16 +57,18 @@ module Mutant
       #
       # @api private
       #
+      # rubocop:disable MethodLength
+      #
       def env
         subjects = matched_subjects
-
         Env.new(
           actor_env:        Actor::Env.new(Thread),
           config:           config,
           cache:            cache,
           subjects:         subjects,
           matchable_scopes: matchable_scopes,
-          selector:         Selector::Expression.new(config.integration),
+          integration:      @integration,
+          selector:         Selector::Expression.new(@integration),
           mutations:        subjects.flat_map(&:mutations)
         )
       end
@@ -101,6 +103,7 @@ module Mutant
       def infect
         config.includes.each(&$LOAD_PATH.method(:<<))
         config.requires.each(&method(:require))
+        @integration = config.integration.new(config).setup
       end
 
       # Try to turn scope into expression

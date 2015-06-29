@@ -34,8 +34,6 @@ module Mutant
     #  @api private
     #
     def run_mutation_analysis
-      config.integration.setup
-
       @result = run_driver(Parallel.async(mutation_test_config))
       reporter.report(@result)
     end

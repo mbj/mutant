@@ -4,7 +4,7 @@ RSpec.describe Mutant::Integration do
     Class.new(described_class)
   end
 
-  let(:object) { class_under_test.new }
+  let(:object) { class_under_test.new(Mutant::Config::DEFAULT) }
 
   describe '#setup' do
     subject { object.setup }
@@ -14,7 +14,7 @@ end
 
 RSpec.describe Mutant::Integration::Null do
 
-  let(:object) { described_class.new }
+  let(:object) { described_class.new(Mutant::Config::DEFAULT) }
 
   describe '#all_tests' do
     subject { object.all_tests }
