@@ -19,7 +19,7 @@ module Mutant
     #   for unique reference.
     class Rspec < self
 
-      ALL                  = Mutant::Expression.parse('*')
+      ALL_EXPRESSION       = Expression.parse('*').freeze
       EXPRESSION_CANDIDATE = /\A([^ ]+)(?: )?/.freeze
       LOCATION_DELIMITER   = ':'.freeze
       EXIT_SUCCESS         = 0
@@ -33,7 +33,8 @@ module Mutant
       #
       # @api private
       #
-      def initialize
+      def initialize(*)
+        super
         @output = StringIO.new
         @runner = RSpec::Core::Runner.new(RSpec::Core::ConfigurationOptions.new(CLI_OPTIONS))
         @world  = RSpec.world
@@ -134,7 +135,7 @@ module Mutant
           Expression.parse(metadata.fetch(:mutant_expression))
         else
           match = EXPRESSION_CANDIDATE.match(metadata.fetch(:full_description))
-          Expression.try_parse(match.captures.first) || ALL
+          Expression.try_parse(match.captures.first) || ALL_EXPRESSION
         end
       end
 

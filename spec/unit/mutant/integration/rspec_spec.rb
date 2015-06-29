@@ -1,10 +1,10 @@
 require 'mutant/integration/rspec'
 
 RSpec.describe Mutant::Integration::Rspec do
-  let(:object) { described_class.new }
+  let(:object) { described_class.new(Mutant::Config::DEFAULT) }
 
-  let(:options)       { double('options')                           }
-  let(:runner)        { double('runner')                            }
+  let(:options) { double('options') }
+  let(:runner)  { double('runner')  }
 
   let(:example_a) do
     double(

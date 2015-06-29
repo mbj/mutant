@@ -184,7 +184,7 @@ module Mutant
     DEFAULT = new(
       debug:             false,
       fail_fast:         false,
-      integration:       Integration::Null.new,
+      integration:       Integration::Null,
       matcher:           Matcher::Config::DEFAULT,
       includes:          EMPTY_ARRAY,
       requires:          EMPTY_ARRAY,

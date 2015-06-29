@@ -45,7 +45,6 @@ RSpec.describe Mutant::Runner do
 
     before do
       expect(reporter).to receive(:start).with(env).ordered
-      expect(integration).to receive(:setup).ordered
       expect(Mutant::Parallel).to receive(:async).with(parallel_config).and_return(driver).ordered
     end
 

@@ -7,6 +7,7 @@ module Mutant
       :cache,
       :subjects,
       :matchable_scopes,
+      :integration,
       :selector,
       :mutations
     )
@@ -63,7 +64,7 @@ module Mutant
 
       config.isolation.call do
         mutation.insert
-        config.integration.call(tests)
+        integration.call(tests)
       end
     rescue Isolation::Error => error
       Result::Test.new(

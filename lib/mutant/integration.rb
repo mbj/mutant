@@ -2,7 +2,7 @@ module Mutant
 
   # Abstract base class mutant test framework integrations
   class Integration
-    include AbstractType, Adamantium::Flat, Equalizer.new
+    include AbstractType, Adamantium::Flat, Concord.new(:config)
 
     REGISTRY = {}
 
@@ -29,7 +29,7 @@ module Mutant
     # @api private
     #
     def self.lookup(name)
-      REGISTRY.fetch(name).new
+      REGISTRY.fetch(name)
     end
 
     # Register integration
@@ -42,8 +42,6 @@ module Mutant
     #
     def self.register(name)
       REGISTRY[name] = self
-
-      define_method(:name) { name }
     end
     private_class_method :register
 
