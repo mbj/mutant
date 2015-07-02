@@ -10,7 +10,6 @@ module Mutant
       # @return [Rational]
       #
       # @api private
-      #
       def coverage
         return Rational(0) if amount_mutation_results.zero?
 
@@ -24,7 +23,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def self.included(host)
         super
 
@@ -47,7 +45,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def sum(name, collection)
         define_method(name) do
           public_send(collection).map(&name).reduce(0, :+)
@@ -61,7 +58,6 @@ module Mutant
     # @return [Float]
     #
     # @api private
-    #
     def overhead
       runtime - killtime
     end
@@ -73,7 +69,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def self.included(host)
       host.class_eval do
         include Adamantium, Anima::Update
@@ -90,7 +85,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def success?
         coverage.eql?(env.config.expected_coverage)
       end
@@ -101,7 +95,6 @@ module Mutant
       # @return [Array<Result::Subject>]
       #
       # @api private
-      #
       def failed_subject_results
         subject_results.reject(&:success?)
       end
@@ -116,7 +109,6 @@ module Mutant
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_mutations
         env.mutations.length
       end
@@ -126,7 +118,6 @@ module Mutant
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_subjects
         env.subjects.length
       end
@@ -155,7 +146,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def success?
         alive_mutation_results.empty?
       end
@@ -165,7 +155,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def continue?
         mutation_results.all?(&:success?)
       end
@@ -175,7 +164,6 @@ module Mutant
       # @return [Array<Result::Mutation>]
       #
       # @api private
-      #
       def alive_mutation_results
         mutation_results.reject(&:success?)
       end
@@ -186,7 +174,6 @@ module Mutant
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_mutation_results
         mutation_results.length
       end
@@ -196,7 +183,6 @@ module Mutant
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_mutations
         subject.mutations.length
       end
@@ -206,7 +192,6 @@ module Mutant
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_mutations_killed
         killed_mutation_results.length
       end
@@ -216,7 +201,6 @@ module Mutant
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_mutations_alive
         alive_mutation_results.length
       end
@@ -226,7 +210,6 @@ module Mutant
       # @return [Array<Result::Mutation>]
       #
       # @api private
-      #
       def killed_mutation_results
         mutation_results.select(&:success?)
       end
@@ -243,7 +226,6 @@ module Mutant
       # @return [Float]
       #
       # @api private
-      #
       def runtime
         test_result.runtime
       end
@@ -255,7 +237,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def success?
         mutation.class.success?(test_result)
       end

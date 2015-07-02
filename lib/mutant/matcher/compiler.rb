@@ -10,7 +10,6 @@ module Mutant
       # @return [Mutant::Matcher]
       #
       # @api private
-      #
       def result
         Filter.new(
           Chain.build(config.match_expressions.map(&method(:matcher))),
@@ -27,7 +26,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def call(subject)
           expression.prefix?(subject.expression)
         end
@@ -40,10 +38,9 @@ module Mutant
       #
       # @return [#call]
       #
-      # @api private
-      #
       # rubocop:disable MethodLength
       #
+      # @api private
       def predicate
         if subject_selector && subject_rejector
           Morpher::Evaluator::Predicate::Boolean::And.new([
@@ -68,7 +65,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def subject_selector
         selectors = config.subject_selects.map do |attribute, value|
           Morpher.compile(s(:eql, s(:attribute, attribute), s(:static, value)))
@@ -86,7 +82,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def subject_rejector
         rejectors = config.subject_ignores.map(&SubjectPrefix.method(:new))
 
@@ -100,7 +95,6 @@ module Mutant
       # @return [Matcher]
       #
       # @api private
-      #
       def matcher(expression)
         expression.matcher(env)
       end

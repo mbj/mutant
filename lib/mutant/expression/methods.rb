@@ -19,7 +19,6 @@ module Mutant
       # @return [String]
       #
       # @api private
-      #
       def syntax
         [scope_name, scope_symbol].join
       end
@@ -32,7 +31,6 @@ module Mutant
       # @return [Matcher::Method]
       #
       # @api private
-      #
       def matcher(env)
         MATCHERS.fetch(scope_symbol).new(env, scope)
       end
@@ -44,7 +42,6 @@ module Mutant
       # @return [Fixnum]
       #
       # @api private
-      #
       def match_length(expression)
         if expression.syntax.start_with?(syntax)
           syntax.length
@@ -60,7 +57,6 @@ module Mutant
       # @return [Class, Method]
       #
       # @api private
-      #
       def scope
         Object.const_get(scope_name)
       end

@@ -15,7 +15,6 @@ module Mutant
     # @return [String]
     #
     # @api private
-    #
     abstract_method :syntax
 
     # Return match length for expression
@@ -25,7 +24,6 @@ module Mutant
     # @return [Fixnum]
     #
     # @api private
-    #
     def match_length(other)
       if eql?(other)
         syntax.length
@@ -41,7 +39,6 @@ module Mutant
     # @return [Boolean]
     #
     # @api private
-    #
     def prefix?(other)
       !match_length(other).zero?
     end

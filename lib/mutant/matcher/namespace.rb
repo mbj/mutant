@@ -14,7 +14,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def each(&block)
         return to_enum unless block_given?
 
@@ -34,7 +33,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def match?(scope)
         expression.prefix?(scope.expression)
       end

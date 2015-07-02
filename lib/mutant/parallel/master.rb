@@ -13,7 +13,6 @@ module Mutant
       # @return [Actor::Sender]
       #
       # @api private
-      #
       def self.call(config)
         config.env.spawn do |mailbox|
           new(config, mailbox).__send__(:run)
@@ -25,7 +24,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def initialize(*)
         super
 
@@ -39,10 +37,9 @@ module Mutant
 
       # Run work loop
       #
-      # @api private
-      #
       # rubocop:disable MethodLength
       #
+      # @api private
       def run
         config.jobs.times do
           @workers += 1
@@ -72,7 +69,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def handle(message)
         type, payload = message.type, message.payload
         method = MAP.fetch(type) do
@@ -86,7 +82,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def receive_loop
         handle(mailbox.receiver.call) until @workers.zero? && @stop
       end
@@ -98,7 +93,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def handle_status(sender)
         status = Status.new(
           payload:     sink.status,
@@ -115,7 +109,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def handle_result(job_result)
         @active_jobs.delete(job_result.job)
         sink.result(job_result.payload)
@@ -128,7 +121,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def handle_stop(sender)
         @stop = true
         receive_loop
@@ -142,7 +134,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def handle_ready(sender)
         if stop_work?
           stop_worker(sender)
@@ -159,6 +150,7 @@ module Mutant
       #
       # @return [nil]
       #
+      # @api private
       def next_job
         Job.new(
           index:   @index,
@@ -176,7 +168,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def stop_worker(sender)
         @workers -= 1
         sender.call(Actor::Message.new(:stop))
@@ -187,7 +178,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def stop_work?
         @stop || !source.next? || sink.stop?
       end
@@ -197,7 +187,6 @@ module Mutant
       # @return [Source]
       #
       # @api private
-      #
       def source
         config.source
       end
@@ -207,7 +196,6 @@ module Mutant
       # @return [Sink]
       #
       # @api private
-      #
       def sink
         config.sink
       end

@@ -12,7 +12,6 @@ module Mutant
       # @return [Parser::AST::Node]
       #
       # @api private
-      #
       def root(node)
         nesting.reverse.reduce(node) do |current, scope|
           self.class.wrap(scope, current)
@@ -24,7 +23,6 @@ module Mutant
       # @return [String]
       #
       # @api private
-      #
       def identification
         scope.name
       end
@@ -41,7 +39,6 @@ module Mutant
       #   if scope is of kind module
       #
       # @api private
-      #
       def self.wrap(scope, node)
         name = s(:const, nil, scope.name.split(NAMESPACE_DELIMITER).last.to_sym)
         case scope
@@ -59,7 +56,6 @@ module Mutant
       # @return [Enumerable<Class,Module>]
       #
       # @api private
-      #
       def nesting
         const = ::Object
         name_nesting.each_with_object([]) do |name, nesting|
@@ -74,7 +70,6 @@ module Mutant
       # @return [String]
       #
       # @api private
-      #
       def unqualified_name
         name_nesting.last
       end
@@ -84,7 +79,6 @@ module Mutant
       # @return [Enumerable<Expression>]
       #
       # @api private
-      #
       def match_expressions
         name_nesting.each_index.reverse_each.map do |index|
           Expression::Namespace::Recursive.new(
@@ -99,7 +93,6 @@ module Mutant
       # @return [::Module|::Class]
       #
       # @api private
-      #
       attr_reader :scope
 
     private
@@ -109,7 +102,6 @@ module Mutant
       # @return [Array<String>]
       #
       # @api private
-      #
       def name_nesting
         scope.name.split(NAMESPACE_DELIMITER)
       end

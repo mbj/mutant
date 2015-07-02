@@ -10,7 +10,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def mutations
       mutations = [neutral_mutation]
       Mutator.each(node) do |mutant|
@@ -25,7 +24,6 @@ module Mutant
     # @return [String]
     #
     # @api private
-    #
     def source_path
       context.source_path
     end
@@ -35,7 +33,6 @@ module Mutant
     # @return [self]
     #
     # @api private
-    #
     def prepare
       self
     end
@@ -45,7 +42,6 @@ module Mutant
     # @return [Range<Fixnum>]
     #
     # @api private
-    #
     def source_lines
       expression = node.location.expression
       expression.line..expression.source_buffer.decompose_position(expression.end_pos).first
@@ -57,7 +53,6 @@ module Mutant
     # @return [Fixnum]
     #
     # @api private
-    #
     def source_line
       source_lines.begin
     end
@@ -67,7 +62,6 @@ module Mutant
     # @return [String]
     #
     # @api private
-    #
     def identification
       "#{expression.syntax}:#{source_path}:#{source_line}"
     end
@@ -78,7 +72,6 @@ module Mutant
     # @return [String]
     #
     # @api private
-    #
     def source
       Unparser.unparse(wrap_node(node))
     end
@@ -89,7 +82,6 @@ module Mutant
     # @return [Expression]
     #
     # @api private
-    #
     abstract_method :expression
 
     # Return match expressions
@@ -97,7 +89,6 @@ module Mutant
     # @return [Enumerable<Expression>]
     #
     # @api private
-    #
     abstract_method :match_expressions
 
   private
@@ -107,7 +98,6 @@ module Mutant
     # @return [Mutation::Neutral]
     #
     # @api private
-    #
     def neutral_mutation
       Mutation::Neutral.new(self, wrap_node(node))
     end
@@ -119,7 +109,6 @@ module Mutant
     # @return [Parser::AST::Node]
     #
     # @api private
-    #
     def wrap_node(node)
       node
     end

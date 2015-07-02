@@ -25,7 +25,6 @@ module Mutant
       # @return [String]
       #
       # @api private
-      #
       def syntax
         [scope_name, scope_symbol, method_name].join
       end
@@ -38,7 +37,6 @@ module Mutant
       # @return [Matcher]
       #
       # @api private
-      #
       def matcher(env)
         methods_matcher = MATCHERS.fetch(scope_symbol).new(env, scope)
 
@@ -52,7 +50,6 @@ module Mutant
       # @return [Class, Method]
       #
       # @api private
-      #
       def scope
         Object.const_get(scope_name)
       end

@@ -9,7 +9,6 @@ module Mutant
       # @return [Actor::Sender]
       #
       # @api private
-      #
       def spawn
         mailbox = new_mailbox
 
@@ -25,7 +24,6 @@ module Mutant
       # @return [Mailbox]
       #
       # @api private
-      #
       def new_mailbox
         Mailbox.new
       end

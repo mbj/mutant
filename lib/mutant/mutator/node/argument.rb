@@ -17,7 +17,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def dispatch
           emit_name_mutation
         end
@@ -27,7 +26,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def emit_name_mutation
           return if skip?
           Mutator::Util::Symbol.each(name, self) do |name|
@@ -40,7 +38,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def skip?
           name.to_s.start_with?(UNDERSCORE)
         end
@@ -59,7 +56,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def dispatch
             emit_name_mutation
             emit_required_mutation
@@ -71,7 +67,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def emit_required_mutation
             emit(s(:arg, name))
           end

@@ -8,7 +8,6 @@ module Mutant
       # @return [Verification]
       #
       # @api private
-      #
       def verification
         Verification.new(self, generated)
       end
@@ -18,7 +17,6 @@ module Mutant
       # @return [String]
       #
       # @api private
-      #
       def source
         Unparser.unparse(node)
       end
@@ -29,7 +27,6 @@ module Mutant
       # @return [Enumerable<Mutant::Mutation>]
       #
       # @api private
-      #
       def generated
         Mutator.each(node).map do |node|
           Mutation::Evil.new(self, node)
@@ -46,7 +43,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def success?
           unparser.success? && missing.empty? && unexpected.empty? && no_diffs.empty?
         end
@@ -56,7 +52,6 @@ module Mutant
         # @return [String]
         #
         # @api private
-        #
         def error_report
           unless unparser.success?
             return unparser.report
@@ -71,7 +66,6 @@ module Mutant
         # @return [Array<Parser::AST::Node>]
         #
         # @api private
-        #
         def unexpected
           mutations.map(&:node) - example.mutations
         end
@@ -82,7 +76,6 @@ module Mutant
         # @return [Enumerable<Mutation>]
         #
         # @api private
-        #
         def no_diffs
           mutations.select { |mutation| mutation.source.eql?(example.source) }
         end
@@ -93,7 +86,6 @@ module Mutant
         # @return [String]
         #
         # @api private
-        #
         def mutation_report
           original_node = example.node
           [
@@ -112,7 +104,6 @@ module Mutant
         # @return [Array, nil]
         #
         # @api private
-        #
         def missing_report
           [
             'Missing mutations:',
@@ -125,7 +116,6 @@ module Mutant
         # @return [Array, nil]
         #
         # @api private
-        #
         def no_diff_report
           [
             'No source diffs to original:',
@@ -140,7 +130,6 @@ module Mutant
         # @return [Array, nil]
         #
         # @api private
-        #
         def unexpected_report
           [
             'Unexpected mutations:',
@@ -153,7 +142,6 @@ module Mutant
         # @return [String]
         #
         # @api private
-        #
         def format_mutation(node)
           [
             node.inspect,
@@ -166,7 +154,6 @@ module Mutant
         # @return [Array<Parser::AST::Node>]
         #
         # @api private
-        #
         def missing
           example.mutations - mutations.map(&:node)
         end
@@ -177,7 +164,6 @@ module Mutant
         # @return [Unparser::CLI::Source]
         #
         # @api private
-        #
         def unparser
           Unparser::CLI::Source::Node.new(Unparser::Preprocessor.run(example.node))
         end

@@ -8,7 +8,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def initialize
         @registry = {}
       end
@@ -21,10 +20,9 @@ module Mutant
       # @param [Symbol] type
       # @param [Class:Mutator] mutator
       #
-      # @api private
-      #
       # @return [self]
       #
+      # @api private
       def register(type, mutator)
         fail RegistryError, "Invalid type registration: #{type}" unless AST::Types::ALL.include?(type)
         fail RegistryError, "Duplicate type registration: #{type}" if @registry.key?(type)
@@ -42,7 +40,6 @@ module Mutant
       #   raises argument error when mutator class cannot be found
       #
       # @api private
-      #
       def lookup(node)
         type = node.type
         @registry.fetch(type) do

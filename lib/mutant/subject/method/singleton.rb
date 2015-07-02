@@ -12,7 +12,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def public?
           scope.singleton_class.public_method_defined?(name)
         end
@@ -23,7 +22,6 @@ module Mutant
         # @return [self]
         #
         # @api private
-        #
         def prepare
           scope.singleton_class.__send__(:undef_method, name)
           self

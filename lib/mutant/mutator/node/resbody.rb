@@ -15,7 +15,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def dispatch
           emit_assignment(nil)
           emit_body_mutations if body
@@ -27,7 +26,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def mutate_captures
           return unless captures
           Util::Array::Element.each(captures.children, self) do |matchers|

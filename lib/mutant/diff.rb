@@ -16,7 +16,6 @@ module Mutant
     #   otherwise
     #
     # @api private
-    #
     def diff
       return if diffs.empty?
 
@@ -35,7 +34,6 @@ module Mutant
     #   otherwise
     #
     # @api private
-    #
     def colorized_diff
       return unless diff
       diff.lines.map(&self.class.method(:colorize_line)).join
@@ -50,7 +48,6 @@ module Mutant
     # @return [Diff]
     #
     # @api private
-    #
     def self.build(old, new)
       new(lines(old), lines(new))
     end
@@ -62,7 +59,6 @@ module Mutant
     # @return [Array<String>]
     #
     # @api private
-    #
     def self.lines(source)
       source.lines.map(&:chomp)
     end
@@ -75,7 +71,6 @@ module Mutant
     # @return [Array<Array>]
     #
     # @api private
-    #
     def diffs
       ::Diff::LCS.diff(old, new)
     end
@@ -85,7 +80,6 @@ module Mutant
     # @return [Array<Diff::LCS::Hunk>]
     #
     # @api private
-    #
     def hunks
       diffs.map do |diff|
         ::Diff::LCS::Hunk.new(old, new, diff, max_length, 0)
@@ -97,7 +91,6 @@ module Mutant
     # @return [Array<Diff::LCS::Hunk>]
     #
     # @api private
-    #
     def minimized_hunks
       head, *tail = hunks
 
@@ -116,7 +109,6 @@ module Mutant
     # @return [Fixnum]
     #
     # @api private
-    #
     def max_length
       [old, new].map(&:length).max
     end
@@ -128,7 +120,6 @@ module Mutant
     # @return [String]
     #
     # @api private
-    #
     def self.colorize_line(line)
       case line[0]
       when ADDITION

@@ -12,7 +12,6 @@ module Mutant
         # @return [String]
         #
         # @api private
-        #
         abstract_method :start
 
         # Return progress representation
@@ -22,7 +21,6 @@ module Mutant
         # @return [String]
         #
         # @api private
-        #
         abstract_method :progress
 
         # Return report delay in seconds
@@ -30,7 +28,6 @@ module Mutant
         # @return [Float]
         #
         # @api private
-        #
         def delay
           self.class::REPORT_DELAY
         end
@@ -44,7 +41,6 @@ module Mutant
           # @return [Boolean]
           #
           # @api private
-          #
           def tty?
             @tty
           end
@@ -66,7 +62,6 @@ module Mutant
         # @return [String]
         #
         # @api private
-        #
         def format(printer, object)
           buffer = new_buffer
           printer.call(Output.new(tty, buffer), object)
@@ -85,7 +80,6 @@ module Mutant
           # @return [String]
           #
           # @api private
-          #
           def start(env)
             format(Printer::Config, env.config)
           end
@@ -95,7 +89,6 @@ module Mutant
           # @return [String]
           #
           # @api private
-          #
           def progress(status)
             format(Printer::StatusProgressive, status)
           end
@@ -107,7 +100,6 @@ module Mutant
           # @return [StringIO]
           #
           # @api private
-          #
           def new_buffer
             StringIO.new
           end
@@ -130,7 +122,6 @@ module Mutant
           # @return [String]
           #
           # @api private
-          #
           def start(_env)
             tput.prepare
           end
@@ -142,7 +133,6 @@ module Mutant
           # @return [String]
           #
           # @api private
-          #
           def progress(status)
             format(Printer::Status, status)
           end
@@ -154,7 +144,6 @@ module Mutant
           # @return [StringIO]
           #
           # @api private
-          #
           def new_buffer
             # For some reason this raises an Ernno::EACCESS errror:
             #

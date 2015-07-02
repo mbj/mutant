@@ -13,7 +13,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def each(&block)
         return to_enum unless block_given?
 
@@ -29,7 +28,6 @@ module Mutant
       # @return [Class:Matcher::Method]
       #
       # @api private
-      #
       def matcher
         self.class::MATCHER
       end
@@ -39,7 +37,6 @@ module Mutant
       # @return [Enumerable<Method, UnboundMethod>]
       #
       # @api private
-      #
       def methods
         candidate_names.each_with_object([]) do |name, methods|
           method = access(name)
@@ -53,7 +50,6 @@ module Mutant
       # @return [Array<Subject>]
       #
       # @api private
-      #
       def subjects
         methods.map do |method|
           matcher.build(env, scope, method)
@@ -66,7 +62,6 @@ module Mutant
       # @return [Enumerable<Symbol>]
       #
       # @api private
-      #
       def candidate_names
         (
           candidate_scope.public_instance_methods(false)   +
@@ -80,7 +75,6 @@ module Mutant
       # @return [Class, Module]
       #
       # @api private
-      #
       abstract_method :candidate_scope
 
       # Matcher for singleton methods
@@ -96,7 +90,6 @@ module Mutant
         # @return [Method]
         #
         # @api private
-        #
         def access(method_name)
           scope.method(method_name)
         end
@@ -106,7 +99,6 @@ module Mutant
         # @return [Class]
         #
         # @api private
-        #
         def candidate_scope
           scope.singleton_class
         end
@@ -127,7 +119,6 @@ module Mutant
         # @return [UnboundMethod]
         #
         # @api private
-        #
         def access(method_name)
           scope.instance_method(method_name)
         end
@@ -137,7 +128,6 @@ module Mutant
         # @return [Class, Module]
         #
         # @api private
-        #
         def candidate_scope
           scope
         end

@@ -18,7 +18,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def each
         return to_enum unless block_given?
 
@@ -36,7 +35,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def skip?
         location = source_location
         if location.nil? || BLACKLIST.match(location.first)
@@ -55,7 +53,6 @@ module Mutant
       # @return [String]
       #
       # @api private
-      #
       def method_name
         target_method.name
       end
@@ -65,7 +62,6 @@ module Mutant
       # @return [Context::Scope]
       #
       # @api private
-      #
       def context
         Context::Scope.new(scope, source_path)
       end
@@ -75,7 +71,6 @@ module Mutant
       # @return [Parser::AST::Node]
       #
       # @api private
-      #
       def ast
         env.cache.parse(source_path)
       end
@@ -85,7 +80,6 @@ module Mutant
       # @return [String]
       #
       # @api private
-      #
       def source_path
         source_location.first
       end
@@ -95,7 +89,6 @@ module Mutant
       # @return [Integer]
       #
       # @api private
-      #
       def source_line
         source_location.last
       end
@@ -105,7 +98,6 @@ module Mutant
       # @return [Array]
       #
       # @api private
-      #
       def source_location
         target_method.source_location
       end
@@ -119,7 +111,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def subject
         node = matched_node_path.last
         return unless node
@@ -132,7 +123,6 @@ module Mutant
       # @return [Array<Parser::AST::Node>]
       #
       # @api private
-      #
       def matched_node_path
         AST.find_last_path(ast, &method(:match?))
       end

@@ -19,7 +19,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def self.define_named_child(name, index)
         super
 
@@ -40,7 +39,6 @@ module Mutant
       # @return [Parser::AST::Node]
       #
       # @api private
-      #
       alias_method :node, :input
 
       # Return duplicated node
@@ -48,7 +46,6 @@ module Mutant
       # @return [Parser::AST::Node]
       #
       # @api private
-      #
       alias_method :dup_node, :dup_input
 
       # Return children
@@ -56,7 +53,6 @@ module Mutant
       # @return [Array<Parser::AST::Node>]
       #
       # @api private
-      #
       def children
         node.children
       end
@@ -68,7 +64,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def mutate_child(index, mutator = Mutator, &block)
         block ||= TAUTOLOGY
         child = children.at(index)
@@ -85,7 +80,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def delete_child(index)
         dup_children = children.dup
         dup_children.delete_at(index)
@@ -100,7 +94,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def emit_child_update(index, node)
         new_children = children.dup
         new_children[index] = node
@@ -114,7 +107,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def emit_type(*children)
         emit(Parser::AST::Node.new(node.type, children))
       end
@@ -124,7 +116,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def emit_singletons
         emit_nil
         emit_self
@@ -135,7 +126,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def emit_self
         emit(N_SELF)
       end
@@ -145,7 +135,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def emit_nil
         emit(N_NIL) unless asgn_left?
       end
@@ -157,7 +146,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def emit_values(values)
         values.each do |value|
           emit_type(value)
@@ -173,7 +161,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def parent_node
         parent.node if parent
       end
@@ -187,7 +174,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def parent_type
         parent_node.type if parent_node
       end
@@ -197,7 +183,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def asgn_left?
         AST::Types::OP_ASSIGN.include?(parent_type) && parent.node.children.first.equal?(node)
       end
@@ -209,7 +194,6 @@ module Mutant
       # @return [Enumerable<Fixnum>]
       #
       # @api private
-      #
       def children_indices(range)
         range_end = range.end
         last_index = range_end >= 0 ? range_end : children.length + range_end

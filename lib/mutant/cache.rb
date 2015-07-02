@@ -8,7 +8,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def initialize
       @cache = {}
     end
@@ -20,7 +19,6 @@ module Mutant
     # @return [AST::Node]
     #
     # @api private
-    #
     def parse(path)
       @cache.fetch(path) do
         @cache[path] = Parser::CurrentRuby.parse(File.read(path))

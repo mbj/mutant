@@ -25,7 +25,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def each(&block)
         return to_enum unless block_given?
         matcher.select(&predicate.method(:call)).each(&block)

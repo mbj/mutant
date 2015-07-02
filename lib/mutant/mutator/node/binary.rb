@@ -20,7 +20,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def dispatch
           emit_singletons
           emit(left)
@@ -36,7 +35,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def mutate_operator
           emit(s(INVERSE.fetch(node.type), left, right))
         end
@@ -46,7 +44,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def mutate_operands
           emit(s(node.type, n_not(left), right))
           emit(n_not(node))

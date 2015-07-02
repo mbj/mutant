@@ -11,7 +11,6 @@ module Mutant
       # @return [Object]
       #
       # @api private
-      #
       def status
         binding.call(__method__)
       end
@@ -21,7 +20,6 @@ module Mutant
       # @return [self]
       #
       # @api private
-      #
       def stop
         binding.call(__method__)
         self
@@ -33,7 +31,6 @@ module Mutant
     # @return [Driver]
     #
     # @api private
-    #
     def self.async(config)
       Driver.new(config.env.new_mailbox.bind(Master.call(config)))
     end
@@ -49,7 +46,6 @@ module Mutant
       # @return [self]
       #
       # @api private
-      #
       abstract_method :result
 
       # Return status
@@ -57,7 +53,6 @@ module Mutant
       # @return [Object]
       #
       # @api private
-      #
       abstract_method :status
 
       # Test if processing should stop
@@ -65,7 +60,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       abstract_method :stop?
     end # Sink
 

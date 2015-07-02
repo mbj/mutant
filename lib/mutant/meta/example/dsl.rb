@@ -11,7 +11,6 @@ module Mutant
         # @return [Example]
         #
         # @api private
-        #
         def self.run(file, block)
           instance = new(file)
           instance.instance_eval(&block)
@@ -23,7 +22,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def initialize(file)
           @file = file
           @source = nil
@@ -38,7 +36,6 @@ module Mutant
         #   in case example cannot be build
         #
         # @api private
-        #
         def example
           fail 'source not defined' unless @source
           Example.new(@file, @source, @expected)
@@ -53,7 +50,6 @@ module Mutant
         # @return [self]
         #
         # @api private
-        #
         def source(input)
           fail 'source already defined' if @source
           @source = node(input)
@@ -68,7 +64,6 @@ module Mutant
         # @return [self]
         #
         # @api private
-        #
         def mutation(input)
           node = node(input)
           if @expected.include?(node)
@@ -84,7 +79,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def singleton_mutations
           mutation('nil')
           mutation('self')
@@ -100,7 +94,6 @@ module Mutant
         #   in case input cannot be coerced
         #
         # @api private
-        #
         def node(input)
           case input
           when String

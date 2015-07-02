@@ -9,7 +9,6 @@ module Mutant
       # @return [Trace]
       #
       # @api private
-      #
       def self.new
         super(Hash[anima.attribute_names.map { |name| [name, []] }])
       end
@@ -28,7 +27,6 @@ module Mutant
       # @return [Float]
       #
       # @api private
-      #
       def delay
         REPORT_DELAY
       end

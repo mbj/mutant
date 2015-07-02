@@ -17,7 +17,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def dispatch
           mutate_body
           mutate_rescue_bodies
@@ -31,7 +30,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def mutate_rescue_bodies
           children_indices(RESCUE_INDICES).each do |index|
             rescue_body = children.at(index)
@@ -49,7 +47,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def emit_concat(child)
           if body
             emit(s(:begin, body, child))
@@ -63,7 +60,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def mutate_body
           return unless body
           emit_body_mutations
@@ -75,7 +71,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def mutate_else_body
           return unless else_body
           emit_else_body_mutations

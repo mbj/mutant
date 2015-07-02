@@ -10,7 +10,6 @@ module Mutant
     # @return [Parser::AST::Node]
     #
     # @api private
-    #
     abstract_method :root
 
     # Return identification
@@ -18,7 +17,6 @@ module Mutant
     # @return [String]
     #
     # @api private
-    #
     abstract_method :identification
 
   end # Context

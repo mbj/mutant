@@ -12,7 +12,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def initialize(target)
       @target   = target
       @warnings = []
@@ -23,7 +22,6 @@ module Mutant
     # @return [Array<String>]
     #
     # @api private
-    #
     attr_reader :warnings
 
     # Return target
@@ -33,7 +31,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     attr_reader :target
     protected :target
 
@@ -44,7 +41,6 @@ module Mutant
     # @return [self]
     #
     # @api private
-    #
     def write(message)
       if WARNING_PATTERN =~ message
         warnings << message
@@ -60,7 +56,6 @@ module Mutant
     # @return [Array<String>]
     #
     # @api private
-    #
     def self.use
       original = $stderr
       $stderr = filter = new(original)

@@ -15,7 +15,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def dispatch
           emit_singletons
           emit(send)
@@ -30,7 +29,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def mutate_body
           emit_body(nil)
           emit_body(N_RAISE)

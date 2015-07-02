@@ -28,7 +28,6 @@ module Mutant
         # @return [String]
         #
         # @api private
-        #
         def syntax
           "#{scope_name}*"
         end
@@ -41,7 +40,6 @@ module Mutant
         # @return [Matcher]
         #
         # @api private
-        #
         def matcher(env)
           Matcher::Namespace.new(env, self)
         end
@@ -53,7 +51,6 @@ module Mutant
         # @return [Fixnum]
         #
         # @api private
-        #
         def match_length(expression)
           if @recursion_pattern =~ expression.syntax
             scope_name.length
@@ -79,7 +76,6 @@ module Mutant
         # @return [Matcher]
         #
         # @api private
-        #
         def matcher(env)
           Matcher::Scope.new(env, Object.const_get(scope_name), self)
         end

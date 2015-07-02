@@ -15,7 +15,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def dispatch
             emit_singletons
           end

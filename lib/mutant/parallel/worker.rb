@@ -11,7 +11,6 @@ module Mutant
       # @return [self]
       #
       # @api private
-      #
       def self.run(attributes)
         new(attributes).run
         self
@@ -23,10 +22,9 @@ module Mutant
       #
       # @return [self]
       #
-      # @api private
-      #
       # rubocop:disable Lint/Loop
       #
+      # @api private
       def run
         begin
           parent.call(Actor::Message.new(:ready, mailbox.sender))
@@ -42,7 +40,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def handle(message)
         type, payload = message.type, message.payload
         case message.type
@@ -63,7 +60,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def handle_job(job)
         result = processor.call(job.payload)
         parent.call(Actor::Message.new(:result, JobResult.new(job: job, payload: result)))

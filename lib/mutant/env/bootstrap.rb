@@ -13,7 +13,6 @@ module Mutant
       # @return [Enumerable<Matcher::Scope>]
       #
       # @api private
-      #
       attr_reader :matchable_scopes
 
       # Return new bootstrap env
@@ -21,7 +20,6 @@ module Mutant
       # @return [Env]
       #
       # @api private
-      #
       def self.new(_config, _cache = Cache.new)
         super
       end
@@ -31,7 +29,6 @@ module Mutant
       # @return [Object]
       #
       # @api private
-      #
       def initialize(*)
         super
         infect
@@ -45,7 +42,6 @@ module Mutant
       # @return [self]
       #
       # @api private
-      #
       def warn(message)
         config.reporter.warn(message)
         self
@@ -56,7 +52,6 @@ module Mutant
       # @return [Env]
       #
       # @api private
-      #
       # rubocop:disable MethodLength
       #
       def env
@@ -86,7 +81,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def scope_name(scope)
         scope.name
       rescue => exception
@@ -99,7 +93,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def infect
         config.includes.each(&$LOAD_PATH.method(:<<))
         config.requires.each(&method(:require))
@@ -111,7 +104,6 @@ module Mutant
       # @return [Enumerable<Subject>]
       #
       # @api private
-      #
       def matched_subjects
         Matcher::Compiler.call(self, config.matcher).to_a
       end
@@ -121,7 +113,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def initialize_matchable_scopes
         scopes = ObjectSpace.each_object(Module).each_with_object([]) do |scope, aggregate|
           expression = expression(scope)
@@ -142,7 +133,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def expression(scope)
         name = scope_name(scope) or return
 

@@ -21,7 +21,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def run
             status(
               FORMAT,
@@ -41,7 +40,6 @@ module Mutant
           # @return [Result::Env]
           #
           # @api private
-          #
           def object
             super.payload
           end

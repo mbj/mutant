@@ -14,7 +14,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def dispatch
             emit_singletons
             emit_values(values)
@@ -32,7 +31,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def emit_special_cases
             SPECIAL.each(&method(:emit))
           end
@@ -42,7 +40,6 @@ module Mutant
           # @return [Array]
           #
           # @api private
-          #
           def values
             original = children.first
             # Work around a bug in RBX/MRI or JRUBY:

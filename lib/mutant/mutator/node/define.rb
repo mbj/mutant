@@ -11,7 +11,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def dispatch
           emit_arguments_mutations
           emit_body(N_RAISE)

@@ -12,7 +12,6 @@ module Mutant
       # @return [self]
       #
       # @api private
-      #
       def call(message)
         mutex.synchronize do
           messages << message

@@ -18,7 +18,6 @@ module Mutant
       # @return [Config]
       #
       # @api private
-      #
       def add(attribute, value)
         update(attribute => public_send(attribute).dup << value)
       end

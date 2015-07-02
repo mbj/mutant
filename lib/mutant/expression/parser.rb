@@ -24,7 +24,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def call(input)
         try_parse(input) or fail InvalidExpressionError, "Expression: #{input.inspect} is not valid"
       end
@@ -40,7 +39,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def try_parse(input)
         expressions = expressions(input)
         case expressions.length
@@ -61,7 +59,6 @@ module Mutant
       #   if expressions can be parsed from input
       #
       # @api private
-      #
       def expressions(input)
         types.each_with_object([]) do |type, aggregate|
           expression = type.try_parse(input)

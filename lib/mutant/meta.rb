@@ -14,7 +14,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def self.add(&block)
         file = caller.first.split(':in', 2).first
         ALL << DSL.run(file, block)

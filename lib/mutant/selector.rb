@@ -10,7 +10,6 @@ module Mutant
     # @return [Enumerable<Test>]
     #
     # @api private
-    #
     abstract_method :call
 
   end # Selector

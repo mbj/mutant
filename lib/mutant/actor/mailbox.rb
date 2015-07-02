@@ -9,7 +9,6 @@ module Mutant
       # @return [Mailbox]
       #
       # @api private
-      #
       def self.new
         mutex              = Mutex.new
         condition_variable = ConditionVariable.new
@@ -28,7 +27,6 @@ module Mutant
       # @return [Binding]
       #
       # @api private
-      #
       def bind(other)
         Binding.new(self, other)
       end
