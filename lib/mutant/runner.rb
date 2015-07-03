@@ -27,9 +27,9 @@ module Mutant
 
     # Run mutation analysis
     #
-    #  @return [undefined]
+    # @return [undefined]
     #
-    #  @api private
+    # @api private
     def run_mutation_analysis
       @result = run_driver(Parallel.async(mutation_test_config))
       reporter.report(@result)

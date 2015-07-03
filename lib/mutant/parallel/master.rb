@@ -39,6 +39,8 @@ module Mutant
       #
       # rubocop:disable MethodLength
       #
+      # @return [undefined]
+      #
       # @api private
       def run
         config.jobs.times do
