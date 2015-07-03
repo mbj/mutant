@@ -3,7 +3,7 @@ module Mutant
   class Selector
     include AbstractType, Adamantium::Flat
 
-    # Return tests for subject
+    # Tests for subject
     #
     # @param [Subject] subjecto
     #

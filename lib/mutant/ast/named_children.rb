@@ -23,7 +23,7 @@ module Mutant
 
       private
 
-        # Return children
+        # Mutated nodes children
         #
         # @return [Array<Parser::AST::Node]
         #

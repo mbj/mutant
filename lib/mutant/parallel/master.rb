@@ -143,7 +143,7 @@ module Mutant
         sender.call(Actor::Message.new(:job, next_job))
       end
 
-      # Return next job if any
+      # Next job if any
       #
       # @return [Job]
       #   if next job is available
@@ -182,7 +182,7 @@ module Mutant
         @stop || !source.next? || sink.stop?
       end
 
-      # Return source
+      # Job source
       #
       # @return [Source]
       #
@@ -191,7 +191,7 @@ module Mutant
         config.source
       end
 
-      # Return sink
+      # Job result sink
       #
       # @return [Sink]
       #

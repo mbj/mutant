@@ -45,7 +45,7 @@ module Mutant
           mutate_child(body_index)
         end
 
-        # Return body node
+        # Body node
         #
         # @return [Parser::AST::Node]
         #   if body is present
@@ -58,7 +58,7 @@ module Mutant
           children[body_index]
         end
 
-        # Return body index
+        # Index of body node
         #
         # @return [Fixnum]
         #

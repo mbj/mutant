@@ -37,7 +37,7 @@ module Mutant
             end
           end
 
-          # Return active subject results
+          # Active subject results
           #
           # @return [Array<Result::Subject>]
           #

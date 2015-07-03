@@ -29,7 +29,7 @@ module Mutant
             emit_upper_bound_mutations
           end
 
-          # Return inverse node
+          # Inverse node
           #
           # @return [Parser::AST::Node]
           #

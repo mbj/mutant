@@ -19,7 +19,7 @@ module Mutant
             emit_values(values)
           end
 
-          # Return values to mutate against
+          # Values to mutate to
           #
           # @return [Array]
           #
@@ -28,7 +28,7 @@ module Mutant
             [0, 1, -value, value + 1, value - 1]
           end
 
-          # Return value
+          # Literal original value
           #
           # @return [Object]
           #

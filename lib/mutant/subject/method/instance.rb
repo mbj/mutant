@@ -44,7 +44,7 @@ module Mutant
 
         private
 
-          # Return memoizer node for mutant
+          # Memoizer node for mutant
           #
           # @param [Parser::AST::Node] mutant
           #

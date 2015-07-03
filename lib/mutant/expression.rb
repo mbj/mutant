@@ -10,14 +10,14 @@ module Mutant
 
     private_constant(*constants(false))
 
-    # Return syntax representing this expression
+    # Syntax of expression
     #
     # @return [String]
     #
     # @api private
     abstract_method :syntax
 
-    # Return match length for expression
+    # Match length with other expression
     #
     # @param [Expression] other
     #

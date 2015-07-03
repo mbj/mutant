@@ -3,7 +3,7 @@ module Mutant
     class Example
       include Adamantium, Concord::Public.new(:file, :node, :mutations)
 
-      # Return a verification instance
+      # Verification instance for example
       #
       # @return [Verification]
       #
@@ -12,7 +12,7 @@ module Mutant
         Verification.new(self, generated)
       end
 
-      # Return source
+      # Normalized source
       #
       # @return [String]
       #
@@ -22,7 +22,7 @@ module Mutant
       end
       memoize :source
 
-      # Return generated mutations
+      # Generated mutations on example source
       #
       # @return [Enumerable<Mutant::Mutation>]
       #
@@ -47,7 +47,7 @@ module Mutant
           unparser.success? && missing.empty? && unexpected.empty? && no_diffs.empty?
         end
 
-        # Return error report
+        # Error report
         #
         # @return [String]
         #
@@ -61,7 +61,7 @@ module Mutant
 
       private
 
-        # Return unexpected mutations
+        # Unexpected mutations
         #
         # @return [Array<Parser::AST::Node>]
         #
@@ -71,7 +71,7 @@ module Mutant
         end
         memoize :unexpected
 
-        # Return mutations with no diff to original
+        # Mutations with no diff to original
         #
         # @return [Enumerable<Mutation>]
         #
@@ -81,7 +81,7 @@ module Mutant
         end
         memoize :no_diffs
 
-        # Return mutation report
+        # Mutation report
         #
         # @return [String]
         #
@@ -99,7 +99,7 @@ module Mutant
           ].join("\n======\n")
         end
 
-        # Return missing report
+        # Missing mutation report
         #
         # @return [Array, nil]
         #
@@ -111,7 +111,7 @@ module Mutant
           ] if missing.any?
         end
 
-        # Return no diff report
+        # No diff mutation report
         #
         # @return [Array, nil]
         #
@@ -125,7 +125,7 @@ module Mutant
           ] if no_diffs.any?
         end
 
-        # Return unexpected report
+        # Unexpected mutation report
         #
         # @return [Array, nil]
         #
@@ -149,7 +149,7 @@ module Mutant
           ].join("\n")
         end
 
-        # Return missing mutations
+        # Missing mutations
         #
         # @return [Array<Parser::AST::Node>]
         #
@@ -159,7 +159,7 @@ module Mutant
         end
         memoize :missing
 
-        # Return unparser verifier
+        # Unparser verifier
         #
         # @return [Unparser::CLI::Source]
         #

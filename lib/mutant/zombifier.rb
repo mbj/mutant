@@ -112,7 +112,7 @@ module Mutant
       )
     end
 
-    # Return namespaced root
+    # Namespaced root node
     #
     # @param [Symbol] namespace
     #

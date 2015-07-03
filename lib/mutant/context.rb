@@ -3,7 +3,7 @@ module Mutant
   class Context
     include Adamantium::Flat, AbstractType, Concord::Public.new(:source_path)
 
-    # Return root ast node
+    # Root ast node
     #
     # @param [Parser::AST::Node] node
     #
@@ -12,7 +12,7 @@ module Mutant
     # @api private
     abstract_method :root
 
-    # Return identification
+    # Identification string
     #
     # @return [String]
     #

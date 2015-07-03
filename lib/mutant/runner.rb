@@ -16,7 +16,7 @@ module Mutant
       run_mutation_analysis
     end
 
-    # Return result
+    # Final result
     #
     # @return [Result::Env]
     #
@@ -58,7 +58,7 @@ module Mutant
       status.payload
     end
 
-    # Return mutation test config
+    # Confiugation for paralell execution engine
     #
     # @return [Parallell::Config]
     #
@@ -73,7 +73,7 @@ module Mutant
       )
     end
 
-    # Return reporter
+    # Reporter to use
     #
     # @return [Reporter]
     #
@@ -82,7 +82,7 @@ module Mutant
       env.config.reporter
     end
 
-    # Return config
+    # Config for this mutant execution
     #
     # @return [Config]
     #

@@ -4,7 +4,7 @@ module Mutant
     class Sink
       include AbstractType
 
-      # Return sink status
+      # sink status
       #
       # @return [Object]
       #
@@ -48,7 +48,7 @@ module Mutant
           end
         end
 
-        # Return runner status
+        # Runner status
         #
         # @return [Status]
         #
@@ -88,7 +88,7 @@ module Mutant
 
       private
 
-        # Return current result
+        # Current result
         #
         # @return [Result::Env]
         #

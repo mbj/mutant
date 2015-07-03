@@ -4,7 +4,7 @@ module Mutant
     include AbstractType, Adamantium::Flat, Enumerable
     include Concord::Public.new(:context, :node)
 
-    # Return mutations
+    # Mutations for this subject
     #
     # @return [Enumerable<Mutation>]
     # @return [undefined]
@@ -19,7 +19,7 @@ module Mutant
     end
     memoize :mutations
 
-    # Return source path
+    # Source path
     #
     # @return [String]
     #
@@ -28,7 +28,7 @@ module Mutant
       context.source_path
     end
 
-    # Prepare the subject for the insertion of mutation
+    # Prepare subject for insertion of mutation
     #
     # @return [self]
     #
@@ -37,7 +37,7 @@ module Mutant
       self
     end
 
-    # Return source lines
+    # Source line range
     #
     # @return [Range<Fixnum>]
     #
@@ -48,7 +48,7 @@ module Mutant
     end
     memoize :source_lines
 
-    # Return source line
+    # First source line
     #
     # @return [Fixnum]
     #
@@ -57,7 +57,7 @@ module Mutant
       source_lines.begin
     end
 
-    # Return subject identification
+    # Identification string
     #
     # @return [String]
     #
@@ -67,7 +67,7 @@ module Mutant
     end
     memoize :identification
 
-    # Return source representation of ast
+    # Source representation of AST
     #
     # @return [String]
     #
@@ -77,14 +77,14 @@ module Mutant
     end
     memoize :source
 
-    # Return match expression
+    # Match expression
     #
     # @return [Expression]
     #
     # @api private
     abstract_method :expression
 
-    # Return match expressions
+    # Match expressions
     #
     # @return [Enumerable<Expression>]
     #
@@ -93,7 +93,7 @@ module Mutant
 
   private
 
-    # Return neutral mutation
+    # Neutral mutation
     #
     # @return [Mutation::Neutral]
     #

@@ -64,7 +64,7 @@ module Mutant
           end
         end
 
-        # Return AST metadata for node
+        # AST metadata for node
         #
         # @return [AST::Meta::Send]
         #
@@ -74,7 +74,7 @@ module Mutant
         end
         memoize :meta
 
-        # Return arguments
+        # Arguments being send
         #
         # @return [Enumerable<Parser::AST::Node>]
         #

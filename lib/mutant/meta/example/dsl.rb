@@ -28,7 +28,7 @@ module Mutant
           @expected = []
         end
 
-        # Return example
+        # Example captured by DSL
         #
         # @return [Example]
         #

@@ -35,7 +35,7 @@ module Mutant
             SPECIAL.each(&method(:emit))
           end
 
-          # Return values to test against
+          # Values to mutate to
           #
           # @return [Array]
           #

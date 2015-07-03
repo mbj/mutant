@@ -34,21 +34,21 @@ module Mutant
 
     private
 
-      # Return mutated node
+      # Node to mutate
       #
       # @return [Parser::AST::Node]
       #
       # @api private
       alias_method :node, :input
 
-      # Return duplicated node
+      # Duplicate of original
       #
       # @return [Parser::AST::Node]
       #
       # @api private
       alias_method :dup_node, :dup_input
 
-      # Return children
+      # Original nodes children
       #
       # @return [Array<Parser::AST::Node>]
       #
@@ -152,7 +152,7 @@ module Mutant
         end
       end
 
-      # Return parent node
+      # Parent node
       #
       # @return [Parser::AST::Node] node
       #   if parent with node is present
@@ -165,7 +165,7 @@ module Mutant
         parent.node if parent
       end
 
-      # Return parent type
+      # Parent type
       #
       # @return [Symbol] type
       #   if parent with type is present
@@ -187,7 +187,7 @@ module Mutant
         AST::Types::OP_ASSIGN.include?(parent_type) && parent.node.children.first.equal?(node)
       end
 
-      # Return children indices
+      # Children indices
       #
       # @param [Range] range
       #

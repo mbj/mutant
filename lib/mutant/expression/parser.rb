@@ -51,7 +51,7 @@ module Mutant
 
     private
 
-      # Return expressions for input
+      # Expressions parsed from input
       #
       # @param [String] input
       #

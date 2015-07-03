@@ -5,7 +5,7 @@ module Mutant
       class Format
         include AbstractType, Anima.new(:tty)
 
-        # Return start representation
+        # Start representation
         #
         # @param [Env] env
         #
@@ -14,7 +14,7 @@ module Mutant
         # @api private
         abstract_method :start
 
-        # Return progress representation
+        # Progress representation
         #
         # @param [Runner::Status] status
         #
@@ -23,7 +23,7 @@ module Mutant
         # @api private
         abstract_method :progress
 
-        # Return report delay in seconds
+        # Report delay in seconds
         #
         # @return [Float]
         #
@@ -75,7 +75,7 @@ module Mutant
           REPORT_FREQUENCY = 1.0
           REPORT_DELAY     = 1 / REPORT_FREQUENCY
 
-          # Return start representation
+          # Start representation
           #
           # @return [String]
           #
@@ -84,7 +84,7 @@ module Mutant
             format(Printer::Config, env.config)
           end
 
-          # Return progress representation
+          # Progress representation
           #
           # @return [String]
           #
@@ -95,7 +95,7 @@ module Mutant
 
         private
 
-          # Return new buffer
+          # New buffer
           #
           # @return [StringIO]
           #
@@ -139,7 +139,7 @@ module Mutant
 
         private
 
-          # Return new buffer
+          # New buffer
           #
           # @return [StringIO]
           #

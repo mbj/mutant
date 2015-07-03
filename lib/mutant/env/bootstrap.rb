@@ -8,14 +8,14 @@ module Mutant
         "Fix your lib to follow normal ruby semantics!\n" \
         '{Module,Class}#name should return resolvable constant name as String or nil'.freeze
 
-      # Return scopes that are eligible for mnatching
+      # Scopes that are eligible for matching
       #
       # @return [Enumerable<Matcher::Scope>]
       #
       # @api private
       attr_reader :matchable_scopes
 
-      # Return new bootstrap env
+      # New bootstrap env
       #
       # @return [Env]
       #
@@ -47,7 +47,7 @@ module Mutant
         self
       end
 
-      # Return environment after bootstraping
+      # Environment after bootstraping
       #
       # @return [Env]
       #
@@ -70,7 +70,7 @@ module Mutant
 
     private
 
-      # Return scope name
+      # Scope name from scopeing object
       #
       # @param [Class, Module] scope
       #
@@ -99,7 +99,7 @@ module Mutant
         @integration = config.integration.new(config).setup
       end
 
-      # Return matched subjects
+      # Matched subjects
       #
       # @return [Enumerable<Subject>]
       #

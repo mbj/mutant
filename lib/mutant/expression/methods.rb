@@ -14,7 +14,7 @@ module Mutant
 
       REGEXP = /\A#{SCOPE_NAME_PATTERN}#{SCOPE_SYMBOL_PATTERN}\z/.freeze
 
-      # Return syntax
+      # Syntax of expression
       #
       # @return [String]
       #
@@ -24,7 +24,7 @@ module Mutant
       end
       memoize :syntax
 
-      # Return method matcher
+      # Matcher on expression
       #
       # @param [Env] env
       #
@@ -35,7 +35,7 @@ module Mutant
         MATCHERS.fetch(scope_symbol).new(env, scope)
       end
 
-      # Return length of match
+      # Length of match with other expression
       #
       # @param [Expression] expression
       #
@@ -52,7 +52,7 @@ module Mutant
 
     private
 
-      # Return scope
+      # Scope object
       #
       # @return [Class, Method]
       #

@@ -5,7 +5,7 @@ module Mutant
     # Coverage mixin
     module Coverage
 
-      # Return coverage
+      # Observed coverage
       #
       # @return [Rational]
       #
@@ -53,7 +53,11 @@ module Mutant
       end
     end # ClassMethods
 
-    # Return overhead
+    # Mutant overhead running mutatet tests
+    #
+    # This is NOT the overhead of mutation testing, just an engine specific
+    # measurement for the efficiency of the parellelization engine, kill
+    # isolation etc.
     #
     # @return [Float]
     #
@@ -90,7 +94,7 @@ module Mutant
       end
       memoize :success?
 
-      # Return failed subject results
+      # Failed subject results
       #
       # @return [Array<Result::Subject>]
       #
@@ -104,7 +108,7 @@ module Mutant
       sum :amount_mutations_killed, :subject_results
       sum :killtime,                :subject_results
 
-      # Return amount of mutations
+      # Amount of mutations
       #
       # @return [Fixnum]
       #
@@ -113,7 +117,7 @@ module Mutant
         env.mutations.length
       end
 
-      # Return amount of subjects
+      # Amount of subjects
       #
       # @return [Fixnum]
       #
@@ -159,7 +163,7 @@ module Mutant
         mutation_results.all?(&:success?)
       end
 
-      # Return killed mutations
+      # Killed mutations
       #
       # @return [Array<Result::Mutation>]
       #
@@ -169,7 +173,7 @@ module Mutant
       end
       memoize :alive_mutation_results
 
-      # Return amount of mutations
+      # Amount of mutations
       #
       # @return [Fixnum]
       #
@@ -178,7 +182,7 @@ module Mutant
         mutation_results.length
       end
 
-      # Return amount of mutations
+      # Amount of mutations
       #
       # @return [Fixnum]
       #
@@ -187,7 +191,7 @@ module Mutant
         subject.mutations.length
       end
 
-      # Return number of killed mutations
+      # Number of killed mutations
       #
       # @return [Fixnum]
       #
@@ -196,7 +200,7 @@ module Mutant
         killed_mutation_results.length
       end
 
-      # Return number of alive mutations
+      # Number of alive mutations
       #
       # @return [Fixnum]
       #
@@ -205,7 +209,7 @@ module Mutant
         alive_mutation_results.length
       end
 
-      # Return alive mutations
+      # Alive mutations
       #
       # @return [Array<Result::Mutation>]
       #
@@ -221,7 +225,7 @@ module Mutant
     class Mutation
       include Result, Anima.new(:mutation, :test_result)
 
-      # Return runtime
+      # The runtime
       #
       # @return [Float]
       #

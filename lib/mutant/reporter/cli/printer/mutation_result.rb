@@ -59,7 +59,7 @@ module Mutant
 
         private
 
-          # Return details
+          # Print mutation details
           #
           # @return [undefined]
           #
@@ -68,7 +68,7 @@ module Mutant
             __send__(MAP.fetch(mutation.class))
           end
 
-          # Return evil details
+          # Evil mutation details
           #
           # @return [String]
           #
@@ -127,7 +127,7 @@ module Mutant
             visit(TestResult, test_result)
           end
 
-          # Return original node
+          # Original node
           #
           # @return [Parser::AST::Node]
           #

@@ -52,7 +52,7 @@ module Mutant
       end
       memoize :setup
 
-      # Return report for test
+      # Run a collection of tests
       #
       # @param [Enumerable<Mutant::Test>] tests
       #
@@ -75,7 +75,7 @@ module Mutant
         )
       end
 
-      # Return all available tests
+      # Available tests
       #
       # @return [Enumerable<Test>]
       #
@@ -87,7 +87,7 @@ module Mutant
 
     private
 
-      # Return all tests index
+      # Index of available tests
       #
       # @return [Hash<Test, RSpec::Core::Example]
       #
@@ -134,7 +134,7 @@ module Mutant
         end
       end
 
-      # Return all examples
+      # Available rspec examples
       #
       # @return [Array<String, RSpec::Core::Example]
       #

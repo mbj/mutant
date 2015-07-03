@@ -12,7 +12,7 @@ module Mutant
       @cache = {}
     end
 
-    # Return node for file
+    # Root node parsed from file
     #
     # @param [#to_s] path
     #

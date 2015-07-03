@@ -4,7 +4,7 @@ module Mutant
     class Mailbox
       include Adamantium::Flat, Concord::Public.new(:receiver, :sender)
 
-      # Return new mailbox
+      # New mailbox
       #
       # @return [Mailbox]
       #
@@ -20,7 +20,7 @@ module Mutant
         )
       end
 
-      # Return binding for RPC to other actors
+      # Binding for RPC to other actors
       #
       # @param [Actor::Sender] other
       #

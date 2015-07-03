@@ -7,7 +7,7 @@ module Mutant
 
         private_class_method :new
 
-        # Return detected tput support
+        # Detected tput support
         #
         # @return [Tput]
         #   if tput support is present

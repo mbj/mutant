@@ -20,7 +20,7 @@ module Mutant
 
       private
 
-        # Return status color
+        # Status color
         #
         # @return [Color]
         #

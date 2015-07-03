@@ -74,7 +74,7 @@ module Mutant
           end
         end
 
-        # Return mlhs childs
+        # Multiple left hand side childs
         #
         # @return [Enumerable<Parser::AST::Node, Fixnum>]
         #

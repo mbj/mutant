@@ -38,7 +38,7 @@ module Mutant
 
         private
 
-          # Return coverage percent
+          # Coverage in percent
           #
           # @return [Float]
           #
@@ -47,7 +47,7 @@ module Mutant
             coverage * 100
           end
 
-          # Return overhead percent
+          # Overhead in percent
           #
           # @return [Float]
           #

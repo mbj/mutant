@@ -5,9 +5,9 @@ module Mutant
     class Compiler
       include Concord.new(:env, :config), AST::Sexp, Procto.call(:result)
 
-      # Return generated matcher
+      # Generated matcher
       #
-      # @return [Mutant::Matcher]
+      # @return [Matcher]
       #
       # @api private
       def result
@@ -34,7 +34,7 @@ module Mutant
 
     private
 
-      # Return predicate
+      # Predicate constraining matches
       #
       # @return [#call]
       #
@@ -56,7 +56,7 @@ module Mutant
         end
       end
 
-      # Return subject selector
+      # the subject selector predicate
       #
       # @return [#call]
       #   if selector is present
@@ -73,7 +73,7 @@ module Mutant
         Morpher::Evaluator::Predicate::Boolean::Or.new(selectors) if selectors.any?
       end
 
-      # Return subject rejector
+      # Subject rejector predicate
       #
       # @return [#call]
       #   if there is a subject rejector
@@ -88,7 +88,7 @@ module Mutant
         Morpher::Evaluator::Predicate::Boolean::Or.new(rejectors) if rejectors.any?
       end
 
-      # Return a matcher from expression
+      # Matcher for expression on env
       #
       # @param [Mutant::Expression] expression
       #

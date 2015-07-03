@@ -23,7 +23,7 @@ module Mutant
           )
         end
 
-        # Return the syntax for this expression
+        # Syntax for expression
         #
         # @return [String]
         #
@@ -33,7 +33,7 @@ module Mutant
         end
         memoize :syntax
 
-        # Return matcher
+        # Matcher for expression
         #
         # @param [Env::Bootstrap] env
         #
@@ -44,7 +44,7 @@ module Mutant
           Matcher::Namespace.new(env, self)
         end
 
-        # Return length of match
+        # Length of match with other expression
         #
         # @param [Expression] expression
         #
@@ -69,7 +69,7 @@ module Mutant
 
         REGEXP  = /\A#{SCOPE_NAME_PATTERN}\z/.freeze
 
-        # Return matcher
+        # Matcher matcher on expression
         #
         # @param [Env::Bootstrap] env
         #
@@ -80,7 +80,7 @@ module Mutant
           Matcher::Scope.new(env, Object.const_get(scope_name), self)
         end
 
-        # Return the syntax for this expression
+        # Syntax for expression
         #
         # @return [String]
         #

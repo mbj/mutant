@@ -20,7 +20,7 @@ module Mutant
 
       REGEXP = /\A#{SCOPE_NAME_PATTERN}#{SCOPE_SYMBOL_PATTERN}#{METHOD_NAME_PATTERN}\z/.freeze
 
-      # Return syntax
+      # Syntax of expression
       #
       # @return [String]
       #
@@ -30,7 +30,7 @@ module Mutant
       end
       memoize :syntax
 
-      # Return method matcher
+      # Matcher for expression
       #
       # @param [Env] env
       #
@@ -45,7 +45,7 @@ module Mutant
 
     private
 
-      # Return scope
+      # Scope object
       #
       # @return [Class, Method]
       #

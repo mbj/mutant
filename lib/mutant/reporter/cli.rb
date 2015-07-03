@@ -46,7 +46,7 @@ module Mutant
         self
       end
 
-      # Return report delay in seconds
+      # Report delay in seconds
       #
       # TODO: Move this to a callback registration
       #

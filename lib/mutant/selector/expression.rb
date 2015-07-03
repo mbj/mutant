@@ -4,7 +4,7 @@ module Mutant
     class Expression < self
       include Concord.new(:integration)
 
-      # Return tests for subject
+      # Tests for subject
       #
       # @param [Subject] subject
       #

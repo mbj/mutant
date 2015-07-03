@@ -6,7 +6,7 @@ module Mutant
 
       NoJobError = Class.new(RuntimeError)
 
-      # Return next job
+      # Next job
       #
       # @return [Object]
       #
@@ -47,7 +47,7 @@ module Mutant
           @next_index < jobs.length
         end
 
-        # Return next job
+        # Next job
         #
         # @return [Object]
         #

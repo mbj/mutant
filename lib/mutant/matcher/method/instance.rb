@@ -48,9 +48,9 @@ module Mutant
 
         private
 
-          # Return source location
+          # Source location
           #
-          # @return [Array]
+          # @return [Array{String,Fixnum}]
           #
           # @api private
           def source_location

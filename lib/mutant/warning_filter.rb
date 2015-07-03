@@ -17,14 +17,14 @@ module Mutant
       @warnings = []
     end
 
-    # Return filtered warnings
+    # Warnings captured by filter
     #
     # @return [Array<String>]
     #
     # @api private
     attr_reader :warnings
 
-    # Return target
+    # Target stream to capture warnings on
     #
     # @return [#write] target
     #

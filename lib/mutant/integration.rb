@@ -51,7 +51,7 @@ module Mutant
       self
     end
 
-    # Return test result for tests
+    # Run a collection of tests
     #
     # @param [Enumerable<Test>] tests
     #
@@ -60,7 +60,7 @@ module Mutant
     # @api private
     abstract_method :call
 
-    # Return all available tests by integration
+    # Available tests for integration
     #
     # @return [Enumerable<Test>]
     #
@@ -69,7 +69,7 @@ module Mutant
 
   private
 
-    # Return expression parser
+    # Expression parser
     #
     # @return [Expression::Parser]
     #
@@ -83,7 +83,7 @@ module Mutant
 
       register('null')
 
-      # Return all tests
+      # Available tests for integration
       #
       # @return [Enumerable<Test>]
       #
@@ -92,7 +92,7 @@ module Mutant
         EMPTY_ARRAY
       end
 
-      # Return report for test
+      # Run a collection of tests
       #
       # @param [Enumerable<Mutant::Test>] tests
       #

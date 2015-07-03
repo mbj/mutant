@@ -35,7 +35,7 @@ module Mutant
 
         private
 
-          # Return object being printed
+          # Object being printed
           #
           # @return [Result::Env]
           #

@@ -6,7 +6,7 @@ module Mutant
     class Driver
       include Concord.new(:binding)
 
-      # Return scheduler status
+      # Scheduler status
       #
       # @return [Object]
       #
@@ -48,7 +48,7 @@ module Mutant
       # @api private
       abstract_method :result
 
-      # Return status
+      # Sink status
       #
       # @return [Object]
       #

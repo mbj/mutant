@@ -7,7 +7,7 @@ module Mutant
     DELETION = '-'.freeze
     NEWLINE  = "\n".freeze
 
-    # Return source diff
+    # Unified source diff between old and new
     #
     # @return [String]
     #   if there is exactly one diff
@@ -25,7 +25,7 @@ module Mutant
     end
     memoize :diff
 
-    # Return colorized source diff
+    # Colorized unified source diff between old and new
     #
     # @return [String]
     #   if there is a diff
@@ -40,7 +40,7 @@ module Mutant
     end
     memoize :colorized_diff
 
-    # Return new object
+    # Build new object from source strings
     #
     # @param [String] old
     # @param [String] new
@@ -66,7 +66,7 @@ module Mutant
 
   private
 
-    # Return diffs
+    # Diffs between old and new
     #
     # @return [Array<Array>]
     #
@@ -75,7 +75,7 @@ module Mutant
       ::Diff::LCS.diff(old, new)
     end
 
-    # Return hunks
+    # Raw diff-lcs hunks
     #
     # @return [Array<Diff::LCS::Hunk>]
     #
@@ -86,7 +86,7 @@ module Mutant
       end
     end
 
-    # Return minimized hunks
+    # Minimized hunks
     #
     # @return [Array<Diff::LCS::Hunk>]
     #
@@ -104,7 +104,7 @@ module Mutant
       end
     end
 
-    # Return max length
+    # Max length of source line in new and old
     #
     # @return [Fixnum]
     #
@@ -113,7 +113,7 @@ module Mutant
       [old, new].map(&:length).max
     end
 
-    # Return colorized diff line
+    # Colorized a unified diff line
     #
     # @param [String] line
     #

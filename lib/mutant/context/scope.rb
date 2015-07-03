@@ -7,7 +7,7 @@ module Mutant
 
       NAMESPACE_DELIMITER = '::'.freeze
 
-      # Return AST wrapping mutated node
+      # Return root node for mutation
       #
       # @return [Parser::AST::Node]
       #
@@ -18,7 +18,7 @@ module Mutant
         end
       end
 
-      # Return identification
+      # Identification string
       #
       # @return [String]
       #
@@ -51,7 +51,7 @@ module Mutant
         end
       end
 
-      # Return nesting
+      # Nesting of scope
       #
       # @return [Enumerable<Class,Module>]
       #
@@ -65,7 +65,7 @@ module Mutant
       end
       memoize :nesting
 
-      # Return unqualified name of scope
+      # Unqualified name of scope
       #
       # @return [String]
       #
@@ -74,7 +74,7 @@ module Mutant
         name_nesting.last
       end
 
-      # Return match expressions
+      # Match expressions for scope
       #
       # @return [Enumerable<Expression>]
       #
@@ -88,7 +88,7 @@ module Mutant
       end
       memoize :match_expressions
 
-      # Return scope wrapped by context
+      # Scope wrapped by context
       #
       # @return [::Module|::Class]
       #
@@ -97,7 +97,7 @@ module Mutant
 
     private
 
-      # Return nesting of names of scope
+      # Nesting of names in scope
       #
       # @return [Array<String>]
       #

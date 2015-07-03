@@ -19,7 +19,7 @@ module Mutant
         mailbox.sender
       end
 
-      # Return new unbound mailbox
+      # New unbound mailbox
       #
       # @return [Mailbox]
       #

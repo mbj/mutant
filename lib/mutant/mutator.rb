@@ -32,14 +32,14 @@ module Mutant
     end
     private_class_method :handle
 
-    # Return input
+    # Mutation input
     #
     # @return [Object]
     #
     # @api private
     attr_reader :input
 
-    # Return input
+    # Parent context of input
     #
     # @return [Object]
     #

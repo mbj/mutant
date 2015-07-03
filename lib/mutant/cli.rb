@@ -38,7 +38,7 @@ module Mutant
       parse(arguments)
     end
 
-    # Return config
+    # Config parsed from CLI
     #
     # @return [Config]
     #

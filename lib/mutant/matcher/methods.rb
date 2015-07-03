@@ -23,7 +23,7 @@ module Mutant
 
     private
 
-      # Return method matcher class
+      # method matcher class
       #
       # @return [Class:Matcher::Method]
       #
@@ -32,7 +32,7 @@ module Mutant
         self.class::MATCHER
       end
 
-      # Return methods
+      # Available methods scope
       #
       # @return [Enumerable<Method, UnboundMethod>]
       #
@@ -45,7 +45,7 @@ module Mutant
       end
       memoize :methods
 
-      # Return subjects
+      # Subjects detected on scope
       #
       # @return [Array<Subject>]
       #
@@ -57,7 +57,7 @@ module Mutant
       end
       memoize :subjects
 
-      # Return candidate names
+      # Candidate method names on target scope
       #
       # @return [Enumerable<Symbol>]
       #
@@ -70,7 +70,7 @@ module Mutant
         ).sort
       end
 
-      # Return candidate scope
+      # Candidate scope
       #
       # @return [Class, Module]
       #
@@ -83,7 +83,7 @@ module Mutant
 
       private
 
-        # Return method for name
+        # Method object on scope
         #
         # @param [Symbol] method_name
         #
@@ -94,7 +94,7 @@ module Mutant
           scope.method(method_name)
         end
 
-        # Return candidate scope
+        # Candidate scope
         #
         # @return [Class]
         #
@@ -112,7 +112,7 @@ module Mutant
 
       private
 
-        # Return method for name
+        # Method object on scope
         #
         # @param [Symbol] method_name
         #
@@ -123,7 +123,7 @@ module Mutant
           scope.instance_method(method_name)
         end
 
-        # Return candidate scope
+        # Candidate scope
         #
         # @return [Class, Module]
         #

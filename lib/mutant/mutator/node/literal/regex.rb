@@ -12,7 +12,7 @@ module Mutant
 
         private
 
-          # Return options
+          # Original regexp options
           #
           # @return [Parser::AST::Node]
           #

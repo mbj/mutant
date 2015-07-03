@@ -142,7 +142,7 @@ module MutantSpec
       # Not in the docs. Number from chatting with their support.
       CIRCLE_CI_CONTAINER_PROCESSES = 2
 
-      # Return number of parallel processes to use
+      # Number of parallel processes to use
       #
       # @return [Fixnum]
       #
@@ -155,7 +155,7 @@ module MutantSpec
         end
       end
 
-      # Return repository path
+      # Repository path
       #
       # @return [Pathname]
       #

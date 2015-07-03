@@ -7,7 +7,7 @@ module Mutant
     CODE_DELIMITER = "\0".freeze
     CODE_RANGE     = (0..4).freeze
 
-    # Return identification
+    # Identification string
     #
     # @return [String]
     #
@@ -17,7 +17,7 @@ module Mutant
     end
     memoize :identification
 
-    # Return mutation code
+    # Mutation code
     #
     # @return [String]
     #
@@ -27,7 +27,7 @@ module Mutant
     end
     memoize :code
 
-    # Return source
+    # Normalized mutation source
     #
     # @return [String]
     #
@@ -37,7 +37,7 @@ module Mutant
     end
     memoize :source
 
-    # Return original source
+    # Normalized original source
     #
     # @return [String]
     #
@@ -75,7 +75,7 @@ module Mutant
 
   private
 
-    # Return sha1 sum of source and subject identification
+    # SHA1 sum of source and subject identification
     #
     # @return [String]
     #
@@ -85,7 +85,7 @@ module Mutant
     end
     memoize :sha1
 
-    # Return mutated root node
+    # Mutated root node
     #
     # @return [Parser::AST::Node]
     #

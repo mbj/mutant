@@ -19,7 +19,7 @@ module Mutant
         INDEX_ASSIGNMENT_SELECTOR            = :[]=
         ATTRIBUTE_ASSIGNMENT_SELECTOR_SUFFIX = '='.freeze
 
-        # Return arguments
+        # Arguments of mutated node
         #
         # @return [Enumerable<Parser::AST::Node>]
         #

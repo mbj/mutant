@@ -10,7 +10,7 @@ module Mutant
       # @api private
       abstract_method :public?
 
-      # Return method name
+      # Method name
       #
       # @return [Expression]
       #
@@ -19,7 +19,7 @@ module Mutant
         node.children.fetch(self.class::NAME_INDEX)
       end
 
-      # Return match expression
+      # Match expression
       #
       # @return [String]
       #
@@ -33,7 +33,7 @@ module Mutant
       end
       memoize :expression
 
-      # Return match expressions
+      # Match expressions
       #
       # @return [Array<Expression>]
       #
@@ -45,7 +45,7 @@ module Mutant
 
     private
 
-      # Return scope
+      # The scope
       #
       # @return [Class, Module]
       #

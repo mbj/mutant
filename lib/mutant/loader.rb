@@ -27,7 +27,7 @@ module Mutant
 
     private
 
-      # Return source
+      # Source generated from AST
       #
       # @return [String]
       #
