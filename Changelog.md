@@ -1,3 +1,7 @@
+# v0.8.1 2015-xx-xx
+
+* Add mutation from #[] to #at / #fetch
+
 # v0.8.0 2015-06-15
 
 * Drop support for ruby < 2.1
