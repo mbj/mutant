@@ -1,31 +1,44 @@
 RSpec.describe Mutant::Expression::Methods do
-
-  let(:object)            { described_class.parse(input) }
-  let(:env)               { Fixtures::TEST_ENV           }
-  let(:instance_methods)  { 'TestApp::Literal#'          }
-  let(:singleton_methods) { 'TestApp::Literal.'          }
+  let(:env)    { Fixtures::TEST_ENV              }
+  let(:object) { described_class.new(attributes) }
 
   describe '#match_length' do
-    let(:input) { instance_methods }
+    let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '#' } }
 
     subject { object.match_length(other) }
 
     context 'when other is an equivalent expression' do
-      let(:other) { described_class.parse(object.syntax) }
+      let(:other) { parse_expression(object.syntax) }
 
       it { should be(object.syntax.length) }
     end
 
     context 'when other is matched' do
-      let(:other) { described_class.parse('TestApp::Literal#foo') }
+      let(:other) { parse_expression('TestApp::Literal#foo') }
 
       it { should be(object.syntax.length) }
     end
 
     context 'when other is an not matched expression' do
-      let(:other) { described_class.parse('Foo*') }
+      let(:other) { parse_expression('Foo*') }
 
       it { should be(0) }
+    end
+  end
+
+  describe '#syntax' do
+    subject { object.syntax }
+
+    context 'with an instance method' do
+      let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '#' } }
+
+      it { should eql('TestApp::Literal#') }
+    end
+
+    context 'with a singleton method' do
+      let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '.' } }
+
+      it { should eql('TestApp::Literal.') }
     end
   end
 
@@ -33,13 +46,13 @@ RSpec.describe Mutant::Expression::Methods do
     subject { object.matcher(env) }
 
     context 'with an instance method' do
-      let(:input) { instance_methods }
+      let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '#' } }
 
       it { should eql(Mutant::Matcher::Methods::Instance.new(env, TestApp::Literal)) }
     end
 
     context 'with a singleton method' do
-      let(:input) { singleton_methods }
+      let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '.' } }
 
       it { should eql(Mutant::Matcher::Methods::Singleton.new(env, TestApp::Literal)) }
     end

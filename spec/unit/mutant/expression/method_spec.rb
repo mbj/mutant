@@ -1,9 +1,8 @@
 RSpec.describe Mutant::Expression::Method do
-
-  let(:object)           { described_class.parse(input) }
-  let(:env)              { Fixtures::TEST_ENV           }
-  let(:instance_method)  { 'TestApp::Literal#string'    }
-  let(:singleton_method) { 'TestApp::Literal.string'    }
+  let(:object)           { parse_expression(input)   }
+  let(:env)              { Fixtures::TEST_ENV        }
+  let(:instance_method)  { 'TestApp::Literal#string' }
+  let(:singleton_method) { 'TestApp::Literal.string' }
 
   describe '#match_length' do
     let(:input) { instance_method }
@@ -11,13 +10,13 @@ RSpec.describe Mutant::Expression::Method do
     subject { object.match_length(other) }
 
     context 'when other is an equivalent expression' do
-      let(:other) { described_class.parse(object.syntax) }
+      let(:other) { parse_expression(object.syntax) }
 
       it { should be(object.syntax.length) }
     end
 
     context 'when other is an unequivalent expression' do
-      let(:other) { described_class.parse('Foo*') }
+      let(:other) { parse_expression('Foo*') }
 
       it { should be(0) }
     end
@@ -30,19 +29,16 @@ RSpec.describe Mutant::Expression::Method do
       let(:input) { instance_method }
 
       it 'returns correct matcher' do
-        should eql(
-          Mutant::Matcher::Method::Instance.new(
-            env,
-            TestApp::Literal, TestApp::Literal.instance_method(:string)
-          )
-        )
+        expect(subject.map(&:expression)).to eql([object])
       end
     end
 
     context 'with a singleton method' do
       let(:input) { singleton_method }
 
-      it { should eql(Mutant::Matcher::Method::Singleton.new(env, TestApp::Literal, TestApp::Literal.method(:string))) }
+      it 'returns correct matcher' do
+        expect(subject.map(&:expression)).to eql([object])
+      end
     end
   end
 end

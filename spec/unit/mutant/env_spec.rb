@@ -9,22 +9,25 @@ RSpec.describe Mutant::Env do
         subjects:         [],
         mutations:        [],
         matchable_scopes: [],
-        integration:      Mutant::Integration::Null.new(config)
+        integration:      integration
       )
     end
 
+    let(:integration) { integration_class.new(config) }
+
     let(:config) do
-      Mutant::Config::DEFAULT.update(isolation: isolation)
+      Mutant::Config::DEFAULT.update(isolation: isolation, integration: integration_class)
     end
 
-    let(:isolation)    { double('Isolation')                                                     }
-    let(:mutation)     { Mutant::Mutation::Evil.new(mutation_subject, Mutant::AST::Nodes::N_NIL) }
-    let(:wrapped_node) { double('Wrapped Node')                                                  }
-    let(:context)      { double('Context')                                                       }
-    let(:test_a)       { double('Test A')                                                        }
-    let(:test_b)       { double('Test B')                                                        }
-    let(:tests)        { [test_a, test_b]                                                        }
-    let(:selector)     { double('Selector')                                                      }
+    let(:isolation)         { double('Isolation')                                                     }
+    let(:mutation)          { Mutant::Mutation::Evil.new(mutation_subject, Mutant::AST::Nodes::N_NIL) }
+    let(:wrapped_node)      { double('Wrapped Node')                                                  }
+    let(:context)           { double('Context')                                                       }
+    let(:test_a)            { double('Test A')                                                        }
+    let(:test_b)            { double('Test B')                                                        }
+    let(:tests)             { [test_a, test_b]                                                        }
+    let(:selector)          { double('Selector')                                                      }
+    let(:integration_class) { Mutant::Integration::Null                                               }
 
     let(:mutation_subject) do
       double(

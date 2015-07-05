@@ -3,15 +3,27 @@ module Mutant
 
     # Abstract base class for methods expression
     class Methods < self
+      include Anima.new(:scope_name, :scope_symbol)
+      private(*anima.attribute_names)
 
       MATCHERS = IceNine.deep_freeze(
         '.' => Matcher::Methods::Singleton,
         '#' => Matcher::Methods::Instance
       )
+      private_constant(*constants(false))
 
-      register(
-        /\A(?<scope_name>#{SCOPE_PATTERN})(?<scope_symbol>[.#])\z/
-      )
+      REGEXP = /\A#{SCOPE_NAME_PATTERN}#{SCOPE_SYMBOL_PATTERN}\z/.freeze
+
+      # Return syntax
+      #
+      # @return [String]
+      #
+      # @api private
+      #
+      def syntax
+        [scope_name, scope_symbol].join
+      end
+      memoize :syntax
 
       # Return method matcher
       #
@@ -43,16 +55,6 @@ module Mutant
 
     private
 
-      # Return scope name
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def scope_name
-        match[__method__]
-      end
-
       # Return scope
       #
       # @return [Class, Method]
@@ -61,16 +63,6 @@ module Mutant
       #
       def scope
         Object.const_get(scope_name)
-      end
-
-      # Return scope symbol
-      #
-      # @return [Symbol]
-      #
-      # @api private
-      #
-      def scope_symbol
-        match[__method__]
       end
 
     end # Method

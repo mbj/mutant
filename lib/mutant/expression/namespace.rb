@@ -2,24 +2,12 @@ module Mutant
   class Expression
     # Abstract base class for expressions matching namespaces
     class Namespace < self
-      include AbstractType
-
-    private
-
-      # Return matched namespace
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def namespace
-        match[__method__]
-      end
+      include AbstractType, Anima.new(:scope_name)
+      private(*anima.attribute_names)
 
       # Recursive namespace expression
       class Recursive < self
-
-        register(/\A(?<namespace>#{SCOPE_PATTERN})?\*\z/)
+        REGEXP = /\A#{SCOPE_NAME_PATTERN}?\*\z/.freeze
 
         # Initialize object
         #
@@ -29,11 +17,22 @@ module Mutant
         def initialize(*)
           super
           @recursion_pattern = Regexp.union(
-            /\A#{namespace}\z/,
-            /\A#{namespace}::/,
-            /\A#{namespace}[.#]/
+            /\A#{scope_name}\z/,
+            /\A#{scope_name}::/,
+            /\A#{scope_name}[.#]/
           )
         end
+
+        # Return the syntax for this expression
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        def syntax
+          "#{scope_name}*"
+        end
+        memoize :syntax
 
         # Return matcher
         #
@@ -57,7 +56,7 @@ module Mutant
         #
         def match_length(expression)
           if @recursion_pattern =~ expression.syntax
-            namespace.length
+            scope_name.length
           else
             0
           end
@@ -68,9 +67,10 @@ module Mutant
       # Exact namespace expression
       class Exact < self
 
-        register(/\A(?<namespace>#{SCOPE_PATTERN})\z/)
-
         MATCHER = Matcher::Scope
+        private_constant(*constants(false))
+
+        REGEXP  = /\A#{SCOPE_NAME_PATTERN}\z/.freeze
 
         # Return matcher
         #
@@ -81,8 +81,17 @@ module Mutant
         # @api private
         #
         def matcher(env)
-          Matcher::Scope.new(env, Object.const_get(namespace), self)
+          Matcher::Scope.new(env, Object.const_get(scope_name), self)
         end
+
+        # Return the syntax for this expression
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        alias_method :syntax, :scope_name
+        public :syntax
 
       end # Exact
     end # Namespace

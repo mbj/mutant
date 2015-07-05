@@ -73,7 +73,7 @@ RSpec.describe Mutant::CLI do
 
     let(:default_matcher_config) do
       Mutant::Matcher::Config::DEFAULT
-        .update(match_expressions: expressions.map(&Mutant::Expression.method(:parse)))
+        .update(match_expressions: expressions.map(&method(:parse_expression)))
     end
 
     let(:flags)       { []           }
@@ -234,7 +234,7 @@ Options:
       let(:flags) { %w[--ignore-subject Foo::Bar] }
 
       let(:expected_matcher_config) do
-        default_matcher_config.update(subject_ignores: [Mutant::Expression.parse('Foo::Bar')])
+        default_matcher_config.update(subject_ignores: [parse_expression('Foo::Bar')])
       end
 
       it_should_behave_like 'a cli parser'

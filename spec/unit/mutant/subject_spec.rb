@@ -2,11 +2,14 @@ RSpec.describe Mutant::Subject do
   let(:class_under_test) do
     Class.new(described_class) do
       def expression
-        Mutant::Expression.parse('SubjectA')
+        Mutant::Expression::Namespace::Exact.new(scope_name: 'SubjectA')
       end
 
       def match_expressions
-        [expression] << Mutant::Expression.parse('SubjectB')
+        [
+          expression,
+          Mutant::Expression::Namespace::Exact.new(scope_name: 'SubjectB')
+        ]
       end
     end
   end

@@ -87,7 +87,9 @@ module Mutant
       #
       def match_expressions
         name_nesting.each_index.reverse_each.map do |index|
-          Expression.parse("#{name_nesting.take(index.succ).join(NAMESPACE_DELIMITER)}*")
+          Expression::Namespace::Recursive.new(
+            scope_name: name_nesting.take(index.succ).join(NAMESPACE_DELIMITER)
+          )
         end
       end
       memoize :match_expressions

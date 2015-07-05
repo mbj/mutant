@@ -3,8 +3,8 @@ RSpec.describe Mutant::Matcher::Compiler do
 
   let(:env) { Fixtures::TEST_ENV }
 
-  let(:expression_a) { Mutant::Expression.parse('Foo*') }
-  let(:expression_b) { Mutant::Expression.parse('Bar*') }
+  let(:expression_a) { parse_expression('Foo*') }
+  let(:expression_b) { parse_expression('Bar*') }
 
   let(:matcher_a) { expression_a.matcher(env) }
   let(:matcher_b) { expression_b.matcher(env) }

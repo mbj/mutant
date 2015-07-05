@@ -3,43 +3,49 @@ module Mutant
 
     # Explicit method expression
     class Method < self
+      include Anima.new(:scope_name, :scope_symbol, :method_name)
+      private(*anima.attribute_names)
 
       MATCHERS = IceNine.deep_freeze(
         '.' => Matcher::Methods::Singleton,
         '#' => Matcher::Methods::Instance
       )
 
-      register(
-        /\A(?<scope_name>#{SCOPE_PATTERN})(?<scope_symbol>[.#])(?<method_name>#{METHOD_NAME_PATTERN})\z/
-      )
+      METHOD_NAME_PATTERN = Regexp.union(
+        /(?<method_name>[A-Za-z_][A-Za-z\d_]*[!?=]?)/,
+        *AST::Types::OPERATOR_METHODS.map(&:to_s)
+      ).freeze
 
-      # Return method matcher
-      #
-      # @param [Env] env
-      #
-      # @return [Matcher::Method]
-      #
-      # @api private
-      #
-      def matcher(env)
-        methods_matcher = MATCHERS.fetch(scope_symbol).new(env, scope)
-        method = methods_matcher.methods.detect do |meth|
-          meth.name.equal?(method_name)
-        end or fail NameError, "Cannot find method #{method_name}"
-        methods_matcher.matcher.build(env, scope, method)
-      end
+      private_constant(*constants(false))
 
-    private
+      REGEXP = /\A#{SCOPE_NAME_PATTERN}#{SCOPE_SYMBOL_PATTERN}#{METHOD_NAME_PATTERN}\z/.freeze
 
-      # Return scope name
+      # Return syntax
       #
       # @return [String]
       #
       # @api private
       #
-      def scope_name
-        match[__method__]
+      def syntax
+        [scope_name, scope_symbol, method_name].join
       end
+      memoize :syntax
+
+      # Return method matcher
+      #
+      # @param [Env] env
+      #
+      # @return [Matcher]
+      #
+      # @api private
+      #
+      def matcher(env)
+        methods_matcher = MATCHERS.fetch(scope_symbol).new(env, scope)
+
+        Matcher::Filter.build(methods_matcher) { |subject| subject.expression.eql?(self) }
+      end
+
+    private
 
       # Return scope
       #
@@ -49,26 +55,6 @@ module Mutant
       #
       def scope
         Object.const_get(scope_name)
-      end
-
-      # Return method name
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def method_name
-        match[__method__].to_sym
-      end
-
-      # Return scope symbol
-      #
-      # @return [Symbol]
-      #
-      # @api private
-      #
-      def scope_symbol
-        match[__method__]
       end
 
     end # Method

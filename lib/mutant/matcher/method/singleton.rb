@@ -3,21 +3,9 @@ module Mutant
     class Method
       # Matcher for singleton methods
       class Singleton < self
-        SUBJECT_CLASS = Subject::Method::Singleton
-
-        # Return identification
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def identification
-          "#{scope.name}.#{method_name}"
-        end
-        memoize :identification
-
-        RECEIVER_INDEX   = 0
-        NAME_INDEX       = 1
+        SUBJECT_CLASS  = Subject::Method::Singleton
+        RECEIVER_INDEX = 0
+        NAME_INDEX     = 1
 
       private
 

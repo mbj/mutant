@@ -13,12 +13,12 @@ module Mutant
 
       # Return method name
       #
-      # @return [Symbol]
+      # @return [Expression]
       #
       # @api private
       #
       def name
-        node.children[self.class::NAME_INDEX]
+        node.children.fetch(self.class::NAME_INDEX)
       end
 
       # Return match expression
@@ -28,7 +28,11 @@ module Mutant
       # @api private
       #
       def expression
-        Expression.parse("#{context.identification}#{self.class::SYMBOL}#{name}")
+        Expression::Method.new(
+          scope_symbol: self.class::SYMBOL,
+          scope_name:   scope.name,
+          method_name:  name.to_s
+        )
       end
       memoize :expression
 

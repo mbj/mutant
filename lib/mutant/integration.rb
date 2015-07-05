@@ -73,6 +73,18 @@ module Mutant
     #
     abstract_method :all_tests
 
+  private
+
+    # Return expression parser
+    #
+    # @return [Expression::Parser]
+    #
+    # @api private
+    #
+    def expression_parser
+      config.expression_parser
+    end
+
     # Null integration that never kills a mutation
     class Null < self
 

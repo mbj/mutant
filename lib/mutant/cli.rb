@@ -86,8 +86,8 @@ module Mutant
     def parse_match_expressions(expressions)
       fail Error, 'No expressions given' if expressions.empty?
 
-      expressions.map(&Expression.method(:parse)).each do |expression|
-        add_matcher(:match_expressions, expression)
+      expressions.each do |expression|
+        add_matcher(:match_expressions, config.expression_parser.(expression))
       end
     end
 
@@ -162,7 +162,7 @@ module Mutant
     #
     def add_filter_options(opts)
       opts.on('--ignore-subject PATTERN', 'Ignore subjects that match PATTERN') do |pattern|
-        add_matcher(:subject_ignores, Expression.parse(pattern))
+        add_matcher(:subject_ignores, config.expression_parser.(pattern))
       end
     end
 

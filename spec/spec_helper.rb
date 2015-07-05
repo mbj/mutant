@@ -35,7 +35,7 @@ require 'test_app'
 module Fixtures
   TEST_CONFIG = Mutant::Config::DEFAULT.update(reporter: Mutant::Reporter::Trace.new)
   TEST_CACHE  = Mutant::Cache.new
-  TEST_ENV    = Mutant::Env::Bootstrap.call(TEST_CONFIG, TEST_CACHE)
+  TEST_ENV    = Mutant::Env::Bootstrap.(TEST_CONFIG, TEST_CACHE)
 end # Fixtures
 
 module ParserHelper
@@ -45,6 +45,10 @@ module ParserHelper
 
   def parse(string)
     Unparser::Preprocessor.run(Parser::CurrentRuby.parse(string))
+  end
+
+  def parse_expression(string)
+    Mutant::Config::DEFAULT.expression_parser.(string)
   end
 end
 

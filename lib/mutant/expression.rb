@@ -2,83 +2,21 @@ module Mutant
 
   # Abstract base class for match expression
   class Expression
-    include AbstractType, Adamantium::Flat, Concord::Public.new(:match)
+    include AbstractType, Adamantium::Flat
 
-    include Equalizer.new(:syntax)
+    fragment             = /[A-Za-z][A-Za-z\d_]*/.freeze
+    SCOPE_NAME_PATTERN   = /(?<scope_name>#{fragment}(?:#{SCOPE_OPERATOR}#{fragment})*)/.freeze
+    SCOPE_SYMBOL_PATTERN = '(?<scope_symbol>[.#])'.freeze
 
-    SCOPE_NAME_PATTERN = /[A-Za-z][A-Za-z\d_]*/.freeze
+    private_constant(*constants(false))
 
-    METHOD_NAME_PATTERN = Regexp.union(
-      /[A-Za-z_][A-Za-z\d_]*[!?=]?/,
-      *AST::Types::OPERATOR_METHODS.map(&:to_s)
-    ).freeze
-
-    INSPECT_FORMAT = '<Mutant::Expression: %s>'.freeze
-
-    SCOPE_PATTERN = /#{SCOPE_NAME_PATTERN}(?:#{SCOPE_OPERATOR}#{SCOPE_NAME_PATTERN})*/.freeze
-
-    REGISTRY = {}
-
-    # Error raised on invalid expressions
-    class InvalidExpressionError < RuntimeError; end
-
-    # Error raised on ambiguous expressions
-    class AmbiguousExpressionError < RuntimeError; end
-
-    # Initialize expression
-    #
-    # @param [MatchData] match
-    #
-    # @api private
-    #
-    def initialize(*)
-      super
-      @syntax = match.to_s
-      @inspect = format(INSPECT_FORMAT, syntax)
-    end
-
-    # Return marshallable representation
-    #
-    # FIXME: Remove the need for this.
-    #
-    #   Refactoring Expression objects not to reference a MatchData instance.
-    #   This will make this hack unneeded.
+    # Return syntax representing this expression
     #
     # @return [String]
     #
     # @api private
     #
-    def _dump(_level)
-      syntax
-    end
-
-    # Load serializable representation
-    #
-    # @return [String]
-    #
-    # @return [Expression]
-    #
-    # @api private
-    #
-    def self._load(syntax)
-      parse(syntax)
-    end
-
-    # Return inspection
-    #
-    # @return [String]
-    #
-    # @api private
-    #
-    attr_reader :inspect
-
-    # Return syntax
-    #
-    # @return [String]
-    #
-    # @api private
-    #
-    attr_reader :syntax
+    abstract_method :syntax
 
     # Return match length for expression
     #
@@ -108,76 +46,23 @@ module Mutant
       !match_length(other).zero?
     end
 
-    # Register expression
-    #
-    # @return [undefined]
-    #
-    # @api private
-    #
-    def self.register(regexp)
-      REGISTRY[regexp] = self
-    end
-    private_class_method :register
-
-    # Parse input into expression or raise
-    #
-    # @param [String] syntax
-    #
-    # @return [Expression]
-    #   if expression is valid
-    #
-    # @raise [RuntimeError]
-    #   otherwise
-    #
-    # @api private
-    #
-    def self.parse(input)
-      try_parse(input) or fail InvalidExpressionError, "Expression: #{input.inspect} is not valid"
-    end
-
-    # Parse input into expression
+    # Try to parse input into expression of receiver class
     #
     # @param [String] input
     #
     # @return [Expression]
-    #   if expression is valid
+    #   when successful
     #
     # @return [nil]
     #   otherwise
     #
     # @api private
-    #
     def self.try_parse(input)
-      expressions = expressions(input)
-      case expressions.length
-      when 0
-      when 1
-        expressions.first
-      else
-        fail AmbiguousExpressionError, "Ambiguous expression: #{input.inspect}"
-      end
+      match = self::REGEXP.match(input)
+      return unless match
+      names = anima.attribute_names
+      new(Hash[names.zip(names.map(&match.method(:[])))])
     end
-
-    # Return expressions for input
-    #
-    # @param [String] input
-    #
-    # @return [Classifier]
-    #   if classifier can be found
-    #
-    # @return [nil]
-    #   otherwise
-    #
-    # @api private
-    #
-    def self.expressions(input)
-      REGISTRY.each_with_object([]) do |(regexp, klass), expressions|
-        match = regexp.match(input)
-        next unless match
-        expressions << klass.new(match)
-      end
-    end
-    private_class_method :expressions
 
   end # Expression
 end # Mutant

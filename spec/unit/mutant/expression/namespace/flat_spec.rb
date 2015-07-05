@@ -1,8 +1,7 @@
 RSpec.describe Mutant::Expression::Namespace::Exact do
-
-  let(:object) { described_class.parse(input) }
-  let(:env)    { Fixtures::TEST_ENV           }
-  let(:input)  { 'TestApp::Literal'           }
+  let(:object) { parse_expression(input) }
+  let(:env)    { Fixtures::TEST_ENV      }
+  let(:input)  { 'TestApp::Literal'      }
 
   describe '#matcher' do
     subject { object.matcher(env) }
@@ -14,13 +13,13 @@ RSpec.describe Mutant::Expression::Namespace::Exact do
     subject { object.match_length(other) }
 
     context 'when other is an equivalent expression' do
-      let(:other) { described_class.parse(object.syntax) }
+      let(:other) { parse_expression(object.syntax) }
 
       it { should be(object.syntax.length) }
     end
 
     context 'when other is an unequivalent expression' do
-      let(:other) { described_class.parse('Foo*') }
+      let(:other) { parse_expression('Foo*') }
 
       it { should be(0) }
     end
