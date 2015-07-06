@@ -1,5 +1,5 @@
 module Mutant
-  # Parallel excecution engine of arbitrary payloads
+  # Parallel execution engine of arbitrary payloads
   module Parallel
 
     # Driver for parallelized execution
