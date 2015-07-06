@@ -27,7 +27,7 @@ RSpec.describe Mutant::Parallel::Worker do
 
     let(:actor_names) { [:worker] }
 
-    context 'when receving :job command' do
+    context 'when receiving :job command' do
 
       before do
         expect(processor).to receive(:call).with(payload).and_return(result_payload)

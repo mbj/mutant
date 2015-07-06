@@ -32,13 +32,13 @@ RSpec.describe Mutant::Expression do
 
     subject { object.try_parse(input) }
 
-    context 'on succesful parse' do
+    context 'on successful parse' do
       let(:input) { 'foo' }
 
       it { should eql(object.new(foo: 'foo')) }
     end
 
-    context 'on unsuccesful parse' do
+    context 'on unsuccessful parse' do
       let(:input) { 'bar' }
 
       it { should be(nil) }

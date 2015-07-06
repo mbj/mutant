@@ -64,7 +64,7 @@ module Mutant
 
     # Return mutation test config
     #
-    # @return [Parallell::Config]
+    # @return [Parallel::Config]
     #
     # @api private
     #
