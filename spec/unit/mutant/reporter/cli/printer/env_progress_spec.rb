@@ -11,7 +11,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
 
       it_reports <<-'STR'
         Mutant configuration:
-        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[]>
         Integration:     Mutant::Integration::Null
         Expect Coverage: 10.00%
         Jobs:            1
@@ -32,7 +32,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
     context 'on full coverage' do
       it_reports <<-'STR'
         Mutant configuration:
-        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[]>
         Integration:     Mutant::Integration::Null
         Expect Coverage: 10.00%
         Jobs:            1
@@ -55,7 +55,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
 
       it_reports <<-'STR'
         Mutant configuration:
-        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[]>
         Integration:     Mutant::Integration::Null
         Expect Coverage: 10.00%
         Jobs:            1

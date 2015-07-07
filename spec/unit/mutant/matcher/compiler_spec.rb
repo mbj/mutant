@@ -41,7 +41,7 @@ RSpec.describe Mutant::Matcher::Compiler do
         it { should eql(expected_matcher) }
       end
 
-      context 'and a subject filter' do
+      context 'and a subject ignore' do
         let(:attributes) do
           {
             match_expressions: [expression_a],
@@ -57,52 +57,6 @@ RSpec.describe Mutant::Matcher::Compiler do
               described_class::SubjectPrefix.new(expression_b)
             ])
           )
-        end
-
-        it { should eql(expected_matcher) }
-      end
-
-      context 'and an attribute filter' do
-        let(:attributes) do
-          {
-            match_expressions: [expression_a],
-            subject_selects:   [[:code, 'foo']]
-          }
-        end
-
-        let(:expected_positive_matcher) { Mutant::Matcher::Chain.new([matcher_a]) }
-
-        let(:expected_predicate) do
-          Morpher::Evaluator::Predicate::Boolean::Or.new([
-            Morpher.compile(s(:eql, s(:attribute, :code), s(:static, 'foo')))
-          ])
-        end
-
-        it { should eql(expected_matcher) }
-      end
-
-      context 'and subject and attribute filter' do
-        let(:attributes) do
-          {
-            match_expressions: [expression_a],
-            subject_ignores:   [expression_b],
-            subject_selects:   [[:code, 'foo']]
-          }
-        end
-
-        let(:expected_positive_matcher) { Mutant::Matcher::Chain.new([matcher_a]) }
-
-        let(:expected_predicate) do
-          Morpher::Evaluator::Predicate::Boolean::And.new([
-            Morpher::Evaluator::Predicate::Boolean::Or.new([
-              Morpher.compile(s(:eql, s(:attribute, :code), s(:static, 'foo')))
-            ]),
-            Morpher::Evaluator::Predicate::Negation.new(
-              Morpher::Evaluator::Predicate::Boolean::Or.new([
-                described_class::SubjectPrefix.new(expression_b)
-              ])
-            )
-          ])
         end
 
         it { should eql(expected_matcher) }

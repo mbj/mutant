@@ -4,8 +4,7 @@ module Mutant
     class Config
       include Adamantium, Anima::Update, Anima.new(
         :match_expressions,
-        :subject_ignores,
-        :subject_selects
+        :subject_ignores
       )
 
       DEFAULT = new(Hash[anima.attribute_names.map { |name| [name, []] }])

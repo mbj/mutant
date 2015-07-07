@@ -38,39 +38,13 @@ module Mutant
       #
       # @return [#call]
       #
-      # rubocop:disable MethodLength
-      #
       # @api private
       def predicate
-        if subject_selector && subject_rejector
-          Morpher::Evaluator::Predicate::Boolean::And.new([
-            subject_selector,
-            Morpher::Evaluator::Predicate::Negation.new(subject_rejector)
-          ])
-        elsif subject_selector
-          subject_selector
-        elsif subject_rejector
+        if subject_rejector
           Morpher::Evaluator::Predicate::Negation.new(subject_rejector)
         else
           Morpher::Evaluator::Predicate::Tautology.new
         end
-      end
-
-      # the subject selector predicate
-      #
-      # @return [#call]
-      #   if selector is present
-      #
-      # @return [nil]
-      #   otherwise
-      #
-      # @api private
-      def subject_selector
-        selectors = config.subject_selects.map do |attribute, value|
-          Morpher.compile(s(:eql, s(:attribute, attribute), s(:static, value)))
-        end
-
-        Morpher::Evaluator::Predicate::Boolean::Or.new(selectors) if selectors.any?
       end
 
       # Subject rejector predicate
