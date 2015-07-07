@@ -11,13 +11,11 @@ module Mutant
           #
           # @return [undefined]
           #
-          # rubocop:disable AbcSize
-          #
           # @api private
           def run
             info 'Mutant configuration:'
             info 'Matcher:         %s',      object.matcher.inspect
-            info 'Integration:     %s',      object.integration.name
+            info 'Integration:     %s',      object.integration
             info 'Expect Coverage: %0.2f%%', (object.expected_coverage * 100)
             info 'Jobs:            %d',      object.jobs
             info 'Includes:        %s',      object.includes

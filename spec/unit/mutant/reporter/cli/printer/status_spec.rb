@@ -9,7 +9,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
 
       it_reports <<-REPORT
         Mutant configuration:
-        Matcher:         #<Mutant::Matcher::Config match_expressions=[] ignore_expressions=[]>
+        Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
         Expect Coverage: 100.00%
         Jobs:            1
@@ -32,7 +32,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
 
         it_reports <<-REPORT
           Mutant configuration:
-          Matcher:         #<Mutant::Matcher::Config match_expressions=[] ignore_expressions=[]>
+          Matcher:         #<Mutant::Matcher::Config empty>
           Integration:     Mutant::Integration::Null
           Expect Coverage: 10.00%
           Jobs:            1
@@ -58,7 +58,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
 
         it_reports(<<-REPORT)
           Mutant configuration:
-          Matcher:         #<Mutant::Matcher::Config match_expressions=[] ignore_expressions=[]>
+          Matcher:         #<Mutant::Matcher::Config empty>
           Integration:     Mutant::Integration::Null
           Expect Coverage: 100.00%
           Jobs:            1
@@ -85,7 +85,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
 
           it_reports(<<-REPORT)
             Mutant configuration:
-            Matcher:         #<Mutant::Matcher::Config match_expressions=[] ignore_expressions=[]>
+            Matcher:         #<Mutant::Matcher::Config empty>
             Integration:     Mutant::Integration::Null
             Expect Coverage: 100.00%
             Jobs:            1
@@ -114,7 +114,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
         context 'on success' do
           it_reports(<<-REPORT)
             Mutant configuration:
-            Matcher:         #<Mutant::Matcher::Config match_expressions=[] ignore_expressions=[]>
+            Matcher:         #<Mutant::Matcher::Config empty>
             Integration:     Mutant::Integration::Null
             Expect Coverage: 100.00%
             Jobs:            1
