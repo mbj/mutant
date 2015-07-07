@@ -234,7 +234,7 @@ Options:
       let(:flags) { %w[--ignore-subject Foo::Bar] }
 
       let(:expected_matcher_config) do
-        default_matcher_config.update(subject_ignores: [parse_expression('Foo::Bar')])
+        default_matcher_config.update(ignore_expressions: [parse_expression('Foo::Bar')])
       end
 
       it_should_behave_like 'a cli parser'

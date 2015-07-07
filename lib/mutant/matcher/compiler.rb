@@ -13,7 +13,7 @@ module Mutant
       def result
         Filter.new(
           Chain.build(config.match_expressions.map(&method(:matcher))),
-          predicate
+          ignored_subjects
         )
       end
 
@@ -34,32 +34,21 @@ module Mutant
 
     private
 
-      # Predicate constraining matches
+      # Predicate returning false on ignored subject
       #
       # @return [#call]
       #
       # @api private
-      def predicate
-        if subject_rejector
-          Morpher::Evaluator::Predicate::Negation.new(subject_rejector)
+      def ignored_subjects
+        rejectors = config.ignore_expressions.map(&SubjectPrefix.method(:new))
+
+        if rejectors.any?
+          Morpher::Evaluator::Predicate::Boolean::Negation.new(
+            Morpher::Evaluator::Predicate::Boolean::Or.new(rejectors)
+          )
         else
           Morpher::Evaluator::Predicate::Tautology.new
         end
-      end
-
-      # Subject rejector predicate
-      #
-      # @return [#call]
-      #   if there is a subject rejector
-      #
-      # @return [nil]
-      #   otherwise
-      #
-      # @api private
-      def subject_rejector
-        rejectors = config.subject_ignores.map(&SubjectPrefix.method(:new))
-
-        Morpher::Evaluator::Predicate::Boolean::Or.new(rejectors) if rejectors.any?
       end
 
       # Matcher for expression on env

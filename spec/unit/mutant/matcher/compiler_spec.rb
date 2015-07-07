@@ -44,8 +44,8 @@ RSpec.describe Mutant::Matcher::Compiler do
       context 'and a subject ignore' do
         let(:attributes) do
           {
-            match_expressions: [expression_a],
-            subject_ignores:   [expression_b]
+            match_expressions:  [expression_a],
+            ignore_expressions: [expression_b]
           }
         end
 
