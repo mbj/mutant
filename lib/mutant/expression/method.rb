@@ -20,25 +20,23 @@ module Mutant
 
       REGEXP = /\A#{SCOPE_NAME_PATTERN}#{SCOPE_SYMBOL_PATTERN}#{METHOD_NAME_PATTERN}\z/.freeze
 
-      # Return syntax
+      # Syntax of expression
       #
       # @return [String]
       #
       # @api private
-      #
       def syntax
         [scope_name, scope_symbol, method_name].join
       end
       memoize :syntax
 
-      # Return method matcher
+      # Matcher for expression
       #
       # @param [Env] env
       #
       # @return [Matcher]
       #
       # @api private
-      #
       def matcher(env)
         methods_matcher = MATCHERS.fetch(scope_symbol).new(env, scope)
 
@@ -47,12 +45,11 @@ module Mutant
 
     private
 
-      # Return scope
+      # Scope object
       #
       # @return [Class, Method]
       #
       # @api private
-      #
       def scope
         Object.const_get(scope_name)
       end

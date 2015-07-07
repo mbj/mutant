@@ -5,12 +5,11 @@ module Mutant
     class Compiler
       include Concord.new(:env, :config), AST::Sexp, Procto.call(:result)
 
-      # Return generated matcher
+      # Generated matcher
       #
-      # @return [Mutant::Matcher]
+      # @return [Matcher]
       #
       # @api private
-      #
       def result
         Filter.new(
           Chain.build(config.match_expressions.map(&method(:matcher))),
@@ -27,7 +26,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def call(subject)
           expression.prefix?(subject.expression)
         end
@@ -36,14 +34,13 @@ module Mutant
 
     private
 
-      # Return predicate
+      # Predicate constraining matches
       #
       # @return [#call]
       #
-      # @api private
-      #
       # rubocop:disable MethodLength
       #
+      # @api private
       def predicate
         if subject_selector && subject_rejector
           Morpher::Evaluator::Predicate::Boolean::And.new([
@@ -59,7 +56,7 @@ module Mutant
         end
       end
 
-      # Return subject selector
+      # the subject selector predicate
       #
       # @return [#call]
       #   if selector is present
@@ -68,7 +65,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def subject_selector
         selectors = config.subject_selects.map do |attribute, value|
           Morpher.compile(s(:eql, s(:attribute, attribute), s(:static, value)))
@@ -77,7 +73,7 @@ module Mutant
         Morpher::Evaluator::Predicate::Boolean::Or.new(selectors) if selectors.any?
       end
 
-      # Return subject rejector
+      # Subject rejector predicate
       #
       # @return [#call]
       #   if there is a subject rejector
@@ -86,21 +82,19 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def subject_rejector
         rejectors = config.subject_ignores.map(&SubjectPrefix.method(:new))
 
         Morpher::Evaluator::Predicate::Boolean::Or.new(rejectors) if rejectors.any?
       end
 
-      # Return a matcher from expression
+      # Matcher for expression on env
       #
       # @param [Mutant::Expression] expression
       #
       # @return [Matcher]
       #
       # @api private
-      #
       def matcher(expression)
         expression.matcher(env)
       end

@@ -23,37 +23,34 @@ module Mutant
           )
         end
 
-        # Return the syntax for this expression
+        # Syntax for expression
         #
         # @return [String]
         #
         # @api private
-        #
         def syntax
           "#{scope_name}*"
         end
         memoize :syntax
 
-        # Return matcher
+        # Matcher for expression
         #
         # @param [Env::Bootstrap] env
         #
         # @return [Matcher]
         #
         # @api private
-        #
         def matcher(env)
           Matcher::Namespace.new(env, self)
         end
 
-        # Return length of match
+        # Length of match with other expression
         #
         # @param [Expression] expression
         #
         # @return [Fixnum]
         #
         # @api private
-        #
         def match_length(expression)
           if @recursion_pattern =~ expression.syntax
             scope_name.length
@@ -72,19 +69,18 @@ module Mutant
 
         REGEXP  = /\A#{SCOPE_NAME_PATTERN}\z/.freeze
 
-        # Return matcher
+        # Matcher matcher on expression
         #
         # @param [Env::Bootstrap] env
         #
         # @return [Matcher]
         #
         # @api private
-        #
         def matcher(env)
           Matcher::Scope.new(env, Object.const_get(scope_name), self)
         end
 
-        # Return the syntax for this expression
+        # Syntax for expression
         #
         # @return [String]
         #

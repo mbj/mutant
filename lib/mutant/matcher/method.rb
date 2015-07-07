@@ -18,7 +18,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def each
         return to_enum unless block_given?
 
@@ -36,7 +35,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def skip?
         location = source_location
         if location.nil? || BLACKLIST.match(location.first)
@@ -50,67 +48,61 @@ module Mutant
         end
       end
 
-      # Return method name
+      # Target method name
       #
       # @return [String]
       #
       # @api private
-      #
       def method_name
         target_method.name
       end
 
-      # Return context
+      # Target context
       #
       # @return [Context::Scope]
       #
       # @api private
-      #
       def context
         Context::Scope.new(scope, source_path)
       end
 
-      # Return full ast
+      # Root source node
       #
       # @return [Parser::AST::Node]
       #
       # @api private
-      #
       def ast
         env.cache.parse(source_path)
       end
 
-      # Return path to source
+      # Path to source
       #
       # @return [String]
       #
       # @api private
-      #
       def source_path
         source_location.first
       end
 
-      # Return source file line
+      # Source file line
       #
-      # @return [Integer]
+      # @return [Fixnum]
       #
       # @api private
-      #
       def source_line
         source_location.last
       end
 
-      # Return source location
+      # Full source location
       #
-      # @return [Array]
+      # @return [Array{String,Fixnum}]
       #
       # @api private
-      #
       def source_location
         target_method.source_location
       end
 
-      # Return subject
+      # Matched subject
       #
       # @return [Subject]
       #   if there is a matched node
@@ -119,7 +111,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def subject
         node = matched_node_path.last
         return unless node
@@ -127,12 +118,11 @@ module Mutant
       end
       memoize :subject
 
-      # Return matched node path
+      # Matched node path
       #
       # @return [Array<Parser::AST::Node>]
       #
       # @api private
-      #
       def matched_node_path
         AST.find_last_path(ast, &method(:match?))
       end

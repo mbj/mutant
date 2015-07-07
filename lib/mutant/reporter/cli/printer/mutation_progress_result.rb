@@ -12,7 +12,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def run
             char(success? ? SUCCESS : FAILURE)
           end
@@ -26,7 +25,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def char(char)
             output.write(colorize(status_color, char))
           end

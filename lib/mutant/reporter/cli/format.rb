@@ -5,32 +5,29 @@ module Mutant
       class Format
         include AbstractType, Anima.new(:tty)
 
-        # Return start representation
+        # Start representation
         #
         # @param [Env] env
         #
         # @return [String]
         #
         # @api private
-        #
         abstract_method :start
 
-        # Return progress representation
+        # Progress representation
         #
         # @param [Runner::Status] status
         #
         # @return [String]
         #
         # @api private
-        #
         abstract_method :progress
 
-        # Return report delay in seconds
+        # Report delay in seconds
         #
         # @return [Float]
         #
         # @api private
-        #
         def delay
           self.class::REPORT_DELAY
         end
@@ -44,7 +41,6 @@ module Mutant
           # @return [Boolean]
           #
           # @api private
-          #
           def tty?
             @tty
           end
@@ -66,7 +62,6 @@ module Mutant
         # @return [String]
         #
         # @api private
-        #
         def format(printer, object)
           buffer = new_buffer
           printer.call(Output.new(tty, buffer), object)
@@ -80,34 +75,31 @@ module Mutant
           REPORT_FREQUENCY = 1.0
           REPORT_DELAY     = 1 / REPORT_FREQUENCY
 
-          # Return start representation
+          # Start representation
           #
           # @return [String]
           #
           # @api private
-          #
           def start(env)
             format(Printer::Config, env.config)
           end
 
-          # Return progress representation
+          # Progress representation
           #
           # @return [String]
           #
           # @api private
-          #
           def progress(status)
             format(Printer::StatusProgressive, status)
           end
 
         private
 
-          # Return new buffer
+          # New buffer
           #
           # @return [StringIO]
           #
           # @api private
-          #
           def new_buffer
             StringIO.new
           end
@@ -130,7 +122,6 @@ module Mutant
           # @return [String]
           #
           # @api private
-          #
           def start(_env)
             tput.prepare
           end
@@ -142,19 +133,17 @@ module Mutant
           # @return [String]
           #
           # @api private
-          #
           def progress(status)
             format(Printer::Status, status)
           end
 
         private
 
-          # Return new buffer
+          # New buffer
           #
           # @return [StringIO]
           #
           # @api private
-          #
           def new_buffer
             # For some reason this raises an Ernno::EACCESS errror:
             #

@@ -14,7 +14,6 @@ module Mutant
         # @return [Matcher::Method::Instance]
         #
         # @api private
-        #
         def self.build(env, scope, target_method)
           name = target_method.name
           if scope.ancestors.include?(::Memoizable) && scope.memoized?(name)
@@ -34,7 +33,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def match?(node)
           location   = node.location       || return
           expression = location.expression || return
@@ -50,12 +48,11 @@ module Mutant
 
         private
 
-          # Return source location
+          # Source location
           #
-          # @return [Array]
+          # @return [Array{String,Fixnum}]
           #
           # @api private
-          #
           def source_location
             scope.unmemoized_instance_method(method_name).source_location
           end

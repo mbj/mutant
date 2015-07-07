@@ -22,7 +22,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def dispatch
             emit_singletons
             emit_inverse
@@ -30,12 +29,11 @@ module Mutant
             emit_upper_bound_mutations
           end
 
-          # Return inverse node
+          # Inverse node
           #
           # @return [Parser::AST::Node]
           #
           # @api private
-          #
           def emit_inverse
             emit(s(MAP.fetch(node.type), *children))
           end
@@ -45,7 +43,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def emit_upper_bound_mutations
             emit__end_mutations
             emit_type(N_NAN, _end)
@@ -56,7 +53,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def emit_lower_bound_mutations
             emit_start_mutations
             emit_type(start, N_INFINITY)

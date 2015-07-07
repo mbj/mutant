@@ -11,7 +11,6 @@ module Mutant
     #   the original implementation on singleton
     #
     # @api private
-    #
     def self.call(target, callback)
       target.method(:require).tap do
         target.module_eval do

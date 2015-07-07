@@ -7,45 +7,41 @@ module Mutant
     CODE_DELIMITER = "\0".freeze
     CODE_RANGE     = (0..4).freeze
 
-    # Return identification
+    # Identification string
     #
     # @return [String]
     #
     # @api private
-    #
     def identification
       "#{self.class::SYMBOL}:#{subject.identification}:#{code}"
     end
     memoize :identification
 
-    # Return mutation code
+    # Mutation code
     #
     # @return [String]
     #
     # @api private
-    #
     def code
       sha1[CODE_RANGE]
     end
     memoize :code
 
-    # Return source
+    # Normalized mutation source
     #
     # @return [String]
     #
     # @api private
-    #
     def source
       Unparser.unparse(node)
     end
     memoize :source
 
-    # Return original source
+    # Normalized original source
     #
     # @return [String]
     #
     # @api private
-    #
     def original_source
       subject.source
     end
@@ -57,7 +53,6 @@ module Mutant
     # @return [Boolean]
     #
     # @api private
-    #
     def self.success?(test_result)
       self::TEST_PASS_SUCCESS.equal?(test_result.passed)
     end
@@ -71,7 +66,6 @@ module Mutant
     # @return [self]
     #
     # @api private
-    #
     def insert
       subject.public?
       subject.prepare
@@ -81,23 +75,21 @@ module Mutant
 
   private
 
-    # Return sha1 sum of source and subject identification
+    # SHA1 sum of source and subject identification
     #
     # @return [String]
     #
     # @api private
-    #
     def sha1
       Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
     end
     memoize :sha1
 
-    # Return mutated root node
+    # Mutated root node
     #
     # @return [Parser::AST::Node]
     #
     # @api private
-    #
     def root
       subject.context.root(node)
     end

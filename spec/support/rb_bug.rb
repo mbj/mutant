@@ -10,7 +10,6 @@ module RbBug
   # @return [undefined]
   #
   # @api private
-  #
   def self.call
     rb_bug('%s', :string, 'test bug')
   end

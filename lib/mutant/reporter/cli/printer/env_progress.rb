@@ -20,10 +20,9 @@ module Mutant
           #
           # @return [undefined]
           #
-          # @api private
-          #
           # rubocop:disable AbcSize
           #
+          # @api private
           def run
             visit(Config, env.config)
             info 'Subjects:        %s',        amount_subjects
@@ -39,22 +38,20 @@ module Mutant
 
         private
 
-          # Return coverage percent
+          # Coverage in percent
           #
           # @return [Float]
           #
           # @api private
-          #
           def coverage_percent
             coverage * 100
           end
 
-          # Return overhead percent
+          # Overhead in percent
           #
           # @return [Float]
           #
           # @api private
-          #
           def overhead_percent
             (overhead / killtime) * 100
           end

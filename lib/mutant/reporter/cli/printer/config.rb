@@ -11,10 +11,9 @@ module Mutant
           #
           # @return [undefined]
           #
-          # @api private
-          #
           # rubocop:disable AbcSize
           #
+          # @api private
           def run
             info 'Mutant configuration:'
             info 'Matcher:         %s',      object.matcher.inspect

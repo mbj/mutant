@@ -18,7 +18,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def dispatch
             emit_singletons
             Mutator::Util::Symbol.each(value, self) do |value|

@@ -16,17 +16,15 @@ module Mutant
         # @return [self]
         #
         # @api private
-        #
         abstract_method :run
 
       private
 
-        # Return status color
+        # Status color
         #
         # @return [Color]
         #
         # @api private
-        #
         def status_color
           success? ? Color::GREEN : Color::RED
         end
@@ -39,7 +37,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def visit_collection(printer, collection)
           collection.each do |object|
             visit(printer, object)
@@ -54,7 +51,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def visit(printer, object)
           printer.call(output, object)
         end
@@ -64,7 +60,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def info(string, *arguments)
           puts(format(string, *arguments))
         end
@@ -74,7 +69,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def status(string, *arguments)
           puts(colorize(status_color, format(string, *arguments)))
         end
@@ -84,7 +78,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def puts(string)
           output.puts(string)
         end
@@ -94,12 +87,11 @@ module Mutant
         # @param [Color] color
         # @param [String] message
         #
-        # @api private
-        #
         # @return [String]
         #   if color is enabled
         #   unmodified message otherwise
         #
+        # @api private
         def colorize(color, message)
           color = Color::NONE unless tty?
           color.format(message)
@@ -110,7 +102,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def tty?
           output.tty?
         end
@@ -120,7 +111,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         alias_method :color?, :tty?
       end # Printer
     end # CLI

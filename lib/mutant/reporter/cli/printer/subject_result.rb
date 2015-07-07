@@ -12,7 +12,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def run
             status(subject.identification)
             tests.each do |test|

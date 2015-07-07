@@ -4,12 +4,11 @@ module Mutant
     class Mailbox
       include Adamantium::Flat, Concord::Public.new(:receiver, :sender)
 
-      # Return new mailbox
+      # New mailbox
       #
       # @return [Mailbox]
       #
       # @api private
-      #
       def self.new
         mutex              = Mutex.new
         condition_variable = ConditionVariable.new
@@ -21,14 +20,13 @@ module Mutant
         )
       end
 
-      # Return binding for RPC to other actors
+      # Binding for RPC to other actors
       #
       # @param [Actor::Sender] other
       #
       # @return [Binding]
       #
       # @api private
-      #
       def bind(other)
         Binding.new(self, other)
       end

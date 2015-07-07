@@ -3,22 +3,20 @@ module Mutant
   class Context
     include Adamantium::Flat, AbstractType, Concord::Public.new(:source_path)
 
-    # Return root ast node
+    # Root ast node
     #
     # @param [Parser::AST::Node] node
     #
     # @return [Parser::AST::Node]
     #
     # @api private
-    #
     abstract_method :root
 
-    # Return identification
+    # Identification string
     #
     # @return [String]
     #
     # @api private
-    #
     abstract_method :identification
 
   end # Context

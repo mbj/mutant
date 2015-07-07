@@ -10,7 +10,7 @@ module Mutant
 
       DEFAULT = new(Hash[anima.attribute_names.map { |name| [name, []] }])
 
-      # Return configuration with added value
+      # Add value to configurable collection
       #
       # @param [Symbol] attribute
       # @param [Object] value
@@ -18,7 +18,6 @@ module Mutant
       # @return [Config]
       #
       # @api private
-      #
       def add(attribute, value)
         update(attribute => public_send(attribute).dup << value)
       end

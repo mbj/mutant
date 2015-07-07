@@ -13,7 +13,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def each(&block)
         return to_enum unless block_given?
 
@@ -24,22 +23,20 @@ module Mutant
 
     private
 
-      # Return method matcher class
+      # method matcher class
       #
       # @return [Class:Matcher::Method]
       #
       # @api private
-      #
       def matcher
         self.class::MATCHER
       end
 
-      # Return methods
+      # Available methods scope
       #
       # @return [Enumerable<Method, UnboundMethod>]
       #
       # @api private
-      #
       def methods
         candidate_names.each_with_object([]) do |name, methods|
           method = access(name)
@@ -48,12 +45,11 @@ module Mutant
       end
       memoize :methods
 
-      # Return subjects
+      # Subjects detected on scope
       #
       # @return [Array<Subject>]
       #
       # @api private
-      #
       def subjects
         methods.map do |method|
           matcher.build(env, scope, method)
@@ -61,12 +57,11 @@ module Mutant
       end
       memoize :subjects
 
-      # Return candidate names
+      # Candidate method names on target scope
       #
       # @return [Enumerable<Symbol>]
       #
       # @api private
-      #
       def candidate_names
         (
           candidate_scope.public_instance_methods(false)   +
@@ -75,12 +70,11 @@ module Mutant
         ).sort
       end
 
-      # Return candidate scope
+      # Candidate scope
       #
       # @return [Class, Module]
       #
       # @api private
-      #
       abstract_method :candidate_scope
 
       # Matcher for singleton methods
@@ -89,24 +83,22 @@ module Mutant
 
       private
 
-        # Return method for name
+        # Method object on scope
         #
         # @param [Symbol] method_name
         #
         # @return [Method]
         #
         # @api private
-        #
         def access(method_name)
           scope.method(method_name)
         end
 
-        # Return candidate scope
+        # Candidate scope
         #
         # @return [Class]
         #
         # @api private
-        #
         def candidate_scope
           scope.singleton_class
         end
@@ -120,24 +112,22 @@ module Mutant
 
       private
 
-        # Return method for name
+        # Method object on scope
         #
         # @param [Symbol] method_name
         #
         # @return [UnboundMethod]
         #
         # @api private
-        #
         def access(method_name)
           scope.instance_method(method_name)
         end
 
-        # Return candidate scope
+        # Candidate scope
         #
         # @return [Class, Module]
         #
         # @api private
-        #
         def candidate_scope
           scope
         end

@@ -1,5 +1,8 @@
 module Mutant
-  # The configuration of a mutator run
+  # Standalone configuration of a mutant execution.
+  #
+  # Does not reference any "external" volatile state. The configuration applied
+  # to current environment is being represented by the Mutant::Env object.
   class Config
     include Adamantium::Flat, Anima::Update, Anima.new(
       :debug,

@@ -6,7 +6,6 @@ module Rspec
   #   returns the value of block
   #
   # @api private
-  #
   def self.nest
     original_world, original_configuration =
       ::RSpec.instance_variable_get(:@world),

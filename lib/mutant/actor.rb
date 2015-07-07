@@ -10,12 +10,11 @@ module Mutant
     Undefined = Class.new do
       INSPECT = 'Mutant::Actor::Undefined'.freeze
 
-      # Return object inspection
+      # Object inspection
       #
       # @return [String]
       #
       # @api private
-      #
       def inspect
         INSPECT
       end
@@ -25,7 +24,7 @@ module Mutant
     class Message
       include Concord::Public.new(:type, :payload)
 
-      # Return new message
+      # New message
       #
       # @param [Symbol] type
       # @param [Object] payload
@@ -33,7 +32,6 @@ module Mutant
       # @return [Message]
       #
       # @api private
-      #
       def self.new(_type, _payload = Undefined)
         super
       end
@@ -51,7 +49,6 @@ module Mutant
       # @return [Object]
       #
       # @api private
-      #
       def call(type)
         other.call(Message.new(type, mailbox.sender))
         message = mailbox.receiver.call

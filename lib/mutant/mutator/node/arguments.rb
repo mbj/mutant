@@ -13,7 +13,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def dispatch
           emit_argument_presence
           emit_argument_mutations
@@ -25,7 +24,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def emit_argument_presence
           emit_type
           Mutator::Util::Array::Presence.each(children, self) do |children|
@@ -38,7 +36,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def emit_argument_mutations
           children.each_with_index do |child, index|
             Mutator.each(child) do |mutant|
@@ -55,7 +52,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def invalid_argument_replacement?(mutant, index)
           original = children.fetch(index)
 
@@ -69,7 +65,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def emit_mlhs_expansion
           mlhs_childs_with_index.each do |child, index|
             dup_children = children.dup
@@ -79,12 +74,11 @@ module Mutant
           end
         end
 
-        # Return mlhs childs
+        # Multiple left hand side childs
         #
         # @return [Enumerable<Parser::AST::Node, Fixnum>]
         #
         # @api private
-        #
         def mlhs_childs_with_index
           children.each_with_index.select do |child, _index|
             n_mlhs?(child)

@@ -13,7 +13,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def dispatch
           children.each_index do |index|
             mutate_child(index)

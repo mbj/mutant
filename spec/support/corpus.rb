@@ -31,6 +31,7 @@ module MutantSpec
       #
       # @raise [Exception]
       #
+      # @api private
       def verify_mutation_coverage
         checkout
         Dir.chdir(repo_path) do
@@ -60,6 +61,7 @@ module MutantSpec
       #
       # rubocop:disable AbcSize
       #
+      # @api private
       def verify_mutation_generation
         checkout
         start = Time.now
@@ -99,7 +101,6 @@ module MutantSpec
       # @return [self]
       #
       # @api private
-      #
       def checkout
         return self if noinstall?
         TMP.mkdir unless TMP.directory?
@@ -126,7 +127,6 @@ module MutantSpec
       # @return [undefined]
       #
       # @api private
-      #
       def install_mutant
         return if noinstall?
         relative = ROOT.relative_path_from(repo_path)
@@ -142,12 +142,11 @@ module MutantSpec
       # Not in the docs. Number from chatting with their support.
       CIRCLE_CI_CONTAINER_PROCESSES = 2
 
-      # Return number of parallel processes to use
+      # Number of parallel processes to use
       #
       # @return [Fixnum]
       #
       # @api private
-      #
       def parallel_processes
         if ENV['CI']
           Mutant::Config::DEFAULT.jobs
@@ -156,12 +155,11 @@ module MutantSpec
         end
       end
 
-      # Return repository path
+      # Repository path
       #
       # @return [Pathname]
       #
       # @api private
-      #
       def repo_path
         TMP.join(name)
       end
@@ -171,7 +169,6 @@ module MutantSpec
       # @return [Boolean]
       #
       # @api private
-      #
       def noinstall?
         ENV.key?('NOINSTALL')
       end
@@ -208,7 +205,6 @@ module MutantSpec
       # @param [Array<String>] arguments
       #
       # @api private
-      #
       def system(arguments)
         return if Kernel.system(*arguments)
         if block_given?

@@ -10,7 +10,6 @@ module Mutant
     # @return [self]
     #
     # @api private
-    #
     abstract_method :warn
 
     # Report start
@@ -20,7 +19,6 @@ module Mutant
     # @return [self]
     #
     # @api private
-    #
     abstract_method :start
 
     # Report collector state
@@ -30,7 +28,6 @@ module Mutant
     # @return [self]
     #
     # @api private
-    #
     abstract_method :report
 
     # Report progress on object
@@ -40,7 +37,6 @@ module Mutant
     # @return [self]
     #
     # @api private
-    #
     abstract_method :progress
 
   end # Reporter

@@ -33,7 +33,6 @@ module Mutant
   # @return [Boolean]
   #
   # @api private
-  #
   def self.ci?
     ENV.key?('CI')
   end

@@ -4,14 +4,13 @@ module Mutant
     class Expression < self
       include Concord.new(:integration)
 
-      # Return tests for subject
+      # Tests for subject
       #
       # @param [Subject] subject
       #
       # @return [Enumerable<Test>]
       #
       # @api private
-      #
       def call(subject)
         subject.match_expressions.each do |match_expression|
           subject_tests = integration.all_tests.select do |test|

@@ -5,12 +5,11 @@ module Mutant
     # Coverage mixin
     module Coverage
 
-      # Return coverage
+      # Observed coverage
       #
       # @return [Rational]
       #
       # @api private
-      #
       def coverage
         return Rational(0) if amount_mutation_results.zero?
 
@@ -24,7 +23,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def self.included(host)
         super
 
@@ -47,7 +45,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def sum(name, collection)
         define_method(name) do
           public_send(collection).map(&name).reduce(0, :+)
@@ -56,12 +53,15 @@ module Mutant
       end
     end # ClassMethods
 
-    # Return overhead
+    # Mutant overhead running mutatet tests
+    #
+    # This is NOT the overhead of mutation testing, just an engine specific
+    # measurement for the efficiency of the parellelization engine, kill
+    # isolation etc.
     #
     # @return [Float]
     #
     # @api private
-    #
     def overhead
       runtime - killtime
     end
@@ -73,7 +73,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def self.included(host)
       host.class_eval do
         include Adamantium, Anima::Update
@@ -90,18 +89,16 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def success?
         coverage.eql?(env.config.expected_coverage)
       end
       memoize :success?
 
-      # Return failed subject results
+      # Failed subject results
       #
       # @return [Array<Result::Subject>]
       #
       # @api private
-      #
       def failed_subject_results
         subject_results.reject(&:success?)
       end
@@ -111,22 +108,20 @@ module Mutant
       sum :amount_mutations_killed, :subject_results
       sum :killtime,                :subject_results
 
-      # Return amount of mutations
+      # Amount of mutations
       #
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_mutations
         env.mutations.length
       end
 
-      # Return amount of subjects
+      # Amount of subjects
       #
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_subjects
         env.subjects.length
       end
@@ -155,7 +150,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def success?
         alive_mutation_results.empty?
       end
@@ -165,68 +159,61 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def continue?
         mutation_results.all?(&:success?)
       end
 
-      # Return killed mutations
+      # Killed mutations
       #
       # @return [Array<Result::Mutation>]
       #
       # @api private
-      #
       def alive_mutation_results
         mutation_results.reject(&:success?)
       end
       memoize :alive_mutation_results
 
-      # Return amount of mutations
+      # Amount of mutations
       #
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_mutation_results
         mutation_results.length
       end
 
-      # Return amount of mutations
+      # Amount of mutations
       #
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_mutations
         subject.mutations.length
       end
 
-      # Return number of killed mutations
+      # Number of killed mutations
       #
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_mutations_killed
         killed_mutation_results.length
       end
 
-      # Return number of alive mutations
+      # Number of alive mutations
       #
       # @return [Fixnum]
       #
       # @api private
-      #
       def amount_mutations_alive
         alive_mutation_results.length
       end
 
-      # Return alive mutations
+      # Alive mutations
       #
       # @return [Array<Result::Mutation>]
       #
       # @api private
-      #
       def killed_mutation_results
         mutation_results.select(&:success?)
       end
@@ -238,12 +225,11 @@ module Mutant
     class Mutation
       include Result, Anima.new(:mutation, :test_result)
 
-      # Return runtime
+      # The runtime
       #
       # @return [Float]
       #
       # @api private
-      #
       def runtime
         test_result.runtime
       end
@@ -255,7 +241,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       def success?
         mutation.class.success?(test_result)
       end

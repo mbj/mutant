@@ -15,7 +15,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def dispatch
             input.each_index do |index|
               dup = dup_input
@@ -36,7 +35,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def dispatch
             input.each_with_index do |element, index|
               Mutator.each(element).each do |mutation|
@@ -56,7 +54,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def dispatch
           run(Element)
           run(Presence)

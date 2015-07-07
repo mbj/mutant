@@ -4,12 +4,11 @@ module Mutant
     class Trace
       include Adamantium::Mutable, Anima.new(:start_calls, :progress_calls, :report_calls, :warn_calls)
 
-      # Return new trace reporter
+      # New trace reporter
       #
       # @return [Trace]
       #
       # @api private
-      #
       def self.new
         super(Hash[anima.attribute_names.map { |name| [name, []] }])
       end
@@ -23,12 +22,11 @@ module Mutant
 
       REPORT_DELAY = 0.0
 
-      # Return report delay
+      # Report delay
       #
       # @return [Float]
       #
       # @api private
-      #
       def delay
         REPORT_DELAY
       end

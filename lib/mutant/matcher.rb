@@ -11,14 +11,11 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def self.build(*arguments)
       new(*arguments)
     end
 
     # Enumerate subjects
-    #
-    # @api private
     #
     # @return [self]
     #   if block given
@@ -26,6 +23,7 @@ module Mutant
     # @return [Enumerable<Subject>]
     #   otherwise
     #
+    # @api private
     abstract_method :each
 
   end # Matcher

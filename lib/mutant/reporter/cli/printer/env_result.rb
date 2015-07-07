@@ -11,7 +11,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def run
             visit_collection(SubjectResult, failed_subject_results)
             visit(EnvProgress, object)

@@ -21,7 +21,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def run
             status(
               FORMAT,
@@ -36,12 +35,11 @@ module Mutant
 
         private
 
-          # Return object being printed
+          # Object being printed
           #
           # @return [Result::Env]
           #
           # @api private
-          #
           def object
             super.payload
           end

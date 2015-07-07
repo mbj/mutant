@@ -8,20 +8,18 @@ module Mutant
         "Fix your lib to follow normal ruby semantics!\n" \
         '{Module,Class}#name should return resolvable constant name as String or nil'.freeze
 
-      # Return scopes that are eligible for mnatching
+      # Scopes that are eligible for matching
       #
       # @return [Enumerable<Matcher::Scope>]
       #
       # @api private
-      #
       attr_reader :matchable_scopes
 
-      # Return new bootstrap env
+      # New bootstrap env
       #
       # @return [Env]
       #
       # @api private
-      #
       def self.new(_config, _cache = Cache.new)
         super
       end
@@ -31,7 +29,6 @@ module Mutant
       # @return [Object]
       #
       # @api private
-      #
       def initialize(*)
         super
         infect
@@ -45,18 +42,16 @@ module Mutant
       # @return [self]
       #
       # @api private
-      #
       def warn(message)
         config.reporter.warn(message)
         self
       end
 
-      # Return environment after bootstraping
+      # Environment after bootstraping
       #
       # @return [Env]
       #
       # @api private
-      #
       # rubocop:disable MethodLength
       #
       def env
@@ -75,7 +70,7 @@ module Mutant
 
     private
 
-      # Return scope name
+      # Scope name from scopeing object
       #
       # @param [Class, Module] scope
       #
@@ -86,7 +81,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def scope_name(scope)
         scope.name
       rescue => exception
@@ -99,19 +93,17 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def infect
         config.includes.each(&$LOAD_PATH.method(:<<))
         config.requires.each(&method(:require))
         @integration = config.integration.new(config).setup
       end
 
-      # Return matched subjects
+      # Matched subjects
       #
       # @return [Enumerable<Subject>]
       #
       # @api private
-      #
       def matched_subjects
         Matcher::Compiler.call(self, config.matcher).to_a
       end
@@ -121,7 +113,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def initialize_matchable_scopes
         scopes = ObjectSpace.each_object(Module).each_with_object([]) do |scope, aggregate|
           expression = expression(scope)
@@ -142,7 +133,6 @@ module Mutant
       #   otherwise
       #
       # @api private
-      #
       def expression(scope)
         name = scope_name(scope) or return
 

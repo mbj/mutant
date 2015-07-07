@@ -8,25 +8,22 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       abstract_method :public?
 
-      # Return method name
+      # Method name
       #
       # @return [Expression]
       #
       # @api private
-      #
       def name
         node.children.fetch(self.class::NAME_INDEX)
       end
 
-      # Return match expression
+      # Match expression
       #
       # @return [String]
       #
       # @api private
-      #
       def expression
         Expression::Method.new(
           scope_symbol: self.class::SYMBOL,
@@ -36,12 +33,11 @@ module Mutant
       end
       memoize :expression
 
-      # Return match expressions
+      # Match expressions
       #
       # @return [Array<Expression>]
       #
       # @api private
-      #
       def match_expressions
         [expression].concat(context.match_expressions)
       end
@@ -49,12 +45,11 @@ module Mutant
 
     private
 
-      # Return scope
+      # The scope
       #
       # @return [Class, Module]
       #
       # @api private
-      #
       def scope
         context.scope
       end

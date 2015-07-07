@@ -40,7 +40,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def dispatch
           emit_singletons
           if meta.index_assignment?
@@ -55,7 +54,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def non_index_dispatch
           if meta.binary_method_operator?
             run(Binary)
@@ -66,20 +64,21 @@ module Mutant
           end
         end
 
-        # Return AST metadata for node
+        # AST metadata for node
         #
         # @return [AST::Meta::Send]
+        #
+        # @api private
         def meta
           AST::Meta::Send.new(node)
         end
         memoize :meta
 
-        # Return arguments
+        # Arguments being send
         #
         # @return [Enumerable<Parser::AST::Node>]
         #
         # @api private
-        #
         alias_method :arguments, :remaining_children
 
         # Perform normal, non special case dispatch
@@ -87,7 +86,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def normal_dispatch
           emit_naked_receiver
           emit_selector_replacement
@@ -101,7 +99,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def emit_selector_replacement
           SELECTOR_REPLACEMENTS.fetch(selector, EMPTY_ARRAY).each do |replacement|
             emit_selector(replacement)
@@ -113,7 +110,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def emit_naked_receiver
           emit(receiver) if receiver && !NOT_ASSIGNABLE.include?(receiver.type)
         end
@@ -123,7 +119,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def mutate_arguments
           emit_type(receiver, selector)
           remaining_children_with_index.each do |_node, index|
@@ -137,7 +132,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def emit_argument_propagation
           node = arguments.first
           emit(node) if arguments.one? && !NOT_STANDALONE.include?(node.type)
@@ -148,7 +142,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def mutate_receiver
           return unless receiver
           emit_implicit_self
@@ -162,7 +155,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def emit_implicit_self
           emit_receiver(nil) if n_self?(receiver) && !(
             KEYWORDS.include?(selector)         ||

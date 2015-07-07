@@ -11,7 +11,6 @@ module Mutant
       # @return [Reporter::CLI]
       #
       # @api private
-      #
       def self.build(output)
         tput = Tput.detect
         tty = output.respond_to?(:tty?) && output.tty?
@@ -30,7 +29,6 @@ module Mutant
       # @return [self]
       #
       # @api private
-      #
       def start(env)
         write(format.start(env))
         self
@@ -43,20 +41,18 @@ module Mutant
       # @return [self]
       #
       # @api private
-      #
       def progress(status)
         write(format.progress(status))
         self
       end
 
-      # Return report delay in seconds
+      # Report delay in seconds
       #
       # TODO: Move this to a callback registration
       #
       # @return [Float]
       #
       # @api private
-      #
       def delay
         format.delay
       end
@@ -68,7 +64,6 @@ module Mutant
       # @return [self]
       #
       # @api private
-      #
       def warn(message)
         output.puts(message)
         self
@@ -81,7 +76,6 @@ module Mutant
       # @return [self]
       #
       # @api private
-      #
       def report(env)
         Printer::EnvResult.call(output, env)
         self
@@ -96,7 +90,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def write(frame)
         output.write(frame)
       end

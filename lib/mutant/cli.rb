@@ -18,7 +18,6 @@ module Mutant
     #   the exit status
     #
     # @api private
-    #
     def self.run(arguments)
       Runner.call(Env::Bootstrap.call(call(arguments))).success? ? EXIT_SUCCESS : EXIT_FAILURE
     rescue Error => exception
@@ -33,19 +32,17 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def initialize(arguments)
       @config = Config::DEFAULT
 
       parse(arguments)
     end
 
-    # Return config
+    # Config parsed from CLI
     #
     # @return [Config]
     #
     # @api private
-    #
     attr_reader :config
 
   private
@@ -61,7 +58,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def parse(arguments)
       opts = OptionParser.new do |builder|
         builder.banner = 'usage: mutant [options] MATCH_EXPRESSION ...'
@@ -82,7 +78,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def parse_match_expressions(expressions)
       fail Error, 'No expressions given' if expressions.empty?
 
@@ -97,10 +92,9 @@ module Mutant
     #
     # @return [undefined]
     #
-    # @api private
-    #
     # rubocop:disable MethodLength
     #
+    # @api private
     def add_environment_options(opts)
       opts.separator('Environment:')
       opts.on('--zombie', 'Run mutant zombified') do
@@ -124,7 +118,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def setup_integration(name)
       update(integration: Integration.setup(name))
     rescue LoadError
@@ -138,7 +131,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def add_mutation_options(opts)
       opts.separator(nil)
       opts.separator('Options:')
@@ -159,7 +151,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def add_filter_options(opts)
       opts.on('--ignore-subject PATTERN', 'Ignore subjects that match PATTERN') do |pattern|
         add_matcher(:subject_ignores, config.expression_parser.(pattern))
@@ -173,7 +164,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def add_debug_options(opts)
       opts.on('--fail-fast', 'Fail fast') do
         update(fail_fast: true)
@@ -198,7 +188,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def update(attributes)
       @config = @config.update(attributes)
     end
@@ -214,7 +203,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def add(attribute, value)
       update(attribute => config.public_send(attribute).dup << value)
     end
@@ -230,7 +218,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def add_matcher(attribute, value)
       update(matcher: config.matcher.add(attribute, value))
     end

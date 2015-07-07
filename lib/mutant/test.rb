@@ -3,12 +3,11 @@ module Mutant
   class Test
     include Adamantium::Flat, Anima.new(:id, :expression)
 
-    # Return test identification
+    # Identification string
     #
     # @return [String]
     #
     # @api private
-    #
     alias_method :identification, :id
 
   end # Test

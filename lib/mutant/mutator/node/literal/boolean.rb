@@ -19,7 +19,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def dispatch
             emit_nil
             emit(s(MAP.fetch(node.type)))

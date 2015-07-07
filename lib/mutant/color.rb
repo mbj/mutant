@@ -10,7 +10,6 @@ module Mutant
     # @return [String]
     #
     # @api private
-    #
     def format(text)
       "\e[#{@code}m#{text}\e[0m"
     end
@@ -25,7 +24,6 @@ module Mutant
       #   the argument string
       #
       # @api private
-      #
       def format(text)
         text
       end
@@ -37,7 +35,6 @@ module Mutant
       # @return [undefined]
       #
       # @api private
-      #
       def initialize
       end
 

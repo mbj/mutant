@@ -10,22 +10,20 @@ module Mutant
 
     private_constant(*constants(false))
 
-    # Return syntax representing this expression
+    # Syntax of expression
     #
     # @return [String]
     #
     # @api private
-    #
     abstract_method :syntax
 
-    # Return match length for expression
+    # Match length with other expression
     #
     # @param [Expression] other
     #
     # @return [Fixnum]
     #
     # @api private
-    #
     def match_length(other)
       if eql?(other)
         syntax.length
@@ -41,7 +39,6 @@ module Mutant
     # @return [Boolean]
     #
     # @api private
-    #
     def prefix?(other)
       !match_length(other).zero?
     end

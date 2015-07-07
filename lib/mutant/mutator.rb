@@ -13,7 +13,6 @@ module Mutant
     # @return [self]
     #
     # @api private
-    #
     def self.each(input, parent = nil, &block)
       return to_enum(__method__, input, parent) unless block_given?
       REGISTRY.lookup(input).new(input, parent, block)
@@ -26,7 +25,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def self.handle(*types)
       types.each do |type|
         REGISTRY.register(type, self)
@@ -34,20 +32,18 @@ module Mutant
     end
     private_class_method :handle
 
-    # Return input
+    # Mutation input
     #
     # @return [Object]
     #
     # @api private
-    #
     attr_reader :input
 
-    # Return input
+    # Parent context of input
     #
     # @return [Object]
     #
     # @api private
-    #
     attr_reader :parent
 
   private
@@ -61,7 +57,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def initialize(input, parent, block)
       @input, @parent, @block = input, parent, block
       @seen = Set.new
@@ -76,7 +71,6 @@ module Mutant
     # @return [Boolean]
     #
     # @api private
-    #
     def new?(object)
       !@seen.include?(object)
     end
@@ -88,7 +82,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def guard(object)
       @seen << object
     end
@@ -98,7 +91,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     abstract_method :dispatch
 
     # Emit generated mutation if object is not equivalent to input
@@ -108,7 +100,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def emit(object)
       return unless new?(object)
 
@@ -124,7 +115,6 @@ module Mutant
     # @return [self]
     #
     # @api private
-    #
     def emit!(node)
       @block.call(node)
       self
@@ -135,7 +125,6 @@ module Mutant
     # @return [undefined]
     #
     # @api private
-    #
     def run(mutator)
       mutator.new(input, self, method(:emit))
     end
@@ -145,7 +134,6 @@ module Mutant
     # @return [Object]
     #
     # @api private
-    #
     def dup_input
       input.dup
     end

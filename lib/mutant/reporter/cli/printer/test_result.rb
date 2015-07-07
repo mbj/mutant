@@ -16,7 +16,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def run
             info(STATUS_FORMAT, tests.length, runtime)
             tests.each do |test|

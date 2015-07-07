@@ -16,7 +16,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def match?(node)
           line?(node) && name?(node) && receiver?(node)
         end
@@ -28,7 +27,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def line?(node)
           expression = node.location.expression
           return false unless expression
@@ -42,7 +40,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def name?(node)
           node.children[NAME_INDEX].equal?(method_name)
         end
@@ -54,7 +51,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def receiver?(node)
           receiver = node.children[RECEIVER_INDEX]
           case receiver.type
@@ -75,7 +71,6 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def receiver_name?(node)
           name = node.children[NAME_INDEX]
           name.to_s.eql?(context.unqualified_name)

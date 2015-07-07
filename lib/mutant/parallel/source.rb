@@ -6,7 +6,7 @@ module Mutant
 
       NoJobError = Class.new(RuntimeError)
 
-      # Return next job
+      # Next job
       #
       # @return [Object]
       #
@@ -14,7 +14,6 @@ module Mutant
       #   when no next job is available
       #
       # @api private
-      #
       abstract_method :next
 
       # Test if next job is available
@@ -22,7 +21,6 @@ module Mutant
       # @return [Boolean]
       #
       # @api private
-      #
       abstract_method :next?
 
       # Job source backed by a finite array
@@ -34,7 +32,6 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        #
         def initialize(*)
           super
 
@@ -46,12 +43,11 @@ module Mutant
         # @return [Boolean]
         #
         # @api private
-        #
         def next?
           @next_index < jobs.length
         end
 
-        # Return next job
+        # Next job
         #
         # @return [Object]
         #
@@ -59,7 +55,6 @@ module Mutant
         #   when no next job is available
         #
         # @api private
-        #
         def next
           fail NoJobError unless next?
           jobs.fetch(@next_index).tap do

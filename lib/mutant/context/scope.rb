@@ -7,24 +7,22 @@ module Mutant
 
       NAMESPACE_DELIMITER = '::'.freeze
 
-      # Return AST wrapping mutated node
+      # Return root node for mutation
       #
       # @return [Parser::AST::Node]
       #
       # @api private
-      #
       def root(node)
         nesting.reverse.reduce(node) do |current, scope|
           self.class.wrap(scope, current)
         end
       end
 
-      # Return identification
+      # Identification string
       #
       # @return [String]
       #
       # @api private
-      #
       def identification
         scope.name
       end
@@ -41,7 +39,6 @@ module Mutant
       #   if scope is of kind module
       #
       # @api private
-      #
       def self.wrap(scope, node)
         name = s(:const, nil, scope.name.split(NAMESPACE_DELIMITER).last.to_sym)
         case scope
@@ -54,12 +51,11 @@ module Mutant
         end
       end
 
-      # Return nesting
+      # Nesting of scope
       #
       # @return [Enumerable<Class,Module>]
       #
       # @api private
-      #
       def nesting
         const = ::Object
         name_nesting.each_with_object([]) do |name, nesting|
@@ -69,22 +65,20 @@ module Mutant
       end
       memoize :nesting
 
-      # Return unqualified name of scope
+      # Unqualified name of scope
       #
       # @return [String]
       #
       # @api private
-      #
       def unqualified_name
         name_nesting.last
       end
 
-      # Return match expressions
+      # Match expressions for scope
       #
       # @return [Enumerable<Expression>]
       #
       # @api private
-      #
       def match_expressions
         name_nesting.each_index.reverse_each.map do |index|
           Expression::Namespace::Recursive.new(
@@ -94,22 +88,20 @@ module Mutant
       end
       memoize :match_expressions
 
-      # Return scope wrapped by context
+      # Scope wrapped by context
       #
       # @return [::Module|::Class]
       #
       # @api private
-      #
       attr_reader :scope
 
     private
 
-      # Return nesting of names of scope
+      # Nesting of names in scope
       #
       # @return [Array<String>]
       #
       # @api private
-      #
       def name_nesting
         scope.name.split(NAMESPACE_DELIMITER)
       end

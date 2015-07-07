@@ -17,7 +17,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def dispatch
             mutate_name
             emit_value_mutations if value
@@ -28,7 +27,6 @@ module Mutant
           # @return [undefined]
           #
           # @api private
-          #
           def mutate_name
             Mutator::Util::Symbol.each(name, self) do |name|
               emit_name(name.upcase)
