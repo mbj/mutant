@@ -15,7 +15,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       +false
       -----------------------
       Mutant configuration:
-      Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+      Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     Mutant::Integration::Null
       Expect Coverage: 100.00%
       Jobs:            1

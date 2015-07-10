@@ -7,7 +7,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
     context 'on default config' do
       it_reports(<<-REPORT)
         Mutant configuration:
-        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
         Expect Coverage: 100.00%
         Jobs:            1
@@ -21,7 +21,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
 
       it_reports(<<-REPORT)
         Mutant configuration:
-        Matcher:         #<Mutant::Matcher::Config match_expressions=[] subject_ignores=[] subject_selects=[]>
+        Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
         Expect Coverage: 10.00%
         Jobs:            1
