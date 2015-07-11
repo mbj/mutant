@@ -14,7 +14,7 @@ RSpec.describe Mutant::Matcher::Compiler do
   end
 
   let(:expected_predicate) do
-    Morpher.compile(s(:true))
+    Morpher.compile(s(:negate, s(:or)))
   end
 
   describe '.call' do
@@ -41,7 +41,7 @@ RSpec.describe Mutant::Matcher::Compiler do
         it { should eql(expected_matcher) }
       end
 
-      context 'and a subject ignore' do
+      context 'and ignore epxressions' do
         let(:attributes) do
           {
             match_expressions:  [expression_a],

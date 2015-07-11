@@ -40,15 +40,11 @@ module Mutant
       #
       # @api private
       def ignored_subjects
-        rejectors = config.ignore_expressions.map(&SubjectPrefix.method(:new))
-
-        if rejectors.any?
-          Morpher::Evaluator::Predicate::Boolean::Negation.new(
-            Morpher::Evaluator::Predicate::Boolean::Or.new(rejectors)
+        Morpher::Evaluator::Predicate::Boolean::Negation.new(
+          Morpher::Evaluator::Predicate::Boolean::Or.new(
+            config.ignore_expressions.map(&SubjectPrefix.method(:new))
           )
-        else
-          Morpher::Evaluator::Predicate::Tautology.new
-        end
+        )
       end
 
       # Matcher for expression on env
