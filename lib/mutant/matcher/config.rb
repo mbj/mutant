@@ -4,7 +4,8 @@ module Mutant
     class Config
       include Adamantium, Anima::Update, Anima.new(
         :match_expressions,
-        :ignore_expressions
+        :ignore_expressions,
+        :subject_filters
       )
 
       INSPECT_FORMAT      = "#<#{self} %s>".freeze
@@ -12,6 +13,11 @@ module Mutant
       ATTRIBUTE_FORMAT    = '%s: [%s]'.freeze
       ENUM_DELIMITER      = ','.freeze
       EMPTY_ATTRIBUTES    = 'empty'.freeze
+      PRESENTATIONS       = IceNine.deep_freeze(
+        match_expressions:  :syntax,
+        ignore_expressions: :syntax,
+        subject_filters:    :inspect
+      )
       private_constant(*constants(false))
 
       DEFAULT = new(Hash[anima.attribute_names.map { |name| [name, []] }])
@@ -71,7 +77,9 @@ module Mutant
         ATTRIBUTE_FORMAT %
           [
             attribute_name,
-            public_send(attribute_name).map(&:syntax).join(ENUM_DELIMITER)
+            public_send(attribute_name)
+              .map(&PRESENTATIONS.fetch(attribute_name))
+              .join(ENUM_DELIMITER)
           ]
       end
 

@@ -32,5 +32,14 @@ RSpec.describe Mutant::Matcher::Config do
 
       it { should eql('#<Mutant::Matcher::Config match_expressions: [Foo] ignore_expressions: [Bar]>') }
     end
+
+    context 'with subject filter' do
+      let(:object) do
+        described_class::DEFAULT
+          .add(:subject_filters, 'foo')
+      end
+
+      it { should eql('#<Mutant::Matcher::Config subject_filters: ["foo"]>') }
+    end
   end
 end
