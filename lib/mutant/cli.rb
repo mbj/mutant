@@ -152,7 +152,7 @@ module Mutant
     #
     # @api private
     def add_filter_options(opts)
-      opts.on('--ignore-subject PATTERN', 'Ignore subjects that match PATTERN') do |pattern|
+      opts.on('--ignore-subject EXPRESSION', 'Ignore subjects that match EXPRESSION as prefix') do |pattern|
         add_matcher(:ignore_expressions, config.expression_parser.(pattern))
       end
     end
