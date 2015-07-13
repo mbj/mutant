@@ -127,7 +127,7 @@ Environment:
 Options:
         --expected-coverage COVERAGE Fail unless COVERAGE is not reached exactly, parsed via Rational()
         --use INTEGRATION            Use INTEGRATION to kill mutations
-        --ignore-subject PATTERN     Ignore subjects that match PATTERN
+        --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
         --fail-fast                  Fail fast
         --version                    Print mutants version
     -d, --debug                      Enable debugging output
