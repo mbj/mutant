@@ -174,6 +174,7 @@ require 'mutant/reporter/cli/printer/status_progressive'
 require 'mutant/reporter/cli/printer/test_result'
 require 'mutant/reporter/cli/tput'
 require 'mutant/reporter/cli/format'
+require 'mutant/repository'
 require 'mutant/zombifier'
 
 module Mutant
