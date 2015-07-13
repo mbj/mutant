@@ -128,6 +128,7 @@ Options:
         --expected-coverage COVERAGE Fail unless COVERAGE is not reached exactly, parsed via Rational()
         --use INTEGRATION            Use INTEGRATION to kill mutations
         --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
+        --since REVISION             Only select subjects touched since REVISION
         --fail-fast                  Fail fast
         --version                    Print mutants version
     -d, --debug                      Enable debugging output
@@ -228,6 +229,20 @@ Options:
       it 'configures requires' do
         expect(subject.config.requires).to eql(%w[foo])
       end
+    end
+
+    context 'with --since flag' do
+      let(:flags) { %w[--since master] }
+
+      let(:expected_matcher_config) do
+        default_matcher_config.update(
+          subject_filters: [
+            Mutant::Repository::SubjectFilter.new(Mutant::Repository::Diff.new('HEAD', 'master'))
+          ]
+        )
+      end
+
+      it_should_behave_like 'a cli parser'
     end
 
     context 'with subject-ignore flag' do

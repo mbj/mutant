@@ -155,6 +155,9 @@ module Mutant
       opts.on('--ignore-subject EXPRESSION', 'Ignore subjects that match EXPRESSION as prefix') do |pattern|
         add_matcher(:ignore_expressions, config.expression_parser.(pattern))
       end
+      opts.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
+        add_matcher(:subject_filters, Repository::SubjectFilter.new(Repository::Diff.from_head(revision)))
+      end
     end
 
     # Add debug options
