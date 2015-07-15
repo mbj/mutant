@@ -12,10 +12,10 @@ module Mutant
     #   datastructure
     # * Does not maintain a unique identification for an example,
     #   aside the instances of `RSpec::Core::Example` objects itself.
-    #   For that reason identifing examples by:
+    #   For that reason identifying examples by:
     #   * full description
     #   * location
-    #   Is NOT enough. It would not be uniqe. So we add an "example index"
+    #   Is NOT enough. It would not be unique. So we add an "example index"
     #   for unique reference.
     class Rspec < self
 
