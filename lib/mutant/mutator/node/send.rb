@@ -100,9 +100,7 @@ module Mutant
         #
         # @api private
         def emit_selector_replacement
-          SELECTOR_REPLACEMENTS.fetch(selector, EMPTY_ARRAY).each do |replacement|
-            emit_selector(replacement)
-          end
+          SELECTOR_REPLACEMENTS.fetch(selector, EMPTY_ARRAY).each(&method(:emit_selector))
         end
 
         # Emit naked receiver mutation
