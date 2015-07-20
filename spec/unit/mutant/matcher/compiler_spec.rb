@@ -14,7 +14,7 @@ RSpec.describe Mutant::Matcher::Compiler do
   end
 
   let(:expected_predicate) do
-    Morpher.compile(s(:true))
+    Morpher.compile(s(:and, s(:negate, s(:or)), s(:and)))
   end
 
   describe '.call' do
@@ -31,32 +31,47 @@ RSpec.describe Mutant::Matcher::Compiler do
     end
 
     context 'on config with match expression' do
-      context 'and no filter' do
+      let(:expected_predicate) do
+        Morpher::Evaluator::Predicate::Boolean::And.new(
+          [
+            Morpher::Evaluator::Predicate::Negation.new(
+              Morpher::Evaluator::Predicate::Boolean::Or.new(ignore_expression_predicates)
+            ),
+            Morpher::Evaluator::Predicate::Boolean::And.new(subject_filter_predicates)
+          ]
+        )
+      end
+
+      let(:expected_positive_matcher)    { Mutant::Matcher::Chain.new([matcher_a]) }
+      let(:attributes)                   { { match_expressions: [expression_a] }   }
+      let(:ignore_expression_predicates) { []                                      }
+      let(:subject_filter_predicates)    { []                                      }
+
+      context 'and no other constraints' do
+        it { should eql(expected_matcher) }
+      end
+
+      context 'and ignore expressions' do
         let(:attributes) do
-          { match_expressions: [expression_a] }
+          super().merge(ignore_expressions: [expression_b])
         end
 
-        let(:expected_positive_matcher) { Mutant::Matcher::Chain.new([matcher_a]) }
+        let(:ignore_expression_predicates) do
+          [Mutant::Matcher::Compiler::SubjectPrefix.new(expression_b)]
+        end
 
         it { should eql(expected_matcher) }
       end
 
-      context 'and a subject ignore' do
+      context 'and subject filters' do
+        let(:filter) { double('filter') }
+
         let(:attributes) do
-          {
-            match_expressions:  [expression_a],
-            ignore_expressions: [expression_b]
-          }
+          super().merge(subject_filters: [filter])
         end
 
-        let(:expected_positive_matcher) { Mutant::Matcher::Chain.new([matcher_a]) }
-
-        let(:expected_predicate) do
-          Morpher::Evaluator::Predicate::Negation.new(
-            Morpher::Evaluator::Predicate::Boolean::Or.new([
-              described_class::SubjectPrefix.new(expression_b)
-            ])
-          )
+        let(:subject_filter_predicates) do
+          [filter]
         end
 
         it { should eql(expected_matcher) }

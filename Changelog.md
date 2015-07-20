@@ -1,5 +1,7 @@
 # v0.8.1 2015-xx-xx
 
+* Add --since flag to constrain mutated subjects based on
+  repository diff from HEAD to other REVISON.
 * Add mutation from #[] to #at / #fetch
 
 # v0.8.0 2015-06-15
