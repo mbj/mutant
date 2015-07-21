@@ -61,7 +61,7 @@ RSpec.describe Mutant::Result::Env do
     context 'when there are no results' do
       let(:results) { 0 }
 
-      it { should eql(Rational(0)) }
+      it { should eql(Rational(1)) }
     end
 
     context 'when there are no kills' do

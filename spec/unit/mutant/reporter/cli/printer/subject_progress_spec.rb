@@ -29,7 +29,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectProgress do
 
       it_reports <<-'STR'
         subject-a mutations: 2
-        (00/02)   0% - killtime: 0.00s runtime: 0.00s overhead: 0.00s
+        (00/02) 100% - killtime: 0.00s runtime: 0.00s overhead: 0.00s
         - test-a
       STR
     end

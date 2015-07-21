@@ -24,7 +24,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Runtime:         4.00s
         Killtime:        0.00s
         Overhead:        Inf%
-        Coverage:        0.00%
+        Coverage:        100.00%
         Expected:        10.00%
       STR
     end
