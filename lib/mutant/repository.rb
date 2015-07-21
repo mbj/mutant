@@ -49,7 +49,7 @@ module Mutant
       # @api private
       def touches?(path, line_range)
         command = %W[
-          git log --pretty=oneline
+          git log
           #{from}...#{to}
           -L #{line_range.begin},#{line_range.end}:#{path}
         ]
