@@ -4,6 +4,8 @@ module Mutant
 
     # Coverage mixin
     module Coverage
+      FULL_COVERAGE = Rational(1).freeze
+      private_constant(*constants(false))
 
       # Observed coverage
       #
@@ -11,24 +13,12 @@ module Mutant
       #
       # @api private
       def coverage
-        return Rational(0) if amount_mutation_results.zero?
-
-        Rational(amount_mutations_killed, amount_mutation_results)
+        if amount_mutation_results.zero?
+          FULL_COVERAGE
+        else
+          Rational(amount_mutations_killed, amount_mutation_results)
+        end
       end
-
-      # Hook called when module gets included
-      #
-      # @param [Class, Module] host
-      #
-      # @return [undefined]
-      #
-      # @api private
-      def self.included(host)
-        super
-
-        host.memoize(:coverage)
-      end
-
     end # Coverage
 
     # Class level mixin
@@ -52,6 +42,8 @@ module Mutant
         memoize(name)
       end
     end # ClassMethods
+
+    private_constant(*constants(false))
 
     # Mutant overhead running mutatet tests
     #

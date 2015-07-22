@@ -208,7 +208,7 @@ RSpec.describe Mutant::Reporter::CLI do
 
         let(:tty?) { true }
 
-        it_reports Mutant::Color::RED.format('(00/02)   0% - killtime: 0.00s runtime: 4.00s overhead: 4.00s') << "\n"
+        it_reports Mutant::Color::GREEN.format('(00/02) 100% - killtime: 0.00s runtime: 4.00s overhead: 4.00s') << "\n"
       end
 
       context 'with last mutation present' do

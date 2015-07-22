@@ -22,7 +22,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
         Runtime:         4.00s
         Killtime:        0.00s
         Overhead:        Inf%
-        Coverage:        0.00%
+        Coverage:        100.00%
         Expected:        100.00%
         Active subjects: 0
       REPORT
@@ -45,7 +45,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
           Runtime:         4.00s
           Killtime:        0.00s
           Overhead:        Inf%
-          Coverage:        0.00%
+          Coverage:        100.00%
           Expected:        10.00%
           Active subjects: 0
         REPORT

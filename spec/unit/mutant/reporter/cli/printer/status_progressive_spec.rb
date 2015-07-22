@@ -8,14 +8,14 @@ RSpec.describe Mutant::Reporter::CLI::Printer::StatusProgressive do
       update(:env_result) { { subject_results: [] } }
 
       it_reports <<-REPORT
-        (00/02)   0% - killtime: 0.00s runtime: 4.00s overhead: 4.00s
+        (00/02) 100% - killtime: 0.00s runtime: 4.00s overhead: 4.00s
       REPORT
 
       context 'on non default coverage expectation' do
         update(:config) { { expected_coverage: 0.1r } }
 
         it_reports <<-REPORT
-          (00/02)   0% - killtime: 0.00s runtime: 4.00s overhead: 4.00s
+          (00/02) 100% - killtime: 0.00s runtime: 4.00s overhead: 4.00s
         REPORT
       end
     end
