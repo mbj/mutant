@@ -38,23 +38,25 @@ module Mutant
       #
       # @api private
       def self.call(&block)
-        reader, writer = IO.pipe.map(&:binmode)
+        IO.pipe(binmode: true) do |reader, writer|
+          begin
+            pid = Process.fork do
+              File.open(File::NULL, 'w') do |file|
+                $stderr.reopen(file)
+                reader.close
+                writer.write(Marshal.dump(block.call))
+                writer.close
+              end
+            end
 
-        pid = Process.fork do
-          File.open('/dev/null', 'w') do |file|
-            $stderr.reopen(file)
-            reader.close
-            writer.write(Marshal.dump(block.call))
             writer.close
+            Marshal.load(reader.read)
+          ensure
+            Process.waitpid(pid) if pid
           end
         end
-
-        writer.close
-        Marshal.load(reader.read)
       rescue => exception
         raise Error, exception
-      ensure
-        Process.waitpid(pid) if pid
       end
 
     end # Fork

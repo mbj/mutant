@@ -64,37 +64,39 @@ RSpec.describe Mutant::Isolation::Fork do
       end
     end
 
-    it 'uses primitives in correct order when fork succeeds' do
-      reader, writer = double('reader'), double('writer')
-      expect(IO).to receive(:pipe).ordered.and_return([reader, writer])
-      expect(reader).to receive(:binmode).and_return(reader).ordered
-      expect(writer).to receive(:binmode).and_return(writer).ordered
-      pid = double('PID')
-      expect(Process).to receive(:fork).ordered.and_yield.and_return(pid)
-      file = double('file')
-      expect(File).to receive(:open).ordered.with('/dev/null', 'w').and_yield(file)
-      expect($stderr).to receive(:reopen).ordered.with(file)
-      expect(reader).to receive(:close).ordered
-      expect(writer).to receive(:write).ordered.with(Marshal.dump(:foo))
-      expect(writer).to receive(:close).ordered
-      expect(writer).to receive(:close).ordered
-      expect(reader).to receive(:read).ordered.and_return(Marshal.dump(:foo))
-      expect(Process).to receive(:waitpid).with(pid)
+    context 'uses primitives in correct order' do
+      let(:reader) { double('reader') }
+      let(:writer) { double('writer') }
 
-      expect(object.call { :foo }).to be(:foo)
-    end
+      before do
+        expect(IO).to receive(:pipe).with(binmode: true).ordered do |&block|
+          block.call([reader, writer])
+        end
+      end
 
-    it 'uses primitives in correct order when fork fails' do
-      reader, writer = double('reader'), double('writer')
-      expect(IO).to receive(:pipe).ordered.and_return([reader, writer])
-      expect(reader).to receive(:binmode).and_return(reader).ordered
-      expect(writer).to receive(:binmode).and_return(writer).ordered
-      expect(Process).to receive(:fork).ordered.and_return(nil)
-      expect(Process).to_not receive(:waitpid)
+      it 'when fork succeeds' do
+        pid = double('PID')
+        expect(Process).to receive(:fork).ordered.and_yield.and_return(pid)
+        file = double('file')
+        expect(File).to receive(:open).ordered.with('/dev/null', 'w').and_yield(file)
+        expect($stderr).to receive(:reopen).ordered.with(file)
+        expect(reader).to receive(:close).ordered
+        expect(writer).to receive(:write).ordered.with(Marshal.dump(:foo))
+        expect(writer).to receive(:close).ordered
+        expect(writer).to receive(:close).ordered
+        expect(reader).to receive(:read).ordered.and_return(Marshal.dump(:foo))
+        expect(Process).to receive(:waitpid).with(pid)
 
-      expect(writer).to receive(:close).ordered
-      expect(reader).to receive(:read).ordered.and_return(Marshal.dump(:foo))
-      expect(object.call).to be(:foo)
+        expect(object.call { :foo }).to be(:foo)
+      end
+
+      it 'when fork fails' do
+        expect(Process).to receive(:fork).ordered.and_return(nil)
+        expect(Process).to_not receive(:waitpid)
+        expect(writer).to receive(:close).ordered
+        expect(reader).to receive(:read).ordered.and_return(Marshal.dump(:foo))
+        expect(object.call).to be(:foo)
+      end
     end
   end
 end
