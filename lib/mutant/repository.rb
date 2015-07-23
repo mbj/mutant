@@ -48,8 +48,10 @@ module Mutant
       #
       # @api private
       def touches?(path, line_range)
+        return false unless tracks?(path)
+
         command = %W[
-          git log --pretty=oneline
+          git log
           #{from}...#{to}
           -L #{line_range.begin},#{line_range.end}:#{path}
         ]
@@ -59,6 +61,26 @@ module Mutant
         fail RepositoryError, "Command #{command} failed!" unless status.success?
 
         !stdout.empty?
+      end
+
+    private
+
+      # Test if path is tracked in repository
+      #
+      # FIXME: Cache results, to avoid spending time on producing redundant results.
+      #
+      # @param [Pathname] path
+      #
+      # @return [Boolean]
+      #
+      # @api private
+      def tracks?(path)
+        command = %W[git ls-files --error-unmatch -- #{path}]
+        Kernel.system(
+          *command,
+          out: File::NULL,
+          err: File::NULL
+        )
       end
 
     end # Diff
