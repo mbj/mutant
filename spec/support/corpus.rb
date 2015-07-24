@@ -210,7 +210,7 @@ module MutantSpec
         if block_given?
           yield
         else
-          fail 'System command failed!'
+          fail "System command failed!: #{arguments.join(' ')}"
         end
       end
 
