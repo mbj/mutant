@@ -21,8 +21,9 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#each' do
   context 'on singleton methods' do
 
     context 'when also defined on lvar' do
-      let(:scope)       { base::AlsoDefinedOnLvar }
-      let(:method_line) { 66                      }
+      let(:scope)       { base::AlsoDefinedOnLvar                           }
+      let(:source_path) { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
+      let(:method_line) { 66                                                }
 
       it_should_behave_like 'a method matcher'
 
@@ -35,8 +36,9 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#each' do
     end
 
     context 'when defined on self' do
-      let(:scope)       { base::DefinedOnSelf }
-      let(:method_line) { 61                  }
+      let(:scope)       { base::DefinedOnSelf                               }
+      let(:source_path) { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
+      let(:method_line) { 61                                                }
 
       it_should_behave_like 'a method matcher'
     end
@@ -44,15 +46,17 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#each' do
     context 'when defined on constant' do
 
       context 'inside namespace' do
-        let(:scope)       { base::DefinedOnConstant::InsideNamespace }
-        let(:method_line) { 71                                       }
+        let(:scope)       { base::DefinedOnConstant::InsideNamespace          }
+        let(:source_path) { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
+        let(:method_line) { 71                                                }
 
         it_should_behave_like 'a method matcher'
       end
 
       context 'outside namespace' do
-        let(:method_line) { 78                                        }
-        let(:scope)       { base::DefinedOnConstant::OutsideNamespace }
+        let(:scope)       { base::DefinedOnConstant::OutsideNamespace         }
+        let(:source_path) { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
+        let(:method_line) { 78                                                }
 
         it_should_behave_like 'a method matcher'
       end
@@ -61,6 +65,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#each' do
     context 'when defined multiple times in the same line' do
       context 'with method on different scope' do
         let(:scope)        { base::DefinedMultipleTimes::SameLine::DifferentScope }
+        let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb')    }
         let(:method_line)  { 97                                                   }
         let(:method_arity) { 1                                                    }
 

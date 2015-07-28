@@ -28,6 +28,10 @@ RSpec.shared_examples_for 'a method matcher' do
     expect(context.scope).to eql(scope)
   end
 
+  it 'should have the correct source path in context' do
+    expect(context.source_path).to eql(source_path)
+  end
+
   it 'should have the correct node type' do
     expect(node.type).to be(type)
   end

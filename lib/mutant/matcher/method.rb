@@ -77,12 +77,13 @@ module Mutant
 
       # Path to source
       #
-      # @return [String]
+      # @return [Pathname]
       #
       # @api private
       def source_path
-        source_location.first
+        Pathname.new(source_location.first)
       end
+      memoize :source_path
 
       # Source file line
       #
