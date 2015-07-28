@@ -43,12 +43,12 @@ NestedIterators:
   - Mutant#self.singleton_subclass_instance
   - Mutant::CLI#parse
   - Mutant::Isolation::Fork#self.call
-  - Mutant::Mutator::Util::Array::Element#dispatch
-  - Mutant::Mutator::Node::Resbody#mutate_captures
   - Mutant::Mutator::Node::Arguments#emit_argument_mutations
+  - Mutant::Mutator::Node::Resbody#mutate_captures
+  - Mutant::Mutator::Util::Array::Element#dispatch
+  - Mutant::Parallel::Master#run
   - Mutant::RequireHighjack#self.call
   - Mutant::Selector::Expression#call
-  - Mutant::Parallel::Master#run
   - Parser::Lexer#self.new
   max_allowed_nesting: 1
   ignore_iterators: []
@@ -70,26 +70,26 @@ TooManyMethods:
   enabled: true
   exclude:
   - Mutant::CLI
-  - Mutant::Mutator::Node
   - Mutant::Meta::Example::Verification
+  - Mutant::Mutator::Node
   - Mutant::Parallel::Master
   max_methods: 10
 TooManyStatements:
   enabled: true
   exclude:
-  - Mutant::Isolation::Fork#self.call
-  - Mutant::Reporter::CLI::Printer::EnvProgress#run
-  - Mutant::Reporter::CLI::Printer::Config#run
-  - Mutant::Zombifier::File#self.find
-  - Mutant::CLI#add_environment_options
   - Mutant::CLI#add_debug_options
+  - Mutant::CLI#add_environment_options
+  - Mutant::Isolation::Fork#self.call
+  - Mutant::Reporter::CLI::Printer::Config#run
+  - Mutant::Reporter::CLI::Printer::EnvProgress#run
   - Mutant::Runner#run_driver
+  - Mutant::Zombifier::File#self.find
   max_statements: 7
 UncommunicativeMethodName:
   enabled: true
   exclude:
-  - Mutant::Mutation#sha1
   - Mutant::AST::Sexp#s
+  - Mutant::Mutation#sha1
   reject:
   - !ruby/regexp /^[a-z]$/
   - !ruby/regexp /[0-9]$/
@@ -124,15 +124,15 @@ UnusedParameters:
 UtilityFunction:
   enabled: true
   exclude:
-  - Mutant::Actor::Env#new_mailbox
   - Mutant::AST::Sexp#s
+  - Mutant::Actor::Env#new_mailbox
   - Mutant::CLI#reporter
   - Mutant::Integration::Null#call
   - Mutant::Integration::Rspec#parse_example
+  - Mutant::Integration::Rspec#parse_expression # intentional, private
   - Mutant::Meta::Example::Verification#format_mutation
-  - Mutant::Repository::Diff#tracks? # intentional, private
-  - Mutant::Repository::Diff#within_working_directory? # intentional, private
   - Mutant::Reporter::CLI::Format::Progressive#new_buffer
   - Mutant::Reporter::CLI::Printer::StatusProgressive#object # False positive calls super
-  - Mutant::Integration::Rspec#parse_expression # intentional, private
+  - Mutant::Repository::Diff#tracks? # intentional, private
+  - Mutant::Repository::Diff#within_working_directory? # intentional, private
   max_helper_calls: 0
