@@ -131,6 +131,7 @@ UtilityFunction:
   - Mutant::Integration::Rspec#parse_example
   - Mutant::Meta::Example::Verification#format_mutation
   - Mutant::Repository::Diff#tracks? # intentional, private
+  - Mutant::Repository::Diff#within_working_directory? # intentional, private
   - Mutant::Reporter::CLI::Format::Progressive#new_buffer
   - Mutant::Reporter::CLI::Printer::StatusProgressive#object # False positive calls super
   - Mutant::Integration::Rspec#parse_expression # intentional, private

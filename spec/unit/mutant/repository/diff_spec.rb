@@ -8,24 +8,38 @@ describe Mutant::Repository::Diff do
   end
 
   describe '#touches?' do
-    let(:object)        { described_class.new('from_rev', 'to_rev') }
-    let(:path)          { Pathname.new('foo.rb')                    }
-    let(:line_range)    { 1..2                                      }
+    let(:object)     { described_class.new('from_rev', 'to_rev') }
+    let(:path)       { Pathname.pwd.join('foo.rb')               }
+    let(:line_range) { 1..2                                      }
 
     subject { object.touches?(path, line_range) }
 
-    before do
-      expect(Kernel).to receive(:system)
-        .ordered
-        .with(
-          *%w[git ls-files --error-unmatch -- foo.rb],
-          out: File::NULL,
-          err: File::NULL
-        ).and_return(git_ls_success?)
+    shared_context 'test if git tracks the file' do
+      before do
+        expect(Kernel).to receive(:system)
+          .ordered
+          .with(
+            *%W[git ls-files --error-unmatch -- #{path}],
+            out: File::NULL,
+            err: File::NULL
+          ).and_return(git_ls_success?)
+      end
+    end
+
+    context 'when file is in a different subdirectory' do
+      let(:path) { Pathname.new('/foo.rb') }
+
+      before do
+        expect(Kernel).to_not receive(:system)
+      end
+
+      it { should be(false) }
     end
 
     context 'when file is NOT tracked in repository' do
       let(:git_ls_success?) { false }
+
+      include_context 'test if git tracks the file'
 
       it { should be(false) }
     end
@@ -36,6 +50,8 @@ describe Mutant::Repository::Diff do
       let(:stdout)          { double('Stdout', empty?: stdout_empty?) }
       let(:stdout_empty?)   { false                                   }
 
+      include_context 'test if git tracks the file'
+
       before do
         expect(Open3).to receive(:capture2)
           .ordered
@@ -44,9 +60,7 @@ describe Mutant::Repository::Diff do
       end
 
       let(:expected_git_log_command) do
-        %w[
-          git log from_rev...to_rev -L 1,2:foo.rb
-        ]
+        %W[git log from_rev...to_rev -L 1,2:#{path}]
       end
 
       context 'on failure of git log command' do

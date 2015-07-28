@@ -48,7 +48,7 @@ module Mutant
       #
       # @api private
       def touches?(path, line_range)
-        return false unless tracks?(path)
+        return false unless within_working_directory?(path) && tracks?(path)
 
         command = %W[
           git log
@@ -81,6 +81,18 @@ module Mutant
           out: File::NULL,
           err: File::NULL
         )
+      end
+
+      # Test if the path is within the current working directory
+      #
+      # @param [Pathname] path
+      #
+      # @return [TrueClass, nil]
+      #
+      # @api private
+      def within_working_directory?(path)
+        working_directory = Pathname.pwd
+        path.ascend { |parent| return true if working_directory.eql?(parent) }
       end
 
     end # Diff
