@@ -3,13 +3,14 @@ require 'anima'
 require 'mutant'
 
 module MutantSpec
+  ROOT = Pathname.new(__FILE__).parent.parent.parent
+
   # Namespace module for corpus testing
   #
   # rubocop:disable MethodLength
   module Corpus
     # Project under corpus test
     # rubocop:disable ClassLength
-    ROOT = Pathname.new(__FILE__).parent.parent.parent
     TMP = ROOT.join('tmp').freeze
 
     class Project

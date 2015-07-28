@@ -114,7 +114,7 @@ module Mutant
 
     # Namespaced root node
     #
-    # @param [Symbol] namespace
+    # @param [Pathname] source_path
     #
     # @return [Parser::AST::Node]
     #

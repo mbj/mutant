@@ -21,7 +21,7 @@ module Mutant
 
     # Source path
     #
-    # @return [String]
+    # @return [Pathname]
     #
     # @api private
     def source_path

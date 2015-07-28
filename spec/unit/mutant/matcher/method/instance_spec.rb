@@ -41,38 +41,43 @@ RSpec.describe Mutant::Matcher::Method::Instance do
     end
 
     context 'when method is defined once' do
-      let(:scope)       { base::DefinedOnce }
-      let(:method_line) { 10                }
+      let(:scope)       { base::DefinedOnce                                 }
+      let(:source_path) { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
+      let(:method_line) { 10                                                }
 
       it_should_behave_like 'a method matcher'
     end
 
     context 'when method is defined once with a memoizer' do
-      let(:scope)       { base::WithMemoizer }
-      let(:method_line) { 15                 }
+      let(:scope)       { base::WithMemoizer                                }
+      let(:source_path) { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
+      let(:method_line) { 15                                                }
 
       it_should_behave_like 'a method matcher'
     end
 
     context 'when method is defined multiple times' do
       context 'on different lines' do
-        let(:scope)        { base::DefinedMultipleTimes::DifferentLines }
-        let(:method_line)  { 24                                         }
-        let(:method_arity) { 1                                          }
+        let(:scope)        { base::DefinedMultipleTimes::DifferentLines        }
+        let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
+        let(:method_line)  { 24                                                }
+        let(:method_arity) { 1                                                 }
 
         it_should_behave_like 'a method matcher'
       end
 
       context 'on the same line' do
-        let(:scope)        { base::DefinedMultipleTimes::SameLineSameScope }
-        let(:method_line)  { 29                                            }
-        let(:method_arity) { 1                                             }
+        let(:scope)        { base::DefinedMultipleTimes::SameLineSameScope     }
+        let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
+        let(:method_line)  { 29                                                }
+        let(:method_arity) { 1                                                 }
 
         it_should_behave_like 'a method matcher'
       end
 
       context 'on the same line with different scope' do
         let(:scope)        { base::DefinedMultipleTimes::SameLineDifferentScope }
+        let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb')  }
         let(:method_line)  { 33                                                 }
         let(:method_arity) { 1                                                  }
 
