@@ -39,6 +39,7 @@ module Mutant
       # @api private
       def self.call(&block)
         IO.pipe(binmode: true) do |reader, writer|
+          writer.binmode
           begin
             pid = Process.fork do
               File.open(File::NULL, 'w') do |file|

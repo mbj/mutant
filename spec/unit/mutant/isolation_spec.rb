@@ -72,6 +72,7 @@ RSpec.describe Mutant::Isolation::Fork do
         expect(IO).to receive(:pipe).with(binmode: true).ordered do |&block|
           block.call([reader, writer])
         end
+        expect(writer).to receive(:binmode).ordered
       end
 
       it 'when fork succeeds' do
