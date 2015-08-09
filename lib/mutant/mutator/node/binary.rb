@@ -22,10 +22,9 @@ module Mutant
         # @api private
         def dispatch
           emit_singletons
-          emit(left)
-          emit(right)
-          mutate_operator
-          mutate_operands
+          emit_promotions
+          emit_operator_mutations
+          emit_left_negation
           emit_left_mutations
           emit_right_mutations
         end
@@ -35,18 +34,39 @@ module Mutant
         # @return [undefined]
         #
         # @api private
-        def mutate_operator
+        def emit_operator_mutations
           emit(s(INVERSE.fetch(node.type), left, right))
         end
 
-        # Emit condition mutations
+        # Emit promotions
         #
         # @return [undefined]
         #
         # @api private
-        def mutate_operands
+        #
+        def emit_promotions
+          emit(left)
+          emit(right)
+        end
+
+        # Emit left negation
+        #
+        # We do not emit right negation as the `and` and `or` nodes
+        # in ruby are also used for control flow.
+        #
+        # Irrespectable of their syntax, aka `||` parses internally to `or`.
+        #
+        # `do_a or do_b`. Negating left makes sense, negating right
+        # only when the result is actualy used.
+        #
+        # It *would* be possible to emit the right negation in case the use of the result is proved.
+        # Like parent is an assignment to an {l,i}var. Dunno if we ever get the time to do that.
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def emit_left_negation
           emit(s(node.type, n_not(left), right))
-          emit(n_not(node))
         end
 
       end # Binary

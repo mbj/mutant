@@ -1,3 +1,7 @@
+# v0.8.2 2015-08-xx
+
+* Remove invalid mutation `foo or bar` to `!(foo or bar)` see #287
+
 # v0.8.1 2015-07-24
 
 * Add --since flag to constrain mutated subjects based on
