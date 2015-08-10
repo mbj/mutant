@@ -119,6 +119,15 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
+  source 'foo.to_h'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'self.to_h'
+  mutation 'foo.to_hash'
+end
+
+Mutant::Meta::Example.add do
   source 'foo == bar'
 
   singleton_mutations
