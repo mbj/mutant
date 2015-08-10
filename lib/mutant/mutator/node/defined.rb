@@ -16,21 +16,10 @@ module Mutant
         #
         # @api private
         def dispatch
-          emit_expression_mutations do |node|
-            !n_self?(node)
-          end
-
-          emit_bools
-        end
-
-        # Emit booleans
-        #
-        # @return [undefined]
-        #
-        # @api private
-        def emit_bools
+          emit_singletons
           emit(N_TRUE)
-          emit(N_FALSE)
+
+          emit_expression_mutations { |node| !n_self?(node) }
         end
 
       end # Defined
