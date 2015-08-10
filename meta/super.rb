@@ -2,6 +2,7 @@ Mutant::Meta::Example.add do
   source 'super'
 
   singleton_mutations
+  mutation 'super()'
 end
 
 Mutant::Meta::Example.add do
