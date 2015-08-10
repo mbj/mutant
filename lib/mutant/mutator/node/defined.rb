@@ -19,6 +19,18 @@ module Mutant
           emit_expression_mutations do |node|
             !n_self?(node)
           end
+
+          emit_bools
+        end
+
+        # Emit booleans
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def emit_bools
+          emit(N_TRUE)
+          emit(N_FALSE)
         end
 
       end # Defined
