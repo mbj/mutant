@@ -2,6 +2,7 @@
 
 * Remove invalid mutation `foo or bar` to `!(foo or bar)` see #287
 * Add mutation from `#to_h` to `#to_hash` #218
+* Add mutation from `#defined?` to `true` / `false` #399
 
 # v0.8.1 2015-07-24
 
