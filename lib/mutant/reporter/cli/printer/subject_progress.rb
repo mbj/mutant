@@ -28,7 +28,6 @@ module Mutant
             print_mutation_results
             print_progress_bar_finish
             print_stats
-            print_tests
           end
 
         private
@@ -48,17 +47,6 @@ module Mutant
               runtime,
               overhead
             )
-          end
-
-          # Print tests
-          #
-          # @return [undefined]
-          #
-          # @api private
-          def print_tests
-            tests.each do |test|
-              puts "- #{test.identification}"
-            end
           end
 
           # Print progress bar finish
