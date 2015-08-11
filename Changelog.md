@@ -2,13 +2,10 @@
 
 * Remove invalid mutation `foo or bar` to `!(foo or bar)` see #287
 * Add mutation from `#to_h` to `#to_hash` #218
-<<<<<<< 2914e9c8d906540edc1cc7d4bc6393f68db39b8d
-* Add mutation from `#defined?` to `true` / `false` #334
 * Add mutation from `super` to `super()` #309
-=======
 * Add mutation from `#defined?` to `true` / `false` #399
 * Reduce framed (multiline) progress reporter noise
->>>>>>> Reduce framed progress reporter noise
+* Fix a bug where killfork pipes where not properly closed
 
 # v0.8.1 2015-07-24
 
