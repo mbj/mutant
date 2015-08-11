@@ -1,4 +1,4 @@
-# v0.8.2 2015-08-xx
+# v0.8.2 2015-08-11
 
 * Remove invalid mutation `foo or bar` to `!(foo or bar)` see #287
 * Add mutation from `#to_h` to `#to_hash` #218
