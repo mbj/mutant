@@ -3,9 +3,35 @@ module Mutant
     class CLI
       # CLI runner status printer base class
       class Printer
-        include AbstractType, Delegator, Adamantium::Flat, Concord.new(:output, :object), Procto.call(:run)
+        include AbstractType, Adamantium::Flat, Concord.new(:output, :object), Procto.call(:run)
 
         private_class_method :new
+
+        # Create delegators to object
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def self.delegate(*names)
+          names.each(&method(:define_delegator))
+        end
+        private_class_method :delegate
+
+        # Create delegator to object
+        #
+        # @param [Symbol] name
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def self.define_delegator(name)
+          fail "method #{name} already defined" if instance_methods.include?(name)
+          define_method(name) do
+            object.public_send(name)
+          end
+          private name
+        end
+        private_class_method :define_delegator
 
         delegate :success?
 
