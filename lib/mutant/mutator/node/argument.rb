@@ -28,9 +28,7 @@ module Mutant
         # @api private
         def emit_name_mutation
           return if skip?
-          Mutator::Util::Symbol.each(name, self) do |name|
-            emit_name(name)
-          end
+          emit_name(:"#{UNDERSCORE}#{name}")
         end
 
         # Test if argument mutation is skipped
