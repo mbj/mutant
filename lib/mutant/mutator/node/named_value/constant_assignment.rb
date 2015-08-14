@@ -19,7 +19,17 @@ module Mutant
           # @api private
           def dispatch
             mutate_name
-            emit_value_mutations if value
+            emit_value_mutations
+            emit_remove_const
+          end
+
+          # Emit remove_const
+          #
+          # @return [undefined]
+          #
+          # @api private
+          def emit_remove_const
+            emit(s(:send, cbase, :remove_const, s(:sym, name)))
           end
 
           # Emit name mutations
