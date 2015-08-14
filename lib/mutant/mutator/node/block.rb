@@ -36,6 +36,22 @@ module Mutant
           return unless body
           emit(body)
           emit_body_mutations
+
+          mutate_body_receiver
+        end
+
+        # Mutate method send in body scope of `send`
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def mutate_body_receiver
+          return unless n_send?(body)
+
+          body_meta = AST::Meta::Send.new(body)
+          send_meta = AST::Meta::Send.new(send)
+
+          emit(s(:send, send_meta.receiver, body_meta.selector, *body_meta.arguments))
         end
 
       end # Block
