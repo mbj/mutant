@@ -1,3 +1,7 @@
+# v0.8.3 2015-08-xx
+
+* Remove invalid mutation `super(...)` to `super`
+
 # v0.8.2 2015-08-11
 
 * Remove invalid mutation `foo or bar` to `!(foo or bar)` see #287
