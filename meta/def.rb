@@ -73,8 +73,8 @@ Mutant::Meta::Example.add do
   mutation 'def foo; end'
 
   # Rename each argument
-  mutation 'def foo(a__mutant__, b); end'
-  mutation 'def foo(a, b__mutant__); end'
+  mutation 'def foo(_a, b); end'
+  mutation 'def foo(a, _b); end'
 
   # Mutation of body
   mutation 'def foo(a, b); raise; end'
@@ -99,8 +99,8 @@ end
 
 Mutant::Meta::Example.add do
   source 'def foo(a = 0, b = 0); end'
-  mutation 'def foo(a = 0, b__mutant__ = 0); end'
-  mutation 'def foo(a__mutant__ = 0, b = 0); end'
+  mutation 'def foo(a = 0, _b = 0); end'
+  mutation 'def foo(_a = 0, b = 0); end'
   mutation 'def foo(a = 0, b = 1); end'
   mutation 'def foo(a = 0, b = -1); end'
   mutation 'def foo(a = 0, b = self); end'
@@ -123,7 +123,7 @@ Mutant::Meta::Example.add do
   mutation 'def foo(); end'
   mutation 'def foo(a = false); end'
   mutation 'def foo(a = nil); end'
-  mutation 'def foo(a__mutant__ = true); end'
+  mutation 'def foo(_a = true); end'
   mutation 'def foo(a = true); raise; end'
 end
 
@@ -158,8 +158,8 @@ Mutant::Meta::Example.add do
   mutation 'def self.foo; end'
 
   # Rename each argument
-  mutation 'def self.foo(a__mutant__, b); end'
-  mutation 'def self.foo(a, b__mutant__); end'
+  mutation 'def self.foo(_a, b); end'
+  mutation 'def self.foo(a, _b); end'
 
   # Mutation of body
   mutation 'def self.foo(a, b); raise; end'

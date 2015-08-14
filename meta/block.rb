@@ -20,8 +20,8 @@ Mutant::Meta::Example.add do
   singleton_mutations
   mutation 'foo'
   mutation 'foo { |a, b| raise }'
-  mutation 'foo { |a, b__mutant__| }'
-  mutation 'foo { |a__mutant__, b| }'
+  mutation 'foo { |a, _b| }'
+  mutation 'foo { |_a, b| }'
   mutation 'foo { |a| }'
   mutation 'foo { |b| }'
   mutation 'foo { || }'
@@ -38,9 +38,9 @@ Mutant::Meta::Example.add do
   mutation 'foo { |(b), c| }'
   mutation 'foo { |(a, b)| }'
   mutation 'foo { |c| }'
-  mutation 'foo { |(a__mutant__, b), c| }'
-  mutation 'foo { |(a, b__mutant__), c| }'
-  mutation 'foo { |(a, b), c__mutant__| }'
+  mutation 'foo { |(_a, b), c| }'
+  mutation 'foo { |(a, _b), c| }'
+  mutation 'foo { |(a, b), _c| }'
   mutation 'foo'
 end
 
@@ -66,6 +66,6 @@ Mutant::Meta::Example.add do
   mutation 'foo { || }'
   mutation 'foo { |a| }'
   mutation 'foo { |(a)| raise }'
-  mutation 'foo { |(a__mutant__)| }'
+  mutation 'foo { |(_a)| }'
   mutation 'foo'
 end
