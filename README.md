@@ -191,6 +191,25 @@ Mutation output is grouped by selection groups. Each group contains three sectio
    -----------------------
    ```
 
+Planning a presentation?
+------------------------
+
+Mutation testing lately (not only mutant) seems to attract some attention. So naturally
+people do talks about it at conferences, user groups or other chances. Thx for that!
+
+As I (the author @mbj) am not too happy with some of the facts being presented about
+mutant the last month.
+
+So if you plan to do a presentation: I offer to review your slides / talk - for free off course.
+My intention is NOT to change your bias pro / against this tool. Just to help to fix
+invalid statements about the tool.
+
+Also in many cases a conversation to the author, should help you to imporve the talk
+significantly. One of mutants biggest weaknesses is the bad documentation, but instead of
+assumptions based on the absence of docs, use the tool authors brain to fill the gaps.
+
+Hint, same applies to papers.
+
 Rails
 -------
 
