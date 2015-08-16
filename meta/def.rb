@@ -81,6 +81,22 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
+  source 'def foo(a, b = nil); true; end'
+
+  mutation 'def foo(_a, b = nil); true; end'
+  mutation 'def foo(a, b = nil); end'
+  mutation 'def foo; true; end'
+  mutation 'def foo(a, b = nil); raise; end'
+  mutation 'def foo(a, b = nil); nil; end'
+  mutation 'def foo(a, b = nil); false; end'
+  mutation 'def foo(a); true; end'
+  mutation 'def foo(a, b = nil); b = nil; true; end'
+  mutation 'def foo(b = nil); true; end'
+  mutation 'def foo(a, _b = nil); true; end'
+  mutation 'def foo(a, b); true; end'
+end
+
+Mutant::Meta::Example.add do
   source 'def foo(_unused); end'
 
   mutation 'def foo(_unused); raise; end'
@@ -113,6 +129,8 @@ Mutant::Meta::Example.add do
   mutation 'def foo(b = 0); end'
   mutation 'def foo(a, b = 0); end'
   mutation 'def foo; end'
+  mutation 'def foo(a = 0, b = 0); a = 0; end'
+  mutation 'def foo(a = 0, b = 0); b = 0; end'
   mutation 'def foo(a = 0, b = 0); raise; end'
 end
 
@@ -125,6 +143,7 @@ Mutant::Meta::Example.add do
   mutation 'def foo(a = nil); end'
   mutation 'def foo(_a = true); end'
   mutation 'def foo(a = true); raise; end'
+  mutation 'def foo(a = true); a = true; end'
 end
 
 Mutant::Meta::Example.add do
