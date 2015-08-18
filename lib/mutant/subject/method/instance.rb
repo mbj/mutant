@@ -27,7 +27,7 @@ module Mutant
           self
         end
 
-        # Mutator for memoized instance methods
+        # Mutator for memoizable memoized instance methods
         class Memoized < self
           include AST::Sexp
 
