@@ -90,9 +90,21 @@ module Mutant
         def normal_dispatch
           emit_naked_receiver
           emit_selector_replacement
+          emit_const_get_mutation
           emit_argument_propagation
           mutate_receiver
           mutate_arguments
+        end
+
+        # Emit mutation from `const_get` to const literal
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def emit_const_get_mutation
+          return unless selector.equal?(:const_get) && n_sym?(arguments.first)
+
+          emit(s(:const, receiver, AST::Meta::Symbol.new(arguments.first).name))
         end
 
         # Emit selector replacement
