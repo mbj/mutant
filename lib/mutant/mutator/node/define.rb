@@ -13,9 +13,38 @@ module Mutant
         # @api private
         def dispatch
           emit_arguments_mutations
+          emit_optarg_body_assignments
           emit_body(N_RAISE)
           emit_body(nil)
           emit_body_mutations if body
+        end
+
+        # Emit mutations with optional arguments as assignments in method
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def emit_optarg_body_assignments
+          arguments.children.each do |argument|
+            next unless n_optarg?(argument) && AST::Meta::Optarg.new(argument).used?
+
+            emit_body_prepend(s(:lvasgn, *argument))
+          end
+        end
+
+        # Emit valid body ASTs depending on instance body
+        #
+        # @param node [Parser::AST::Node]
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def emit_body_prepend(node)
+          if body
+            emit_body(s(:begin, node, body))
+          else
+            emit_body(node)
+          end
         end
 
         # Mutator for instance method defines
