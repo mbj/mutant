@@ -158,7 +158,6 @@ module Mutant
           emit_receiver(nil) if n_self?(receiver) && !(
             KEYWORDS.include?(selector)         ||
             METHOD_OPERATORS.include?(selector) ||
-            OP_ASSIGN.include?(parent_type)     ||
             meta.attribute_assignment?
           )
         end
