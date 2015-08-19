@@ -19,7 +19,7 @@ module Mutant
             emit(left)
             emit_left_mutations
             emit_selector_replacement
-            emit(right) unless n_splat?(right)
+            emit(right)
             emit_right_mutations
           end
 
