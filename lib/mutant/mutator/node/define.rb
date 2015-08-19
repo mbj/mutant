@@ -54,6 +54,19 @@ module Mutant
 
           children :name, :arguments, :body
 
+          def dispatch
+            super()
+            emit_remove_method
+          end
+
+          # Remove an instance method
+          #
+          # @return [undefined]
+          #
+          # @api private
+          def emit_remove_method
+            emit(s(:send, nil, :remove_method, s(:sym, name)))
+          end
         end # Instance
 
         # Mutator for singleton method defines

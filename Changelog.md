@@ -2,6 +2,7 @@
 
 * Remove invalid mutation `super(...)` to `super`
 * Add mutation from `def foo(a = true); end` to `def foo(a = true); a = true; end` #419
+* Add mutation from `def foo; end` to `remove_method :foo` #413
 
 # v0.8.2 2015-08-11
 
