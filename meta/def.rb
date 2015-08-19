@@ -6,6 +6,31 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
+  source 'def foo(a, *b); nil; end'
+
+  mutation 'def foo(_a, *b); nil; end'
+  mutation 'def foo; nil; end'
+  mutation 'def foo(a, *b); end'
+  mutation 'def foo(a, *b); raise; end'
+  mutation 'def foo(a); nil; end'
+  mutation 'def foo(*b); nil; end'
+  mutation 'def foo(a, *b); b = []; nil; end'
+  mutation 'remove_method :foo'
+end
+
+Mutant::Meta::Example.add do
+  source 'def foo(a, *); nil; end'
+
+  mutation 'def foo(_a, *); nil; end'
+  mutation 'def foo; nil; end'
+  mutation 'def foo(a, *); end'
+  mutation 'def foo(a, *); raise; end'
+  mutation 'def foo(a); nil; end'
+  mutation 'def foo(*); nil; end'
+  mutation 'remove_method :foo'
+end
+
+Mutant::Meta::Example.add do
   source 'def foo; foo; rescue; end'
 
   mutation 'def foo; raise; end'

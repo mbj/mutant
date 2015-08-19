@@ -1,13 +1,13 @@
 # v0.8.4 2015-09-xx
 
 * Add mutation `A.const_get(:B)` -> `A::B` #426
+* Add mutation `def foo(*args); end` into `def foo(*args); args = []; end` #423
 
 # v0.8.3 2015-09-01
 
 * Remove invalid mutation `super(...)` to `super`
 * Add mutation from `def foo(a = true); end` to `def foo(a = true); a = true; end` #419
 * Add mutation from `def foo; end` to `remove_method :foo` #413
-* Add mutation from `a != b` to `!a.eql?(b)` and `!a.equal?(b)` #417
 
 # v0.8.2 2015-08-11
 

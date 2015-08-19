@@ -14,6 +14,7 @@ module Mutant
         def dispatch
           emit_arguments_mutations
           emit_optarg_body_assignments
+          emit_restarg_body_mutation
           emit_body(N_RAISE)
           emit_body(nil)
           emit_body_mutations if body
@@ -29,6 +30,19 @@ module Mutant
             next unless n_optarg?(argument) && AST::Meta::Optarg.new(argument).used?
 
             emit_body_prepend(s(:lvasgn, *argument))
+          end
+        end
+
+        # Emit mutation with arg splat as empty array signment in method
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def emit_restarg_body_mutation
+          arguments.children.each do |argument|
+            next unless n_restarg?(argument) && argument.children.one?
+
+            emit_body_prepend(s(:lvasgn, AST::Meta::Restarg.new(argument).name, s(:array)))
           end
         end
 

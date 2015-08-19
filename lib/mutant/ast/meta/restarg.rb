@@ -1,0 +1,15 @@
+module Mutant
+  module AST
+    # Node meta information mixin
+    module Meta
+
+      # Metadata for restarg nodes
+      class Restarg
+        include NamedChildren, Concord.new(:node)
+
+        children :name
+      end # Restarg
+
+    end # Meta
+  end # AST
+end # Mutant
