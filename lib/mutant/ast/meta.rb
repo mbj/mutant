@@ -1,19 +1,16 @@
 module Mutant
   module AST
     # Node meta information mixin
-    module Meta
+    class Meta
+      include NamedChildren, Concord.new(:node)
 
       # Metadata for resbody nods
-      class Resbody
-        include NamedChildren, Concord.new(:node)
-
+      class Resbody < self
         children :captures, :assignment, :body
       end # Resbody
 
       # Metadata for optional argument nodes
-      class Optarg
-        include NamedChildren, Concord.new(:node)
-
+      class Optarg < self
         UNDERSCORE = '_'.freeze
 
         children :name, :default_value
@@ -29,9 +26,7 @@ module Mutant
       end # Optarg
 
       # Metadata for send nodes
-      class Send
-        include NamedChildren, Concord.new(:node)
-
+      class Send < self
         children :receiver, :selector
 
         INDEX_ASSIGNMENT_SELECTOR            = :[]=
