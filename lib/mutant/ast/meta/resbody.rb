@@ -3,7 +3,7 @@ module Mutant
     # Node meta information mixin
     module Meta
 
-      # Metadata for resbody nods
+      # Metadata for resbody nodes
       class Resbody
         include NamedChildren, Concord.new(:node)
 
