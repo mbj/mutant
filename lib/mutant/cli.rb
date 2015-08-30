@@ -168,7 +168,7 @@ module Mutant
     #
     # @api private
     def add_debug_options(opts)
-      opts.on('--fail-fast', 'Stops immediately on first alive mutation') do
+      opts.on('--fail-fast', 'Stops immediately upon first alive mutation') do
         update(fail_fast: true)
       end
       opts.on('--version', 'Print mutants version') do
