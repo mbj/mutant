@@ -129,7 +129,7 @@ Options:
         --use INTEGRATION            Use INTEGRATION to kill mutations
         --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
         --since REVISION             Only select subjects touched since REVISION
-        --fail-fast                  Fail fast
+        --fail-fast                  Stops immediately upon first alive mutation
         --version                    Print mutants version
     -d, --debug                      Enable debugging output
     -h, --help                       Show this message
