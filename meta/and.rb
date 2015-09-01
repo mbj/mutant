@@ -10,5 +10,4 @@ Mutant::Meta::Example.add do
   mutation 'false and false'
   mutation 'true and true'
   mutation '!true and false'
-  mutation 'false if true'
 end
