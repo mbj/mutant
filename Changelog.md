@@ -1,3 +1,7 @@
+# v0.8.4 2015-09-xx
+
+* Add mutation `A.const_get(:B)` -> `A::B` #426
+
 # v0.8.3 2015-09-01
 
 * Remove invalid mutation `super(...)` to `super`

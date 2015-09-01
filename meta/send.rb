@@ -15,6 +15,32 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
+  source 'A.const_get(:B)'
+
+  singleton_mutations
+  mutation 'A::B'
+  mutation 'A.const_get'
+  mutation 'A'
+  mutation ':B'
+  mutation 'A.const_get(nil)'
+  mutation 'A.const_get(self)'
+  mutation 'A.const_get(:B__mutant__)'
+  mutation 'self.const_get(:B)'
+end
+
+Mutant::Meta::Example.add do
+  source 'A.const_get(bar)'
+
+  singleton_mutations
+  mutation 'A.const_get'
+  mutation 'A'
+  mutation 'bar'
+  mutation 'A.const_get(nil)'
+  mutation 'A.const_get(self)'
+  mutation 'self.const_get(bar)'
+end
+
+Mutant::Meta::Example.add do
   source 'a >= b'
 
   singleton_mutations
