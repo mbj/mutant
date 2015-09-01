@@ -24,6 +24,7 @@ module Mutant
           emit_singletons
           emit_promotions
           emit_operator_mutations
+          emit_conditional_mutations
           emit_left_negation
           emit_left_mutations
           emit_right_mutations
@@ -36,6 +37,22 @@ module Mutant
         # @api private
         def emit_operator_mutations
           emit(s(INVERSE.fetch(node.type), left, right))
+        end
+
+        # Mutate `and` and `or` into `if` and `unless`
+        #
+        # - `a or b` becomes `b unless a`
+        # - `a and b` becomes `b if a`
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def emit_conditional_mutations
+          if n_or?(node)
+            emit(s(:if, left, nil, right))
+          else
+            emit(s(:if, left, right, nil))
+          end
         end
 
         # Emit promotions
