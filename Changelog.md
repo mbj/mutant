@@ -1,4 +1,4 @@
-# v0.8.3 2015-08-xx
+# v0.8.3 2015-09-01
 
 * Remove invalid mutation `super(...)` to `super`
 * Add mutation from `def foo(a = true); end` to `def foo(a = true); a = true; end` #419
