@@ -52,7 +52,7 @@ describe Mutant::Runner::Sink::Mutation do
     context 'one result' do
       include_context 'one result'
 
-      update(:subject_a_result) { { mutation_results: [mutation_a_result] } }
+      with(:subject_a_result) { { mutation_results: [mutation_a_result] } }
 
       let(:expected_status) do
         Mutant::Result::Env.new(env: env, runtime: 0.0, subject_results: [subject_a_result])
@@ -88,7 +88,7 @@ describe Mutant::Runner::Sink::Mutation do
         end
 
         context 'when result failed' do
-          update(:mutation_a_test_result) { { passed: true } }
+          with(:mutation_a_test_result) { { passed: true } }
 
           it { should be(false) }
         end
@@ -102,13 +102,13 @@ describe Mutant::Runner::Sink::Mutation do
         end
 
         context 'when first result is unsuccessful' do
-          update(:mutation_a_test_result) { { passed: true } }
+          with(:mutation_a_test_result) { { passed: true } }
 
           it { should be(false) }
         end
 
         context 'when second result is unsuccessful' do
-          update(:mutation_b_test_result) { { passed: true } }
+          with(:mutation_b_test_result) { { passed: true } }
 
           it { should be(false) }
         end
@@ -116,7 +116,7 @@ describe Mutant::Runner::Sink::Mutation do
     end
 
     context 'with fail fast' do
-      update(:config) { { fail_fast: true } }
+      with(:config) { { fail_fast: true } }
 
       context 'no results' do
         it { should be(false) }
@@ -130,7 +130,7 @@ describe Mutant::Runner::Sink::Mutation do
         end
 
         context 'when result failed' do
-          update(:mutation_a_test_result) { { passed: true } }
+          with(:mutation_a_test_result) { { passed: true } }
 
           it { should be(true) }
         end
@@ -144,13 +144,13 @@ describe Mutant::Runner::Sink::Mutation do
         end
 
         context 'when first result is unsuccessful' do
-          update(:mutation_a_test_result) { { passed: true } }
+          with(:mutation_a_test_result) { { passed: true } }
 
           it { should be(true) }
         end
 
         context 'when second result is unsuccessful' do
-          update(:mutation_b_test_result) { { passed: true } }
+          with(:mutation_b_test_result) { { passed: true } }
 
           it { should be(true) }
         end

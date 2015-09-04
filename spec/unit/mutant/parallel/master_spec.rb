@@ -92,8 +92,8 @@ RSpec.describe Mutant::Parallel::Master do
     subject { described_class.call(config) }
 
     context 'with multiple workers configured' do
-      let(:config)           { super().update(jobs: 2) }
-      let(:expected_results) { []                      }
+      let(:config)           { super().with(jobs: 2) }
+      let(:expected_results) { []                    }
 
       before do
         expect(Mutant::Parallel::Worker).to receive(:run).with(

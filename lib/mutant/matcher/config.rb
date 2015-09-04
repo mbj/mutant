@@ -2,7 +2,7 @@ module Mutant
   class Matcher
     # Subject matcher configuration
     class Config
-      include Adamantium, Anima::Update, Anima.new(
+      include Adamantium, Anima.new(
         :match_expressions,
         :ignore_expressions,
         :subject_filters
@@ -41,7 +41,7 @@ module Mutant
       #
       # @api private
       def add(attribute, value)
-        update(attribute => public_send(attribute) + [value])
+        with(attribute => public_send(attribute) + [value])
       end
 
     private

@@ -78,7 +78,7 @@ module Mutant
 
           original = @subject_results[mutation.subject]
 
-          @subject_results[mutation.subject] = original.update(
+          @subject_results[mutation.subject] = original.with(
             mutation_results: (original.mutation_results + [mutation_result]),
             tests:            mutation_result.test_result.tests
           )

@@ -5,7 +5,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
 
   describe '.call' do
     context 'failed kill' do
-      update(:mutation_a_test_result) { { passed: true } }
+      with(:mutation_a_test_result) { { passed: true } }
 
       context 'on evil mutation' do
         context 'with a diff' do
@@ -61,7 +61,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
       end
 
       context 'on neutral mutation' do
-        update(:mutation_a_test_result) { { passed: false } }
+        with(:mutation_a_test_result) { { passed: false } }
 
         let(:mutation_a) do
           Mutant::Mutation::Neutral.new(subject_a, s(:true))
@@ -86,7 +86,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
       end
 
       context 'on noop mutation' do
-        update(:mutation_a_test_result) { { passed: false } }
+        with(:mutation_a_test_result) { { passed: false } }
 
         let(:mutation_a) do
           Mutant::Mutation::Noop.new(subject_a, s(:true))

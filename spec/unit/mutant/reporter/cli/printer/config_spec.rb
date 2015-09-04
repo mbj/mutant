@@ -17,7 +17,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
     end
 
     context 'with non default coverage expectation' do
-      update(:config) { { expected_coverage: 0.1r } }
+      with(:config) { { expected_coverage: 0.1r } }
 
       it_reports(<<-REPORT)
         Mutant configuration:

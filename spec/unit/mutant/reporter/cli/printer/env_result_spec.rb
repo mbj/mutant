@@ -1,7 +1,7 @@
 RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
   setup_shared_context
 
-  update(:mutation_a_test_result) { { passed: true } }
+  with(:mutation_a_test_result) { { passed: true } }
 
   let(:reportable) { env_result }
 

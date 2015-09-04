@@ -75,12 +75,12 @@ module Mutant
 
     # Parallel run configuration
     class Config
-      include Anima::Update, Adamantium::Flat, Anima.new(:env, :processor, :source, :sink, :jobs)
+      include Adamantium::Flat, Anima.new(:env, :processor, :source, :sink, :jobs)
     end # Config
 
     # Parallel execution status
     class Status
-      include Adamantium::Flat, Anima::Update, Anima.new(:payload, :done, :active_jobs)
+      include Adamantium::Flat, Anima.new(:payload, :done, :active_jobs)
     end
 
   end # Parallel

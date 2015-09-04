@@ -9,13 +9,13 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationProgressResult do
 
   describe '.run' do
     context 'on killed mutant' do
-      update(:mutation_a_test_result) { { passed: true } }
+      with(:mutation_a_test_result) { { passed: true } }
 
       it_reports Mutant::Color::RED.format('F')
     end
 
     context 'on alive mutant' do
-      update(:mutation_a_test_result) { { passed: false } }
+      with(:mutation_a_test_result) { { passed: false } }
 
       it_reports Mutant::Color::GREEN.format('.')
     end

@@ -98,7 +98,7 @@ module Mutant
     def add_environment_options(opts)
       opts.separator('Environment:')
       opts.on('--zombie', 'Run mutant zombified') do
-        update(zombie: true)
+        with(zombie: true)
       end
       opts.on('-I', '--include DIRECTORY', 'Add DIRECTORY to $LOAD_PATH') do |directory|
         add(:includes, directory)
@@ -107,7 +107,7 @@ module Mutant
         add(:requires, name)
       end
       opts.on('-j', '--jobs NUMBER', 'Number of kill jobs. Defaults to number of processors.') do |number|
-        update(jobs: Integer(number))
+        with(jobs: Integer(number))
       end
     end
 
@@ -119,7 +119,7 @@ module Mutant
     #
     # @api private
     def setup_integration(name)
-      update(integration: Integration.setup(name))
+      with(integration: Integration.setup(name))
     rescue LoadError
       raise Error, "Could not load integration #{name.inspect} (you may want to try installing the gem mutant-#{name})"
     end
@@ -139,7 +139,7 @@ module Mutant
         '--expected-coverage COVERAGE',
         'Fail unless COVERAGE is not reached exactly, parsed via Rational()'
       ) do |coverage|
-        update(expected_coverage: Rational(coverage))
+        with(expected_coverage: Rational(coverage))
       end
       opts.on('--use INTEGRATION', 'Use INTEGRATION to kill mutations', &method(:setup_integration))
     end
@@ -169,14 +169,14 @@ module Mutant
     # @api private
     def add_debug_options(opts)
       opts.on('--fail-fast', 'Fail fast') do
-        update(fail_fast: true)
+        with(fail_fast: true)
       end
       opts.on('--version', 'Print mutants version') do
         puts("mutant-#{VERSION}")
         Kernel.exit(EXIT_SUCCESS)
       end
       opts.on('-d', '--debug', 'Enable debugging output') do
-        update(debug: true)
+        with(debug: true)
       end
       opts.on_tail('-h', '--help', 'Show this message') do
         puts(opts.to_s)
@@ -184,15 +184,15 @@ module Mutant
       end
     end
 
-    # Update configuration
+    # With configuration
     #
     # @param [Hash<Symbol, Object>] attributes
     #
     # @return [undefined]
     #
     # @api private
-    def update(attributes)
-      @config = @config.update(attributes)
+    def with(attributes)
+      @config = @config.with(attributes)
     end
 
     # Add configuration
@@ -207,7 +207,7 @@ module Mutant
     #
     # @api private
     def add(attribute, value)
-      update(attribute => config.public_send(attribute) + [value])
+      with(attribute => config.public_send(attribute) + [value])
     end
 
     # Add matcher configuration
@@ -222,7 +222,7 @@ module Mutant
     #
     # @api private
     def add_matcher(attribute, value)
-      update(matcher: config.matcher.add(attribute, value))
+      with(matcher: config.matcher.add(attribute, value))
     end
 
   end # CLI

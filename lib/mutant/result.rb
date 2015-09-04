@@ -67,7 +67,7 @@ module Mutant
     # @api private
     def self.included(host)
       host.class_eval do
-        include Adamantium, Anima::Update
+        include Adamantium
         extend ClassMethods
       end
     end

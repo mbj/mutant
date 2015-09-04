@@ -132,7 +132,8 @@ RSpec.describe Mutant::Reporter::CLI do
 
     context 'with non default coverage expectation' do
       let(:format) { progressive_format }
-      update(:config) { { expected_coverage: 0.1r } }
+
+      with(:config) { { expected_coverage: 0.1r } }
 
       it_reports(<<-REPORT)
         Mutant configuration:
@@ -204,7 +205,7 @@ RSpec.describe Mutant::Reporter::CLI do
       let(:format) { progressive_format }
 
       context 'with empty scheduler' do
-        update(:env_result) { { subject_results: [] } }
+        with(:env_result) { { subject_results: [] } }
 
         let(:tty?) { true }
 
@@ -212,14 +213,15 @@ RSpec.describe Mutant::Reporter::CLI do
       end
 
       context 'with last mutation present' do
-        update(:env_result) { { subject_results: [subject_a_result] } }
+        with(:env_result) { { subject_results: [subject_a_result] } }
 
         context 'when mutation is successful' do
           it_reports "(02/02) 100% - killtime: 2.00s runtime: 4.00s overhead: 2.00s\n"
         end
 
         context 'when mutation is NOT successful' do
-          update(:mutation_a_test_result) { { passed: true } }
+          with(:mutation_a_test_result) { { passed: true } }
+
           it_reports "(01/02)  50% - killtime: 2.00s runtime: 4.00s overhead: 2.00s\n"
         end
       end

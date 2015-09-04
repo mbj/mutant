@@ -16,7 +16,7 @@ RSpec.describe Mutant::Env do
     let(:integration) { integration_class.new(config) }
 
     let(:config) do
-      Mutant::Config::DEFAULT.update(isolation: isolation, integration: integration_class)
+      Mutant::Config::DEFAULT.with(isolation: isolation, integration: integration_class)
     end
 
     let(:isolation)         { double('Isolation')                                                     }
