@@ -134,6 +134,7 @@ module MutantSpec
         repo_path.join('Gemfile').open('a') do |file|
           file << "gem 'mutant', path: '#{relative}'\n"
           file << "gem 'mutant-rspec', path: '#{relative}'\n"
+          file << "eval_gemfile File.expand_path('#{relative.join('Gemfile.shared')}')\n"
         end
         lockfile = repo_path.join('Gemfile.lock')
         lockfile.delete if lockfile.exist?
