@@ -69,3 +69,18 @@ Mutant::Meta::Example.add do
   mutation 'foo { |(_a)| }'
   mutation 'foo'
 end
+
+Mutant::Meta::Example.add do
+  source 'self.foo { bar(nil) }'
+
+  singleton_mutations
+  mutation 'self.foo'
+  mutation 'foo { bar(nil) }'
+  mutation 'self.foo { bar }'
+  mutation 'self.foo { nil }'
+  mutation 'self.foo {}'
+  mutation 'self.foo { self }'
+  mutation 'self.foo { raise }'
+  mutation 'bar(nil)'
+  mutation 'self.bar(nil)'
+end
