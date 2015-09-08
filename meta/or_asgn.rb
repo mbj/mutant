@@ -22,6 +22,15 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
+  source '@a ||= self.bar'
+
+  singleton_mutations
+  mutation '@a ||= nil'
+  mutation '@a ||= self'
+  mutation '@a ||= bar'
+end
+
+Mutant::Meta::Example.add do
   source 'foo[:bar] ||= 1'
 
   singleton_mutations
