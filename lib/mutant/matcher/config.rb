@@ -41,7 +41,7 @@ module Mutant
       #
       # @api private
       def add(attribute, value)
-        update(attribute => public_send(attribute).dup << value)
+        update(attribute => public_send(attribute) + [value])
       end
 
     private

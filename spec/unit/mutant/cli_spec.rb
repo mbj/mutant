@@ -221,13 +221,13 @@ Options:
       end
     end
 
-    context 'with require flag' do
-      let(:flags) { %w[--require foo] }
+    context 'with require flags' do
+      let(:flags) { %w[--require foo --require bar] }
 
       it_should_behave_like 'a cli parser'
 
       it 'configures requires' do
-        expect(subject.config.requires).to eql(%w[foo])
+        expect(subject.config.requires).to eql(%w[foo bar])
       end
     end
 

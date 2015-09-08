@@ -207,7 +207,7 @@ module Mutant
     #
     # @api private
     def add(attribute, value)
-      update(attribute => config.public_send(attribute).dup << value)
+      update(attribute => config.public_send(attribute) + [value])
     end
 
     # Add matcher configuration
