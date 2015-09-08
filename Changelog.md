@@ -2,6 +2,7 @@
 
 * Add mutation from `a != b` to `!a.eql?(b)` and `!a.equal?(b)` #417
 * Add mutation `A.const_get(:B)` -> `A::B` #426
+* Add mutation `def foo(*args); end` into `def foo(*args); args = []; end` #423
 
 # v0.8.3 2015-09-01
 
