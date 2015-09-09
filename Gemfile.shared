@@ -1,0 +1,3 @@
+# Place for shared git sources, used for developing updates to depedencies 
+# where the git sources (without this file) need to be consistently edited 
+# into multiple Gemfiles.

@@ -5,7 +5,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
 
   describe '.call' do
     context 'with empty scheduler' do
-      update(:env_result) { { subject_results: [] } }
+      with(:env_result) { { subject_results: [] } }
 
       it_reports <<-REPORT
         Mutant configuration:
@@ -28,7 +28,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
       REPORT
 
       context 'on non default coverage expectation' do
-        update(:config) { { expected_coverage: 0.1r } }
+        with(:config) { { expected_coverage: 0.1r } }
 
         it_reports <<-REPORT
           Mutant configuration:
@@ -54,7 +54,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
 
     context 'with scheduler active on one subject' do
       context 'without progress' do
-        update(:status) { { active_jobs: [].to_set } }
+        with(:status) { { active_jobs: [].to_set } }
 
         it_reports(<<-REPORT)
           Mutant configuration:
@@ -78,10 +78,10 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
       end
 
       context 'with progress' do
-        update(:status) { { active_jobs: [job_b, job_a].to_set } }
+        with(:status) { { active_jobs: [job_b, job_a].to_set } }
 
         context 'on failure' do
-          update(:mutation_a_test_result) { { passed: true } }
+          with(:mutation_a_test_result) { { passed: true } }
 
           it_reports(<<-REPORT)
             Mutant configuration:

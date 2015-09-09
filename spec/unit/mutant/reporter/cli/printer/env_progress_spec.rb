@@ -1,13 +1,13 @@
 RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
   setup_shared_context
 
-  update(:config) { { expected_coverage: 0.1r } }
+  with(:config) { { expected_coverage: 0.1r } }
 
   let(:reportable) { env_result }
 
   describe '.call' do
     context 'without progress' do
-      update(:subject_a_result) { { mutation_results: [] } }
+      with(:subject_a_result) { { mutation_results: [] } }
 
       it_reports <<-'STR'
         Mutant configuration:
@@ -51,7 +51,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
     end
 
     context 'on partial coverage' do
-      update(:mutation_a_test_result) { { passed: true } }
+      with(:mutation_a_test_result) { { passed: true } }
 
       it_reports <<-'STR'
         Mutant configuration:

@@ -13,7 +13,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectProgress do
     end
 
     context 'on partial coverage' do
-      update(:mutation_a_test_result) { { passed: true } }
+      with(:mutation_a_test_result) { { passed: true } }
 
       it_reports <<-'STR'
         subject-a mutations: 2
@@ -23,7 +23,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectProgress do
     end
 
     context 'without results' do
-      update(:subject_a_result) { { mutation_results: [] } }
+      with(:subject_a_result) { { mutation_results: [] } }
 
       it_reports <<-'STR'
         subject-a mutations: 2

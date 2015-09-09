@@ -1,7 +1,7 @@
 module Mutant
   # Abstract base class for mutant environments
   class Env
-    include Adamantium::Flat, Anima::Update, Anima.new(
+    include Adamantium::Flat, Anima.new(
       :config,
       :actor_env,
       :cache,

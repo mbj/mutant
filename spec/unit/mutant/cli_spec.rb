@@ -73,7 +73,7 @@ RSpec.describe Mutant::CLI do
 
     let(:default_matcher_config) do
       Mutant::Matcher::Config::DEFAULT
-        .update(match_expressions: expressions.map(&method(:parse_expression)))
+        .with(match_expressions: expressions.map(&method(:parse_expression)))
     end
 
     let(:flags)       { []           }
@@ -221,13 +221,13 @@ Options:
       end
     end
 
-    context 'with require flag' do
-      let(:flags) { %w[--require foo] }
+    context 'with require flags' do
+      let(:flags) { %w[--require foo --require bar] }
 
       it_should_behave_like 'a cli parser'
 
       it 'configures requires' do
-        expect(subject.config.requires).to eql(%w[foo])
+        expect(subject.config.requires).to eql(%w[foo bar])
       end
     end
 
@@ -235,7 +235,7 @@ Options:
       let(:flags) { %w[--since master] }
 
       let(:expected_matcher_config) do
-        default_matcher_config.update(
+        default_matcher_config.with(
           subject_filters: [
             Mutant::Repository::SubjectFilter.new(Mutant::Repository::Diff.new('HEAD', 'master'))
           ]
@@ -249,7 +249,7 @@ Options:
       let(:flags) { %w[--ignore-subject Foo::Bar] }
 
       let(:expected_matcher_config) do
-        default_matcher_config.update(ignore_expressions: [parse_expression('Foo::Bar')])
+        default_matcher_config.with(ignore_expressions: [parse_expression('Foo::Bar')])
       end
 
       it_should_behave_like 'a cli parser'

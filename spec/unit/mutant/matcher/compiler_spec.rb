@@ -18,7 +18,7 @@ RSpec.describe Mutant::Matcher::Compiler do
   end
 
   describe '.call' do
-    subject { object.call(env, matcher_config.update(attributes)) }
+    subject { object.call(env, matcher_config.with(attributes)) }
 
     let(:matcher_config) { Mutant::Matcher::Config::DEFAULT }
 

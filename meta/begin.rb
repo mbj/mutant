@@ -12,8 +12,6 @@ Mutant::Meta::Example.add do
   mutation 'false'
 end
 
-# encoding: utf-8
-
 Mutant::Meta::Example.add do
 
   source s(:begin, s(:true))

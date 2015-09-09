@@ -1,6 +1,6 @@
 RSpec.describe Mutant::Env::Bootstrap do
   let(:config) do
-    Mutant::Config::DEFAULT.update(
+    Mutant::Config::DEFAULT.with(
       jobs:     1,
       reporter: Mutant::Reporter::Trace.new,
       includes: [],
@@ -69,7 +69,7 @@ RSpec.describe Mutant::Env::Bootstrap do
     end
 
     context 'when includes are present' do
-      let(:config) { super().update(includes: %w[foo bar]) }
+      let(:config) { super().with(includes: %w[foo bar]) }
 
       before do
         %w[foo bar].each do |component|
@@ -121,7 +121,7 @@ RSpec.describe Mutant::Env::Bootstrap do
       end
 
       let(:expected_env) do
-        super().update(
+        super().with(
           subjects:  subjects,
           mutations: mutations
         )

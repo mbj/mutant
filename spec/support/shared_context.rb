@@ -1,8 +1,8 @@
 # rubocop:disable ModuleLength
 module SharedContext
-  def update(name, &block)
+  def with(name, &block)
     define_method(name) do
-      super().update(instance_eval(&block))
+      super().with(instance_eval(&block))
     end
   end
 
@@ -51,7 +51,7 @@ module SharedContext
     end
 
     let(:config) do
-      Mutant::Config::DEFAULT.update(
+      Mutant::Config::DEFAULT.with(
         jobs:      1,
         reporter:  Mutant::Reporter::Trace.new
       )
@@ -120,11 +120,11 @@ module SharedContext
     end
 
     let(:empty_subject_a_result) do
-      subject_a_result.update(mutation_results: [])
+      subject_a_result.with(mutation_results: [])
     end
 
     let(:partial_subject_a_result) do
-      subject_a_result.update(mutation_results: [mutation_a_result])
+      subject_a_result.with(mutation_results: [mutation_a_result])
     end
   end
 end
