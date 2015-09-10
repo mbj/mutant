@@ -1,9 +1,10 @@
-# v0.8.4 2015-09-xx
+# v0.8.4 2015-09-10
 
 * Add mutation from `a != b` to `!a.eql?(b)` and `!a.equal?(b)` #417
 * Add mutation `A.const_get(:B)` -> `A::B` #426
 * Add mutation `def foo(*args); end` into `def foo(*args); args = []; end` #423
 * Add mutation from `foo.baz { bar }` to `foo.bar` #416
+* Update anima dependency to 0.3.0
 
 # v0.8.3 2015-09-01
 
