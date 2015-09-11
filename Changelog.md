@@ -1,3 +1,8 @@
+# v0.8.5 2015-09-11
+
+* Fix misimplementation of block gluing operator that
+  as side effect could also cause invalid AST crashes
+
 # v0.8.4 2015-09-10
 
 * Add mutation from `a != b` to `!a.eql?(b)` and `!a.equal?(b)` #417
