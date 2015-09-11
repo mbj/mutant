@@ -2,6 +2,9 @@
 machine:
   ruby:
     version: '2.2'
+dependencies:
+  pre:
+    - bundle -v | grep -Fx "Bundler version 1.10.6" || gem install bundler --version 1.10.6
 test:
   override:
     - bundle exec rake ci

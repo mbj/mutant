@@ -71,16 +71,32 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
-  source 'self.foo { bar(nil) }'
+  source 'foo { bar(nil) }'
 
   singleton_mutations
-  mutation 'self.foo'
-  mutation 'foo { bar(nil) }'
-  mutation 'self.foo { bar }'
-  mutation 'self.foo { nil }'
-  mutation 'self.foo {}'
-  mutation 'self.foo { self }'
-  mutation 'self.foo { raise }'
+  mutation 'foo'
+  mutation 'foo { bar }'
+  mutation 'foo { nil }'
+  mutation 'foo {}'
+  mutation 'foo { self }'
+  mutation 'foo { raise }'
+  mutation 'foo.bar(nil)'
   mutation 'bar(nil)'
-  mutation 'self.bar(nil)'
+end
+
+Mutant::Meta::Example.add do
+  source 'foo { self << true }'
+
+  singleton_mutations
+  mutation 'foo { self << false }'
+  mutation 'foo { self << nil }'
+  mutation 'foo { nil << true }'
+  mutation 'foo { nil }'
+  mutation 'foo { self }'
+  mutation 'foo { true }'
+  mutation 'self << true'
+  mutation 'foo << true'
+  mutation 'foo { raise }'
+  mutation 'foo { }'
+  mutation 'foo'
 end
