@@ -49,9 +49,8 @@ module Mutant
           return unless n_send?(body)
 
           body_meta = AST::Meta::Send.new(body)
-          send_meta = AST::Meta::Send.new(send)
 
-          emit(s(:send, send_meta.receiver, body_meta.selector, *body_meta.arguments))
+          emit(s(:send, send, body_meta.selector, *body_meta.arguments))
         end
 
       end # Block
