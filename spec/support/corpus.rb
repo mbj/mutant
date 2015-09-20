@@ -138,7 +138,7 @@ module MutantSpec
         end
         lockfile = repo_path.join('Gemfile.lock')
         lockfile.delete if lockfile.exist?
-        system('bundle install')
+        system(%w[bundle install])
       end
 
       # Not in the docs. Number from chatting with their support.
