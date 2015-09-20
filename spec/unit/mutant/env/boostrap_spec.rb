@@ -43,7 +43,7 @@ RSpec.describe Mutant::Env::Bootstrap do
 
   before do
     expect(integration_class).to receive(:new)
-      .with(config)
+      .with(config.expression_parser)
       .and_return(integration)
 
     expect(integration).to receive(:setup).and_return(integration)

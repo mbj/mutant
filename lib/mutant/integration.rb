@@ -2,7 +2,7 @@ module Mutant
 
   # Abstract base class mutant test framework integrations
   class Integration
-    include AbstractType, Adamantium::Flat, Concord.new(:config)
+    include AbstractType, Adamantium::Flat, Concord.new(:expression_parser)
 
     REGISTRY = {}
 
@@ -66,17 +66,6 @@ module Mutant
     #
     # @api private
     abstract_method :all_tests
-
-  private
-
-    # Expression parser
-    #
-    # @return [Expression::Parser]
-    #
-    # @api private
-    def expression_parser
-      config.expression_parser
-    end
 
     # Null integration that never kills a mutation
     class Null < self

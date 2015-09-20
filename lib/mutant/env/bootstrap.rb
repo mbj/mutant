@@ -96,7 +96,7 @@ module Mutant
       def infect
         config.includes.each(&$LOAD_PATH.method(:<<))
         config.requires.each(&Kernel.method(:require))
-        @integration = config.integration.new(config).setup
+        @integration = config.integration.new(config.expression_parser).setup
       end
 
       # Matched subjects
