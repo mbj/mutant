@@ -82,7 +82,7 @@ module Mutant
       fail Error, 'No expressions given' if expressions.empty?
 
       expressions.each do |expression|
-        add_matcher(:match_expressions, config.expression_parser.(expression))
+        add_matcher(:match_expressions, expression)
       end
     end
 
@@ -119,9 +119,10 @@ module Mutant
     #
     # @api private
     def setup_integration(name)
-      with(integration: Integration.setup(name))
+      Integration.setup(name)
+      with(integration: name)
     rescue LoadError
-      raise Error, "Could not load integration #{name.inspect} (you may want to try installing the gem mutant-#{name})"
+      raise Error, "Could not load integration #{name.inspect} (install the gem mutant-#{name} if exists)"
     end
 
     # Add mutation options
@@ -153,7 +154,7 @@ module Mutant
     # @api private
     def add_filter_options(opts)
       opts.on('--ignore-subject EXPRESSION', 'Ignore subjects that match EXPRESSION as prefix') do |pattern|
-        add_matcher(:ignore_expressions, config.expression_parser.(pattern))
+        add_matcher(:ignore_expressions, pattern)
       end
       opts.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
         add_matcher(:subject_filters, Repository::SubjectFilter.new(Repository::Diff.from_head(revision)))

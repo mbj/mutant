@@ -2,13 +2,15 @@ module Mutant
   # Abstract base class for mutant environments
   class Env
     include Adamantium::Flat, Anima.new(
-      :config,
       :actor_env,
       :cache,
+      :config,
+      :integration,
+      :expression_parser,
+      :isolation,
+      :selector,
       :subjects,
       :matchable_scopes,
-      :integration,
-      :selector,
       :mutations
     )
 
@@ -59,7 +61,7 @@ module Mutant
       start = Time.now
       tests = selector.call(mutation.subject)
 
-      config.isolation.call do
+      isolation.call do
         mutation.insert
         integration.call(tests)
       end

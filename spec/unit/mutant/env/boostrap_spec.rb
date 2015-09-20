@@ -19,21 +19,22 @@ RSpec.describe Mutant::Env::Bootstrap do
       reporter:    Mutant::Reporter::Trace.new,
       includes:    [],
       requires:    [],
-      integration: integration_class,
       matcher:     matcher_config
     )
   end
 
   let(:expected_env) do
     Mutant::Env.new(
-      cache:            Mutant::Cache.new,
-      subjects:         [],
-      matchable_scopes: [],
-      mutations:        [],
-      config:           config,
-      selector:         Mutant::Selector::Expression.new(integration),
-      actor_env:        Mutant::Actor::Env.new(Thread),
-      integration:      integration
+      cache:             Mutant::Cache.new,
+      subjects:          [],
+      matchable_scopes:  [],
+      mutations:         [],
+      expression_parser: Mutant::Expression::Parser::DEFAULT,
+      isolation:         Mutant::Isolation::Fork,
+      config:            config,
+      selector:          Mutant::Selector::Expression.new(integration),
+      actor_env:         Mutant::Actor::Env.new(Thread),
+      integration:       integration
     )
   end
 
@@ -42,8 +43,12 @@ RSpec.describe Mutant::Env::Bootstrap do
   end
 
   before do
+    expect(Mutant::Integration).to receive(:lookup)
+      .with('null')
+      .and_return(integration_class)
+
     expect(integration_class).to receive(:new)
-      .with(config.expression_parser)
+      .with(an_instance_of(Mutant::Expression::Parser))
       .and_return(integration)
 
     expect(integration).to receive(:setup).and_return(integration)
@@ -169,8 +174,8 @@ RSpec.describe Mutant::Env::Bootstrap do
     end
 
     context 'when scope matches expression' do
-      let(:object_space_modules) { [TestApp::Literal, TestApp::Empty]                               }
-      let(:match_expressions)    { object_space_modules.map(&:name).map(&method(:parse_expression)) }
+      let(:object_space_modules) { [TestApp::Literal, TestApp::Empty] }
+      let(:match_expressions)    { object_space_modules.map(&:name)   }
 
       let(:matcher_config) do
         super().with(match_expressions: match_expressions)
@@ -181,8 +186,8 @@ RSpec.describe Mutant::Env::Bootstrap do
 
         super().with(
           matchable_scopes: [
-            Mutant::Scope.new(TestApp::Empty,   match_expressions.last),
-            Mutant::Scope.new(TestApp::Literal, match_expressions.first)
+            Mutant::Scope.new(TestApp::Empty,   parse_expression(match_expressions.last)),
+            Mutant::Scope.new(TestApp::Literal, parse_expression(match_expressions.first))
           ],
           subjects:         subjects,
           mutations:        subjects.flat_map(&:mutations)

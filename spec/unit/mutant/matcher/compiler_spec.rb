@@ -18,7 +18,12 @@ RSpec.describe Mutant::Matcher::Compiler, '#call' do
     Morpher.compile(s(:and, s(:negate, s(:or)), s(:and)))
   end
 
-  subject { object.call(matcher_config.with(attributes)) }
+  subject do
+    object.call(
+      matcher_config.with(attributes),
+      Mutant::Expression::Parser::DEFAULT
+    )
+  end
 
   context 'on empty config' do
     let(:attributes) { {} }
@@ -40,10 +45,10 @@ RSpec.describe Mutant::Matcher::Compiler, '#call' do
       )
     end
 
-    let(:expected_positive_matcher)    { Mutant::Matcher::Chain.new([matcher_a]) }
-    let(:attributes)                   { { match_expressions: [expression_a] }   }
-    let(:ignore_expression_predicates) { []                                      }
-    let(:subject_filter_predicates)    { []                                      }
+    let(:expected_positive_matcher)    { Mutant::Matcher::Chain.new([matcher_a])      }
+    let(:attributes)                   { { match_expressions: [expression_a.syntax] } }
+    let(:ignore_expression_predicates) { []                                           }
+    let(:subject_filter_predicates)    { []                                           }
 
     context 'and no other constraints' do
       it { should eql(expected_matcher) }
@@ -51,7 +56,7 @@ RSpec.describe Mutant::Matcher::Compiler, '#call' do
 
     context 'and ignore expressions' do
       let(:attributes) do
-        super().merge(ignore_expressions: [expression_b])
+        super().merge(ignore_expressions: [expression_b.syntax])
       end
 
       let(:ignore_expression_predicates) do

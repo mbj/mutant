@@ -1,7 +1,7 @@
 require 'mutant/integration/rspec'
 
 RSpec.describe Mutant::Integration::Rspec do
-  let(:object) { described_class.new(Mutant::Config::DEFAULT.expression_parser) }
+  let(:object) { described_class.new(Mutant::Expression::Parser::DEFAULT) }
 
   let(:options) { double('options') }
   let(:runner)  { double('runner')  }

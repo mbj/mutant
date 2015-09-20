@@ -1,45 +1,61 @@
 RSpec.describe Mutant::Env do
-  context '#kill' do
-    let(:object) do
-      described_class.new(
-        config:           config,
-        actor_env:        Mutant::Actor::Env.new(Thread),
-        cache:            Mutant::Cache.new,
-        selector:         selector,
-        subjects:         [],
-        mutations:        [],
-        matchable_scopes: [],
-        integration:      integration
-      )
+  let(:integration_class) { Mutant::Integration::Null            }
+  let(:integration)       { instance_double(Mutant::Integration) }
+  let(:isolation)         { double(Mutant::Isolation)            }
+  let(:selector)          { instance_double(Mutant::Selector)    }
+
+  let(:object) do
+    described_class.new(
+      actor_env:         Mutant::Actor::Env.new(Thread),
+      cache:             Mutant::Cache.new,
+      config:            config,
+      expression_parser: Mutant::Expression::Parser::DEFAULT,
+      integration:       integration,
+      isolation:         isolation,
+      matchable_scopes:  [],
+      mutations:         [],
+      selector:          selector,
+      subjects:          []
+    )
+  end
+
+  let(:config) do
+    Mutant::Config::DEFAULT.with(
+      integration: integration_class,
+      reporter:    Mutant::Reporter::Trace.new
+    )
+  end
+
+  describe '#warn' do
+    let(:message) { instance_double(String) }
+
+    subject { object.warn(message) }
+
+    it 'reports a warning' do
+      expect { subject }
+        .to change { object.config.reporter.warn_calls }
+        .from([])
+        .to([message])
     end
 
-    let(:integration) { integration_class.new(config) }
+    it_behaves_like 'a command method'
+  end
 
-    let(:config) do
-      Mutant::Config::DEFAULT.with(isolation: isolation, integration: integration_class)
-    end
+  describe '#kill' do
+    subject { object.kill(mutation) }
 
-    let(:isolation)         { double('Isolation')                                                     }
-    let(:mutation)          { Mutant::Mutation::Evil.new(mutation_subject, Mutant::AST::Nodes::N_NIL) }
-    let(:wrapped_node)      { double('Wrapped Node')                                                  }
-    let(:context)           { double('Context')                                                       }
-    let(:test_a)            { double('Test A')                                                        }
-    let(:test_b)            { double('Test B')                                                        }
-    let(:tests)             { [test_a, test_b]                                                        }
-    let(:selector)          { double('Selector')                                                      }
-    let(:integration_class) { Mutant::Integration::Null                                               }
+    let(:mutation)          { instance_double(Mutant::Mutation, subject: mutation_subject) }
+    let(:test_a)            { instance_double(Mutant::Test)                                }
+    let(:test_b)            { instance_double(Mutant::Test)                                }
+    let(:tests)             { [test_a, test_b]                                             }
 
     let(:mutation_subject) do
-      double(
-        'Subject',
+      instance_double(
+        Mutant::Subject,
         identification: 'subject',
-        context: context,
-        source: 'original',
-        tests:  tests
+        source:         'original'
       )
     end
-
-    subject { object.kill(mutation) }
 
     shared_examples_for 'mutation kill' do
       it { should eql(Mutant::Result::Mutation.new(mutation: mutation, test_result: test_result)) }
@@ -51,13 +67,22 @@ RSpec.describe Mutant::Env do
     end
 
     context 'when isolation does not raise error' do
-      let(:test_result)  { double('Test Result A', passed: false) }
+      let(:test_result) { instance_double(Mutant::Result::Test, passed: false) }
 
       before do
-        expect(isolation).to receive(:call).and_yield.and_return(test_result)
-        expect(mutation_subject).to receive(:prepare).and_return(mutation_subject).ordered
-        expect(context).to receive(:root).with(s(:nil)).and_return(wrapped_node).ordered
-        expect(Mutant::Loader::Eval).to receive(:call).with(wrapped_node, mutation_subject).and_return(nil).ordered
+        expect(isolation).to receive(:call)
+          .ordered
+          .and_yield
+          .and_return(test_result)
+
+        expect(mutation).to receive(:insert)
+          .ordered
+          .and_return(mutation)
+
+        expect(integration).to receive(:call)
+          .ordered
+          .with(tests)
+          .and_return(test_result)
       end
 
       include_examples 'mutation kill'

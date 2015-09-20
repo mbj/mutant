@@ -193,22 +193,26 @@ module Mutant
 
     DEFAULT = new(
       debug:             false,
-      fail_fast:         false,
-      integration:       Integration::Null,
-      matcher:           Matcher::Config::DEFAULT,
-      includes:          EMPTY_ARRAY,
-      requires:          EMPTY_ARRAY,
-      isolation:         Mutant::Isolation::Fork,
-      reporter:          Reporter::CLI.build($stdout),
-      zombie:            false,
-      jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : ::Parallel.processor_count,
       expected_coverage: Rational(1),
-      expression_parser: Expression::Parser.new([
+      fail_fast:         false,
+      includes:          EMPTY_ARRAY,
+      integration:       'null'.freeze,
+      jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : ::Parallel.processor_count,
+      matcher:           Matcher::Config::DEFAULT,
+      requires:          EMPTY_ARRAY,
+      reporter:          Reporter::CLI.build($stdout),
+      zombie:            false
+    )
+  end # Config
+
+  class Expression
+    class Parser
+      DEFAULT = Expression::Parser.new([
         Expression::Method,
         Expression::Methods,
         Expression::Namespace::Exact,
         Expression::Namespace::Recursive
       ])
-    )
-  end # Config
+    end # Parser
+  end # Expression
 end # Mutant

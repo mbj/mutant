@@ -9,15 +9,15 @@ RSpec.describe Mutant::Matcher::Config do
     end
 
     context 'with one expression' do
-      let(:object) { described_class::DEFAULT.add(:match_expressions, parse_expression('Foo')) }
+      let(:object) { described_class::DEFAULT.add(:match_expressions, 'Foo') }
       it { should eql('#<Mutant::Matcher::Config match_expressions: [Foo]>') }
     end
 
     context 'with many expressions' do
       let(:object) do
         described_class::DEFAULT
-          .add(:match_expressions, parse_expression('Foo'))
-          .add(:match_expressions, parse_expression('Bar'))
+          .add(:match_expressions, 'Foo')
+          .add(:match_expressions, 'Bar')
       end
 
       it { should eql('#<Mutant::Matcher::Config match_expressions: [Foo,Bar]>') }
@@ -26,8 +26,8 @@ RSpec.describe Mutant::Matcher::Config do
     context 'with match and ignore expression' do
       let(:object) do
         described_class::DEFAULT
-          .add(:match_expressions,  parse_expression('Foo'))
-          .add(:ignore_expressions, parse_expression('Bar'))
+          .add(:match_expressions,  'Foo')
+          .add(:ignore_expressions, 'Bar')
       end
 
       it { should eql('#<Mutant::Matcher::Config match_expressions: [Foo] ignore_expressions: [Bar]>') }

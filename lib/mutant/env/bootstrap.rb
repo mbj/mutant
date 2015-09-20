@@ -15,6 +15,13 @@ module Mutant
       # @api private
       attr_reader :matchable_scopes
 
+      # The expression parser
+      #
+      # @return [Expression::Parser]
+      #
+      # @api private
+      attr_reader :expression_parser
+
       # New bootstrap env
       #
       # @return [Env]
@@ -31,6 +38,7 @@ module Mutant
       # @api private
       def initialize(*)
         super
+        @expression_parser = Expression::Parser::DEFAULT
         infect
         initialize_matchable_scopes
       end
@@ -57,14 +65,16 @@ module Mutant
       def env
         subjects = matched_subjects
         Env.new(
-          actor_env:        Actor::Env.new(Thread),
-          config:           config,
-          cache:            cache,
-          subjects:         subjects,
-          matchable_scopes: matchable_scopes,
-          integration:      @integration,
-          selector:         Selector::Expression.new(@integration),
-          mutations:        subjects.flat_map(&:mutations)
+          actor_env:         Actor::Env.new(Thread),
+          cache:             cache,
+          config:            config,
+          expression_parser: expression_parser,
+          integration:       @integration,
+          isolation:         Isolation::Fork,
+          matchable_scopes:  matchable_scopes,
+          mutations:         subjects.flat_map(&:mutations),
+          selector:          Selector::Expression.new(@integration),
+          subjects:          subjects
         )
       end
 
@@ -96,7 +106,11 @@ module Mutant
       def infect
         config.includes.each(&$LOAD_PATH.method(:<<))
         config.requires.each(&Kernel.method(:require))
-        @integration = config.integration.new(config.expression_parser).setup
+
+        @integration = Integration
+          .lookup(config.integration)
+          .new(expression_parser)
+          .setup
       end
 
       # Matched subjects
@@ -105,7 +119,7 @@ module Mutant
       #
       # @api private
       def matched_subjects
-        Matcher::Compiler.call(config.matcher).call(self)
+        Matcher::Compiler.call(config.matcher, expression_parser).call(self)
       end
 
       # Initialize matchable scopes
@@ -141,7 +155,7 @@ module Mutant
           return
         end
 
-        config.expression_parser.try_parse(name)
+        expression_parser.try_parse(name)
       end
     end # Boostrap
   end # Env

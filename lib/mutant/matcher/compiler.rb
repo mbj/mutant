@@ -3,21 +3,25 @@ module Mutant
 
     # Compiler for complex matchers
     class Compiler
-      include Concord.new(:config), AST::Sexp, Procto.call(:result)
+      include Concord.new(:config, :expression_parser), AST::Sexp, Procto.call(:result)
 
       # Generated matcher
       #
       # @return [Matcher]
       #
       # @api private
+      #
+      # rubocop:disable MethodLength
       def result
         Filter.new(
-          Chain.new(config.match_expressions.map(&:matcher)),
+          Chain.new(
+            config
+              .match_expressions
+              .map(&method(:parse_expression))
+              .map(&:matcher)
+          ),
           Morpher::Evaluator::Predicate::Boolean::And.new(
-            [
-              ignored_subjects,
-              filtered_subjects
-            ]
+            [ignored_subjects, filtered_subjects]
           )
         )
       end
@@ -47,7 +51,10 @@ module Mutant
       def ignored_subjects
         Morpher::Evaluator::Predicate::Boolean::Negation.new(
           Morpher::Evaluator::Predicate::Boolean::Or.new(
-            config.ignore_expressions.map(&SubjectPrefix.method(:new))
+            config
+              .ignore_expressions
+              .map(&method(:parse_expression))
+              .map(&SubjectPrefix.method(:new))
           )
         )
       end
@@ -59,6 +66,17 @@ module Mutant
       # @api private
       def filtered_subjects
         Morpher::Evaluator::Predicate::Boolean::And.new(config.subject_filters)
+      end
+
+      # Parse expression
+      #
+      # @param [String] syntax
+      #
+      # @return [Expression]
+      #
+      # @api private
+      def parse_expression(syntax)
+        expression_parser.call(syntax)
       end
 
     end # Compiler
