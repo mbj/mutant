@@ -26,6 +26,7 @@ Thread.abort_on_exception = true
 module Mutant
   EMPTY_STRING   = ''.freeze
   EMPTY_ARRAY    = [].freeze
+  EMPTY_HASH     = {}.freeze
   SCOPE_OPERATOR = '::'.freeze
 
   # Test if CI is detected via environment
