@@ -1,3 +1,7 @@
+# Unreleased
+
+* Add mutation from `Date.parse` to more strict parsing methods #448
+
 # v0.8.5 2015-09-11
 
 * Fix misimplementation of block gluing operator that

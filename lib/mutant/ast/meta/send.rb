@@ -5,7 +5,7 @@ module Mutant
 
       # Metadata for send nodes
       class Send
-        include NamedChildren, Concord.new(:node)
+        include NamedChildren, Concord.new(:node), NodePredicates
 
         children :receiver, :selector
 
@@ -54,6 +54,17 @@ module Mutant
         # @api private
         def binary_method_operator?
           Types::BINARY_METHOD_OPERATORS.include?(selector)
+        end
+
+        # Test if receiver is possibly a top level constant
+        #
+        # @return [Boolean]
+        #
+        # @api private
+        def receiver_possible_top_level_const?
+          return false unless receiver && n_const?(receiver)
+
+          Const.new(receiver).possible_top_level?
         end
 
       end # Send

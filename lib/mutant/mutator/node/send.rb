@@ -3,6 +3,7 @@ module Mutant
     class Node
 
       # Namespace for send mutators
+      # rubocop:disable ClassLength
       class Send < self
         include AST::Types
 
@@ -32,6 +33,12 @@ module Mutant
           :<= =>         %i[< == eql? equal?],
           :> =>          %i[== >= eql? equal?],
           :< =>          %i[== <= eql? equal?]
+        )
+
+        RECEIVER_SELECTOR_REPLACEMENTS = IceNine.deep_freeze(
+          Date: {
+            parse: %i[jd civil strptime iso8601 rfc3339 xmlschema rfc2822 rfc822 httpdate jisx0301]
+          }
         )
 
       private
@@ -92,8 +99,23 @@ module Mutant
           emit_selector_replacement
           emit_const_get_mutation
           emit_argument_propagation
+          emit_receiver_selector_mutations
           mutate_receiver
           mutate_arguments
+        end
+
+        # Emit selector mutations specific to top level constants
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def emit_receiver_selector_mutations
+          return unless meta.receiver_possible_top_level_const?
+
+          RECEIVER_SELECTOR_REPLACEMENTS
+            .fetch(receiver.children.last, EMPTY_HASH)
+            .fetch(selector, EMPTY_ARRAY)
+            .each(&method(:emit_selector))
         end
 
         # Emit mutation from `const_get` to const literal
