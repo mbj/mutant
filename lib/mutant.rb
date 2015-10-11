@@ -26,6 +26,7 @@ Thread.abort_on_exception = true
 module Mutant
   EMPTY_STRING   = ''.freeze
   EMPTY_ARRAY    = [].freeze
+  EMPTY_HASH     = {}.freeze
   SCOPE_OPERATOR = '::'.freeze
 
   # Test if CI is detected via environment
@@ -49,6 +50,7 @@ require 'mutant/ast/named_children'
 require 'mutant/ast/node_predicates'
 require 'mutant/ast/meta'
 require 'mutant/ast/meta/send'
+require 'mutant/ast/meta/const'
 require 'mutant/ast/meta/symbol'
 require 'mutant/ast/meta/optarg'
 require 'mutant/ast/meta/resbody'
