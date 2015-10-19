@@ -2,6 +2,7 @@ Mutant::Meta::Example.add do
   source '@a.b += 1'
 
   singleton_mutations
+  mutation 'a.b += 1'
   mutation '@a.b += -1'
   mutation '@a.b += 2'
   mutation '@a.b += 0'

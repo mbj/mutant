@@ -2,6 +2,7 @@
 
 * Add mutation from `Date.parse` to more strict parsing methods #448
 * Add mutation from `foo.to_i` to `Integer(foo)` #455
+* Add mutation from `@foo` to `foo` #454
 
 # v0.8.5 2015-09-11
 
