@@ -97,11 +97,21 @@ module Mutant
         def normal_dispatch
           emit_naked_receiver
           emit_selector_replacement
-          emit_const_get_mutation
+          emit_selector_specific_mutations
           emit_argument_propagation
           emit_receiver_selector_mutations
           mutate_receiver
           mutate_arguments
+        end
+
+        # Emit mutations which only correspond to one selector
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def emit_selector_specific_mutations
+          emit_const_get_mutation
+          emit_integer_mutation
         end
 
         # Emit selector mutations specific to top level constants
@@ -116,6 +126,17 @@ module Mutant
             .fetch(receiver.children.last, EMPTY_HASH)
             .fetch(selector, EMPTY_ARRAY)
             .each(&method(:emit_selector))
+        end
+
+        # Emit mutation from `to_i` to `Integer(...)`
+        #
+        # @return [undefined]
+        #
+        # @api private
+        def emit_integer_mutation
+          return unless selector.equal?(:to_i)
+
+          emit(s(:send, nil, :Integer, receiver))
         end
 
         # Emit mutation from `const_get` to const literal
