@@ -142,6 +142,7 @@ Mutant::Meta::Example.add do
   mutation 'foo'
   mutation 'self.to_i'
   mutation 'foo.to_int'
+  mutation 'Integer(foo)'
 end
 
 Mutant::Meta::Example.add do
