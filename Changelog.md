@@ -1,4 +1,4 @@
-# Unreleased
+# v0.8.6. 2015-10-27
 
 * Add mutation from `Date.parse` to more strict parsing methods #448
 * Add mutation from `foo.to_i` to `Integer(foo)` #455
