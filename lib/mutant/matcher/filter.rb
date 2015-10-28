@@ -4,30 +4,17 @@ module Mutant
     class Filter < self
       include Concord.new(:matcher, :predicate)
 
-      # New matcher
-      #
-      # @param [Matcher] matcher
-      #
-      # @return [Matcher]
-      #
-      # @api private
-      def self.build(matcher, &predicate)
-        new(matcher, predicate)
-      end
-
       # Enumerate matches
       #
-      # @return [self]
-      #   if block given
+      # @param [Env] env
       #
-      # @return [Enumerator<Subject>]
-      #   otherwise
+      # @return [Enumerable<Subject>]
       #
       # @api private
-      def each(&block)
-        return to_enum unless block_given?
-        matcher.select(&predicate.method(:call)).each(&block)
-        self
+      def call(env)
+        matcher
+          .call(env)
+          .select(&predicate.method(:call))
       end
 
     end # Filter

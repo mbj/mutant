@@ -1,44 +1,36 @@
-RSpec.describe Mutant::Matcher::Namespace do
-  let(:object) { described_class.new(env, parse_expression('TestApp*')) }
-  let(:yields) { []                                                     }
-  let(:env)    { double('Env')                                          }
+RSpec.describe Mutant::Matcher::Namespace, '#call' do
+  let(:object) { described_class.new(parse_expression('TestApp*')) }
+  let(:env)    { instance_double(Mutant::Env)                      }
+  let(:raw_scope_a) { double('SingletonA', name: 'TestApp::Literal') }
 
-  subject { object.each { |item| yields << item } }
+  let(:raw_scope_b) { double('SingletonB', name: 'TestApp::Foo')     }
+  let(:raw_scope_c) { double('SingletonC', name: 'TestAppOther')     }
+  let(:subject_a)   { double('SubjectA')                             }
+  let(:subject_b)   { double('SubjectB')                             }
 
-  describe '#each' do
+  before do
+    [
+      [Mutant::Matcher::Methods::Singleton, raw_scope_b, [subject_b]],
+      [Mutant::Matcher::Methods::Instance,  raw_scope_b, []],
+      [Mutant::Matcher::Methods::Singleton, raw_scope_a, [subject_a]],
+      [Mutant::Matcher::Methods::Instance,  raw_scope_a, []]
+    ].each do |klass, scope, subjects|
+      matcher = instance_double(Mutant::Matcher)
+      expect(matcher).to receive(:call).with(env).and_return(subjects)
 
-    let(:singleton_a) { double('SingletonA', name: 'TestApp::Literal') }
-    let(:singleton_b) { double('SingletonB', name: 'TestApp::Foo')     }
-    let(:singleton_c) { double('SingletonC', name: 'TestAppOther')     }
-    let(:subject_a)   { double('SubjectA')                             }
-    let(:subject_b)   { double('SubjectB')                             }
-
-    before do
-      allow(Mutant::Matcher::Methods::Singleton).to receive(:new).with(env, singleton_b).and_return([subject_b])
-      allow(Mutant::Matcher::Methods::Instance).to receive(:new).with(env, singleton_b).and_return([])
-
-      allow(Mutant::Matcher::Methods::Singleton).to receive(:new).with(env, singleton_a).and_return([subject_a])
-      allow(Mutant::Matcher::Methods::Instance).to receive(:new).with(env, singleton_a).and_return([])
-
-      allow(env).to receive(:matchable_scopes).and_return(
-        [singleton_a, singleton_b, singleton_c].map do |scope|
-          Mutant::Matcher::Scope.new(env, scope, parse_expression(scope.name))
-        end
-      )
+      expect(klass).to receive(:new)
+        .with(scope)
+        .and_return(matcher)
     end
 
-    context 'with no block' do
-      subject { object.each }
-
-      it { should be_instance_of(to_enum.class) }
-
-      it 'yields the expected values' do
-        expect(subject.to_a).to eql(object.to_a)
+    allow(env).to receive(:matchable_scopes).and_return(
+      [raw_scope_a, raw_scope_b, raw_scope_c].map do |raw_scope|
+        Mutant::Scope.new(raw_scope, parse_expression(raw_scope.name))
       end
-    end
+    )
+  end
 
-    it 'should yield subjects' do
-      expect { subject }.to change { yields }.from([]).to([subject_a, subject_b])
-    end
+  it 'returns subjects' do
+    expect(object.call(env)).to eql([subject_a, subject_b])
   end
 end

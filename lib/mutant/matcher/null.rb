@@ -6,16 +6,13 @@ module Mutant
 
       # Enumerate subjects
       #
-      # @return [Enumerator<Subject]
-      #   if no block given
+      # @param [Env] env
       #
-      # @return [self]
-      #   otherwise
+      # @return [Enumerable<Subject>]
       #
       # @api private
-      def each
-        return to_enum unless block_given?
-        self
+      def call(_env)
+        EMPTY_ARRAY
       end
 
     end # Null

@@ -1,34 +1,40 @@
 module Mutant
   class Matcher
-
     # Matcher for specific namespace
     class Namespace < self
-      include Concord::Public.new(:env, :expression)
+      include Concord::Public.new(:expression)
 
       # Enumerate subjects
       #
-      # @return [self]
-      #   if block given
+      # @param [Env] env
       #
-      # @return [Enumerator<Subject>]
-      #   otherwise
+      # @return [Enumerable<Subject>]
       #
       # @api private
-      def each(&block)
-        return to_enum unless block_given?
-
-        env.matchable_scopes.select do |scope|
-          scope.each(&block) if match?(scope)
-        end
-
-        self
+      def call(env)
+        Chain.new(
+          matched_scopes(env).map { |scope| Scope.new(scope.raw) }
+        ).call(env)
       end
 
     private
 
-      # Test scope if name matches expression
+      # The matched scopes
       #
-      # @param [Module, Class] scope
+      # @param [Env] env
+      #
+      # @return [Enumerable<Scope>]
+      #
+      # @api private
+      def matched_scopes(env)
+        env
+          .matchable_scopes
+          .select(&method(:match?))
+      end
+
+      # Test scope if matches expression
+      #
+      # @param [Scope] scope
       #
       # @return [Boolean]
       #

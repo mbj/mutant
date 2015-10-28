@@ -35,13 +35,11 @@ module Mutant
 
         # Matcher for expression
         #
-        # @param [Env::Bootstrap] env
-        #
         # @return [Matcher]
         #
         # @api private
-        def matcher(env)
-          Matcher::Namespace.new(env, self)
+        def matcher
+          Matcher::Namespace.new(self)
         end
 
         # Length of match with other expression
@@ -71,13 +69,11 @@ module Mutant
 
         # Matcher matcher on expression
         #
-        # @param [Env::Bootstrap] env
-        #
         # @return [Matcher]
         #
         # @api private
-        def matcher(env)
-          Matcher::Scope.new(env, Object.const_get(scope_name), self)
+        def matcher
+          Matcher::Scope.new(Object.const_get(scope_name))
         end
 
         # Syntax for expression

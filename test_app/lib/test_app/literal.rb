@@ -29,4 +29,7 @@ module TestApp
       2.4
     end
   end
+
+  class Empty
+  end
 end

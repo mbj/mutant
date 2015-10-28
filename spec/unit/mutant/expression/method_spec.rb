@@ -23,13 +23,13 @@ RSpec.describe Mutant::Expression::Method do
   end
 
   describe '#matcher' do
-    subject { object.matcher(env) }
+    subject { object.matcher }
 
     context 'with an instance method' do
       let(:input) { instance_method }
 
       it 'returns correct matcher' do
-        expect(subject.map(&:expression)).to eql([object])
+        expect(subject.call(env).map(&:expression)).to eql([object])
       end
     end
 
@@ -37,7 +37,7 @@ RSpec.describe Mutant::Expression::Method do
       let(:input) { singleton_method }
 
       it 'returns correct matcher' do
-        expect(subject.map(&:expression)).to eql([object])
+        expect(subject.call(env).map(&:expression)).to eql([object])
       end
     end
   end

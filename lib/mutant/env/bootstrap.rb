@@ -84,7 +84,7 @@ module Mutant
       def scope_name(scope)
         scope.name
       rescue => exception
-        warn("#{scope.class}#name from: #{scope.inspect} raised an error: #{exception.inspect}. #{SEMANTICS_MESSAGE}")
+        warn("#{scope.class}#name from: #{scope} raised an error: #{exception.inspect}. #{SEMANTICS_MESSAGE}")
         nil
       end
 
@@ -95,7 +95,7 @@ module Mutant
       # @api private
       def infect
         config.includes.each(&$LOAD_PATH.method(:<<))
-        config.requires.each(&method(:require))
+        config.requires.each(&Kernel.method(:require))
         @integration = config.integration.new(config).setup
       end
 
@@ -105,7 +105,7 @@ module Mutant
       #
       # @api private
       def matched_subjects
-        Matcher::Compiler.call(self, config.matcher).to_a
+        Matcher::Compiler.call(config.matcher).call(self)
       end
 
       # Initialize matchable scopes
@@ -115,8 +115,8 @@ module Mutant
       # @api private
       def initialize_matchable_scopes
         scopes = ObjectSpace.each_object(Module).each_with_object([]) do |scope, aggregate|
-          expression = expression(scope)
-          aggregate << Matcher::Scope.new(self, scope, expression) if expression
+          expression = expression(scope) || next
+          aggregate << Scope.new(scope, expression)
         end
 
         @matchable_scopes = scopes.sort_by { |scope| scope.expression.syntax }
@@ -137,7 +137,7 @@ module Mutant
         name = scope_name(scope) or return
 
         unless name.instance_of?(String)
-          warn("#{scope.class}#name from: #{scope.inspect} returned #{name.inspect}. #{SEMANTICS_MESSAGE}")
+          warn("#{scope.class}#name from: #{scope} returned #{name}. #{SEMANTICS_MESSAGE}")
           return
         end
 
