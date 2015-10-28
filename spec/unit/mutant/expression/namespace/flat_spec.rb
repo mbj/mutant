@@ -1,12 +1,11 @@
 RSpec.describe Mutant::Expression::Namespace::Exact do
   let(:object) { parse_expression(input) }
-  let(:env)    { Fixtures::TEST_ENV      }
   let(:input)  { 'TestApp::Literal'      }
 
   describe '#matcher' do
-    subject { object.matcher(env) }
+    subject { object.matcher }
 
-    it { should eql(Mutant::Matcher::Scope.new(env, TestApp::Literal, object)) }
+    it { should eql(Mutant::Matcher::Scope.new(TestApp::Literal)) }
   end
 
   describe '#match_length' do

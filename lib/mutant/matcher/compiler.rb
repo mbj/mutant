@@ -3,7 +3,7 @@ module Mutant
 
     # Compiler for complex matchers
     class Compiler
-      include Concord.new(:env, :config), AST::Sexp, Procto.call(:result)
+      include Concord.new(:config), AST::Sexp, Procto.call(:result)
 
       # Generated matcher
       #
@@ -12,7 +12,7 @@ module Mutant
       # @api private
       def result
         Filter.new(
-          Chain.build(config.match_expressions.map(&method(:matcher))),
+          Chain.new(config.match_expressions.map(&:matcher)),
           Morpher::Evaluator::Predicate::Boolean::And.new(
             [
               ignored_subjects,
@@ -59,17 +59,6 @@ module Mutant
       # @api private
       def filtered_subjects
         Morpher::Evaluator::Predicate::Boolean::And.new(config.subject_filters)
-      end
-
-      # Matcher for expression on env
-      #
-      # @param [Mutant::Expression] expression
-      #
-      # @return [Matcher]
-      #
-      # @api private
-      def matcher(expression)
-        expression.matcher(env)
       end
 
     end # Compiler

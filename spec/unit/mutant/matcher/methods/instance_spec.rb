@@ -1,10 +1,6 @@
-RSpec.describe Mutant::Matcher::Methods::Instance, '#each' do
-  let(:object) { described_class.new(env, class_under_test) }
-  let(:env)    { Fixtures::TEST_ENV            }
-
-  subject { object.each { |matcher| yields << matcher } }
-
-  let(:yields) { [] }
+RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
+  let(:object) { described_class.new(class_under_test) }
+  let(:env)    { Fixtures::TEST_ENV                    }
 
   let(:class_under_test) do
     parent = Module.new do
@@ -37,26 +33,27 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#each' do
     end
   end
 
-  let(:subject_a) { double('Subject A') }
-  let(:subject_b) { double('Subject B') }
-  let(:subject_c) { double('Subject C') }
-
-  let(:subjects) { [subject_a, subject_b, subject_c] }
+  let(:subject_a) { instance_double(Mutant::Subject) }
+  let(:subject_b) { instance_double(Mutant::Subject) }
+  let(:subject_c) { instance_double(Mutant::Subject) }
+  let(:subjects)  { [subject_a, subject_b, subject_c] }
 
   before do
-    matcher = Mutant::Matcher::Method::Instance
-    allow(matcher).to receive(:new)
-      .with(env, class_under_test, class_under_test.instance_method(:method_a)).and_return([subject_a])
-    allow(matcher).to receive(:new)
-      .with(env, class_under_test, class_under_test.instance_method(:method_b)).and_return([subject_b])
-    allow(matcher).to receive(:new)
-      .with(env, class_under_test, class_under_test.instance_method(:method_c)).and_return([subject_c])
+    {
+      method_a: subject_a,
+      method_b: subject_b,
+      method_c: subject_c
+    }.each do |method, subject|
+      matcher = instance_double(Mutant::Matcher)
+      expect(matcher).to receive(:call).with(env).and_return([subject])
+
+      expect(Mutant::Matcher::Method::Instance).to receive(:new)
+        .with(class_under_test, class_under_test.instance_method(method))
+        .and_return(matcher)
+    end
   end
 
-  it 'should yield expected subjects' do
-    subject
-    expect(yields).to eql(subjects)
+  it 'returns expected subjects' do
+    expect(object.call(env)).to eql(subjects)
   end
-
-  it_should_behave_like 'an #each method'
 end

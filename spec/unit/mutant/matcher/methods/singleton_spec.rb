@@ -1,10 +1,6 @@
-RSpec.describe Mutant::Matcher::Methods::Singleton, '#each' do
-  let(:object) { described_class.new(env, class_under_test) }
-  let(:env)    { Fixtures::TEST_ENV            }
-
-  subject { object.each { |matcher| yields << matcher } }
-
-  let(:yields) { [] }
+RSpec.describe Mutant::Matcher::Methods::Singleton, '#call' do
+  let(:object) { described_class.new(class_under_test) }
+  let(:env)    { Fixtures::TEST_ENV                    }
 
   let(:class_under_test) do
     parent = Module.new do
@@ -32,26 +28,27 @@ RSpec.describe Mutant::Matcher::Methods::Singleton, '#each' do
     end
   end
 
-  let(:subject_a) { double('Subject A') }
-  let(:subject_b) { double('Subject B') }
-  let(:subject_c) { double('Subject C') }
+  let(:subject_a) { instance_double(Mutant::Subject, 'A') }
+  let(:subject_b) { instance_double(Mutant::Subject, 'B') }
+  let(:subject_c) { instance_double(Mutant::Subject, 'C') }
 
   let(:subjects) { [subject_a, subject_b, subject_c] }
 
   before do
     matcher = Mutant::Matcher::Method::Singleton
-    allow(matcher).to receive(:new)
-      .with(env, class_under_test, class_under_test.method(:method_a)).and_return([subject_a])
-    allow(matcher).to receive(:new)
-      .with(env, class_under_test, class_under_test.method(:method_b)).and_return([subject_b])
-    allow(matcher).to receive(:new)
-      .with(env, class_under_test, class_under_test.method(:method_c)).and_return([subject_c])
+
+    {
+      method_a: subject_a,
+      method_b: subject_b,
+      method_c: subject_c
+    }.each do |method, subject|
+      allow(matcher).to receive(:new)
+        .with(class_under_test, class_under_test.method(method))
+        .and_return(Mutant::Matcher::Static.new([subject]))
+    end
   end
 
-  it 'should yield expected subjects' do
-    subject
-    expect(yields).to eql(subjects)
+  it 'returns expected subjects' do
+    expect(object.call(env)).to eql(subjects)
   end
-
-  it_should_behave_like 'an #each method'
 end

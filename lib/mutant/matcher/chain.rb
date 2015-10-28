@@ -1,26 +1,20 @@
 module Mutant
   class Matcher
-    # A chain of matchers
+    # Matcher chaining results of other matchers together
     class Chain < self
       include Concord.new(:matchers)
 
-      # Enumerate subjects
+      # Call matcher
       #
-      # @return [Enumerator<Subject]
-      #   if no block given
+      # @param [Env] env
       #
-      # @return [self]
-      #   otherwise
+      # @return [Enumerable<Subject>]
       #
       # @api private
-      def each(&block)
-        return to_enum unless block_given?
-
-        matchers.each do |matcher|
-          matcher.each(&block)
+      def call(env)
+        matchers.flat_map do |matcher|
+          matcher.call(env)
         end
-
-        self
       end
 
     end # Chain

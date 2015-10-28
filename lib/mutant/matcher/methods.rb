@@ -2,23 +2,27 @@ module Mutant
   class Matcher
     # Abstract base class for matcher that returns method subjects from scope
     class Methods < self
-      include AbstractType, Concord::Public.new(:env, :scope)
+      include AbstractType, Concord.new(:scope)
+
+      CANDIDATE_NAMES = IceNine.deep_freeze(%i[
+        public_instance_methods
+        private_instance_methods
+        protected_instance_methods
+      ])
+
+      private_constant(*constants(false))
 
       # Enumerate subjects
       #
-      # @return [self]
-      #   if block given
+      # @param [Env] env
       #
-      # @return [Enumerator<Subject>]
-      #   otherwise
+      # @return [Enumerable<Subject>]
       #
       # @api private
-      def each(&block)
-        return to_enum unless block_given?
-
-        subjects.each(&block)
-
-        self
+      def call(env)
+        Chain.new(
+          methods.map { |method| matcher.new(scope, method) }
+        ).call(env)
       end
 
     private
@@ -45,29 +49,16 @@ module Mutant
       end
       memoize :methods
 
-      # Subjects detected on scope
-      #
-      # @return [Array<Subject>]
-      #
-      # @api private
-      def subjects
-        methods.map do |method|
-          matcher.build(env, scope, method)
-        end.flat_map(&:to_a)
-      end
-      memoize :subjects
-
       # Candidate method names on target scope
       #
       # @return [Enumerable<Symbol>]
       #
       # @api private
       def candidate_names
-        (
-          candidate_scope.public_instance_methods(false)   +
-          candidate_scope.private_instance_methods(false)  +
-          candidate_scope.protected_instance_methods(false)
-        ).sort
+        CANDIDATE_NAMES
+          .map(&candidate_scope.method(:public_send))
+          .reduce(:+)
+          .sort
       end
 
       # Candidate scope
@@ -133,7 +124,6 @@ module Mutant
         end
 
       end # Instance
-
     end # Methods
   end # Matcher
 end # Mutant
