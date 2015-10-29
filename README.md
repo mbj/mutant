@@ -67,15 +67,7 @@ which will fail specs which run for longer than 5 seconds.
 Rails
 -------
 
-Assuming you are using rspec, you can mutation test Rails models by adding the following lines to your Gemfile:
-
-```ruby
-group :test do
-  gem 'mutant-rspec'
-end
-```
-
-Next, run bundle and comment out ```require 'rspec/autorun'``` from your spec_helper.rb file.  Having done so you should be able to use commands like the following:
+To mutation test Rails models with rspec comment out ```require 'rspec/autorun'``` from your spec_helper.rb file.  Having done so you should be able to use commands like the following:
 
 ```sh
 RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec User
