@@ -245,9 +245,8 @@ Your options:
 * [GitHub Issues](https://github.com/mbj/mutant/issues)
 * Ping me on [twitter](https://twitter.com/_m_b_j_)
 
-There is also the [#mutant](http://irclog.whitequark.org/mutant) channel on freenode.
-As my OSS time budget is very limited I cannot join it often. Please prefer to use GitHub issues with
-a 'Question: ' prefix in title.
+There is also a mutant [slack chat](https://mutation-testing.slack.com/).
+@mention [@\_m\_b\_j\_](https://twitter.com/_m_b_j_) on twitter for an invite.
 
 Credits
 -------
