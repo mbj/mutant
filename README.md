@@ -220,7 +220,7 @@ Planning a presentation?
 ------------------------
 
 Mutation testing lately (not only mutant) seems to attract some attention. So naturally
-people do talks about it at conferences, user groups or other chances. Thx for that!
+people do talks about it at conferences, user groups or other chances. Thanks for that!
 
 As I (the author @mbj) am not too happy with some of the facts being presented about
 mutant the last month.
@@ -229,7 +229,7 @@ So if you plan to do a presentation: I offer to review your slides / talk - for 
 My intention is NOT to change your bias pro / against this tool. Just to help to fix
 invalid statements about the tool.
 
-Also in many cases a conversation to the author, should help you to imporve the talk
+Also in many cases a conversation to the author should help you to improve the talk
 significantly. One of mutants biggest weaknesses is the bad documentation, but instead of
 assumptions based on the absence of docs, use the tool authors brain to fill the gaps.
 
@@ -246,7 +246,7 @@ Your options:
 * Ping me on [twitter](https://twitter.com/_m_b_j_)
 
 There is also the [#mutant](http://irclog.whitequark.org/mutant) channel on freenode.
-As my OSS time budged is very limited I cannot join it often. Please prefer to use GitHub issues with
+As my OSS time budget is very limited I cannot join it often. Please prefer to use GitHub issues with
 a 'Question: ' prefix in title.
 
 Credits
