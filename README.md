@@ -31,7 +31,7 @@ It'll pull the `mutant` gem (in correct version), that contains the main engine.
 gem install mutant-rspec
 ```
 
-The minitest integration is still in the [works](https://github.com/mbj/mutant/pull/330).
+The minitest integration is still in the [works](https://github.com/mbj/mutant/pull/445).
 
 Examples
 --------
