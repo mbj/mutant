@@ -7,7 +7,7 @@ module Mutant
 
       # Methods within rbx kernel directory are precompiled and their source
       # cannot be accessed via reading source location. Same for methods created by eval.
-      BLACKLIST = %r{\Akernel/|(eval)}.freeze
+      BLACKLIST = %r{\A(kernel/|\(eval\)\z)}.freeze
 
       # Enumerate matches
       #

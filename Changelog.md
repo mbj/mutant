@@ -1,3 +1,7 @@
+# v0.8.7 2015-10-30
+
+* Fix blackliting regexp to correctly match the String `(eval)` absolutely.
+
 # v0.8.6. 2015-10-27
 
 * Add mutation from `Date.parse` to more strict parsing methods #448
