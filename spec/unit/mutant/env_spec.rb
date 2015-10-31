@@ -55,7 +55,6 @@ RSpec.describe Mutant::Env do
 
       before do
         expect(isolation).to receive(:call).and_yield.and_return(test_result)
-        expect(mutation_subject).to receive(:public?).and_return(true).ordered
         expect(mutation_subject).to receive(:prepare).and_return(mutation_subject).ordered
         expect(context).to receive(:root).with(s(:nil)).and_return(wrapped_node).ordered
         expect(Mutant::Loader::Eval).to receive(:call).with(wrapped_node, mutation_subject).and_return(nil).ordered
