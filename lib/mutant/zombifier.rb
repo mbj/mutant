@@ -10,6 +10,7 @@ module Mutant
       :root_require,
       :pathname
     )
+    private(*anima.attribute_names)
 
     include AST::Sexp
 
@@ -56,7 +57,7 @@ module Mutant
     #
     # @api private
     def include?(logical_name)
-      !@zombified.include?(logical_name) && @includes =~ logical_name
+      !@zombified.include?(logical_name) && includes =~ logical_name
     end
 
     # Require file in zombie namespace

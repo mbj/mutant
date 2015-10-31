@@ -41,9 +41,8 @@ module Mutant
           # @return [Boolean]
           #
           # @api private
-          def tty?
-            @tty
-          end
+          alias_method :tty?, :tty
+          public :tty?
 
           %i[puts write].each do |name|
             define_method(name) do |*args, &block|
