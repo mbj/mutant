@@ -1,12 +1,13 @@
 RSpec.describe Mutant::Actor::Binding do
-  let(:actor_a)    { double('Actor-A', sender: sender_a, receiver: receiver_a) }
-  let(:sender_a)   { double('Sender-A')                                        }
-  let(:sender_b)   { double('Sender-B')                                        }
-  let(:receiver_a) { double('Receiver-A')                                      }
-  let(:payload)    { double('Payload')                                         }
-  let(:type)       { double('Type')                                            }
+  let_instance(:sender_a,   Mutant::Actor::Sender                                           )
+  let_instance(:sender_b,   Mutant::Actor::Sender                                           )
+  let_instance(:mailbox,    Mutant::Actor::Mailbox, receiver: :receiver_a, sender: :sender_a)
+  let_instance(:receiver_a, Mutant::Actor::Receiver                                         )
 
-  let(:object) { described_class.new(actor_a, sender_b) }
+  let_anon(:payload)
+  let_anon(:type)
+
+  let(:object) { described_class.new(mailbox, sender_b) }
 
   describe '#call' do
     subject { object.call(type) }

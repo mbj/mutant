@@ -64,4 +64,5 @@ RSpec.configure do |config|
   config.include(MessageHelper)
   config.include(ParserHelper)
   config.include(Mutant::AST::Sexp)
+  config.extend(MutantTest::LetHelper)
 end
