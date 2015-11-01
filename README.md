@@ -101,6 +101,18 @@ Mutant cannot emit mutations for...
     end
     ```
 
+* singleton methods not defined on a constant or `self`
+
+    ```ruby
+    class Foo
+      def self.bar; end   # ok
+      def Foo.baz; end    # ok
+
+      myself = self
+      def myself.qux; end # cannot mutate
+    end
+    ```
+
 Mutation-Operators:
 -------------------
 
