@@ -113,6 +113,14 @@ Mutant cannot emit mutations for...
     end
     ```
 
+* methods defined with eval:
+
+    ```ruby
+    class Foo
+      class_eval('def bar; end') # cannot mutate
+    end
+    ```
+
 Mutation-Operators:
 -------------------
 
