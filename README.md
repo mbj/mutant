@@ -233,9 +233,21 @@ There are some presentations about mutant in the wild:
 Blog-Posts
 ----------
 
-* https://blog.blockscore.com/how-to-write-better-code-using-mutation-testing/
-* http://www.sitepoint.com/mutation-testing-mutant/
-* http://solnic.eu/2013/01/23/mutation-testing-with-mutant.html
+Sorted by recency:
+
+* [How to write better code using mutation testing (November 2015)][blockscore]
+* [How good are your Ruby tests? Testing your tests with mutant (June 2015)][arkency1]
+* [Mutation testing and continuous integration (May 2015)][arkency2]
+* [Why I want to introduce mutation testing to the `rails_event_store` gem (April 2015)][arkency3]
+* [Mutation testing with mutant (April 2014)][sitepoint]
+* [Mutation testing with mutant (January 2013)][solnic]
+
+[blockscore]: https://blog.blockscore.com/how-to-write-better-code-using-mutation-testing/
+[sitepoint]: http://www.sitepoint.com/mutation-testing-mutant/
+[arkency1]: http://blog.arkency.com/2015/06/how-good-are-your-ruby-tests-testing-your-tests-with-mutant/
+[arkency2]: http://blog.arkency.com/2015/05/mutation-testing-and-continuous-integration/
+[arkency3]: http://blog.arkency.com/2015/04/why-i-want-to-introduce-mutation-testing-to-the-rails-event-store-gem/  
+[solnic]: http://solnic.eu/2013/01/23/mutation-testing-with-mutant.html
 
 The Crash / Stuck Problem (MRI)
 -------------------------------
