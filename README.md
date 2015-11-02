@@ -230,7 +230,7 @@ There are some presentations about mutant in the wild:
 * [eurucamp 2013](http://2013.eurucamp.org/) / FrOSCon-2013 http://slid.es/markusschirp/mutation-testing
 * [Cologne.rb](http://www.colognerb.de/topics/mutation-testing-mit-mutant) / https://github.com/DonSchado/colognerb-on-mutant/blob/master/mutation_testing_slides.pdf
 
-Blog-Posts
+Blog posts
 ----------
 
 Sorted by recency:
