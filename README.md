@@ -233,6 +233,7 @@ There are some presentations about mutant in the wild:
 Blog-Posts
 ----------
 
+* https://blog.blockscore.com/how-to-write-better-code-using-mutation-testing/
 * http://www.sitepoint.com/mutation-testing-mutant/
 * http://solnic.eu/2013/01/23/mutation-testing-with-mutant.html
 
