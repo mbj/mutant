@@ -1,5 +1,5 @@
 RSpec.describe Mutant::Expression::Parser do
-  let(:object) { Mutant::Config::DEFAULT.expression_parser }
+  let(:object) { Mutant::Expression::Parser::DEFAULT }
 
   describe '#call' do
     subject { object.call(input) }

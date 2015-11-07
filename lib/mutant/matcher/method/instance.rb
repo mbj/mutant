@@ -3,62 +3,68 @@ module Mutant
     class Method
       # Matcher for instance methods
       class Instance < self
-        SUBJECT_CLASS = Subject::Method::Instance
 
         # Dispatching builder, detects memoizable case
         #
-        # @param [Env::Boostrap] env
         # @param [Class, Module] scope
         # @param [UnboundMethod] method
         #
         # @return [Matcher::Method::Instance]
         #
         # @api private
-        def self.build(env, scope, target_method)
+        def self.new(scope, target_method)
           name = target_method.name
-          if scope.ancestors.include?(::Memoizable) && scope.memoized?(name)
-            return Memoized.new(env, scope, target_method)
-          end
-          super
+          evaluator =
+            if scope.include?(Memoizable) && scope.memoized?(name)
+              Evaluator::Memoized
+            else
+              Evaluator
+            end
+
+          super(scope, target_method, evaluator)
         end
 
-        NAME_INDEX = 0
-
-      private
-
-        # Check if node is matched
-        #
-        # @param [Parser::AST::Node] node
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        def match?(node)
-          location   = node.location       || return
-          expression = location.expression || return
-
-          expression.line.equal?(source_line)           &&
-          node.type.equal?(:def)                        &&
-          node.children[NAME_INDEX].equal?(method_name)
-        end
-
-        # Matcher for memoized instance methods
-        class Memoized < self
-          SUBJECT_CLASS = Subject::Method::Instance::Memoized
+        # Instance method specific evaluator
+        class Evaluator < Evaluator
+          SUBJECT_CLASS = Subject::Method::Instance
+          NAME_INDEX    = 0
 
         private
 
-          # Source location
+          # Check if node is matched
           #
-          # @return [Array{String,Fixnum}]
+          # @param [Parser::AST::Node] node
+          #
+          # @return [Boolean]
           #
           # @api private
-          def source_location
-            scope.unmemoized_instance_method(method_name).source_location
+          def match?(node)
+            node.type.equal?(:def)                 &&
+            node.location.line.equal?(source_line) &&
+            node.children.fetch(NAME_INDEX).equal?(method_name)
           end
 
-        end # Memoized
+          # Evaluator specialized for memoized instance mthods
+          class Memoized < self
+            SUBJECT_CLASS = Subject::Method::Instance::Memoized
 
+          private
+
+            # Source location
+            #
+            # @return [Array{String,Fixnum}]
+            #
+            # @api private
+            def source_location
+              scope
+                .unmemoized_instance_method(method_name)
+                .source_location
+            end
+
+          end # Memoized
+        end # Evaluator
+
+        private_constant(*constants(false))
       end # Instance
     end # Method
   end # Matcher

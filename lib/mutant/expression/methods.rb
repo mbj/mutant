@@ -26,13 +26,11 @@ module Mutant
 
       # Matcher on expression
       #
-      # @param [Env] env
-      #
       # @return [Matcher::Method]
       #
       # @api private
-      def matcher(env)
-        MATCHERS.fetch(scope_symbol).new(env, scope)
+      def matcher
+        MATCHERS.fetch(scope_symbol).new(scope)
       end
 
       # Length of match with other expression

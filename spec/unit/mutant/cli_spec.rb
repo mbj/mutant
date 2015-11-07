@@ -67,13 +67,13 @@ RSpec.describe Mutant::CLI do
 
     # Defaults
     let(:expected_filter)         { Morpher.evaluator(s(:true))      }
-    let(:expected_integration)    { Mutant::Integration::Null        }
+    let(:expected_integration)    { 'null'                           }
     let(:expected_reporter)       { Mutant::Config::DEFAULT.reporter }
     let(:expected_matcher_config) { default_matcher_config           }
 
     let(:default_matcher_config) do
       Mutant::Matcher::Config::DEFAULT
-        .with(match_expressions: expressions.map(&method(:parse_expression)))
+        .with(match_expressions: expressions)
     end
 
     let(:flags)       { []           }
@@ -153,18 +153,15 @@ Options:
 
         it_should_behave_like 'a cli parser'
 
-        let(:expected_integration) { Mutant::Integration::Rspec }
+        let(:expected_integration) { 'rspec' }
       end
 
-      context 'when integration does NOT exist' do
-        let(:flags) { %w[--use other] }
+      context 'when does not' do
+        let(:flags) { %w[--use foo] }
 
-        it 'raises error' do
-          expect { subject }.to raise_error(
-            Mutant::CLI::Error,
-            'Could not load integration "other" (you may want to try installing the gem mutant-other)'
-          )
-        end
+        let(:expected_message) { 'Could not load integration "foo" (install the gem mutant-foo if exists)' }
+
+        it_should_behave_like 'an invalid cli run'
       end
     end
 
@@ -249,7 +246,7 @@ Options:
       let(:flags) { %w[--ignore-subject Foo::Bar] }
 
       let(:expected_matcher_config) do
-        default_matcher_config.with(ignore_expressions: [parse_expression('Foo::Bar')])
+        default_matcher_config.with(ignore_expressions: %w[Foo::Bar])
       end
 
       it_should_behave_like 'a cli parser'

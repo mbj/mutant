@@ -50,32 +50,4 @@ RSpec.describe Mutant::Subject::Method::Singleton do
 
     it { should eql("def self.foo\nend") }
   end
-
-  describe '#public?' do
-    subject { object.public? }
-
-    context 'when method is public' do
-      it { should be(true) }
-    end
-
-    context 'when method is private' do
-      before do
-        scope.class_eval do
-          private_class_method :foo
-        end
-      end
-
-      it { should be(false) }
-    end
-
-    context 'when method is protected' do
-      before do
-        class << scope
-          protected :foo
-        end
-      end
-
-      it { should be(false) }
-    end
-  end
 end

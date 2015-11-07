@@ -14,8 +14,8 @@ module Mutant
       ENUM_DELIMITER      = ','.freeze
       EMPTY_ATTRIBUTES    = 'empty'.freeze
       PRESENTATIONS       = IceNine.deep_freeze(
-        match_expressions:  :syntax,
-        ignore_expressions: :syntax,
+        match_expressions:  :to_s,
+        ignore_expressions: :to_s,
         subject_filters:    :inspect
       )
       private_constant(*constants(false))

@@ -1,13 +1,11 @@
 RSpec.describe Mutant::Expression::Namespace::Recursive do
-
   let(:object) { parse_expression(input) }
   let(:input)  { 'TestApp::Literal*'     }
-  let(:env)    { Fixtures::TEST_ENV      }
 
   describe '#matcher' do
-    subject { object.matcher(env) }
+    subject { object.matcher }
 
-    it { should eql(Mutant::Matcher::Namespace.new(env, object)) }
+    it { should eql(Mutant::Matcher::Namespace.new(object)) }
   end
 
   describe '#syntax' do

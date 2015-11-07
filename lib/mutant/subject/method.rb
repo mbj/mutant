@@ -3,13 +3,6 @@ module Mutant
     # Abstract base class for method subjects
     class Method < self
 
-      # Test if method is public
-      #
-      # @return [Boolean]
-      #
-      # @api private
-      abstract_method :public?
-
       # Method name
       #
       # @return [Expression]

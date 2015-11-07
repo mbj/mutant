@@ -1,38 +1,33 @@
 RSpec.shared_examples_for 'a method matcher' do
-
-  before { subject }
-
   let(:node)              { mutation_subject.node    }
   let(:context)           { mutation_subject.context }
-  let(:mutation_subject)  { yields.first             }
+  let(:mutation_subject)  { subject.first            }
 
-  it 'should return one subject' do
-    expect(yields.size).to be(1)
+  it 'returns one subject' do
+    expect(subject.size).to be(1)
   end
 
-  it_should_behave_like 'an #each method'
-
-  it 'should have correct method name' do
+  it 'has expected method name' do
     expect(name).to eql(method_name)
   end
 
-  it 'should have correct line number' do
+  it 'has epxected line number' do
     expect(node.location.expression.line).to eql(method_line)
   end
 
-  it 'should have correct arity' do
+  it 'has expected arity' do
     expect(arguments.children.length).to eql(method_arity)
   end
 
-  it 'should have correct scope in context' do
+  it 'has expected scope in context' do
     expect(context.scope).to eql(scope)
   end
 
-  it 'should have the correct source path in context' do
+  it 'has source path in context' do
     expect(context.source_path).to eql(source_path)
   end
 
-  it 'should have the correct node type' do
+  it 'has the correct node type' do
     expect(node.type).to be(type)
   end
 end

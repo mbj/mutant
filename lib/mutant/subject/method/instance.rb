@@ -7,16 +7,6 @@ module Mutant
         NAME_INDEX = 0
         SYMBOL     = '#'.freeze
 
-        # Test if method is public
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        def public?
-          scope.public_method_defined?(name)
-        end
-        memoize :public?
-
         # Prepare subject for mutation insertion
         #
         # @return [self]

@@ -16,7 +16,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       -----------------------
       Mutant configuration:
       Matcher:         #<Mutant::Matcher::Config empty>
-      Integration:     Mutant::Integration::Null
+      Integration:     null
       Expect Coverage: 100.00%
       Jobs:            1
       Includes:        []
