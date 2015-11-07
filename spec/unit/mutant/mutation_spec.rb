@@ -1,25 +1,45 @@
 RSpec.describe Mutant::Mutation do
-
   class TestMutation < Mutant::Mutation
     SYMBOL = 'test'.freeze
   end
 
   let(:object)  { TestMutation.new(mutation_subject, Mutant::AST::Nodes::N_NIL) }
-  let(:context) { double('Context')                                             }
+  let(:context) { instance_double(Mutant::Context)                              }
 
   let(:mutation_subject) do
-    double(
-      'Subject',
+    instance_double(
+      Mutant::Subject,
       identification: 'subject',
-      context: context,
-      source: 'original',
-      tests:  tests
+      context:        context,
+      source:         'original'
     )
   end
 
-  let(:test_a) { double('Test A') }
-  let(:test_b) { double('Test B') }
-  let(:tests)  { [test_a, test_b] }
+  let(:test_a) { instance_double(Mutant::Test) }
+  let(:test_b) { instance_double(Mutant::Test) }
+
+  describe '#insert' do
+    subject { object.insert }
+
+    let(:root_node) { s(:foo) }
+
+    before do
+      expect(context).to receive(:root)
+        .with(object.node)
+        .and_return(root_node)
+
+      expect(mutation_subject).to receive(:prepare)
+        .ordered
+        .and_return(mutation_subject)
+
+      expect(Mutant::Loader::Eval).to receive(:call)
+        .ordered
+        .with(root_node, mutation_subject)
+        .and_return(Mutant::Loader::Eval)
+    end
+
+    it_should_behave_like 'a command method'
+  end
 
   describe '#code' do
     subject { object.code }
