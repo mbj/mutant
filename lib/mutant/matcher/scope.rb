@@ -1,31 +1,41 @@
 module Mutant
   class Matcher
-    # Matcher for specific namespace
+    # Matcher expanding Mutant::Scope objects into method matches
+    # at singleton or instance level
+    #
+    # If we *ever* get other subjects than methods, its likely the place
+    # to hook in custom matchers. In that case the scope matchers to expand
+    # should be passed as arguments to the constructor.
     class Scope < self
-      include Concord::Public.new(:env, :scope, :expression)
+      include Concord.new(:scope)
 
       MATCHERS = [
         Matcher::Methods::Singleton,
         Matcher::Methods::Instance
       ].freeze
 
-      # Enumerate subjects
+      private_constant(*constants(false))
+
+      # Matched subjects
       #
-      # @return [self]
-      #   if block given
+      # @param [Env] env
       #
-      # @return [Enumerator<Subject>]
-      #   otherwise
+      # @return [Enumerable<Subject>]
       #
       # @api private
-      def each(&block)
-        return to_enum unless block_given?
+      def call(env)
+        Chain.new(effective_matchers).call(env)
+      end
 
-        MATCHERS.each do |matcher|
-          matcher.new(env, scope).each(&block)
-        end
+    private
 
-        self
+      # Effective matchers
+      #
+      # @return [Enumerable<Matcher>]
+      #
+      # @api private
+      def effective_matchers
+        MATCHERS.map { |matcher| matcher.new(scope) }
       end
 
     end # Scope

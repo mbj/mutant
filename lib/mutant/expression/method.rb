@@ -32,15 +32,13 @@ module Mutant
 
       # Matcher for expression
       #
-      # @param [Env] env
-      #
       # @return [Matcher]
       #
       # @api private
-      def matcher(env)
-        methods_matcher = MATCHERS.fetch(scope_symbol).new(env, scope)
+      def matcher
+        methods_matcher = MATCHERS.fetch(scope_symbol).new(scope)
 
-        Matcher::Filter.build(methods_matcher) { |subject| subject.expression.eql?(self) }
+        Matcher::Filter.new(methods_matcher, ->(subject) { subject.expression.eql?(self) })
       end
 
     private

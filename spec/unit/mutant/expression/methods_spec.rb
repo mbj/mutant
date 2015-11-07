@@ -1,5 +1,4 @@
 RSpec.describe Mutant::Expression::Methods do
-  let(:env)    { Fixtures::TEST_ENV              }
   let(:object) { described_class.new(attributes) }
 
   describe '#match_length' do
@@ -43,18 +42,18 @@ RSpec.describe Mutant::Expression::Methods do
   end
 
   describe '#matcher' do
-    subject { object.matcher(env) }
+    subject { object.matcher }
 
     context 'with an instance method' do
       let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '#' } }
 
-      it { should eql(Mutant::Matcher::Methods::Instance.new(env, TestApp::Literal)) }
+      it { should eql(Mutant::Matcher::Methods::Instance.new(TestApp::Literal)) }
     end
 
     context 'with a singleton method' do
       let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '.' } }
 
-      it { should eql(Mutant::Matcher::Methods::Singleton.new(env, TestApp::Literal)) }
+      it { should eql(Mutant::Matcher::Methods::Singleton.new(TestApp::Literal)) }
     end
   end
 end
