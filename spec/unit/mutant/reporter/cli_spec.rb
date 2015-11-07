@@ -164,11 +164,13 @@ RSpec.describe Mutant::Reporter::CLI do
       Requires:        []
       Subjects:        1
       Mutations:       2
+      Results:         2
       Kills:           2
       Alive:           0
       Runtime:         4.00s
       Killtime:        2.00s
       Overhead:        100.00%
+      Mutations/s:     0.50
       Coverage:        100.00%
       Expected:        100.00%
     REPORT
@@ -190,11 +192,13 @@ RSpec.describe Mutant::Reporter::CLI do
         Requires:        []
         Subjects:        1
         Mutations:       2
+        Results:         2
         Kills:           2
         Alive:           0
         Runtime:         4.00s
         Killtime:        2.00s
         Overhead:        100.00%
+        Mutations/s:     0.50
         Coverage:        100.00%
         Expected:        100.00%
         Active subjects: 0

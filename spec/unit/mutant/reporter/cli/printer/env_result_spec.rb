@@ -23,11 +23,13 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       Requires:        []
       Subjects:        1
       Mutations:       2
+      Results:         2
       Kills:           1
       Alive:           1
       Runtime:         4.00s
       Killtime:        2.00s
       Overhead:        100.00%
+      Mutations/s:     0.50
       Coverage:        50.00%
       Expected:        100.00%
     STR
