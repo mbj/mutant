@@ -41,7 +41,7 @@ module Mutant
           #
           # @api private
           def object
-            super.payload
+            super().payload
           end
         end # StatusProgressive
       end # Printer
