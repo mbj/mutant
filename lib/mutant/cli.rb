@@ -192,7 +192,7 @@ module Mutant
     #
     # @api private
     def with(attributes)
-      @config = @config.with(attributes)
+      @config = config.with(attributes)
     end
 
     # Add configuration
