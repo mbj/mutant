@@ -183,6 +183,16 @@ require 'mutant/reporter/cli/printer/status_progressive'
 require 'mutant/reporter/cli/printer/test_result'
 require 'mutant/reporter/cli/tput'
 require 'mutant/reporter/cli/format'
+
+require 'mutant/reporter/hash/printer'
+require 'mutant/reporter/hash/printer/config'
+require 'mutant/reporter/hash/printer/env_result'
+require 'mutant/reporter/hash/printer/env_progress'
+require 'mutant/reporter/hash/printer/mutation_result'
+require 'mutant/reporter/hash/printer/subject_result'
+require 'mutant/reporter/hash/printer/test_result'
+
+
 require 'mutant/repository'
 require 'mutant/zombifier'
 
@@ -201,6 +211,7 @@ module Mutant
       isolation:         Mutant::Isolation::Fork,
       reporter:          Reporter::CLI.build($stdout),
       zombie:            false,
+      json_dump:         false,
       jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : ::Parallel.processor_count,
       expected_coverage: Rational(1),
       expression_parser: Expression::Parser.new([

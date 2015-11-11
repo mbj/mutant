@@ -15,6 +15,7 @@ module Mutant
       :fail_fast,
       :jobs,
       :zombie,
+      :json_dump,
       :expected_coverage,
       :expression_parser
     )

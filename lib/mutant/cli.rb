@@ -109,6 +109,10 @@ module Mutant
       opts.on('-j', '--jobs NUMBER', 'Number of kill jobs. Defaults to number of processors.') do |number|
         with(jobs: Integer(number))
       end
+
+      opts.on('--json-dump FILENAME', 'Name of file to write JSON output for others to consume.') do |filename|
+        with(json_dump: filename)
+      end
     end
 
     # Use integration
