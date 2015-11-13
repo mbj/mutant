@@ -1,7 +1,7 @@
 module Mutant
-  # An AST cache
-  class Cache
-    include Equalizer.new, Adamantium::Mutable
+  # An AST Parser
+  class Parser
+    include Adamantium::Mutable, Equalizer.new
 
     # Initialize object
     #
@@ -12,18 +12,18 @@ module Mutant
       @cache = {}
     end
 
-    # Root node parsed from file
+    # Parse path into AST
     #
-    # @param [#to_s] path
+    # @param [Pathname] path
     #
     # @return [AST::Node]
     #
     # @api private
-    def parse(path)
+    def call(path)
       @cache.fetch(path) do
-        @cache[path] = Parser::CurrentRuby.parse(File.read(path))
+        @cache[path] = ::Parser::CurrentRuby.parse(path.read)
       end
     end
 
-  end # Cache
+  end # Parser
 end # Mutant

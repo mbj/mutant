@@ -4,7 +4,7 @@ RSpec.describe Mutant::Env do
       described_class.new(
         config:           config,
         actor_env:        Mutant::Actor::Env.new(Thread),
-        cache:            Mutant::Cache.new,
+        parser:           Mutant::Parser.new,
         selector:         selector,
         subjects:         [],
         mutations:        [],

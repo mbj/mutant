@@ -108,7 +108,7 @@ module Mutant
       #
       # @api private
       def emit_type(*children)
-        emit(Parser::AST::Node.new(node.type, children))
+        emit(::Parser::AST::Node.new(node.type, children))
       end
 
       # Emit singleton literals
