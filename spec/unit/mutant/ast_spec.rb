@@ -27,6 +27,15 @@ RSpec.describe Mutant::AST do
       end
     end
 
+    context 'on non Parser::AST::Node child' do
+      let(:block)   { ->(node) { fail if node.equal?(child_a) } }
+      let(:child_a) { AST::Node.new(:foo) }
+
+      it 'does not yield that node' do
+        expect(path).to eql([])
+      end
+    end
+
     context 'when one node matches' do
       let(:block) { ->(node) { node.equal?(child_a) } }
 
