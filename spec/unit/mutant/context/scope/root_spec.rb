@@ -2,7 +2,7 @@ RSpec.describe Mutant::Context::Scope, '#root' do
   subject { object.root(node) }
 
   let(:object) { described_class.new(TestApp::Literal, path) }
-  let(:path)   { double('Path')                              }
+  let(:path)   { instance_double(Pathname)                   }
   let(:node)   { parse(':node')                              }
 
   let(:scope)      { subject.body }

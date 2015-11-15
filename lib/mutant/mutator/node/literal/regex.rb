@@ -15,8 +15,6 @@ module Mutant
           # Original regexp options
           #
           # @return [Parser::AST::Node]
-          #
-          # @api private
           def options
             children.last
           end
@@ -24,8 +22,6 @@ module Mutant
           # Emit mutants
           #
           # @return [undefined]
-          #
-          # @api private
           def dispatch
             emit_singletons unless parent_node && n_match_current_line?(parent_node)
             children.each_with_index do |child, index|

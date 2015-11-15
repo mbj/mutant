@@ -10,8 +10,6 @@ module Mutant
           # @param [Mutant::Config] config
           #
           # @return [undefined]
-          #
-          # @api private
           def run
             info 'Mutant configuration:'
             info 'Matcher:         %s',      object.matcher.inspect

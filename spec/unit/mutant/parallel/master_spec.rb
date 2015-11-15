@@ -1,16 +1,16 @@
 RSpec.describe Mutant::Parallel::Master do
   let(:message_sequence)     { FakeActor::MessageSequence.new                                             }
   let(:actor_names)          { %i[master worker_a worker_b]                                               }
-  let(:status)               { double('Status')                                                           }
+  let(:status)               { instance_double(Mutant::Result::Status)                                    }
   let(:sink)                 { FakeSink.new                                                               }
-  let(:processor)            { double('Processor')                                                        }
+  let(:processor)            { instance_double(Proc)                                                      }
   let(:worker_a)             { actor_env.mailbox(:worker_a).sender                                        }
   let(:worker_b)             { actor_env.mailbox(:worker_b).sender                                        }
   let(:parent)               { actor_env.mailbox(:parent).sender                                          }
-  let(:job_payload_a)        { double('Job Payload A')                                                    }
-  let(:job_payload_b)        { double('Job Payload B')                                                    }
-  let(:job_result_payload_a) { double('Job Result Payload A')                                             }
-  let(:job_result_payload_b) { double('Job Result Payload B')                                             }
+  let(:job_payload_a)        { instance_double(Object)                                                    }
+  let(:job_payload_b)        { instance_double(Object)                                                    }
+  let(:job_result_payload_a) { instance_double(Object)                                                    }
+  let(:job_result_payload_b) { instance_double(Object)                                                    }
   let(:job_a)                { Mutant::Parallel::Job.new(index: 0, payload: job_payload_a)                }
   let(:job_b)                { Mutant::Parallel::Job.new(index: 1, payload: job_payload_b)                }
   let(:job_result_a)         { Mutant::Parallel::JobResult.new(job: job_a, payload: job_result_payload_a) }
@@ -36,11 +36,11 @@ RSpec.describe Mutant::Parallel::Master do
 
   let(:config) do
     Mutant::Parallel::Config.new(
-      jobs:      1,
       env:       actor_env,
-      source:    Mutant::Parallel::Source::Array.new([job_payload_a, job_payload_b]),
+      jobs:      1,
+      processor: processor,
       sink:      sink,
-      processor: processor
+      source:    Mutant::Parallel::Source::Array.new([job_payload_a, job_payload_b])
     )
   end
 

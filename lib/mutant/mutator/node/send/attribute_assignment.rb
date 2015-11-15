@@ -10,8 +10,6 @@ module Mutant
           # Emit mutations
           #
           # @return [undefined]
-          #
-          # @api private
           def dispatch
             normal_dispatch
             emit_attribute_read
@@ -20,8 +18,6 @@ module Mutant
           # Mutate arguments
           #
           # @return [undefined]
-          #
-          # @api private
           def mutate_arguments
             remaining_children_indices.each do |index|
               mutate_child(index)
@@ -31,8 +27,6 @@ module Mutant
           # Emit attribute read
           #
           # @return [undefined]
-          #
-          # @api private
           def emit_attribute_read
             emit_type(receiver, selector.to_s[0..-2].to_sym)
           end

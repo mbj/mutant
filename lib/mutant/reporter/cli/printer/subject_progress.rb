@@ -21,8 +21,6 @@ module Mutant
           # Run printer
           #
           # @return [undefined]
-          #
-          # @api private
           def run
             puts("#{subject.identification} mutations: #{amount_mutations}")
             print_mutation_results
@@ -35,8 +33,6 @@ module Mutant
           # Print stats
           #
           # @return [undefined]
-          #
-          # @api private
           def print_stats
             status(
               FORMAT,
@@ -52,8 +48,6 @@ module Mutant
           # Print progress bar finish
           #
           # @return [undefined]
-          #
-          # @api private
           def print_progress_bar_finish
             puts(nil) unless amount_mutation_results.zero?
           end
@@ -61,8 +55,6 @@ module Mutant
           # Print mutation results
           #
           # @return [undefined]
-          #
-          # @api private
           def print_mutation_results
             visit_collection(MutationProgressResult, object.mutation_results)
           end

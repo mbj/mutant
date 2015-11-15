@@ -10,8 +10,6 @@ module Mutant
       # Observed coverage
       #
       # @return [Rational]
-      #
-      # @api private
       def coverage
         if amount_mutation_results.zero?
           FULL_COVERAGE
@@ -33,8 +31,6 @@ module Mutant
       #   the attribute name used to receive collection
       #
       # @return [undefined]
-      #
-      # @api private
       def sum(name, collection)
         define_method(name) do
           public_send(collection).map(&name).reduce(0, :+)
@@ -52,8 +48,6 @@ module Mutant
     # isolation etc.
     #
     # @return [Float]
-    #
-    # @api private
     def overhead
       runtime - killtime
     end
@@ -63,8 +57,6 @@ module Mutant
     # @param [Class, Module] host
     #
     # @return [undefined]
-    #
-    # @api private
     def self.included(host)
       host.class_eval do
         include Adamantium
@@ -74,13 +66,15 @@ module Mutant
 
     # Env result object
     class Env
-      include Coverage, Result, Anima.new(:runtime, :env, :subject_results)
+      include Coverage, Result, Anima.new(
+        :env,
+        :runtime,
+        :subject_results
+      )
 
       # Test if run is successful
       #
       # @return [Boolean]
-      #
-      # @api private
       def success?
         coverage.eql?(env.config.expected_coverage)
       end
@@ -89,8 +83,6 @@ module Mutant
       # Failed subject results
       #
       # @return [Array<Result::Subject>]
-      #
-      # @api private
       def failed_subject_results
         subject_results.reject(&:success?)
       end
@@ -103,8 +95,6 @@ module Mutant
       # Amount of mutations
       #
       # @return [Fixnum]
-      #
-      # @api private
       def amount_mutations
         env.mutations.length
       end
@@ -112,8 +102,6 @@ module Mutant
       # Amount of subjects
       #
       # @return [Fixnum]
-      #
-      # @api private
       def amount_subjects
         env.subjects.length
       end
@@ -123,16 +111,20 @@ module Mutant
     # Test result
     class Test
       include Result, Anima.new(
-        :tests,
         :output,
         :passed,
-        :runtime
+        :runtime,
+        :tests
       )
     end # Test
 
     # Subject result
     class Subject
-      include Coverage, Result, Anima.new(:subject, :tests, :mutation_results)
+      include Coverage, Result, Anima.new(
+        :mutation_results,
+        :subject,
+        :tests
+      )
 
       sum :killtime, :mutation_results
       sum :runtime,  :mutation_results
@@ -140,8 +132,6 @@ module Mutant
       # Test if subject was processed successful
       #
       # @return [Boolean]
-      #
-      # @api private
       def success?
         alive_mutation_results.empty?
       end
@@ -149,8 +139,6 @@ module Mutant
       # Test if runner should continue on subject
       #
       # @return [Boolean]
-      #
-      # @api private
       def continue?
         mutation_results.all?(&:success?)
       end
@@ -158,8 +146,6 @@ module Mutant
       # Killed mutations
       #
       # @return [Array<Result::Mutation>]
-      #
-      # @api private
       def alive_mutation_results
         mutation_results.reject(&:success?)
       end
@@ -168,8 +154,6 @@ module Mutant
       # Amount of mutations
       #
       # @return [Fixnum]
-      #
-      # @api private
       def amount_mutation_results
         mutation_results.length
       end
@@ -177,8 +161,6 @@ module Mutant
       # Amount of mutations
       #
       # @return [Fixnum]
-      #
-      # @api private
       def amount_mutations
         subject.mutations.length
       end
@@ -186,8 +168,6 @@ module Mutant
       # Number of killed mutations
       #
       # @return [Fixnum]
-      #
-      # @api private
       def amount_mutations_killed
         killed_mutation_results.length
       end
@@ -195,8 +175,6 @@ module Mutant
       # Number of alive mutations
       #
       # @return [Fixnum]
-      #
-      # @api private
       def amount_mutations_alive
         alive_mutation_results.length
       end
@@ -204,8 +182,6 @@ module Mutant
       # Alive mutations
       #
       # @return [Array<Result::Mutation>]
-      #
-      # @api private
       def killed_mutation_results
         mutation_results.select(&:success?)
       end
@@ -215,13 +191,14 @@ module Mutant
 
     # Mutation result
     class Mutation
-      include Result, Anima.new(:mutation, :test_result)
+      include Result, Anima.new(
+        :mutation,
+        :test_result
+      )
 
       # The runtime
       #
       # @return [Float]
-      #
-      # @api private
       def runtime
         test_result.runtime
       end
@@ -231,8 +208,6 @@ module Mutant
       # Test if mutation was handled successfully
       #
       # @return [Boolean]
-      #
-      # @api private
       def success?
         mutation.class.success?(test_result)
       end

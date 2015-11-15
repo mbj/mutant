@@ -10,8 +10,6 @@ module Mutant
           # Run printer
           #
           # @return [undefined]
-          #
-          # @api private
           def run
             char(success? ? SUCCESS : FAILURE)
           end
@@ -23,8 +21,6 @@ module Mutant
           # @param [String] char
           #
           # @return [undefined]
-          #
-          # @api private
           def char(char)
             output.write(colorize(status_color, char))
           end

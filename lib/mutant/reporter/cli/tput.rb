@@ -14,8 +14,6 @@ module Mutant
         #
         # @return [nil]
         #   otherwise
-        #
-        # @api private
         def self.detect
           reset   = capture('tput reset')
           save    = capture('tput sc') if reset
@@ -34,8 +32,6 @@ module Mutant
         #
         # @return [nil]
         #   otherwise
-        #
-        # @api private
         def self.capture(command)
           stdout, _stderr, exitstatus = Open3.capture3(command)
           stdout if exitstatus.success?

@@ -12,7 +12,10 @@ module MutantSpec
 
     # An event being expected, can advance the VM
     class EventExpectation
-      include AbstractType, Anima.new(:expected_payload, :trigger_requires)
+      include AbstractType, Anima.new(
+        :expected_payload,
+        :trigger_requires
+      )
 
       DEFAULTS = IceNine.deep_freeze(trigger_requires: [])
 
@@ -56,8 +59,8 @@ module MutantSpec
       handle_event(
         EventObservation.new(
           EventExpectation::Eval,
-          binding:  binding,
-          source:   source,
+          binding:         binding,
+          source:          source,
           source_location: location
         )
       )

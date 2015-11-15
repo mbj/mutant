@@ -8,8 +8,6 @@ module Mutant
       # Generated matcher
       #
       # @return [Matcher]
-      #
-      # @api private
       def result
         Filter.new(
           Chain.new(config.match_expressions.map(&:matcher)),
@@ -29,8 +27,6 @@ module Mutant
         # Test if subject expression is matched by prefix
         #
         # @return [Boolean]
-        #
-        # @api private
         def call(subject)
           expression.prefix?(subject.expression)
         end
@@ -42,8 +38,6 @@ module Mutant
       # Predicate returning false on expression ignored subject
       #
       # @return [#call]
-      #
-      # @api private
       def ignored_subjects
         Morpher::Evaluator::Predicate::Boolean::Negation.new(
           Morpher::Evaluator::Predicate::Boolean::Or.new(
@@ -55,8 +49,6 @@ module Mutant
       # Predicate returning false on filtered subject
       #
       # @return [#call]
-      #
-      # @api private
       def filtered_subjects
         Morpher::Evaluator::Predicate::Boolean::And.new(config.subject_filters)
       end

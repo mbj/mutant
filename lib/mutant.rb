@@ -23,6 +23,8 @@ require 'unparser'
 Thread.abort_on_exception = true
 
 # Library namespace
+#
+# @api private
 module Mutant
   EMPTY_STRING   = ''.freeze
   EMPTY_ARRAY    = [].freeze
@@ -32,8 +34,6 @@ module Mutant
   # Test if CI is detected via environment
   #
   # @return [Boolean]
-  #
-  # @api private
   def self.ci?
     ENV.key?('CI')
   end
@@ -193,22 +193,22 @@ module Mutant
 
     DEFAULT = new(
       debug:             false,
-      fail_fast:         false,
-      integration:       Integration::Null,
-      matcher:           Matcher::Config::DEFAULT,
-      includes:          EMPTY_ARRAY,
-      requires:          EMPTY_ARRAY,
-      isolation:         Mutant::Isolation::Fork,
-      reporter:          Reporter::CLI.build($stdout),
-      zombie:            false,
-      jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : ::Parallel.processor_count,
       expected_coverage: Rational(1),
       expression_parser: Expression::Parser.new([
         Expression::Method,
         Expression::Methods,
         Expression::Namespace::Exact,
         Expression::Namespace::Recursive
-      ])
+      ]),
+      fail_fast:         false,
+      includes:          EMPTY_ARRAY,
+      integration:       Integration::Null,
+      isolation:         Mutant::Isolation::Fork,
+      jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : ::Parallel.processor_count,
+      matcher:           Matcher::Config::DEFAULT,
+      requires:          EMPTY_ARRAY,
+      reporter:          Reporter::CLI.build($stdout),
+      zombie:            false
     )
   end # Config
 end # Mutant

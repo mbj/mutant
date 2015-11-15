@@ -49,8 +49,6 @@ module Mutant
           # Run report printer
           #
           # @return [undefined]
-          #
-          # @api private
           def run
             puts(mutation.identification)
             print_details
@@ -62,8 +60,6 @@ module Mutant
           # Print mutation details
           #
           # @return [undefined]
-          #
-          # @api private
           def print_details
             __send__(MAP.fetch(mutation.class))
           end
@@ -71,8 +67,6 @@ module Mutant
           # Evil mutation details
           #
           # @return [String]
-          #
-          # @api private
           def evil_details
             diff = Diff.build(mutation.original_source, mutation.source)
             diff = color? ? diff.colorized_diff : diff.diff
@@ -86,8 +80,6 @@ module Mutant
           # Print no diff message
           #
           # @return [undefined]
-          #
-          # @api private
           def print_no_diff_message
             info(
               NO_DIFF_MESSAGE,
@@ -101,8 +93,6 @@ module Mutant
           # Noop details
           #
           # @return [String]
-          #
-          # @api private
           def noop_details
             info(NOOP_MESSAGE)
             visit_test_result
@@ -111,8 +101,6 @@ module Mutant
           # Neutral details
           #
           # @return [String]
-          #
-          # @api private
           def neutral_details
             info(NEUTRAL_MESSAGE, original_node.inspect, mutation.source)
             visit_test_result
@@ -121,8 +109,6 @@ module Mutant
           # Visit failed test results
           #
           # @return [undefined]
-          #
-          # @api private
           def visit_test_result
             visit(TestResult, test_result)
           end
@@ -130,8 +116,6 @@ module Mutant
           # Original node
           #
           # @return [Parser::AST::Node]
-          #
-          # @api private
           def original_node
             mutation.subject.node
           end

@@ -31,27 +31,5 @@ RSpec.describe Mutant::Context::Scope do
 
       it { should eql(expected) }
     end
-
-    context 'with Class as scope' do
-      let(:scope) { Mutant::Context }
-
-      let(:expected) do
-        s(:class,
-          s(:const, nil, :Context),
-          nil,
-          s(:str, 'test')
-        )
-      end
-
-      it { should eql(expected) }
-    end
-
-    context 'with anything else as scope' do
-      let(:scope) { double(name: 'Foo') }
-
-      it 'raises exception' do
-        expect { subject }.to raise_error(RuntimeError, "Cannot wrap scope: #{scope.inspect}")
-      end
-    end
   end
 end

@@ -2,14 +2,14 @@ module Mutant
   # Abstract base class for mutant environments
   class Env
     include Adamantium::Flat, Anima.new(
-      :config,
       :actor_env,
-      :parser,
-      :subjects,
-      :matchable_scopes,
+      :config,
       :integration,
+      :matchable_scopes,
+      :mutations,
+      :parser,
       :selector,
-      :mutations
+      :subjects
     )
 
     SEMANTICS_MESSAGE =
@@ -21,8 +21,6 @@ module Mutant
     # @param [String]
     #
     # @return [self]
-    #
-    # @api private
     def warn(message)
       config.reporter.warn(message)
       self
@@ -33,8 +31,6 @@ module Mutant
     # @param [Mutation] mutation
     #
     # @return [Result::Mutation]
-    #
-    # @api private
     def kill(mutation)
       test_result = run_mutation_tests(mutation)
       Result::Mutation.new(
@@ -53,8 +49,6 @@ module Mutant
     # @return [Result::Test]
     #
     # rubocop:disable MethodLength
-    #
-    # @api private
     def run_mutation_tests(mutation)
       start = Time.now
       tests = selector.call(mutation.subject)
@@ -65,10 +59,10 @@ module Mutant
       end
     rescue Isolation::Error => error
       Result::Test.new(
-        tests:   tests,
         output:  error.message,
+        passed:  false,
         runtime: Time.now - start,
-        passed:  false
+        tests:   tests
       )
     end
 

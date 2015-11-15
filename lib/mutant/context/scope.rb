@@ -10,8 +10,6 @@ module Mutant
       # Return root node for mutation
       #
       # @return [Parser::AST::Node]
-      #
-      # @api private
       def root(node)
         nesting.reverse.reduce(node) do |current, scope|
           self.class.wrap(scope, current)
@@ -21,8 +19,6 @@ module Mutant
       # Identification string
       #
       # @return [String]
-      #
-      # @api private
       def identification
         scope.name
       end
@@ -37,8 +33,6 @@ module Mutant
       #
       # @return [Parser::AST::Module]
       #   if scope is of kind module
-      #
-      # @api private
       def self.wrap(scope, node)
         name = s(:const, nil, scope.name.split(NAMESPACE_DELIMITER).last.to_sym)
         case scope
@@ -46,16 +40,12 @@ module Mutant
           s(:class, name, nil, node)
         when Module
           s(:module, name, node)
-        else
-          fail "Cannot wrap scope: #{scope.inspect}"
         end
       end
 
       # Nesting of scope
       #
       # @return [Enumerable<Class,Module>]
-      #
-      # @api private
       def nesting
         const = ::Object
         name_nesting.each_with_object([]) do |name, nesting|
@@ -68,8 +58,6 @@ module Mutant
       # Unqualified name of scope
       #
       # @return [String]
-      #
-      # @api private
       def unqualified_name
         name_nesting.last
       end
@@ -77,8 +65,6 @@ module Mutant
       # Match expressions for scope
       #
       # @return [Enumerable<Expression>]
-      #
-      # @api private
       def match_expressions
         name_nesting.each_index.reverse_each.map do |index|
           Expression::Namespace::Recursive.new(
@@ -91,8 +77,6 @@ module Mutant
       # Scope wrapped by context
       #
       # @return [::Module|::Class]
-      #
-      # @api private
       attr_reader :scope
 
     private
@@ -100,8 +84,6 @@ module Mutant
       # Nesting of names in scope
       #
       # @return [Array<String>]
-      #
-      # @api private
       def name_nesting
         scope.name.split(NAMESPACE_DELIMITER)
       end

@@ -9,8 +9,6 @@ module Mutant
       # @param [Env] env
       #
       # @return [Enumerable<Subject>]
-      #
-      # @api private
       def call(env)
         matchers.flat_map do |matcher|
           matcher.call(env)

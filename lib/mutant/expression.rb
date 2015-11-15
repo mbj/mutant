@@ -13,8 +13,6 @@ module Mutant
     # Syntax of expression
     #
     # @return [String]
-    #
-    # @api private
     abstract_method :syntax
 
     # Match length with other expression
@@ -22,8 +20,6 @@ module Mutant
     # @param [Expression] other
     #
     # @return [Fixnum]
-    #
-    # @api private
     def match_length(other)
       if eql?(other)
         syntax.length
@@ -37,8 +33,6 @@ module Mutant
     # @param [Expression] other
     #
     # @return [Boolean]
-    #
-    # @api private
     def prefix?(other)
       !match_length(other).zero?
     end
@@ -52,8 +46,6 @@ module Mutant
     #
     # @return [nil]
     #   otherwise
-    #
-    # @api private
     def self.try_parse(input)
       match = self::REGEXP.match(input)
       return unless match

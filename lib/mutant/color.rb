@@ -8,8 +8,6 @@ module Mutant
     # @param [String] text
     #
     # @return [String]
-    #
-    # @api private
     def format(text)
       "\e[#{@code}m#{text}\e[0m"
     end
@@ -22,8 +20,6 @@ module Mutant
       #
       # @return [String]
       #   the argument string
-      #
-      # @api private
       def format(text)
         text
       end
@@ -33,8 +29,6 @@ module Mutant
       # Initialize null color
       #
       # @return [undefined]
-      #
-      # @api private
       def initialize
       end
 

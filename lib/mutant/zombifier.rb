@@ -3,13 +3,14 @@ module Mutant
   class Zombifier
     include Anima.new(
       :includes,
-      :namespace,
       :load_path,
       :kernel,
+      :namespace,
+      :pathname,
       :require_highjack,
-      :root_require,
-      :pathname
+      :root_require
     )
+
     private(*anima.attribute_names)
 
     include AST::Sexp
@@ -21,8 +22,6 @@ module Mutant
     # @param [Symbol] namespace
     #
     # @return [undefined]
-    #
-    # @api private
     def initialize(*)
       super
       @includes = %r{\A#{Regexp.union(includes)}(?:/.*)?\z}
@@ -32,8 +31,6 @@ module Mutant
     # Call zombifier
     #
     # @return [self]
-    #
-    # @api private
     def self.call(*args)
       new(*args).__send__(:call)
       self
@@ -44,8 +41,6 @@ module Mutant
     # Run zombifier
     #
     # @return [undefined]
-    #
-    # @api private
     def call
       @original = require_highjack.call(method(:require))
       require(root_require)
@@ -54,8 +49,6 @@ module Mutant
     # Test if logical name is subjected to zombification
     #
     # @param [String]
-    #
-    # @api private
     def include?(logical_name)
       !@zombified.include?(logical_name) && includes =~ logical_name
     end
@@ -65,8 +58,6 @@ module Mutant
     # @param [#to_s] logical_name
     #
     # @return [undefined]
-    #
-    # @api private
     def require(logical_name)
       logical_name = logical_name.to_s
       @original.call(logical_name)
@@ -83,8 +74,6 @@ module Mutant
     #
     # @raise [LoadError]
     #   otherwise
-    #
-    # @api private
     def find(logical_name)
       file_name = "#{logical_name}.rb"
 
@@ -103,8 +92,6 @@ module Mutant
     # @param [Pathname] source_path
     #
     # @return [undefined]
-    #
-    # @api private
     def zombify(source_path)
       kernel.eval(
         Unparser.unparse(namespaced_node(source_path)),
@@ -118,8 +105,6 @@ module Mutant
     # @param [Pathname] source_path
     #
     # @return [Parser::AST::Node]
-    #
-    # @api private
     def namespaced_node(source_path)
       s(:module, s(:const, nil, namespace), ::Parser::CurrentRuby.parse(source_path.read))
     end

@@ -12,9 +12,9 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
     end
   end
 
-  let(:reportable) { double('Reportable', success?: success?) }
-  let(:tty?)       { true }
-  let(:success?)   { true }
+  let(:reportable) { instance_double(Mutant::Result::Env, success?: success?) }
+  let(:tty?)       { true                                                     }
+  let(:success?)   { true                                                     }
 
   context '.call' do
     let(:class_under_test) do

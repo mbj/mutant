@@ -25,17 +25,17 @@ RSpec.describe Mutant::Integration::Null do
   end
 
   describe '#call' do
-    let(:tests) { double('Tests') }
+    let(:tests) { instance_double(Array) }
 
     subject { object.call(tests) }
 
     it 'returns test result' do
       should eql(
         Mutant::Result::Test.new(
-          tests:   tests,
-          runtime: 0.0,
+          output:  '',
           passed:  true,
-          output:  ''
+          runtime: 0.0,
+          tests:   tests
         )
       )
     end

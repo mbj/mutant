@@ -3,7 +3,11 @@ module Mutant
 
     # Abstract base class for methods expression
     class Methods < self
-      include Anima.new(:scope_name, :scope_symbol)
+      include Anima.new(
+        :scope_name,
+        :scope_symbol
+      )
+
       private(*anima.attribute_names)
 
       MATCHERS = IceNine.deep_freeze(
@@ -17,8 +21,6 @@ module Mutant
       # Syntax of expression
       #
       # @return [String]
-      #
-      # @api private
       def syntax
         [scope_name, scope_symbol].join
       end
@@ -27,8 +29,6 @@ module Mutant
       # Matcher on expression
       #
       # @return [Matcher::Method]
-      #
-      # @api private
       def matcher
         MATCHERS.fetch(scope_symbol).new(scope)
       end
@@ -38,8 +38,6 @@ module Mutant
       # @param [Expression] expression
       #
       # @return [Fixnum]
-      #
-      # @api private
       def match_length(expression)
         if expression.syntax.start_with?(syntax)
           syntax.length
@@ -53,8 +51,6 @@ module Mutant
       # Scope object
       #
       # @return [Class, Method]
-      #
-      # @api private
       def scope
         Object.const_get(scope_name)
       end

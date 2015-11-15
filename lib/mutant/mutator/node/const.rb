@@ -12,8 +12,6 @@ module Mutant
         # Emit mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           emit_singletons unless parent_node && n_const?(parent_node)
           emit_type(nil, *children.drop(1))

@@ -7,8 +7,6 @@ module Mutant
       # Call matcher
       #
       # @return [Enumerable<Subject>]
-      #
-      # @api private
       def call(_env)
         subjects
       end

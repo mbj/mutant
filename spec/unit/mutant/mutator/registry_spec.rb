@@ -20,7 +20,7 @@ RSpec.describe Mutant::Mutator::Registry do
   describe '#register' do
     let(:object) { described_class.new }
 
-    let(:mutator) { double('Mutator') }
+    let(:mutator) { instance_double(Mutant::Mutator) }
 
     subject { object.register(type, mutator) }
 

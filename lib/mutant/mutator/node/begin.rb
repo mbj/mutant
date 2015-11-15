@@ -12,8 +12,6 @@ module Mutant
         # Emit mutants
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           Util::Array.each(children, self, &method(:emit_child_subset))
           children.each_with_index do |child, index|
@@ -27,8 +25,6 @@ module Mutant
         # @param [Array<Parser::AST::Node>] children
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_child_subset(children)
           return if children.length < 2
           emit_type(*children)

@@ -10,8 +10,6 @@ module Mutant
         # Prepare subject for mutation insertion
         #
         # @return [self]
-        #
-        # @api private
         def prepare
           scope.singleton_class.__send__(:undef_method, name)
           self
