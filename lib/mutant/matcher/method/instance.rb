@@ -10,8 +10,6 @@ module Mutant
         # @param [UnboundMethod] method
         #
         # @return [Matcher::Method::Instance]
-        #
-        # @api private
         def self.new(scope, target_method)
           name = target_method.name
           evaluator =
@@ -36,8 +34,6 @@ module Mutant
           # @param [Parser::AST::Node] node
           #
           # @return [Boolean]
-          #
-          # @api private
           def match?(node)
             n_def?(node)                           &&
             node.location.line.equal?(source_line) &&
@@ -53,8 +49,6 @@ module Mutant
             # Source location
             #
             # @return [Array{String,Fixnum}]
-            #
-            # @api private
             def source_location
               scope
                 .unmemoized_instance_method(method_name)

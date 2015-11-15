@@ -11,8 +11,6 @@ module Mutant
       #
       # @raise [Error]
       #   if block terminates abnormal
-      #
-      # @api private
       def self.call(&block)
         block.call
       rescue => exception
@@ -35,8 +33,6 @@ module Mutant
       #   if block terminates abnormal
       #
       # rubocop:disable MethodLength
-      #
-      # @api private
       def self.call(&block)
         IO.pipe(binmode: true) do |reader, writer|
           writer.binmode

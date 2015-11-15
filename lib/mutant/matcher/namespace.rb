@@ -9,8 +9,6 @@ module Mutant
       # @param [Env::Bootstrap] env
       #
       # @return [Enumerable<Subject>]
-      #
-      # @api private
       def call(env)
         Chain.new(
           matched_scopes(env).map { |scope| Scope.new(scope.raw) }
@@ -24,8 +22,6 @@ module Mutant
       # @param [Env] env
       #
       # @return [Enumerable<Scope>]
-      #
-      # @api private
       def matched_scopes(env)
         env
           .matchable_scopes
@@ -37,8 +33,6 @@ module Mutant
       # @param [Scope] scope
       #
       # @return [Boolean]
-      #
-      # @api private
       def match?(scope)
         expression.prefix?(scope.expression)
       end

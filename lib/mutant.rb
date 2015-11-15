@@ -23,6 +23,8 @@ require 'unparser'
 Thread.abort_on_exception = true
 
 # Library namespace
+#
+# @api private
 module Mutant
   EMPTY_STRING   = ''.freeze
   EMPTY_ARRAY    = [].freeze
@@ -32,8 +34,6 @@ module Mutant
   # Test if CI is detected via environment
   #
   # @return [Boolean]
-  #
-  # @api private
   def self.ci?
     ENV.key?('CI')
   end

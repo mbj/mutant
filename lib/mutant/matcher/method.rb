@@ -21,8 +21,6 @@ module Mutant
       # @param [Env::Bootstrap] env
       #
       # @return [Enumerable<Subject>]
-      #
-      # @api private
       def call(env)
         evaluator.call(scope, target_method, env)
       end
@@ -42,8 +40,6 @@ module Mutant
         # Matched subjects
         #
         # @return [Enumerable<Subject>]
-        #
-        # @api private
         def call
           return EMPTY_ARRAY if skip?
 
@@ -55,8 +51,6 @@ module Mutant
         # Test if method should be skipped
         #
         # @return [Truthy]
-        #
-        # @api private
         def skip?
           location = source_location
           if location.nil? || BLACKLIST.match(location.first)
@@ -69,8 +63,6 @@ module Mutant
         # Target method name
         #
         # @return [String]
-        #
-        # @api private
         def method_name
           target_method.name
         end
@@ -78,8 +70,6 @@ module Mutant
         # Target context
         #
         # @return [Context::Scope]
-        #
-        # @api private
         def context
           Context::Scope.new(scope, source_path)
         end
@@ -87,8 +77,6 @@ module Mutant
         # Root source node
         #
         # @return [Parser::AST::Node]
-        #
-        # @api private
         def ast
           env.parser.call(source_path)
         end
@@ -96,8 +84,6 @@ module Mutant
         # Path to source
         #
         # @return [Pathname]
-        #
-        # @api private
         def source_path
           Pathname.new(source_location.first)
         end
@@ -106,8 +92,6 @@ module Mutant
         # Source file line
         #
         # @return [Fixnum]
-        #
-        # @api private
         def source_line
           source_location.last
         end
@@ -115,8 +99,6 @@ module Mutant
         # Full source location
         #
         # @return [Array{String,Fixnum}]
-        #
-        # @api private
         def source_location
           target_method.source_location
         end
@@ -128,8 +110,6 @@ module Mutant
         #
         # @return [nil]
         #   otherwise
-        #
-        # @api private
         def subject
           node = matched_node_path.last || return
           self.class::SUBJECT_CLASS.new(context, node)
@@ -139,8 +119,6 @@ module Mutant
         # Matched node path
         #
         # @return [Array<Parser::AST::Node>]
-        #
-        # @api private
         def matched_node_path
           AST.find_last_path(ast, &method(:match?))
         end

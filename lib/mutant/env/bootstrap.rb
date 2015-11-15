@@ -19,8 +19,6 @@ module Mutant
       # Scopes that are eligible for matching
       #
       # @return [Enumerable<Matcher::Scope>]
-      #
-      # @api private
       attr_reader :matchable_scopes
 
       # Parser for this environment
@@ -31,8 +29,6 @@ module Mutant
       # Initialize object
       #
       # @return [Object]
-      #
-      # @api private
       def initialize(*)
         super
         @parser = Parser.new
@@ -45,8 +41,6 @@ module Mutant
       # @param [String]
       #
       # @return [self]
-      #
-      # @api private
       def warn(message)
         config.reporter.warn(message)
         self
@@ -55,8 +49,6 @@ module Mutant
       # Environment after bootstraping
       #
       # @return [Env]
-      #
-      # @api private
       # rubocop:disable MethodLength
       #
       def env
@@ -84,8 +76,6 @@ module Mutant
       #
       # @return [nil]
       #   otherwise
-      #
-      # @api private
       def scope_name(scope)
         scope.name
       rescue => exception
@@ -101,8 +91,6 @@ module Mutant
       # Infect environment
       #
       # @return [undefined]
-      #
-      # @api private
       def infect
         config.includes.each(&$LOAD_PATH.method(:<<))
         config.requires.each(&Kernel.method(:require))
@@ -112,8 +100,6 @@ module Mutant
       # Matched subjects
       #
       # @return [Enumerable<Subject>]
-      #
-      # @api private
       def matched_subjects
         Matcher::Compiler.call(config.matcher).call(self)
       end
@@ -121,8 +107,6 @@ module Mutant
       # Initialize matchable scopes
       #
       # @return [undefined]
-      #
-      # @api private
       def initialize_matchable_scopes
         scopes = ObjectSpace.each_object(Module).each_with_object([]) do |scope, aggregate|
           expression = expression(scope) || next
@@ -141,8 +125,6 @@ module Mutant
       #
       # @return [nil]
       #   otherwise
-      #
-      # @api private
       def expression(scope)
         name = scope_name(scope) or return
 
@@ -162,8 +144,6 @@ module Mutant
       # Write a semantics warning
       #
       # @return [undefined]
-      #
-      # @api private
       def semantics_warning(format, options)
         message = format % options
         warn(SEMANTICS_MESSAGE_FORMAT % { message: message })

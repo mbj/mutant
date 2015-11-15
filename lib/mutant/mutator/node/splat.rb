@@ -13,8 +13,6 @@ module Mutant
         # Perform dispatch
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           emit_singletons
           emit_expression_mutations

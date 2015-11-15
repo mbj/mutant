@@ -9,8 +9,6 @@ module Mutant
         # Emit mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           emit_arguments_mutations
           emit_optarg_body_assignments
@@ -23,8 +21,6 @@ module Mutant
         # Emit mutations with optional arguments as assignments in method
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_optarg_body_assignments
           arguments.children.each do |argument|
             next unless n_optarg?(argument) && AST::Meta::Optarg.new(argument).used?
@@ -36,8 +32,6 @@ module Mutant
         # Emit mutation with arg splat as empty array assignment in method
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_restarg_body_mutation
           arguments.children.each do |argument|
             next unless n_restarg?(argument) && argument.children.one?
@@ -51,8 +45,6 @@ module Mutant
         # @param node [Parser::AST::Node]
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_body_prepend(node)
           if body
             emit_body(s(:begin, node, body))
@@ -71,8 +63,6 @@ module Mutant
           # Emit mutations
           #
           # @return [undefined]
-          #
-          # @api private
           def dispatch
             super()
             emit_remove_method
@@ -81,8 +71,6 @@ module Mutant
           # Remove an instance method
           #
           # @return [undefined]
-          #
-          # @api private
           def emit_remove_method
             emit(s(:send, nil, :remove_method, s(:sym, name)))
           end

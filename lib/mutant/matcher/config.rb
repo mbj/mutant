@@ -25,8 +25,6 @@ module Mutant
       # Inspection string
       #
       # @return [String]
-      #
-      # @api private
       def inspect
         INSPECT_FORMAT % inspect_attributes
       end
@@ -38,8 +36,6 @@ module Mutant
       # @param [Object] value
       #
       # @return [Config]
-      #
-      # @api private
       def add(attribute, value)
         with(attribute => public_send(attribute) + [value])
       end
@@ -49,8 +45,6 @@ module Mutant
       # Present attributes
       #
       # @return [Array<Symbol>]
-      #
-      # @api private
       def present_attributes
         to_h.reject { |_key, value| value.empty? }.keys
       end
@@ -58,8 +52,6 @@ module Mutant
       # Formatted attributes
       #
       # @return [String]
-      #
-      # @api private
       def inspect_attributes
         attributes = present_attributes
           .map(&method(:format_attribute))

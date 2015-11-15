@@ -10,8 +10,6 @@ module Mutant
         # @param [Symbol] method_name
         #
         # @return [Matcher::Method::Singleton]
-        #
-        # @api private
         def self.new(scope, method_name)
           super(scope, method_name, Evaluator)
         end
@@ -29,8 +27,6 @@ module Mutant
           # @param [Parser::AST::Node] node
           #
           # @return [Boolean]
-          #
-          # @api private
           def match?(node)
             n_defs?(node) && line?(node) && name?(node) && receiver?(node)
           end
@@ -40,8 +36,6 @@ module Mutant
           # @param [Parser::AST::Node] node
           #
           # @return [Boolean]
-          #
-          # @api private
           def line?(node)
             node
               .location
@@ -54,8 +48,6 @@ module Mutant
           # @param [Parser::AST::Node] node
           #
           # @return [Boolean]
-          #
-          # @api private
           def name?(node)
             node.children.fetch(NAME_INDEX).equal?(method_name)
           end
@@ -65,8 +57,6 @@ module Mutant
           # @param [Parser::AST::Node] node
           #
           # @return [Boolean]
-          #
-          # @api private
           def receiver?(node)
             receiver = node.children.fetch(RECEIVER_INDEX)
             case receiver.type
@@ -85,8 +75,6 @@ module Mutant
           # @param [Parser::AST::Node] node
           #
           # @return [Boolean]
-          #
-          # @api private
           def receiver_name?(node)
             name = node.children.fetch(NAME_INDEX)
             name.to_s.eql?(context.unqualified_name)

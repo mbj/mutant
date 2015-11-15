@@ -11,8 +11,6 @@ module Mutant
     # @param [String] name
     #
     # @return [Integration]
-    #
-    # @api private
     def self.setup(name)
       require "mutant/integration/#{name}"
       lookup(name)
@@ -24,8 +22,6 @@ module Mutant
     #
     # @return [Integration]
     #   if found
-    #
-    # @api private
     def self.lookup(name)
       REGISTRY.fetch(name)
     end
@@ -35,8 +31,6 @@ module Mutant
     # @param [String] name
     #
     # @return [undefined]
-    #
-    # @api private
     def self.register(name)
       REGISTRY[name] = self
     end
@@ -45,8 +39,6 @@ module Mutant
     # Perform integration setup
     #
     # @return [self]
-    #
-    # @api private
     def setup
       self
     end
@@ -56,15 +48,11 @@ module Mutant
     # @param [Enumerable<Test>] tests
     #
     # @return [Result::Test]
-    #
-    # @api private
     abstract_method :call
 
     # Available tests for integration
     #
     # @return [Enumerable<Test>]
-    #
-    # @api private
     abstract_method :all_tests
 
   private
@@ -72,8 +60,6 @@ module Mutant
     # Expression parser
     #
     # @return [Expression::Parser]
-    #
-    # @api private
     def expression_parser
       config.expression_parser
     end
@@ -86,8 +72,6 @@ module Mutant
       # Available tests for integration
       #
       # @return [Enumerable<Test>]
-      #
-      # @api private
       def all_tests
         EMPTY_ARRAY
       end
@@ -97,8 +81,6 @@ module Mutant
       # @param [Enumerable<Mutant::Test>] tests
       #
       # @return [Result::Test]
-      #
-      # @api private
       def call(tests)
         Result::Test.new(
           output:  '',

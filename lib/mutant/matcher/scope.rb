@@ -21,8 +21,6 @@ module Mutant
       # @param [Env::Bootstrap] env
       #
       # @return [Enumerable<Subject>]
-      #
-      # @api private
       def call(env)
         Chain.new(effective_matchers).call(env)
       end
@@ -32,8 +30,6 @@ module Mutant
       # Effective matchers
       #
       # @return [Enumerable<Matcher>]
-      #
-      # @api private
       def effective_matchers
         MATCHERS.map { |matcher| matcher.new(scope) }
       end

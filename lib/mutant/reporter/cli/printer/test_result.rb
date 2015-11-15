@@ -14,8 +14,6 @@ module Mutant
           # Run test result reporter
           #
           # @return [undefined]
-          #
-          # @api private
           def run
             info(STATUS_FORMAT, tests.length, runtime)
             tests.each do |test|

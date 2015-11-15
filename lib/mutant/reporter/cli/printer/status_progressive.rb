@@ -19,8 +19,6 @@ module Mutant
           # Run printer
           #
           # @return [undefined]
-          #
-          # @api private
           def run
             status(
               FORMAT,
@@ -38,8 +36,6 @@ module Mutant
           # Object being printed
           #
           # @return [Result::Env]
-          #
-          # @api private
           def object
             super().payload
           end

@@ -17,8 +17,6 @@ module Mutant
       # @param [Env::Bootstrap] env
       #
       # @return [Enumerable<Subject>]
-      #
-      # @api private
       def call(env)
         Chain.new(
           methods.map { |method| matcher.new(scope, method) }
@@ -30,8 +28,6 @@ module Mutant
       # method matcher class
       #
       # @return [Class:Matcher::Method]
-      #
-      # @api private
       def matcher
         self.class::MATCHER
       end
@@ -39,8 +35,6 @@ module Mutant
       # Available methods scope
       #
       # @return [Enumerable<Method, UnboundMethod>]
-      #
-      # @api private
       def methods
         candidate_names.each_with_object([]) do |name, methods|
           method = access(name)
@@ -52,8 +46,6 @@ module Mutant
       # Candidate method names on target scope
       #
       # @return [Enumerable<Symbol>]
-      #
-      # @api private
       def candidate_names
         CANDIDATE_NAMES
           .map(&candidate_scope.method(:public_send))
@@ -64,8 +56,6 @@ module Mutant
       # Candidate scope
       #
       # @return [Class, Module]
-      #
-      # @api private
       abstract_method :candidate_scope
 
       # Matcher for singleton methods
@@ -79,8 +69,6 @@ module Mutant
         # @param [Symbol] method_name
         #
         # @return [Method]
-        #
-        # @api private
         def access(method_name)
           scope.method(method_name)
         end
@@ -88,8 +76,6 @@ module Mutant
         # Candidate scope
         #
         # @return [Class]
-        #
-        # @api private
         def candidate_scope
           scope.singleton_class
         end
@@ -108,8 +94,6 @@ module Mutant
         # @param [Symbol] method_name
         #
         # @return [UnboundMethod]
-        #
-        # @api private
         def access(method_name)
           scope.instance_method(method_name)
         end
@@ -117,8 +101,6 @@ module Mutant
         # Candidate scope
         #
         # @return [Class, Module]
-        #
-        # @api private
         def candidate_scope
           scope
         end

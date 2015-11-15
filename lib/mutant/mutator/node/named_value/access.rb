@@ -13,8 +13,6 @@ module Mutant
           # Emit mutations
           #
           # @return [undefined]
-          #
-          # @api private
           def dispatch
             emit_singletons
           end
@@ -30,8 +28,6 @@ module Mutant
             # Emit mutations
             #
             # @return [undefined]
-            #
-            # @api private
             def dispatch
               emit_attribute_read
               super()
@@ -42,8 +38,6 @@ module Mutant
             # Emit instance variable as attribute send
             #
             # @return [undefined]
-            #
-            # @api private
             def emit_attribute_read
               emit(s(:send, nil, attribute_name))
             end
@@ -51,8 +45,6 @@ module Mutant
             # Variable name without leading '@'
             #
             # @return [Symbol]
-            #
-            # @api private
             def attribute_name
               name.slice(NAME_RANGE).to_sym
             end

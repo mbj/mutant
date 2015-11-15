@@ -18,8 +18,6 @@ module Mutant
         # Emit mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           emit_singletons
           emit_promotions
@@ -32,8 +30,6 @@ module Mutant
         # Emit operator mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_operator_mutations
           emit(s(INVERSE.fetch(node.type), left, right))
         end
@@ -41,9 +37,6 @@ module Mutant
         # Emit promotions
         #
         # @return [undefined]
-        #
-        # @api private
-        #
         def emit_promotions
           emit(left)
           emit(right)
@@ -63,8 +56,6 @@ module Mutant
         # Like parent is an assignment to an {l,i}var. Dunno if we ever get the time to do that.
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_left_negation
           emit(s(node.type, n_not(left), right))
         end

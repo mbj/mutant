@@ -9,8 +9,6 @@ module Mutant
       # @param [Env::Bootstrap] env
       #
       # @return [Enumerable<Subject>]
-      #
-      # @api private
       def call(_env)
         EMPTY_ARRAY
       end

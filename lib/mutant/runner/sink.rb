@@ -6,8 +6,6 @@ module Mutant
       # Initialize object
       #
       # @return [undefined]
-      #
-      # @api private
       def initialize(*)
         super
         @start           = Time.now
@@ -17,8 +15,6 @@ module Mutant
       # Runner status
       #
       # @return [Result::Env]
-      #
-      # @api private
       def status
         Result::Env.new(
           env:             env,
@@ -30,8 +26,6 @@ module Mutant
       # Test if scheduling stopped
       #
       # @return [Boolean]
-      #
-      # @api private
       def stop?
         env.config.fail_fast && !status.subject_results.all?(&:success?)
       end
@@ -41,8 +35,6 @@ module Mutant
       # @param [Result::Mutation] mutation_result
       #
       # @return [self]
-      #
-      # @api private
       def result(mutation_result)
         subject = mutation_result.mutation.subject
 

@@ -9,8 +9,6 @@ module Mutant
       # @param [Class, Module] host
       #
       # @return [undefined]
-      #
-      # @api private
       def self.included(host)
         host.class_eval do
           include InstanceMethods
@@ -26,8 +24,6 @@ module Mutant
         # Mutated nodes children
         #
         # @return [Array<Parser::AST::Node]
-        #
-        # @api private
         def children
           node.children
         end
@@ -45,8 +41,6 @@ module Mutant
         # @param [Fixnum] index
         #
         # @return [undefined]
-        #
-        # @api private
         def define_named_child(name, index)
           define_method(name) do
             children.at(index)
@@ -58,8 +52,6 @@ module Mutant
         # @param [Array<Symbol>] names
         #
         # @return [undefined]
-        #
-        # @api private
         def define_remaining_children(names)
           define_method(:remaining_children_with_index) do
             children.each_with_index.drop(names.length)
@@ -77,8 +69,6 @@ module Mutant
         # Create name helpers
         #
         # @return [undefined]
-        #
-        # @api private
         def children(*names)
           names.each_with_index do |name, index|
             define_named_child(name, index)
