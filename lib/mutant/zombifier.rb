@@ -121,7 +121,7 @@ module Mutant
     #
     # @api private
     def namespaced_node(source_path)
-      s(:module, s(:const, nil, namespace), Parser::CurrentRuby.parse(source_path.read))
+      s(:module, s(:const, nil, namespace), ::Parser::CurrentRuby.parse(source_path.read))
     end
 
   end # Zombifier

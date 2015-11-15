@@ -26,7 +26,7 @@ RSpec.describe Mutant::Env::Bootstrap do
 
   let(:expected_env) do
     Mutant::Env.new(
-      cache:            Mutant::Cache.new,
+      parser:           Mutant::Parser.new,
       subjects:         [],
       matchable_scopes: [],
       mutations:        [],
@@ -61,7 +61,7 @@ RSpec.describe Mutant::Env::Bootstrap do
 
     it 'reports a warning' do
       expect { subject }
-        .to change { object.config.reporter.warn_calls }
+        .to change { config.reporter.warn_calls }
         .from([])
         .to([message])
     end

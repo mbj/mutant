@@ -4,7 +4,7 @@ module Mutant
     include Adamantium::Flat, Anima.new(
       :config,
       :actor_env,
-      :cache,
+      :parser,
       :subjects,
       :matchable_scopes,
       :integration,
