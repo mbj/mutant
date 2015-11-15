@@ -32,7 +32,7 @@ module Mutant
     # @api private
     def run_mutation_analysis
       @result = run_driver(Parallel.async(mutation_test_config))
-      reporter.report(@result)
+      reporter.report(result)
     end
 
     # Run driver
@@ -68,7 +68,7 @@ module Mutant
         env:       env.actor_env,
         jobs:      config.jobs,
         source:    Parallel::Source::Array.new(env.mutations),
-        sink:      Sink::Mutation.new(env),
+        sink:      Sink.new(env),
         processor: env.method(:kill)
       )
     end

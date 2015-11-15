@@ -1,107 +1,72 @@
 module Mutant
   class Runner
-    # Abstract base class for computation sinks
     class Sink
-      include AbstractType
+      include Concord.new(:env)
 
-      # sink status
+      # Initialize object
       #
-      # @return [Object]
+      # @return [undefined]
       #
       # @api private
-      abstract_method :status
+      def initialize(*)
+        super
+        @start           = Time.now
+        @subject_results = {}
+      end
 
-      # Test if computation should be stopped
+      # Runner status
+      #
+      # @return [Result::Env]
+      #
+      # @api private
+      def status
+        Result::Env.new(
+          env:             env,
+          runtime:         Time.now - @start,
+          subject_results: @subject_results.values
+        )
+      end
+
+      # Test if scheduling stopped
       #
       # @return [Boolean]
       #
       # @api private
-      abstract_method :stop?
+      def stop?
+        env.config.fail_fast && !status.subject_results.all?(&:success?)
+      end
 
-      # Consume result
+      # Handle mutation finish
       #
-      # @param [Object] result
+      # @param [Result::Mutation] mutation_result
       #
       # @return [self]
       #
       # @api private
-      abstract_method :result
+      def result(mutation_result)
+        subject = mutation_result.mutation.subject
 
-      # Mutation result sink
-      class Mutation < self
-        include Concord.new(:env)
+        @subject_results[subject] = Result::Subject.new(
+          subject:          subject,
+          mutation_results: previous_mutation_results(subject) + [mutation_result],
+          tests:            mutation_result.test_result.tests
+        )
 
-        # Initialize object
-        #
-        # @return [undefined]
-        #
-        # @api private
-        def initialize(*)
-          super
-          @start           = Time.now
-          @subject_results = Hash.new do |_hash, subject|
-            Result::Subject.new(
-              subject:          subject,
-              tests:            [],
-              mutation_results: []
-            )
-          end
-        end
+        self
+      end
 
-        # Runner status
-        #
-        # @return [Status]
-        #
-        # @api private
-        def status
-          env_result
-        end
+    private
 
-        # Test if scheduling stopped
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        def stop?
-          env.config.fail_fast && !env_result.subject_results.all?(&:success?)
-        end
+      # Return previous results
+      #
+      # @param [Subject]
+      #
+      # @return [Array<Result::Mutation>]
+      def previous_mutation_results(subject)
+        subject_result = @subject_results.fetch(subject) { return EMPTY_ARRAY }
+        subject_result.mutation_results
+      end
 
-        # Handle mutation finish
-        #
-        # @param [Result::Mutation] mutation_result
-        #
-        # @return [self]
-        #
-        # @api private
-        def result(mutation_result)
-          mutation = mutation_result.mutation
-
-          original = @subject_results[mutation.subject]
-
-          @subject_results[mutation.subject] = original.with(
-            mutation_results: (original.mutation_results + [mutation_result]),
-            tests:            mutation_result.test_result.tests
-          )
-
-          self
-        end
-
-      private
-
-        # Current result
-        #
-        # @return [Result::Env]
-        #
-        # @api private
-        def env_result
-          Result::Env.new(
-            env:             env,
-            runtime:         Time.now - @start,
-            subject_results: @subject_results.values
-          )
-        end
-
-      end # Mutation
     end # Sink
   end # Runner
 end # Mutant

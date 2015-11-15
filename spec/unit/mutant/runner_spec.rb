@@ -38,7 +38,7 @@ RSpec.describe Mutant::Runner do
         jobs:      1,
         env:       actor_env,
         source:    Mutant::Parallel::Source::Array.new(env.mutations),
-        sink:      Mutant::Runner::Sink::Mutation.new(env),
+        sink:      Mutant::Runner::Sink.new(env),
         processor: env.method(:kill)
       )
     end
