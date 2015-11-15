@@ -15,8 +15,6 @@ module Mutant
           # Perform dispatch
           #
           # @return [undefined]
-          #
-          # @api private
           def dispatch
             mutate_name
             emit_value_mutations
@@ -26,8 +24,6 @@ module Mutant
           # Emit remove_const
           #
           # @return [undefined]
-          #
-          # @api private
           def emit_remove_const
             emit(s(:send, cbase, :remove_const, s(:sym, name)))
           end
@@ -35,8 +31,6 @@ module Mutant
           # Emit name mutations
           #
           # @return [undefined]
-          #
-          # @api private
           def mutate_name
             Mutator::Util::Symbol.each(name, self) do |name|
               emit_name(name.upcase)

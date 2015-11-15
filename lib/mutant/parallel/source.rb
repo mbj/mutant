@@ -12,15 +12,11 @@ module Mutant
       #
       # @raise [NoJobError]
       #   when no next job is available
-      #
-      # @api private
       abstract_method :next
 
       # Test if next job is available
       #
       # @return [Boolean]
-      #
-      # @api private
       abstract_method :next?
 
       # Job source backed by a finite array
@@ -30,8 +26,6 @@ module Mutant
         # Initialize objecto
         #
         # @return [undefined]
-        #
-        # @api private
         def initialize(*)
           super
 
@@ -41,8 +35,6 @@ module Mutant
         # Test if next job is available
         #
         # @return [Boolean]
-        #
-        # @api private
         def next?
           @next_index < jobs.length
         end
@@ -53,8 +45,6 @@ module Mutant
         #
         # @raise [NoJobError]
         #   when no next job is available
-        #
-        # @api private
         def next
           fail NoJobError unless next?
           jobs.fetch(@next_index).tap do

@@ -8,8 +8,6 @@ module Mutant
     #
     # @return [Enumerable<Mutation>]
     # @return [undefined]
-    #
-    # @api private
     def mutations
       mutations = [neutral_mutation]
       Mutator.each(node) do |mutant|
@@ -22,8 +20,6 @@ module Mutant
     # Source path
     #
     # @return [Pathname]
-    #
-    # @api private
     def source_path
       context.source_path
     end
@@ -31,8 +27,6 @@ module Mutant
     # Prepare subject for insertion of mutation
     #
     # @return [self]
-    #
-    # @api private
     def prepare
       self
     end
@@ -40,8 +34,6 @@ module Mutant
     # Source line range
     #
     # @return [Range<Fixnum>]
-    #
-    # @api private
     def source_lines
       expression = node.location.expression
       expression.line..expression.source_buffer.decompose_position(expression.end_pos).first
@@ -51,8 +43,6 @@ module Mutant
     # First source line
     #
     # @return [Fixnum]
-    #
-    # @api private
     def source_line
       source_lines.begin
     end
@@ -60,8 +50,6 @@ module Mutant
     # Identification string
     #
     # @return [String]
-    #
-    # @api private
     def identification
       "#{expression.syntax}:#{source_path}:#{source_line}"
     end
@@ -70,8 +58,6 @@ module Mutant
     # Source representation of AST
     #
     # @return [String]
-    #
-    # @api private
     def source
       Unparser.unparse(wrap_node(node))
     end
@@ -80,15 +66,11 @@ module Mutant
     # Match expression
     #
     # @return [Expression]
-    #
-    # @api private
     abstract_method :expression
 
     # Match expressions
     #
     # @return [Enumerable<Expression>]
-    #
-    # @api private
     abstract_method :match_expressions
 
   private
@@ -96,8 +78,6 @@ module Mutant
     # Neutral mutation
     #
     # @return [Mutation::Neutral]
-    #
-    # @api private
     def neutral_mutation
       Mutation::Neutral.new(self, wrap_node(node))
     end
@@ -107,8 +87,6 @@ module Mutant
     # @param [Parser::AST::Node] node
     #
     # @return [Parser::AST::Node]
-    #
-    # @api private
     def wrap_node(node)
       node
     end

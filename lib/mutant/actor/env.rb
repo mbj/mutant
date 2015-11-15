@@ -7,8 +7,6 @@ module Mutant
       # Spawn a new actor executing block
       #
       # @return [Actor::Sender]
-      #
-      # @api private
       def spawn
         mailbox = new_mailbox
 
@@ -22,8 +20,6 @@ module Mutant
       # New unbound mailbox
       #
       # @return [Mailbox]
-      #
-      # @api private
       def new_mailbox
         Mailbox.new
       end

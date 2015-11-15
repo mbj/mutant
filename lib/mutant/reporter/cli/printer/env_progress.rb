@@ -35,8 +35,6 @@ module Mutant
           # Run printer
           #
           # @return [undefined]
-          #
-          # @api private
           def run
             visit(Config, env.config)
             FORMATS.each do |report, format, value|

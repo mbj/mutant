@@ -15,15 +15,11 @@ module Mutant
         # Arguments of mutated node
         #
         # @return [Enumerable<Parser::AST::Node>]
-        #
-        # @api private
         alias_method :arguments, :remaining_children
 
         # Test if AST node is a valid assignment target
         #
         # @return [Boolean]
-        #
-        # @api private
         def assignment?
           index_assignment? || attribute_assignment?
         end
@@ -31,8 +27,6 @@ module Mutant
         # Test if AST node is an attribute assignment?
         #
         # @return [Boolean]
-        #
-        # @api private
         def attribute_assignment?
           !Types::METHOD_OPERATORS.include?(selector) &&
           selector.to_s.end_with?(ATTRIBUTE_ASSIGNMENT_SELECTOR_SUFFIX)
@@ -41,8 +35,6 @@ module Mutant
         # Test if AST node is an index assign
         #
         # @return [Boolean]
-        #
-        # @api private
         def index_assignment?
           selector.equal?(INDEX_ASSIGNMENT_SELECTOR)
         end
@@ -50,8 +42,6 @@ module Mutant
         # Test for binary operator implemented as method
         #
         # @return [Boolean]
-        #
-        # @api private
         def binary_method_operator?
           Types::BINARY_METHOD_OPERATORS.include?(selector)
         end
@@ -59,8 +49,6 @@ module Mutant
         # Test if receiver is possibly a top level constant
         #
         # @return [Boolean]
-        #
-        # @api private
         def receiver_possible_top_level_const?
           return false unless receiver && n_const?(receiver)
 

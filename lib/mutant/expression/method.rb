@@ -28,8 +28,6 @@ module Mutant
       # Syntax of expression
       #
       # @return [String]
-      #
-      # @api private
       def syntax
         [scope_name, scope_symbol, method_name].join
       end
@@ -38,8 +36,6 @@ module Mutant
       # Matcher for expression
       #
       # @return [Matcher]
-      #
-      # @api private
       def matcher
         methods_matcher = MATCHERS.fetch(scope_symbol).new(scope)
 
@@ -51,8 +47,6 @@ module Mutant
       # Scope object
       #
       # @return [Class, Method]
-      #
-      # @api private
       def scope
         Object.const_get(scope_name)
       end

@@ -9,8 +9,6 @@ module Mutant
     # Identification string
     #
     # @return [String]
-    #
-    # @api private
     alias_method :identification, :id
 
   end # Test

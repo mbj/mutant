@@ -9,8 +9,6 @@ module Mutant
       # Create delegators to object
       #
       # @return [undefined]
-      #
-      # @api private
       def delegate(*names)
         names.each(&method(:define_delegator))
       end
@@ -20,8 +18,6 @@ module Mutant
       # @param [Symbol] name
       #
       # @return [undefined]
-      #
-      # @api private
       def define_delegator(name)
         fail "method #{name} already defined" if instance_methods.include?(name)
         define_method(name) do
@@ -37,8 +33,6 @@ module Mutant
     # @param [Class,Module] host
     #
     # @return [undefined]
-    #
-    # @api private
     def self.included(host)
       super
 

@@ -21,8 +21,6 @@ module Mutant
     # @param [String]
     #
     # @return [self]
-    #
-    # @api private
     def warn(message)
       config.reporter.warn(message)
       self
@@ -33,8 +31,6 @@ module Mutant
     # @param [Mutation] mutation
     #
     # @return [Result::Mutation]
-    #
-    # @api private
     def kill(mutation)
       test_result = run_mutation_tests(mutation)
       Result::Mutation.new(
@@ -53,8 +49,6 @@ module Mutant
     # @return [Result::Test]
     #
     # rubocop:disable MethodLength
-    #
-    # @api private
     def run_mutation_tests(mutation)
       start = Time.now
       tests = selector.call(mutation.subject)

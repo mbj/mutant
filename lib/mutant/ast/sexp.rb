@@ -10,8 +10,6 @@ module Mutant
       # @param [Symbol] type
       #
       # @return [Parser::AST::Node]
-      #
-      # @api private
       def s(type, *children)
         ::Parser::AST::Node.new(type, children)
       end
@@ -21,8 +19,6 @@ module Mutant
       # @param [Parser::AST::Node] node
       #
       # @return [Parser::AST::Node]
-      #
-      # @api private
       def n_not(node)
         s(:send, node, :!)
       end

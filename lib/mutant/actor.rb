@@ -13,8 +13,6 @@ module Mutant
       # Object inspection
       #
       # @return [String]
-      #
-      # @api private
       def inspect
         INSPECT
       end
@@ -30,8 +28,6 @@ module Mutant
       # @param [Object] payload
       #
       # @return [Message]
-      #
-      # @api private
       def self.new(_type, _payload = Undefined)
         super
       end
@@ -47,8 +43,6 @@ module Mutant
       # @param [Symbol] type
       #
       # @return [Object]
-      #
-      # @api private
       def call(type)
         other.call(Message.new(type, mailbox.sender))
         message = mailbox.receiver.call

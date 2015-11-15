@@ -26,8 +26,6 @@ module Mutant
           # Perform dispatch
           #
           # @return [undefined]
-          #
-          # @api private
           def dispatch
             emit_singletons
             mutate_name
@@ -37,8 +35,6 @@ module Mutant
           # Emit name mutations
           #
           # @return [undefined]
-          #
-          # @api private
           def mutate_name
             prefix, regexp = MAP.fetch(node.type)
             stripped = name.to_s.sub(regexp, EMPTY_STRING)

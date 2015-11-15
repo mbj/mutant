@@ -6,8 +6,6 @@ module Mutant
     # Initialize object
     #
     # @return [undefined]
-    #
-    # @api private
     def initialize
       @cache = {}
     end
@@ -17,8 +15,6 @@ module Mutant
     # @param [Pathname] path
     #
     # @return [AST::Node]
-    #
-    # @api private
     def call(path)
       @cache[path] ||= ::Parser::CurrentRuby.parse(path.read)
     end

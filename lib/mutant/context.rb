@@ -8,15 +8,11 @@ module Mutant
     # @param [Parser::AST::Node] node
     #
     # @return [Parser::AST::Node]
-    #
-    # @api private
     abstract_method :root
 
     # Identification string
     #
     # @return [String]
-    #
-    # @api private
     abstract_method :identification
 
   end # Context

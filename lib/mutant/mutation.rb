@@ -10,8 +10,6 @@ module Mutant
     # Identification string
     #
     # @return [String]
-    #
-    # @api private
     def identification
       "#{self.class::SYMBOL}:#{subject.identification}:#{code}"
     end
@@ -20,8 +18,6 @@ module Mutant
     # Mutation code
     #
     # @return [String]
-    #
-    # @api private
     def code
       sha1[CODE_RANGE]
     end
@@ -30,8 +26,6 @@ module Mutant
     # Normalized mutation source
     #
     # @return [String]
-    #
-    # @api private
     def source
       Unparser.unparse(node)
     end
@@ -40,8 +34,6 @@ module Mutant
     # Normalized original source
     #
     # @return [String]
-    #
-    # @api private
     def original_source
       subject.source
     end
@@ -51,8 +43,6 @@ module Mutant
     # @param [Array<Report::Test>] test_reports
     #
     # @return [Boolean]
-    #
-    # @api private
     def self.success?(test_result)
       self::TEST_PASS_SUCCESS.equal?(test_result.passed)
     end
@@ -60,8 +50,6 @@ module Mutant
     # Insert mutated node
     #
     # @return [self]
-    #
-    # @api private
     def insert
       subject.prepare
       Loader::Eval.call(root, subject)
@@ -73,8 +61,6 @@ module Mutant
     # SHA1 sum of source and subject identification
     #
     # @return [String]
-    #
-    # @api private
     def sha1
       Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
     end
@@ -83,8 +69,6 @@ module Mutant
     # Mutated root node
     #
     # @return [Parser::AST::Node]
-    #
-    # @api private
     def root
       subject.context.root(node)
     end

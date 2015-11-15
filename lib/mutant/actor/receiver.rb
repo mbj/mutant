@@ -7,8 +7,6 @@ module Mutant
       # Receives a message, blocking
       #
       # @return [Object]
-      #
-      # @api private
       def call
         2.times do
           message = try_blocking_receive
@@ -26,8 +24,6 @@ module Mutant
       #
       # @return [Object]
       #   if there is a message
-      #
-      # @api private
       def try_blocking_receive
         mutex.synchronize do
           if messages.empty?

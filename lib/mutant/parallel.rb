@@ -9,8 +9,6 @@ module Mutant
       # Scheduler status
       #
       # @return [Object]
-      #
-      # @api private
       def status
         binding.call(__method__)
       end
@@ -18,8 +16,6 @@ module Mutant
       # Stop master gracefully
       #
       # @return [self]
-      #
-      # @api private
       def stop
         binding.call(__method__)
         self
@@ -29,8 +25,6 @@ module Mutant
     # Run async computation returing driver
     #
     # @return [Driver]
-    #
-    # @api private
     def self.async(config)
       Driver.new(config.env.new_mailbox.bind(Master.call(config)))
     end
@@ -44,22 +38,16 @@ module Mutant
       # @param [Object]
       #
       # @return [self]
-      #
-      # @api private
       abstract_method :result
 
       # Sink status
       #
       # @return [Object]
-      #
-      # @api private
       abstract_method :status
 
       # Test if processing should stop
       #
       # @return [Boolean]
-      #
-      # @api private
       abstract_method :stop?
     end # Sink
 

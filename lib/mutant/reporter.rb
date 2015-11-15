@@ -8,8 +8,6 @@ module Mutant
     # @param [String] message
     #
     # @return [self]
-    #
-    # @api private
     abstract_method :warn
 
     # Report start
@@ -17,8 +15,6 @@ module Mutant
     # @param [Env] env
     #
     # @return [self]
-    #
-    # @api private
     abstract_method :start
 
     # Report collector state
@@ -26,8 +22,6 @@ module Mutant
     # @param [Runner::Collector] collector
     #
     # @return [self]
-    #
-    # @api private
     abstract_method :report
 
     # Report progress on object
@@ -35,15 +29,11 @@ module Mutant
     # @param [Object] object
     #
     # @return [self]
-    #
-    # @api private
     abstract_method :progress
 
     # The reporter delay
     #
     # @return [Float]
-    #
-    # @api private
     abstract_method :delay
 
   end # Reporter

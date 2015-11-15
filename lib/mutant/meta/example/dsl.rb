@@ -9,8 +9,6 @@ module Mutant
         # Run DSL on block
         #
         # @return [Example]
-        #
-        # @api private
         def self.run(file, block)
           instance = new(file)
           instance.instance_eval(&block)
@@ -20,8 +18,6 @@ module Mutant
         # Initialize DSL context
         #
         # @return [undefined]
-        #
-        # @api private
         def initialize(file)
           @file = file
           @source = nil
@@ -34,8 +30,6 @@ module Mutant
         #
         # @raise [RuntimeError]
         #   in case example cannot be build
-        #
-        # @api private
         def example
           fail 'source not defined' unless @source
           Example.new(@file, @source, @expected)
@@ -48,8 +42,6 @@ module Mutant
         # @param [String,Parser::AST::Node] input
         #
         # @return [self]
-        #
-        # @api private
         def source(input)
           fail 'source already defined' if @source
           @source = node(input)
@@ -62,8 +54,6 @@ module Mutant
         # @param [String,Parser::AST::Node] input
         #
         # @return [self]
-        #
-        # @api private
         def mutation(input)
           node = node(input)
           if @expected.include?(node)
@@ -77,8 +67,6 @@ module Mutant
         # Add singleton mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def singleton_mutations
           mutation('nil')
           mutation('self')
@@ -92,8 +80,6 @@ module Mutant
         #
         # @raise [RuntimeError]
         #   in case input cannot be coerced
-        #
-        # @api private
         def node(input)
           case input
           when String

@@ -13,8 +13,6 @@ module Mutant
           # Print progress for collector
           #
           # @return [undefined]
-          #
-          # @api private
           def run
             visit(EnvProgress, payload)
             job_status
@@ -27,8 +25,6 @@ module Mutant
           # Print worker status
           #
           # @return [undefined]
-          #
-          # @api private
           def job_status
             return if active_jobs.empty?
             info(ACTIVE_JOB_HEADER)
@@ -40,8 +36,6 @@ module Mutant
           # Active subject results
           #
           # @return [Array<Result::Subject>]
-          #
-          # @api private
           def active_subject_results
             active_subjects = active_jobs.map(&:payload).flat_map(&:subject)
 

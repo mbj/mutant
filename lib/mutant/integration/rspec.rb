@@ -32,8 +32,6 @@ module Mutant
       # Initialize rspec integration
       #
       # @return [undefined]
-      #
-      # @api private
       def initialize(*)
         super
         @output = StringIO.new
@@ -44,8 +42,6 @@ module Mutant
       # Setup rspec integration
       #
       # @return [self]
-      #
-      # @api private
       def setup
         @runner.setup($stderr, @output)
         self
@@ -59,8 +55,6 @@ module Mutant
       # @return [Result::Test]
       #
       # rubocop:disable MethodLength
-      #
-      # @api private
       def call(tests)
         examples = tests.map(&all_tests_index.method(:fetch))
         filter_examples(&examples.method(:include?))
@@ -78,8 +72,6 @@ module Mutant
       # Available tests
       #
       # @return [Enumerable<Test>]
-      #
-      # @api private
       def all_tests
         all_tests_index.keys
       end
@@ -90,8 +82,6 @@ module Mutant
       # Index of available tests
       #
       # @return [Hash<Test, RSpec::Core::Example]
-      #
-      # @api private
       def all_tests_index
         all_examples.each_with_index.each_with_object({}) do |(example, example_index), index|
           index[parse_example(example, example_index)] = example
@@ -105,8 +95,6 @@ module Mutant
       # @param [Fixnum] index
       #
       # @return [Test]
-      #
-      # @api private
       def parse_example(example, index)
         metadata         = example.metadata
         location         = metadata.fetch(:location)
@@ -123,8 +111,6 @@ module Mutant
       # @param [RSpec::Core::Example::Medatada] metadata
       #
       # @return [Expression]
-      #
-      # @api private
       def parse_expression(metadata)
         if metadata.key?(:mutant_expression)
           expression_parser.(metadata.fetch(:mutant_expression))
@@ -137,8 +123,6 @@ module Mutant
       # Available rspec examples
       #
       # @return [Array<String, RSpec::Core::Example]
-      #
-      # @api private
       def all_examples
         @world.example_groups.flat_map(&:descendants).flat_map(&:examples).select do |example|
           example.metadata.fetch(:mutant, true)
@@ -150,8 +134,6 @@ module Mutant
       # @param [#call] predicate
       #
       # @return [undefined]
-      #
-      # @api private
       def filter_examples(&predicate)
         @world.filtered_examples.each_value do |examples|
           examples.keep_if(&predicate)

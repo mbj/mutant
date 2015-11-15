@@ -12,8 +12,6 @@ module Mutant
         # Emit mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           if body
             mutate_body
@@ -26,8 +24,6 @@ module Mutant
         # Emit condition mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def mutate_conditions
           conditions = children.length - 1
           children[0..-2].each_index do |index|
@@ -39,8 +35,6 @@ module Mutant
         # Emit body mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def mutate_body
           mutate_child(body_index)
         end
@@ -52,8 +46,6 @@ module Mutant
         #
         # @return [nil]
         #   otherwise
-        #
-        # @api private
         def body
           children[body_index]
         end
@@ -61,8 +53,6 @@ module Mutant
         # Index of body node
         #
         # @return [Fixnum]
-        #
-        # @api private
         def body_index
           children.length - 1
         end

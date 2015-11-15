@@ -13,8 +13,6 @@ module Mutant
         # Perform dispatch
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           unless number.equal?(1)
             emit_number(number - 1)

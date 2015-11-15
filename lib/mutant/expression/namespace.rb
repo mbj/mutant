@@ -12,8 +12,6 @@ module Mutant
         # Initialize object
         #
         # @return [undefined]
-        #
-        # @api private
         def initialize(*)
           super
           @recursion_pattern = Regexp.union(
@@ -26,8 +24,6 @@ module Mutant
         # Syntax for expression
         #
         # @return [String]
-        #
-        # @api private
         def syntax
           "#{scope_name}*"
         end
@@ -36,8 +32,6 @@ module Mutant
         # Matcher for expression
         #
         # @return [Matcher]
-        #
-        # @api private
         def matcher
           Matcher::Namespace.new(self)
         end
@@ -47,8 +41,6 @@ module Mutant
         # @param [Expression] expression
         #
         # @return [Fixnum]
-        #
-        # @api private
         def match_length(expression)
           if @recursion_pattern =~ expression.syntax
             scope_name.length
@@ -70,8 +62,6 @@ module Mutant
         # Matcher matcher on expression
         #
         # @return [Matcher]
-        #
-        # @api private
         def matcher
           Matcher::Scope.new(Object.const_get(scope_name))
         end
@@ -79,9 +69,6 @@ module Mutant
         # Syntax for expression
         #
         # @return [String]
-        #
-        # @api private
-        #
         alias_method :syntax, :scope_name
         public :syntax
 

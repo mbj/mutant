@@ -12,8 +12,6 @@ module Mutant
         # Emit mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           super
           emit_singletons
