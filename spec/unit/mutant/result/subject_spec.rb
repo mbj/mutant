@@ -7,7 +7,7 @@ RSpec.describe Mutant::Result::Subject do
     )
   end
 
-  let(:mutation_subject) { double('Subject') }
+  let(:mutation_subject) { instance_double(Mutant::Subject) }
 
   describe '#continue?' do
     subject { object.continue? }
@@ -19,13 +19,13 @@ RSpec.describe Mutant::Result::Subject do
     end
 
     context 'with failing mutation result' do
-      let(:mutation_results) { [double('Mutation Result', success?: false)] }
+      let(:mutation_results) { [instance_double(Mutant::Result::Mutation, success?: false)] }
 
       it { should be(false) }
     end
 
     context 'with successful mutation result' do
-      let(:mutation_results) { [double('Mutation Result', success?: true)] }
+      let(:mutation_results) { [instance_double(Mutant::Result::Mutation, success?: true)] }
 
       it { should be(true) }
     end
@@ -33,8 +33,8 @@ RSpec.describe Mutant::Result::Subject do
     context 'with failed and successful mutation result' do
       let(:mutation_results) do
         [
-          double('Mutation Result', success?: true),
-          double('Mutation Result', success?: false)
+          instance_double(Mutant::Result::Mutation, success?: true),
+          instance_double(Mutant::Result::Mutation, success?: false)
         ]
       end
 

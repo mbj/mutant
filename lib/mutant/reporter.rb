@@ -39,5 +39,12 @@ module Mutant
     # @api private
     abstract_method :progress
 
+    # The reporter delay
+    #
+    # @return [Float]
+    #
+    # @api private
+    abstract_method :delay
+
   end # Reporter
 end # Mutant

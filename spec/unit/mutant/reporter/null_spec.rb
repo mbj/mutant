@@ -1,20 +1,21 @@
 RSpec.describe Mutant::Reporter::Null do
-  let(:object) { described_class.new }
+  let(:object) { described_class.new     }
+  let(:value)  { instance_double(Object) }
 
   describe '#report' do
-    subject { object.report(double('some input')) }
+    subject { object.report(value) }
 
     it_should_behave_like 'a command method'
   end
 
   describe '#warn' do
-    subject { object.warn(double('some input')) }
+    subject { object.warn(value) }
 
     it_should_behave_like 'a command method'
   end
 
   describe '#progress' do
-    subject { object.progress(double('some input')) }
+    subject { object.progress(value) }
 
     it_should_behave_like 'a command method'
   end

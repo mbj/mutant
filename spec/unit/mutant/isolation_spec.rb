@@ -65,8 +65,8 @@ RSpec.describe Mutant::Isolation::Fork do
     end
 
     context 'uses primitives in correct order' do
-      let(:reader) { double('reader') }
-      let(:writer) { double('writer') }
+      let(:reader) { instance_double(IO) }
+      let(:writer) { instance_double(IO) }
 
       before do
         expect(IO).to receive(:pipe).with(binmode: true).ordered do |&block|
@@ -76,9 +76,9 @@ RSpec.describe Mutant::Isolation::Fork do
       end
 
       it 'when fork succeeds' do
-        pid = double('PID')
+        pid = instance_double(Fixnum)
         expect(Process).to receive(:fork).ordered.and_yield.and_return(pid)
-        file = double('file')
+        file = instance_double(File)
         expect(File).to receive(:open).ordered
           .with(File::NULL, File::WRONLY).and_yield(file)
         expect($stderr).to receive(:reopen).ordered.with(file)

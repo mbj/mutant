@@ -7,14 +7,17 @@ RSpec.describe Mutant::Reporter::Trace do
     it { should eql(0.0) }
   end
 
-  let(:reportable) { double('Reportable') }
+  let(:value) { instance_double(Object) }
 
   %i[report start progress].each do |name|
     describe "##{name}" do
-      subject { object.public_send(name, reportable) }
+      subject { object.public_send(name, value) }
 
-      it 'logs the reportable' do
-        expect { subject }.to change { object.public_send("#{name}_calls") }.from([]).to([reportable])
+      it 'logs the value' do
+        expect { subject }
+          .to change { object.public_send("#{name}_calls") }
+          .from([])
+          .to([value])
       end
     end
   end

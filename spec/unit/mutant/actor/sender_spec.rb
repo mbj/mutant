@@ -1,12 +1,12 @@
 RSpec.describe Mutant::Actor::Sender do
   let(:object)   { described_class.new(condition_variable, mutex, messages) }
 
-  let(:condition_variable) { double('Condition Variable') }
-  let(:mutex)              { double('Mutex')              }
-  let(:messages)           { double('Messages')           }
-  let(:type)               { double('Type')               }
-  let(:payload)            { double('Payload')            }
-  let(:_message)           { message(type, payload)       }
+  let(:condition_variable) { instance_double(ConditionVariable) }
+  let(:mutex)              { instance_double(Mutex)             }
+  let(:messages)           { instance_double(Array)             }
+  let(:type)               { instance_double(Symbol)            }
+  let(:payload)            { instance_double(Object)            }
+  let(:_message)           { message(type, payload)             }
 
   describe '#call' do
     subject { object.call(_message) }

@@ -1,6 +1,7 @@
 RSpec.describe Mutant::Matcher::Null, '#call' do
-  let(:object) { described_class.new }
-  let(:env) { instance_double(Mutant::Env) }
+  let(:object) { described_class.new          }
+  let(:env)    { instance_double(Mutant::Env) }
+
   subject { object.call(env) }
 
   it 'returns no subjects' do

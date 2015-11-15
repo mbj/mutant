@@ -1,6 +1,6 @@
 RSpec.describe Mutant::Actor::Env do
-  let(:thread)      { double('Thread')      }
-  let(:thread_root) { double('Thread Root') }
+  let(:thread)      { instance_double(Thread)                 }
+  let(:thread_root) { instance_double(Thread.singleton_class) }
 
   let(:object) { described_class.new(thread_root) }
 

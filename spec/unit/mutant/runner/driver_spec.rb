@@ -1,8 +1,8 @@
 RSpec.describe Mutant::Parallel::Driver do
   let(:object) { described_class.new(binding) }
 
-  let(:binding) { double('Binding') }
-  let(:result)  { double('Result') }
+  let(:binding) { instance_double(Mutant::Actor::Binding) }
+  let(:value)   { instance_double(Object, 'value')        }
 
   describe '#stop' do
     subject { object.stop }
@@ -18,9 +18,9 @@ RSpec.describe Mutant::Parallel::Driver do
     subject { object.status }
 
     before do
-      expect(binding).to receive(:call).with(:status).and_return(result)
+      expect(binding).to receive(:call).with(:status).and_return(value)
     end
 
-    it { should be(result) }
+    it { should be(value) }
   end
 end

@@ -1,6 +1,6 @@
 RSpec.describe Mutant::Actor::Mailbox do
-  let(:mutex)              { double('Mutex') }
-  let(:condition_variable) { double('Mutex') }
+  let(:mutex)              { instance_double(Mutex)             }
+  let(:condition_variable) { instance_double(ConditionVariable) }
 
   before do
     allow(Mutex).to receive(:new).and_return(mutex)
@@ -10,8 +10,8 @@ RSpec.describe Mutant::Actor::Mailbox do
   describe '.new' do
     subject { described_class.new }
 
-    let(:object) { described_class.new }
-    let(:thread) { double('Thread')    }
+    let(:object) { described_class.new     }
+    let(:thread) { instance_double(Thread) }
 
     its(:sender) { should eql(Mutant::Actor::Sender.new(condition_variable, mutex, [])) }
     its(:receiver) { should eql(Mutant::Actor::Receiver.new(condition_variable, mutex, [])) }
@@ -19,8 +19,8 @@ RSpec.describe Mutant::Actor::Mailbox do
   end
 
   describe '#bind' do
-    let(:object) { described_class.new }
-    let(:other)  { double('Sender')    }
+    let(:object) { described_class.new                    }
+    let(:other)  { instance_double(Mutant::Actor::Sender) }
 
     subject { object.bind(other) }
 

@@ -4,12 +4,12 @@ RSpec.describe Mutant do
   describe '.ci?' do
     subject { object.ci? }
 
-    let(:result) { double('Result') }
+    let(:value) { instance_double(Object, 'value') }
 
     before do
-      expect(ENV).to receive(:key?).with('CI').and_return(result)
+      expect(ENV).to receive(:key?).with('CI').and_return(value)
     end
 
-    it { should be(result) }
+    it { should be(value) }
   end
 end

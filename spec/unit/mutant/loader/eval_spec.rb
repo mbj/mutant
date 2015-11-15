@@ -7,7 +7,7 @@ RSpec.describe Mutant::Loader::Eval, '.call' do
   let(:line)   { 1               }
 
   let(:mutation_subject) do
-    double('Subject', source_path: path, source_line: line)
+    instance_double(Mutant::Subject, source_path: path, source_line: line)
   end
 
   let(:source) do

@@ -4,11 +4,11 @@ RSpec.describe Mutant::Parallel::Worker do
   end
 
   let(:message_sequence) { FakeActor::MessageSequence.new    }
-  let(:processor)        { double('Processor')               }
+  let(:processor)        { instance_double(Proc)             }
   let(:mailbox)          { actor_env.mailbox(:worker)        }
   let(:parent)           { actor_env.mailbox(:parent).sender }
-  let(:payload)          { double('Payload')                 }
-  let(:result_payload)   { double('Result Payload')          }
+  let(:payload)          { instance_double(Object)           }
+  let(:result_payload)   { instance_double(Object)           }
 
   let(:attributes) do
     {
@@ -38,8 +38,8 @@ RSpec.describe Mutant::Parallel::Worker do
         message_sequence.add(:worker, :stop)
       end
 
-      let(:index)           { double('Index')                                                     }
-      let(:test_result)     { double('Test Result')                                               }
+      let(:index)           { instance_double(Fixnum)                                             }
+      let(:test_result)     { instance_double(Mutant::Result::Test)                               }
       let(:job_result)      { Mutant::Parallel::JobResult.new(job: job, payload: result_payload)  }
       let(:job)             { Mutant::Parallel::Job.new(index: index, payload: payload)           }
 

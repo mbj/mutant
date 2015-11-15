@@ -25,7 +25,7 @@ RSpec.describe Mutant::Integration::Null do
   end
 
   describe '#call' do
-    let(:tests) { double('Tests') }
+    let(:tests) { instance_double(Array) }
 
     subject { object.call(tests) }
 
