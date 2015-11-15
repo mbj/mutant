@@ -62,14 +62,14 @@ RSpec.describe Mutant::Matcher::Compiler, '#call' do
     end
 
     context 'and subject filters' do
-      let(:filter) { double('filter') }
+      let(:subject_filter) { instance_double(Mutant::Matcher) }
 
       let(:attributes) do
-        super().merge(subject_filters: [filter])
+        super().merge(subject_filters: [subject_filter])
       end
 
       let(:subject_filter_predicates) do
-        [filter]
+        [subject_filter]
       end
 
       it { should eql(expected_matcher) }

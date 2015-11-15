@@ -1,7 +1,7 @@
 RSpec.describe Mutant::Actor::Message do
 
-  let(:type)    { double('Type')    }
-  let(:payload) { double('Payload') }
+  let(:type)    { instance_double(Symbol) }
+  let(:payload) { instance_double(Object) }
 
   describe '.new' do
     subject { described_class.new(*arguments) }

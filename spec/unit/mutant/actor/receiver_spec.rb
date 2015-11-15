@@ -1,8 +1,8 @@
 RSpec.describe Mutant::Actor::Receiver do
-  let(:messages)           { double('Messages')           }
-  let(:mutex)              { double('Mutex')              }
-  let(:condition_variable) { double('Condition Variable') }
-  let(:message)            { double('Message')            }
+  let(:messages)           { instance_double(Array)             }
+  let(:mutex)              { instance_double(Mutex)             }
+  let(:condition_variable) { instance_double(ConditionVariable) }
+  let(:message)            { instance_double(Object)            }
 
   let(:object) { described_class.new(condition_variable, mutex, messages) }
 

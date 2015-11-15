@@ -23,12 +23,8 @@ RSpec.describe Mutant::Subject do
     RUBY
   end
 
-  let(:location) do
-    double('Location', expression: expression)
-  end
-
   let(:expression) do
-    double('Expression', line: 'source_line')
+    instance_double(Mutant::Expression, line: 'source_line')
   end
 
   let(:context) do

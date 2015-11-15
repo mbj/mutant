@@ -1,31 +1,31 @@
 RSpec.describe Mutant::Result::Env do
   let(:object) do
     described_class.new(
-      runtime:         double('Runtime'),
+      runtime:         instance_double(Float),
       env:             env,
       subject_results: [subject_result]
     )
   end
 
   let(:env) do
-    double(
-      'Env',
+    instance_double(
+      Mutant::Env,
       config:    config,
-      subjects:  [double('Subject')],
-      mutations: [double('Mutation')]
+      subjects:  [instance_double(Mutant::Subject)],
+      mutations: [instance_double(Mutant::Mutation)]
     )
   end
 
   let(:config) do
-    double(
-      'Config',
+    instance_double(
+      Mutant::Config,
       expected_coverage: Rational(1, 1)
     )
   end
 
   let(:subject_result) do
-    double(
-      'Subject Result',
+    instance_double(
+      Mutant::Result::Subject,
       amount_mutation_results: results,
       amount_mutations_killed: killed,
       success?:                true

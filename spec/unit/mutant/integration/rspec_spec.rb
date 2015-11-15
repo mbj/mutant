@@ -3,8 +3,8 @@ require 'mutant/integration/rspec'
 RSpec.describe Mutant::Integration::Rspec do
   let(:object) { described_class.new(Mutant::Config::DEFAULT) }
 
-  let(:options) { double('options') }
-  let(:runner)  { double('runner')  }
+  let(:rspec_options) { instance_double(RSpec::Core::ConfigurationOptions) }
+  let(:rspec_runner)  { instance_double(RSpec::Core::Runner)               }
 
   let(:example_a) do
     double(
@@ -115,10 +115,16 @@ RSpec.describe Mutant::Integration::Rspec do
   end
 
   before do
-    expect(RSpec::Core::ConfigurationOptions).to receive(:new).with(%w[spec --fail-fast]).and_return(options)
-    expect(RSpec::Core::Runner).to receive(:new).with(options).and_return(runner)
-    expect(RSpec).to receive(:world).with(no_args).and_return(world)
-    allow(Time).to receive(:now).and_return(Time.now)
+    expect(RSpec::Core::ConfigurationOptions).to receive(:new)
+      .with(%w[spec --fail-fast])
+      .and_return(rspec_options)
+
+    expect(RSpec::Core::Runner).to receive(:new)
+      .with(rspec_options)
+      .and_return(rspec_runner)
+
+    expect(RSpec).to receive_messages(world: world)
+    allow(Time).to receive_messages(now: Time.now)
   end
 
   describe '#all_tests' do
@@ -131,7 +137,7 @@ RSpec.describe Mutant::Integration::Rspec do
     subject { object.setup }
 
     before do
-      expect(runner).to receive(:setup) do |error, output|
+      expect(rspec_runner).to receive(:setup) do |error, output|
         expect(error).to be($stderr)
         output.write('foo')
       end
@@ -144,7 +150,7 @@ RSpec.describe Mutant::Integration::Rspec do
     subject { object.call(tests) }
 
     before do
-      expect(runner).to receive(:setup) do |_errors, output|
+      expect(rspec_runner).to receive(:setup) do |_errors, output|
         output.write('the-test-output')
       end
 
@@ -157,7 +163,7 @@ RSpec.describe Mutant::Integration::Rspec do
       expect(world).to receive(:ordered_example_groups) do
         filtered_examples.values.flatten
       end
-      expect(runner).to receive(:run_specs).with([example_a]).and_return(exit_status)
+      expect(rspec_runner).to receive(:run_specs).with([example_a]).and_return(exit_status)
     end
 
     context 'on unsuccessful exit' do

@@ -2,7 +2,7 @@ describe Mutant::Repository::Diff do
   describe '.from_head' do
     subject { described_class.from_head(to_revision) }
 
-    let(:to_revision) { double('to revision') }
+    let(:to_revision) { instance_double(String) }
 
     it { should eql(described_class.new('HEAD', to_revision)) }
   end
@@ -45,10 +45,10 @@ describe Mutant::Repository::Diff do
     end
 
     context 'when file is tracked in repository' do
-      let(:git_ls_success?) { true                                    }
-      let(:status)          { double('Status', success?: success?)    }
-      let(:stdout)          { double('Stdout', empty?: stdout_empty?) }
-      let(:stdout_empty?)   { false                                   }
+      let(:git_ls_success?) { true                                                 }
+      let(:status)          { instance_double(Process::Status, success?: success?) }
+      let(:stdout)          { instance_double(String, empty?: stdout_empty?)       }
+      let(:stdout_empty?)   { false                                                }
 
       include_context 'test if git tracks the file'
 

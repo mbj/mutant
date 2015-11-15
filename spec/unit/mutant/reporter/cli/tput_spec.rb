@@ -6,8 +6,8 @@ RSpec.describe Mutant::Reporter::CLI::Tput do
       allow(Open3).to receive(:capture3).with(command).ordered.and_return(
         [
           stdout,
-          double('Stderr'),
-          double('Exitstatus', success?: success)
+          instance_double(IO),
+          instance_double(Process::Status, success?: success)
         ]
       )
     end
