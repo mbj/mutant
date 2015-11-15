@@ -90,7 +90,7 @@ module Mutant
         #
         # @api private
         def ast
-          env.cache.parse(source_path)
+          env.parser.call(source_path)
         end
 
         # Path to source

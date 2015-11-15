@@ -40,7 +40,7 @@ module Mutant
     # @api private
     def self.walk(node, stack, &block)
       block.call(node, stack)
-      node.children.grep(Parser::AST::Node) do |child|
+      node.children.grep(::Parser::AST::Node) do |child|
         stack.push(child)
         walk(child, stack, &block)
         stack.pop

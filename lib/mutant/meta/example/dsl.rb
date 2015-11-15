@@ -97,8 +97,8 @@ module Mutant
         def node(input)
           case input
           when String
-            Unparser::Preprocessor.run(Parser::CurrentRuby.parse(input))
-          when Parser::AST::Node
+            Unparser::Preprocessor.run(::Parser::CurrentRuby.parse(input))
+          when ::Parser::AST::Node
             input
           else
             fail "Cannot coerce to node: #{source.inspect}"

@@ -2,7 +2,7 @@ module Mutant
   class Env
     # Boostrap environment
     class Bootstrap
-      include Adamantium::Flat, Concord::Public.new(:config, :cache), Procto.call(:env)
+      include Adamantium::Flat, Concord::Public.new(:config), Procto.call(:env)
 
       SEMANTICS_MESSAGE_FORMAT =
         "%<message>s. Fix your lib to follow normal ruby semantics!\n" \
@@ -23,14 +23,10 @@ module Mutant
       # @api private
       attr_reader :matchable_scopes
 
-      # New bootstrap env
+      # Parser for this environment
       #
-      # @return [Env]
-      #
-      # @api private
-      def self.new(_config, _cache = Cache.new)
-        super
-      end
+      # @return [Parser]
+      attr_reader :parser
 
       # Initialize object
       #
@@ -39,6 +35,7 @@ module Mutant
       # @api private
       def initialize(*)
         super
+        @parser = Parser.new
         infect
         initialize_matchable_scopes
       end
@@ -67,7 +64,7 @@ module Mutant
         Env.new(
           actor_env:        Actor::Env.new(Thread),
           config:           config,
-          cache:            cache,
+          parser:           parser,
           subjects:         subjects,
           matchable_scopes: matchable_scopes,
           integration:      @integration,
