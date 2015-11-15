@@ -1,3 +1,7 @@
+# v0.8.8 2015-xx-xx
+
+* Drop support for rspec-3.2
+
 # v0.8.8 2015-11-15
 
 * Add support for rspec-3.3.4
