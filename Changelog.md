@@ -1,3 +1,8 @@
+# v0.8.8 2015-11-15
+
+* Add support for rspec-3.3.4
+* Add mutations/s performance metric to report
+
 # v0.8.7 2015-10-30
 
 * Fix blackliting regexp to correctly match the String `(eval)` absolutely.
