@@ -286,7 +286,7 @@ people do talks about it at conferences, user groups or other chances. Thanks fo
 As I (the author @mbj) am not too happy with some of the facts being presented about
 mutant the last month.
 
-So if you plan to do a presentation: I offer to review your slides / talk - for free off course.
+So if you plan to do a presentation: I offer to review your slides / talk - for free of course.
 My intention is NOT to change your bias pro / against this tool. Just to help to fix
 invalid statements about the tool.
 
