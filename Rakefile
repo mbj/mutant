@@ -14,6 +14,7 @@ namespace :metrics do
       --include lib
       --require mutant
       --since HEAD~1
+      --ignore-subject Mutant::Meta*
       --
       Mutant*
     ]) or fail 'Mutant task is not successful'
