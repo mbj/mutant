@@ -43,7 +43,11 @@ describe Mutant::Runner::Sink do
 
     context 'no results' do
       let(:expected_status) do
-        Mutant::Result::Env.new(env: env, runtime: 0.0, subject_results: [])
+        Mutant::Result::Env.new(
+          env:             env,
+          runtime:         0.0,
+          subject_results: []
+        )
       end
 
       it { should eql(expected_status) }
@@ -55,7 +59,11 @@ describe Mutant::Runner::Sink do
       with(:subject_a_result) { { mutation_results: [mutation_a_result] } }
 
       let(:expected_status) do
-        Mutant::Result::Env.new(env: env, runtime: 0.0, subject_results: [subject_a_result])
+        Mutant::Result::Env.new(
+          env:             env,
+          runtime:         0.0,
+          subject_results: [subject_a_result]
+        )
       end
 
       it { should eql(expected_status) }
@@ -65,7 +73,11 @@ describe Mutant::Runner::Sink do
       include_context 'two results'
 
       let(:expected_status) do
-        Mutant::Result::Env.new(env: env, runtime: 0.0, subject_results: [subject_a_result])
+        Mutant::Result::Env.new(
+          env:             env,
+          runtime:         0.0,
+          subject_results: [subject_a_result]
+        )
       end
 
       it { should eql(expected_status) }

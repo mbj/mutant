@@ -65,22 +65,38 @@ module Mutant
 
     # Job to push to workers
     class Job
-      include Adamantium::Flat, Anima.new(:index, :payload)
+      include Adamantium::Flat, Anima.new(
+        :index,
+        :payload
+      )
     end # Job
 
     # Job result object received from workers
     class JobResult
-      include Adamantium::Flat, Anima.new(:job, :payload)
+      include Adamantium::Flat, Anima.new(
+        :job,
+        :payload
+      )
     end # JobResult
 
     # Parallel run configuration
     class Config
-      include Adamantium::Flat, Anima.new(:env, :processor, :source, :sink, :jobs)
+      include Adamantium::Flat, Anima.new(
+        :env,
+        :jobs,
+        :processor,
+        :sink,
+        :source
+      )
     end # Config
 
     # Parallel execution status
     class Status
-      include Adamantium::Flat, Anima.new(:payload, :done, :active_jobs)
+      include Adamantium::Flat, Anima.new(
+        :active_jobs,
+        :done,
+        :payload
+      )
     end
 
   end # Parallel

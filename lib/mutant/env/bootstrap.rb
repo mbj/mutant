@@ -64,12 +64,12 @@ module Mutant
         Env.new(
           actor_env:        Actor::Env.new(Thread),
           config:           config,
-          parser:           parser,
-          subjects:         subjects,
-          matchable_scopes: matchable_scopes,
           integration:      @integration,
+          matchable_scopes: matchable_scopes,
+          mutations:        subjects.flat_map(&:mutations),
+          parser:           parser,
           selector:         Selector::Expression.new(@integration),
-          mutations:        subjects.flat_map(&:mutations)
+          subjects:         subjects
         )
       end
 
@@ -91,9 +91,9 @@ module Mutant
       rescue => exception
         semantics_warning(
           CLASS_NAME_RAISED_EXCEPTION,
-          scope_class: scope.class,
+          exception:   exception.inspect,
           scope:       scope,
-          exception:   exception.inspect
+          scope_class: scope.class
         )
         nil
       end
@@ -149,9 +149,9 @@ module Mutant
         unless name.instance_of?(String)
           semantics_warning(
             CLASS_NAME_TYPE_MISMATCH_FORMAT,
+            name:        name,
             scope_class: scope.class,
-            scope:       scope,
-            name:        name
+            scope:       scope
           )
           return
         end

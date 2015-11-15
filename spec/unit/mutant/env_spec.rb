@@ -2,14 +2,14 @@ RSpec.describe Mutant::Env do
   context '#kill' do
     let(:object) do
       described_class.new(
-        config:           config,
         actor_env:        Mutant::Actor::Env.new(Thread),
-        parser:           Mutant::Parser.new,
+        config:           config,
+        integration:      integration,
+        matchable_scopes: [],
+        mutations:        [],
         selector:         selector,
         subjects:         [],
-        mutations:        [],
-        matchable_scopes: [],
-        integration:      integration
+        parser:           Mutant::Parser.new
       )
     end
 
@@ -32,8 +32,8 @@ RSpec.describe Mutant::Env do
     let(:mutation_subject) do
       instance_double(
         Mutant::Subject,
-        identification: 'subject',
         context: context,
+        identification: 'subject',
         source: 'original'
       )
     end
@@ -67,7 +67,14 @@ RSpec.describe Mutant::Env do
         expect(isolation).to receive(:call).and_raise(Mutant::Isolation::Error, 'test-error')
       end
 
-      let(:test_result) { Mutant::Result::Test.new(tests: tests, output: 'test-error', passed: false, runtime: 0.0) }
+      let(:test_result) do
+        Mutant::Result::Test.new(
+          output:  'test-error',
+          passed:  false,
+          runtime: 0.0,
+          tests:   tests
+        )
+      end
 
       include_examples 'mutation kill'
     end

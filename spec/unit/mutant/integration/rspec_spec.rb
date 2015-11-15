@@ -176,10 +176,10 @@ RSpec.describe Mutant::Integration::Rspec do
       it 'should return failed result' do
         expect(subject).to eql(
           Mutant::Result::Test.new(
-            tests: tests,
-            output: 'the-test-output',
-            passed: false,
-            runtime: 0.0
+            output:  'the-test-output',
+            passed:  false,
+            runtime: 0.0,
+            tests:   tests
           )
         )
       end
@@ -191,10 +191,10 @@ RSpec.describe Mutant::Integration::Rspec do
       it 'should return passed result' do
         expect(subject).to eql(
           Mutant::Result::Test.new(
-            tests: tests,
-            output: 'the-test-output',
-            passed: true,
-            runtime: 0.0
+            output:  'the-test-output',
+            passed:  true,
+            runtime: 0.0,
+            tests:   tests
           )
         )
       end

@@ -68,10 +68,10 @@ module Mutant
         passed = @runner.run_specs(@world.ordered_example_groups).equal?(EXIT_SUCCESS)
         @output.rewind
         Result::Test.new(
-          tests:    tests,
           output:   @output.read,
+          passed:   passed,
           runtime:  Time.now - start,
-          passed:   passed
+          tests:    tests
         )
       end
 
@@ -113,8 +113,8 @@ module Mutant
         full_description = metadata.fetch(:full_description)
 
         Test.new(
-          id:         "rspec:#{index}:#{location}/#{full_description}",
-          expression: parse_expression(metadata)
+          expression: parse_expression(metadata),
+          id:         "rspec:#{index}:#{location}/#{full_description}"
         )
       end
 

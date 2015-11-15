@@ -12,8 +12,8 @@ RSpec.describe Mutant::Runner do
       instance_double(
         Mutant::Config,
         integration: integration,
-        reporter:    reporter,
-        jobs:        1
+        jobs:        1,
+        reporter:    reporter
       )
     end
 
@@ -25,11 +25,11 @@ RSpec.describe Mutant::Runner do
 
     let(:parallel_config) do
       Mutant::Parallel::Config.new(
-        jobs:      1,
         env:       actor_env,
-        source:    Mutant::Parallel::Source::Array.new(env.mutations),
+        jobs:      1,
+        processor: ->(_object) { fail },
         sink:      Mutant::Runner::Sink.new(env),
-        processor: ->(_object) { fail }
+        source:    Mutant::Parallel::Source::Array.new(env.mutations)
       )
     end
 
