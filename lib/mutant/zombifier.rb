@@ -3,13 +3,14 @@ module Mutant
   class Zombifier
     include Anima.new(
       :includes,
-      :namespace,
       :load_path,
       :kernel,
+      :namespace,
+      :pathname,
       :require_highjack,
-      :root_require,
-      :pathname
+      :root_require
     )
+
     private(*anima.attribute_names)
 
     include AST::Sexp

@@ -74,7 +74,11 @@ module Mutant
 
     # Env result object
     class Env
-      include Coverage, Result, Anima.new(:runtime, :env, :subject_results)
+      include Coverage, Result, Anima.new(
+        :env,
+        :runtime,
+        :subject_results
+      )
 
       # Test if run is successful
       #
@@ -123,16 +127,20 @@ module Mutant
     # Test result
     class Test
       include Result, Anima.new(
-        :tests,
         :output,
         :passed,
-        :runtime
+        :runtime,
+        :tests
       )
     end # Test
 
     # Subject result
     class Subject
-      include Coverage, Result, Anima.new(:subject, :tests, :mutation_results)
+      include Coverage, Result, Anima.new(
+        :mutation_results,
+        :subject,
+        :tests
+      )
 
       sum :killtime, :mutation_results
       sum :runtime,  :mutation_results
@@ -215,7 +223,10 @@ module Mutant
 
     # Mutation result
     class Mutation
-      include Result, Anima.new(:mutation, :test_result)
+      include Result, Anima.new(
+        :mutation,
+        :test_result
+      )
 
       # The runtime
       #

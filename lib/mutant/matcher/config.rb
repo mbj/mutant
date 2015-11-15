@@ -3,8 +3,8 @@ module Mutant
     # Subject matcher configuration
     class Config
       include Adamantium, Anima.new(
-        :match_expressions,
         :ignore_expressions,
+        :match_expressions,
         :subject_filters
       )
 
@@ -14,8 +14,8 @@ module Mutant
       ENUM_DELIMITER      = ','.freeze
       EMPTY_ATTRIBUTES    = 'empty'.freeze
       PRESENTATIONS       = IceNine.deep_freeze(
-        match_expressions:  :syntax,
         ignore_expressions: :syntax,
+        match_expressions:  :syntax,
         subject_filters:    :inspect
       )
       private_constant(*constants(false))

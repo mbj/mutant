@@ -101,10 +101,10 @@ module Mutant
       # @api private
       def call(tests)
         Result::Test.new(
-          tests:   tests,
           output:  '',
+          passed:  true,
           runtime: 0.0,
-          passed:  true
+          tests:   tests
         )
       end
 

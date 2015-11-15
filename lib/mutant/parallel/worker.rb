@@ -2,7 +2,11 @@ module Mutant
   module Parallel
     # Parallel execution worker
     class Worker
-      include Adamantium::Flat, Anima.new(:mailbox, :processor, :parent)
+      include Adamantium::Flat, Anima.new(
+        :mailbox,
+        :parent,
+        :processor
+      )
 
       # Run worker
       #
@@ -62,7 +66,16 @@ module Mutant
       # @api private
       def handle_job(job)
         result = processor.call(job.payload)
-        parent.call(Actor::Message.new(:result, JobResult.new(job: job, payload: result)))
+
+        parent.call(
+          Actor::Message.new(
+            :result,
+            JobResult.new(
+              job: job,
+              payload: result
+            )
+          )
+        )
       end
 
     end # Worker

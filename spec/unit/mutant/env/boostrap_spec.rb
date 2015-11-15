@@ -15,25 +15,25 @@ RSpec.describe Mutant::Env::Bootstrap do
 
   let(:config) do
     Mutant::Config::DEFAULT.with(
-      jobs:        1,
-      reporter:    instance_double(Mutant::Reporter),
       includes:    [],
-      requires:    [],
       integration: integration_class,
-      matcher:     matcher_config
+      jobs:        1,
+      matcher:     matcher_config,
+      reporter:    instance_double(Mutant::Reporter),
+      requires:    []
     )
   end
 
   let(:expected_env) do
     Mutant::Env.new(
-      parser:           Mutant::Parser.new,
-      subjects:         [],
+      actor_env:        Mutant::Actor::Env.new(Thread),
+      config:           config,
+      integration:      integration,
       matchable_scopes: [],
       mutations:        [],
-      config:           config,
+      parser:           Mutant::Parser.new,
       selector:         Mutant::Selector::Expression.new(integration),
-      actor_env:        Mutant::Actor::Env.new(Thread),
-      integration:      integration
+      subjects:         []
     )
   end
 
@@ -177,8 +177,8 @@ RSpec.describe Mutant::Env::Bootstrap do
             Mutant::Scope.new(TestApp::Empty,   match_expressions.last),
             Mutant::Scope.new(TestApp::Literal, match_expressions.first)
           ],
-          subjects:         subjects,
-          mutations:        subjects.flat_map(&:mutations)
+          mutations: subjects.flat_map(&:mutations),
+          subjects:  subjects
         )
       end
 

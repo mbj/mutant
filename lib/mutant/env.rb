@@ -2,14 +2,14 @@ module Mutant
   # Abstract base class for mutant environments
   class Env
     include Adamantium::Flat, Anima.new(
-      :config,
       :actor_env,
-      :parser,
-      :subjects,
-      :matchable_scopes,
+      :config,
       :integration,
+      :matchable_scopes,
+      :mutations,
+      :parser,
       :selector,
-      :mutations
+      :subjects
     )
 
     SEMANTICS_MESSAGE =
@@ -53,10 +53,10 @@ module Mutant
       end
     rescue Isolation::Error => error
       Result::Test.new(
-        tests:   tests,
         output:  error.message,
+        passed:  false,
         runtime: Time.now - start,
-        passed:  false
+        tests:   tests
       )
     end
 

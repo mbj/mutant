@@ -16,13 +16,13 @@ module MutantSpec
     class Project
       MUTEX = Mutex.new
       include Adamantium, Anima.new(
-        :name,
-        :repo_uri,
         :exclude,
+        :expect_coverage,
         :mutation_coverage,
         :mutation_generation,
+        :name,
         :namespace,
-        :expect_coverage
+        :repo_uri
       )
 
       # Verify mutation coverage

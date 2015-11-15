@@ -32,10 +32,10 @@ RSpec.describe Mutant::Integration::Null do
     it 'returns test result' do
       should eql(
         Mutant::Result::Test.new(
-          tests:   tests,
-          runtime: 0.0,
+          output:  '',
           passed:  true,
-          output:  ''
+          runtime: 0.0,
+          tests:   tests
         )
       )
     end

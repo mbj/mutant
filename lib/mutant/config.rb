@@ -6,17 +6,17 @@ module Mutant
   class Config
     include Adamantium::Flat, Anima.new(
       :debug,
+      :expected_coverage,
+      :expression_parser,
+      :fail_fast,
       :integration,
-      :matcher,
       :includes,
+      :isolation,
+      :jobs,
+      :matcher,
       :requires,
       :reporter,
-      :isolation,
-      :fail_fast,
-      :jobs,
-      :zombie,
-      :expected_coverage,
-      :expression_parser
+      :zombie
     )
 
     %i[fail_fast zombie debug].each do |name|

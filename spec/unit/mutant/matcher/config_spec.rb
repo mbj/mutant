@@ -30,7 +30,7 @@ RSpec.describe Mutant::Matcher::Config do
           .add(:ignore_expressions, parse_expression('Bar'))
       end
 
-      it { should eql('#<Mutant::Matcher::Config match_expressions: [Foo] ignore_expressions: [Bar]>') }
+      it { should eql('#<Mutant::Matcher::Config ignore_expressions: [Bar] match_expressions: [Foo]>') }
     end
 
     context 'with subject filter' do

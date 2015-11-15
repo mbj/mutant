@@ -3,7 +3,12 @@ module Mutant
 
     # Explicit method expression
     class Method < self
-      include Anima.new(:scope_name, :scope_symbol, :method_name)
+      include Anima.new(
+        :method_name,
+        :scope_name,
+        :scope_symbol
+      )
+
       private(*anima.attribute_names)
 
       MATCHERS = IceNine.deep_freeze(

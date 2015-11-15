@@ -19,9 +19,9 @@ module Mutant
       # @api private
       def expression
         Expression::Method.new(
+          method_name:  name.to_s,
           scope_symbol: self.class::SYMBOL,
-          scope_name:   scope.name,
-          method_name:  name.to_s
+          scope_name:   scope.name
         )
       end
       memoize :expression
