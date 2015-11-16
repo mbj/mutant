@@ -53,7 +53,7 @@ module SharedContext
     let(:config) do
       Mutant::Config::DEFAULT.with(
         jobs:      1,
-        reporter:  Mutant::Reporter::Trace.new
+        reporter:  Mutant::Reporter::Null.new
       )
     end
 

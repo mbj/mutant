@@ -16,7 +16,7 @@ RSpec.describe Mutant::Env::Bootstrap do
   let(:config) do
     Mutant::Config::DEFAULT.with(
       jobs:        1,
-      reporter:    Mutant::Reporter::Trace.new,
+      reporter:    instance_double(Mutant::Reporter),
       includes:    [],
       requires:    [],
       integration: integration_class,
@@ -59,11 +59,10 @@ RSpec.describe Mutant::Env::Bootstrap do
 
     subject { object.warn(message) }
 
-    it 'reports a warning' do
-      expect { subject }
-        .to change { config.reporter.warn_calls }
-        .from([])
-        .to([message])
+    before do
+      expect(config.reporter).to receive(:warn)
+        .with(message)
+        .and_return(config.reporter)
     end
 
     it_behaves_like 'a command method'
@@ -92,16 +91,14 @@ RSpec.describe Mutant::Env::Bootstrap do
         end
       end
 
-      it 'warns via reporter' do
-        expected_warnings = [
+      before do
+        expected_warning =
           "Class#name from: #{invalid_class} raised an error: " \
           "RuntimeError. #{Mutant::Env::SEMANTICS_MESSAGE}"
-        ]
 
-        expect { subject }
-          .to change { config.reporter.warn_calls }
-          .from([])
-          .to(expected_warnings)
+        expect(config.reporter).to receive(:warn)
+          .with(expected_warning)
+          .and_return(config.reporter)
       end
 
       include_examples 'bootstrap call'
@@ -155,14 +152,11 @@ RSpec.describe Mutant::Env::Bootstrap do
         end
       end
 
-      it 'warns via reporter' do
-        expected_warnings = [
+      before do
+        expected_warning =
           "Class#name from: #{invalid_class.inspect} returned Object. #{Mutant::Env::SEMANTICS_MESSAGE}"
-        ]
 
-        expect { subject }
-          .to change { config.reporter.warn_calls }
-          .from([]).to(expected_warnings)
+        expect(config.reporter).to receive(:warn).with(expected_warning).and_return(config.reporter)
       end
 
       include_examples 'bootstrap call'
