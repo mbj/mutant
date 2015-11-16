@@ -25,22 +25,22 @@ module SharedContext
   # rubocop:disable MethodLength
   # rubocop:disable AbcSize
   def setup_shared_context
-    let(:env)              { double('env', config: config, subjects: [subject_a], mutations: mutations) }
-    let(:job_a)            { Mutant::Parallel::Job.new(index: 0, payload: mutation_a)                   }
-    let(:job_b)            { Mutant::Parallel::Job.new(index: 1, payload: mutation_b)                   }
-    let(:job_a_result)     { Mutant::Runner::JobResult.new(job: job_a, result: mutation_a_result)       }
-    let(:job_b_result)     { Mutant::Runner::JobResult.new(job: job_b, result: mutation_b_result)       }
-    let(:test_a)           { double('test a', identification: 'test-a')                                 }
-    let(:test_b)           { double('test b', identification: 'test-b')                                 }
-    let(:output)           { StringIO.new                                                               }
-    let(:matchable_scopes) { double('matchable scopes', length: 10)                                     }
-    let(:message_sequence) { FakeActor::MessageSequence.new                                             }
-    let(:mutations)        { [mutation_a, mutation_b]                                                   }
-    let(:mutation_a_node)  { s(:false)                                                                  }
-    let(:mutation_b_node)  { s(:nil)                                                                    }
-    let(:mutation_b)       { Mutant::Mutation::Evil.new(subject_a, mutation_b_node)                     }
-    let(:mutation_a)       { Mutant::Mutation::Evil.new(subject_a, mutation_a_node)                     }
-    let(:subject_a_node)   { s(:true)                                                                   }
+    let(:env)              { instance_double(Mutant::Env, config: config, subjects: [subject_a], mutations: mutations) }
+    let(:job_a)            { Mutant::Parallel::Job.new(index: 0, payload: mutation_a)                                  }
+    let(:job_b)            { Mutant::Parallel::Job.new(index: 1, payload: mutation_b)                                  }
+    let(:job_a_result)     { Mutant::Runner::JobResult.new(job: job_a, result: mutation_a_result)                      }
+    let(:job_b_result)     { Mutant::Runner::JobResult.new(job: job_b, result: mutation_b_result)                      }
+    let(:test_a)           { instance_double(Mutant::Test, identification: 'test-a')                                   }
+    let(:test_b)           { instance_double(Mutant::Test, identification: 'test-b')                                   }
+    let(:output)           { StringIO.new                                                                              }
+    let(:matchable_scopes) { instance_double(Array, length: 10)                                                        }
+    let(:message_sequence) { FakeActor::MessageSequence.new                                                            }
+    let(:mutations)        { [mutation_a, mutation_b]                                                                  }
+    let(:mutation_a_node)  { s(:false)                                                                                 }
+    let(:mutation_b_node)  { s(:nil)                                                                                   }
+    let(:mutation_b)       { Mutant::Mutation::Evil.new(subject_a, mutation_b_node)                                    }
+    let(:mutation_a)       { Mutant::Mutation::Evil.new(subject_a, mutation_a_node)                                    }
+    let(:subject_a_node)   { s(:true)                                                                                  }
 
     let(:status) do
       Mutant::Parallel::Status.new(
@@ -58,11 +58,10 @@ module SharedContext
     end
 
     let(:subject_a) do
-      double(
-        'subject a',
+      instance_double(
+        Mutant::Subject,
         node:           subject_a_node,
         source:         Unparser.unparse(subject_a_node),
-        tests:          [test_a],
         identification: 'subject-a'
       )
     end

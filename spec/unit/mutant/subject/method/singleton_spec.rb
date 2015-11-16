@@ -4,7 +4,7 @@ RSpec.describe Mutant::Subject::Method::Singleton do
   let(:node)    { s(:defs, s(:self), :foo, s(:args)) }
 
   let(:context) do
-    Mutant::Context::Scope.new(scope, double('Source Path'))
+    Mutant::Context::Scope.new(scope, instance_double(Pathname))
   end
 
   let(:scope) do

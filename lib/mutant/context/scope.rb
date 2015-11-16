@@ -46,8 +46,6 @@ module Mutant
           s(:class, name, nil, node)
         when Module
           s(:module, name, node)
-        else
-          fail "Cannot wrap scope: #{scope.inspect}"
         end
       end
 

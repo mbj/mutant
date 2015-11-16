@@ -5,8 +5,8 @@ RSpec.describe Mutant::Reporter::CLI do
   let(:output) { StringIO.new                        }
 
   let(:tput) do
-    double(
-      'tput',
+    instance_double(
+      Mutant::Reporter::CLI::Tput,
       restore: '[tput-restore]',
       prepare: '[tput-prepare]'
     )
@@ -61,9 +61,9 @@ RSpec.describe Mutant::Reporter::CLI do
       expect(ENV).to receive(:key?).with('CI').and_return(ci?)
     end
 
-    let(:output) { double('Output', tty?: tty?) }
-    let(:tty?)   { true                         }
-    let(:ci?)    { false                        }
+    let(:output) { instance_double(IO, tty?: tty?) }
+    let(:tty?)   { true                            }
+    let(:ci?)    { false                           }
 
     context 'when not on CI and on a tty' do
       before do
@@ -92,8 +92,8 @@ RSpec.describe Mutant::Reporter::CLI do
     end
 
     context 'when output does not respond to #tty?' do
-      let(:output) { double('Output') }
-      let(:tty?)   { false }
+      let(:output) { instance_double(IO) }
+      let(:tty?)   { false               }
 
       it { should eql(described_class.new(output, progressive_format)) }
     end

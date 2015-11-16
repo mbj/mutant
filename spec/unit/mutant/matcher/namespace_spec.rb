@@ -1,12 +1,11 @@
 RSpec.describe Mutant::Matcher::Namespace, '#call' do
-  let(:object) { described_class.new(parse_expression('TestApp*')) }
-  let(:env)    { instance_double(Mutant::Env)                      }
-  let(:raw_scope_a) { double('SingletonA', name: 'TestApp::Literal') }
-
-  let(:raw_scope_b) { double('SingletonB', name: 'TestApp::Foo')     }
-  let(:raw_scope_c) { double('SingletonC', name: 'TestAppOther')     }
-  let(:subject_a)   { double('SubjectA')                             }
-  let(:subject_b)   { double('SubjectB')                             }
+  let(:object)      { described_class.new(parse_expression('TestApp*')) }
+  let(:env)         { instance_double(Mutant::Env)                      }
+  let(:raw_scope_a) { instance_double(Class, name: 'TestApp::Literal')  }
+  let(:raw_scope_b) { instance_double(Class, name: 'TestApp::Foo')      }
+  let(:raw_scope_c) { instance_double(Class, name: 'TestAppOther')      }
+  let(:subject_a)   { instance_double(Mutant::Subject)                  }
+  let(:subject_b)   { instance_double(Mutant::Subject)                  }
 
   before do
     [

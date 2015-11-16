@@ -16,14 +16,14 @@ RSpec.describe Mutant::Selector::Expression do
       end
     end
 
-    let(:mutation_subject) { subject_class.new(context, node)                           }
-    let(:context)          { double('Context')                                          }
-    let(:node)             { double('Node')                                             }
-    let(:config)           { Mutant::Config::DEFAULT.with(integration: integration)     }
-    let(:integration)      { double('Integration', all_tests: all_tests)                }
-    let(:test_a)           { double('test a', expression: parse_expression('SubjectA')) }
-    let(:test_b)           { double('test b', expression: parse_expression('SubjectB')) }
-    let(:test_c)           { double('test c', expression: parse_expression('SubjectC')) }
+    let(:mutation_subject) { subject_class.new(context, node)                                        }
+    let(:context)          { instance_double(Mutant::Context)                                        }
+    let(:node)             { instance_double(Parser::AST::Node)                                      }
+    let(:config)           { Mutant::Config::DEFAULT.with(integration: integration)                  }
+    let(:integration)      { instance_double(Mutant::Integration, all_tests: all_tests)              }
+    let(:test_a)           { instance_double(Mutant::Test, expression: parse_expression('SubjectA')) }
+    let(:test_b)           { instance_double(Mutant::Test, expression: parse_expression('SubjectB')) }
+    let(:test_c)           { instance_double(Mutant::Test, expression: parse_expression('SubjectC')) }
 
     subject { object.call(mutation_subject) }
 

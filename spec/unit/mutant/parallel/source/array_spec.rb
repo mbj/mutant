@@ -1,9 +1,9 @@
 RSpec.describe Mutant::Parallel::Source::Array do
   let(:object) { described_class.new(jobs) }
 
-  let(:job_a) { double('Job A') }
-  let(:job_b) { double('Job B') }
-  let(:job_c) { double('Job B') }
+  let(:job_a) { instance_double(Mutant::Parallel::Job) }
+  let(:job_b) { instance_double(Mutant::Parallel::Job) }
+  let(:job_c) { instance_double(Mutant::Parallel::Job) }
 
   let(:jobs) { [job_a, job_b, job_c] }
 

@@ -1,36 +1,25 @@
 RSpec.describe Mutant::Runner do
-  # setup_shared_context
-  class FakeEnv
-    def self.kill
-    end
-
-    def self.mutations
-      []
-    end
-  end
-
   describe '.call' do
-    let(:integration) { double('Integration')            }
-    let(:reporter)    { double('Reporter', delay: delay) }
-    let(:driver)      { double('Driver')                 }
-    let(:delay)       { double('Delay')                  }
-    let(:env)         { FakeEnv                          }
-    let(:env_result)  { double('Env Result')             }
-    let(:actor_env)   { double('Actor ENV')              }
+    let(:integration) { instance_double(Mutant::Integration)            }
+    let(:reporter)    { instance_double(Mutant::Reporter, delay: delay) }
+    let(:driver)      { instance_double(Mutant::Parallel::Driver)       }
+    let(:delay)       { instance_double(Float)                          }
+    let(:env)         { instance_double(Mutant::Env, mutations: [])     }
+    let(:env_result)  { instance_double(Mutant::Result::Env)            }
+    let(:actor_env)   { instance_double(Mutant::Actor::Env)             }
 
     let(:config) do
-      double(
-        'Config',
+      instance_double(
+        Mutant::Config,
         integration: integration,
         reporter:    reporter,
-        actor_env:   actor_env,
         jobs:        1
       )
     end
 
     before do
-      allow(FakeEnv).to receive(:config).and_return(config)
-      allow(FakeEnv).to receive(:actor_env).and_return(actor_env)
+      allow(env).to receive_messages(config: config, actor_env: actor_env)
+      allow(env).to receive(:method).with(:kill).and_return(parallel_config.processor)
     end
 
     let(:parallel_config) do
@@ -39,7 +28,7 @@ RSpec.describe Mutant::Runner do
         env:       actor_env,
         source:    Mutant::Parallel::Source::Array.new(env.mutations),
         sink:      Mutant::Runner::Sink.new(env),
-        processor: env.method(:kill)
+        processor: ->(_object) { fail }
       )
     end
 
@@ -51,7 +40,7 @@ RSpec.describe Mutant::Runner do
     subject { described_class.call(env) }
 
     context 'when runner finishes immediately' do
-      let(:status) { double('Status', done: true, payload: env_result) }
+      let(:status) { instance_double(Mutant::Parallel::Status, done: true, payload: env_result) }
 
       before do
         expect(driver).to receive(:status).and_return(status)
@@ -62,8 +51,8 @@ RSpec.describe Mutant::Runner do
     end
 
     context 'when report iterations are done' do
-      let(:status_a) { double('Status A', done: false)                     }
-      let(:status_b) { double('Status B', done: true, payload: env_result) }
+      let(:status_a) { instance_double(Mutant::Parallel::Status, done: false)                     }
+      let(:status_b) { instance_double(Mutant::Parallel::Status, done: true, payload: env_result) }
 
       before do
         expect(driver).to receive(:status).and_return(status_a).ordered

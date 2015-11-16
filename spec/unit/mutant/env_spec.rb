@@ -19,23 +19,22 @@ RSpec.describe Mutant::Env do
       Mutant::Config::DEFAULT.with(isolation: isolation, integration: integration_class)
     end
 
-    let(:isolation)         { double('Isolation')                                                     }
+    let(:isolation)         { instance_double(Mutant::Isolation::Fork.singleton_class)                }
     let(:mutation)          { Mutant::Mutation::Evil.new(mutation_subject, Mutant::AST::Nodes::N_NIL) }
-    let(:wrapped_node)      { double('Wrapped Node')                                                  }
-    let(:context)           { double('Context')                                                       }
-    let(:test_a)            { double('Test A')                                                        }
-    let(:test_b)            { double('Test B')                                                        }
+    let(:wrapped_node)      { instance_double(Parser::AST::Node)                                      }
+    let(:context)           { instance_double(Mutant::Context)                                        }
+    let(:test_a)            { instance_double(Mutant::Test)                                           }
+    let(:test_b)            { instance_double(Mutant::Test)                                           }
     let(:tests)             { [test_a, test_b]                                                        }
-    let(:selector)          { double('Selector')                                                      }
+    let(:selector)          { instance_double(Mutant::Selector)                                       }
     let(:integration_class) { Mutant::Integration::Null                                               }
 
     let(:mutation_subject) do
-      double(
-        'Subject',
+      instance_double(
+        Mutant::Subject,
         identification: 'subject',
         context: context,
-        source: 'original',
-        tests:  tests
+        source: 'original'
       )
     end
 
@@ -51,7 +50,7 @@ RSpec.describe Mutant::Env do
     end
 
     context 'when isolation does not raise error' do
-      let(:test_result)  { double('Test Result A', passed: false) }
+      let(:test_result)  { instance_double(Mutant::Result::Test, passed: false) }
 
       before do
         expect(isolation).to receive(:call).and_yield.and_return(test_result)

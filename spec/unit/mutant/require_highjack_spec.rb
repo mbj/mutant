@@ -17,7 +17,7 @@ RSpec.describe Mutant::RequireHighjack do
   end
 
   describe '.call' do
-    let(:logical_name) { double('Logical Name') }
+    let(:logical_name) { instance_double(String) }
 
     def apply
       described_class.call(target_module, highjacked_calls.method(:<<))
