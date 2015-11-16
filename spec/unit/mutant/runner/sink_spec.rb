@@ -1,4 +1,4 @@
-describe Mutant::Runner::Sink::Mutation do
+describe Mutant::Runner::Sink do
   setup_shared_context
 
   shared_context 'one result' do
