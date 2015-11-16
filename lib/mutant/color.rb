@@ -11,7 +11,7 @@ module Mutant
     #
     # @api private
     def format(text)
-      "\e[#{@code}m#{text}\e[0m"
+      "\e[#{code}m#{text}\e[0m"
     end
 
     NONE = Class.new(self) do
