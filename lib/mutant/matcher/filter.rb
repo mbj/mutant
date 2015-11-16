@@ -6,7 +6,7 @@ module Mutant
 
       # Enumerate matches
       #
-      # @param [Env] env
+      # @param [Env::Bootstrap] env
       #
       # @return [Enumerable<Subject>]
       #

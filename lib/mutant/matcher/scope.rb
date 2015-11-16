@@ -18,7 +18,7 @@ module Mutant
 
       # Matched subjects
       #
-      # @param [Env] env
+      # @param [Env::Bootstrap] env
       #
       # @return [Enumerable<Subject>]
       #

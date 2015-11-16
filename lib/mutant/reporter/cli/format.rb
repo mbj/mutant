@@ -7,7 +7,7 @@ module Mutant
 
         # Start representation
         #
-        # @param [Env] env
+        # @param [Env::Bootstrap] env
         #
         # @return [String]
         #
@@ -116,7 +116,7 @@ module Mutant
 
           # Format start
           #
-          # @param [Env] env
+          # @param [Env::Bootstrap] env
           #
           # @return [String]
           #

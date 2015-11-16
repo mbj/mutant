@@ -24,7 +24,7 @@ module Mutant
 
       # Report start
       #
-      # @param [Env] env
+      # @param [Env::Bootstrap] env
       #
       # @return [self]
       #

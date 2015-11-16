@@ -42,12 +42,6 @@ module ParserHelper
     Unparser.unparse(node)
   end
 
-  def test_env
-    Fixtures::TEST_ENV.with(
-      config: Mutant::Config::DEFAULT.with(reporter: Mutant::Reporter::Trace.new)
-    )
-  end
-
   def parse(string)
     Unparser::Preprocessor.run(Parser::CurrentRuby.parse(string))
   end
