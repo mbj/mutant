@@ -13,7 +13,7 @@ RSpec.describe Mutant::Env do
       )
     end
 
-    let(:integration) { integration_class.new(config) }
+    let(:integration) { instance_double(Mutant::Integration) }
 
     let(:config) do
       Mutant::Config::DEFAULT.with(isolation: isolation, integration: integration_class)
@@ -45,18 +45,38 @@ RSpec.describe Mutant::Env do
     end
 
     before do
-      expect(selector).to receive(:call).with(mutation_subject).and_return(tests)
-      allow(Time).to receive(:now).and_return(Time.at(0))
+      expect(selector).to receive(:call)
+        .with(mutation_subject)
+        .and_return(tests)
+
+      allow(Time).to receive_messages(now: Time.at(0))
     end
 
     context 'when isolation does not raise error' do
       let(:test_result)  { instance_double(Mutant::Result::Test, passed: false) }
 
       before do
-        expect(isolation).to receive(:call).and_yield.and_return(test_result)
-        expect(mutation_subject).to receive(:prepare).and_return(mutation_subject).ordered
-        expect(context).to receive(:root).with(s(:nil)).and_return(wrapped_node).ordered
-        expect(Mutant::Loader::Eval).to receive(:call).with(wrapped_node, mutation_subject).and_return(nil).ordered
+        expect(isolation).to receive(:call)
+          .ordered
+          .and_yield
+
+        expect(mutation_subject).to receive(:prepare)
+          .ordered
+          .and_return(mutation_subject)
+
+        expect(context).to receive(:root)
+          .with(s(:nil))
+          .and_return(wrapped_node)
+
+        expect(Mutant::Loader::Eval).to receive(:call)
+          .ordered
+          .with(wrapped_node, mutation_subject)
+          .and_return(Mutant::Loader::Eval)
+
+        expect(integration).to receive(:call)
+          .ordered
+          .with(tests)
+          .and_return(test_result)
       end
 
       include_examples 'mutation kill'
@@ -64,10 +84,18 @@ RSpec.describe Mutant::Env do
 
     context 'when isolation does raise error' do
       before do
-        expect(isolation).to receive(:call).and_raise(Mutant::Isolation::Error, 'test-error')
+        expect(isolation).to receive(:call)
+          .and_raise(Mutant::Isolation::Error, 'test-error')
       end
 
-      let(:test_result) { Mutant::Result::Test.new(tests: tests, output: 'test-error', passed: false, runtime: 0.0) }
+      let(:test_result) do
+        Mutant::Result::Test.new(
+          tests:   tests,
+          output:  'test-error',
+          passed:  false,
+          runtime: 0.0
+        )
+      end
 
       include_examples 'mutation kill'
     end

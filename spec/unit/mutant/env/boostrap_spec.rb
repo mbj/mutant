@@ -41,12 +41,18 @@ RSpec.describe Mutant::Env::Bootstrap do
     it { should eql(expected_env) }
   end
 
+  def expect_warning
+    expect(config.reporter).to receive(:warn)
+      .with(expected_warning)
+      .and_return(config.reporter)
+  end
+
   before do
     expect(integration_class).to receive(:new)
       .with(config)
       .and_return(integration)
 
-    expect(integration).to receive(:setup).and_return(integration)
+    expect(integration).to receive_messages(setup: integration)
 
     expect(ObjectSpace).to receive(:each_object)
       .with(Module)
@@ -54,16 +60,12 @@ RSpec.describe Mutant::Env::Bootstrap do
   end
 
   describe '#warn' do
-    let(:object)  { described_class.new(config) }
-    let(:message) { instance_double(String)     }
+    let(:object)           { described_class.new(config) }
+    let(:expected_warning) { instance_double(String)     }
 
-    subject { object.warn(message) }
+    subject { object.warn(expected_warning) }
 
-    before do
-      expect(config.reporter).to receive(:warn)
-        .with(message)
-        .and_return(config.reporter)
-    end
+    before { expect_warning }
 
     it_behaves_like 'a command method'
   end
@@ -73,6 +75,11 @@ RSpec.describe Mutant::Env::Bootstrap do
 
     context 'when Module#name calls result in exceptions' do
       let(:object_space_modules) { [invalid_class] }
+
+      let(:expected_warning) do
+        "Class#name from: #{invalid_class} raised an error: " \
+        "RuntimeError. #{Mutant::Env::SEMANTICS_MESSAGE}"
+      end
 
       let(:invalid_class) do
         Class.new do
@@ -91,15 +98,7 @@ RSpec.describe Mutant::Env::Bootstrap do
         end
       end
 
-      before do
-        expected_warning =
-          "Class#name from: #{invalid_class} raised an error: " \
-          "RuntimeError. #{Mutant::Env::SEMANTICS_MESSAGE}"
-
-        expect(config.reporter).to receive(:warn)
-          .with(expected_warning)
-          .and_return(config.reporter)
-      end
+      before { expect_warning }
 
       include_examples 'bootstrap call'
     end
@@ -143,6 +142,11 @@ RSpec.describe Mutant::Env::Bootstrap do
         end
       end
 
+      let(:expected_warning) do
+        "Class#name from: #{invalid_class} " \
+        "returned Object. #{Mutant::Env::SEMANTICS_MESSAGE}"
+      end
+
       after do
         # Fix Class#name so other specs do not see this one
         class << invalid_class
@@ -152,12 +156,7 @@ RSpec.describe Mutant::Env::Bootstrap do
         end
       end
 
-      before do
-        expected_warning =
-          "Class#name from: #{invalid_class.inspect} returned Object. #{Mutant::Env::SEMANTICS_MESSAGE}"
-
-        expect(config.reporter).to receive(:warn).with(expected_warning).and_return(config.reporter)
-      end
+      before { expect_warning }
 
       include_examples 'bootstrap call'
     end
