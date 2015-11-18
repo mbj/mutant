@@ -1,5 +1,5 @@
 module Mutant
-  # Namespace and mixon module for results
+  # Namespace and mixin module for results
   module Result
 
     # Coverage mixin
@@ -48,7 +48,7 @@ module Mutant
     # Mutant overhead running mutatet tests
     #
     # This is NOT the overhead of mutation testing, just an engine specific
-    # measurement for the efficiency of the parellelization engine, kill
+    # measurement for the efficiency of the parallelization engine, kill
     # isolation etc.
     #
     # @return [Float]

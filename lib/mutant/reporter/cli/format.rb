@@ -144,7 +144,7 @@ module Mutant
           #
           # @api private
           def new_buffer
-            # For some reason this raises an Ernno::EACCESS errror:
+            # For some reason this raises an Errno::EACCESS error:
             #
             #  StringIO.new(Tput::INSTANCE.restore, BUFFER_FLAGS)
             #

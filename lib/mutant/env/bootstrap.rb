@@ -1,6 +1,6 @@
 module Mutant
   class Env
-    # Boostrap environment
+    # Bootstrap environment
     class Bootstrap
       include Adamantium::Flat, Concord::Public.new(:config), Procto.call(:env)
 
@@ -75,7 +75,7 @@ module Mutant
 
     private
 
-      # Scope name from scopeing object
+      # Scope name from scoping object
       #
       # @param [Class, Module] scope
       #
@@ -168,6 +168,6 @@ module Mutant
         message = format % options
         warn(SEMANTICS_MESSAGE_FORMAT % { message: message })
       end
-    end # Boostrap
+    end # Bootstrap
   end # Env
 end # Mutant

@@ -58,7 +58,7 @@ module Mutant
       status.payload
     end
 
-    # Confiugation for paralell execution engine
+    # Configuration for parallel execution engine
     #
     # @return [Parallel::Config]
     #

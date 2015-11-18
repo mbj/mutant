@@ -9,7 +9,7 @@ module Mutant
     # * Keeps its state global in RSpec.world and lots of other places
     # * There is no API to "just run a subset of examples", the examples
     #   need to be selected in-place via mutating the `RSpec.filtered_examples`
-    #   datastructure
+    #   data structure
     # * Does not maintain a unique identification for an example,
     #   aside the instances of `RSpec::Core::Example` objects itself.
     #   For that reason identifying examples by:
@@ -120,7 +120,7 @@ module Mutant
 
       # Parse metadata into expression
       #
-      # @param [RSpec::Core::Example::Medatada] metadata
+      # @param [RSpec::Core::Example::MetaData] metadata
       #
       # @return [Expression]
       #

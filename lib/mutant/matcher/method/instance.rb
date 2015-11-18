@@ -44,7 +44,7 @@ module Mutant
             node.children.fetch(NAME_INDEX).equal?(method_name)
           end
 
-          # Evaluator specialized for memoized instance mthods
+          # Evaluator specialized for memoized instance methods
           class Memoized < self
             SUBJECT_CLASS = Subject::Method::Instance::Memoized
 

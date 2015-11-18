@@ -30,7 +30,7 @@ module Mutant
       # Abstract method match evaluator
       #
       # Present to avoid passing the env argument around in case the
-      # logic would be implemnented directly on the Matcher::Method
+      # logic would be implemented directly on the Matcher::Method
       # instance
       class Evaluator
         include AbstractType,

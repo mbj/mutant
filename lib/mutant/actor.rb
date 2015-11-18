@@ -38,7 +38,7 @@ module Mutant
 
     end # Message
 
-    # Binding to othersactors sender for simple RPC
+    # Binding to other actors sender for simple RPC
     class Binding
       include Concord.new(:mailbox, :other)
 
