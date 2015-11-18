@@ -11,7 +11,7 @@ RSpec.shared_examples_for 'a method matcher' do
     expect(name).to eql(method_name)
   end
 
-  it 'has epxected line number' do
+  it 'has expected line number' do
     expect(node.location.expression.line).to eql(method_line)
   end
 
