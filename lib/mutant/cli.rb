@@ -25,7 +25,7 @@ module Mutant
       EXIT_FAILURE
     end
 
-    # Initialize objecct
+    # Initialize object
     #
     # @param [Array<String>]
     #

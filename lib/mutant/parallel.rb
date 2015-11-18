@@ -26,7 +26,7 @@ module Mutant
       end
     end # Driver
 
-    # Run async computation returing driver
+    # Run async computation returning driver
     #
     # @return [Driver]
     #

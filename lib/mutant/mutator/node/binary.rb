@@ -54,10 +54,10 @@ module Mutant
         # We do not emit right negation as the `and` and `or` nodes
         # in ruby are also used for control flow.
         #
-        # Irrespectable of their syntax, aka `||` parses internally to `or`.
+        # Irrespective of their syntax, aka `||` parses internally to `or`.
         #
         # `do_a or do_b`. Negating left makes sense, negating right
-        # only when the result is actualy used.
+        # only when the result is actually used.
         #
         # It *would* be possible to emit the right negation in case the use of the result is proved.
         # Like parent is an assignment to an {l,i}var. Dunno if we ever get the time to do that.

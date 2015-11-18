@@ -33,7 +33,7 @@ module Mutant
           end
         end
 
-        # Emit mutation with arg splat as empty array signment in method
+        # Emit mutation with arg splat as empty array assignment in method
         #
         # @return [undefined]
         #
