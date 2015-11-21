@@ -44,7 +44,7 @@ module Mutant
       tests = selector.call(mutation.subject)
 
       config.isolation.call do
-        mutation.insert
+        mutation.insert(config.kernel)
         integration.call(tests)
       end
     rescue Isolation::Error => error

@@ -4,22 +4,33 @@ RSpec.describe Mutant::Runner do
     let(:reporter)    { instance_double(Mutant::Reporter, delay: delay) }
     let(:driver)      { instance_double(Mutant::Parallel::Driver)       }
     let(:delay)       { instance_double(Float)                          }
-    let(:env)         { instance_double(Mutant::Env, mutations: [])     }
     let(:env_result)  { instance_double(Mutant::Result::Env)            }
     let(:actor_env)   { instance_double(Mutant::Actor::Env)             }
+    let(:kernel)      { instance_double(Kernel.singleton_class)         }
+    let(:sleep)       { instance_double(Method)                         }
+
+    let(:env) do
+      instance_double(
+        Mutant::Env,
+        actor_env: actor_env,
+        config:    config,
+        mutations: []
+      )
+    end
 
     let(:config) do
       instance_double(
         Mutant::Config,
         integration: integration,
         jobs:        1,
+        kernel:      kernel,
         reporter:    reporter
       )
     end
 
     before do
-      allow(env).to receive_messages(config: config, actor_env: actor_env)
       allow(env).to receive(:method).with(:kill).and_return(parallel_config.processor)
+      allow(kernel).to receive(:method).with(:sleep).and_return(sleep)
     end
 
     let(:parallel_config) do
@@ -57,7 +68,7 @@ RSpec.describe Mutant::Runner do
       before do
         expect(driver).to receive(:status).and_return(status_a).ordered
         expect(reporter).to receive(:progress).with(status_a).ordered
-        expect(Kernel).to receive(:sleep).with(reporter.delay).ordered
+        expect(sleep).to receive(:call).with(reporter.delay).ordered
 
         expect(driver).to receive(:status).and_return(status_b).ordered
         expect(reporter).to receive(:progress).with(status_b).ordered

@@ -20,17 +20,9 @@ module Mutant
 
     # Diff between two objects in repository
     class Diff
-      include Adamantium, Concord.new(:from, :to)
+      include Adamantium, Anima.new(:config, :from, :to)
 
       HEAD = 'HEAD'.freeze
-      private_constant(*constants(false))
-
-      # Create diff from head to revision
-      #
-      # @return [Diff]
-      def self.from_head(to)
-        new(HEAD, to)
-      end
 
       # Test if diff changes file at line range
       #
@@ -50,7 +42,7 @@ module Mutant
           -L #{line_range.begin},#{line_range.end}:#{path}
         ]
 
-        stdout, status = Open3.capture2(*command, binmode: true)
+        stdout, status = config.open3.capture2(*command, binmode: true)
 
         fail RepositoryError, "Command #{command} failed!" unless status.success?
 
@@ -68,7 +60,7 @@ module Mutant
       # @return [Boolean]
       def tracks?(path)
         command = %W[git ls-files --error-unmatch -- #{path}]
-        Kernel.system(
+        config.kernel.system(
           *command,
           out: File::NULL,
           err: File::NULL
@@ -81,7 +73,7 @@ module Mutant
       #
       # @return [TrueClass, nil]
       def within_working_directory?(path)
-        working_directory = Pathname.pwd
+        working_directory = config.pathname.pwd
         path.ascend { |parent| return true if working_directory.eql?(parent) }
       end
 

@@ -19,9 +19,10 @@ RSpec.describe Mutant::Mutation do
   let(:test_b) { instance_double(Mutant::Test) }
 
   describe '#insert' do
-    subject { object.insert }
+    subject { object.insert(kernel) }
 
-    let(:root_node) { s(:foo) }
+    let(:root_node) { s(:foo)                 }
+    let(:kernel)    { instance_double(Kernel) }
 
     before do
       expect(context).to receive(:root)
@@ -32,10 +33,15 @@ RSpec.describe Mutant::Mutation do
         .ordered
         .and_return(mutation_subject)
 
-      expect(Mutant::Loader::Eval).to receive(:call)
+      expect(Mutant::Loader).to receive(:call)
         .ordered
-        .with(root_node, mutation_subject)
-        .and_return(Mutant::Loader::Eval)
+        .with(
+          binding: TOPLEVEL_BINDING,
+          kernel:  kernel,
+          node:    root_node,
+          subject: mutation_subject
+        )
+        .and_return(Mutant::Loader)
     end
 
     it_should_behave_like 'a command method'

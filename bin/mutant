@@ -15,7 +15,11 @@ namespace =
       load_path:        $LOAD_PATH,
       kernel:           Kernel,
       pathname:         Pathname,
-      require_highjack: Mutant::RequireHighjack.method(:call).to_proc.curry.call(Kernel),
+      require_highjack: Mutant::RequireHighjack
+        .method(:call)
+        .to_proc
+        .curry
+        .call(Kernel),
       root_require:     'mutant',
       includes: %w[
         mutant
