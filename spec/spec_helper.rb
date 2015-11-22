@@ -33,19 +33,13 @@ $LOAD_PATH << File.join(TestApp.root, 'lib')
 require 'test_app'
 
 module Fixtures
-  TEST_CONFIG = Mutant::Config::DEFAULT.with(reporter: Mutant::Reporter::Trace.new)
+  TEST_CONFIG = Mutant::Config::DEFAULT.with(reporter: Mutant::Reporter::Null.new)
   TEST_ENV    = Mutant::Env::Bootstrap.(TEST_CONFIG)
 end # Fixtures
 
 module ParserHelper
   def generate(node)
     Unparser.unparse(node)
-  end
-
-  def test_env
-    Fixtures::TEST_ENV.with(
-      config: Mutant::Config::DEFAULT.with(reporter: Mutant::Reporter::Trace.new)
-    )
   end
 
   def parse(string)

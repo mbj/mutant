@@ -16,18 +16,6 @@ module Mutant
       "Fix your lib to follow normal ruby semantics!\n" \
       '{Module,Class}#name should return resolvable constant name as String or nil'.freeze
 
-    # Print warning message
-    #
-    # @param [String]
-    #
-    # @return [self]
-    #
-    # @api private
-    def warn(message)
-      config.reporter.warn(message)
-      self
-    end
-
     # Kill mutation
     #
     # @param [Mutation] mutation

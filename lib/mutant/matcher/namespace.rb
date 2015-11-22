@@ -6,7 +6,7 @@ module Mutant
 
       # Enumerate subjects
       #
-      # @param [Env] env
+      # @param [Env::Bootstrap] env
       #
       # @return [Enumerable<Subject>]
       #

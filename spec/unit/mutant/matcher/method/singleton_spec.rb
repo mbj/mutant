@@ -2,13 +2,19 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   subject { object.call(env) }
 
   let(:object)       { described_class.new(scope, method)                }
-  let(:env)          { test_env                                          }
   let(:method)       { scope.method(method_name)                         }
   let(:type)         { :defs                                             }
   let(:method_name)  { :foo                                              }
   let(:method_arity) { 0                                                 }
   let(:base)         { TestApp::SingletonMethodTests                     }
   let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
+
+  let(:env) do
+    instance_double(
+      Mutant::Env::Bootstrap,
+      parser: Fixtures::TEST_ENV.parser
+    )
+  end
 
   def name
     node.children.fetch(1)
