@@ -36,11 +36,11 @@ RSpec.describe Mutant::Parallel::Master do
 
   let(:config) do
     Mutant::Parallel::Config.new(
-      jobs:      1,
       env:       actor_env,
-      source:    Mutant::Parallel::Source::Array.new([job_payload_a, job_payload_b]),
+      jobs:      1,
+      processor: processor,
       sink:      sink,
-      processor: processor
+      source:    Mutant::Parallel::Source::Array.new([job_payload_a, job_payload_b])
     )
   end
 

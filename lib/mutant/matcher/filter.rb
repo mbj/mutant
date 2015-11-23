@@ -9,8 +9,6 @@ module Mutant
       # @param [Env::Bootstrap] env
       #
       # @return [Enumerable<Subject>]
-      #
-      # @api private
       def call(env)
         matcher
           .call(env)

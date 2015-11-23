@@ -9,8 +9,6 @@ module Mutant
       # Scheduler status
       #
       # @return [Object]
-      #
-      # @api private
       def status
         binding.call(__method__)
       end
@@ -18,8 +16,6 @@ module Mutant
       # Stop master gracefully
       #
       # @return [self]
-      #
-      # @api private
       def stop
         binding.call(__method__)
         self
@@ -29,8 +25,6 @@ module Mutant
     # Run async computation returning driver
     #
     # @return [Driver]
-    #
-    # @api private
     def self.async(config)
       Driver.new(config.env.new_mailbox.bind(Master.call(config)))
     end
@@ -44,43 +38,53 @@ module Mutant
       # @param [Object]
       #
       # @return [self]
-      #
-      # @api private
       abstract_method :result
 
       # Sink status
       #
       # @return [Object]
-      #
-      # @api private
       abstract_method :status
 
       # Test if processing should stop
       #
       # @return [Boolean]
-      #
-      # @api private
       abstract_method :stop?
     end # Sink
 
     # Job to push to workers
     class Job
-      include Adamantium::Flat, Anima.new(:index, :payload)
+      include Adamantium::Flat, Anima.new(
+        :index,
+        :payload
+      )
     end # Job
 
     # Job result object received from workers
     class JobResult
-      include Adamantium::Flat, Anima.new(:job, :payload)
+      include Adamantium::Flat, Anima.new(
+        :job,
+        :payload
+      )
     end # JobResult
 
     # Parallel run configuration
     class Config
-      include Adamantium::Flat, Anima.new(:env, :processor, :source, :sink, :jobs)
+      include Adamantium::Flat, Anima.new(
+        :env,
+        :jobs,
+        :processor,
+        :sink,
+        :source
+      )
     end # Config
 
     # Parallel execution status
     class Status
-      include Adamantium::Flat, Anima.new(:payload, :done, :active_jobs)
+      include Adamantium::Flat, Anima.new(
+        :active_jobs,
+        :done,
+        :payload
+      )
     end
 
   end # Parallel

@@ -12,8 +12,6 @@ module Mutant
       # @param [Subject] subject
       #
       # @return [Boolean]
-      #
-      # @api private
       def call(subject)
         diff.touches?(subject.source_path, subject.source_lines)
       end
@@ -30,8 +28,6 @@ module Mutant
       # Create diff from head to revision
       #
       # @return [Diff]
-      #
-      # @api private
       def self.from_head(to)
         new(HEAD, to)
       end
@@ -45,8 +41,6 @@ module Mutant
       #
       # @raise [RepositoryError]
       #   when git command failed
-      #
-      # @api private
       def touches?(path, line_range)
         return false unless within_working_directory?(path) && tracks?(path)
 
@@ -72,8 +66,6 @@ module Mutant
       # @param [Pathname] path
       #
       # @return [Boolean]
-      #
-      # @api private
       def tracks?(path)
         command = %W[git ls-files --error-unmatch -- #{path}]
         Kernel.system(
@@ -88,8 +80,6 @@ module Mutant
       # @param [Pathname] path
       #
       # @return [TrueClass, nil]
-      #
-      # @api private
       def within_working_directory?(path)
         working_directory = Pathname.pwd
         path.ascend { |parent| return true if working_directory.eql?(parent) }

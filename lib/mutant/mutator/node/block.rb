@@ -13,8 +13,6 @@ module Mutant
         # Emit mutants
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           emit_singletons
           emit(send)
@@ -27,8 +25,6 @@ module Mutant
         # Emit body mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def mutate_body
           emit_body(nil)
           emit_body(N_RAISE)
@@ -43,8 +39,6 @@ module Mutant
         # Mutate method send in body scope of `send`
         #
         # @return [undefined]
-        #
-        # @api private
         def mutate_body_receiver
           return unless n_send?(body)
 

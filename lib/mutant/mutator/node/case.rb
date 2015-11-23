@@ -14,8 +14,6 @@ module Mutant
         # Emit mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           emit_singletons
           emit_condition_mutations if condition
@@ -26,8 +24,6 @@ module Mutant
         # Emit when mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_when_mutations
           indices = children.each_index.drop(1).take(children.length - 2)
           one = indices.one?
@@ -40,8 +36,6 @@ module Mutant
         # Emit else mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_else_mutations
           else_branch = children.last
           else_index = children.length - 1

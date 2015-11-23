@@ -13,8 +13,6 @@ module Mutant
         # Emit mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           emit_singletons
           mutate_condition
@@ -25,8 +23,6 @@ module Mutant
         # Emit condition mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def mutate_condition
           emit_condition_mutations do |node|
             !n_self?(node)
@@ -39,8 +35,6 @@ module Mutant
         # Emit if branch mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def mutate_if_branch
           emit_type(condition, else_branch, nil) if else_branch
           return unless if_branch
@@ -52,8 +46,6 @@ module Mutant
         # Emit else branch mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def mutate_else_branch
           return unless else_branch
           emit(else_branch)

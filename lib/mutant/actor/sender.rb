@@ -10,8 +10,6 @@ module Mutant
       # @param [Object] message
       #
       # @return [self]
-      #
-      # @api private
       def call(message)
         mutex.synchronize do
           messages << message

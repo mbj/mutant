@@ -2,6 +2,7 @@ require 'morpher'
 require 'anima'
 require 'mutant'
 
+# @api private
 module MutantSpec
   ROOT = Pathname.new(__FILE__).parent.parent.parent
 
@@ -16,13 +17,13 @@ module MutantSpec
     class Project
       MUTEX = Mutex.new
       include Adamantium, Anima.new(
-        :name,
-        :repo_uri,
         :exclude,
+        :expect_coverage,
         :mutation_coverage,
         :mutation_generation,
+        :name,
         :namespace,
-        :expect_coverage
+        :repo_uri
       )
 
       # Verify mutation coverage
@@ -31,8 +32,6 @@ module MutantSpec
       #   if successful
       #
       # @raise [Exception]
-      #
-      # @api private
       def verify_mutation_coverage
         checkout
         Dir.chdir(repo_path) do
@@ -61,8 +60,6 @@ module MutantSpec
       #   otherwise
       #
       # rubocop:disable AbcSize
-      #
-      # @api private
       def verify_mutation_generation
         checkout
         start = Time.now
@@ -100,8 +97,6 @@ module MutantSpec
       # Checkout repository
       #
       # @return [self]
-      #
-      # @api private
       def checkout
         return self if noinstall?
         TMP.mkdir unless TMP.directory?
@@ -126,8 +121,6 @@ module MutantSpec
       # Install mutant
       #
       # @return [undefined]
-      #
-      # @api private
       def install_mutant
         return if noinstall?
         relative = ROOT.relative_path_from(repo_path)
@@ -147,8 +140,6 @@ module MutantSpec
       # Number of parallel processes to use
       #
       # @return [Fixnum]
-      #
-      # @api private
       def parallel_processes
         if ENV['CI']
           Mutant::Config::DEFAULT.jobs
@@ -160,8 +151,6 @@ module MutantSpec
       # Repository path
       #
       # @return [Pathname]
-      #
-      # @api private
       def repo_path
         TMP.join(name)
       end
@@ -169,8 +158,6 @@ module MutantSpec
       # Test if installation should be skipped
       #
       # @return [Boolean]
-      #
-      # @api private
       def noinstall?
         ENV.key?('NOINSTALL')
       end
@@ -205,8 +192,6 @@ module MutantSpec
       # Helper method to execute system commands
       #
       # @param [Array<String>] arguments
-      #
-      # @api private
       def system(arguments)
         return if Kernel.system(*arguments)
         if block_given?

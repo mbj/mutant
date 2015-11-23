@@ -14,8 +14,6 @@ module Mutant
         # Test if optarg definition intends to be used
         #
         # @return [Boolean]
-        #
-        # @api private
         def used?
           !name.to_s.start_with?(UNDERSCORE)
         end

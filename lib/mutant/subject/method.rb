@@ -6,8 +6,6 @@ module Mutant
       # Method name
       #
       # @return [Expression]
-      #
-      # @api private
       def name
         node.children.fetch(self.class::NAME_INDEX)
       end
@@ -15,13 +13,11 @@ module Mutant
       # Match expression
       #
       # @return [String]
-      #
-      # @api private
       def expression
         Expression::Method.new(
+          method_name:  name.to_s,
           scope_symbol: self.class::SYMBOL,
-          scope_name:   scope.name,
-          method_name:  name.to_s
+          scope_name:   scope.name
         )
       end
       memoize :expression
@@ -29,8 +25,6 @@ module Mutant
       # Match expressions
       #
       # @return [Array<Expression>]
-      #
-      # @api private
       def match_expressions
         [expression].concat(context.match_expressions)
       end
@@ -41,8 +35,6 @@ module Mutant
       # The scope
       #
       # @return [Class, Module]
-      #
-      # @api private
       def scope
         context.scope
       end

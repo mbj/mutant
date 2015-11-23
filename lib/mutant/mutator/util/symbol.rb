@@ -12,8 +12,6 @@ module Mutant
         # Emit mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           emit((input.to_s + POSTFIX).to_sym)
         end

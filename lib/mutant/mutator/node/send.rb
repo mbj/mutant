@@ -46,8 +46,6 @@ module Mutant
         # Perform dispatch
         #
         # @return [undefined]
-        #
-        # @api private
         def dispatch
           emit_singletons
           if meta.index_assignment?
@@ -60,8 +58,6 @@ module Mutant
         # Perform non index dispatch
         #
         # @return [undefined]
-        #
-        # @api private
         def non_index_dispatch
           if meta.binary_method_operator?
             run(Binary)
@@ -75,8 +71,6 @@ module Mutant
         # AST metadata for node
         #
         # @return [AST::Meta::Send]
-        #
-        # @api private
         def meta
           AST::Meta::Send.new(node)
         end
@@ -85,15 +79,11 @@ module Mutant
         # Arguments being send
         #
         # @return [Enumerable<Parser::AST::Node>]
-        #
-        # @api private
         alias_method :arguments, :remaining_children
 
         # Perform normal, non special case dispatch
         #
         # @return [undefined]
-        #
-        # @api private
         def normal_dispatch
           emit_naked_receiver
           emit_selector_replacement
@@ -107,8 +97,6 @@ module Mutant
         # Emit mutations which only correspond to one selector
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_selector_specific_mutations
           emit_const_get_mutation
           emit_integer_mutation
@@ -117,8 +105,6 @@ module Mutant
         # Emit selector mutations specific to top level constants
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_receiver_selector_mutations
           return unless meta.receiver_possible_top_level_const?
 
@@ -131,8 +117,6 @@ module Mutant
         # Emit mutation from `to_i` to `Integer(...)`
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_integer_mutation
           return unless selector.equal?(:to_i)
 
@@ -142,8 +126,6 @@ module Mutant
         # Emit mutation from `const_get` to const literal
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_const_get_mutation
           return unless selector.equal?(:const_get) && n_sym?(arguments.first)
 
@@ -153,8 +135,6 @@ module Mutant
         # Emit selector replacement
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_selector_replacement
           SELECTOR_REPLACEMENTS.fetch(selector, EMPTY_ARRAY).each(&method(:emit_selector))
         end
@@ -162,8 +142,6 @@ module Mutant
         # Emit naked receiver mutation
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_naked_receiver
           emit(receiver) if receiver && !NOT_ASSIGNABLE.include?(receiver.type)
         end
@@ -171,8 +149,6 @@ module Mutant
         # Mutate arguments
         #
         # @return [undefined]
-        #
-        # @api private
         def mutate_arguments
           emit_type(receiver, selector)
           remaining_children_with_index.each do |_node, index|
@@ -184,8 +160,6 @@ module Mutant
         # Emit argument propagation
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_argument_propagation
           node = arguments.first
           emit(node) if arguments.one? && !NOT_STANDALONE.include?(node.type)
@@ -194,8 +168,6 @@ module Mutant
         # Emit receiver mutations
         #
         # @return [undefined]
-        #
-        # @api private
         def mutate_receiver
           return unless receiver
           emit_implicit_self
@@ -207,8 +179,6 @@ module Mutant
         # Emit implicit self mutation
         #
         # @return [undefined]
-        #
-        # @api private
         def emit_implicit_self
           emit_receiver(nil) if n_self?(receiver) && !(
             KEYWORDS.include?(selector)         ||

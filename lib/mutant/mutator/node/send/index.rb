@@ -17,8 +17,6 @@ module Mutant
             # Perform dispatch
             #
             # @return [undefined]
-            #
-            # @api private
             def dispatch
               emit_naked_receiver
               emit_value_mutations
@@ -30,8 +28,6 @@ module Mutant
             # Mutate indices
             #
             # @return [undefined]
-            #
-            # @api private
             def mutate_indices
               children_indices(INDEX_RANGE).each do |index|
                 delete_child(index)
@@ -42,8 +38,6 @@ module Mutant
             # Emit index read
             #
             # @return [undefined]
-            #
-            # @api private
             def emit_index_read
               emit_type(receiver, :[], *children[INDEX_RANGE])
             end

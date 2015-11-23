@@ -14,8 +14,6 @@ module Mutant
     #
     # @return [nil]
     #   otherwise
-    #
-    # @api private
     def self.find_last_path(node, &predicate)
       fail ArgumentError, 'block expected' unless block_given?
       path = []
@@ -36,8 +34,6 @@ module Mutant
     #   all nodes visited recursively including root
     #
     # @return [undefined]
-    #
-    # @api private
     def self.walk(node, stack, &block)
       block.call(node, stack)
       node.children.grep(::Parser::AST::Node) do |child|

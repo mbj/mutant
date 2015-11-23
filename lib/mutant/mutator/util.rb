@@ -13,8 +13,6 @@ module Mutant
       #
       # @return [self]
       #   otherwise
-      #
-      # @api private
       def self.each(object, parent, &block)
         return to_enum(__method__, object, parent) unless block_given?
 
@@ -30,8 +28,6 @@ module Mutant
       # @param [Object] generated
       #
       # @return [Boolean]
-      #
-      # @api private
       def new?(generated)
         !input.eql?(generated)
       end

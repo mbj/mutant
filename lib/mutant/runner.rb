@@ -6,8 +6,6 @@ module Mutant
     # Initialize object
     #
     # @return [undefined]
-    #
-    # @api private
     def initialize(*)
       super
 
@@ -19,8 +17,6 @@ module Mutant
     # Final result
     #
     # @return [Result::Env]
-    #
-    # @api private
     attr_reader :result
 
   private
@@ -28,8 +24,6 @@ module Mutant
     # Run mutation analysis
     #
     # @return [undefined]
-    #
-    # @api private
     def run_mutation_analysis
       @result = run_driver(Parallel.async(mutation_test_config))
       reporter.report(result)
@@ -41,8 +35,6 @@ module Mutant
     #
     # @return [Object]
     #   the last returned status payload
-    #
-    # @api private
     def run_driver(driver)
       status = nil
 
@@ -61,23 +53,19 @@ module Mutant
     # Configuration for parallel execution engine
     #
     # @return [Parallel::Config]
-    #
-    # @api private
     def mutation_test_config
       Parallel::Config.new(
         env:       env.actor_env,
         jobs:      config.jobs,
-        source:    Parallel::Source::Array.new(env.mutations),
+        processor: env.method(:kill),
         sink:      Sink.new(env),
-        processor: env.method(:kill)
+        source:    Parallel::Source::Array.new(env.mutations)
       )
     end
 
     # Reporter to use
     #
     # @return [Reporter]
-    #
-    # @api private
     def reporter
       env.config.reporter
     end
@@ -85,8 +73,6 @@ module Mutant
     # Config for this mutant execution
     #
     # @return [Config]
-    #
-    # @api private
     def config
       env.config
     end

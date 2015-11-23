@@ -12,8 +12,6 @@ module Mutant
         # Test if AST node is possibly a top level constant
         #
         # @return [Boolean]
-        #
-        # @api private
         def possible_top_level?
           base.nil? || n_cbase?(base)
         end

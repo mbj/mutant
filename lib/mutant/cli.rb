@@ -16,8 +16,6 @@ module Mutant
     #
     # @return [Fixnum]
     #   the exit status
-    #
-    # @api private
     def self.run(arguments)
       Runner.call(Env::Bootstrap.call(call(arguments))).success? ? EXIT_SUCCESS : EXIT_FAILURE
     rescue Error => exception
@@ -30,8 +28,6 @@ module Mutant
     # @param [Array<String>]
     #
     # @return [undefined]
-    #
-    # @api private
     def initialize(arguments)
       @config = Config::DEFAULT
 
@@ -41,8 +37,6 @@ module Mutant
     # Config parsed from CLI
     #
     # @return [Config]
-    #
-    # @api private
     attr_reader :config
 
   private
@@ -56,8 +50,6 @@ module Mutant
     #   An error occurred while parsing the options.
     #
     # @return [undefined]
-    #
-    # @api private
     def parse(arguments)
       opts = OptionParser.new do |builder|
         builder.banner = 'usage: mutant [options] MATCH_EXPRESSION ...'
@@ -76,8 +68,6 @@ module Mutant
     # @param [Array<String>] expressions
     #
     # @return [undefined]
-    #
-    # @api private
     def parse_match_expressions(expressions)
       fail Error, 'No expressions given' if expressions.empty?
 
@@ -93,8 +83,6 @@ module Mutant
     # @return [undefined]
     #
     # rubocop:disable MethodLength
-    #
-    # @api private
     def add_environment_options(opts)
       opts.separator('Environment:')
       opts.on('--zombie', 'Run mutant zombified') do
@@ -116,8 +104,6 @@ module Mutant
     # @param [String] name
     #
     # @return [undefined]
-    #
-    # @api private
     def setup_integration(name)
       with(integration: Integration.setup(name))
     rescue LoadError
@@ -129,8 +115,6 @@ module Mutant
     # @param [OptionParser] opts
     #
     # @return [undefined]
-    #
-    # @api private
     def add_mutation_options(opts)
       opts.separator(nil)
       opts.separator('Options:')
@@ -149,8 +133,6 @@ module Mutant
     # @param [OptionParser] opts
     #
     # @return [undefined]
-    #
-    # @api private
     def add_filter_options(opts)
       opts.on('--ignore-subject EXPRESSION', 'Ignore subjects that match EXPRESSION as prefix') do |pattern|
         add_matcher(:ignore_expressions, config.expression_parser.(pattern))
@@ -165,8 +147,6 @@ module Mutant
     # @param [OptionParser] opts
     #
     # @return [undefined]
-    #
-    # @api private
     def add_debug_options(opts)
       opts.on('--fail-fast', 'Fail fast') do
         with(fail_fast: true)
@@ -189,8 +169,6 @@ module Mutant
     # @param [Hash<Symbol, Object>] attributes
     #
     # @return [undefined]
-    #
-    # @api private
     def with(attributes)
       @config = config.with(attributes)
     end
@@ -204,8 +182,6 @@ module Mutant
     #   the value to add
     #
     # @return [undefined]
-    #
-    # @api private
     def add(attribute, value)
       with(attribute => config.public_send(attribute) + [value])
     end
@@ -219,8 +195,6 @@ module Mutant
     #   the value to add
     #
     # @return [undefined]
-    #
-    # @api private
     def add_matcher(attribute, value)
       with(matcher: config.matcher.add(attribute, value))
     end

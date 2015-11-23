@@ -13,8 +13,6 @@ module Mutant
       # One off the very few valid uses of eval
       #
       # rubocop:disable Lint/Eval
-      #
-      # @api private
       def call
         eval(
           source,
@@ -30,8 +28,6 @@ module Mutant
       # Source generated from AST
       #
       # @return [String]
-      #
-      # @api private
       def source
         Unparser.unparse(root)
       end

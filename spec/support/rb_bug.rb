@@ -1,5 +1,6 @@
 require 'ffi'
 
+# @api private
 module RbBug
   extend FFI::Library
   ffi_lib 'ruby'
@@ -8,8 +9,6 @@ module RbBug
   # Call the test bug
   #
   # @return [undefined]
-  #
-  # @api private
   def self.call
     rb_bug('%s', :string, 'test bug')
   end

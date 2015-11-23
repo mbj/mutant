@@ -10,8 +10,6 @@ module Mutant
         # Prepare subject for mutation insertion
         #
         # @return [self]
-        #
-        # @api private
         def prepare
           scope.__send__(:undef_method, name)
           self
@@ -24,8 +22,6 @@ module Mutant
           # Prepare subject for mutation insertion
           #
           # @return [self]
-          #
-          # @api private
           def prepare
             scope.__send__(:memoized_methods).instance_variable_get(:@memory).delete(name)
             super
@@ -39,8 +35,6 @@ module Mutant
           # @param [Parser::AST::Node] mutant
           #
           # @return [Parser::AST::Node]
-          #
-          # @api private
           def wrap_node(mutant)
             s(:begin, mutant, s(:send, nil, :memoize, s(:args, s(:sym, name))))
           end
