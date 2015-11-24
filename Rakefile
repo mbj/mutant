@@ -6,18 +6,21 @@ Rake.application.load_imports
 
 task('metrics:mutant').clear
 namespace :metrics do
-  task :mutant => :coverage do
-    success = Kernel.system(*%w[
+  task mutant: :coverage do
+    arguments = %w[
       bundle exec mutant
-      --zombie
-      --use rspec
-      --include lib
-      --require mutant
-      --since HEAD~1
       --ignore-subject Mutant::Meta*
-      --
-      Mutant*
-    ]) or fail 'Mutant task is not successful'
+      --include lib
+      --since HEAD~1
+      --require mutant
+      --use rspec
+      --zombie
+    ]
+    arguments.concat(%W[--jobs 4]) if ENV.key?('CIRCLE_CI')
+
+    arguments.concat(%w[-- Mutant*])
+
+    success = Kernel.system(*arguments) or fail 'Mutant task is not successful'
   end
 end
 

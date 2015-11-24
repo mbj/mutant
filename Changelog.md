@@ -1,6 +1,7 @@
 # v0.8.8 2015-xx-xx
 
 * Drop support for rspec-3.2
+* Remove CI specific job number default
 
 # v0.8.8 2015-11-15
 

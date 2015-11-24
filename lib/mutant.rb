@@ -188,8 +188,6 @@ require 'mutant/zombifier'
 module Mutant
   # Reopen class to initialize constant to avoid dep circle
   class Config
-    CI_DEFAULT_PROCESSOR_COUNT = 4
-
     DEFAULT = new(
       debug:             false,
       expected_coverage: Rational(1),
@@ -203,7 +201,7 @@ module Mutant
       includes:          EMPTY_ARRAY,
       integration:       Integration::Null,
       isolation:         Mutant::Isolation::Fork,
-      jobs:              Mutant.ci? ? CI_DEFAULT_PROCESSOR_COUNT : ::Parallel.processor_count,
+      jobs:              ::Parallel.processor_count,
       matcher:           Matcher::Config::DEFAULT,
       requires:          EMPTY_ARRAY,
       reporter:          Reporter::CLI.build($stdout),
