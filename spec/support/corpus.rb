@@ -10,10 +10,18 @@ module MutantSpec
   #
   # rubocop:disable MethodLength
   module Corpus
+    TMP                 = ROOT.join('tmp').freeze
+    EXCLUDE_GLOB_FORMAT = '{%s}'.freeze
+    RUBY_GLOB_PATTERN   = '**/*.rb'.freeze
+
+    # Not in the docs. Number from chatting with their support.
+    # 2 processors allocated per container, 4 processes works well.
+    CIRCLE_CI_CONTAINER_PROCESSES = 4
+
+    private_constant(*constants(false))
+
     # Project under corpus test
     # rubocop:disable ClassLength
-    TMP = ROOT.join('tmp').freeze
-
     class Project
       MUTEX = Mutex.new
       include Adamantium, Anima.new(
@@ -58,18 +66,16 @@ module MutantSpec
       #
       # @raise [Exception]
       #   otherwise
-      #
-      # rubocop:disable AbcSize
       def verify_mutation_generation
         checkout
         start = Time.now
-        paths = Pathname.glob(repo_path.join('**/*.rb')).sort_by(&:size).reverse
+
         options = {
           finish:       method(:finish),
           start:        method(:start),
           in_processes: parallel_processes
         }
-        total = Parallel.map(paths, options) do |path|
+        total = Parallel.map(effective_ruby_paths, options) do |path|
           count = 0
           node =
             begin
@@ -134,15 +140,31 @@ module MutantSpec
         system(%w[bundle])
       end
 
-      # Not in the docs. Number from chatting with their support.
-      CIRCLE_CI_CONTAINER_PROCESSES = 2
+      # The effective ruby file paths
+      #
+      # @return [Array<Pathname>]
+      def effective_ruby_paths
+        paths = Pathname
+          .glob(repo_path.join(RUBY_GLOB_PATTERN))
+          .sort_by(&:size)
+          .reverse
+
+        paths - excluded_paths
+      end
+
+      # The excluded file paths
+      #
+      # @return [Array<Pathname>]
+      def excluded_paths
+        Pathname.glob(repo_path.join(EXCLUDE_GLOB_FORMAT % exclude.join(',')))
+      end
 
       # Number of parallel processes to use
       #
       # @return [Fixnum]
       def parallel_processes
-        if ENV['CI']
-          Mutant::Config::DEFAULT.jobs
+        if ENV.key?('CI')
+          CIRCLE_CI_CONTAINER_PROCESSES
         else
           Parallel.processor_count
         end
