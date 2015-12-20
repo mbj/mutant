@@ -91,6 +91,8 @@ module Mutant
         # Test if output can be colored
         #
         # @return [Boolean]
+        #
+        # @api private
         alias_method :color?, :tty?
       end # Printer
     end # CLI
