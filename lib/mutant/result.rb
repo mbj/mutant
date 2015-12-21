@@ -136,14 +136,7 @@ module Mutant
         alive_mutation_results.empty?
       end
 
-      # Test if runner should continue on subject
-      #
-      # @return [Boolean]
-      def continue?
-        mutation_results.all?(&:success?)
-      end
-
-      # Killed mutations
+      # Alive mutations
       #
       # @return [Array<Result::Mutation>]
       def alive_mutation_results
@@ -179,7 +172,9 @@ module Mutant
         alive_mutation_results.length
       end
 
-      # Alive mutations
+    private
+
+      # Killed mutation results
       #
       # @return [Array<Result::Mutation>]
       def killed_mutation_results
