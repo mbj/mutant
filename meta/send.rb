@@ -359,6 +359,15 @@ Mutant::Meta::Example.add do
   mutation 'foo(nil)'
 end
 
+Mutant::Meta::Example.add do
+  source 'self.fetch(nil)'
+
+  singleton_mutations
+  mutation 'self.fetch'
+  mutation 'fetch(nil)'
+  mutation 'self.key?(nil)'
+end
+
 Unparser::Constants::KEYWORDS.each do |keyword|
   Mutant::Meta::Example.add do
     source "foo.#{keyword}(nil)"
