@@ -1,3 +1,7 @@
+# Master (unreleased)
+
+* Add mutation from `Hash#[]` to `Hash#key?` (#511)
+
 # v0.8.8 2015-xx-xx
 
 * Drop support for rspec-3.2

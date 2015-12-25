@@ -405,6 +405,7 @@ Mutant::Meta::Example.add do
   mutation 'foo[]'
   mutation 'foo.at(1)'
   mutation 'foo.fetch(1)'
+  mutation 'foo.key?(1)'
   mutation 'self[1]'
   mutation 'foo[0]'
   mutation 'foo[2]'
@@ -420,6 +421,7 @@ Mutant::Meta::Example.add do
   mutation 'self.foo'
   mutation 'self.foo.at()'
   mutation 'self.foo.fetch()'
+  mutation 'self.foo.key?()'
   mutation 'self[]'
   mutation 'foo[]'
 end
@@ -433,6 +435,7 @@ Mutant::Meta::Example.add do
   mutation 'self[]'
   mutation 'self.at(foo)'
   mutation 'self.fetch(foo)'
+  mutation 'self.key?(foo)'
   mutation 'foo'
 end
 
@@ -444,6 +447,7 @@ Mutant::Meta::Example.add do
   mutation 'foo[]'
   mutation 'foo.at(*bar)'
   mutation 'foo.fetch(*bar)'
+  mutation 'foo.key?(*bar)'
   mutation 'foo[nil]'
   mutation 'foo[self]'
   mutation 'foo[bar]'
