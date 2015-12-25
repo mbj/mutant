@@ -224,6 +224,22 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
+  source 'foo.values_at(a, b)'
+
+  singleton_mutations
+  mutation 'foo.fetch_values(a, b)'
+  mutation 'foo'
+  mutation 'self.values_at(a, b)'
+  mutation 'foo.values_at(a)'
+  mutation 'foo.values_at(b)'
+  mutation 'foo.values_at(nil, b)'
+  mutation 'foo.values_at(self, b)'
+  mutation 'foo.values_at(a, nil)'
+  mutation 'foo.values_at(a, self)'
+  mutation 'foo.values_at'
+end
+
+Mutant::Meta::Example.add do
   source 'foo.__send__(bar)'
 
   singleton_mutations
