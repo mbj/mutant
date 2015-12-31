@@ -1,18 +1,17 @@
 ---
 - name: rubyspec
   namespace: Rubyspec
-  repo_uri: 'https://github.com/rubyspec/rubyspec.git'
+  repo_uri: 'https://github.com/ruby/rubyspec.git'
   mutation_coverage: false
   mutation_generation: true
   expect_coverage: 0 # not run
   exclude:
     # Binary encoded source subjected to limitations see README of unparser
     - core/array/pack/{b,h,u}_spec.rb
-    - language/versions/*1.8*
+    - language/regexp/escapes_spec.rb
     - core/array/pack/shared/float.rb
     - core/array/pack/shared/integer.rb
     - core/array/pack/{c,m,w}_spec.rb
-    - core/regexp/shared/new.rb
     - core/regexp/shared/quote.rb
     - core/encoding/compatible_spec.rb
     - core/io/readpartial_spec.rb

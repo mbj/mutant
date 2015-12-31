@@ -17,7 +17,7 @@ module Mutant
           # @return [undefined]
           def dispatch
             mutate_name
-            emit_value_mutations
+            emit_value_mutations if value
             emit_remove_const
           end
 

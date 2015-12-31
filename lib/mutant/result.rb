@@ -203,6 +203,11 @@ module Mutant
         test_result.runtime
       end
 
+      # The time spent on killing
+      #
+      # @return [Float]
+      #
+      # @api private
       alias_method :killtime, :runtime
 
       # Test if mutation was handled successfully
