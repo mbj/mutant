@@ -26,7 +26,7 @@ module Mutant
           to_i:          %i[to_int],
           to_a:          %i[to_ary],
           to_h:          %i[to_hash],
-          at:            %i[fetch],
+          at:            %i[fetch key?],
           fetch:         %i[key?],
           :[] =>         %i[at fetch key?],
           :== =>         %i[eql? equal?],

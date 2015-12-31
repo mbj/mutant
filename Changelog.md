@@ -2,6 +2,7 @@
 
 * Add mutation from `Hash#[]` to `Hash#key?` (#511)
 * Add mutation from `Hash#fetch` to `Hash#key?` (#511)
+* Add mutation from `#at` to `#key?` (#511)
 
 # v0.8.8 2015-xx-xx
 
