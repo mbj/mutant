@@ -37,12 +37,13 @@ module Mutant
     #   the last returned status payload
     def run_driver(driver)
       status = nil
+      sleep  = env.config.kernel.method(:sleep)
 
       loop do
         status = driver.status
         reporter.progress(status)
         break if status.done
-        Kernel.sleep(reporter.delay)
+        sleep.call(reporter.delay)
       end
 
       driver.stop

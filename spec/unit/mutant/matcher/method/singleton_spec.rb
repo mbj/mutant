@@ -12,6 +12,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   let(:env) do
     instance_double(
       Mutant::Env::Bootstrap,
+      config: Mutant::Config::DEFAULT,
       parser: Fixtures::TEST_ENV.parser
     )
   end

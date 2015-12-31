@@ -69,8 +69,8 @@ require 'mutant/parallel/worker'
 require 'mutant/parallel/source'
 require 'mutant/warning_filter'
 require 'mutant/require_highjack'
-require 'mutant/mutator'
 require 'mutant/mutation'
+require 'mutant/mutator'
 require 'mutant/mutator/registry'
 require 'mutant/mutator/util'
 require 'mutant/mutator/util/array'
@@ -202,7 +202,11 @@ module Mutant
       integration:       Integration::Null,
       isolation:         Mutant::Isolation::Fork,
       jobs:              ::Parallel.processor_count,
+      kernel:            Kernel,
+      load_path:         $LOAD_PATH,
       matcher:           Matcher::Config::DEFAULT,
+      open3:             Open3,
+      pathname:          Pathname,
       requires:          EMPTY_ARRAY,
       reporter:          Reporter::CLI.build($stdout),
       zombie:            false

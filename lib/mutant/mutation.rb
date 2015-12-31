@@ -49,10 +49,17 @@ module Mutant
 
     # Insert mutated node
     #
+    # @param kernel [Kernel]
+    #
     # @return [self]
-    def insert
+    def insert(kernel)
       subject.prepare
-      Loader::Eval.call(root, subject)
+      Loader.call(
+        binding: TOPLEVEL_BINDING,
+        kernel:  kernel,
+        node:    root,
+        subject: subject
+      )
       self
     end
 

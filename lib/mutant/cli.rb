@@ -1,26 +1,24 @@
 module Mutant
 
   # Commandline parser
+  #
+  # rubocop:disable ClassLength
   class CLI
     include Adamantium::Flat, Equalizer.new(:config), Procto.call(:config)
 
     # Error failed when CLI argv is invalid
     Error = Class.new(RuntimeError)
 
-    EXIT_FAILURE = 1
-    EXIT_SUCCESS = 0
-
     # Run cli with arguments
     #
     # @param [Array<String>] arguments
     #
-    # @return [Fixnum]
-    #   the exit status
+    # @return [Boolean]
     def self.run(arguments)
-      Runner.call(Env::Bootstrap.call(call(arguments))).success? ? EXIT_SUCCESS : EXIT_FAILURE
+      Runner.call(Env::Bootstrap.call(call(arguments))).success?
     rescue Error => exception
       $stderr.puts(exception.message)
-      EXIT_FAILURE
+      false
     end
 
     # Initialize object
@@ -53,7 +51,7 @@ module Mutant
     def parse(arguments)
       opts = OptionParser.new do |builder|
         builder.banner = 'usage: mutant [options] MATCH_EXPRESSION ...'
-        %w[add_environment_options add_mutation_options add_filter_options add_debug_options].each do |name|
+        %i[add_environment_options add_mutation_options add_filter_options add_debug_options].each do |name|
           __send__(name, builder)
         end
       end
@@ -138,7 +136,16 @@ module Mutant
         add_matcher(:ignore_expressions, config.expression_parser.(pattern))
       end
       opts.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
-        add_matcher(:subject_filters, Repository::SubjectFilter.new(Repository::Diff.from_head(revision)))
+        add_matcher(
+          :subject_filters,
+          Repository::SubjectFilter.new(
+            Repository::Diff.new(
+              config: config,
+              from:   Repository::Diff::HEAD,
+              to:     revision
+            )
+          )
+        )
       end
     end
 
@@ -153,14 +160,14 @@ module Mutant
       end
       opts.on('--version', 'Print mutants version') do
         puts("mutant-#{VERSION}")
-        Kernel.exit(EXIT_SUCCESS)
+        config.kernel.exit
       end
       opts.on('-d', '--debug', 'Enable debugging output') do
         with(debug: true)
       end
       opts.on_tail('-h', '--help', 'Show this message') do
         puts(opts.to_s)
-        Kernel.exit(EXIT_SUCCESS)
+        config.kernel.exit
       end
     end
 

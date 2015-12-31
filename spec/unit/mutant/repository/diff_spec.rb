@@ -1,22 +1,34 @@
 describe Mutant::Repository::Diff do
-  describe '.from_head' do
-    subject { described_class.from_head(to_revision) }
-
-    let(:to_revision) { instance_double(String) }
-
-    it { should eql(described_class.new('HEAD', to_revision)) }
-  end
-
   describe '#touches?' do
-    let(:object)     { described_class.new('from_rev', 'to_rev') }
-    let(:path)       { Pathname.pwd.join('foo.rb')               }
-    let(:line_range) { 1..2                                      }
+    let(:object) do
+      described_class.new(
+        config: config,
+        from:   'from_rev',
+        to:     'to_rev'
+      )
+    end
+
+    let(:config) do
+      instance_double(
+        Mutant::Config,
+        kernel:   kernel,
+        open3:    open3,
+        pathname: pathname
+      )
+    end
+
+    let(:pathname)   { instance_double(Pathname.singleton_class, pwd: pwd) }
+    let(:open3)      { instance_double(Open3.singleton_class)              }
+    let(:kernel)     { instance_double(Kernel.singleton_class)             }
+    let(:pwd)        { Pathname.new('/foo')                                }
+    let(:path)       { Pathname.new('/foo/bar.rb')                         }
+    let(:line_range) { 1..2                                                }
 
     subject { object.touches?(path, line_range) }
 
     shared_context 'test if git tracks the file' do
       before do
-        expect(Kernel).to receive(:system)
+        expect(config.kernel).to receive(:system)
           .ordered
           .with(
             *%W[git ls-files --error-unmatch -- #{path}],
@@ -27,10 +39,10 @@ describe Mutant::Repository::Diff do
     end
 
     context 'when file is in a different subdirectory' do
-      let(:path) { Pathname.new('/foo.rb') }
+      let(:path) { Pathname.new('/baz/bar.rb') }
 
       before do
-        expect(Kernel).to_not receive(:system)
+        expect(config.kernel).to_not receive(:system)
       end
 
       it { should be(false) }
@@ -53,7 +65,7 @@ describe Mutant::Repository::Diff do
       include_context 'test if git tracks the file'
 
       before do
-        expect(Open3).to receive(:capture2)
+        expect(config.open3).to receive(:capture2)
           .ordered
           .with(*expected_git_log_command, binmode: true)
           .and_return([stdout, status])

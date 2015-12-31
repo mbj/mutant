@@ -33,7 +33,7 @@ RSpec.describe Mutant::CLI do
       let(:report_success) { true }
 
       it 'exits failure' do
-        expect(subject).to be(0)
+        expect(subject).to be(true)
       end
     end
 
@@ -41,7 +41,7 @@ RSpec.describe Mutant::CLI do
       let(:report_success) { false }
 
       it 'exits failure' do
-        expect(subject).to be(1)
+        expect(subject).to be(false)
       end
     end
 
@@ -55,7 +55,7 @@ RSpec.describe Mutant::CLI do
 
       it 'exits failure' do
         expect($stderr).to receive(:puts).with('test-error')
-        expect(subject).to be(1)
+        expect(subject).to be(false)
       end
     end
   end
@@ -110,7 +110,7 @@ RSpec.describe Mutant::CLI do
 
       before do
         expect($stdout).to receive(:puts).with(expected_message)
-        expect(Kernel).to receive(:exit).with(0)
+        expect(Kernel).to receive(:exit)
       end
 
       it_should_behave_like 'a cli parser'
@@ -172,7 +172,7 @@ Options:
       let(:flags) { %w[--version] }
 
       before do
-        expect(Kernel).to receive(:exit).with(0)
+        expect(Kernel).to receive(:exit)
         expect($stdout).to receive(:puts).with("mutant-#{Mutant::VERSION}")
       end
 
@@ -237,7 +237,13 @@ Options:
       let(:expected_matcher_config) do
         default_matcher_config.with(
           subject_filters: [
-            Mutant::Repository::SubjectFilter.new(Mutant::Repository::Diff.new('HEAD', 'master'))
+            Mutant::Repository::SubjectFilter.new(
+              Mutant::Repository::Diff.new(
+                config: Mutant::Config::DEFAULT,
+                from:   'HEAD',
+                to:     'master'
+              )
+            )
           ]
         )
       end

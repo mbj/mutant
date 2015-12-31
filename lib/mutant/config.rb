@@ -13,7 +13,11 @@ module Mutant
       :includes,
       :isolation,
       :jobs,
+      :kernel,
+      :load_path,
       :matcher,
+      :open3,
+      :pathname,
       :requires,
       :reporter,
       :zombie
