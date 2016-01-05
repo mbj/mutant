@@ -5,13 +5,10 @@
 * Add mutation from `#at` to `#key?` (#511)
 * Add mutation from `Hash#values_at` to `Hash#fetch_values` (#510)
 
-# v0.8.8 2015-xx-xx
+# v0.8.8 2015-11-15
 
 * Drop support for rspec-3.2
 * Remove CI specific job number default
-
-# v0.8.8 2015-11-15
-
 * Add support for rspec-3.3.4
 * Add mutations/s performance metric to report
 
