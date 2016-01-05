@@ -1,4 +1,4 @@
-# Master (unreleased)
+# v0.8.9 2016-01-05
 
 * Add mutation from `Hash#[]` to `Hash#key?` (#511)
 * Add mutation from `Hash#fetch` to `Hash#key?` (#511)
