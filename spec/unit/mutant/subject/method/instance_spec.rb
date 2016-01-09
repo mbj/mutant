@@ -2,7 +2,7 @@ RSpec.describe Mutant::Subject::Method::Instance do
   let(:object)  { described_class.new(context, node) }
 
   let(:context) do
-    Mutant::Context::Scope.new(
+    Mutant::Context.new(
       scope,
       instance_double(Pathname)
     )
@@ -48,7 +48,7 @@ RSpec.describe Mutant::Subject::Method::Instance do
   describe '#prepare' do
 
     let(:context) do
-      Mutant::Context::Scope.new(scope, instance_double(Pathname))
+      Mutant::Context.new(scope, instance_double(Pathname))
     end
 
     subject { object.prepare }
@@ -78,7 +78,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   describe '#prepare' do
 
     let(:context) do
-      Mutant::Context::Scope.new(scope, double('Source Path'))
+      Mutant::Context.new(scope, double('Source Path'))
     end
 
     let(:scope) do
