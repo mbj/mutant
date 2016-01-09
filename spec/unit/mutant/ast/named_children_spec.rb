@@ -42,8 +42,18 @@ RSpec.describe Mutant::AST::NamedChildren do
       end
 
       describe '#bar' do
-        it 'returns named child bar' do
-          expect(instance.bar).to be(node_bar)
+        context 'when node is present' do
+          it 'returns named child bar' do
+            expect(instance.bar).to be(node_bar)
+          end
+        end
+
+        context 'when node is NOT present' do
+          let(:node) { s(:node, node_foo) }
+
+          it 'returns nil' do
+            expect(instance.bar).to be(nil)
+          end
         end
       end
     end
