@@ -24,6 +24,7 @@ module Mutant
       LOCATION_DELIMITER   = ':'.freeze
       EXIT_SUCCESS         = 0
       CLI_OPTIONS          = IceNine.deep_freeze(%w[spec --fail-fast])
+      TEST_ID_FORMAT       = 'rspec:%<index>d:%<location>s/%<description>s'.freeze
 
       private_constant(*constants(false))
 
@@ -96,13 +97,17 @@ module Mutant
       #
       # @return [Test]
       def parse_example(example, index)
-        metadata         = example.metadata
-        location         = metadata.fetch(:location)
-        full_description = metadata.fetch(:full_description)
+        metadata = example.metadata
+
+        id = TEST_ID_FORMAT % {
+          index:       index,
+          location:    metadata.fetch(:location),
+          description: metadata.fetch(:full_description)
+        }
 
         Test.new(
           expression: parse_expression(metadata),
-          id:         "rspec:#{index}:#{location}/#{full_description}"
+          id:         id
         )
       end
 
