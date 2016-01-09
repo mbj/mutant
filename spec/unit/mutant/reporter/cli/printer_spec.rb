@@ -16,7 +16,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
   let(:tty?)       { true                                                     }
   let(:success?)   { true                                                     }
 
-  context '.call' do
+  describe '.call' do
     let(:class_under_test) do
       Class.new(described_class) do
         def run
@@ -30,7 +30,28 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
     it_reports "foo\n"
   end
 
-  context '#status' do
+  describe '.delegate' do
+    let(:reportable) { double(foo: :bar, baz: :boz) }
+
+    let(:class_under_test) do
+      Class.new(described_class) do
+        delegate :foo, :baz
+
+        def run
+          puts(foo)
+          puts(baz)
+        end
+      end
+    end
+
+    it_reports "bar\nboz\n"
+
+    it 'sets delegation methods to private visibility' do
+      expect(class_under_test.private_instance_methods).to include(:foo, :baz)
+    end
+  end
+
+  describe '#status' do
     let(:class_under_test) do
       Class.new(described_class) do
         def run
@@ -65,7 +86,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
     end
   end
 
-  context '#visit_collection' do
+  describe '#visit_collection' do
     let(:class_under_test) do
       reporter = nested_reporter
       Class.new(described_class) do
@@ -86,7 +107,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
     it_reports "foo\nbar\n"
   end
 
-  context '#visit' do
+  describe '#visit' do
     let(:class_under_test) do
       reporter = nested_reporter
       Class.new(described_class) do
@@ -107,7 +128,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
     it_reports "foo\n"
   end
 
-  context '#info' do
+  describe '#info' do
     let(:class_under_test) do
       Class.new(described_class) do
         def run
@@ -119,7 +140,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
     it_reports "foo - bar\n"
   end
 
-  context '#colorize' do
+  describe '#colorize' do
     let(:class_under_test) do
       Class.new(described_class) do
         def run
