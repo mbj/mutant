@@ -151,6 +151,12 @@ Options:
       context 'when integration exists' do
         let(:flags) { %w[--use rspec] }
 
+        before do
+          expect(Kernel).to receive(:require)
+            .with('mutant/integration/rspec')
+            .and_call_original
+        end
+
         it_should_behave_like 'a cli parser'
 
         let(:expected_integration) { Mutant::Integration::Rspec }

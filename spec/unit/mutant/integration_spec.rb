@@ -10,6 +10,20 @@ RSpec.describe Mutant::Integration do
     subject { object.setup }
     it_should_behave_like 'a command method'
   end
+
+  describe '.setup' do
+    subject { described_class.setup(kernel, name) }
+
+    let(:name)   { 'null'               }
+    let(:kernel) { class_double(Kernel) }
+
+    before do
+      expect(kernel).to receive(:require)
+        .with('mutant/integration/null')
+    end
+
+    it { should be(Mutant::Integration::Null) }
+  end
 end
 
 RSpec.describe Mutant::Integration::Null do

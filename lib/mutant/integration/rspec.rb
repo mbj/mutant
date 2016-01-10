@@ -28,8 +28,6 @@ module Mutant
 
       private_constant(*constants(false))
 
-      register 'rspec'
-
       # Initialize rspec integration
       #
       # @return [undefined]
