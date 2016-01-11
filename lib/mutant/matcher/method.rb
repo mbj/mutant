@@ -69,9 +69,9 @@ module Mutant
 
         # Target context
         #
-        # @return [Context::Scope]
+        # @return [Context]
         def context
-          Context::Scope.new(scope, source_path)
+          Context.new(scope, source_path)
         end
 
         # Root source node
