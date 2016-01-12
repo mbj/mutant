@@ -34,6 +34,15 @@ RSpec.describe Mutant::Diff do
 
       it_should_behave_like 'an idempotent method'
     end
+
+    context 'when there is no diff' do
+      let(:old) { '' }
+      let(:new) { '' }
+
+      it { should be(nil) }
+
+      it_should_behave_like 'an idempotent method'
+    end
   end
 
   describe '#diff' do

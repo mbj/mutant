@@ -17,9 +17,7 @@ module Mutant
     def diff
       return if diffs.empty?
 
-      minimized_hunks.map do |hunk|
-        hunk.diff(:unified) << NEWLINE
-      end.join
+      minimized_hunk.diff(:unified) << NEWLINE
     end
     memoize :diff
 
@@ -74,19 +72,15 @@ module Mutant
       end
     end
 
-    # Minimized hunks
+    # Minimized hunk
     #
-    # @return [Array<Diff::LCS::Hunk>]
-    def minimized_hunks
+    # @return Diff::LCS::Hunk
+    def minimized_hunk
       head, *tail = hunks
 
-      tail.each_with_object([head]) do |right, aggregate|
-        left = aggregate.last
-        if right.overlaps?(left)
-          right.merge(left)
-          aggregate.pop
-        end
-        aggregate << right
+      tail.reduce(head) do |left, right|
+        right.merge(left)
+        right
       end
     end
 
