@@ -17,12 +17,12 @@ describe Mutant::Repository::Diff do
       )
     end
 
-    let(:pathname)   { instance_double(Pathname.singleton_class, pwd: pwd) }
-    let(:open3)      { instance_double(Open3.singleton_class)              }
-    let(:kernel)     { instance_double(Kernel.singleton_class)             }
-    let(:pwd)        { Pathname.new('/foo')                                }
-    let(:path)       { Pathname.new('/foo/bar.rb')                         }
-    let(:line_range) { 1..2                                                }
+    let(:pathname)   { class_double(Pathname, pwd: pwd) }
+    let(:open3)      { class_double(Open3)              }
+    let(:kernel)     { class_double(Kernel)             }
+    let(:pwd)        { Pathname.new('/foo')             }
+    let(:path)       { Pathname.new('/foo/bar.rb')      }
+    let(:line_range) { 1..2                             }
 
     subject { object.touches?(path, line_range) }
 

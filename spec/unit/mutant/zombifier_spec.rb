@@ -1,9 +1,6 @@
 RSpec.describe Mutant::Zombifier do
   let(:root_require) { Pathname.new('project') }
-
-  let(:pathname) do
-    instance_double(::Pathname.singleton_class)
-  end
+  let(:pathname)     { class_double(Pathname)  }
 
   let(:require_highjack) do
     lambda do |block|

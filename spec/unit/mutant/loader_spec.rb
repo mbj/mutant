@@ -11,7 +11,7 @@ RSpec.describe Mutant::Loader, '.call' do
   let(:path)     { instance_double(Pathname, to_s: path_str) }
   let(:path_str) { instance_double(String)                   }
   let(:line)     { instance_double(Fixnum)                   }
-  let(:kernel)   { instance_double(Kernel.singleton_class)   }
+  let(:kernel)   { class_double(Kernel)                      }
   let(:binding)  { instance_double(Binding)                  }
   let(:source)   { instance_double(String)                   }
   let(:node)     { instance_double(Parser::AST::Node)        }
