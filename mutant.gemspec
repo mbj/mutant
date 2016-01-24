@@ -25,7 +25,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('ast',           '~> 2.1')
   gem.add_runtime_dependency('diff-lcs',      '~> 1.2')
   gem.add_runtime_dependency('parallel',      '~> 1.3')
-  gem.add_runtime_dependency('morpher',       '~> 0.2.5')
+  gem.add_runtime_dependency('morpher',       '~> 0.2.6')
   gem.add_runtime_dependency('procto',        '~> 0.0.2')
   gem.add_runtime_dependency('abstract_type', '~> 0.0.7')
   gem.add_runtime_dependency('unparser',      '~> 0.2.4')
@@ -36,7 +36,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('anima',         '~> 0.3.0')
   gem.add_runtime_dependency('concord',       '~> 0.1.5')
 
-  gem.add_development_dependency('devtools', '~> 0.1.1')
+  gem.add_development_dependency('devtools', '~> 0.1.3')
   gem.add_development_dependency('bundler',  '~> 1.10')
   gem.add_development_dependency('ffi',      '~> 1.9.6')
 end
