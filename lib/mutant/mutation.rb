@@ -40,7 +40,7 @@ module Mutant
 
     # Test if mutation is killed by test reports
     #
-    # @param [Array<Report::Test>] test_reports
+    # @param [Result::Test] test_result
     #
     # @return [Boolean]
     def self.success?(test_result)
