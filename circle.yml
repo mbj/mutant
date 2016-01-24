@@ -1,7 +1,7 @@
 ---
 machine:
   ruby:
-    version: '2.2'
+    version: '2.3.0'
 dependencies:
   pre:
     - bundle -v | grep -Fx "Bundler version 1.10.6" || gem install bundler --version 1.10.6
