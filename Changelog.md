@@ -1,3 +1,7 @@
+# v0.8.10 2016-01-24
+
+* Add support for parser 2.3 (via unparser 0.2.5)
+
 # v0.8.9 2016-01-05
 
 * Add mutation from `Hash#[]` to `Hash#key?` (#511)
