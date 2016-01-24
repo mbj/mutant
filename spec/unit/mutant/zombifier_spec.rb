@@ -5,7 +5,10 @@ RSpec.describe Mutant::Zombifier do
   let(:require_highjack) do
     lambda do |block|
       original = ruby_vm.method(:require)
-      allow(ruby_vm).to receive(:require, &block)
+      allow(ruby_vm).to receive(:require) do |argument|
+        return_value = ruby_vm.expected_events.first.return_value
+        expect(block.call(argument)).to be(return_value)
+      end
       original
     end
   end
@@ -28,7 +31,8 @@ RSpec.describe Mutant::Zombifier do
         MutantSpec::RubyVM::EventExpectation::Require.new(
           expected_payload: {
             logical_name: 'project'
-          }
+          },
+          return_value: true
         ),
         MutantSpec::RubyVM::EventExpectation::Eval.new(
           expected_payload: {
@@ -36,18 +40,21 @@ RSpec.describe Mutant::Zombifier do
             source:          "module Zombie\n  module Project\n  end\nend",
             source_location: 'a/project.rb'
           },
-          trigger_requires: %w[foo bar]
+          trigger_requires: %w[foo bar],
+          return_value: nil
         ),
         MutantSpec::RubyVM::EventExpectation::Require.new(
           expected_payload: {
             logical_name: 'foo'
           },
-          trigger_requires: %w[bar]
+          trigger_requires: %w[bar],
+          return_value: true
         ),
         MutantSpec::RubyVM::EventExpectation::Require.new(
           expected_payload: {
             logical_name: 'bar'
-          }
+          },
+          return_value: true
         ),
         MutantSpec::RubyVM::EventExpectation::Eval.new(
           expected_payload: {
@@ -55,21 +62,17 @@ RSpec.describe Mutant::Zombifier do
             source:          "module Zombie\n  module Bar\n  end\nend",
             source_location: 'b/bar.rb'
           },
-          trigger_requires: %w[]
+          trigger_requires: %w[],
+          return_value: nil
         ),
         MutantSpec::RubyVM::EventExpectation::Require.new(
           expected_payload: {
             logical_name: 'bar'
-          }
+          },
+          return_value: false
         )
       ]
     )
-  end
-
-  let(:require_effects) do
-    {
-      'project' => { requires: [] }
-    }
   end
 
   let(:file_entries) do
@@ -100,7 +103,7 @@ RSpec.describe Mutant::Zombifier do
       expect(apply).to be(described_class)
     end
 
-    it 'consumes walks the VM through expected steps' do
+    it 'walks the VM through expected steps' do
       expect { apply }.to change(ruby_vm, :done?).from(false).to(true)
     end
 
