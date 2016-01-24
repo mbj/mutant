@@ -6,7 +6,7 @@ RSpec.describe Mutant::Runner do
     let(:delay)       { instance_double(Float)                          }
     let(:env_result)  { instance_double(Mutant::Result::Env)            }
     let(:actor_env)   { instance_double(Mutant::Actor::Env)             }
-    let(:kernel)      { instance_double(Kernel.singleton_class)         }
+    let(:kernel)      { class_double(Kernel)                            }
     let(:sleep)       { instance_double(Method)                         }
 
     let(:env) do
