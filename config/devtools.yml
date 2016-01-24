@@ -1,2 +1,2 @@
 ---
-unit_test_timeout: 10
+unit_test_timeout: 10.0

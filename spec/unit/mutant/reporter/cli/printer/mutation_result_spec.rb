@@ -50,11 +50,11 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
             Original unparsed source:
             super
             Original AST:
-            (lvar :super)
+            s(:lvar, :super)
             Mutated unparsed source:
             super
             Mutated AST:
-            (zsuper)
+            s(:zsuper)
             -----------------------
           REPORT
         end
@@ -73,7 +73,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           Original code was inserted unmutated. And the test did NOT PASS.
           Your tests do not pass initially or you found a bug in mutant / unparser.
           Subject AST:
-          (true)
+          s(:true)
           Unparsed Source:
           true
           Test Result:
