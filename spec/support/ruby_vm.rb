@@ -3,7 +3,7 @@ module MutantSpec
   # require semantics Zombifier relies on in a way we can avoid having to
   # mock around everywhere to test every detail.
   class RubyVM
-    include Concord.new(:expected_events)
+    include Concord::Public.new(:expected_events)
 
     # An event being observed by the VM handlers
     class EventObservation
@@ -14,7 +14,8 @@ module MutantSpec
     class EventExpectation
       include AbstractType, Anima.new(
         :expected_payload,
-        :trigger_requires
+        :trigger_requires,
+        :return_value
       )
 
       DEFAULTS = IceNine.deep_freeze(trigger_requires: [])
@@ -29,11 +30,11 @@ module MutantSpec
         end
 
         trigger_requires.each(&vm.method(:require))
+
+        self
       end
 
     private
-
-      abstract_method :advance_vm
 
       def match?(observation)
         observation.type.eql?(self.class) && observation.payload.eql?(expected_payload)
@@ -51,7 +52,6 @@ module MutantSpec
     # A fake implementation of Kernel#require
     def require(logical_name)
       handle_event(EventObservation.new(EventExpectation::Require, logical_name: logical_name))
-      self
     end
 
     # A fake implementation of Kernel#eval
@@ -64,7 +64,6 @@ module MutantSpec
           source_location: location
         )
       )
-      self
     end
 
     # Test if VM events where fully processed
@@ -77,7 +76,7 @@ module MutantSpec
     def handle_event(observation)
       fail "Unexpected event: #{observation.type} / #{observation.payload}" if expected_events.empty?
 
-      expected_events.slice!(0).handle(self, observation)
+      expected_events.slice!(0).handle(self, observation).return_value
     end
   end
 end # MutantSpec
