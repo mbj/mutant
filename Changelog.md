@@ -1,3 +1,7 @@
+# v0.8.11 2016-01-xx
+
+* Add support for mutating csend (duck tape operator) into regular sends
+
 # v0.8.10 2016-01-24
 
 * Add support for parser 2.3 (via unparser 0.2.5)
