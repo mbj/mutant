@@ -20,6 +20,7 @@ module Mutant
           map:           %i[each],
           send:          %i[public_send __send__],
           __send__:      %i[public_send],
+          method:        %i[public_method],
           gsub:          %i[sub],
           eql?:          %i[equal?],
           to_s:          %i[to_str],
