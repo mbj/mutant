@@ -252,6 +252,41 @@ Mutant::Meta::Example.add do
 end
 
 Mutant::Meta::Example.add do
+  source 'foo.dig(a, b)'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'self.dig(a, b)'
+  mutation 'foo.dig(a)'
+  mutation 'foo.dig(b)'
+  mutation 'foo.dig(nil, b)'
+  mutation 'foo.dig(self, b)'
+  mutation 'foo.dig(a, nil)'
+  mutation 'foo.dig(a, self)'
+  mutation 'foo.dig'
+end
+
+Mutant::Meta::Example.add do
+  source 'foo.dig(a)'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'self.dig(a)'
+  mutation 'foo.dig(nil)'
+  mutation 'foo.dig(self)'
+  mutation 'foo.dig'
+  mutation 'a'
+end
+
+Mutant::Meta::Example.add do
+  source 'foo.dig'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'self.dig'
+end
+
+Mutant::Meta::Example.add do
   source 'foo.__send__(bar)'
 
   singleton_mutations
