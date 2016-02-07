@@ -255,6 +255,7 @@ Mutant::Meta::Example.add do
   source 'foo.dig(a, b)'
 
   singleton_mutations
+  mutation 'foo.fetch(a).dig(b)'
   mutation 'foo'
   mutation 'self.dig(a, b)'
   mutation 'foo.dig(a)'
@@ -270,6 +271,7 @@ Mutant::Meta::Example.add do
   source 'foo.dig(a)'
 
   singleton_mutations
+  mutation 'foo.fetch(a)'
   mutation 'foo'
   mutation 'self.dig(a)'
   mutation 'foo.dig(nil)'

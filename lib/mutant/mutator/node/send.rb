@@ -103,6 +103,7 @@ module Mutant
         def emit_selector_specific_mutations
           emit_const_get_mutation
           emit_integer_mutation
+          emit_dig_mutation
         end
 
         # Emit selector mutations specific to top level constants
@@ -115,6 +116,24 @@ module Mutant
             .fetch(receiver.children.last, EMPTY_HASH)
             .fetch(selector, EMPTY_ARRAY)
             .each(&method(:emit_selector))
+        end
+
+        # Emit mutation for `#dig`
+        #
+        # - Mutates `foo.dig(a, b)` to `foo.fetch(a).dig(b)`
+        # - Mutates `foo.dig(a)` to `foo.fetch(a)`
+        #
+        # @return [undefined]
+        def emit_dig_mutation
+          return if !selector.equal?(:dig) || arguments.none?
+
+          head, *tail = arguments
+
+          fetch_mutation = s(:send, receiver, :fetch, head)
+
+          return emit(fetch_mutation) if tail.empty?
+
+          emit(s(:send, fetch_mutation, :dig, *tail))
         end
 
         # Emit mutation from `to_i` to `Integer(...)`
