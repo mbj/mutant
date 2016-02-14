@@ -47,7 +47,11 @@ module Mutant
             end
 
             writer.close
-            Marshal.load(reader.read)
+            data = reader.read
+            if data.nil? || data.empty?
+              raise Error.new('Mutation returned no data!')
+            end
+            Marshal.load(data)
           ensure
             Process.waitpid(pid) if pid
           end
