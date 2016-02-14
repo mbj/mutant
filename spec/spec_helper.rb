@@ -8,6 +8,7 @@ if ENV['COVERAGE'] == 'true'
     add_filter 'spec'
     add_filter 'vendor'
     add_filter 'test_app'
+    add_filter 'lib/mutant.rb' # simplecov bug not seeing default block is executed
     add_filter 'lib/mutant/meta/*'
     add_filter 'lib/mutant/zombifier'
     add_filter 'lib/mutant/zombifier/*'

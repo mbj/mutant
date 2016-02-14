@@ -13,15 +13,15 @@ RSpec.describe Mutant::Env do
       )
     end
 
-    let(:integration)       { instance_double(Mutant::Integration)  }
-    let(:wrapped_node)      { instance_double(Parser::AST::Node)    }
-    let(:context)           { instance_double(Mutant::Context)      }
-    let(:test_a)            { instance_double(Mutant::Test)         }
-    let(:test_b)            { instance_double(Mutant::Test)         }
-    let(:tests)             { [test_a, test_b]                      }
-    let(:selector)          { instance_double(Mutant::Selector)     }
-    let(:integration_class) { Mutant::Integration::Null             }
-    let(:isolation)         { class_double(Mutant::Isolation::Fork) }
+    let(:integration)       { instance_double(Mutant::Integration)     }
+    let(:wrapped_node)      { instance_double(Parser::AST::Node)       }
+    let(:context)           { instance_double(Mutant::Context)         }
+    let(:test_a)            { instance_double(Mutant::Test)            }
+    let(:test_b)            { instance_double(Mutant::Test)            }
+    let(:tests)             { [test_a, test_b]                         }
+    let(:selector)          { instance_double(Mutant::Selector)        }
+    let(:integration_class) { Mutant::Integration::Null                }
+    let(:isolation)         { instance_double(Mutant::Isolation::Fork) }
 
     let(:mutation) do
       instance_double(

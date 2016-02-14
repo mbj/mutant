@@ -62,6 +62,8 @@ require 'mutant/actor/mailbox'
 require 'mutant/actor/env'
 require 'mutant/parser'
 require 'mutant/isolation'
+require 'mutant/isolation/none'
+require 'mutant/isolation/fork'
 require 'mutant/parallel'
 require 'mutant/parallel/master'
 require 'mutant/parallel/worker'
@@ -200,7 +202,14 @@ module Mutant
       fail_fast:         false,
       includes:          EMPTY_ARRAY,
       integration:       Integration::Null,
-      isolation:         Mutant::Isolation::Fork,
+      isolation:         Mutant::Isolation::Fork.new(
+        devnull: ->(&block) { File.open(File::NULL, File::WRONLY, &block) },
+        stdout:  $stdout,
+        stderr:  $stderr,
+        io:      IO,
+        marshal: Marshal,
+        process: Process
+      ),
       jobs:              ::Parallel.processor_count,
       kernel:            Kernel,
       load_path:         $LOAD_PATH,
