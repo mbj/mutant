@@ -65,8 +65,15 @@ module Mutant
         Result::Test.new(
           output:   @output.read,
           passed:   passed,
-          runtime:  Time.now - start,
+          runtime:  calculate_run_time(start),
           tests:    tests
+        )
+      rescue => exception
+        Result::Test.new(
+            tests:    tests,
+            output:   exception.to_s,
+            runtime:  calculate_run_time(start),
+            passed:   false
         )
       end
 
@@ -142,6 +149,21 @@ module Mutant
       def filter_examples(&predicate)
         @world.filtered_examples.each_value do |examples|
           examples.keep_if(&predicate)
+        end
+      end
+
+      # Calculate the run time of a test
+      #
+      # @param [#Time] start_time
+      #
+      # @return [Time]
+      #
+      # @api private
+      def calculate_run_time(start_time)
+        if start_time
+          Time.now - start_time
+        else
+          Time.at(0)
         end
       end
 
