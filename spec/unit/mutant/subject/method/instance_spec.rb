@@ -103,7 +103,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     it_should_behave_like 'a command method'
   end
 
-  describe '#mutations' do
+  describe '#mutations', mutant_expression: 'Mutant::Subject#mutations' do
     subject { object.mutations }
 
     let(:expected) do

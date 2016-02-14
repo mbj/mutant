@@ -9,11 +9,11 @@ module Mutant
     # @return [Enumerable<Mutation>]
     # @return [undefined]
     def mutations
-      mutations = [neutral_mutation]
-      Mutator.each(node) do |mutant|
-        mutations << Mutation::Evil.new(self, wrap_node(mutant))
-      end
-      mutations
+      [neutral_mutation].concat(
+        Mutator.each(node).map do |mutant|
+          Mutation::Evil.new(self, wrap_node(mutant))
+        end
+      )
     end
     memoize :mutations
 
