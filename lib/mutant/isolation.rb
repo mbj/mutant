@@ -47,11 +47,18 @@ module Mutant
             end
 
             writer.close
-            Marshal.load(reader.read)
+            result = Marshal.load(reader.read)
+            if result.is_a?(Mutant::Result::Test)
+              result
+            else
+              raise Error, result.to_s
+            end
           ensure
             Process.waitpid(pid) if pid
           end
         end
+      rescue Error => exception
+        raise exception
       rescue => exception
         raise Error, exception
       end
