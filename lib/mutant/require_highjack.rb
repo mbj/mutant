@@ -10,10 +10,14 @@ module Mutant
     # @return [#call]
     #   the original implementation on singleton
     def self.call(target, callback)
-      target.method(:require).tap do
+      target.public_method(:require).tap do
         target.module_eval do
+          undef_method(:require)
           define_method(:require, &callback)
-          public :require
+          class << self
+            undef_method(:require)
+          end
+          define_singleton_method(:require, &callback)
         end
       end
     end
