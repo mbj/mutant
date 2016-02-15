@@ -48,22 +48,6 @@ mutant --include lib --require virtus --use rspec Virtus::Attribute.build
 mutant --include lib --require virtus --use rspec Virtus::Attribute#type
 ```
 
-Configuration
--------------
-
-Occasionally mutant will produce a mutation with an infinite runtime. When this happens
-mutant will look like it is running indefinitely without killing a remaining mutation. To
-avoid mutations like this, consider adding a timeout around your tests. For example, in
-RSpec you can add the following to your `spec_helper`:
-
-```ruby
-config.around(:each) do |example|
-  Timeout.timeout(5_000, &example)
-end
-```
-
-which will fail specs which run for longer than 5 seconds.
-
 Rails
 -------
 
@@ -121,8 +105,8 @@ Mutant cannot emit mutations for...
     end
     ```
 
-Mutation-Operators:
--------------------
+Mutation-Operators
+------------------
 
 Mutant supports a wide range of mutation operators. An exhaustive list can be found in the [mutant-meta](https://github.com/mbj/mutant/tree/master/meta).
 The `mutant-meta` is arranged to the AST-Node-Types of parser. Refer to parsers [AST documentation](https://github.com/whitequark/parser/blob/master/doc/AST_FORMAT.md) in doubt.
@@ -219,35 +203,67 @@ Mutation output is grouped by selection groups. Each group contains three sectio
     end
    -----------------------
    ```
+   
+Concurrency
+-----------
 
-Presentations
--------------
+By default, mutant will test mutations in parallel by running up to one process for each core on your system. You can control the number of processes created using the `--jobs` argument.
+ 
+Mutant forks a new process for each mutation to be tested to prevent side affects in your specs, and the lack of thread safety in rspec, from impacting the results.
 
-There are some presentations about mutant in the wild:
+If the code under test relies on a database, you may experience problems when running mutant because of conflicting data in the database. For example, if you have a test like this:
+```
+m = MyModel.create!(...)
+expect(MyModel.first.name).to eql(m.name)
+```
+It might fail if some other test wrote a record to the MyModel table at the same time as this test was executed. (It would find the MyModel record created by the other test.) Most of these issues can be fixed by writing more specific tests. Here is a concurrent safe version of the same test:
+```
+m = MyModel.create!(...)
+expect(MyModel.find_by_id(m.id).name).to eql(m.name)
+```
+You may also try wrapping your test runs in transactions.
 
-* [RailsConf 2014](http://railsconf.com/) / http://confreaks.com/videos/3333-railsconf-mutation-testing-with-mutant
-* [Wrocloverb 2014](http://wrocloverb.com/) / https://www.youtube.com/watch?v=rz-lFKEioLk
-* [eurucamp 2013](http://2013.eurucamp.org/) / FrOSCon-2013 http://slid.es/markusschirp/mutation-testing
-* [Cologne.rb](http://www.colognerb.de/topics/mutation-testing-mit-mutant) / https://github.com/DonSchado/colognerb-on-mutant/blob/master/mutation_testing_slides.pdf
+Note that some databases, SQLite in particular, are not designed for concurrent access and will fail if used in this manner. If you are using SQLite, you should set the `--jobs` to 1.
 
-Blog posts
-----------
+Neutral (noop) Tests
+--------------------
 
-Sorted by recency:
+Mutant will also test the original, unmutated, verison your code. This ensures that mutant is able to properly setup and run your tests.
+If an error occurs while mutant/rspec is running testing the original code, you will receive an error like the following:
+```
+--- Neutral failure ---
+Original code was inserted unmutated. And the test did NOT PASS.
+Your tests do not pass initially or you found a bug in mutant / unparser.
+...
+Test Output:
+marshal data too short
+```
+Currently, troublehshooting these errors requires using a debugger and/or modyifying mutant to print out the error. You will want to rescue and inspect exceptions raised in this method: lib/mutant/integration/rspec.rb:call
 
-* [How to write better code using mutation testing (November 2015)][blockscore]
-* [How good are your Ruby tests? Testing your tests with mutant (June 2015)][arkency1]
-* [Mutation testing and continuous integration (May 2015)][arkency2]
-* [Why I want to introduce mutation testing to the `rails_event_store` gem (April 2015)][arkency3]
-* [Mutation testing with mutant (April 2014)][sitepoint]
-* [Mutation testing with mutant (January 2013)][solnic]
+Only Mutating Changed Code
+--------------------------
 
-[blockscore]: https://blog.blockscore.com/how-to-write-better-code-using-mutation-testing/
-[sitepoint]: http://www.sitepoint.com/mutation-testing-mutant/
-[arkency1]: http://blog.arkency.com/2015/06/how-good-are-your-ruby-tests-testing-your-tests-with-mutant/
-[arkency2]: http://blog.arkency.com/2015/05/mutation-testing-and-continuous-integration/
-[arkency3]: http://blog.arkency.com/2015/04/why-i-want-to-introduce-mutation-testing-to-the-rails-event-store-gem/  
-[solnic]: http://solnic.eu/2013/01/23/mutation-testing-with-mutant.html
+Running mutant for the first time on a existing codebase can be a rather disheartining experience due to the large number of alive mutations found! Mutant has a setting that can help. Using the `--since` argument, mutant will only mutate code that has been modified. This allows you to introduce mutant into an existing code base without drowning in errors. Example usage that will mutate all code changed between master and the current branch:
+```
+mutant --include lib --require virtus --since master --use rspec Virtus::Attribute#type
+```
+
+Known Problems
+==============
+
+Mutations with Inifinite Runtimes
+---------------------------------
+
+Occasionally mutant will produce a mutation with an infinite runtime. When this happens
+mutant will look like it is running indefinitely without killing a remaining mutation. To
+avoid mutations like this, consider adding a timeout around your tests. For example, in
+RSpec you can add the following to your `spec_helper`:
+```ruby
+config.around(:each) do |example|
+  Timeout.timeout(5_000, &example)
+end
+```
+which will fail specs which run for longer than 5 seconds.
 
 The Crash / Stuck Problem (MRI)
 -------------------------------
@@ -277,6 +293,17 @@ References:
 * [Upstream bug redmine](https://bugs.ruby-lang.org/issues/10460)
 * [Upstream bug github](https://github.com/ruby/ruby/pull/822)
 
+Presentations
+-------------
+
+There are some presentations about mutant in the wild:
+
+* [RailsConf 2014](http://railsconf.com/) / http://confreaks.com/videos/3333-railsconf-mutation-testing-with-mutant
+* [Wrocloverb 2014](http://wrocloverb.com/) / https://www.youtube.com/watch?v=rz-lFKEioLk
+* [eurucamp 2013](http://2013.eurucamp.org/) / FrOSCon-2013 http://slid.es/markusschirp/mutation-testing
+* [Cologne.rb](http://www.colognerb.de/topics/mutation-testing-mit-mutant) / https://github.com/DonSchado/colognerb-on-mutant/blob/master/mutation_testing_slides.pdf
+
+
 Planning a presentation?
 ------------------------
 
@@ -295,6 +322,25 @@ significantly. One of mutants biggest weaknesses is the bad documentation, but i
 assumptions based on the absence of docs, use the tool authors brain to fill the gaps.
 
 Hint, same applies to papers.
+
+Blog posts
+----------
+
+Sorted by recency:
+
+* [How to write better code using mutation testing (November 2015)][blockscore]
+* [How good are your Ruby tests? Testing your tests with mutant (June 2015)][arkency1]
+* [Mutation testing and continuous integration (May 2015)][arkency2]
+* [Why I want to introduce mutation testing to the `rails_event_store` gem (April 2015)][arkency3]
+* [Mutation testing with mutant (April 2014)][sitepoint]
+* [Mutation testing with mutant (January 2013)][solnic]
+
+[blockscore]: https://blog.blockscore.com/how-to-write-better-code-using-mutation-testing/
+[sitepoint]: http://www.sitepoint.com/mutation-testing-mutant/
+[arkency1]: http://blog.arkency.com/2015/06/how-good-are-your-ruby-tests-testing-your-tests-with-mutant/
+[arkency2]: http://blog.arkency.com/2015/05/mutation-testing-and-continuous-integration/
+[arkency3]: http://blog.arkency.com/2015/04/why-i-want-to-introduce-mutation-testing-to-the-rails-event-store-gem/  
+[solnic]: http://solnic.eu/2013/01/23/mutation-testing-with-mutant.html
 
 Support
 -------
