@@ -62,48 +62,49 @@ Limitations
 
 Mutant cannot emit mutations for...
 
-* methods defined within a closure.  For example, methods defined using `module_eval`, `class_eval`,
-  `define_method`, or `define_singleton_method`:
+* methods defined within a closure in 3rd party code. For example, methods defined using `module_eval`, `class_eval`, `define_method`, or `define_singleton_method`:
 
-    ```ruby
-    class Example
-      class_eval do
-        def example1
-        end
-      end
+  ```ruby
+  class Example
+    include MonkeyPatchyDSL # cannot mutate included code
 
-      module_eval do
-        def example2
-        end
-      end
-
-      define_method(:example3) do
-      end
-
-      define_singleton_method(:example4) do
+    class_eval do
+      def example1 # ok
       end
     end
-    ```
+
+    module_eval do
+      def example2 # ok
+      end
+    end
+
+    define_method(:example3) do # ok
+    end
+
+    define_singleton_method(:example4) do # ok
+    end
+  end
+  ```
 
 * singleton methods not defined on a constant or `self`
 
-    ```ruby
-    class Foo
-      def self.bar; end   # ok
-      def Foo.baz; end    # ok
+  ```ruby
+  class Foo
+    def self.bar; end   # ok
+    def Foo.baz; end    # ok
 
-      myself = self
-      def myself.qux; end # cannot mutate
-    end
-    ```
+    myself = self
+    def myself.qux; end # cannot mutate
+  end
+  ```
 
 * methods defined with eval:
 
-    ```ruby
-    class Foo
-      class_eval('def bar; end') # cannot mutate
-    end
-    ```
+  ```ruby
+  class Foo
+    class_eval('def bar; end') # cannot mutate
+  end
+  ```
 
 Mutation-Operators
 ------------------
@@ -203,12 +204,12 @@ Mutation output is grouped by selection groups. Each group contains three sectio
     end
    -----------------------
    ```
-   
+
 Concurrency
 -----------
 
 By default, mutant will test mutations in parallel by running up to one process for each core on your system. You can control the number of processes created using the `--jobs` argument.
- 
+
 Mutant forks a new process for each mutation to be tested to prevent side affects in your specs, and the lack of thread safety in rspec, from impacting the results.
 
 If the code under test relies on a database, you may experience problems when running mutant because of conflicting data in the database. For example, if you have a test like this:
