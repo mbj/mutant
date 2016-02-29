@@ -3,6 +3,7 @@ module Mutant
   module Meta
     require 'mutant/meta/example'
     require 'mutant/meta/example/dsl'
+    require 'mutant/meta/example/verification'
 
     # Mutation example
     class Example
@@ -15,15 +16,20 @@ module Mutant
       # @return [undefined]
       def self.add(&block)
         file = caller.first.split(':in', 2).first
-        ALL << DSL.run(file, block)
+        ALL << DSL.call(file, block)
       end
 
-      Pathname.glob(Pathname.new(__FILE__).parent.parent.parent.join('meta', '**/*.rb'))
+      Pathname.glob(Pathname.new(__dir__).parent.parent.join('meta', '*.rb'))
         .sort
         .each(&method(:require))
+
       ALL.freeze
 
-    end # Example
+      # Remove mutation method only present for DSL executions from meta/**/*.rb
+      class << self
+        undef_method :add
+      end
 
+    end # Example
   end # Meta
 end # Mutant

@@ -9,7 +9,6 @@ if ENV['COVERAGE'] == 'true'
     add_filter 'vendor'
     add_filter 'test_app'
     add_filter 'lib/mutant.rb' # simplecov bug not seeing default block is executed
-    add_filter 'lib/mutant/meta/*'
     add_filter 'lib/mutant/zombifier'
     add_filter 'lib/mutant/zombifier/*'
     # Trace points shadow each other under 2.0 (fixed in 2.1)
