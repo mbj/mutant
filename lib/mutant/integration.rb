@@ -4,37 +4,22 @@ module Mutant
   class Integration
     include AbstractType, Adamantium::Flat, Concord.new(:config)
 
-    REGISTRY = {}
-
     # Setup integration
     #
-    # @param [String] name
+    # Integrations are supposed to define a constant under
+    # Mutant::Integration named after the capitalized +name+
+    # parameter.
     #
-    # @return [Integration]
-    def self.setup(name)
-      require "mutant/integration/#{name}"
-      lookup(name)
+    # This avoids having to maintain a mutable registry.
+    #
+    # @param kernel [Kernel]
+    # @param name [String]
+    #
+    # @return [Class<Integration>]
+    def self.setup(kernel, name)
+      kernel.require("mutant/integration/#{name}")
+      const_get(name.capitalize)
     end
-
-    # Lookup integration for name
-    #
-    # @param [String] name
-    #
-    # @return [Integration]
-    #   if found
-    def self.lookup(name)
-      REGISTRY.fetch(name)
-    end
-
-    # Register integration
-    #
-    # @param [String] name
-    #
-    # @return [undefined]
-    def self.register(name)
-      REGISTRY[name] = self
-    end
-    private_class_method :register
 
     # Perform integration setup
     #
@@ -67,8 +52,6 @@ module Mutant
     # Null integration that never kills a mutation
     class Null < self
 
-      register('null')
-
       # Available tests for integration
       #
       # @return [Enumerable<Test>]
@@ -91,6 +74,5 @@ module Mutant
       end
 
     end # Null
-
   end # Integration
 end # Mutant

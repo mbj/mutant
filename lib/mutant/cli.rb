@@ -103,7 +103,7 @@ module Mutant
     #
     # @return [undefined]
     def setup_integration(name)
-      with(integration: Integration.setup(name))
+      with(integration: Integration.setup(config.kernel, name))
     rescue LoadError
       raise Error, "Could not load integration #{name.inspect} (you may want to try installing the gem mutant-#{name})"
     end
