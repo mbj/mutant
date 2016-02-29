@@ -71,7 +71,7 @@ RSpec.describe Mutant::Subject do
     subject { object.mutations }
 
     before do
-      expect(Mutant::Mutator).to receive(:each).with(node).and_yield(mutation_a).and_yield(mutation_b)
+      expect(Mutant::Mutator).to receive(:each).with(node).and_return([mutation_a, mutation_b])
     end
 
     let(:mutation_a) { double('Mutation A') }
