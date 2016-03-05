@@ -74,7 +74,7 @@ RSpec.describe Mutant::Parallel::Master do
   describe 'object initialization' do
     let(:object) { described_class.send(:new, config, actor_env.mailbox(:master)) }
 
-    it 'initializes falsy ivars'do
+    it 'initializes falsy ivars' do
       expect(object.instance_variable_get(:@stop)).to be(false)
     end
   end

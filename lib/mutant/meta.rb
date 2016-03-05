@@ -7,6 +7,7 @@ module Mutant
     # Mutation example
     class Example
 
+      # rubocop:disable MutableConstant
       ALL = []
 
       # Add example

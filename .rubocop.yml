@@ -8,3 +8,4 @@ AllCops:
     - 'test_app/**/*'
     - 'benchmarks/**/*'
     - 'bin/mutant'
+  TargetRubyVersion: 2.2
