@@ -140,3 +140,23 @@ ExtraSpacing:
 # Buggy
 FormatParameterMismatch:
   Enabled: false
+
+# Different preference
+SignalException:
+  EnforcedStyle: semantic
+
+# Different preference
+Alias:
+  Enabled: false
+
+# Teaching people to ignore singleton class is pointless
+RedundantFreeze:
+  Enabled: false
+
+# Do not waste my horizontal or vertical space
+IndentArray:
+  Enabled: false
+
+# My style is not supported
+MultilineMethodCallIndentation:
+  Enabled: false

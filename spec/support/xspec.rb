@@ -13,6 +13,17 @@ module XSpec
       end.last
     end
 
+    # Parse events into reaction
+    #
+    # @param [Array{Symbol,Object}, Hash{Symbol,Object}]
+    #
+    # @return [MessageReaction]
+    def self.parse(events)
+      event_list = events.to_a
+      assert_valid(event_list)
+      new(event_list)
+    end
+
   private
 
     def return(_, value)
@@ -45,17 +56,6 @@ module XSpec
     end
 
     alias_method :yields_return, :yields
-
-    # Parse events into reaction
-    #
-    # @param [Array{Symbol,Object}, Hash{Symbol,Object}]
-    #
-    # @return [MessageReaction]
-    def self.parse(events)
-      event_list = events.to_a
-      assert_valid(event_list)
-      new(event_list)
-    end
 
     def self.assert_valid(event_list)
       assert_not_empty(event_list)

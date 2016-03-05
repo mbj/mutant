@@ -54,6 +54,8 @@ module Mutant
       # @param [Fixnum] index
       #
       # @return [undefined]
+      #
+      # rubocop:disable RedundantBlockCall - its not redundant here
       def mutate_child(index, mutator = Mutator, &block)
         block ||= TAUTOLOGY
         child = children.at(index)
