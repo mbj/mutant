@@ -24,7 +24,7 @@ module Mutant
         # @return [undefined]
         def mutate_captures
           return unless captures
-          Util::Array::Element.each(captures.children, self) do |matchers|
+          Util::Array::Element.call(captures.children).each do |matchers|
             next if matchers.any?(&method(:n_nil?))
             emit_captures(s(:array, *matchers))
           end

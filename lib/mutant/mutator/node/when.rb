@@ -47,7 +47,7 @@ module Mutant
         # @return [nil]
         #   otherwise
         def body
-          children[body_index]
+          children.fetch(body_index)
         end
 
         # Index of body node

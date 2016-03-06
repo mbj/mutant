@@ -29,7 +29,7 @@ module Mutant
           def dispatch
             emit_singletons
             mutate_name
-            emit_value_mutations if value # mlhs!
+            emit_value_mutations if value # op asgn!
           end
 
           # Emit name mutations
@@ -38,7 +38,7 @@ module Mutant
           def mutate_name
             prefix, regexp = MAP.fetch(node.type)
             stripped = name.to_s.sub(regexp, EMPTY_STRING)
-            Mutator::Util::Symbol.each(stripped, self) do |name|
+            Util::Symbol.call(stripped).each do |name|
               emit_name(:"#{prefix}#{name}")
             end
           end

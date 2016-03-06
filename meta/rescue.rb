@@ -40,3 +40,48 @@ Mutant::Meta::Example.add :rescue do
   mutation 'begin; rescue; nil; end'
   mutation 'begin; true end'
 end
+
+Mutant::Meta::Example.add :rescue do
+  source 'begin; true; end'
+
+  singleton_mutations
+  mutation 'begin; false; end'
+  mutation 'begin; nil; end'
+end
+
+Mutant::Meta::Example.add :rescue do
+  source 'def a; foo; rescue; bar; else; baz; end'
+
+  # Mutate all bodies
+  mutation 'def a; nil;  rescue; bar; else; baz; end'
+  mutation 'def a; self; rescue; bar; else; baz; end'
+  mutation 'def a; foo; rescue; nil;  else; baz; end'
+  mutation 'def a; foo; rescue; self; else; baz; end'
+  mutation 'def a; foo; rescue; bar; else; nil; end'
+  mutation 'def a; foo; rescue; bar; else; self; end'
+
+  # Promote and concat rescue resbody bodies
+  mutation 'def a; foo; bar; end'
+
+  # Promote and concat else body
+  mutation 'def a; foo; baz; end'
+
+  # Promote rescue body
+  mutation 'def a; foo; end'
+
+  # Empty body
+  mutation 'def a; end'
+
+  # Failing body
+  mutation 'def a; raise; end'
+
+  mutation 'remove_method :a'
+end
+
+Mutant::Meta::Example.add :rescue do
+  source 'begin; rescue; ensure; true; end'
+
+  singleton_mutations
+  mutation 'begin; rescue; ensure; false; end'
+  mutation 'begin; rescue; ensure; nil; end'
+end

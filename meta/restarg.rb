@@ -1,11 +1,8 @@
 Mutant::Meta::Example.add :restarg do
-  source 'foo(*bar)'
+  source 'def foo(*bar); end'
 
-  singleton_mutations
-  mutation 'foo'
-  mutation 'foo(nil)'
-  mutation 'foo(self)'
-  mutation 'foo(*self)'
-  mutation 'foo(bar)'
-  mutation 'foo(*nil)'
+  mutation 'def foo; end'
+  mutation 'def foo(*bar); bar = []; end'
+  mutation 'def foo(*bar); raise; end'
+  mutation 'remove_method(:foo)'
 end

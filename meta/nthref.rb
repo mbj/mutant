@@ -1,12 +1,12 @@
-Mutant::Meta::Example.add :nthref do
+Mutant::Meta::Example.add :nth_ref do
   source '$1'
 
   mutation '$2'
 end
 
-Mutant::Meta::Example.add :nthref do
-  source '$2'
+Mutant::Meta::Example.add :nth_ref do
+  source '$3'
 
-  mutation '$3'
-  mutation '$1'
+  mutation '$2'
+  mutation '$4'
 end

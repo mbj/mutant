@@ -22,7 +22,7 @@ module Mutant
       #
       # @return [Enumerable<Mutant::Mutation>]
       def generated
-        Mutator.each(node).map do |node|
+        Mutator::REGISTRY.call(node).map do |node|
           Mutation::Evil.new(self, node)
         end
       end

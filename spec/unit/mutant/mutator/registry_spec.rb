@@ -1,11 +1,33 @@
 RSpec.describe Mutant::Mutator::Registry do
-  describe '#lookup' do
-    subject { Mutant::Mutator::REGISTRY.lookup(node) }
+  let(:object)             { described_class.new           }
+  let(:mutator)            { class_double(Mutant::Mutator) }
+  let(:node)               { s(:true)                      }
+  let(:expected_arguments) { [node, nil]                   }
+
+  before do
+    allow(mutator).to receive(:call).with(*expected_arguments).and_return([s(:nil)])
+  end
+
+  describe '#call' do
+    let(:call_arguments) { [node] }
+
+    subject { object.call(*call_arguments) }
+
+    before do
+      object.register(:true, mutator)
+    end
+
+    context 'on parent given' do
+      let(:call_arguments)     { [node, s(:and)] }
+      let(:expected_arguments) { call_arguments  }
+
+      it { should eql([s(:nil)]) }
+    end
 
     context 'on registered node' do
       let(:node) { s(:true) }
 
-      it { should eql(Mutant::Mutator::Node::Literal::Boolean) }
+      it { should eql([s(:nil)]) }
     end
 
     context 'on unknown node' do
@@ -18,26 +40,22 @@ RSpec.describe Mutant::Mutator::Registry do
   end
 
   describe '#register' do
-    let(:object) { described_class.new }
-
-    let(:mutator) { instance_double(Mutant::Mutator) }
-
     subject { object.register(type, mutator) }
 
     context 'when registering an invalid node type' do
       let(:type) { :invalid }
 
       it 'raises error' do
-        expect { subject }.to raise_error(described_class::RegistryError, 'Invalid type registration: invalid')
+        expect { subject }.to raise_error(described_class::RegistryError, 'Invalid type registration: :invalid')
       end
     end
 
     context 'when registering a valid node type' do
       let(:type) { :true }
 
-      it 'allows to lookup mutator' do
+      it 'allows to call mutator' do
         subject
-        expect(object.lookup(s(type))).to be(mutator)
+        expect(object.call(s(type))).to eql([s(:nil)])
       end
 
       it_behaves_like 'a command method'
@@ -48,7 +66,7 @@ RSpec.describe Mutant::Mutator::Registry do
 
       it 'allows to lookup mutator' do
         object.register(type, mutator)
-        expect { subject }.to raise_error(described_class::RegistryError, 'Duplicate type registration: true')
+        expect { subject }.to raise_error(described_class::RegistryError, 'Duplicate type registration: :true')
       end
 
       it_behaves_like 'a command method'

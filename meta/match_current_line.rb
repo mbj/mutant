@@ -8,6 +8,6 @@ Mutant::Meta::Example.add :match_current_line do
   mutation 'true if true'
   mutation 'true if false'
   mutation 'true if nil'
-  mutation 'true if /a\A/'
+  mutation 'true if /nomatch\A/'
   mutation 'true'
 end

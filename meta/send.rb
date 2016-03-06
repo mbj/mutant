@@ -316,27 +316,25 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
-  source 'self.bar = baz'
+  source 'self.booz = baz'
 
   singleton_mutations
-  mutation 'self.bar = nil'
-  mutation 'self.bar = self'
-  mutation 'self.bar'
+  mutation 'self.booz = nil'
+  mutation 'self.booz = self'
+  mutation 'self.booz'
   mutation 'baz'
-  # This one could probably be removed
 end
 
 Mutant::Meta::Example.add :send do
-  source 'foo.bar = baz'
+  source 'foo.booz = baz'
 
   singleton_mutations
   mutation 'foo'
-  mutation 'foo.bar = nil'
-  mutation 'foo.bar = self'
-  mutation 'self.bar = baz'
-  mutation 'foo.bar'
+  mutation 'foo.booz = nil'
+  mutation 'foo.booz = self'
+  mutation 'self.booz = baz'
+  mutation 'foo.booz'
   mutation 'baz'
-  # This one could probably be removed
 end
 
 Mutant::Meta::Example.add :send do
