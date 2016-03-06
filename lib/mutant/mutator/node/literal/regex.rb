@@ -8,7 +8,7 @@ module Mutant
           handle(:regexp)
 
           # No input can ever be matched with this
-          NULL_REGEXP_SOURCE = 'a\A'.freeze
+          NULL_REGEXP_SOURCE = 'nomatch\A'.freeze
 
         private
 
@@ -23,7 +23,7 @@ module Mutant
           #
           # @return [undefined]
           def dispatch
-            emit_singletons unless parent_node && n_match_current_line?(parent_node)
+            emit_singletons unless parent_node
             children.each_with_index do |child, index|
               mutate_child(index) unless n_str?(child)
             end

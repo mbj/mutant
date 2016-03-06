@@ -18,9 +18,7 @@ module Mutant
           # @return [undefined]
           def dispatch
             emit_singletons
-            Mutator::Util::Symbol.each(value, self) do |value|
-              emit_type(value)
-            end
+            Util::Symbol.call(value).each(&method(:emit_type))
           end
 
         end # Symbol

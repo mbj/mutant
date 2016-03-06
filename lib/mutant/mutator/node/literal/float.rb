@@ -14,7 +14,7 @@ module Mutant
           # @return [undefined]
           def dispatch
             emit_singletons
-            emit_values(values)
+            emit_values
             emit_special_cases
           end
 
@@ -36,10 +36,8 @@ module Mutant
           # @return [Array]
           def values
             original = children.first
-            # Work around a bug in RBX/MRI or JRUBY:
-            [0.0, 1.0, -original].delete_if do |value|
-              value.eql?(original)
-            end
+
+            [0.0, 1.0, -original]
           end
 
         end # Float

@@ -20,11 +20,11 @@ module Mutant
       def self.define_named_child(name, index)
         super
 
-        define_method("emit_#{name}_mutations") do |&block|
+        define_method(:"emit_#{name}_mutations") do |&block|
           mutate_child(index, &block)
         end
 
-        define_method("emit_#{name}") do |node|
+        define_method(:"emit_#{name}") do |node|
           emit_child_update(index, node)
         end
       end
@@ -56,10 +56,9 @@ module Mutant
       # @return [undefined]
       #
       # rubocop:disable RedundantBlockCall - its not redundant here
-      def mutate_child(index, mutator = Mutator, &block)
+      def mutate_child(index, &block)
         block ||= TAUTOLOGY
-        child = children.at(index)
-        mutator.each(child, self) do |mutation|
+        REGISTRY.call(children.fetch(index), self).each do |mutation|
           next unless block.call(mutation)
           emit_child_update(index, mutation)
         end
@@ -119,17 +118,6 @@ module Mutant
         emit(N_NIL) unless asgn_left?
       end
 
-      # Emit values
-      #
-      # @param [Array<Object>] values
-      #
-      # @return [undefined]
-      def emit_values(values)
-        values.each do |value|
-          emit_type(value)
-        end
-      end
-
       # Parent node
       #
       # @return [Parser::AST::Node] node
@@ -165,9 +153,17 @@ module Mutant
       #
       # @return [Enumerable<Fixnum>]
       def children_indices(range)
-        range_end = range.end
-        last_index = range_end >= 0 ? range_end : children.length + range_end
-        range.begin.upto(last_index)
+        range.begin.upto(children.length + range.end)
+      end
+
+      # Emit single child mutation
+      #
+      # @return [undefined]
+      def mutate_single_child
+        children.each_with_index do |child, index|
+          mutate_child(index)
+          yield child, index unless children.one?
+        end
       end
 
     end # Node

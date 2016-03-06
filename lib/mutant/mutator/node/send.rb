@@ -83,6 +83,7 @@ module Mutant
         #
         # @return [Enumerable<Parser::AST::Node>]
         alias_method :arguments, :remaining_children
+        private :arguments
 
         # Perform normal, non special case dispatch
         #
@@ -165,7 +166,7 @@ module Mutant
         #
         # @return [undefined]
         def emit_naked_receiver
-          emit(receiver) if receiver && !NOT_ASSIGNABLE.include?(receiver.type)
+          emit(receiver) if receiver
         end
 
         # Mutate arguments

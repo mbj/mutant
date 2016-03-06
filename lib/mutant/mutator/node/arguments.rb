@@ -22,7 +22,7 @@ module Mutant
         # @return [undefined]
         def emit_argument_presence
           emit_type
-          Mutator::Util::Array::Presence.each(children, self) do |children|
+          Util::Array::Presence.call(children).each do |children|
             emit_type(*children)
           end
         end
@@ -32,7 +32,7 @@ module Mutant
         # @return [undefined]
         def emit_argument_mutations
           children.each_with_index do |child, index|
-            Mutator.each(child) do |mutant|
+            REGISTRY.call(child).each do |mutant|
               next if invalid_argument_replacement?(mutant, index)
               emit_child_update(index, mutant)
             end
@@ -45,11 +45,7 @@ module Mutant
         #
         # @return [Boolean]
         def invalid_argument_replacement?(mutant, index)
-          original = children.fetch(index)
-
-          n_optarg?(original) &&
-          n_arg?(mutant)      &&
-          children[0...index].any?(&method(:n_optarg?))
+          n_arg?(mutant) && children[0...index].any?(&method(:n_optarg?))
         end
 
         # Emit mlhs expansions
@@ -59,7 +55,7 @@ module Mutant
           mlhs_childs_with_index.each do |child, index|
             dup_children = children.dup
             dup_children.delete_at(index)
-            dup_children.insert(index, *child.children)
+            dup_children.insert(index, *child)
             emit_type(*dup_children)
           end
         end

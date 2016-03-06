@@ -10,7 +10,7 @@ module Mutant
     # @return [undefined]
     def mutations
       [neutral_mutation].concat(
-        Mutator.each(node).map do |mutant|
+        Mutator::REGISTRY.call(node).map do |mutant|
           Mutation::Evil.new(self, wrap_node(mutant))
         end
       )

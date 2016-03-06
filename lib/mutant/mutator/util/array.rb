@@ -33,7 +33,7 @@ module Mutant
           # @return [undefined]
           def dispatch
             input.each_with_index do |element, index|
-              Mutator.each(element).each do |mutation|
+              REGISTRY.call(element).each do |mutation|
                 dup = dup_input
                 dup[index] = mutation
                 emit(dup)
@@ -42,18 +42,6 @@ module Mutant
           end
 
         end # Element
-
-      private
-
-        # Emit mutations
-        #
-        # @return [undefined]
-        def dispatch
-          run(Element)
-          run(Presence)
-          emit(EMPTY_ARRAY)
-        end
-
       end # Array
     end # Node
   end # Mutant

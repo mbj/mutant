@@ -15,3 +15,12 @@ Mutant::Meta::Example.add :casgn do
   mutation 'self::A = nil'
   mutation 'self.remove_const :A'
 end
+
+Mutant::Meta::Example.add :casgn do
+  source 'A &&= true'
+
+  singleton_mutations
+  mutation 'A__MUTANT__ &&= true'
+  mutation 'A &&= false'
+  mutation 'A &&= nil'
+end

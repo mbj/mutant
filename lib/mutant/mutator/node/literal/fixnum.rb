@@ -14,7 +14,7 @@ module Mutant
           # @return [undefined]
           def dispatch
             emit_singletons
-            emit_values(values)
+            emit_values
           end
 
           # Values to mutate to

@@ -5,6 +5,9 @@ module Mutant
         # Mutator for attribute assignments
         class AttributeAssignment < self
 
+          ATTRIBUTE_RANGE = (0..-2).freeze
+          private_constant(*constants(false))
+
         private
 
           # Emit mutations
@@ -28,7 +31,7 @@ module Mutant
           #
           # @return [undefined]
           def emit_attribute_read
-            emit_type(receiver, selector.to_s[0..-2].to_sym)
+            emit_type(receiver, selector[ATTRIBUTE_RANGE].to_sym)
           end
 
         end # AttributeAssignment

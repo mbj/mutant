@@ -71,11 +71,11 @@ RSpec.describe Mutant::Subject do
     subject { object.mutations }
 
     before do
-      expect(Mutant::Mutator).to receive(:each).with(node).and_return([mutation_a, mutation_b])
+      expect(Mutant::Mutator::REGISTRY).to receive(:call).with(node).and_return([mutation_a, mutation_b])
     end
 
-    let(:mutation_a) { double('Mutation A') }
-    let(:mutation_b) { double('Mutation B') }
+    let(:mutation_a) { instance_double(Parser::AST::Node, :mutation_a) }
+    let(:mutation_b) { instance_double(Parser::AST::Node, :mutation_b) }
 
     it 'generates neutral and evil mutations' do
       should eql([

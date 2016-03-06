@@ -12,9 +12,8 @@ module Mutant
         #
         # @return [undefined]
         def dispatch
-          children.each_index do |index|
-            mutate_child(index)
-            delete_child(index) unless children.one?
+          mutate_single_child do |_child, index|
+            delete_child(index)
           end
         end
 

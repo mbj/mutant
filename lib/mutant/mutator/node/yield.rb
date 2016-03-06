@@ -13,7 +13,7 @@ module Mutant
         #
         # @return [undefined]
         def dispatch
-          super
+          super()
           emit_singletons
           children.each_index(&method(:delete_child))
         end

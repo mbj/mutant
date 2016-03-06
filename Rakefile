@@ -9,14 +9,13 @@ namespace :metrics do
   task mutant: :coverage do
     arguments = %w[
       bundle exec mutant
-      --ignore-subject Mutant::Meta*
       --include lib
       --since HEAD~1
       --require mutant
       --use rspec
       --zombie
     ]
-    arguments.concat(%w[--jobs 4]) if ENV.key?('CIRCLE_CI')
+    arguments.concat(%w[--jobs 4]) if ENV.key?('CIRCLECI')
 
     arguments.concat(%w[-- Mutant*])
 

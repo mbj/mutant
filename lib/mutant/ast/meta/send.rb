@@ -18,6 +18,7 @@ module Mutant
         #
         # @return [Enumerable<Parser::AST::Node>]
         alias_method :arguments, :remaining_children
+
         public :arguments
 
         # Test if AST node is a valid assignment target

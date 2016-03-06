@@ -13,7 +13,7 @@ module Mutant
         #
         # @return [undefined]
         def dispatch
-          super
+          super()
           emit_singletons
         end
 

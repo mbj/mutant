@@ -88,11 +88,11 @@ module MutantSpec
             rescue EncodingError, ArgumentError
               nil # Make rubocop happy
             end
+
           if node
-            Mutant::Mutator::Node.each(node) do
-              count += 1
-            end
+            count += Mutant::Mutator::REGISTRY.call(node).length
           end
+
           count
         end.inject(0, :+)
         took = Time.now - start

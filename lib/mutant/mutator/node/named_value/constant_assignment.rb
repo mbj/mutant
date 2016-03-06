@@ -17,7 +17,8 @@ module Mutant
           # @return [undefined]
           def dispatch
             mutate_name
-            emit_value_mutations if value
+            return unless value # op asgn
+            emit_value_mutations
             emit_remove_const
           end
 
@@ -32,7 +33,7 @@ module Mutant
           #
           # @return [undefined]
           def mutate_name
-            Mutator::Util::Symbol.each(name, self) do |name|
+            Util::Symbol.call(name).each do |name|
               emit_name(name.upcase)
             end
           end
