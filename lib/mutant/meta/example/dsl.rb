@@ -1,7 +1,6 @@
 module Mutant
   module Meta
     class Example
-
       # Example DSL
       class DSL
         include AST::Sexp
@@ -9,18 +8,20 @@ module Mutant
         # Run DSL on block
         #
         # @return [Example]
-        def self.run(file, block)
+        def self.call(file, block)
           instance = new(file)
           instance.instance_eval(&block)
           instance.example
         end
 
-        # Initialize DSL context
+        private_class_method :new
+
+        # Initialize object
         #
         # @return [undefined]
         def initialize(file)
-          @file = file
-          @source = nil
+          @file     = file
+          @source   = nil
           @expected = []
         end
 
@@ -41,27 +42,23 @@ module Mutant
         #
         # @param [String,Parser::AST::Node] input
         #
-        # @return [self]
+        # @return [undefined]
         def source(input)
           fail 'source already defined' if @source
           @source = node(input)
-
-          self
         end
 
         # Add expected mutation
         #
         # @param [String,Parser::AST::Node] input
         #
-        # @return [self]
+        # @return [undefined]
         def mutation(input)
           node = node(input)
           if @expected.include?(node)
-            fail "Node for input: #{input.inspect} is already expected"
+            fail "Mutation for input: #{input.inspect} is already expected"
           end
           @expected << node
-
-          self
         end
 
         # Add singleton mutations
@@ -87,7 +84,7 @@ module Mutant
           when ::Parser::AST::Node
             input
           else
-            fail "Cannot coerce to node: #{source.inspect}"
+            fail "Cannot coerce to node: #{input.inspect}"
           end
         end
 

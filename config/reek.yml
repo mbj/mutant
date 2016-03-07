@@ -69,7 +69,6 @@ TooManyMethods:
   enabled: true
   exclude:
   - Mutant::CLI
-  - Mutant::Meta::Example::Verification
   - Mutant::Mutator::Node
   - Mutant::Parallel::Master
   max_methods: 10
@@ -128,7 +127,7 @@ UtilityFunction:
   - Mutant::Integration::Null#call
   - Mutant::Integration::Rspec#parse_example
   - Mutant::Integration::Rspec#parse_expression # intentional, private
-  - Mutant::Meta::Example::Verification#format_mutation
+  - Mutant::Meta::Example::Verification#format_mutations # intentional, private
   - Mutant::Reporter::CLI::Format::Progressive#new_buffer
   - Mutant::Reporter::CLI::Printer::StatusProgressive#object # False positive calls super
   - Mutant::Repository::Diff#tracks? # intentional, private
