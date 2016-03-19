@@ -24,7 +24,7 @@ module Mutant
         text
       end
 
-    private
+    private # rubocop:disable AccessModifierIndentation
 
       # Initialize null color
       #

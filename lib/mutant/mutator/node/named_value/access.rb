@@ -33,7 +33,7 @@ module Mutant
               super()
             end
 
-            private
+          private
 
             # Emit instance variable as attribute send
             #
