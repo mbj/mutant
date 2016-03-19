@@ -41,7 +41,7 @@ RSpec.describe Mutant::Isolation::Fork do
           receiver:  io,
           selector:  :pipe,
           arguments: [binmode: true],
-          reaction: {
+          reaction:  {
             yields: [[reader, writer]]
           }
         }
@@ -53,25 +53,25 @@ RSpec.describe Mutant::Isolation::Fork do
         [
           *prefork_expectations,
           {
-            receiver:  process,
-            selector:  :fork,
-            reaction:  {
-              yields:  [],
-              return:  pid
+            receiver: process,
+            selector: :fork,
+            reaction: {
+              yields: [],
+              return: pid
             }
           },
           # Inside the killfork
           {
-            receiver:  reader,
-            selector:  :close
+            receiver: reader,
+            selector: :close
           },
           {
-            receiver:  writer,
-            selector:  :binmode
+            receiver: writer,
+            selector: :binmode
           },
           {
-            receiver:  devnull,
-            selector:  :call,
+            receiver: devnull,
+            selector: :call,
             reaction: {
               yields: [nullio]
             }
@@ -90,7 +90,7 @@ RSpec.describe Mutant::Isolation::Fork do
             receiver:  marshal,
             selector:  :dump,
             arguments: [block_return],
-            reaction: {
+            reaction:  {
               return: block_return_blob
             }
           },
@@ -100,19 +100,19 @@ RSpec.describe Mutant::Isolation::Fork do
             arguments: [block_return_blob]
           },
           {
-            receiver:  writer,
-            selector:  :close
+            receiver: writer,
+            selector: :close
           },
           # Outside the killfork
           {
-            receiver:  writer,
-            selector:  :close
+            receiver: writer,
+            selector: :close
           },
           {
             receiver:  marshal,
             selector:  :load,
             arguments: [reader],
-            reaction: {
+            reaction:  {
               return: block_return
             }
           },

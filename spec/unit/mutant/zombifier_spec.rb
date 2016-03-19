@@ -32,7 +32,7 @@ RSpec.describe Mutant::Zombifier do
           expected_payload: {
             logical_name: 'project'
           },
-          return_value: true
+          return_value:     true
         ),
         MutantSpec::RubyVM::EventExpectation::Eval.new(
           expected_payload: {
@@ -41,20 +41,20 @@ RSpec.describe Mutant::Zombifier do
             source_location: 'a/project.rb'
           },
           trigger_requires: %w[foo bar],
-          return_value: nil
+          return_value:     nil
         ),
         MutantSpec::RubyVM::EventExpectation::Require.new(
           expected_payload: {
             logical_name: 'foo'
           },
           trigger_requires: %w[bar],
-          return_value: true
+          return_value:     true
         ),
         MutantSpec::RubyVM::EventExpectation::Require.new(
           expected_payload: {
             logical_name: 'bar'
           },
-          return_value: true
+          return_value:     true
         ),
         MutantSpec::RubyVM::EventExpectation::Eval.new(
           expected_payload: {
@@ -63,13 +63,13 @@ RSpec.describe Mutant::Zombifier do
             source_location: 'b/bar.rb'
           },
           trigger_requires: %w[],
-          return_value: nil
+          return_value:     nil
         ),
         MutantSpec::RubyVM::EventExpectation::Require.new(
           expected_payload: {
             logical_name: 'bar'
           },
-          return_value: false
+          return_value:     false
         )
       ]
     )

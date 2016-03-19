@@ -155,3 +155,7 @@ IndentArray:
 # My style is not supported
 MultilineMethodCallIndentation:
   Enabled: false
+
+# Align keys and values in a multiline hash
+Style/AlignHash:
+  EnforcedColonStyle: table

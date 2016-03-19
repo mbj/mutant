@@ -52,8 +52,8 @@ module SharedContext
 
     let(:config) do
       Mutant::Config::DEFAULT.with(
-        jobs:      1,
-        reporter:  Mutant::Reporter::Null.new
+        jobs:     1,
+        reporter: Mutant::Reporter::Null.new
       )
     end
 
@@ -94,19 +94,19 @@ module SharedContext
 
     let(:mutation_a_test_result) do
       Mutant::Result::Test.new(
-        tests:    [test_a],
-        passed:   false,
-        runtime:  1.0,
+        tests:   [test_a],
+        passed:  false,
+        runtime: 1.0,
         output:  'mutation a test result output'
       )
     end
 
     let(:mutation_b_test_result) do
       Mutant::Result::Test.new(
-        tests:    [test_a],
-        passed:   false,
-        runtime:  1.0,
-        output:   'mutation b test result output'
+        tests:   [test_a],
+        passed:  false,
+        runtime: 1.0,
+        output:  'mutation b test result output'
       )
     end
 
