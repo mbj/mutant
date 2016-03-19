@@ -12,7 +12,7 @@ Mutant::Meta::Example.add do
   singleton_mutations
   mutation '//' # match all
   mutation '/#{foo}n/'
-  mutation '/a\A/'         # match nothing
+  mutation '/a\A/' # match nothing
   mutation '/#{self.bar}n/'
   mutation '/#{nil}n/'
   mutation '/#{self}n/'

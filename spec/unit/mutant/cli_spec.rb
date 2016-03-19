@@ -288,7 +288,7 @@ Options:
     end
 
     context 'with zombie flag' do
-      let(:flags)   { %w[--zombie] }
+      let(:flags) { %w[--zombie] }
 
       it_should_behave_like 'a cli parser'
 

@@ -1,7 +1,7 @@
 module Mutant
   class Reporter
     class CLI
-      class  Printer
+      class Printer
         # Printer for mutation progress results
         class MutationProgressResult < self
           SUCCESS = '.'.freeze

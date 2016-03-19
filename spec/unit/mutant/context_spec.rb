@@ -3,10 +3,10 @@ RSpec.describe Mutant::Context do
   describe '.wrap' do
     subject { described_class.wrap(scope, node) }
 
-    let(:node)  { s(:str, 'test') }
+    let(:node) { s(:str, 'test') }
 
     context 'with Module as scope' do
-      let(:scope) { Mutant          }
+      let(:scope) { Mutant }
 
       let(:expected) do
         s(:module,
