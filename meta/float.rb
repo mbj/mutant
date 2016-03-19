@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :float do
   source '10.0'
 
   singleton_mutations
@@ -14,7 +14,7 @@ Mutant::Meta::Example.add do
   mutation '-10.0'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :float do
   source '0.0'
 
   singleton_mutations
@@ -24,7 +24,7 @@ Mutant::Meta::Example.add do
   mutation '(-1.0 / 0.0)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :float do
   source '-0.0'
 
   singleton_mutations

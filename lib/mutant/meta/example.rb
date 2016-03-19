@@ -1,7 +1,7 @@
 module Mutant
   module Meta
     class Example
-      include Adamantium, Concord::Public.new(:file, :node, :mutations)
+      include Adamantium, Anima.new(:file, :node, :node_type, :expected)
 
       # Verification instance for example
       #
@@ -27,6 +27,7 @@ module Mutant
         end
       end
       memoize :generated
+
     end # Example
   end # Meta
 end # Mutant

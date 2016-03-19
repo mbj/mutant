@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :regexp do
   source '/foo/'
 
   singleton_mutations
@@ -6,7 +6,7 @@ Mutant::Meta::Example.add do
   mutation '/a\A/' # match nothing
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :regexp do
   source '/#{foo.bar}n/'
 
   singleton_mutations

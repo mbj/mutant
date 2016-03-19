@@ -1,3 +1,3 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :redo do
   source 'redo'
 end

@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :case do
   source <<-RUBY
     case
     when true
@@ -29,7 +29,7 @@ Mutant::Meta::Example.add do
   RUBY
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :case do
   source <<-RUBY
     case condition
     when A

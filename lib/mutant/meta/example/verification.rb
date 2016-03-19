@@ -34,7 +34,7 @@ module Mutant
         #
         # @return [Array<Parser::AST::Node>]
         def unexpected
-          mutations.map(&:node) - example.mutations
+          mutations.map(&:node) - example.expected
         end
         memoize :unexpected
 
@@ -76,7 +76,7 @@ module Mutant
         #
         # @return [Array<Parser::AST::Node>]
         def missing
-          example.mutations - mutations.map(&:node)
+          example.expected - mutations.map(&:node)
         end
         memoize :missing
 

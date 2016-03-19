@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :and_asgn do
   source 'a &&= 1'
 
   singleton_mutations

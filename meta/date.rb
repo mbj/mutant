@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'Date.parse(nil)'
 
   singleton_mutations
@@ -17,7 +17,7 @@ Mutant::Meta::Example.add do
   mutation 'Date.jisx0301(nil)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source '::Date.parse(nil)'
 
   singleton_mutations
@@ -37,7 +37,7 @@ Mutant::Meta::Example.add do
   mutation '::Date.jisx0301(nil)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'Date.iso8601(nil)'
 
   singleton_mutations
@@ -46,7 +46,7 @@ Mutant::Meta::Example.add do
   mutation 'Date'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'Foo::Date.parse(nil)'
 
   singleton_mutations

@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :rescue do
   source 'begin; rescue ExceptionA, ExceptionB => error; true; end'
 
   singleton_mutations
@@ -11,7 +11,7 @@ Mutant::Meta::Example.add do
 
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :rescue do
   source 'begin; rescue SomeException => error; true; end'
 
   singleton_mutations
@@ -22,7 +22,7 @@ Mutant::Meta::Example.add do
   mutation 'begin; true; end'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :rescue do
   source 'begin; rescue => error; true end'
 
   singleton_mutations
@@ -32,7 +32,7 @@ Mutant::Meta::Example.add do
   mutation 'begin; true; end'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :rescue do
   source 'begin; rescue; true end'
 
   singleton_mutations

@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :kwbegin do
   source 'begin; true; end'
 
   singleton_mutations

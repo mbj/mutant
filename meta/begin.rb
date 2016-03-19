@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :begin do
 
   source 'true; false'
   # Mutation of each statement in block
@@ -12,7 +12,7 @@ Mutant::Meta::Example.add do
   mutation 'false'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :begin do
 
   source s(:begin, s(:true))
   # Mutation of each statement in block

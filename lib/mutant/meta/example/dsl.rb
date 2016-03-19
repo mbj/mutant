@@ -8,8 +8,8 @@ module Mutant
         # Run DSL on block
         #
         # @return [Example]
-        def self.call(file, block)
-          instance = new(file)
+        def self.call(file, type, block)
+          instance = new(file, type)
           instance.instance_eval(&block)
           instance.example
         end
@@ -19,9 +19,10 @@ module Mutant
         # Initialize object
         #
         # @return [undefined]
-        def initialize(file)
+        def initialize(file, type)
           @file     = file
-          @source   = nil
+          @type     = type
+          @node     = nil
           @expected = []
         end
 
@@ -32,8 +33,13 @@ module Mutant
         # @raise [RuntimeError]
         #   in case example cannot be build
         def example
-          fail 'source not defined' unless @source
-          Example.new(@file, @source, @expected)
+          fail 'source not defined' unless @node
+          Example.new(
+            file:      @file,
+            node:      @node,
+            node_type: @type,
+            expected:  @expected
+          )
         end
 
       private
@@ -44,8 +50,8 @@ module Mutant
         #
         # @return [undefined]
         def source(input)
-          fail 'source already defined' if @source
-          @source = node(input)
+          fail 'source already defined' if @node
+          @node = node(input)
         end
 
         # Add expected mutation

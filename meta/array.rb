@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :array do
   source '[true]'
 
   singleton_mutations
@@ -8,7 +8,7 @@ Mutant::Meta::Example.add do
   mutation '[]'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :array do
   source '[true, false]'
 
   singleton_mutations

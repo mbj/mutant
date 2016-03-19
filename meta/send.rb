@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'a > b'
 
   singleton_mutations
@@ -14,7 +14,7 @@ Mutant::Meta::Example.add do
   mutation 'b'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'A.const_get(:B)'
 
   singleton_mutations
@@ -28,7 +28,7 @@ Mutant::Meta::Example.add do
   mutation 'self.const_get(:B)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'A.const_get(bar)'
 
   singleton_mutations
@@ -40,7 +40,7 @@ Mutant::Meta::Example.add do
   mutation 'self.const_get(bar)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'method(bar)'
 
   singleton_mutations
@@ -51,7 +51,7 @@ Mutant::Meta::Example.add do
   mutation 'method(self)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'a >= b'
 
   singleton_mutations
@@ -67,7 +67,7 @@ Mutant::Meta::Example.add do
   mutation 'b'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'a <= b'
 
   singleton_mutations
@@ -83,7 +83,7 @@ Mutant::Meta::Example.add do
   mutation 'b'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'a < b'
 
   singleton_mutations
@@ -99,21 +99,21 @@ Mutant::Meta::Example.add do
   mutation 'b'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'reverse_each'
 
   singleton_mutations
   mutation 'each'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'reverse_merge'
 
   singleton_mutations
   mutation 'merge'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'reverse_map'
 
   singleton_mutations
@@ -121,14 +121,14 @@ Mutant::Meta::Example.add do
   mutation 'each'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'map'
 
   singleton_mutations
   mutation 'each'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.to_s'
 
   singleton_mutations
@@ -137,7 +137,7 @@ Mutant::Meta::Example.add do
   mutation 'foo.to_str'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.to_a'
 
   singleton_mutations
@@ -147,7 +147,7 @@ Mutant::Meta::Example.add do
   mutation 'foo.to_set'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.to_i'
 
   singleton_mutations
@@ -157,7 +157,7 @@ Mutant::Meta::Example.add do
   mutation 'Integer(foo)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.to_h'
 
   singleton_mutations
@@ -166,7 +166,7 @@ Mutant::Meta::Example.add do
   mutation 'foo.to_hash'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo == bar'
 
   singleton_mutations
@@ -180,7 +180,7 @@ Mutant::Meta::Example.add do
   mutation 'foo.equal?(bar)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.is_a?(bar)'
 
   singleton_mutations
@@ -193,7 +193,7 @@ Mutant::Meta::Example.add do
   mutation 'foo.instance_of?(bar)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.is_a?(bar)'
 
   singleton_mutations
@@ -206,7 +206,7 @@ Mutant::Meta::Example.add do
   mutation 'foo.instance_of?(bar)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.kind_of?(bar)'
 
   singleton_mutations
@@ -219,7 +219,7 @@ Mutant::Meta::Example.add do
   mutation 'foo.instance_of?(bar)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.gsub(a, b)'
 
   singleton_mutations
@@ -235,7 +235,7 @@ Mutant::Meta::Example.add do
   mutation 'self.gsub(a, b)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.values_at(a, b)'
 
   singleton_mutations
@@ -251,7 +251,7 @@ Mutant::Meta::Example.add do
   mutation 'foo.values_at'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.dig(a, b)'
 
   singleton_mutations
@@ -267,7 +267,7 @@ Mutant::Meta::Example.add do
   mutation 'foo.dig'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.dig(a)'
 
   singleton_mutations
@@ -280,7 +280,7 @@ Mutant::Meta::Example.add do
   mutation 'a'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.dig'
 
   singleton_mutations
@@ -288,7 +288,7 @@ Mutant::Meta::Example.add do
   mutation 'self.dig'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.__send__(bar)'
 
   singleton_mutations
@@ -301,7 +301,7 @@ Mutant::Meta::Example.add do
   mutation 'foo.__send__(self)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.send(bar)'
 
   singleton_mutations
@@ -315,7 +315,7 @@ Mutant::Meta::Example.add do
   mutation 'foo.send(self)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'self.bar = baz'
 
   singleton_mutations
@@ -326,7 +326,7 @@ Mutant::Meta::Example.add do
   # This one could probably be removed
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.bar = baz'
 
   singleton_mutations
@@ -339,7 +339,7 @@ Mutant::Meta::Example.add do
   # This one could probably be removed
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo[bar] = baz'
 
   singleton_mutations
@@ -353,7 +353,7 @@ Mutant::Meta::Example.add do
   mutation 'baz'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo(*bar)'
 
   singleton_mutations
@@ -365,20 +365,20 @@ Mutant::Meta::Example.add do
   mutation 'foo(*self)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo(&bar)'
 
   singleton_mutations
   mutation 'foo'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo'
 
   singleton_mutations
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'self.foo'
 
   singleton_mutations
@@ -386,14 +386,14 @@ Mutant::Meta::Example.add do
 end
 
 Unparser::Constants::KEYWORDS.each do |keyword|
-  Mutant::Meta::Example.add do
+  Mutant::Meta::Example.add :send do
     source "self.#{keyword}"
 
     singleton_mutations
   end
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo.bar'
 
   singleton_mutations
@@ -401,7 +401,7 @@ Mutant::Meta::Example.add do
   mutation 'self.bar'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'self.class.foo'
 
   singleton_mutations
@@ -409,14 +409,14 @@ Mutant::Meta::Example.add do
   mutation 'self.foo'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo(nil)'
 
   singleton_mutations
   mutation 'foo'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'self.foo(nil)'
 
   singleton_mutations
@@ -424,7 +424,7 @@ Mutant::Meta::Example.add do
   mutation 'foo(nil)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'self.fetch(nil)'
 
   singleton_mutations
@@ -434,7 +434,7 @@ Mutant::Meta::Example.add do
 end
 
 Unparser::Constants::KEYWORDS.each do |keyword|
-  Mutant::Meta::Example.add do
+  Mutant::Meta::Example.add :send do
     source "foo.#{keyword}(nil)"
 
     singleton_mutations
@@ -444,7 +444,7 @@ Unparser::Constants::KEYWORDS.each do |keyword|
   end
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo(nil, nil)'
 
   singleton_mutations
@@ -452,7 +452,7 @@ Mutant::Meta::Example.add do
   mutation 'foo(nil)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source '(left - right) / foo'
 
   singleton_mutations
@@ -470,7 +470,7 @@ Mutant::Meta::Example.add do
   mutation 'self / foo'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo[1]'
 
   singleton_mutations
@@ -488,7 +488,7 @@ Mutant::Meta::Example.add do
   mutation 'foo[self]'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'self.foo[]'
 
   singleton_mutations
@@ -500,7 +500,7 @@ Mutant::Meta::Example.add do
   mutation 'foo[]'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'self[foo]'
 
   singleton_mutations
@@ -513,7 +513,7 @@ Mutant::Meta::Example.add do
   mutation 'foo'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'foo[*bar]'
 
   singleton_mutations
@@ -531,7 +531,7 @@ Mutant::Meta::Example.add do
 end
 
 (Mutant::AST::Types::BINARY_METHOD_OPERATORS - %i[<= >= < > == != eql?]).each do |operator|
-  Mutant::Meta::Example.add do
+  Mutant::Meta::Example.add :send do
     source "true #{operator} false"
 
     singleton_mutations
@@ -544,7 +544,7 @@ end
   end
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :send do
   source 'a != b'
 
   singleton_mutations
