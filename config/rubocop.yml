@@ -11,6 +11,7 @@ BlockNesting:
 
 # Align with the style guide.
 CollectionMethods:
+  Enabled: true
   PreferredMethods:
     collect:  'map'
     inject:   'reduce'
