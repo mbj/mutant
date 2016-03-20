@@ -90,11 +90,6 @@ SymbolArray:
 EndAlignment:
   AlignWith: variable
 
-# Do not always align parameters when it is easier to read
-AlignParameters:
-  Exclude:
-    - spec/**/*_spec.rb
-
 # Prefer #kind_of? over #is_a?
 ClassCheck:
   EnforcedStyle: kind_of?
