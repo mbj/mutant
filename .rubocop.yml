@@ -1,9 +1,7 @@
 AllCops:
   Exclude:
-    - 'Gemfile.devtools'
     - 'vendor/**/*'
     - 'tmp/**/*'
     - 'test_app/**/*'
-    - 'benchmarks/**/*'
     - 'bin/mutant'
   TargetRubyVersion: 2.2
