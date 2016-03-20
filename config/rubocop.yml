@@ -67,7 +67,7 @@ MultilineOperationIndentation:
 
 # Prefer String#% over Kernel#sprintf
 FormatString:
-  Enabled: false
+  EnforcedStyle: percent
 
 # Use square brackets for literal Array objects
 PercentLiteralDelimiters:

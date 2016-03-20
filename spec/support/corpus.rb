@@ -24,6 +24,11 @@ module MutantSpec
     # rubocop:disable ClassLength
     class Project
       MUTEX = Mutex.new
+
+      MUTATION_GENERATION_MESSAGE = 'Total Mutations/Time/Parse-Errors: %s/%0.2fs - %0.2f/s'.freeze
+      START_MESSAGE               = 'Starting - %s'.freeze
+      FINISH_MESSAGE              = 'Mutations - %4i - %s'.freeze
+
       include Adamantium, Anima.new(
         :exclude,
         :expect_coverage,
@@ -91,12 +96,7 @@ module MutantSpec
           count
         end.inject(0, :+)
         took = Time.now - start
-        puts format(
-          'Total Mutations/Time/Parse-Errors: %s/%0.2fs - %0.2f/s',
-          total,
-          took,
-          total / took
-        )
+        puts MUTATION_GENERATION_MESSAGE % [total, took, total / took]
         self
       end
 
@@ -193,7 +193,7 @@ module MutantSpec
       #
       def start(path, _index)
         MUTEX.synchronize do
-          puts format('Starting - %s', path)
+          puts START_MESSAGE % path
         end
       end
 
@@ -207,7 +207,7 @@ module MutantSpec
       #
       def finish(path, _index, count)
         MUTEX.synchronize do
-          puts format('Mutations - %4i - %s', count, path)
+          puts FINISH_MESSAGE % [count, path]
         end
       end
 
