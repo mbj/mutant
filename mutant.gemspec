@@ -10,9 +10,9 @@ Gem::Specification.new do |gem|
   gem.homepage    = 'https://github.com/mbj/mutant'
   gem.license     = 'MIT'
 
-  gem.require_paths    = %w[lib]
+  gem.require_paths = %w[lib]
 
-  mutant_integration_files   = `git ls-files -- lib/mutant/integration/*.rb`.split("\n")
+  mutant_integration_files = `git ls-files -- lib/mutant/integration/*.rb`.split("\n")
 
   gem.files            = `git ls-files`.split("\n") - mutant_integration_files
   gem.test_files       = `git ls-files -- spec/{unit,integration}`.split("\n")

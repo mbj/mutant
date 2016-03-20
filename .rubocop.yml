@@ -1,6 +1,4 @@
 AllCops:
-  Include:
-    - 'Gemfile'
   Exclude:
     - 'Gemfile.devtools'
     - 'vendor/**/*'
