@@ -152,9 +152,20 @@ RedundantFreeze:
 IndentArray:
   Enabled: false
 
-# My style is not supported
+# Prefer
+#
+#     some_receiver
+#       .foo
+#       .bar
+#       .baz
+#
+# Over
+#
+#     some_receiver.foo
+#                  .bar
+#                  .baz
 MultilineMethodCallIndentation:
-  Enabled: false
+  EnforcedStyle: indented
 
 # Align keys and values in a multiline hash
 Style/AlignHash:
