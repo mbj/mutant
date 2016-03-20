@@ -72,7 +72,7 @@ RSpec.describe Mutant::Parallel::Master do
 
   # Needed because of rubies undefined-ivar-read-is-nil stuff
   describe 'object initialization' do
-    let(:object) { described_class.send(:new, config, actor_env.mailbox(:master)) }
+    let(:object) { described_class.__send__(:new, config, actor_env.mailbox(:master)) }
 
     it 'initializes falsy ivars' do
       expect(object.instance_variable_get(:@stop)).to be(false)
