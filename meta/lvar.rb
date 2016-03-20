@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :lvar do
   source 'a = nil; a'
 
   mutation 'a = nil; nil'

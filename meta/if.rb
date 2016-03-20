@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :if do
   source 'if condition; true; else false; end'
 
   singleton_mutations
@@ -33,7 +33,7 @@ Mutant::Meta::Example.add do
   mutation 'if condition; true;  else nil;   end'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :if do
   source 'if condition; true; end'
 
   singleton_mutations
@@ -46,7 +46,7 @@ Mutant::Meta::Example.add do
   mutation 'true'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :if do
   source 'unless condition; true; end'
 
   singleton_mutations

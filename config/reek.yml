@@ -32,6 +32,7 @@ LongParameterList:
   enabled: true
   exclude:
   - Mutant::Matcher::Method::Instance#self.build
+  - Mutant::Meta::Example::DSL # 3 vars
   max_params: 2
 LongYieldList:
   enabled: true
@@ -64,6 +65,7 @@ TooManyInstanceVariables:
   exclude:
   - Mutant::Mutator # 4 vars
   - Mutant::Parallel::Master # 4 vars
+  - Mutant::Meta::Example::DSL # 4 vars
   max_instance_variables: 3
 TooManyMethods:
   enabled: true

@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :restarg do
   source 'foo(*bar)'
 
   singleton_mutations

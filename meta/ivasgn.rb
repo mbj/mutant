@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :ivasgn do
   source '@a = true'
 
   singleton_mutations

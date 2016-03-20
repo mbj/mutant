@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :or do
   source 'true or false'
 
   singleton_mutations

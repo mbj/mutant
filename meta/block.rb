@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :block do
   source 'foo { a; b }'
 
   singleton_mutations
@@ -14,7 +14,7 @@ Mutant::Meta::Example.add do
   mutation 'a; b'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :block do
   source 'foo { |a, b| }'
 
   singleton_mutations
@@ -27,7 +27,7 @@ Mutant::Meta::Example.add do
   mutation 'foo { || }'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :block do
   source 'foo { |(a, b), c| }'
 
   singleton_mutations
@@ -44,7 +44,7 @@ Mutant::Meta::Example.add do
   mutation 'foo'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :block do
   source 'foo(a, b) {}'
 
   singleton_mutations
@@ -59,7 +59,7 @@ Mutant::Meta::Example.add do
   mutation 'foo {}'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :block do
   source 'foo { |(a)| }'
 
   singleton_mutations
@@ -70,7 +70,7 @@ Mutant::Meta::Example.add do
   mutation 'foo'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :block do
   source 'foo { bar(nil) }'
 
   singleton_mutations
@@ -84,7 +84,7 @@ Mutant::Meta::Example.add do
   mutation 'bar(nil)'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :block do
   source 'foo { self << true }'
 
   singleton_mutations

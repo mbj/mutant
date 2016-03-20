@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :defined? do
   source 'defined?(foo)'
 
   singleton_mutations

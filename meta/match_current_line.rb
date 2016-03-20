@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :match_current_line do
   source 'true if /foo/'
 
   singleton_mutations

@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :break do
   source 'break true'
 
   singleton_mutations

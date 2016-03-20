@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :cvar do
   source '@@a'
 
   singleton_mutations

@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :str do
   source '"foo"'
 
   singleton_mutations

@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :casgn do
   source 'A = true'
 
   mutation 'A__MUTANT__ = true'
@@ -7,7 +7,7 @@ Mutant::Meta::Example.add do
   mutation 'remove_const :A'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :casgn do
   source 'self::A = true'
 
   mutation 'self::A__MUTANT__ = true'

@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :while do
   source 'while true; foo; bar; end'
 
   singleton_mutations
@@ -14,7 +14,7 @@ Mutant::Meta::Example.add do
   mutation 'while true;  raise; end'
 end
 
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :while do
   source 'while true; end'
 
   singleton_mutations

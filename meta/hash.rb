@@ -1,4 +1,4 @@
-Mutant::Meta::Example.add do
+Mutant::Meta::Example.add :hash do
   source '{true => true, false => false}'
 
   singleton_mutations
