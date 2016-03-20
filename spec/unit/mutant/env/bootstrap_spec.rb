@@ -177,8 +177,8 @@ RSpec.describe Mutant::Env::Bootstrap do
             Mutant::Scope.new(TestApp::Empty,   match_expressions.last),
             Mutant::Scope.new(TestApp::Literal, match_expressions.first)
           ],
-          mutations: subjects.flat_map(&:mutations),
-          subjects:  subjects
+          mutations:        subjects.flat_map(&:mutations),
+          subjects:         subjects
         )
       end
 

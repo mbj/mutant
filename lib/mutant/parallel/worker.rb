@@ -63,7 +63,7 @@ module Mutant
           Actor::Message.new(
             :result,
             JobResult.new(
-              job: job,
+              job:     job,
               payload: result
             )
           )

@@ -1,5 +1,5 @@
 RSpec.describe Mutant::Actor::Sender do
-  let(:object)   { described_class.new(condition_variable, mutex, messages) }
+  let(:object) { described_class.new(condition_variable, mutex, messages) }
 
   let(:condition_variable) { instance_double(ConditionVariable) }
   let(:mutex)              { instance_double(Mutex)             }

@@ -104,13 +104,13 @@ RSpec.describe Mutant::Parallel::Master do
 
         sink.stop
 
-        message_sequence.add(:master,   :ready,  worker_a)
+        message_sequence.add(:master,   :ready, worker_a)
         message_sequence.add(:worker_a, :stop)
 
-        message_sequence.add(:master,   :ready,  worker_b)
+        message_sequence.add(:master,   :ready, worker_b)
         message_sequence.add(:worker_b, :stop)
 
-        message_sequence.add(:master,   :stop,   parent)
+        message_sequence.add(:master,   :stop, parent)
         message_sequence.add(:parent,   :stop)
       end
 
@@ -124,10 +124,10 @@ RSpec.describe Mutant::Parallel::Master do
         before do
           sink.stop
 
-          message_sequence.add(:master,   :ready,  worker_a)
+          message_sequence.add(:master,   :ready, worker_a)
           message_sequence.add(:worker_a, :stop)
 
-          message_sequence.add(:master,   :stop,   parent)
+          message_sequence.add(:master,   :stop, parent)
           message_sequence.add(:parent,   :stop)
         end
 
@@ -154,7 +154,7 @@ RSpec.describe Mutant::Parallel::Master do
           message_sequence.add(:master,   :ready,  worker_a)
           message_sequence.add(:worker_a, :stop)
 
-          message_sequence.add(:master,   :stop,   parent)
+          message_sequence.add(:master,   :stop, parent)
           message_sequence.add(:parent,   :stop)
         end
 
@@ -182,7 +182,7 @@ RSpec.describe Mutant::Parallel::Master do
           message_sequence.add(:master,   :ready,  worker_a)
           message_sequence.add(:worker_a, :stop)
 
-          message_sequence.add(:master,   :stop,   parent)
+          message_sequence.add(:master,   :stop, parent)
           message_sequence.add(:parent,   :stop)
         end
 
@@ -244,7 +244,7 @@ RSpec.describe Mutant::Parallel::Master do
           message_sequence.add(:parent,   :status, expected_status) do |message|
             expect(message.payload.active_jobs.frozen?).to be(true)
           end
-          message_sequence.add(:master,   :stop,   parent)
+          message_sequence.add(:master,   :stop, parent)
           message_sequence.add(:parent,   :stop)
         end
 
@@ -275,7 +275,7 @@ RSpec.describe Mutant::Parallel::Master do
           message_sequence.add(:master,   :ready,  worker_a)
           message_sequence.add(:worker_a, :stop)
 
-          message_sequence.add(:master,   :stop,   parent)
+          message_sequence.add(:master,   :stop, parent)
           message_sequence.add(:parent,   :stop)
         end
 
@@ -302,7 +302,7 @@ RSpec.describe Mutant::Parallel::Master do
           message_sequence.add(:master,   :ready,  worker_a)
           message_sequence.add(:worker_a, :stop)
 
-          message_sequence.add(:master,   :stop,   parent)
+          message_sequence.add(:master,   :stop, parent)
           message_sequence.add(:parent,   :stop)
         end
 

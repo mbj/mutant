@@ -57,7 +57,7 @@ module Mutant
         MATCHER = Matcher::Scope
         private_constant(*constants(false))
 
-        REGEXP  = /\A#{SCOPE_NAME_PATTERN}\z/.freeze
+        REGEXP = /\A#{SCOPE_NAME_PATTERN}\z/.freeze
 
         # Matcher matcher on expression
         #

@@ -75,14 +75,14 @@ module Mutant
         #
         # @return [undefined]
         def info(string, *arguments)
-          puts(format(string, *arguments))
+          puts(string % arguments)
         end
 
         # Print a status line to output
         #
         # @return [undefined]
         def status(string, *arguments)
-          puts(colorize(status_color, format(string, *arguments)))
+          puts(colorize(status_color, string % arguments))
         end
 
         # Print a line to output

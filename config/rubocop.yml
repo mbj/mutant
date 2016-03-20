@@ -11,20 +11,15 @@ BlockNesting:
 
 # Align with the style guide.
 CollectionMethods:
+  Enabled: true
   PreferredMethods:
     collect:  'map'
     inject:   'reduce'
     find:     'detect'
     find_all: 'select'
 
-# Do not force public/protected/private keyword to be indented at the same
-# level as the def keyword. My personal preference is to outdent these keywords
-# because I think when scanning code it makes it easier to identify the
-# sections of code and visually separate them. When the keyword is at the same
-# level I think it sort of blends in with the def keywords and makes it harder
-# to scan the code and see where the sections are.
 AccessModifierIndentation:
-  Enabled: false
+  EnforcedStyle: outdent
 
 # Limit line length
 LineLength:
@@ -72,7 +67,7 @@ MultilineOperationIndentation:
 
 # Prefer String#% over Kernel#sprintf
 FormatString:
-  Enabled: false
+  EnforcedStyle: percent
 
 # Use square brackets for literal Array objects
 PercentLiteralDelimiters:
@@ -135,7 +130,7 @@ ParallelAssignment:
 
 # Allow additional specs
 ExtraSpacing:
-  Enabled: false
+  AllowForAlignment: true
 
 # Buggy
 FormatParameterMismatch:
@@ -145,9 +140,9 @@ FormatParameterMismatch:
 SignalException:
   EnforcedStyle: semantic
 
-# Different preference
+# Do not use `alias`
 Alias:
-  Enabled: false
+  EnforcedStyle: prefer_alias_method
 
 # Teaching people to ignore singleton class is pointless
 RedundantFreeze:
@@ -160,3 +155,7 @@ IndentArray:
 # My style is not supported
 MultilineMethodCallIndentation:
   Enabled: false
+
+# Align keys and values in a multiline hash
+Style/AlignHash:
+  EnforcedColonStyle: table

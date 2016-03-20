@@ -16,17 +16,17 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
 
       private :method_d
 
-      public
+    public
 
       def method_a
       end
 
-      protected
+    protected
 
       def method_b
       end
 
-      private
+    private
 
       def method_c
       end

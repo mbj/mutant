@@ -88,8 +88,8 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:world) do
     double(
       'world',
-      example_groups:         example_groups,
-      filtered_examples:      filtered_examples
+      example_groups:    example_groups,
+      filtered_examples: filtered_examples
     )
   end
 

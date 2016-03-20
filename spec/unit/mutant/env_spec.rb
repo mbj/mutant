@@ -41,9 +41,9 @@ RSpec.describe Mutant::Env do
     let(:mutation_subject) do
       instance_double(
         Mutant::Subject,
-        context: context,
+        context:        context,
         identification: 'subject',
-        source: 'original'
+        source:         'original'
       )
     end
 
@@ -53,7 +53,7 @@ RSpec.describe Mutant::Env do
       specify do
         should eql(
           Mutant::Result::Mutation.new(
-            mutation: mutation,
+            mutation:    mutation,
             test_result: test_result
           )
         )
