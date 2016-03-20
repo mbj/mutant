@@ -29,9 +29,17 @@ LineLength:
 Documentation:
   Enabled: false
 
-# Do not always use &&/|| instead of and/or.
+# Permit
+#
+#     boolean_check? or fail
+#
+# Reject
+#
+#     if foo or bar
+#       ...
+#     end
 AndOr:
-  Enabled: false
+  EnforcedStyle: conditionals
 
 # Do not favor modifier if/unless usage when you have a single-line body
 IfUnlessModifier:
