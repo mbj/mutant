@@ -163,7 +163,7 @@ MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
 # Align keys and values in a multiline hash
-Style/AlignHash:
+AlignHash:
   EnforcedColonStyle: table
 
 # Prefer `public_send` and `__send__` over `send`
