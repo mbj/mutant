@@ -9,6 +9,8 @@ module Mutant
 
         children :receiver, :selector
 
+        public :receiver, :selector
+
         INDEX_ASSIGNMENT_SELECTOR            = :[]=
         ATTRIBUTE_ASSIGNMENT_SELECTOR_SUFFIX = '='.freeze
 
@@ -16,6 +18,7 @@ module Mutant
         #
         # @return [Enumerable<Parser::AST::Node>]
         alias_method :arguments, :remaining_children
+        public :arguments
 
         # Test if AST node is a valid assignment target
         #

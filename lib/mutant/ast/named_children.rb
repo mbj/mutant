@@ -42,7 +42,7 @@ module Mutant
         #
         # @return [undefined]
         def define_named_child(name, index)
-          define_method(name) do
+          define_private_method(name) do
             children.at(index)
           end
         end
@@ -53,15 +53,15 @@ module Mutant
         #
         # @return [undefined]
         def define_remaining_children(names)
-          define_method(:remaining_children_with_index) do
+          define_private_method(:remaining_children_with_index) do
             children.each_with_index.drop(names.length)
           end
 
-          define_method(:remaining_children_indices) do
+          define_private_method(:remaining_children_indices) do
             children.each_index.drop(names.length)
           end
 
-          define_method(:remaining_children) do
+          define_private_method(:remaining_children) do
             children.drop(names.length)
           end
         end
@@ -74,6 +74,14 @@ module Mutant
             define_named_child(name, index)
           end
           define_remaining_children(names)
+        end
+
+        # Define private method
+        #
+        # @param [Symbol] name
+        def define_private_method(name, &block)
+          define_method(name, &block)
+          private(name)
         end
 
       end # ClassMethods

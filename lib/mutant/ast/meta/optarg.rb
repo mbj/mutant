@@ -11,6 +11,8 @@ module Mutant
 
         children :name, :default_value
 
+        public :name, :default_value
+
         # Test if optarg definition intends to be used
         #
         # @return [Boolean]
