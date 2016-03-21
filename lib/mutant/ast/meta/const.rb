@@ -9,6 +9,8 @@ module Mutant
 
         children :base, :name
 
+        public :base, :name
+
         # Test if AST node is possibly a top level constant
         #
         # @return [Boolean]

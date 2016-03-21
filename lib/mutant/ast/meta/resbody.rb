@@ -8,6 +8,8 @@ module Mutant
         include NamedChildren, Concord.new(:node)
 
         children :captures, :assignment, :body
+
+        public :captures, :assignment, :body
       end # Resbody
 
     end # Meta
