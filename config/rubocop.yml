@@ -29,9 +29,17 @@ LineLength:
 Documentation:
   Enabled: false
 
-# Do not always use &&/|| instead of and/or.
+# Permit
+#
+#     boolean_check? or fail
+#
+# Reject
+#
+#     if foo or bar
+#       ...
+#     end
 AndOr:
-  Enabled: false
+  EnforcedStyle: conditionals
 
 # Do not favor modifier if/unless usage when you have a single-line body
 IfUnlessModifier:
@@ -90,11 +98,6 @@ SymbolArray:
 EndAlignment:
   AlignWith: variable
 
-# Do not always align parameters when it is easier to read
-AlignParameters:
-  Exclude:
-    - spec/**/*_spec.rb
-
 # Prefer #kind_of? over #is_a?
 ClassCheck:
   EnforcedStyle: kind_of?
@@ -152,10 +155,25 @@ RedundantFreeze:
 IndentArray:
   Enabled: false
 
-# My style is not supported
+# Prefer
+#
+#     some_receiver
+#       .foo
+#       .bar
+#       .baz
+#
+# Over
+#
+#     some_receiver.foo
+#                  .bar
+#                  .baz
 MultilineMethodCallIndentation:
-  Enabled: false
+  EnforcedStyle: indented
 
 # Align keys and values in a multiline hash
-Style/AlignHash:
+AlignHash:
   EnforcedColonStyle: table
+
+# Prefer `public_send` and `__send__` over `send`
+Send:
+  Enabled: true

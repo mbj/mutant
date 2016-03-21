@@ -9,7 +9,7 @@ module XSpec
 
     def call(observation)
       event_list.map do |event, object|
-        send(event, observation, object)
+        __send__(event, observation, object)
       end.last
     end
 
