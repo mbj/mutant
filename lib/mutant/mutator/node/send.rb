@@ -105,6 +105,7 @@ module Mutant
           emit_const_get_mutation
           emit_integer_mutation
           emit_dig_mutation
+          emit_drop_mutation
         end
 
         # Emit selector mutations specific to top level constants
@@ -135,6 +136,19 @@ module Mutant
           return emit(fetch_mutation) if tail.empty?
 
           emit(s(:send, fetch_mutation, :dig, *tail))
+        end
+
+        # Emit mutation `foo[n..-1]` -> `foo.drop(n)`
+        #
+        # @return [undefined]
+        def emit_drop_mutation
+          return if !selector.equal?(:[]) || !arguments.one? || !n_irange?(arguments.first)
+
+          start, ending = *arguments.first
+
+          return unless ending.eql?(s(:int, -1))
+
+          emit(s(:send, receiver, :drop, start))
         end
 
         # Emit mutation from `to_i` to `Integer(...)`

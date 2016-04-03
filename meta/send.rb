@@ -597,6 +597,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo[n..(1.0 / 0.0)]'
   mutation 'foo[n..(0.0 / 0.0)]'
   mutation 'foo[(0.0 / 0.0)..-1]'
+  mutation 'foo.drop(n)'
 end
 
 Mutant::Meta::Example.add :send do
