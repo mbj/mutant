@@ -499,6 +499,107 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
+  source 'foo(n..-1)'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'n..-1'
+  mutation 'foo(nil)'
+  mutation 'foo(self)'
+  mutation 'foo(n...-1)'
+  mutation 'foo(nil..-1)'
+  mutation 'foo(self..-1)'
+  mutation 'foo(n..(1.0 / 0.0))'
+  mutation 'foo(n..(0.0 / 0.0))'
+  mutation 'foo(n..nil)'
+  mutation 'foo(n..self)'
+  mutation 'foo(n..0)'
+  mutation 'foo(n..1)'
+  mutation 'foo(n..-2)'
+  mutation 'foo((0.0 / 0.0)..-1)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo[n..-2]'
+
+  singleton_mutations
+  mutation 'n..-2'
+  mutation 'foo'
+  mutation 'foo[]'
+  mutation 'foo.at(n..-2)'
+  mutation 'foo.fetch(n..-2)'
+  mutation 'foo.key?(n..-2)'
+  mutation 'self[n..-2]'
+  mutation 'foo[nil]'
+  mutation 'foo[self]'
+  mutation 'foo[n..nil]'
+  mutation 'foo[n..self]'
+  mutation 'foo[n..-1]'
+  mutation 'foo[n..2]'
+  mutation 'foo[n..0]'
+  mutation 'foo[n..1]'
+  mutation 'foo[n..-3]'
+  mutation 'foo[n...-2]'
+  mutation 'foo[nil..-2]'
+  mutation 'foo[self..-2]'
+  mutation 'foo[n..(1.0 / 0.0)]'
+  mutation 'foo[n..(0.0 / 0.0)]'
+  mutation 'foo[(0.0 / 0.0)..-2]'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo[n...-1]'
+
+  singleton_mutations
+  mutation 'n...-1'
+  mutation 'foo'
+  mutation 'foo[]'
+  mutation 'foo.at(n...-1)'
+  mutation 'foo.fetch(n...-1)'
+  mutation 'foo.key?(n...-1)'
+  mutation 'self[n...-1]'
+  mutation 'foo[nil]'
+  mutation 'foo[self]'
+  mutation 'foo[n...nil]'
+  mutation 'foo[n...self]'
+  mutation 'foo[n..-1]'
+  mutation 'foo[n...0]'
+  mutation 'foo[n...1]'
+  mutation 'foo[n...-2]'
+  mutation 'foo[nil...-1]'
+  mutation 'foo[self...-1]'
+  mutation 'foo[n...(1.0 / 0.0)]'
+  mutation 'foo[n...(0.0 / 0.0)]'
+  mutation 'foo[(0.0 / 0.0)...-1]'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo[n..-1]'
+
+  singleton_mutations
+  mutation 'n..-1'
+  mutation 'foo'
+  mutation 'foo[]'
+  mutation 'foo.at(n..-1)'
+  mutation 'foo.fetch(n..-1)'
+  mutation 'foo.key?(n..-1)'
+  mutation 'self[n..-1]'
+  mutation 'foo[nil]'
+  mutation 'foo[self]'
+  mutation 'foo[n..nil]'
+  mutation 'foo[n..self]'
+  mutation 'foo[n..0]'
+  mutation 'foo[n..1]'
+  mutation 'foo[n..-2]'
+  mutation 'foo[n...-1]'
+  mutation 'foo[nil..-1]'
+  mutation 'foo[self..-1]'
+  mutation 'foo[n..(1.0 / 0.0)]'
+  mutation 'foo[n..(0.0 / 0.0)]'
+  mutation 'foo[(0.0 / 0.0)..-1]'
+end
+
+Mutant::Meta::Example.add :send do
   source 'self[foo]'
 
   singleton_mutations
