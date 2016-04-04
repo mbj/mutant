@@ -27,7 +27,7 @@ module Mutant
           #
           # @return [undefined]
           def dispatch
-            emit_singletons
+            emit_singletons unless parent_type.equal?(:mlhs)
             mutate_name
             emit_value_mutations if value # op asgn!
           end
