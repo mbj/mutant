@@ -9,7 +9,7 @@ module Mutant
         # your contribution is that close!
         handle(
           :ensure, :redo, :regopt, :retry, :arg_expr, :blockarg,
-          :kwrestarg, :kwoptarg, :kwarg, :undef, :module, :empty,
+          :kwrestarg, :undef, :module, :empty,
           :alias, :for, :xstr, :back_ref, :class, :restarg,
           :sclass, :match_with_lvasgn, :while_post,
           :until_post, :preexe, :postexe, :iflipflop, :eflipflop, :kwsplat,
