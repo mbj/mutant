@@ -37,7 +37,12 @@ module Mutant
         # Mutator for optional arguments
         class Optional < self
 
-          handle(:optarg)
+          TYPE_MAP = IceNine.deep_freeze(
+            optarg:   :arg,
+            kwoptarg: :kwarg
+          )
+
+          handle(:optarg, :kwoptarg)
 
           children :name, :default
 
@@ -56,7 +61,7 @@ module Mutant
           #
           # @return [undefined]
           def emit_required_mutation
-            emit(s(:arg, name))
+            emit(s(TYPE_MAP.fetch(node.type), name))
           end
 
         end # Optional
