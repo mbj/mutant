@@ -4,7 +4,7 @@ module Mutant
 
       # Mutator for required arguments
       class Argument < self
-        handle(:arg)
+        handle(:arg, :kwarg)
 
         UNDERSCORE = '_'.freeze
 
