@@ -44,13 +44,13 @@ module ParserHelper
   def parse_expression(string)
     Mutant::Config::DEFAULT.expression_parser.(string)
   end
-end
+end # ParserHelper
 
 module MessageHelper
   def message(*arguments)
     Mutant::Actor::Message.new(*arguments)
   end
-end
+end # MessageHelper
 
 RSpec.configure do |config|
   config.extend(SharedContext)

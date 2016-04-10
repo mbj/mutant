@@ -82,7 +82,7 @@ module XSpec
       end
     end
     private_class_method :assert_total
-  end
+  end # MessageReaction
 
   class MessageExpectation
     include Anima.new(:receiver, :selector, :arguments, :reaction)
@@ -127,12 +127,12 @@ module XSpec
         fail exception if exception
       end
 
-    end
-  end
+    end # Verifier
+  end # MessageExpectation
 
   class MessageObservation
     include Anima.new(:receiver, :selector, :arguments, :block)
-  end
+  end # MessageObservation
 
   class ExpectationVerifier
     include Concord.new(:expectations)
@@ -173,5 +173,5 @@ module XSpec
 
       verifier.assert_done
     end
-  end
-end
+  end # ExpectationVerifier
+end # XSpec

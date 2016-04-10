@@ -7,5 +7,5 @@ module Mutant
     # @return [Object]
     #   the blocks result
     abstract_method :call
-  end
-end
+  end # Isolation
+end # Mutant

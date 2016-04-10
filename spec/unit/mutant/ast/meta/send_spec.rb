@@ -23,7 +23,7 @@ RSpec.describe Mutant::AST::Meta::Send do
     ].map do |values|
       new(Hash[anima.attribute_names.zip(values)])
     end.freeze
-  end
+  end # Expectation
 
   # Rspec should have a build in for this kind of "n-dimensional assertion with context"
   (Expectation.anima.attribute_names - %i[name]).each do |name|

@@ -68,7 +68,7 @@ RSpec.describe Mutant::Parallel::Master do
     def stop?
       @stop
     end
-  end
+  end # FakeSink
 
   # Needed because of rubies undefined-ivar-read-is-nil stuff
   describe 'object initialization' do

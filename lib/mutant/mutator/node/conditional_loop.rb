@@ -22,7 +22,7 @@ module Mutant
           emit_body(N_RAISE)
         end
 
-      end # While
+      end # ConditionalLoop
     end # Node
   end # Mutator
 end # Mutant

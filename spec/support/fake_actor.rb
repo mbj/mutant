@@ -16,7 +16,7 @@ module FakeActor
       end
       block.call(other.message) if block
     end
-  end
+  end # Expectation
 
   class MessageSequence
     include Adamantium::Flat, Concord::Public.new(:messages)
@@ -47,7 +47,7 @@ module FakeActor
     def consumed?
       messages.empty?
     end
-  end
+  end # MessageSequence
 
   class Env
     include Concord.new(:messages, :mailbox_names)
@@ -89,7 +89,7 @@ module FakeActor
     def bind(sender)
       Mutant::Actor::Binding.new(self, sender)
     end
-  end
+  end # Mailbox
 
   class Sender
     include Concord.new(:name, :messages)
@@ -105,5 +105,5 @@ module FakeActor
     def call
       messages.receiving(name)
     end
-  end
-end
+  end # Receiver
+end # FakeActor

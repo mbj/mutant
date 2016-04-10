@@ -8,7 +8,7 @@ module MutantSpec
     # An event being observed by the VM handlers
     class EventObservation
       include Concord::Public.new(:type, :payload)
-    end
+    end # EventObservation
 
     # An event being expected, can advance the VM
     class EventExpectation
@@ -42,12 +42,12 @@ module MutantSpec
 
       # Expectation and advance on require calls
       class Require < self
-      end
+      end # Require
 
       # Expectation and advance on eval calls
       class Eval < self
-      end
-    end
+      end # Eval
+    end # EventExpectation
 
     # A fake implementation of Kernel#require
     def require(logical_name)
@@ -78,5 +78,5 @@ module MutantSpec
 
       expected_events.slice!(0).handle(self, observation).return_value
     end
-  end
+  end # RubyVM
 end # MutantSpec

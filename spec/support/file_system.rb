@@ -44,7 +44,7 @@ module MutantSpec
     def state
       file_system.state(pathname.to_s)
     end
-  end # Pathname
+  end # FakePathname
 
   class FileSystem
     include Adamantium, Concord.new(:file_states)

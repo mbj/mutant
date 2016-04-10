@@ -126,4 +126,4 @@ module SharedContext
       subject_a_result.with(mutation_results: [mutation_a_result])
     end
   end
-end
+end # SharedContext

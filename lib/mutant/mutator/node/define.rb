@@ -83,7 +83,7 @@ module Mutant
 
           children :subject, :name, :arguments, :body
 
-        end # Singelton
+        end # Singleton
 
       end # Define
     end # Node
