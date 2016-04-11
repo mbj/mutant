@@ -48,7 +48,7 @@ module Mutant
             def attribute_name
               name.slice(NAME_RANGE).to_sym
             end
-          end
+          end # Ivar
 
         end # Access
       end # NamedValue

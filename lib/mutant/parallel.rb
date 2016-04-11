@@ -85,7 +85,7 @@ module Mutant
         :done,
         :payload
       )
-    end
+    end # Status
 
   end # Parallel
 end # Mutant

@@ -55,6 +55,6 @@ module Mutant
         Object.const_get(scope_name)
       end
 
-    end # Method
+    end # Methods
   end # Expression
 end # Mutant

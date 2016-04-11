@@ -17,7 +17,7 @@ module Mutant
             emit(child)
           end
         end
-      end # Block
+      end # Begin
     end # Node
   end # Mutator
 end # Mutant

@@ -74,5 +74,5 @@ module Mutant
 
       end # Exact
     end # Namespace
-  end # Namespace
+  end # Expression
 end # Mutant

@@ -5,7 +5,7 @@ module Mutant
 
       class ParserError < RuntimeError
         include AbstractType
-      end
+      end # ParserError
 
       # Error raised on invalid expressions
       class InvalidExpressionError < ParserError; end

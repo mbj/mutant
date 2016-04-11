@@ -38,7 +38,7 @@ module Mutant
         end
         private_class_method :capture
 
-      end # TPUT
+      end # Tput
     end # CLI
   end # Reporter
 end # Mutant

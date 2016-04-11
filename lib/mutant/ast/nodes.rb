@@ -16,6 +16,6 @@ module Mutant
       N_ZSUPER            = s(:zsuper)
       N_EMPTY_SUPER       = s(:super)
 
-    end # Node
+    end # Nodes
   end # AST
 end # Mutant
