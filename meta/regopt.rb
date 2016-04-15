@@ -4,4 +4,5 @@ Mutant::Meta::Example.add :regopt do
   singleton_mutations
   mutation '//ixom'
   mutation '/nomatch\\A/ixom'
+  mutation '/foo/xom'
 end
