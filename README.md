@@ -10,7 +10,7 @@ mutant
 
 Mutant is a mutation testing tool for Ruby.
 
-The idea is that if code can be changed and your tests do not notice, either that code isn't being covered
+The idea is that if code can be changed and your tests do not notice, then either that code isn't being covered
 or it does not have a speced side effect.
 
 Mutant supports ruby >= 2.1, while support for JRuby is planned.
@@ -25,7 +25,7 @@ Installation
 ------------
 
 As mutant right now only supports rspec, install the gem `mutant-rspec` via your preferred method.
-It'll pull the `mutant` gem (in correct version), that contains the main engine.
+It'll pull the `mutant` gem (in the correct version), that contains the main engine.
 
 ```ruby
 gem install mutant-rspec
@@ -51,7 +51,7 @@ mutant --include lib --require virtus --use rspec Virtus::Attribute#type
 Rails
 -------
 
-To mutation test Rails models with rspec comment out ```require 'rspec/autorun'``` from your spec_helper.rb file.  Having done so you should be able to use commands like the following:
+To mutation test Rails models with rspec, comment out ```require 'rspec/autorun'``` from your spec_helper.rb file.  Having done so you should be able to use commands like the following:
 
 ```sh
 RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec User
@@ -220,7 +220,7 @@ Concurrency
 
 By default, mutant will test mutations in parallel by running up to one process for each core on your system. You can control the number of processes created using the `--jobs` argument.
  
-Mutant forks a new process for each mutation to be tested to prevent side affects in your specs, and the lack of thread safety in rspec, from impacting the results.
+Mutant forks a new process for each mutation to be tested to prevent side affects in your specs and the lack of thread safety in rspec from impacting the results.
 
 If the code under test relies on a database, you may experience problems when running mutant because of conflicting data in the database. For example, if you have a test like this:
 ```
@@ -254,7 +254,7 @@ Currently, troublehshooting these errors requires using a debugger and/or modyif
 Only Mutating Changed Code
 --------------------------
 
-Running mutant for the first time on a existing codebase can be a rather disheartining experience due to the large number of alive mutations found! Mutant has a setting that can help. Using the `--since` argument, mutant will only mutate code that has been modified. This allows you to introduce mutant into an existing code base without drowning in errors. Example usage that will mutate all code changed between master and the current branch:
+Running mutant for the first time on an existing codebase can be a rather disheartening experience due to the large number of alive mutations found! Mutant has a setting that can help. Using the `--since` argument, mutant will only mutate code that has been modified. This allows you to introduce mutant into an existing code base without drowning in errors. Example usage that will mutate all code changed between master and the current branch:
 ```
 mutant --include lib --require virtus --since master --use rspec Virtus::Attribute#type
 ```
@@ -262,7 +262,7 @@ mutant --include lib --require virtus --since master --use rspec Virtus::Attribu
 Known Problems
 ==============
 
-Mutations with Inifinite Runtimes
+Mutations with Infinite Runtimes
 ---------------------------------
 
 Occasionally mutant will produce a mutation with an infinite runtime. When this happens
