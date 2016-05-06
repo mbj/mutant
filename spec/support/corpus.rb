@@ -146,7 +146,7 @@ module MutantSpec
 
         return DEFAULT_MUTATION_COUNT unless node
 
-        Mutant::Mutator::REGISTRY.call(node).length
+        Mutant::Mutator.mutate(node).length
       end
 
       # Install mutant

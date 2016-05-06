@@ -71,7 +71,7 @@ RSpec.describe Mutant::Subject do
     subject { object.mutations }
 
     before do
-      expect(Mutant::Mutator::REGISTRY).to receive(:call).with(node).and_return([mutation_a, mutation_b])
+      expect(Mutant::Mutator).to receive(:mutate).with(node).and_return([mutation_a, mutation_b])
     end
 
     let(:mutation_a) { instance_double(Parser::AST::Node, :mutation_a) }

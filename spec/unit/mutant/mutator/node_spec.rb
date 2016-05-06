@@ -1,5 +1,5 @@
 Mutant::Meta::Example::ALL.each.group_by(&:node_type).each do |type, examples|
-  RSpec.describe Mutant::Mutator::REGISTRY.__send__(:lookup, type) do
+  RSpec.describe Mutant::Mutator::REGISTRY.lookup(type) do
     toplevel_nodes = examples.map { |example| example.node.type }.uniq
 
     it "generates the correct mutations on #{toplevel_nodes} toplevel examples" do

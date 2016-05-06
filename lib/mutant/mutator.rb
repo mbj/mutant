@@ -1,7 +1,20 @@
 module Mutant
   # Generator for mutations
   class Mutator
+
+    REGISTRY = Registry.new
+
     include Adamantium::Flat, Concord.new(:input, :parent), AbstractType, Procto.call(:output)
+
+    # Lookup and invoke dedicated AST mutator
+    #
+    # @param node [Parser::AST::Node]
+    # @param parent [nil,Mutant::Mutator::Node]
+    #
+    # @return [Set<Parser::AST::Node>]
+    def self.mutate(node, parent = nil)
+      self::REGISTRY.lookup(node.type).call(node, parent)
+    end
 
     # Register node class handler
     #

@@ -4,7 +4,7 @@ RSpec.describe Mutant::Mutator do
 
     subject do
       Class.new(described_class) do
-        const_set(:REGISTRY, Mutant::Mutator::Registry.new)
+        const_set(:REGISTRY, Mutant::Registry.new)
 
         handle :send
 
@@ -15,7 +15,7 @@ RSpec.describe Mutant::Mutator do
     end
 
     it 'should register mutator' do
-      expect(subject::REGISTRY.call(s(:send), s(:parent))).to eql([s(:parent)].to_set)
+      expect(subject.mutate(s(:send), s(:parent))).to eql([s(:parent)].to_set)
     end
   end
 end

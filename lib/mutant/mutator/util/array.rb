@@ -33,7 +33,7 @@ module Mutant
           # @return [undefined]
           def dispatch
             input.each_with_index do |element, index|
-              REGISTRY.call(element).each do |mutation|
+              Mutator.mutate(element).each do |mutation|
                 dup = dup_input
                 dup[index] = mutation
                 emit(dup)
