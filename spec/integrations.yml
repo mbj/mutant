@@ -5,36 +5,100 @@
   mutation_coverage: false
   mutation_generation: true
   expect_coverage: 0 # not run
-  exclude:
-    # Binary encoded source subjected to limitations see README of unparser
-    - core/array/pack/{b,h,u}_spec.rb
-    - language/regexp/escapes_spec.rb
-    - core/array/pack/shared/float.rb
-    - core/array/pack/shared/integer.rb
-    - core/array/pack/{c,m,w}_spec.rb
-    - core/regexp/shared/quote.rb
-    - core/encoding/compatible_spec.rb
-    - core/io/readpartial_spec.rb
-    - core/env/element_reference_spec.rb
-    - core/dir/pwd_spec.rb
-    - core/string/casecmp_spec.rb
-    - core/string/unpack/{b,c,h,m,u,w}_spec.rb
-    - core/string/unpack/b_spec.rb
-    - core/string/unpack/shared/float.rb
-    - core/string/unpack/shared/integer.rb
-    - core/symbol/casecmp_spec.rb
-    - optional/capi/integer_spec.rb
+  expected_errors:
+    "#<Parser::SyntaxError: invalid multibyte escape: /\xAA/>":
+      - language/regexp/escapes_spec.rb
+    "#<Parser::SyntaxError: literal contains escape sequences incompatible with UTF-8>":
+      - core/array/fixtures/encoded_strings.rb
+      - core/array/pack/shared/string.rb
+      - core/array/pack/shared/unicode.rb
+      - core/encoding/converter/convert_spec.rb
+      - core/encoding/converter/last_error_spec.rb
+      - core/encoding/converter/primitive_convert_spec.rb
+      - core/encoding/converter/primitive_errinfo_spec.rb
+      - core/encoding/converter/putback_spec.rb
+      - core/encoding/fixtures/classes.rb
+      - core/encoding/invalid_byte_sequence_error/error_bytes_spec.rb
+      - core/encoding/invalid_byte_sequence_error/incomplete_input_spec.rb
+      - core/encoding/invalid_byte_sequence_error/readagain_bytes_spec.rb
+      - core/encoding/replicate_spec.rb
+      - core/file/expand_path_spec.rb
+      - core/io/gets_spec.rb
+      - core/io/read_spec.rb
+      - core/io/shared/gets_ascii.rb
+      - core/io/write_spec.rb
+      - core/marshal/dump_spec.rb
+      - core/marshal/fixtures/marshal_data.rb
+      - core/marshal/shared/load.rb
+      - core/random/bytes_spec.rb
+      - core/regexp/match_spec.rb
+      - core/regexp/shared/new_ascii.rb
+      - core/string/byteslice_spec.rb
+      - core/string/codepoints_spec.rb
+      - core/string/comparison_spec.rb
+      - core/string/count_spec.rb
+      - core/string/delete_spec.rb
+      - core/string/element_set_spec.rb
+      - core/string/encode_spec.rb
+      - core/string/encoding_spec.rb
+      - core/string/fixtures/iso-8859-9-encoding.rb
+      - core/string/getbyte_spec.rb
+      - core/string/gsub_spec.rb
+      - core/string/new_spec.rb
+      - core/string/scrub_spec.rb
+      - core/string/shared/chars.rb
+      - core/string/shared/codepoints.rb
+      - core/string/shared/each_codepoint_without_block.rb
+      - core/string/shared/encode.rb
+      - core/string/shared/eql.rb
+      - core/string/shared/succ.rb
+      - core/string/slice_spec.rb
+      - core/string/squeeze_spec.rb
+      - core/string/unicode_normalize_spec.rb
+      - core/string/valid_encoding_spec.rb
+      - core/symbol/casecmp_spec.rb
+      - core/time/_dump_spec.rb
+      - core/time/_load_spec.rb
+      - language/regexp/encoding_spec.rb
+      - language/string_spec.rb
+      - library/digest/md5/shared/constants.rb
+      - library/digest/md5/shared/sample.rb
+      - library/digest/sha1/shared/constants.rb
+      - library/digest/sha256/shared/constants.rb
+      - library/digest/sha384/shared/constants.rb
+      - library/digest/sha512/shared/constants.rb
+      - library/openssl/shared/constants.rb
+      - library/socket/basicsocket/recv_spec.rb
+      - library/socket/socket/gethostbyname_spec.rb
+      - library/stringscanner/getch_spec.rb
+      - library/stringscanner/shared/get_byte.rb
+      - library/zlib/deflate/deflate_spec.rb
+      - library/zlib/deflate/set_dictionary_spec.rb
+      - library/zlib/gzipreader/each_byte_spec.rb
+      - library/zlib/gzipreader/eof_spec.rb
+      - library/zlib/gzipreader/getc_spec.rb
+      - library/zlib/gzipreader/pos_spec.rb
+      - library/zlib/gzipreader/read_spec.rb
+      - library/zlib/gzipreader/rewind_spec.rb
+      - library/zlib/inflate/append_spec.rb
+      - library/zlib/inflate/inflate_spec.rb
+      - library/zlib/inflate/set_dictionary_spec.rb
+      - library/zlib/zstream/flush_next_out_spec.rb
+      - optional/capi/encoding_spec.rb
+      - optional/capi/string_spec.rb
+    '#<RegexpError: invalid multibyte escape: /\xAA/>':
+      - language/regexp/escapes_spec.rb
 - name: auom
   namespace: AUOM
   repo_uri: 'https://github.com/mbj/auom.git'
   mutation_coverage: true
   mutation_generation: true
-  exclude: []
+  expected_errors: {}
   expect_coverage: 1
 - name: axiom
   namespace: Axiom
   repo_uri: 'https://github.com/dkubb/axiom.git'
   mutation_coverage: false
   mutation_generation: true
-  exclude: []
+  expected_errors: {}
   expect_coverage: 1
