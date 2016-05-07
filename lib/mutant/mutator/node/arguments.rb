@@ -32,7 +32,7 @@ module Mutant
         # @return [undefined]
         def emit_argument_mutations
           children.each_with_index do |child, index|
-            REGISTRY.call(child).each do |mutant|
+            Mutator.mutate(child).each do |mutant|
               next if invalid_argument_replacement?(mutant, index)
               emit_child_update(index, mutant)
             end
