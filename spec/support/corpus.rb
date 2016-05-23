@@ -250,7 +250,7 @@ module MutantSpec
           def initialize(*error_info)
             super(MESSAGE % error_info)
           end
-        end
+        end # UnnecessaryExpectation
 
         include Concord.new(:map), Adamantium
 
