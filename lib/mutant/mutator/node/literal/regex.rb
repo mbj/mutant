@@ -60,7 +60,7 @@ module Mutant
           #
           # @return [Regexp::Expression]
           def body_expression
-            ::Regexp::Parser.parse(body.map(&:children).join)
+            AST::Regexp.parse(body.map(&:children).join)
           end
           memoize :body_expression
 

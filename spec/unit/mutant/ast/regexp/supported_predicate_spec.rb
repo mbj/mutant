@@ -1,8 +1,8 @@
 RSpec.describe Mutant::AST::Regexp, '.supported?' do
   subject { described_class.supported?(expression) }
 
-  let(:expression) { Regexp::Parser.parse(regexp) }
-  let(:regexp)     { /foo/                        }
+  let(:expression) { described_class.parse(regexp) }
+  let(:regexp)     { /foo/                         }
 
   it { should be(true) }
 

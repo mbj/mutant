@@ -24,7 +24,7 @@ module RegexpSpec
   end # Expression
 
   RSpec.shared_context 'regexp transformation' do
-    let(:parsed)     { Regexp::Parser.parse(regexp)           }
+    let(:parsed)     { Mutant::AST::Regexp.parse(regexp)      }
     let(:ast)        { Mutant::AST::Regexp.to_ast(parsed)     }
     let(:expression) { Mutant::AST::Regexp.to_expression(ast) }
 

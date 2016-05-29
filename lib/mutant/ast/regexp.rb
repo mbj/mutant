@@ -3,7 +3,20 @@ module Mutant
     # Regexp source mapper
     module Regexp
       UNSUPPORTED_EXPRESSION_TYPE = :conditional
+
       private_constant(*constants(false))
+
+      # Parse regex string into expression
+      #
+      # @param regexp [String]
+      #
+      # @return [Regexp::Expression]
+      def self.parse(regexp)
+        ::Regexp::Parser.parse(
+          regexp,
+          "ruby/#{RUBY_VERSION.split('.').first(2).join('.')}"
+        )
+      end
 
       # Check if expression is supported by mapper
       #
