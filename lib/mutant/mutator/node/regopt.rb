@@ -25,7 +25,7 @@ module Mutant
           (children - MUTATED_FLAGS)
         end
 
-      end # Regopt
+      end # Generic
     end # Node
   end # Mutator
 end # Mutant
