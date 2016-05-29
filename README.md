@@ -271,7 +271,7 @@ avoid mutations like this, consider adding a timeout around your tests. For exam
 RSpec you can add the following to your `spec_helper`:
 ```ruby
 config.around(:each) do |example|
-  Timeout.timeout(5_000, &example)
+  Timeout.timeout(5, &example)
 end
 ```
 which will fail specs which run for longer than 5 seconds.
