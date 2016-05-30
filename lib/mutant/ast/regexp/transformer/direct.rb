@@ -73,6 +73,8 @@ module Mutant
               [:regexp_digit_type,               [:type,     :digit,            '\d'],           ::Regexp::Expression::CharacterType::Digit],
               [:regexp_space_type,               [:type,     :space,            '\s'],           ::Regexp::Expression::CharacterType::Space],
               [:regexp_word_type,                [:type,     :word,             '\w'],           ::Regexp::Expression::CharacterType::Word],
+              [:regexp_hex_type,                 [:type,     :hex,              '\h'],           ::Regexp::Expression::CharacterType::Hex],
+              [:regexp_nonhex_type,              [:type,     :nonhex,           '\H'],           ::Regexp::Expression::CharacterType::NonHex],
               [:regexp_nondigit_type,            [:type,     :nondigit,         '\D'],           ::Regexp::Expression::CharacterType::NonDigit],
               [:regexp_nonspace_type,            [:type,     :nonspace,         '\S'],           ::Regexp::Expression::CharacterType::NonSpace],
               [:regexp_nonword_type,             [:type,     :nonword,          '\W'],           ::Regexp::Expression::CharacterType::NonWord],

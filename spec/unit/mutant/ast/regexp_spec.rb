@@ -339,6 +339,16 @@ RegexpSpec.expect_mapping(/\xFF/n, :regexp_hex_escape) do
     s(:regexp_hex_escape, '\\xFF'))
 end
 
+RegexpSpec.expect_mapping(/\h/, :regexp_hex_type) do
+  s(:regexp_root_expression,
+    s(:regexp_hex_type))
+end
+
+RegexpSpec.expect_mapping(/\H/, :regexp_hex_type) do
+  s(:regexp_root_expression,
+    s(:regexp_nonhex_type))
+end
+
 RegexpSpec.expect_mapping(/\}/, :regexp_interval_close_escape) do
   s(:regexp_root_expression,
     s(:regexp_interval_close_escape))

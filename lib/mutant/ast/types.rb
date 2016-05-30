@@ -72,6 +72,7 @@ module Mutant
         regexp_group_close_escape
         regexp_group_open_escape
         regexp_hex_escape
+        regexp_hex_type
         regexp_interval_close_escape
         regexp_interval_open_escape
         regexp_letter_any_property
@@ -91,6 +92,7 @@ module Mutant
         regexp_nonspace_type
         regexp_nonword_boundary_anchor
         regexp_nonword_type
+        regexp_nonhex_type
         regexp_number_backref
         regexp_one_or_more_escape
         regexp_open_conditional
