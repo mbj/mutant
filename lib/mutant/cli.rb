@@ -162,9 +162,6 @@ module Mutant
         puts("mutant-#{VERSION}")
         config.kernel.exit
       end
-      opts.on('-d', '--debug', 'Enable debugging output') do
-        with(debug: true)
-      end
       opts.on_tail('-h', '--help', 'Show this message') do
         puts(opts.to_s)
         config.kernel.exit

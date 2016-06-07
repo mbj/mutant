@@ -190,7 +190,6 @@ module Mutant
   # Reopen class to initialize constant to avoid dep circle
   class Config
     DEFAULT = new(
-      debug:             false,
       expected_coverage: Rational(1),
       expression_parser: Expression::Parser.new([
         Expression::Method,

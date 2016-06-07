@@ -5,7 +5,6 @@ module Mutant
   # to current environment is being represented by the Mutant::Env object.
   class Config
     include Adamantium::Flat, Anima.new(
-      :debug,
       :expected_coverage,
       :expression_parser,
       :fail_fast,
@@ -23,7 +22,7 @@ module Mutant
       :zombie
     )
 
-    %i[fail_fast zombie debug].each do |name|
+    %i[fail_fast zombie].each do |name|
       define_method(:"#{name}?") { public_send(name) }
     end
 

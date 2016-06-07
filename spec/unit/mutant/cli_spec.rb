@@ -131,7 +131,6 @@ Options:
         --since REVISION             Only select subjects touched since REVISION
         --fail-fast                  Fail fast
         --version                    Print mutants version
-    -d, --debug                      Enable debugging output
     -h, --help                       Show this message
         MESSAGE
       end
@@ -274,16 +273,6 @@ Options:
 
       it 'sets the fail fast option' do
         expect(subject.config.fail_fast).to be(true)
-      end
-    end
-
-    context 'with debug flag' do
-      let(:flags) { %w[--debug] }
-
-      it_should_behave_like 'a cli parser'
-
-      it 'sets the debug option' do
-        expect(subject.config.debug).to be(true)
       end
     end
 
