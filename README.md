@@ -239,7 +239,7 @@ Note that some databases, SQLite in particular, are not designed for concurrent 
 Neutral (noop) Tests
 --------------------
 
-Mutant will also test the original, unmutated, verison your code. This ensures that mutant is able to properly setup and run your tests.
+Mutant will also test the original, unmutated, version your code. This ensures that mutant is able to properly setup and run your tests.
 If an error occurs while mutant/rspec is running testing the original code, you will receive an error like the following:
 ```
 --- Neutral failure ---
@@ -249,7 +249,7 @@ Your tests do not pass initially or you found a bug in mutant / unparser.
 Test Output:
 marshal data too short
 ```
-Currently, troublehshooting these errors requires using a debugger and/or modyifying mutant to print out the error. You will want to rescue and inspect exceptions raised in this method: lib/mutant/integration/rspec.rb:call
+Currently, troubleshooting these errors requires using a debugger and/or modyifying mutant to print out the error. You will want to rescue and inspect exceptions raised in this method: lib/mutant/integration/rspec.rb:call
 
 Only Mutating Changed Code
 --------------------------
