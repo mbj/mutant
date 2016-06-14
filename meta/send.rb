@@ -657,3 +657,18 @@ Mutant::Meta::Example.add :send do
   mutation '!a.eql?(b)'
   mutation '!a.equal?(b)'
 end
+
+Mutant::Meta::Example.add :send do
+  source 'sample'
+
+  singleton_mutations
+  mutation 'first'
+  mutation 'last'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'first'
+
+  singleton_mutations
+  mutation 'last'
+end

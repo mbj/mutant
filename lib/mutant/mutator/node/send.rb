@@ -18,6 +18,8 @@ module Mutant
           reverse_each:  %i[each],
           reverse_merge: %i[merge],
           map:           %i[each],
+          sample:        %i[first last],
+          first:         %i[last],
           send:          %i[public_send __send__],
           __send__:      %i[public_send],
           method:        %i[public_method],
