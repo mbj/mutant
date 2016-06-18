@@ -1,7 +1,7 @@
 module Mutant
   class Mutator
     class Node
-      # Namespace for define mutations
+      # Namespace for `defined?` mutations
       class Defined < self
 
         handle(:defined?)

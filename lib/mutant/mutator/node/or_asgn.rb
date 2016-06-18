@@ -2,7 +2,7 @@ module Mutant
   class Mutator
     class Node
 
-      # OpAsgn mutator
+      # OrAsgn mutator
       class OrAsgn < self
 
         handle(:or_asgn)
