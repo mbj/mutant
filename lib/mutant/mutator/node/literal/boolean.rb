@@ -14,7 +14,7 @@ module Mutant
 
           handle(*MAP.keys)
 
-          # Emit mutants
+          # Emit mutations
           #
           # @return [undefined]
           def dispatch
