@@ -19,7 +19,7 @@ module Mutant
             children.last
           end
 
-          # Emit mutants
+          # Emit mutations
           #
           # @return [undefined]
           def dispatch

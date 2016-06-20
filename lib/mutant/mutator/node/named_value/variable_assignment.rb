@@ -23,7 +23,7 @@ module Mutant
 
         private
 
-          # Perform dispatch
+          # Emit mutations
           #
           # @return [undefined]
           def dispatch

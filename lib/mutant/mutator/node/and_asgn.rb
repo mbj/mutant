@@ -2,7 +2,7 @@ module Mutant
   class Mutator
     class Node
 
-      # OpAsgn mutator
+      # AndAsgn mutator
       class AndAsgn < self
 
         handle(:and_asgn)
