@@ -15,8 +15,8 @@ RSpec.describe Mutant::CLI do
     it { expect(subject.config.matcher).to eql(expected_matcher_config)  }
   end
 
-  describe '.run' do
-    subject { object.run(arguments) }
+  describe '.call' do
+    subject { object.call(arguments) }
 
     let(:arguments) { instance_double(Array)                                         }
     let(:report)    { instance_double(Mutant::Result::Env, success?: report_success) }
