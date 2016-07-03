@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.extra_rdoc_files = %w[TODO LICENSE]
 
   gem.add_runtime_dependency('mutant', "~> #{gem.version}")
-  gem.add_runtime_dependency('rspec-core', '>= 3.3.0', '< 3.5.0')
+  gem.add_runtime_dependency('rspec-core', '>= 3.3.0', '< 3.6.0')
 
   gem.add_development_dependency('bundler', '~> 1.3', '>= 1.3.5')
 end
