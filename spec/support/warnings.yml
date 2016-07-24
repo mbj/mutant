@@ -1,0 +1,3 @@
+---
+- 'lib/parser/lexer.rb:10791: warning: assigned but unused variable - testEof'
+- 'lib/parser/source/rewriter.rb:392: warning: assigned but unused variable - begin_pos'

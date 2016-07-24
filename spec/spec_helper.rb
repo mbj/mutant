@@ -14,6 +14,10 @@ if ENV['COVERAGE'] == 'true'
   end
 end
 
+# Require warning support first in order to catch any warnings emitted during boot
+require_relative './support/warning'
+$stderr = MutantSpec::Warning::EXTRACTOR
+
 require 'tempfile'
 require 'concord'
 require 'anima'
@@ -58,4 +62,9 @@ RSpec.configure do |config|
   config.include(MessageHelper)
   config.include(ParserHelper)
   config.include(Mutant::AST::Sexp)
+
+  config.after(:suite) do
+    $stderr = STDERR
+    MutantSpec::Warning.assert_no_warnings
+  end
 end

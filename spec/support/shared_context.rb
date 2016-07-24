@@ -1,9 +1,18 @@
 # rubocop:disable ModuleLength
 module SharedContext
+  # Prepend an anonymous module with the new `with` method
+  #
+  # Using an anonymous module eliminates warnings where `setup_shared_context`
+  # is used and one of the shared methods is immediately redefined.
   def with(name, &block)
-    define_method(name) do
-      super().with(instance_eval(&block))
-    end
+    new_definition =
+      Module.new do
+        define_method(name) do
+          super().with(instance_eval(&block))
+        end
+      end
+
+    prepend(new_definition)
   end
 
   def messages(&block)

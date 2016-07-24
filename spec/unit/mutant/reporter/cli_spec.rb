@@ -2,7 +2,6 @@ RSpec.describe Mutant::Reporter::CLI do
   setup_shared_context
 
   let(:object) { described_class.new(output, format) }
-  let(:output) { StringIO.new                        }
 
   let(:tput) do
     instance_double(
