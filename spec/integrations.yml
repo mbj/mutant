@@ -88,6 +88,15 @@
       - optional/capi/string_spec.rb
     '#<RegexpError: invalid multibyte escape: /\xAA/>':
       - language/regexp/escapes_spec.rb
+    "#<Regexp::Scanner::PrematureEndError: Premature end of pattern at #{str}>":
+      - language/regexp/interpolation_spec.rb
+- name: regexp_parser
+  namespace: Regexp
+  repo_uri: 'https://github.com/ammar/regexp_parser.git'
+  mutation_coverage: false
+  mutation_generation: true
+  expect_coverage: 0 # not run
+  expected_errors: {}
 - name: auom
   namespace: AUOM
   repo_uri: 'https://github.com/mbj/auom.git'
