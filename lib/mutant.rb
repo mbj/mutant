@@ -42,6 +42,7 @@ end # Mutant
 require 'mutant/version'
 require 'mutant/env'
 require 'mutant/env/bootstrap'
+require 'mutant/util'
 require 'mutant/ast'
 require 'mutant/ast/sexp'
 require 'mutant/ast/types'
