@@ -1,6 +1,8 @@
 module Mutant
   module AST
     # Groups of node types
+    #
+    # :reek:TooManyConstants
     module Types
       symbolset = ->(strings) { strings.map(&:to_sym).to_set.freeze }
 

@@ -16,8 +16,6 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
 
       private :method_d
 
-    public
-
       def method_a
       end
 
