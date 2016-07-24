@@ -1,6 +1,8 @@
 module Mutant
   module AST
     # Singleton nodes
+    #
+    # :reek:TooManyConstants
     module Nodes
       extend Sexp
 

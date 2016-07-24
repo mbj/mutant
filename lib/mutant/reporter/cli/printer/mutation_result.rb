@@ -3,6 +3,8 @@ module Mutant
     class CLI
       class Printer
         # Reporter for mutation results
+        #
+        # :reek:TooManyConstants
         class MutationResult < self
 
           delegate :mutation, :test_result

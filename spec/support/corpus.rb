@@ -294,7 +294,6 @@ module MutantSpec
         end
       end # ErrorWhitelist
 
-      # rubocop:disable ClosingParenthesisIndentation
       LOADER = Morpher.build do
         s(:block,
           s(:guard, s(:primitive, Array)),
@@ -317,22 +316,14 @@ module MutantSpec
                       [
                         ->(hash) { hash.map { |key, values| [key, values.map(&Pathname.method(:new))] }.to_h },
                         ->(hash) { hash.map { |key, values| [key, values.map(&:to_s)]                 }.to_h }
-                      ]
-                    ),
-                    s(:load_attribute_hash, s(:param, ErrorWhitelist))
-                  )
-                )
-              ),
+                      ]),
+                    s(:load_attribute_hash, s(:param, ErrorWhitelist))))),
               s(:load_attribute_hash,
                 # NOTE: The domain param has no DSL currently!
                 Morpher::Evaluator::Transformer::Domain::Param.new(
                   Project,
                   %i[repo_uri name expected_errors mutation_coverage mutation_generation]
-                )
-              )
-            )
-          )
-        )
+                )))))
       end
 
       ALL = LOADER.call(YAML.load_file(ROOT.join('spec', 'integrations.yml')))

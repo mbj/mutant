@@ -17,6 +17,8 @@ module Mutant
     #   * location
     #   Is NOT enough. It would not be unique. So we add an "example index"
     #   for unique reference.
+    #
+    # :reek:TooManyConstants
     class Rspec < self
 
       ALL_EXPRESSION       = Expression::Namespace::Recursive.new(scope_name: nil)

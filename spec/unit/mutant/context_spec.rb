@@ -1,4 +1,3 @@
-# rubocop:disable ClosingParenthesisIndentation
 RSpec.describe Mutant::Context do
   describe '.wrap' do
     subject { described_class.wrap(scope, node) }
@@ -11,8 +10,7 @@ RSpec.describe Mutant::Context do
       let(:expected) do
         s(:module,
           s(:const, nil, :Mutant),
-          s(:str, 'test')
-        )
+          s(:str, 'test'))
       end
 
       it { should eql(expected) }
@@ -25,8 +23,7 @@ RSpec.describe Mutant::Context do
         s(:class,
           s(:const, nil, :Context),
           nil,
-          s(:str, 'test')
-        )
+          s(:str, 'test'))
       end
 
       it { should eql(expected) }
