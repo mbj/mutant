@@ -509,14 +509,11 @@ Mutant::Meta::Example.add :send do
   mutation 'foo(n...-1)'
   mutation 'foo(nil..-1)'
   mutation 'foo(self..-1)'
-  mutation 'foo(n..(1.0 / 0.0))'
-  mutation 'foo(n..(0.0 / 0.0))'
   mutation 'foo(n..nil)'
   mutation 'foo(n..self)'
   mutation 'foo(n..0)'
   mutation 'foo(n..1)'
   mutation 'foo(n..-2)'
-  mutation 'foo((0.0 / 0.0)..-1)'
 end
 
 Mutant::Meta::Example.add :send do
@@ -542,9 +539,6 @@ Mutant::Meta::Example.add :send do
   mutation 'foo[n...-2]'
   mutation 'foo[nil..-2]'
   mutation 'foo[self..-2]'
-  mutation 'foo[n..(1.0 / 0.0)]'
-  mutation 'foo[n..(0.0 / 0.0)]'
-  mutation 'foo[(0.0 / 0.0)..-2]'
 end
 
 Mutant::Meta::Example.add :send do
@@ -568,9 +562,6 @@ Mutant::Meta::Example.add :send do
   mutation 'foo[n...-2]'
   mutation 'foo[nil...-1]'
   mutation 'foo[self...-1]'
-  mutation 'foo[n...(1.0 / 0.0)]'
-  mutation 'foo[n...(0.0 / 0.0)]'
-  mutation 'foo[(0.0 / 0.0)...-1]'
 end
 
 Mutant::Meta::Example.add :send do
@@ -594,9 +585,6 @@ Mutant::Meta::Example.add :send do
   mutation 'foo[n...-1]'
   mutation 'foo[nil..-1]'
   mutation 'foo[self..-1]'
-  mutation 'foo[n..(1.0 / 0.0)]'
-  mutation 'foo[n..(0.0 / 0.0)]'
-  mutation 'foo[(0.0 / 0.0)..-1]'
   mutation 'foo.drop(n)'
 end
 
