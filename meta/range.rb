@@ -3,9 +3,6 @@ Mutant::Meta::Example.add :irange do
 
   singleton_mutations
   mutation '1...100'
-  mutation '(0.0 / 0.0)..100'
-  mutation '1..(1.0 / 0.0)'
-  mutation '1..(0.0 / 0.0)'
   mutation '-1..100'
   mutation '0..100'
   mutation '2..100'
@@ -25,9 +22,6 @@ Mutant::Meta::Example.add :erange do
 
   singleton_mutations
   mutation '1..100'
-  mutation '(0.0 / 0.0)...100'
-  mutation '1...(1.0 / 0.0)'
-  mutation '1...(0.0 / 0.0)'
   mutation '-1...100'
   mutation '0...100'
   mutation '2...100'

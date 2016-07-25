@@ -11,7 +11,7 @@ module Mutant
             erange: :irange
           }.freeze
 
-          children :start, :_end
+          children :lower_bound, :upper_bound
 
           handle(*MAP.keys)
 
@@ -32,23 +32,6 @@ module Mutant
           # @return [Parser::AST::Node]
           def emit_inverse
             emit(s(MAP.fetch(node.type), *children))
-          end
-
-          # Emit range start mutations
-          #
-          # @return [undefined]
-          def emit_upper_bound_mutations
-            emit__end_mutations
-            emit_type(N_NAN, _end)
-          end
-
-          # Emit start mutations
-          #
-          # @return [undefined]
-          def emit_lower_bound_mutations
-            emit_start_mutations
-            emit_type(start, N_INFINITY)
-            emit_type(start, N_NAN)
           end
 
         end # Range
