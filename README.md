@@ -7,6 +7,7 @@ mutant
 [![Inline docs](http://inch-ci.org/github/mbj/mutant.png)](http://inch-ci.org/github/mbj/mutant)
 [![Gem Version](https://img.shields.io/gem/v/mutant.svg)](https://rubygems.org/gems/mutant)
 [![Flattr](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/thing/1823010/mbjmutant-on-GitHub)
+[![Slack Status](https://mutation-testing-slack.herokuapp.com/badge.svg)](https://mutation-testing.slack.com/messages/mutant)
 
 Mutant is a mutation testing tool for Ruby.
 
@@ -214,12 +215,12 @@ Mutation output is grouped by selection groups. Each group contains three sectio
     end
    -----------------------
    ```
-   
+
 Concurrency
 -----------
 
 By default, mutant will test mutations in parallel by running up to one process for each core on your system. You can control the number of processes created using the `--jobs` argument.
- 
+
 Mutant forks a new process for each mutation to be tested to prevent side affects in your specs and the lack of thread safety in rspec from impacting the results.
 
 If the code under test relies on a database, you may experience problems when running mutant because of conflicting data in the database. For example, if you have a test like this:
@@ -363,8 +364,19 @@ Your options:
 * [GitHub Issues](https://github.com/mbj/mutant/issues)
 * Ping me on [twitter](https://twitter.com/_m_b_j_)
 
-There is also a mutant [slack chat](https://mutation-testing.slack.com/).
-@mention [@\_m\_b\_j\_](https://twitter.com/_m_b_j_) on twitter for an invite.
+There is also a mutation testing slack chat. Get an invite [here](https://mutation-testing-slack.herokuapp.com).
+For discussing this project, join [#mutant](https://mutation-testing.slack.com/messages/#mutant).
+
+Other Channels:
+
+- [#cosmic-ray](https://mutation-testing.slack.com/messages/cosmic-ray): for discussing `cosmic-ray`, the python mutation testing tool.
+- [#devtools](https://mutation-testing.slack.com/messages/devtools): for discussing the `devtools` metagem.
+- [#general](https://mutation-testing.slack.com/messages/general): for general discussions about mutation testing.
+- [#mutagen](https://mutation-testing.slack.com/messages/mutagen): for discussing `mutagen`, the javascript mutation testing tool.
+- [#random](https://mutation-testing.slack.com/messages/random): for misc. off topic discussion.
+- [#stryker](https://mutation-testing.slack.com/messages/stryker): for discussing `stryker`, the javascript mutation testing tool.
+- [#wtf-dev](https://mutation-testing.slack.com/messages/wtf-dev): for sharing software development wtfs.
+
 
 Credits
 -------
