@@ -10,7 +10,7 @@ module Mutant
         handle(
           :ensure, :redo, :retry, :arg_expr, :blockarg,
           :kwrestarg, :undef, :module, :empty,
-          :alias, :for, :xstr, :back_ref, :class, :restarg,
+          :alias, :for, :xstr, :back_ref, :restarg,
           :sclass, :match_with_lvasgn, :while_post,
           :until_post, :preexe, :postexe, :iflipflop, :eflipflop, :kwsplat,
           :shadowarg, :rational, :complex, :__FILE__, :__LINE__
