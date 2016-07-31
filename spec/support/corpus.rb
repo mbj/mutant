@@ -318,12 +318,7 @@ module MutantSpec
                         ->(hash) { hash.map { |key, values| [key, values.map(&:to_s)]                 }.to_h }
                       ]),
                     s(:load_attribute_hash, s(:param, ErrorWhitelist))))),
-              s(:load_attribute_hash,
-                # NOTE: The domain param has no DSL currently!
-                Morpher::Evaluator::Transformer::Domain::Param.new(
-                  Project,
-                  %i[repo_uri name expected_errors mutation_coverage mutation_generation]
-                )))))
+              s(:anima_load, Project))))
       end
 
       ALL = LOADER.call(YAML.load_file(ROOT.join('spec', 'integrations.yml')))
