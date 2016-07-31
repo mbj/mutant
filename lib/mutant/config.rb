@@ -5,7 +5,6 @@ module Mutant
   # to current environment is being represented by the Mutant::Env object.
   class Config
     include Adamantium::Flat, Anima.new(
-      :expected_coverage,
       :expression_parser,
       :fail_fast,
       :integration,

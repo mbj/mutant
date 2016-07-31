@@ -17,10 +17,7 @@ RSpec.describe Mutant::Result::Env do
   end
 
   let(:config) do
-    instance_double(
-      Mutant::Config,
-      expected_coverage: Rational(1, 1)
-    )
+    instance_double(Mutant::Config)
   end
 
   let(:subject_result) do

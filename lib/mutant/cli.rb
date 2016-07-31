@@ -1,8 +1,5 @@
 module Mutant
-
-  # Commandline parser
-  #
-  # rubocop:disable ClassLength
+  # Commandline parser / runner
   class CLI
     include Adamantium::Flat, Equalizer.new(:config), Procto.call(:config)
 
@@ -117,12 +114,6 @@ module Mutant
       opts.separator(nil)
       opts.separator('Options:')
 
-      opts.on(
-        '--expected-coverage COVERAGE',
-        'Fail unless COVERAGE is not reached exactly, parsed via Rational()'
-      ) do |coverage|
-        with(expected_coverage: Rational(coverage))
-      end
       opts.on('--use INTEGRATION', 'Use INTEGRATION to kill mutations', &method(:setup_integration))
     end
 

@@ -11,7 +11,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
-        Expect Coverage: 100.00%
         Jobs:            1
         Includes:        []
         Requires:        []
@@ -25,35 +24,8 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
         Overhead:        Inf%
         Mutations/s:     0.00
         Coverage:        100.00%
-        Expected:        100.00%
         Active subjects: 0
       REPORT
-
-      context 'on non default coverage expectation' do
-        with(:config) { { expected_coverage: 0.1r } }
-
-        it_reports <<-REPORT
-          Mutant configuration:
-          Matcher:         #<Mutant::Matcher::Config empty>
-          Integration:     Mutant::Integration::Null
-          Expect Coverage: 10.00%
-          Jobs:            1
-          Includes:        []
-          Requires:        []
-          Subjects:        1
-          Mutations:       2
-          Results:         0
-          Kills:           0
-          Alive:           0
-          Runtime:         4.00s
-          Killtime:        0.00s
-          Overhead:        Inf%
-          Mutations/s:     0.00
-          Coverage:        100.00%
-          Expected:        10.00%
-          Active subjects: 0
-        REPORT
-      end
     end
 
     context 'with scheduler active on one subject' do
@@ -64,7 +36,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
           Mutant configuration:
           Matcher:         #<Mutant::Matcher::Config empty>
           Integration:     Mutant::Integration::Null
-          Expect Coverage: 100.00%
           Jobs:            1
           Includes:        []
           Requires:        []
@@ -78,7 +49,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
           Overhead:        100.00%
           Mutations/s:     0.50
           Coverage:        100.00%
-          Expected:        100.00%
           Active subjects: 0
         REPORT
       end
@@ -93,7 +63,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
             Mutant configuration:
             Matcher:         #<Mutant::Matcher::Config empty>
             Integration:     Mutant::Integration::Null
-            Expect Coverage: 100.00%
             Jobs:            1
             Includes:        []
             Requires:        []
@@ -107,7 +76,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
             Overhead:        100.00%
             Mutations/s:     0.50
             Coverage:        50.00%
-            Expected:        100.00%
             Active Jobs:
             0: evil:subject-a:d27d2
             1: evil:subject-a:d5a9d
@@ -123,7 +91,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
             Mutant configuration:
             Matcher:         #<Mutant::Matcher::Config empty>
             Integration:     Mutant::Integration::Null
-            Expect Coverage: 100.00%
             Jobs:            1
             Includes:        []
             Requires:        []
@@ -137,7 +104,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
             Overhead:        100.00%
             Mutations/s:     0.50
             Coverage:        100.00%
-            Expected:        100.00%
             Active Jobs:
             0: evil:subject-a:d27d2
             1: evil:subject-a:d5a9d

@@ -10,14 +10,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::StatusProgressive do
       it_reports <<-REPORT
         (00/02) 100% - killtime: 0.00s runtime: 4.00s overhead: 4.00s
       REPORT
-
-      context 'on non default coverage expectation' do
-        with(:config) { { expected_coverage: 0.1r } }
-
-        it_reports <<-REPORT
-          (00/02) 100% - killtime: 0.00s runtime: 4.00s overhead: 4.00s
-        REPORT
-      end
     end
 
     context 'with scheduler active on one subject' do
