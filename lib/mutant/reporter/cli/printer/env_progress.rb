@@ -28,8 +28,7 @@ module Mutant
             [:info,   'Killtime:        %0.2fs',  :killtime                 ],
             [:info,   'Overhead:        %0.2f%%', :overhead_percent         ],
             [:info,   'Mutations/s:     %0.2f',   :mutations_per_second     ],
-            [:status, 'Coverage:        %0.2f%%', :coverage_percent         ],
-            [:status, 'Expected:        %0.2f%%', :expected_coverage_percent]
+            [:status, 'Coverage:        %0.2f%%', :coverage_percent         ]
           ])
 
           # Run printer
@@ -60,15 +59,6 @@ module Mutant
           # @api private
           def coverage_percent
             coverage * 100
-          end
-
-          # Expected coverage in percent
-          #
-          # @return [Float]
-          #
-          # @api private
-          def expected_coverage_percent
-            env.config.expected_coverage * 100
           end
 
           # Overhead in percent

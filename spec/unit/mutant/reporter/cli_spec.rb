@@ -122,23 +122,6 @@ RSpec.describe Mutant::Reporter::CLI do
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
-        Expect Coverage: 100.00%
-        Jobs:            1
-        Includes:        []
-        Requires:        []
-      REPORT
-    end
-
-    context 'with non default coverage expectation' do
-      let(:format) { progressive_format }
-
-      with(:config) { { expected_coverage: 0.1r } }
-
-      it_reports(<<-REPORT)
-        Mutant configuration:
-        Matcher:         #<Mutant::Matcher::Config empty>
-        Integration:     Mutant::Integration::Null
-        Expect Coverage: 10.00%
         Jobs:            1
         Includes:        []
         Requires:        []
@@ -157,7 +140,6 @@ RSpec.describe Mutant::Reporter::CLI do
       Mutant configuration:
       Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     Mutant::Integration::Null
-      Expect Coverage: 100.00%
       Jobs:            1
       Includes:        []
       Requires:        []
@@ -171,7 +153,6 @@ RSpec.describe Mutant::Reporter::CLI do
       Overhead:        100.00%
       Mutations/s:     0.50
       Coverage:        100.00%
-      Expected:        100.00%
     REPORT
   end
 
@@ -185,7 +166,6 @@ RSpec.describe Mutant::Reporter::CLI do
         [tput-restore]Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
-        Expect Coverage: 100.00%
         Jobs:            1
         Includes:        []
         Requires:        []
@@ -199,7 +179,6 @@ RSpec.describe Mutant::Reporter::CLI do
         Overhead:        100.00%
         Mutations/s:     0.50
         Coverage:        100.00%
-        Expected:        100.00%
         Active subjects: 0
       REPORT
     end

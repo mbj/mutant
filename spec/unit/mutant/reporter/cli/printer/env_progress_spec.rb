@@ -1,8 +1,6 @@
 RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
   setup_shared_context
 
-  with(:config) { { expected_coverage: 0.1r } }
-
   let(:reportable) { env_result }
 
   describe '.call' do
@@ -13,7 +11,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
-        Expect Coverage: 10.00%
         Jobs:            1
         Includes:        []
         Requires:        []
@@ -27,7 +24,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Overhead:        Inf%
         Mutations/s:     0.00
         Coverage:        100.00%
-        Expected:        10.00%
       STR
     end
 
@@ -36,7 +32,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
-        Expect Coverage: 10.00%
         Jobs:            1
         Includes:        []
         Requires:        []
@@ -50,7 +45,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Overhead:        100.00%
         Mutations/s:     0.50
         Coverage:        100.00%
-        Expected:        10.00%
       STR
     end
 
@@ -61,7 +55,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
-        Expect Coverage: 10.00%
         Jobs:            1
         Includes:        []
         Requires:        []
@@ -75,7 +68,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Overhead:        100.00%
         Mutations/s:     0.50
         Coverage:        50.00%
-        Expected:        10.00%
       STR
     end
   end

@@ -32,7 +32,6 @@ module MutantSpec
       DEFAULT_MUTATION_COUNT = 0
 
       include Adamantium, Anima.new(
-        :expect_coverage,
         :expected_errors,
         :mutation_coverage,
         :mutation_generation,
@@ -58,7 +57,6 @@ module MutantSpec
                 --use rspec
                 --include lib
                 --require #{name}
-                --expected-coverage #{expect_coverage}
                 #{namespace}*
               ]
             )
@@ -304,7 +302,6 @@ module MutantSpec
                 s(:key_symbolize, :repo_uri,            s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :name,                s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :namespace,           s(:guard, s(:primitive, String))),
-                s(:key_symbolize, :expect_coverage,     s(:guard, s(:primitive, Fixnum))),
                 s(:key_symbolize, :mutation_coverage,
                   s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
                 s(:key_symbolize, :mutation_generation,

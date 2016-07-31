@@ -9,7 +9,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
-        Expect Coverage: 100.00%
         Jobs:            1
         Includes:        []
         Requires:        []
@@ -17,13 +16,10 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
     end
 
     context 'with non default coverage expectation' do
-      with(:config) { { expected_coverage: 0.1r } }
-
       it_reports(<<-REPORT)
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
-        Expect Coverage: 10.00%
         Jobs:            1
         Includes:        []
         Requires:        []

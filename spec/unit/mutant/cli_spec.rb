@@ -125,7 +125,6 @@ Environment:
     -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
 
 Options:
-        --expected-coverage COVERAGE Fail unless COVERAGE is not reached exactly, parsed via Rational()
         --use INTEGRATION            Use INTEGRATION to kill mutations
         --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
         --since REVISION             Only select subjects touched since REVISION
@@ -191,38 +190,6 @@ Options:
 
       it 'configures expected coverage' do
         expect(subject.config.jobs).to eql(0)
-      end
-    end
-
-    context 'with expected-coverage flag' do
-      context 'given as decimal' do
-        let(:flags) { %w[--expected-coverage 0.1] }
-
-        it_should_behave_like 'a cli parser'
-
-        it 'configures expected coverage' do
-          expect(subject.config.expected_coverage).to eql(Rational(1, 10))
-        end
-      end
-
-      context 'given as scientific' do
-        let(:flags) { %w[--expected-coverage 1e-1] }
-
-        it_should_behave_like 'a cli parser'
-
-        it 'configures expected coverage' do
-          expect(subject.config.expected_coverage).to eql(Rational(1, 10))
-        end
-      end
-
-      context 'given as rational' do
-        let(:flags) { %w[--expected-coverage 1/10] }
-
-        it_should_behave_like 'a cli parser'
-
-        it 'configures expected coverage' do
-          expect(subject.config.expected_coverage).to eql(Rational(1, 10))
-        end
       end
     end
 
