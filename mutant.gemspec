@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
 
   gem.files            = `git ls-files`.split("\n") - mutant_integration_files
   gem.test_files       = `git ls-files -- spec/{unit,integration}`.split("\n")
-  gem.extra_rdoc_files = %w[TODO LICENSE]
+  gem.extra_rdoc_files = %w[LICENSE]
   gem.executables      = %w[mutant]
 
   gem.required_ruby_version = '>= 2.1'
