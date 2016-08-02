@@ -1,4 +1,4 @@
-# v0.8.11 2016-01-xx
+# v0.8.11 2016-01-01
 
 * Add support for rspec-3.5
 * Remove misleading --debug option
