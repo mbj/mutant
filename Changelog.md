@@ -1,8 +1,8 @@
-# v0.8.11 2016-01-01
+# v0.8.11 2016-08-01
 
 * Add support for rspec-3.5
-* Remove misleading --debug option
-* Remove misleading --expect-coverage option
+* Remove misleading `--debug` option
+* Remove misleading `--expect-coverage` option
 * Add basic support for regexp mutations (machinery and simple anchor mutations)
 * Add support for mutating csend (duck tape operator) into regular sends
 
