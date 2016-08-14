@@ -2,56 +2,39 @@ Mutant::Meta::Example.add :regexp do
   source '/foo/'
 
   singleton_mutations
-
-  # match all inputs
-  mutation '//'
-
-  # match no input
-  mutation '/nomatch\A/'
+  regexp_mutations
 end
 
 Mutant::Meta::Example.add :regexp do
   source '/#{foo.bar}n/'
 
   singleton_mutations
+  regexp_mutations
+
   mutation '/#{foo}n/'
   mutation '/#{self.bar}n/'
   mutation '/#{nil}n/'
   mutation '/#{self}n/'
-
-  # match all inputs
-  mutation '//'
-
-  # match no input
-  mutation '/nomatch\A/'
 end
 
 Mutant::Meta::Example.add :regexp do
   source '/#{foo}/'
 
   singleton_mutations
+  regexp_mutations
+
   mutation '/#{self}/'
   mutation '/#{nil}/'
-
-  # match all inputs
-  mutation '//'
-
-  # match no input
-  mutation '/nomatch\A/'
 end
 
 Mutant::Meta::Example.add :regexp do
   source '/#{foo}#{nil}/'
 
   singleton_mutations
+  regexp_mutations
+
   mutation '/#{nil}#{nil}/'
   mutation '/#{self}#{nil}/'
-
-  # match all inputs
-  mutation '//'
-
-  # match no input
-  mutation '/nomatch\A/'
 end
 
 Mutant::Meta::Example.add :regexp do
@@ -85,12 +68,7 @@ Mutant::Meta::Example.add :regexp do
   source '/(?(1)(foo)(bar))/'
 
   singleton_mutations
-
-  # match all inputs
-  mutation '//'
-
-  # match no input
-  mutation '/nomatch\A/'
+  regexp_mutations
 end
 
 Pathname
