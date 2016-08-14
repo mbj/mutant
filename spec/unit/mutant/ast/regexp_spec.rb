@@ -611,6 +611,11 @@ RegexpSpec.expect_mapping(/\w/, :regexp_word_type) do
     s(:regexp_word_type))
 end
 
+RegexpSpec.expect_mapping(/\h/, :regexp_hex_type) do
+  s(:regexp_root_expression,
+    s(:regexp_hex_type))
+end
+
 RegexpSpec.expect_mapping(/\*/, :regexp_zero_or_more_escape) do
   s(:regexp_root_expression,
     s(:regexp_zero_or_more_escape))
