@@ -70,6 +70,7 @@ module Mutant
               [:regexp_script_hiragana_property, [:property, :script_hiragana,  '\p{Hiragana}'], ::Regexp::Expression::UnicodeProperty::Script],
               [:regexp_script_katakana_property, [:property, :script_katakana,  '\p{Katakana}'], ::Regexp::Expression::UnicodeProperty::Script],
               [:regexp_letter_any_property,      [:property, :letter_any,       '\p{L}'],        ::Regexp::Expression::UnicodeProperty::Letter::Any],
+              [:regexp_hex_type,                 [:type,     :hex,              '\h'],           ::Regexp::Expression::CharacterType::Hex],
               [:regexp_digit_type,               [:type,     :digit,            '\d'],           ::Regexp::Expression::CharacterType::Digit],
               [:regexp_space_type,               [:type,     :space,            '\s'],           ::Regexp::Expression::CharacterType::Space],
               [:regexp_word_type,                [:type,     :word,             '\w'],           ::Regexp::Expression::CharacterType::Word],
