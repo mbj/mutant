@@ -47,6 +47,7 @@ module Mutant
           regexp_nonspace_type
           regexp_word_boundary_anchor
           regexp_nonword_boundary_anchor
+          regexp_alternation_meta
         ]
 
         # These nodes still need a dedicated mutator,
