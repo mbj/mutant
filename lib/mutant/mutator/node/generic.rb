@@ -5,16 +5,45 @@ module Mutant
       # Generic mutator
       class Generic < self
 
+        unsupported_nodes = %i[
+          ensure
+          redo
+          retry
+          arg_expr
+          blockarg
+          kwrestarg
+          undef
+          module
+          empty
+          alias
+          for
+          xstr
+          back_ref
+          restarg
+          sclass
+          match_with_lvasgn
+          while_post
+          until_post
+          preexe
+          postexe
+          iflipflop
+          eflipflop
+          kwsplat
+          shadowarg
+          rational
+          complex
+          __FILE__
+          __LINE__
+        ]
+
+        unsupported_regexp_nodes = AST::Types::REGEXP.to_a - %i[
+          regexp_root_expression
+          regexp_bol_anchor
+        ]
+
         # These nodes still need a dedicated mutator,
         # your contribution is that close!
-        handle(
-          :ensure, :redo, :retry, :arg_expr, :blockarg,
-          :kwrestarg, :undef, :module, :empty,
-          :alias, :for, :xstr, :back_ref, :restarg,
-          :sclass, :match_with_lvasgn, :while_post,
-          :until_post, :preexe, :postexe, :iflipflop, :eflipflop, :kwsplat,
-          :shadowarg, :rational, :complex, :__FILE__, :__LINE__
-        )
+        handle(*(unsupported_nodes + unsupported_regexp_nodes))
 
       private
 
