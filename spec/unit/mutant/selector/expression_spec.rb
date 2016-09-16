@@ -19,7 +19,6 @@ RSpec.describe Mutant::Selector::Expression do
     let(:mutation_subject) { subject_class.new(context, node)                                        }
     let(:context)          { instance_double(Mutant::Context)                                        }
     let(:node)             { instance_double(Parser::AST::Node)                                      }
-    let(:config)           { Mutant::Config::DEFAULT.with(integration: integration)                  }
     let(:integration)      { instance_double(Mutant::Integration, all_tests: all_tests)              }
     let(:test_a)           { instance_double(Mutant::Test, expression: parse_expression('SubjectA')) }
     let(:test_b)           { instance_double(Mutant::Test, expression: parse_expression('SubjectB')) }

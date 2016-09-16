@@ -21,9 +21,6 @@ RSpec.describe Mutant::Mutation do
     )
   end
 
-  let(:test_a) { instance_double(Mutant::Test) }
-  let(:test_b) { instance_double(Mutant::Test) }
-
   describe '#insert' do
     subject { object.insert(kernel) }
 

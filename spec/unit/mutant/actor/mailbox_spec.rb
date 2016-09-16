@@ -10,9 +10,6 @@ RSpec.describe Mutant::Actor::Mailbox do
   describe '.new' do
     subject { described_class.new }
 
-    let(:object) { described_class.new     }
-    let(:thread) { instance_double(Thread) }
-
     its(:sender) { should eql(Mutant::Actor::Sender.new(condition_variable, mutex, [])) }
     its(:receiver) { should eql(Mutant::Actor::Receiver.new(condition_variable, mutex, [])) }
 

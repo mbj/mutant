@@ -21,12 +21,6 @@ RSpec.describe Mutant::Result::Mutation do
     )
   end
 
-  let(:mutation_subject) do
-    instance_double(
-      Mutant::Subject
-    )
-  end
-
   describe '#runtime' do
     subject { object.runtime }
 

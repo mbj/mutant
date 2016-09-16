@@ -26,8 +26,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   end
 
   context 'when also defined on lvar' do
-    let(:scope)        { base::DefinedOnLvar }
-    let(:method_line)  { 66                  }
+    let(:scope) { base::DefinedOnLvar }
     let(:expected_warnings) do
       [
         'Can only match :defs on :self or :const got :lvar unable to match'

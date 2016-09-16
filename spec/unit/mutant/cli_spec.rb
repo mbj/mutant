@@ -66,7 +66,6 @@ RSpec.describe Mutant::CLI do
     subject { object.new(arguments) }
 
     # Defaults
-    let(:expected_filter)         { Morpher.evaluator(s(:true))      }
     let(:expected_integration)    { Mutant::Integration::Null        }
     let(:expected_reporter)       { Mutant::Config::DEFAULT.reporter }
     let(:expected_matcher_config) { default_matcher_config           }

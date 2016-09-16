@@ -50,17 +50,6 @@ RSpec.describe Mutant::Runner do
 
     subject { described_class.call(env) }
 
-    context 'when runner finishes immediately' do
-      let(:status) { instance_double(Mutant::Parallel::Status, done: true, payload: env_result) }
-
-      before do
-        expect(driver).to receive(:status).and_return(status)
-        expect(reporter).to receive(:progress).with(status).ordered
-        expect(driver).to receive(:stop).ordered
-        expect(reporter).to receive(:report).with(env_result).ordered
-      end
-    end
-
     context 'when report iterations are done' do
       let(:status_a) { instance_double(Mutant::Parallel::Status, done: false)                     }
       let(:status_b) { instance_double(Mutant::Parallel::Status, done: true, payload: env_result) }
