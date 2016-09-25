@@ -9,6 +9,8 @@ module Mutant
       # @param [IO] output
       #
       # @return [Reporter::CLI]
+      #
+      # :reek:ManualDispatch
       def self.build(output)
         tput = Tput.detect
         tty = output.respond_to?(:tty?) && output.tty?

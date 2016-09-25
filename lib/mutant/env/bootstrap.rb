@@ -56,16 +56,21 @@ module Mutant
         Env.new(
           actor_env:        Actor::Env.new(Thread),
           config:           config,
-          integration:      @integration,
+          integration:      integration,
           matchable_scopes: matchable_scopes,
           mutations:        subjects.flat_map(&:mutations),
           parser:           parser,
-          selector:         Selector::Expression.new(@integration),
+          selector:         Selector::Expression.new(integration),
           subjects:         subjects
         )
       end
 
     private
+
+      # Configured mutant integration
+      #
+      # @return [Mutant::Integration]
+      attr_reader :integration
 
       # Scope name from scoping object
       #

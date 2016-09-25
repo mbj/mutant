@@ -38,6 +38,11 @@ module Mutant
 
   private
 
+    # Original require method
+    #
+    # @return [Method]
+    attr_reader :original
+
     # Run zombifier
     #
     # @return [undefined]
@@ -61,7 +66,7 @@ module Mutant
     #   true if successful and false if feature already loaded
     def require(logical_name)
       logical_name = logical_name.to_s
-      loaded = @original.call(logical_name)
+      loaded = original.call(logical_name)
       return loaded unless include?(logical_name)
       @zombified << logical_name
       zombify(find(logical_name))

@@ -37,7 +37,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('concord',       '~> 0.1.5')
   gem.add_runtime_dependency('regexp_parser', '~> 0.3.6')
 
-  gem.add_development_dependency('devtools', '= 0.1.10')
+  gem.add_development_dependency('devtools', '~> 0.1.12')
   gem.add_development_dependency('bundler',  '~> 1.10')
   gem.add_development_dependency('ffi',      '~> 1.9.6')
 end
