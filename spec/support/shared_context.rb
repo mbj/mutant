@@ -37,13 +37,8 @@ module SharedContext
     let(:env)              { instance_double(Mutant::Env, config: config, subjects: [subject_a], mutations: mutations) }
     let(:job_a)            { Mutant::Parallel::Job.new(index: 0, payload: mutation_a)                                  }
     let(:job_b)            { Mutant::Parallel::Job.new(index: 1, payload: mutation_b)                                  }
-    let(:job_a_result)     { Mutant::Runner::JobResult.new(job: job_a, result: mutation_a_result)                      }
-    let(:job_b_result)     { Mutant::Runner::JobResult.new(job: job_b, result: mutation_b_result)                      }
     let(:test_a)           { instance_double(Mutant::Test, identification: 'test-a')                                   }
-    let(:test_b)           { instance_double(Mutant::Test, identification: 'test-b')                                   }
     let(:output)           { StringIO.new                                                                              }
-    let(:matchable_scopes) { instance_double(Array, length: 10)                                                        }
-    let(:message_sequence) { FakeActor::MessageSequence.new                                                            }
     let(:mutations)        { [mutation_a, mutation_b]                                                                  }
     let(:mutation_a_node)  { s(:false)                                                                                 }
     let(:mutation_b_node)  { s(:nil)                                                                                   }
@@ -125,14 +120,6 @@ module SharedContext
         tests:            [test_a],
         mutation_results: [mutation_a_result, mutation_b_result]
       )
-    end
-
-    let(:empty_subject_a_result) do
-      subject_a_result.with(mutation_results: [])
-    end
-
-    let(:partial_subject_a_result) do
-      subject_a_result.with(mutation_results: [mutation_a_result])
     end
   end
 end # SharedContext

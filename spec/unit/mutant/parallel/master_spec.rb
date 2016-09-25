@@ -1,7 +1,6 @@
 RSpec.describe Mutant::Parallel::Master do
   let(:message_sequence)     { FakeActor::MessageSequence.new                                             }
   let(:actor_names)          { %i[master worker_a worker_b]                                               }
-  let(:status)               { instance_double(Mutant::Result::Status)                                    }
   let(:sink)                 { FakeSink.new                                                               }
   let(:processor)            { instance_double(Proc)                                                      }
   let(:worker_a)             { actor_env.mailbox(:worker_a).sender                                        }
@@ -135,8 +134,6 @@ RSpec.describe Mutant::Parallel::Master do
       end
 
       context 'while jobs are processed' do
-        let(:expected_results) { [job_result_payload_a] }
-
         let(:sink) do
           super().instance_eval do
             def stop?

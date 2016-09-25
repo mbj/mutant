@@ -1,6 +1,4 @@
 RSpec.describe Mutant::Expression do
-  let(:object) { described_class }
-
   let(:parser) { Mutant::Config::DEFAULT.expression_parser }
 
   describe '#prefix?' do

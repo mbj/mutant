@@ -5,7 +5,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   let(:method_name)  { :foo                                              }
   let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
   let(:method)       { scope.instance_method(method_name)                }
-  let(:namespace)    { self.class                                        }
   let(:type)         { :def                                              }
   let(:method_arity) { 0                                                 }
   let(:base)         { TestApp::InstanceMethodTests                      }
@@ -29,7 +28,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   context 'when method is defined inside eval' do
     let(:scope)             { base::WithMemoizer          }
     let(:method)            { scope.instance_method(:boz) }
-    let(:method_name)       { :boz                        }
 
     let(:expected_warnings) do
       [

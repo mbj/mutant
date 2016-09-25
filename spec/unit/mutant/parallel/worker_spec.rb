@@ -39,7 +39,6 @@ RSpec.describe Mutant::Parallel::Worker do
       end
 
       let(:index)           { instance_double(Fixnum)                                             }
-      let(:test_result)     { instance_double(Mutant::Result::Test)                               }
       let(:job_result)      { Mutant::Parallel::JobResult.new(job: job, payload: result_payload)  }
       let(:job)             { Mutant::Parallel::Job.new(index: index, payload: payload)           }
 

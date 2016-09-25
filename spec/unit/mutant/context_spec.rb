@@ -31,7 +31,6 @@ RSpec.describe Mutant::Context do
   end
 
   let(:object)      { described_class.new(scope, source_path) }
-  let(:scope_name)  { instance_double(String)                 }
   let(:source_path) { instance_double(Pathname)               }
   let(:scope)       { TestApp::Literal                        }
 
@@ -60,10 +59,6 @@ RSpec.describe Mutant::Context do
       Unparser.unparse(subject)
     end
 
-    let(:round_tripped_source) do
-      Unparser.unparse(parse(expected_source))
-    end
-
     it 'should create correct source' do
       expect(generated_source).to eql(expected_source)
     end
@@ -71,8 +66,6 @@ RSpec.describe Mutant::Context do
 
   describe '#unqualified_name' do
     subject { object.unqualified_name }
-
-    let(:path) { instance_double(Pathname) }
 
     context 'with top level constant name' do
       let(:scope) { TestApp }

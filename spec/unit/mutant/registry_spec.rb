@@ -1,9 +1,7 @@
 RSpec.describe Mutant::Registry do
-  let(:lookup)             { object.lookup(type)           }
-  let(:object)             { described_class.new           }
-  let(:mutator)            { class_double(Mutant::Mutator) }
-  let(:node)               { s(:true)                      }
-  let(:expected_arguments) { [node, nil]                   }
+  let(:lookup)  { object.lookup(type)           }
+  let(:object)  { described_class.new           }
+  let(:mutator) { class_double(Mutant::Mutator) }
 
   def register_mutator
     object.register(type, mutator)

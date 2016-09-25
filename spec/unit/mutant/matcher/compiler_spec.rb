@@ -1,11 +1,9 @@
 RSpec.describe Mutant::Matcher::Compiler, '#call' do
   let(:object)         { described_class                  }
-  let(:env)            { Fixtures::TEST_ENV               }
   let(:matcher_config) { Mutant::Matcher::Config::DEFAULT }
   let(:expression_a)   { parse_expression('Foo*')         }
   let(:expression_b)   { parse_expression('Bar*')         }
   let(:matcher_a)      { expression_a.matcher             }
-  let(:matcher_b)      { expression_b.matcher             }
 
   let(:expected_matcher) do
     Mutant::Matcher::Filter.new(

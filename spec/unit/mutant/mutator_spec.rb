@@ -1,7 +1,5 @@
 RSpec.describe Mutant::Mutator do
   describe '.handle' do
-    let(:object) { described_class }
-
     subject do
       Class.new(described_class) do
         const_set(:REGISTRY, Mutant::Registry.new)

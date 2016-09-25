@@ -14,7 +14,6 @@ RSpec.describe Mutant::Env do
     end
 
     let(:integration)       { instance_double(Mutant::Integration)     }
-    let(:wrapped_node)      { instance_double(Parser::AST::Node)       }
     let(:context)           { instance_double(Mutant::Context)         }
     let(:test_a)            { instance_double(Mutant::Test)            }
     let(:test_b)            { instance_double(Mutant::Test)            }
