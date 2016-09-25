@@ -14,13 +14,13 @@ RSpec.describe Mutant::Env do
     end
 
     let(:integration)       { instance_double(Mutant::Integration)     }
-    let(:context)           { instance_double(Mutant::Context)         }
     let(:test_a)            { instance_double(Mutant::Test)            }
     let(:test_b)            { instance_double(Mutant::Test)            }
     let(:tests)             { [test_a, test_b]                         }
     let(:selector)          { instance_double(Mutant::Selector)        }
     let(:integration_class) { Mutant::Integration::Null                }
     let(:isolation)         { instance_double(Mutant::Isolation::Fork) }
+    let(:mutation_subject)  { instance_double(Mutant::Subject)         }
 
     let(:mutation) do
       instance_double(
@@ -34,15 +34,6 @@ RSpec.describe Mutant::Env do
         isolation:   isolation,
         integration: integration_class,
         kernel:      class_double(Kernel)
-      )
-    end
-
-    let(:mutation_subject) do
-      instance_double(
-        Mutant::Subject,
-        context:        context,
-        identification: 'subject',
-        source:         'original'
       )
     end
 
@@ -68,12 +59,7 @@ RSpec.describe Mutant::Env do
     end
 
     context 'when isolation does not raise error' do
-      let(:test_result) do
-        instance_double(
-          Mutant::Result::Test,
-          passed: false
-        )
-      end
+      let(:test_result) { instance_double(Mutant::Result::Test) }
 
       before do
         expect(isolation).to receive(:call)

@@ -10,14 +10,9 @@ RSpec.describe Mutant::Result::Env do
   let(:env) do
     instance_double(
       Mutant::Env,
-      config:    config,
       subjects:  [instance_double(Mutant::Subject)],
       mutations: [instance_double(Mutant::Mutation)]
     )
-  end
-
-  let(:config) do
-    instance_double(Mutant::Config)
   end
 
   let(:subject_result) do

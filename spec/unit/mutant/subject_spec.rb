@@ -26,8 +26,7 @@ RSpec.describe Mutant::Subject do
   let(:context) do
     double(
       'Context',
-      source_path: 'source_path',
-      source_line: 'source_line'
+      source_path: 'source_path'
     )
   end
 
