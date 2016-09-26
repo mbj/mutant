@@ -6,13 +6,7 @@ RSpec.describe Mutant::Result::Mutation do
     )
   end
 
-  let(:mutation) do
-    instance_double(
-      Mutant::Mutation,
-      frozen?: true,
-      class:   class_double(Mutant::Mutation)
-    )
-  end
+  let(:mutation) { instance_double(Mutant::Mutation) }
 
   let(:test_result) do
     instance_double(

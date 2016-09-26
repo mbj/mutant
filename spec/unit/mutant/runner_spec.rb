@@ -1,6 +1,5 @@
 RSpec.describe Mutant::Runner do
   describe '.call' do
-    let(:integration) { instance_double(Mutant::Integration)            }
     let(:reporter)    { instance_double(Mutant::Reporter, delay: delay) }
     let(:driver)      { instance_double(Mutant::Parallel::Driver)       }
     let(:delay)       { instance_double(Float)                          }
@@ -21,10 +20,9 @@ RSpec.describe Mutant::Runner do
     let(:config) do
       instance_double(
         Mutant::Config,
-        integration: integration,
-        jobs:        1,
-        kernel:      kernel,
-        reporter:    reporter
+        jobs:     1,
+        kernel:   kernel,
+        reporter: reporter
       )
     end
 
