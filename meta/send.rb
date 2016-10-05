@@ -134,7 +134,7 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'foo'
   mutation 'self.to_s'
-  mutation 'foo.to_str'
+  # mutation 'foo.to_str'
 end
 
 Mutant::Meta::Example.add :send do
@@ -143,7 +143,7 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'foo'
   mutation 'self.to_a'
-  mutation 'foo.to_ary'
+  # mutation 'foo.to_ary'
   mutation 'foo.to_set'
 end
 
@@ -153,7 +153,7 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'foo'
   mutation 'self.to_i'
-  mutation 'foo.to_int'
+  # mutation 'foo.to_int'
   mutation 'Integer(foo)'
 end
 
@@ -163,7 +163,7 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'foo'
   mutation 'self.to_h'
-  mutation 'foo.to_hash'
+  # mutation 'foo.to_hash'
 end
 
 Mutant::Meta::Example.add :send do
@@ -475,8 +475,8 @@ Mutant::Meta::Example.add :send do
   mutation '1'
   mutation 'foo'
   mutation 'foo[]'
-  mutation 'foo.at(1)'
-  mutation 'foo.fetch(1)'
+  # mutation 'foo.at(1)'
+  # mutation 'foo.fetch(1)'
   mutation 'foo.key?(1)'
   mutation 'self[1]'
   mutation 'foo[0]'
@@ -491,8 +491,8 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'self.foo'
-  mutation 'self.foo.at()'
-  mutation 'self.foo.fetch()'
+  # mutation 'self.foo.at()'
+  # mutation 'self.foo.fetch()'
   mutation 'self.foo.key?()'
   mutation 'self[]'
   mutation 'foo[]'
@@ -523,8 +523,8 @@ Mutant::Meta::Example.add :send do
   mutation 'n..-2'
   mutation 'foo'
   mutation 'foo[]'
-  mutation 'foo.at(n..-2)'
-  mutation 'foo.fetch(n..-2)'
+  # mutation 'foo.at(n..-2)'
+  # mutation 'foo.fetch(n..-2)'
   mutation 'foo.key?(n..-2)'
   mutation 'self[n..-2]'
   mutation 'foo[nil]'
@@ -548,8 +548,8 @@ Mutant::Meta::Example.add :send do
   mutation 'n...-1'
   mutation 'foo'
   mutation 'foo[]'
-  mutation 'foo.at(n...-1)'
-  mutation 'foo.fetch(n...-1)'
+  # mutation 'foo.at(n...-1)'
+  # mutation 'foo.fetch(n...-1)'
   mutation 'foo.key?(n...-1)'
   mutation 'self[n...-1]'
   mutation 'foo[nil]'
@@ -571,8 +571,8 @@ Mutant::Meta::Example.add :send do
   mutation 'n..-1'
   mutation 'foo'
   mutation 'foo[]'
-  mutation 'foo.at(n..-1)'
-  mutation 'foo.fetch(n..-1)'
+  # mutation 'foo.at(n..-1)'
+  # mutation 'foo.fetch(n..-1)'
   mutation 'foo.key?(n..-1)'
   mutation 'self[n..-1]'
   mutation 'foo[nil]'
@@ -595,8 +595,8 @@ Mutant::Meta::Example.add :send do
   mutation 'self[self]'
   mutation 'self[nil]'
   mutation 'self[]'
-  mutation 'self.at(foo)'
-  mutation 'self.fetch(foo)'
+  # mutation 'self.at(foo)'
+  # mutation 'self.fetch(foo)'
   mutation 'self.key?(foo)'
   mutation 'foo'
 end
@@ -607,8 +607,8 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'foo'
   mutation 'foo[]'
-  mutation 'foo.at(*bar)'
-  mutation 'foo.fetch(*bar)'
+  # mutation 'foo.at(*bar)'
+  # mutation 'foo.fetch(*bar)'
   mutation 'foo.key?(*bar)'
   mutation 'foo[nil]'
   mutation 'foo[self]'

@@ -1,3 +1,14 @@
+# v0.9.0 2016-10-04
+* start of fork
+* Removed the following mutations
+    * to_s -> to_str
+    * to_i -> to_int
+    * to_a -> to_ary
+    * to_h -> to_hash
+    * at -> fetch
+    * [] -> at
+    * [] -> fetch
+
 # v0.8.11 2016-08-01
 
 * Add support for rspec-3.5

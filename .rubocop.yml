@@ -5,3 +5,5 @@ AllCops:
     - 'test_app/**/*'
     - 'bin/mutant'
   TargetRubyVersion: 2.2
+EndOfLine:
+  Enabled: false
