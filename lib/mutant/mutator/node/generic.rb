@@ -40,6 +40,7 @@ module Mutant
           regexp_alternation_meta
           regexp_bol_anchor
           regexp_digit_type
+          regexp_eol_anchor
           regexp_nondigit_type
           regexp_nonspace_type
           regexp_nonword_boundary_anchor
