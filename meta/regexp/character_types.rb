@@ -1,8 +1,8 @@
 mutations = {
-  [:regexp_word_type,            '/\w/'] => [:regexp_nonword_type,            '/\W/'],
   [:regexp_digit_type,           '/\d/'] => [:regexp_nondigit_type,           '/\D/'],
   [:regexp_space_type,           '/\s/'] => [:regexp_nonspace_type,           '/\S/'],
-  [:regexp_word_boundary_anchor, '/\b/'] => [:regexp_nonword_boundary_anchor, '/\B/']
+  [:regexp_word_boundary_anchor, '/\b/'] => [:regexp_nonword_boundary_anchor, '/\B/'],
+  [:regexp_word_type,            '/\w/'] => [:regexp_nonword_type,            '/\W/']
 }
 
 mutations = mutations.merge(mutations.invert)
