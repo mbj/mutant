@@ -41,7 +41,9 @@ module Mutant
           regexp_bol_anchor
           regexp_digit_type
           regexp_eol_anchor
+          regexp_hex_type
           regexp_nondigit_type
+          regexp_nonhex_type
           regexp_nonspace_type
           regexp_nonword_boundary_anchor
           regexp_nonword_type
