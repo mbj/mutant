@@ -14,7 +14,7 @@ module Mutant
           def dispatch
             emit(s(:regexp_eos_anchor))
           end
-        end # EndOfLineAnchor
+        end # EndOfStringOrBeforeEndOfLineAnchor
       end # Regexp
     end # Node
   end # Mutator
