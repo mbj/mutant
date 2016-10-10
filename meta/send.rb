@@ -129,6 +129,13 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
+  source 'flat_map'
+
+  singleton_mutations
+  mutation 'map'
+end
+
+Mutant::Meta::Example.add :send do
   source 'foo.to_s'
 
   singleton_mutations

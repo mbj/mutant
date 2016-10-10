@@ -18,6 +18,7 @@ module Mutant
           reverse_each:  %i[each],
           reverse_merge: %i[merge],
           map:           %i[each],
+          flat_map:      %i[map],
           sample:        %i[first last],
           pop:           %i[last],
           shift:         %i[first],
