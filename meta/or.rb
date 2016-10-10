@@ -68,6 +68,7 @@ Mutant::Meta::Example.add :or do
   mutation 'self[bar] || baz'
   mutation '!foo[bar] || baz'
   mutation 'foo.at(bar) || baz'
+  mutation 'foo.fetch(bar) { baz }'
   mutation 'foo.key?(bar) || baz'
   mutation 'foo.fetch(bar) || baz'
 end

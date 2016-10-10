@@ -25,6 +25,7 @@ module Mutant
           emit_left_negation
           emit_left_mutations
           emit_right_mutations
+          emit_fetch_mutation
         end
 
         # Emit operator mutations
@@ -58,6 +59,23 @@ module Mutant
         # @return [undefined]
         def emit_left_negation
           emit(s(node.type, n_not(left), right))
+        end
+
+        # Emit mutation from `a[b] || c` to `a.fetch(b) { c }`
+        #
+        # @return [undefined]
+        def emit_fetch_mutation
+          return unless n_send?(left) && n_or?(node)
+
+          send_node = AST::Meta::Send.new(left)
+          return unless send_node.selector.equal?(:[]) && send_node.arguments.one?
+
+          emit(
+            s(:block,
+              s(:send, send_node.receiver, :fetch, *send_node.arguments),
+              s(:args),
+              right)
+          )
         end
 
       end # Binary
