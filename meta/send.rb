@@ -734,6 +734,7 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'proc'
   mutation 'proc { raise }'
+  mutation 'lambda { }'
 end
 
 Mutant::Meta::Example.add :send do
@@ -743,4 +744,5 @@ Mutant::Meta::Example.add :send do
   mutation 'Proc.new'
   mutation 'self.new { }'
   mutation 'Proc.new { raise }'
+  mutation 'lambda { }'
 end
