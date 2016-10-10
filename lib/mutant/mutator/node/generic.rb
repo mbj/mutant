@@ -39,6 +39,7 @@ module Mutant
         unsupported_regexp_nodes = AST::Types::REGEXP.to_a - %i[
           regexp_alternation_meta
           regexp_bol_anchor
+          regexp_capture_group
           regexp_digit_type
           regexp_eol_anchor
           regexp_eos_ob_eol_anchor
