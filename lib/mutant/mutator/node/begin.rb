@@ -14,7 +14,7 @@ module Mutant
         # @return [undefined]
         def dispatch
           mutate_single_child do |child|
-            emit(child)
+            emit(child) unless n_lvar?(child)
           end
         end
       end # Begin

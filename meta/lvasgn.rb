@@ -26,8 +26,8 @@ Mutant::Meta::Example.add :lvasgn do
   # TODO: fix invalid AST
   #   These ASTs are not valid and should NOT be emitted
   #   Mutations of lvarasgn need to be special cased to avoid this.
-  mutation s(:begin, s(:lvasgn, :a__mutant__, s(:nil)), s(:lvar, :a))
-  mutation s(:begin, s(:nil), s(:lvar, :a))
-  mutation s(:begin, s(:self), s(:lvar, :a))
-  mutation s(:lvar, :a)
+  # mutation s(:begin, s(:lvasgn, :a__mutant__, s(:nil)), s(:lvar, :a))
+  # mutation s(:begin, s(:nil), s(:lvar, :a))
+  # mutation s(:begin, s(:self), s(:lvar, :a))
+  # mutation s(:lvar, :a)
 end
