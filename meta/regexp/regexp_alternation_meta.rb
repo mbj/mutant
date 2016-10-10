@@ -8,4 +8,5 @@ Mutant::Meta::Example.add :regexp_alternation_meta do
   mutation '/\A(foo|baz)\z/'
   mutation '/\A(bar|baz)\z/'
   mutation '/\A(?:foo|bar|baz)\z/'
+  mutation '/\Afoo|bar|baz\z/'
 end

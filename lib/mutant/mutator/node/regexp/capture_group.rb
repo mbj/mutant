@@ -17,6 +17,7 @@ module Mutant
             return unless group
 
             emit(s(:regexp_passive_group, group))
+            # emit(group)
             emit_group_mutations
           end
         end # EndOfLineAnchor
