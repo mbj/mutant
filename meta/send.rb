@@ -696,6 +696,7 @@ Mutant::Meta::Example.add :send do
   mutation '!foo'
   mutation '!self'
   mutation '!!self'
+  mutation 'foo'
 end
 
 Mutant::Meta::Example.add :send do
