@@ -16,8 +16,9 @@ module Mutant
             emit_singletons
             emit_type
             mutate_body
+            emit_empty_set
             return unless children.one?
-            emit(children.first)
+            emit(Mutant::Util.one(children))
           end
 
           # Mutate body
@@ -30,6 +31,13 @@ module Mutant
               emit_type(*dup_children)
               mutate_child(index)
             end
+          end
+
+          # Emit `Set.new`
+          #
+          # @return [undefined]
+          def emit_empty_set
+            emit(s(:send, s(:const, nil, :Set), :new)) if children.empty?
           end
 
         end # Array

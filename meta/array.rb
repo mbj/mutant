@@ -31,4 +31,5 @@ Mutant::Meta::Example.add :array do
   source '[]'
 
   singleton_mutations
+  mutation 'Set.new'
 end
