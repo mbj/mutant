@@ -16,6 +16,7 @@ module Mutant
           def dispatch
             emit(s(:regexp_greedy_one_or_more, *children))
             emit_subject_mutations
+            emit(subject)
           end
         end # GreedyZeroOrMore
       end # Regexp
