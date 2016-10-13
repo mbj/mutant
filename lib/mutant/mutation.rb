@@ -63,6 +63,13 @@ module Mutant
       self
     end
 
+    # Test if subject is a neutral mutation
+    #
+    # @return [Boolean]
+    def neutral?
+      self.class::SYMBOL.equal?(Neutral::SYMBOL)
+    end
+
   private
 
     # SHA1 sum of source and subject identification

@@ -50,6 +50,18 @@ RSpec.describe Mutant::Mutation do
     it_should_behave_like 'a command method'
   end
 
+  describe '#neutral?' do
+    subject { object.neutral? }
+
+    it { should be(false) }
+
+    context 'when neutral mutation' do
+      let(:mutation_class) { described_class::Neutral }
+
+      it { should be(true) }
+    end
+  end
+
   describe '#code' do
     subject { object.code }
 

@@ -27,7 +27,7 @@ module Mutant
       #
       # @return [Boolean]
       def stop?
-        env.config.fail_fast && !status.subject_results.all?(&:success?)
+        (env.config.fail_fast && evil_failure?) || neutral_failure?
       end
 
       # Handle mutation finish
@@ -48,6 +48,29 @@ module Mutant
       end
 
     private
+
+      # Test if an evil failure has been reported
+      #
+      # @return [Boolean]
+      def evil_failure?
+        any_subject_result?(:failure?)
+      end
+
+      # Test if a neutral failure has occured
+      #
+      # @return [Boolean]
+      def neutral_failure?
+        any_subject_result?(:neutral_failure?)
+      end
+
+      # Test if any result matches the predicate applied by the provided block
+      #
+      # @param predicate [Symbol] predicate method to test results with
+      #
+      # @return [Boolean]
+      def any_subject_result?(predicate)
+        status.subject_results.any?(&predicate)
+      end
 
       # Return previous results
       #

@@ -168,5 +168,15 @@ describe Mutant::Runner::Sink do
         end
       end
     end
+
+    context 'with a neutral failure' do
+      include_context 'two results'
+
+      with(:mutation_a_test_result) { { passed: false } }
+
+      let(:mutation_a) { Mutant::Mutation::Neutral.new(subject_a, mutation_a_node) }
+
+      it { should be(true) }
+    end
   end
 end

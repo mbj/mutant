@@ -120,7 +120,7 @@ module Mutant
 
     # Subject result
     class Subject
-      include Coverage, Result, Anima.new(
+      include FailurePredicate, Coverage, Result, Anima.new(
         :mutation_results,
         :subject,
         :tests
@@ -172,6 +172,13 @@ module Mutant
         alive_mutation_results.length
       end
 
+      # Test if subject contains a neutral failure
+      #
+      # @return [Boolean]
+      def neutral_failure?
+        mutation_results.any?(&:neutral_failure?)
+      end
+
     private
 
       # Killed mutation results
@@ -186,7 +193,7 @@ module Mutant
 
     # Mutation result
     class Mutation
-      include Result, Anima.new(
+      include FailurePredicate, Result, Anima.new(
         :mutation,
         :test_result
       )
@@ -210,6 +217,13 @@ module Mutant
       # @return [Boolean]
       def success?
         mutation.class.success?(test_result)
+      end
+
+      # Test if mutation is a neutral failure
+      #
+      # @return [Boolean]
+      def neutral_failure?
+        failure? && mutation.neutral?
       end
 
     end # Mutation

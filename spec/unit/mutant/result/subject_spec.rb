@@ -106,4 +106,30 @@ RSpec.describe Mutant::Result::Subject do
       end
     end
   end
+
+  describe '#neutral_failure?' do
+    subject { object.neutral_failure? }
+
+    context 'without failing neutral mutations' do
+      let(:mutation_results) do
+        [
+          instance_double(Mutant::Result::Mutation, success?: false, neutral_failure?: false),
+          instance_double(Mutant::Result::Mutation, success?: true,  neutral_failure?: false)
+        ]
+      end
+
+      it { should be(false) }
+    end
+
+    context 'with one failing neutral mutation' do
+      let(:mutation_results) do
+        [
+          instance_double(Mutant::Result::Mutation, success?: false, neutral_failure?: false),
+          instance_double(Mutant::Result::Mutation, success?: false, neutral_failure?: true)
+        ]
+      end
+
+      it { should be(true) }
+    end
+  end
 end
