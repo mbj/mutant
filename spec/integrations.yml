@@ -82,7 +82,6 @@
       - library/zlib/inflate/append_spec.rb
       - library/zlib/inflate/inflate_spec.rb
       - library/zlib/inflate/set_dictionary_spec.rb
-      - library/zlib/zstream/flush_next_out_spec.rb
       - optional/capi/encoding_spec.rb
       - optional/capi/string_spec.rb
     '#<RegexpError: invalid multibyte escape: /\xAA/>':
