@@ -87,6 +87,15 @@ module Mutant
         subject_results.reject(&:success?)
       end
 
+      def neutral_failure_violation?
+        neutral_violation_subject_results.any?
+      end
+
+      def neutral_violation_subject_results
+        subject_results.select(&:neutral_failure?)
+      end
+      memoize :neutral_violation_subject_results
+
       sum :amount_mutation_results, :subject_results
       sum :amount_mutations_alive,  :subject_results
       sum :amount_mutations_killed, :subject_results

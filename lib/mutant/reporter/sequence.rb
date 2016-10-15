@@ -3,7 +3,7 @@ module Mutant
     class Sequence < self
       include Concord.new(:reporters)
 
-      %i[warn progress report start].each do |name|
+      %i[warn progress done violation start].each do |name|
         define_method(name) do |value|
           reporters.each do |reporter|
             reporter.public_send(name, value)

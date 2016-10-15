@@ -66,12 +66,20 @@ module Mutant
       # @param [Result::Env] env
       #
       # @return [self]
-      def report(env)
-        Printer::EnvResult.call(output, env)
-        self
+      def done(env)
+        print(Printer::EnvResult, env)
+      end
+
+      def violation(env)
+        print(Printer::NeutralViolation, env)
       end
 
     private
+
+      def print(printer, env)
+        printer.call(output, env)
+        self
+      end
 
       # Write output frame
       #

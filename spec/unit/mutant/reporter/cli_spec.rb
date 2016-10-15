@@ -133,8 +133,8 @@ RSpec.describe Mutant::Reporter::CLI do
     end
   end
 
-  describe '#report' do
-    subject { object.report(env_result) }
+  describe '#done' do
+    subject { object.done(env_result) }
 
     it_reports(<<-REPORT)
       Mutant configuration:
@@ -154,6 +154,17 @@ RSpec.describe Mutant::Reporter::CLI do
       Mutations/s:     0.50
       Coverage:        100.00%
     REPORT
+  end
+
+  describe '#violation' do
+    subject { object.violation(env_result) }
+
+    it_reports(
+      'Mutant exited early due to neutral failures encountered during execution. Mutant ran '   \
+      'your tests using semantically equivalent source code and the tests did not pass. This '  \
+      'might happen if your tests are not passing, if executing your test suite mutates global '\
+      "state, or if your tests otherwise do not run properly in parallel.\n"
+    )
   end
 
   describe '#progress' do

@@ -20,7 +20,8 @@ RSpec.describe Mutant::Result::Env do
       Mutant::Result::Subject,
       amount_mutation_results: results,
       amount_mutations_killed: killed,
-      success?:                true
+      success?:                true,
+      neutral_failure?:        false
     )
   end
 
@@ -45,6 +46,18 @@ RSpec.describe Mutant::Result::Env do
     subject { object.failed_subject_results }
 
     it { should eql([]) }
+  end
+
+  describe '#neutral_violation_subject_results' do
+    subject { object.neutral_violation_subject_results }
+
+    it { should eql([]) }
+  end
+
+  describe '#neutral_failure_violation?' do
+    subject { object.neutral_failure_violation? }
+
+    it { should be(false) }
   end
 
   describe '#coverage' do
