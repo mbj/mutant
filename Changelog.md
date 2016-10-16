@@ -19,6 +19,18 @@
 * Remove misleading `--expect-coverage` option
 * Add basic support for regexp mutations (machinery and simple anchor mutations)
 * Add support for mutating csend (duck tape operator) into regular sends
+* Add mutation from `foo&.bar` to `foo.bar`
+* Add mutation from `#to_a` to `#to_set`
+* Add mutation from `foo.dig(a, b)` to `foo.fetch(a).dig(b)`
+* Add mutation from `def foo(bar:); end` to `def foo(_bar:); end`
+* Add mutation from `def foo(bar: baz); end` to `def foo(_bar: baz); end`
+* Add mutation from `/regex/i` to `/regex/`
+* Add mutation from `foo[n..-1]` to `foo.drop(n)`
+* Add mutation from `/^/` to `/\A/`
+* Add mutation from `#first` to `#last`
+* Add mutation from `#last` to `#first`
+* Add mutation from `#sample` to `#first` and `#last`
+* Remove mutations from `1..n` to `1..(0.0 / 0.0)` and `1..(1.0 / 0.0)`
 
 # v0.8.10 2016-01-24
 
