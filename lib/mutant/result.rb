@@ -87,10 +87,6 @@ module Mutant
         subject_results.reject(&:success?)
       end
 
-      def neutral_failure_violation?
-        neutral_violation_subject_results.any?
-      end
-
       def neutral_violation_subject_results
         subject_results.select(&:neutral_failure?)
       end
@@ -113,6 +109,32 @@ module Mutant
       # @return [Fixnum]
       def amount_subjects
         env.subjects.length
+      end
+
+      def evaluation_status
+        if evil_failures? && env.config.fail_fast
+          EvaluationStatus::Done.new
+        else
+          EvaluationStatus::Running.new
+        end
+      end
+
+      private
+
+      def evil_failures?
+        failed_subject_results.any?
+      end
+
+      def neutral_failures?
+        neutral_violation_subject_results.any?
+      end
+
+      class EvaluationStatus
+        include AbstractType
+
+        Running          = Class.new(self)
+        Done             = Class.new(self)
+        NeutralViolation = Class.new(self)
       end
 
     end # Env

@@ -54,8 +54,8 @@ RSpec.describe Mutant::Result::Env do
     it { should eql([]) }
   end
 
-  describe '#neutral_failure_violation?' do
-    subject { object.neutral_failure_violation? }
+  xdescribe '#neutral_failures?' do
+    subject { object.neutral_failures? }
 
     it { should be(false) }
   end
