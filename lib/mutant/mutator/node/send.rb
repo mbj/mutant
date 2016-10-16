@@ -112,6 +112,7 @@ module Mutant
           emit_integer_mutation
           emit_dig_mutation
           emit_double_negation_mutation
+          emit_lambda_mutation
           emit_drop_mutation
         end
 
@@ -135,6 +136,13 @@ module Mutant
 
           negated = AST::Meta::Send.new(meta.receiver)
           emit(negated.receiver) if negated.selector.equal?(:!)
+        end
+
+        # Emit mutation from proc definition to lambda
+        #
+        # @return [undefined]
+        def emit_lambda_mutation
+          emit(s(:send, nil, :lambda)) if meta.proc?
         end
 
         # Emit mutation for `#dig`
@@ -244,5 +252,4 @@ module Mutant
       end # Send
     end # Node
   end # Mutator
-
 end # Mutant

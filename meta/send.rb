@@ -717,3 +717,32 @@ Mutant::Meta::Example.add :send do
   mutation '!self&.!'
   mutation '!(!foo)'
 end
+
+Mutant::Meta::Example.add :send do
+  source 'custom.proc { }'
+
+  singleton_mutations
+  mutation 'custom.proc'
+  mutation 'custom { }'
+  mutation 'self.proc { }'
+  mutation 'custom.proc { raise }'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'proc { }'
+
+  singleton_mutations
+  mutation 'proc'
+  mutation 'proc { raise }'
+  mutation 'lambda { }'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'Proc.new { }'
+
+  singleton_mutations
+  mutation 'Proc.new'
+  mutation 'self.new { }'
+  mutation 'Proc.new { raise }'
+  mutation 'lambda { }'
+end

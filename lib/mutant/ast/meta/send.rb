@@ -21,6 +21,13 @@ module Mutant
 
         public :arguments
 
+        # Test if node is defining a proc
+        #
+        # @return [Boolean]
+        def proc?
+          naked_proc? || proc_new?
+        end
+
         # Test if AST node is a valid assignment target
         #
         # @return [Boolean]
@@ -57,6 +64,25 @@ module Mutant
           return false unless receiver && n_const?(receiver)
 
           Const.new(receiver).possible_top_level?
+        end
+
+      private
+
+        # Test if node is `proc { ... }`
+        #
+        # @return [Boolean]
+        def naked_proc?
+          !receiver && selector.equal?(:proc)
+        end
+
+        # Test if node is `Proc.new { ... }`
+        #
+        # @return [Boolean]
+        def proc_new?
+          receiver                &&
+            selector.equal?(:new) &&
+            n_const?(receiver)    &&
+            Const.new(receiver).name.equal?(:Proc)
         end
 
       end # Send
