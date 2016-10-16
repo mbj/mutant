@@ -133,8 +133,8 @@ RSpec.describe Mutant::Reporter::CLI do
     end
   end
 
-  describe '#done' do
-    subject { object.done(env_result) }
+  describe '#report' do
+    subject { object.report(env_result) }
 
     it_reports(<<-REPORT)
       Mutant configuration:
@@ -156,7 +156,7 @@ RSpec.describe Mutant::Reporter::CLI do
     REPORT
   end
 
-  describe '#violation' do
+  xdescribe '#violation' do
     subject { object.violation(env_result) }
 
     it_reports(

@@ -46,9 +46,9 @@ RSpec.describe Mutant::Runner do
       expect(Mutant::Parallel).to receive(:async).with(parallel_config).and_return(driver).ordered
     end
 
-    subject { described_class.call(env) }
+    context 'when report iterations are done' do
+      subject { described_class.call(env) }
 
-    shared_context 'parallel execution setup' do
       let(:status_a) { instance_double(Mutant::Parallel::Status, done: false)                     }
       let(:status_b) { instance_double(Mutant::Parallel::Status, done: true, payload: env_result) }
 
@@ -60,28 +60,12 @@ RSpec.describe Mutant::Runner do
         expect(driver).to receive(:status).and_return(status_b).ordered
         expect(reporter).to receive(:progress).with(status_b).ordered
         expect(driver).to receive(:stop).ordered
+
+        expect(reporter).to receive(:report).with(env_result).ordered
       end
 
       it 'returns env result' do
         should be(env_result)
-      end
-    end
-
-    context 'when report iterations are done' do
-      include_context 'parallel execution setup'
-
-      before do
-        expect(env_result).to receive(:neutral_failure_violation?).and_return(false).ordered
-        expect(reporter).to receive(:done).with(env_result).ordered
-      end
-    end
-
-    context 'when violation is encountered' do
-      include_context 'parallel execution setup'
-
-      before do
-        expect(env_result).to receive(:neutral_failure_violation?).and_return(true).ordered
-        expect(reporter).to receive(:violation).with(env_result).ordered
       end
     end
   end

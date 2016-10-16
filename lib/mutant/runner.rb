@@ -26,7 +26,7 @@ module Mutant
     # @return [undefined]
     def run_mutation_analysis
       @result = run_driver(Parallel.async(mutation_test_config))
-      report_result
+      reporter.report(result)
     end
 
     # Run driver
@@ -76,14 +76,6 @@ module Mutant
     # @return [Config]
     def config
       env.config
-    end
-
-    def report_result
-      if result.neutral_failure_violation?
-        reporter.violation(result)
-      else
-        reporter.done(result)
-      end
     end
 
   end # Runner

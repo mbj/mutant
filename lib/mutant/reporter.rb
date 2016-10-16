@@ -22,8 +22,7 @@ module Mutant
     # @param [Runner::Collector] collector
     #
     # @return [self]
-    abstract_method :done
-    abstract_method :violation
+    abstract_method :report
 
     # Report progress on object
     #
