@@ -1,3 +1,17 @@
+# v0.8.12 2016-10-xx
+
+* Add mutation from `/foo|bar/` to `/foo/` and `/bar/`
+* Add mutation from `/$/` to `/\z/`
+* Add mutation from `/\h/` to `/\H/`
+* Add mutation from `/\H/` to `/\h/`
+* Add mutation from `/\Z/` to `/\z/`
+* Add mutation from `flat_map` to `map`
+* Add mutation from `/(foo)/` to `/(?:foo)/`
+* Add mutation from `/a*/` to `/a+/`
+* Add mutation from `/a*/` to `/a/`
+* Add mutation from `!!foo` to `foo`
+* Add mutation from `proc { }` to `lambda { }`
+
 # v0.8.11 2016-08-01
 
 * Add support for rspec-3.5
