@@ -688,3 +688,32 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'first'
 end
+
+Mutant::Meta::Example.add :send do
+  source '!!foo'
+
+  singleton_mutations
+  mutation '!foo'
+  mutation '!self'
+  mutation '!!self'
+  mutation 'foo'
+end
+
+Mutant::Meta::Example.add :send do
+  source '!foo'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation '!self'
+end
+
+Mutant::Meta::Example.add :send do
+  source '!foo&.!'
+
+  singleton_mutations
+  mutation 'foo&.!'
+  mutation '!self'
+  mutation '!foo'
+  mutation '!self&.!'
+  mutation '!(!foo)'
+end

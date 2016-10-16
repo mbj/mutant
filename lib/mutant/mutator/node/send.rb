@@ -111,6 +111,7 @@ module Mutant
           emit_const_get_mutation
           emit_integer_mutation
           emit_dig_mutation
+          emit_double_negation_mutation
           emit_drop_mutation
         end
 
@@ -124,6 +125,16 @@ module Mutant
             .fetch(receiver.children.last, EMPTY_HASH)
             .fetch(selector, EMPTY_ARRAY)
             .each(&method(:emit_selector))
+        end
+
+        # Emit mutation from `!!foo` to `foo`
+        #
+        # @return [undefined]
+        def emit_double_negation_mutation
+          return unless selector.equal?(:!) && n_send?(receiver)
+
+          negated = AST::Meta::Send.new(meta.receiver)
+          emit(negated.receiver) if negated.selector.equal?(:!)
         end
 
         # Emit mutation for `#dig`
