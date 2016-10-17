@@ -1,4 +1,4 @@
-# v0.8.12 2016-10-xx
+# v0.8.12 2016-10-17
 
 * Add mutation from `/foo|bar/` to `/foo/` and `/bar/`
 * Add mutation from `/$/` to `/\z/`
