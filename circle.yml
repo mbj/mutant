@@ -7,4 +7,5 @@ dependencies:
     - bundle -v | grep -Fx "Bundler version 1.10.6" || gem install bundler --version 1.10.6
 test:
   override:
-    - bundle exec rake ci
+    - ./circle.sh:
+        parallel: true
