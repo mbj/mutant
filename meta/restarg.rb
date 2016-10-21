@@ -4,5 +4,4 @@ Mutant::Meta::Example.add :restarg do
   mutation 'def foo; end'
   mutation 'def foo(*bar); bar = []; end'
   mutation 'def foo(*bar); raise; end'
-  mutation 'remove_method(:foo)'
 end

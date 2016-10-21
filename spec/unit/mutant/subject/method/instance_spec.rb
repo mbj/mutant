@@ -122,11 +122,6 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
           object,
           s(:begin,
             s(:def, :foo, s(:args), nil), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))
-        ),
-        Mutant::Mutation::Evil.new(
-          object,
-          s(:begin,
-            s(:send, nil, :remove_method, s(:sym, :foo)), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))
         )
       ]
     end

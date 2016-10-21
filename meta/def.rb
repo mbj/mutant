@@ -2,7 +2,6 @@ Mutant::Meta::Example.add :def do
   source 'def foo; end'
 
   mutation 'def foo; raise; end'
-  mutation 'remove_method :foo'
 end
 
 Mutant::Meta::Example.add :def do
@@ -15,7 +14,6 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(a); nil; end'
   mutation 'def foo(*b); nil; end'
   mutation 'def foo(a, *b); b = []; nil; end'
-  mutation 'remove_method :foo'
 end
 
 Mutant::Meta::Example.add :def do
@@ -27,7 +25,6 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(a, *); raise; end'
   mutation 'def foo(a); nil; end'
   mutation 'def foo(*); nil; end'
-  mutation 'remove_method :foo'
 end
 
 Mutant::Meta::Example.add :def do
@@ -37,7 +34,6 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo; nil; rescue; end'
   mutation 'def foo; self; rescue; end'
   mutation 'def foo; end'
-  mutation 'remove_method :foo'
 
   # Promote rescue resbody bodies
   mutation 'def foo; foo; end'
@@ -69,7 +65,6 @@ Mutant::Meta::Example.add :def do
   # Failing body
   mutation 'def a; raise; end'
 
-  mutation 'remove_method :a'
 end
 
 Mutant::Meta::Example.add :def do
@@ -90,7 +85,6 @@ Mutant::Meta::Example.add :def do
 
   mutation 'def foo; raise; end'
 
-  mutation 'remove_method :foo'
 end
 
 Mutant::Meta::Example.add :def do
@@ -110,7 +104,6 @@ Mutant::Meta::Example.add :def do
   # Mutation of body
   mutation 'def foo(a, b); raise; end'
 
-  mutation 'remove_method :foo'
 end
 
 Mutant::Meta::Example.add :def do
@@ -127,7 +120,6 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(b = nil); true; end'
   mutation 'def foo(a, _b = nil); true; end'
   mutation 'def foo(a, b); true; end'
-  mutation 'remove_method :foo'
 end
 
 Mutant::Meta::Example.add :def do
@@ -135,7 +127,6 @@ Mutant::Meta::Example.add :def do
 
   mutation 'def foo(_unused); raise; end'
   mutation 'def foo; end'
-  mutation 'remove_method :foo'
 end
 
 Mutant::Meta::Example.add :def do
@@ -146,7 +137,6 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(_unused = true); raise; end'
   mutation 'def foo(_unused); end'
   mutation 'def foo; end'
-  mutation 'remove_method :foo'
 end
 
 Mutant::Meta::Example.add :def do
@@ -168,7 +158,6 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(a = 0, b = 0); a = 0; end'
   mutation 'def foo(a = 0, b = 0); b = 0; end'
   mutation 'def foo(a = 0, b = 0); raise; end'
-  mutation 'remove_method :foo'
 end
 
 Mutant::Meta::Example.add :def do
@@ -181,7 +170,6 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(_a = true); end'
   mutation 'def foo(a = true); raise; end'
   mutation 'def foo(a = true); a = true; end'
-  mutation 'remove_method :foo'
 end
 
 Mutant::Meta::Example.add :def do
