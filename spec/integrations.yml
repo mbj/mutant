@@ -22,8 +22,6 @@
       - core/encoding/invalid_byte_sequence_error/readagain_bytes_spec.rb
       - core/encoding/replicate_spec.rb
       - core/regexp/shared/new_ascii.rb
-      - core/string/byteslice_spec.rb
-      - core/string/codepoints_spec.rb
       - core/string/comparison_spec.rb
       - core/string/count_spec.rb
       - core/string/delete_spec.rb
