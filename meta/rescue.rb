@@ -74,8 +74,6 @@ Mutant::Meta::Example.add :rescue do
 
   # Failing body
   mutation 'def a; raise; end'
-
-  mutation 'remove_method :a'
 end
 
 Mutant::Meta::Example.add :rescue do
