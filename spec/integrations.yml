@@ -11,8 +11,6 @@
       - core/array/fixtures/encoded_strings.rb
       - core/array/pack/shared/string.rb
       - core/array/pack/shared/unicode.rb
-      - core/encoding/converter/primitive_convert_spec.rb
-      - core/encoding/converter/primitive_errinfo_spec.rb
       - core/encoding/converter/putback_spec.rb
       - core/encoding/fixtures/classes.rb
       - core/encoding/invalid_byte_sequence_error/error_bytes_spec.rb
