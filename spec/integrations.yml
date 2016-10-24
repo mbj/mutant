@@ -40,8 +40,6 @@
       - language/string_spec.rb
       - library/openssl/shared/constants.rb
       - library/socket/socket/gethostbyname_spec.rb
-      - library/stringscanner/getch_spec.rb
-      - library/stringscanner/shared/get_byte.rb
       - library/zlib/inflate/set_dictionary_spec.rb
       - optional/capi/encoding_spec.rb
       - optional/capi/string_spec.rb
