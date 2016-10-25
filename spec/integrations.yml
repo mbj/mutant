@@ -8,9 +8,6 @@
     "#<Parser::SyntaxError: invalid multibyte escape: /\xAA/>":
       - language/regexp/escapes_spec.rb
     "#<Parser::SyntaxError: literal contains escape sequences incompatible with UTF-8>":
-      - core/array/fixtures/encoded_strings.rb
-      - core/array/pack/shared/string.rb
-      - core/array/pack/shared/unicode.rb
       - core/regexp/shared/new_ascii.rb
       - core/string/comparison_spec.rb
       - core/string/count_spec.rb
