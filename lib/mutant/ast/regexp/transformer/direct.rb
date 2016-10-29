@@ -50,6 +50,7 @@ module Mutant
               [:regexp_set_open_escape,          [:escape,   :set_open,         '\['],           ::Regexp::Expression::EscapeSequence::Literal],
               [:regexp_set_close_escape,         [:escape,   :set_close,        '\]'],           ::Regexp::Expression::EscapeSequence::Literal],
               [:regexp_eol_escape,               [:escape,   :eol,              '\$'],           ::Regexp::Expression::EscapeSequence::Literal],
+              [:regexp_bol_escape,               [:escape,   :bol,              '\^'],           ::Regexp::Expression::EscapeSequence::Literal],
               [:regexp_bell_escape,              [:escape,   :bell,             '\a'],           ::Regexp::Expression::EscapeSequence::Literal],
               [:regexp_escape_escape,            [:escape,   :escape,           '\e'],           ::Regexp::Expression::EscapeSequence::AsciiEscape],
               [:regexp_form_feed_escape,         [:escape,   :form_feed,        '\f'],           ::Regexp::Expression::EscapeSequence::FormFeed],

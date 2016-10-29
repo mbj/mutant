@@ -113,6 +113,11 @@ RegexpSpec.expect_mapping(/^/, :regexp_bol_anchor) do
     s(:regexp_bol_anchor))
 end
 
+RegexpSpec.expect_mapping(/\^/, :regexp_bol_escape) do
+  s(:regexp_root_expression,
+    s(:regexp_bol_escape))
+end
+
 RegexpSpec.expect_mapping(/\A/, :regexp_bos_anchor) do
   s(:regexp_root_expression,
     s(:regexp_bos_anchor))

@@ -7,29 +7,12 @@
   expected_errors:
     "#<Parser::SyntaxError: invalid multibyte escape: /\xAA/>":
       - language/regexp/escapes_spec.rb
-    "#<Parser::SyntaxError: literal contains escape sequences incompatible with UTF-8>":
-      - core/string/shared/each_codepoint_without_block.rb
-      - core/string/shared/encode.rb
-      - core/string/shared/eql.rb
-      - core/string/shared/succ.rb
-      - core/string/slice_spec.rb
-      - core/string/squeeze_spec.rb
-      - core/string/unicode_normalize_spec.rb
-      - core/string/valid_encoding_spec.rb
-      - core/symbol/casecmp_spec.rb
-      - core/time/_dump_spec.rb
-      - core/time/_load_spec.rb
-      - language/regexp/encoding_spec.rb
-      - language/string_spec.rb
-      - library/openssl/shared/constants.rb
-      - library/socket/socket/gethostbyname_spec.rb
-      - library/zlib/inflate/set_dictionary_spec.rb
-      - optional/capi/encoding_spec.rb
-      - optional/capi/string_spec.rb
     '#<RegexpError: invalid multibyte escape: /\xAA/>':
       - language/regexp/escapes_spec.rb
     "#<Regexp::Scanner::PrematureEndError: Premature end of pattern at #{str}>":
       - language/regexp/interpolation_spec.rb
+    '#<Regexp::Scanner::PrematureEndError: Premature end of pattern at \xA>':
+      - language/regexp/escapes_spec.rb
 - name: regexp_parser
   namespace: Regexp
   repo_uri: 'https://github.com/ammar/regexp_parser.git'

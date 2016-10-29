@@ -50,6 +50,7 @@ module Mutant
         regexp_backslash_escape
         regexp_bell_escape
         regexp_bol_anchor
+        regexp_bol_escape
         regexp_bos_anchor
         regexp_capture_group
         regexp_carriage_escape
