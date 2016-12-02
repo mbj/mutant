@@ -96,14 +96,6 @@ RSpec.describe Mutant::CLI do
       it_should_behave_like 'an invalid cli run'
     end
 
-    context 'without expressions' do
-      let(:expressions) { [] }
-
-      let(:expected_message) { 'No expressions given' }
-
-      it_should_behave_like 'an invalid cli run'
-    end
-
     context 'with include help flag' do
       let(:flags) { %w[--help] }
 
