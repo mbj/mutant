@@ -12,8 +12,7 @@ module Mutant
           # Emit mutations
           #
           # @return [undefined]
-          def dispatch
-          end
+          def dispatch; end
 
         end # Nil
       end # Literal

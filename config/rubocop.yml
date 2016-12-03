@@ -177,3 +177,6 @@ AlignHash:
 # Prefer `public_send` and `__send__` over `send`
 Send:
   Enabled: true
+
+Lint/UnifiedInteger:
+  Enabled: false
