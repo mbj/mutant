@@ -1,5 +1,6 @@
 require File.expand_path('../lib/mutant/version', __FILE__)
 
+# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |gem|
   gem.name        = 'mutant'
   gem.version     = Mutant::VERSION.dup

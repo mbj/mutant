@@ -27,6 +27,7 @@ describe Mutant::Repository::Diff do
     subject { object.touches?(path, line_range) }
 
     shared_context 'test if git tracks the file' do
+      # rubocop:disable Lint/UnneededSplatExpansion
       before do
         expect(config.kernel).to receive(:system)
           .ordered

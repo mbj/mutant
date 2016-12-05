@@ -1,3 +1,7 @@
+# v0.8.13 2016-xx-xx
+
+* Allow empty match expressions on CLI
+
 # v0.8.12 2016-10-17
 
 * Add mutation from `/foo|bar/` to `/foo/` and `/bar/`

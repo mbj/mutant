@@ -4,25 +4,20 @@ RSpec.describe Mutant::Matcher::Methods::Singleton, '#call' do
 
   let(:class_under_test) do
     parent = Module.new do
-      def method_d
-      end
+      def method_d; end
 
-      def method_e
-      end
+      def method_e; end
     end
 
     Class.new do
       extend parent
 
-      def self.method_a
-      end
+      def self.method_a; end
 
-      def self.method_b
-      end
+      def self.method_b; end
       class << self; protected :method_b; end
 
-      def self.method_c
-      end
+      def self.method_c; end
       private_class_method :method_c
 
     end

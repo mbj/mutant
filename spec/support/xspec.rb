@@ -77,9 +77,9 @@ module XSpec
     private_class_method :assert_not_empty
 
     def self.assert_total(event_list)
-      if event_list[0..-2].map(&:first).any?(&TERMINATE_EVENTS.method(:include?))
-        fail "Reaction not total: #{event_list}"
-      end
+      return unless event_list[0..-2].map(&:first).any?(&TERMINATE_EVENTS.method(:include?))
+
+      fail "Reaction not total: #{event_list}"
     end
     private_class_method :assert_total
   end # MessageReaction

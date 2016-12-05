@@ -21,7 +21,7 @@ namespace =
         .curry
         .call(Kernel),
       root_require:     'mutant',
-      includes: %w[
+      includes:         %w[
         mutant
         unparser
         morpher
