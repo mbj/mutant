@@ -341,6 +341,7 @@ Blog posts
 Sorted by recency:
 
 * [A deep dive into mutation testing and how the Mutant gem works][troessner]
+* [Keep calm and kill mutants (December, 2015)][itransition]
 * [How to write better code using mutation testing (November 2015)][blockscore]
 * [How good are your Ruby tests? Testing your tests with mutant (June 2015)][arkency1]
 * [Mutation testing and continuous integration (May 2015)][arkency2]
@@ -349,6 +350,7 @@ Sorted by recency:
 * [Mutation testing with mutant (January 2013)][solnic]
 
 [troessner]: https://troessner.svbtle.com/kill-all-the-mutants-a-deep-dive-into-mutation-testing-and-how-the-mutant-gem-works
+[itransition]: https://github.com/maksar/mentat
 [blockscore]: https://blog.blockscore.com/how-to-write-better-code-using-mutation-testing/
 [sitepoint]: http://www.sitepoint.com/mutation-testing-mutant/
 [arkency1]: http://blog.arkency.com/2015/06/how-good-are-your-ruby-tests-testing-your-tests-with-mutant/
