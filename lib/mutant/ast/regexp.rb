@@ -12,10 +12,7 @@ module Mutant
       #
       # @return [Regexp::Expression]
       def self.parse(regexp)
-        ::Regexp::Parser.parse(
-          regexp,
-          "ruby/#{RUBY_VERSION.split('.').first(2).join('.')}"
-        )
+        ::Regexp::Parser.parse(regexp)
       end
 
       # Check if expression is supported by mapper

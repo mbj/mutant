@@ -37,7 +37,8 @@ module MutantSpec
         :mutation_generation,
         :name,
         :namespace,
-        :repo_uri
+        :repo_uri,
+        :repo_ref
       )
 
       # Verify mutation coverage
@@ -95,18 +96,23 @@ module MutantSpec
       def checkout
         return self if noinstall?
         TMP.mkdir unless TMP.directory?
+
         if repo_path.exist?
           Dir.chdir(repo_path) do
             system(%w[git fetch origin])
-            system(%w[git reset --hard])
-            system(%w[git clean -f -d -x])
-            system(%w[git checkout origin/master])
             system(%w[git reset --hard])
             system(%w[git clean -f -d -x])
           end
         else
           system(%W[git clone #{repo_uri} #{repo_path}])
         end
+
+        Dir.chdir(repo_path) do
+          system(%W[git checkout #{repo_ref}])
+          system(%w[git reset --hard])
+          system(%w[git clean -f -d -x])
+        end
+
         self
       end
       memoize :checkout
@@ -300,6 +306,7 @@ module MutantSpec
               s(:guard, s(:primitive, Hash)),
               s(:hash_transform,
                 s(:key_symbolize, :repo_uri,            s(:guard, s(:primitive, String))),
+                s(:key_symbolize, :repo_ref,            s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :name,                s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :namespace,           s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :mutation_coverage,
