@@ -625,7 +625,7 @@ Mutant::Meta::Example.add :send do
   mutation 'self[*bar]'
 end
 
-(Mutant::AST::Types::BINARY_METHOD_OPERATORS - %i[<= >= < > == != eql?]).each do |operator|
+(Mutant::AST::Types::BINARY_METHOD_OPERATORS - %i[=~ <= >= < > == != eql?]).each do |operator|
   Mutant::Meta::Example.add :send do
     source "true #{operator} false"
 
@@ -756,6 +756,7 @@ Mutant::Meta::Example.add :send do
   mutation 'self =~ //'
   mutation '//'
   mutation 'a =~ /nomatch\A/'
+  mutation 'a.match?(//)'
 end
 
 Mutant::Meta::Example.add :send do
@@ -766,6 +767,7 @@ Mutant::Meta::Example.add :send do
   mutation '//.match'
   mutation '//.match(nil)'
   mutation '//.match(self)'
+  mutation '//.match?(a)'
   mutation '//'
   mutation '/nomatch\A/.match(a)'
 end
