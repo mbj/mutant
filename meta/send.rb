@@ -746,3 +746,26 @@ Mutant::Meta::Example.add :send do
   mutation 'Proc.new { raise }'
   mutation 'lambda { }'
 end
+
+Mutant::Meta::Example.add :send do
+  source 'a =~ //'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'nil =~ //'
+  mutation 'self =~ //'
+  mutation '//'
+  mutation 'a =~ /nomatch\A/'
+end
+
+Mutant::Meta::Example.add :send do
+  source '//.match(a)'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '//.match'
+  mutation '//.match(nil)'
+  mutation '//.match(self)'
+  mutation '//'
+  mutation '/nomatch\A/.match(a)'
+end
