@@ -11,7 +11,7 @@ module Mutant
     # @param [Array<String>] arguments
     #
     # @return [Boolean]
-    def self.run(arguments)
+    def self.call(arguments)
       Runner.call(Env::Bootstrap.call(call(arguments))).success?
     rescue Error => exception
       $stderr.puts(exception.message)
