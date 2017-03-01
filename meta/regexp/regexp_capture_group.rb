@@ -14,4 +14,9 @@ Mutant::Meta::Example.add :regexp_capture_group do
   mutation '/(?:foo|bar)/'
   mutation '/(foo)/'
   mutation '/(bar)/'
+  mutation '/foo|bar/'
+end
+
+Mutant::Meta::Example.add :regexp_capture_group do
+  source '/(one|two){2,3}/'
 end
