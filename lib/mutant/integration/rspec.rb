@@ -82,7 +82,7 @@ module Mutant
 
       # Index of available tests
       #
-      # @return [Hash<Test, RSpec::Core::Example]
+      # @return [Hash<Test, RSpec::Core::Example>]
       def all_tests_index
         all_examples.each_with_index.each_with_object({}) do |(example, example_index), index|
           index[parse_example(example, example_index)] = example
@@ -127,7 +127,7 @@ module Mutant
 
       # Available rspec examples
       #
-      # @return [Array<String, RSpec::Core::Example]
+      # @return [Array<String, RSpec::Core::Example>]
       def all_examples
         @world.example_groups.flat_map(&:descendants).flat_map(&:examples).select do |example|
           example.metadata.fetch(:mutant, true)

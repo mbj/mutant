@@ -10,14 +10,14 @@ module Mutant
       #
       # @param regexp [String]
       #
-      # @return [Regexp::Expression]
+      # @return [Regexp::Expression::Base]
       def self.parse(regexp)
         ::Regexp::Parser.parse(regexp)
       end
 
       # Check if expression is supported by mapper
       #
-      # @param expression [Regexp::Expression]
+      # @param expression [Regexp::Expression::Base]
       #
       # @return [Boolean]
       def self.supported?(expression)
@@ -28,7 +28,7 @@ module Mutant
 
       # Convert expression into ast node
       #
-      # @param expression [Regexp::Expression]
+      # @param expression [Regexp::Expression::Base]
       #
       # @return [Parser::AST::Node]
       def self.to_ast(expression)
@@ -41,7 +41,7 @@ module Mutant
       #
       # @param node [Parser::AST::Node]
       #
-      # @return [Regexp::Expression]
+      # @return [Regexp::Expression::Base]
       def self.to_expression(node)
         Transformer.lookup(node.type).to_expression(node)
       end

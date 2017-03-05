@@ -87,7 +87,7 @@ module Mutant
 
             # Transform ast into expression
             #
-            # @return [Regexp::Expression]
+            # @return [Regexp::Expression::Base]
             def transform
               expression_class.new(expression_token)
             end

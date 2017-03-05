@@ -49,7 +49,7 @@ module Mutant
 
         # Format object with printer
         #
-        # @param [Class:Printer] printer
+        # @param [Class] Printer
         # @param [Object] object
         #
         # @return [String]

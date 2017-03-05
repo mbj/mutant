@@ -74,7 +74,7 @@ module Mutant
 
     # Scope wrapped by context
     #
-    # @return [Module|Class]
+    # @return [Module,Class]
     attr_reader :scope
 
   private

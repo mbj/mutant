@@ -49,7 +49,7 @@ module Mutant
 
             # Transform ast into quantifier attached to expression
             #
-            # @return [Regexp::Expression]
+            # @return [Regexp::Expression::Base]
             def transform
               Regexp.to_expression(subject).dup.tap do |expression|
                 expression.quantify(type, text, min, max, mode)
@@ -69,7 +69,7 @@ module Mutant
 
             # Type of quantifier
             #
-            # @return [:zero_or_more,:one_or_more,:interval]
+            # @return [Symbol] :zero_or_more, :one_or_more, or :interval
             def type
               quantifier.type
             end
@@ -83,7 +83,7 @@ module Mutant
 
             # The quantifier "mode"
             #
-            # @return [:greedy,:possessive,:reluctant]
+            # @return [Symbol] :greedy, :possessive, or :reluctant
             def mode
               quantifier.mode
             end

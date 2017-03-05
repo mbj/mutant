@@ -15,7 +15,7 @@ module XSpec
 
     # Parse events into reaction
     #
-    # @param [Array{Symbol,Object}, Hash{Symbol,Object}]
+    # @param [Array<Symbol,Object>, Hash{Symbol,Object}]
     #
     # @return [MessageReaction]
     def self.parse(events)

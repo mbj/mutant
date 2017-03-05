@@ -27,7 +27,7 @@ module Mutant
 
       # method matcher class
       #
-      # @return [Class:Matcher::Method]
+      # @return [Class] Matcher::Method
       def matcher
         self.class::MATCHER
       end

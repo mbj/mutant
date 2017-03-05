@@ -58,7 +58,7 @@ module Mutant
 
           # Expression representation of regexp body
           #
-          # @return [Regexp::Expression]
+          # @return [Regexp::Expression::Base]
           def body_expression
             AST::Regexp.parse(body.map(&:children).join)
           end

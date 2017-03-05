@@ -10,7 +10,7 @@ module Mutant
 
       # Run worker
       #
-      # @param [Hash<Symbol, Object] attributes
+      # @param [Hash<Symbol, Object>] attributes
       #
       # @return [self]
       def self.run(attributes)

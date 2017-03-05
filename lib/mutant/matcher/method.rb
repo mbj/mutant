@@ -98,7 +98,7 @@ module Mutant
 
         # Full source location
         #
-        # @return [Array{String,Fixnum}]
+        # @return [Array<String,Fixnum>]
         def source_location
           target_method.source_location
         end

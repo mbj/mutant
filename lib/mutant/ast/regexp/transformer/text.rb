@@ -39,7 +39,7 @@ module Mutant
 
             # Transform node to expression with text value
             #
-            # @return [Regexp::Expression]
+            # @return [Regexp::Expression::Base]
             def transform
               token = expression_token.dup
               token.text = Util.one(node.children)
