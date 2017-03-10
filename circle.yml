@@ -4,4 +4,5 @@ machine:
     version: '2.3.3'
 test:
   override:
-    - bundle exec rake ci
+    - ./circle.sh:
+        parallel: true
