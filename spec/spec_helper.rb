@@ -16,7 +16,7 @@ end
 
 # Require warning support first in order to catch any warnings emitted during boot
 require_relative './support/warning'
-$stderr = MutantSpec::Warning::EXTRACTOR
+$stderr = MutantSpec::Warning.warning_hijacker_for($PROGRAM_NAME)
 
 require 'tempfile'
 require 'concord'
