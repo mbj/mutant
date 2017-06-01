@@ -1,6 +1,8 @@
-# v0.8.13 2016-xx-xx
+# v0.8.13 2017-06-01
 
 * Allow empty match expressions on CLI
+* Add support for rspec-3.6 by @krzysiek150
+* Add support for configurable corpus glob exprssions by @jekuta
 
 # v0.8.12 2016-10-17
 
