@@ -12,7 +12,6 @@ module MutantSpec
   module Corpus
     TMP                 = ROOT.join('tmp').freeze
     EXCLUDE_GLOB_FORMAT = '{%s}'.freeze
-    RUBY_GLOB_PATTERN   = '**/*.rb'.freeze
 
     # Not in the docs. Number from chatting with their support.
     # 2 processors allocated per container, 4 processes works well.
@@ -38,7 +37,8 @@ module MutantSpec
         :name,
         :namespace,
         :repo_uri,
-        :repo_ref
+        :repo_ref,
+        :ruby_glob_pattern
       )
 
       # Verify mutation coverage
@@ -174,7 +174,7 @@ module MutantSpec
       # @return [Array<Pathname>]
       def effective_ruby_paths
         Pathname
-          .glob(repo_path.join(RUBY_GLOB_PATTERN))
+          .glob(repo_path.join(ruby_glob_pattern))
           .sort_by(&:size)
           .reverse
       end
@@ -307,6 +307,7 @@ module MutantSpec
               s(:hash_transform,
                 s(:key_symbolize, :repo_uri,            s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :repo_ref,            s(:guard, s(:primitive, String))),
+                s(:key_symbolize, :ruby_glob_pattern,   s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :name,                s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :namespace,           s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :mutation_coverage,
