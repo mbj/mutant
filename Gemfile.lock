@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mutant (0.8.12)
+    mutant (0.8.13)
       abstract_type (~> 0.0.7)
       adamantium (~> 0.2.0)
       anima (~> 0.3.0)
@@ -15,10 +15,10 @@ PATH
       parallel (~> 1.3)
       parser (~> 2.3.1, >= 2.3.1.4)
       procto (~> 0.0.2)
-      regexp_parser (~> 0.4.1)
+      regexp_parser (~> 0.4.3)
       unparser (~> 0.2.5)
-    mutant-rspec (0.8.12)
-      mutant (~> 0.8.12)
+    mutant-rspec (0.8.13)
+      mutant (~> 0.8.13)
       rspec-core (>= 3.4.0, < 3.7.0)
 
 GEM
@@ -103,7 +103,7 @@ GEM
       codeclimate-engine-rb (~> 0.4.0)
       parser (~> 2.3.1, >= 2.3.1.2)
       rainbow (~> 2.0)
-    regexp_parser (0.4.1)
+    regexp_parser (0.4.3)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -164,4 +164,4 @@ DEPENDENCIES
   mutant!
 
 BUNDLED WITH
-   1.13.6
+   1.15.1
