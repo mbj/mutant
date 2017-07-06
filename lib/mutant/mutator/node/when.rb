@@ -52,7 +52,7 @@ module Mutant
 
         # Index of body node
         #
-        # @return [Fixnum]
+        # @return [Integer]
         def body_index
           children.length - 1
         end

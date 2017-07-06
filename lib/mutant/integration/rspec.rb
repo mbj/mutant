@@ -93,7 +93,7 @@ module Mutant
       # Parse example into test
       #
       # @param [RSpec::Core::Example] example
-      # @param [Fixnum] index
+      # @param [Integer] index
       #
       # @return [Test]
       def parse_example(example, index)

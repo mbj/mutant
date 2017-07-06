@@ -2,8 +2,8 @@ module Mutant
   class Mutator
     class Node
       class Literal < self
-        # Mutator for fixnum literals
-        class Fixnum < self
+        # Mutator for integer literals
+        class Integer < self
 
           handle(:int)
 
@@ -28,10 +28,11 @@ module Mutant
           #
           # @return [Object]
           def value
-            children.first
+            value, = children
+            value
           end
 
-        end # Fixnum
+        end # Integer
       end # Literal
     end # Node
   end # Mutator

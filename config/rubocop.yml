@@ -96,7 +96,7 @@ SymbolArray:
 
 # Align if/else blocks with the variable assignment
 EndAlignment:
-  AlignWith: variable
+  EnforcedStyleAlignWith: variable
 
 # Prefer #kind_of? over #is_a?
 ClassCheck:
@@ -109,6 +109,9 @@ UnneededPercentQ:
 # Allow a maximum ABC score
 Metrics/AbcSize:
   Max: 21.02
+
+Metrics/BlockLength:
+  Enabled: false
 
 # Do not prefer lambda.call(...) over lambda.(...)
 LambdaCall:

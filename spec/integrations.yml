@@ -18,7 +18,7 @@
 - name: regexp_parser
   namespace: Regexp
   repo_uri: 'https://github.com/ammar/regexp_parser.git'
-  repo_ref: 'v0.4.1'
+  repo_ref: 'v0.4.3'
   ruby_glob_pattern: '**/*.rb'
   mutation_coverage: false
   mutation_generation: true
