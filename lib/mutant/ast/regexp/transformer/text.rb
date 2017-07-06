@@ -31,6 +31,7 @@ module Mutant
               [:regexp_backslash_escape,      %i[escape backslash],      ::Regexp::Expression::EscapeSequence::Literal],
               [:regexp_tab_escape,            %i[escape tab],            ::Regexp::Expression::EscapeSequence::Literal],
               [:regexp_codepoint_list_escape, %i[escape codepoint_list], ::Regexp::Expression::EscapeSequence::Literal],
+              [:regexp_codepoint_escape,      %i[escape codepoint],      ::Regexp::Expression::EscapeSequence::Literal],
               [:regexp_control_escape,        %i[escape control],        ::Regexp::Expression::EscapeSequence::Control],
               [:regexp_meta_sequence_escape,  %i[escape meta_sequence],  ::Regexp::Expression::EscapeSequence::Control]
             )
