@@ -10,7 +10,7 @@ jobs:
   ruby_2_3:
     <<: *defaults
     docker:
-      - image: circleci/ruby:2.3.3
+      - image: circleci/ruby:2.3.4
   ruby_2_4:
     <<: *defaults
     docker:
