@@ -38,7 +38,7 @@ module Mutant
         # Define named child
         #
         # @param [Symbol] name
-        # @param [Fixnum] index
+        # @param [Integer] index
         #
         # @return [undefined]
         def define_named_child(name, index)

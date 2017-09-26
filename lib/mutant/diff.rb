@@ -86,7 +86,7 @@ module Mutant
 
     # Max length of source line in new and old
     #
-    # @return [Fixnum]
+    # @return [Integer]
     def max_length
       [old, new].map(&:length).max
     end

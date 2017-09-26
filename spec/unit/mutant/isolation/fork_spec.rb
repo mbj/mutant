@@ -14,7 +14,7 @@ RSpec.describe Mutant::Isolation::Fork do
   let(:isolated_block)    { -> { block_return }                         }
   let(:marshal)           { class_double(Marshal)                       }
   let(:process)           { class_double(Process)                       }
-  let(:pid)               { class_double(Fixnum)                        }
+  let(:pid)               { class_double(0.class)                       }
   let(:reader)            { instance_double(IO, :reader)                }
   let(:stderr)            { instance_double(IO, :stderr)                }
   let(:stdout)            { instance_double(IO, :stdout)                }

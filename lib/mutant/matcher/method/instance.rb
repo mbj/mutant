@@ -48,7 +48,7 @@ module Mutant
 
             # Source location
             #
-            # @return [Array{String,Fixnum}]
+            # @return [Array{String,Integer}]
             def source_location
               scope
                 .unmemoized_instance_method(method_name)

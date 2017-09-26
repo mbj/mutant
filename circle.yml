@@ -1,7 +1,23 @@
----
-machine:
-  ruby:
-    version: '2.3.3'
-test:
-  override:
-    - bundle exec rake ci
+defaults: &defaults
+  working_directory: ~/mutant
+  steps:
+    - checkout
+    - run: bundle install
+    - run: bundle exec rake ci
+
+version: 2
+jobs:
+  ruby_2_3:
+    <<: *defaults
+    docker:
+      - image: circleci/ruby:2.3.4
+  ruby_2_4:
+    <<: *defaults
+    docker:
+      - image: circleci/ruby:2.4.1
+workflows:
+  version: 2
+  test:
+    jobs:
+      - ruby_2_3
+      - ruby_2_4

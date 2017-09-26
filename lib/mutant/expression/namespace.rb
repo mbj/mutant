@@ -40,7 +40,7 @@ module Mutant
         #
         # @param [Expression] expression
         #
-        # @return [Fixnum]
+        # @return [Integer]
         def match_length(expression)
           if @recursion_pattern =~ expression.syntax
             scope_name.length

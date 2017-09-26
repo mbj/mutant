@@ -9,8 +9,7 @@ RSpec.describe Mutant::Subject::Method::Singleton do
 
   let(:scope) do
     Class.new do
-      def self.foo
-      end
+      def self.foo; end
 
       def self.name
         'Test'

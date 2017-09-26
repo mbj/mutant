@@ -29,7 +29,6 @@ Mutant::Meta::Example.add :case do
   RUBY
 end
 
-# rubocop:disable Metrics/BlockLength
 Mutant::Meta::Example.add :case do
   source <<-RUBY
     case condition

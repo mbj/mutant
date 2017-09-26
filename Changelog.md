@@ -1,3 +1,7 @@
+# v0.8.14 2017-07-06
+
+* Support ruby 2.4 #719
+
 # v0.8.13 2017-06-01
 
 * Allow empty match expressions on CLI
