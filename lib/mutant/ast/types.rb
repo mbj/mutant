@@ -57,6 +57,7 @@ module Mutant
         regexp_character_set
         regexp_character_set
         regexp_codepoint_list_escape
+        regexp_codepoint_escape
         regexp_comment_free_space
         regexp_comment_group
         regexp_control_escape

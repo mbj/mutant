@@ -94,14 +94,14 @@ module Mutant
 
       # Amount of mutations
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def amount_mutations
         env.mutations.length
       end
 
       # Amount of subjects
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def amount_subjects
         env.subjects.length
       end
@@ -146,28 +146,28 @@ module Mutant
 
       # Amount of mutations
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def amount_mutation_results
         mutation_results.length
       end
 
       # Amount of mutations
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def amount_mutations
         subject.mutations.length
       end
 
       # Number of killed mutations
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def amount_mutations_killed
         killed_mutation_results.length
       end
 
       # Number of alive mutations
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def amount_mutations_alive
         alive_mutation_results.length
       end

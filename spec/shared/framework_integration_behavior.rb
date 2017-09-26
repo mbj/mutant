@@ -1,11 +1,12 @@
 RSpec.shared_examples_for 'framework integration' do
+  def system_with_gemfile(*command)
+    Kernel.system({ 'BUNDLE_GEMFILE' => gemfile }, *command)
+  end
+
   around do |example|
-    Bundler.with_clean_env do
-      Dir.chdir(TestApp.root) do
-        Kernel.system("bundle install --gemfile=#{gemfile}") || fail('Bundle install failed!')
-        ENV['BUNDLE_GEMFILE'] = gemfile
-        example.run
-      end
+    Dir.chdir(TestApp.root) do
+      Kernel.system('bundle', 'install', '--gemfile', gemfile) || fail('Bundle install failed!')
+      example.run
     end
   end
 
@@ -20,16 +21,16 @@ RSpec.shared_examples_for 'framework integration' do
       TestApp::Literal#uncovered_string
         --ignore-subject TestApp::Literal#uncovered_string
     CMD
-    expect(Kernel.system(cli)).to be(true)
+    expect(system_with_gemfile(cli)).to be(true)
   end
 
   specify 'fails to kill mutations when they are not covered' do
     cli = "#{base_cmd} TestApp::Literal#uncovered_string"
-    expect(Kernel.system(cli)).to be(false)
+    expect(system_with_gemfile(cli)).to be(false)
   end
 
   specify 'fails when some mutations are not covered' do
     cli = "#{base_cmd} TestApp::Literal"
-    expect(Kernel.system(cli)).to be(false)
+    expect(system_with_gemfile(cli)).to be(false)
   end
 end

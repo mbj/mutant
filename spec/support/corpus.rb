@@ -50,18 +50,16 @@ module MutantSpec
       def verify_mutation_coverage
         checkout
         Dir.chdir(repo_path) do
-          Bundler.with_clean_env do
-            install_mutant
-            system(
-              %W[
-                bundle exec mutant
-                --use rspec
-                --include lib
-                --require #{name}
-                #{namespace}*
-              ]
-            )
-          end
+          install_mutant
+          system(
+            %W[
+              bundle exec mutant
+              --use rspec
+              --include lib
+              --require #{name}
+              #{namespace}*
+            ]
+          )
         end
       end
 
@@ -123,7 +121,7 @@ module MutantSpec
       #
       # @param path [Pathname] path responsible for exception
       #
-      # @return [Fixnum] mutations generated
+      # @return [Integer] mutations generated
       def count_mutations_and_check_errors(path)
         relative_path = path.relative_path_from(repo_path)
 
@@ -144,7 +142,7 @@ module MutantSpec
       #
       # @raise [Exception] any error specified by integrations.yml
       #
-      # @return [Fixnum] number of mutations generated
+      # @return [Integer] number of mutations generated
       def count_mutations(path)
         node = Parser::CurrentRuby.parse(path.read)
 
@@ -181,7 +179,7 @@ module MutantSpec
 
       # Number of parallel processes to use
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def parallel_processes
         if ENV.key?('CI')
           CIRCLE_CI_CONTAINER_PROCESSES
@@ -207,7 +205,7 @@ module MutantSpec
       # Print start progress
       #
       # @param [Pathname] path
-      # @param [Fixnum] _index
+      # @param [Integer] _index
       #
       # @return [undefined]
       #
@@ -220,8 +218,8 @@ module MutantSpec
       # Print finish progress
       #
       # @param [Pathname] path
-      # @param [Fixnum] _index
-      # @param [Fixnum] count
+      # @param [Integer] _index
+      # @param [Integer] count
       #
       # @return [undefined]
       #
