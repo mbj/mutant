@@ -14,9 +14,12 @@ module Mutant
         #
         # @return [undefined]
         def dispatch
+          emit(expression)
+
+          return if parent_type.equal?(:mlhs)
+
           emit_singletons
           emit_expression_mutations
-          emit(expression)
         end
 
       end # Splat

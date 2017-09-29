@@ -30,6 +30,15 @@ module Mutant
       end
       private_class_method :define_named_child
 
+    protected
+
+      # Original nodes children
+      #
+      # @return [Array<Parser::AST::Node>]
+      def children
+        node.children
+      end
+
     private
 
       # Node to mutate
@@ -41,13 +50,6 @@ module Mutant
       #
       # @return [Parser::AST::Node]
       alias_method :dup_node, :dup_input
-
-      # Original nodes children
-      #
-      # @return [Array<Parser::AST::Node>]
-      def children
-        node.children
-      end
 
       # Dispatch on child index
       #

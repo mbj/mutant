@@ -16,6 +16,7 @@ module Mutant
         # @return [undefined]
         def dispatch
           emit_singletons
+          emit_left_mutations
         end
 
       end # MultipleAssignment
