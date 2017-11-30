@@ -40,13 +40,13 @@ Examples
 ```
 cd virtus
 # Run mutant on virtus namespace
-mutant --include lib --require virtus --use rspec Virtus*
+bundle exec mutant --include lib --require virtus --use rspec Virtus*
 # Run mutant on specific virtus class
-mutant --include lib --require virtus --use rspec Virtus::Attribute
+bundle exec mutant --include lib --require virtus --use rspec Virtus::Attribute
 # Run mutant on specific virtus class method
-mutant --include lib --require virtus --use rspec Virtus::Attribute.build
+bundle exec mutant --include lib --require virtus --use rspec Virtus::Attribute.build
 # Run mutant on specific virtus instance method
-mutant --include lib --require virtus --use rspec Virtus::Attribute#type
+bundle exec mutant --include lib --require virtus --use rspec Virtus::Attribute#type
 ```
 
 Rails
@@ -66,7 +66,7 @@ Passing in RSpec Options
 You can control some aspects of RSpec using the `SPEC_OPTS` environment variable as usual. If you want mutant to only pay attention to specs in a certain directory, you can run
 
 ```sh
-SPEC_OPTS="--pattern spec/subdir_only/**/*_spec.rb" mutant --use rspec SomeClass
+SPEC_OPTS="--pattern spec/subdir_only/**/*_spec.rb" bundle exec mutant --use rspec SomeClass
 ```
 
 Limitations
@@ -257,7 +257,7 @@ Only Mutating Changed Code
 
 Running mutant for the first time on an existing codebase can be a rather disheartening experience due to the large number of alive mutations found! Mutant has a setting that can help. Using the `--since` argument, mutant will only mutate code that has been modified. This allows you to introduce mutant into an existing code base without drowning in errors. Example usage that will mutate all code changed between master and the current branch:
 ```
-mutant --include lib --require virtus --since master --use rspec Virtus::Attribute#type
+bundle exec mutant --include lib --require virtus --since master --use rspec Virtus::Attribute#type
 ```
 
 Known Problems
