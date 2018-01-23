@@ -38,7 +38,8 @@ module MutantSpec
         :namespace,
         :repo_uri,
         :repo_ref,
-        :ruby_glob_pattern
+        :ruby_glob_pattern,
+        :exclude
       )
 
       # Verify mutation coverage
@@ -175,6 +176,7 @@ module MutantSpec
           .glob(repo_path.join(ruby_glob_pattern))
           .sort_by(&:size)
           .reverse
+          .reject { |path| exclude.include?(path.relative_path_from(repo_path).to_s) }
       end
 
       # Number of parallel processes to use
@@ -320,7 +322,8 @@ module MutantSpec
                         ->(hash) { hash.map { |key, values| [key, values.map(&Pathname.method(:new))] }.to_h },
                         ->(hash) { hash.map { |key, values| [key, values.map(&:to_s)]                 }.to_h }
                       ]),
-                    s(:load_attribute_hash, s(:param, ErrorWhitelist))))),
+                    s(:load_attribute_hash, s(:param, ErrorWhitelist)))),
+                s(:key_symbolize, :exclude, s(:map, s(:guard, s(:primitive, String))))),
               s(:anima_load, Project))))
       end
 
