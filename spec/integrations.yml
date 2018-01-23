@@ -15,6 +15,9 @@
       - language/regexp/interpolation_spec.rb
     '#<Regexp::Scanner::PrematureEndError: Premature end of pattern at \xA>':
       - language/regexp/escapes_spec.rb
+  exclude:
+    - core/string/casecmp_spec.rb
+    - core/symbol/casecmp_spec.rb
 - name: regexp_parser
   namespace: Regexp
   repo_uri: 'https://github.com/ammar/regexp_parser.git'
@@ -25,6 +28,7 @@
   expected_errors:
     "Regexp::Syntax::Ruby::V233 does not implement: [escape:codepoint]":
      - regexp_parser/test/parser/test_escapes.rb
+  exclude: []
 - name: auom
   namespace: AUOM
   repo_uri: 'https://github.com/mbj/auom.git'
@@ -33,6 +37,7 @@
   mutation_coverage: true
   mutation_generation: true
   expected_errors: {}
+  exclude: []
 - name: axiom
   namespace: Axiom
   repo_uri: 'https://github.com/dkubb/axiom.git'
@@ -41,3 +46,4 @@
   mutation_coverage: false
   mutation_generation: true
   expected_errors: {}
+  exclude: []
