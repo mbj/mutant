@@ -54,6 +54,7 @@ module Mutant
           regexp_space_type
           regexp_word_boundary_anchor
           regexp_word_type
+          regexp_xgrapheme_type
         ]
 
         # These nodes still need a dedicated mutator,

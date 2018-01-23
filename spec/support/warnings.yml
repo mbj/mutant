@@ -3,3 +3,5 @@
 - 'lib/parallel.rb:227: warning: shadowing outer local variable - args'
 - 'lib/parser/lexer.rb:10922: warning: assigned but unused variable - testEof'
 - 'lib/regexp_parser/scanner.rb:1675: warning: assigned but unused variable - testEof'
+- 'lib/regexp_parser/scanner.rb:1692: warning: assigned but unused variable - testEof'
+- 'lib/regexp_parser/scanner.rb:1689: warning: assigned but unused variable - testEof'
