@@ -125,6 +125,7 @@ module Mutant
         regexp_whitespace_free_space
         regexp_word_boundary_anchor
         regexp_word_type
+        regexp_xgrapheme_type
         regexp_zero_or_more_escape
         regexp_zero_or_one_escape
       ])

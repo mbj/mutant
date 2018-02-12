@@ -227,12 +227,7 @@ RegexpSpec.expect_mapping(/(?x-: # comment
 )/, :regexp_comment_free_space) do
   s(:regexp_root_expression,
     s(:regexp_options_group, {
-        m: false,
-        i: false,
-        x: true,
-        d: false,
-        a: false,
-        u: false
+        x: true
       },
       s(:regexp_whitespace_free_space, ' '),
       s(:regexp_comment_free_space, "# comment\n")))
@@ -352,6 +347,11 @@ end
 RegexpSpec.expect_mapping(/\H/, :regexp_hex_type) do
   s(:regexp_root_expression,
     s(:regexp_nonhex_type))
+end
+
+RegexpSpec.expect_mapping(/\X/, :regexp_xgrapheme_type) do
+  s(:regexp_root_expression,
+    s(:regexp_xgrapheme_type))
 end
 
 RegexpSpec.expect_mapping(/\}/, :regexp_interval_close_escape) do
@@ -480,12 +480,7 @@ RegexpSpec.expect_mapping(/(?i-:a)+/, :regexp_options_group) do
     s(:regexp_greedy_one_or_more, 1, -1,
       s(:regexp_options_group,
         {
-          m: false,
-          i: true,
-          x: false,
-          d: false,
-          a: false,
-          u: false
+          i: true
         },
         s(:regexp_literal_literal, 'a'))))
 end
@@ -494,12 +489,7 @@ RegexpSpec.expect_mapping(/(?x-: #{"\n"} )/, :regexp_whitespace_free_space) do
   s(:regexp_root_expression,
     s(:regexp_options_group,
       {
-        m: false,
-        i: false,
-        x: true,
-        d: false,
-        a: false,
-        u: false
+        x: true
       },
       s(:regexp_whitespace_free_space, " \n ")))
 end
