@@ -182,7 +182,7 @@ module Mutant
         #
         # @return [undefined]
         def emit_integer_mutation
-          return unless selector.equal?(:to_i)
+          return unless receiver && selector.equal?(:to_i)
 
           emit(s(:send, nil, :Integer, receiver))
         end
