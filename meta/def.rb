@@ -2,6 +2,7 @@ Mutant::Meta::Example.add :def do
   source 'def foo; end'
 
   mutation 'def foo; raise; end'
+  mutation 'def foo; super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -14,6 +15,7 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(a); nil; end'
   mutation 'def foo(*b); nil; end'
   mutation 'def foo(a, *b); b = []; nil; end'
+  mutation 'def foo(a, *b); super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -25,6 +27,7 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(a, *); raise; end'
   mutation 'def foo(a); nil; end'
   mutation 'def foo(*); nil; end'
+  mutation 'def foo(a, *); super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -34,6 +37,7 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo; nil; rescue; end'
   mutation 'def foo; self; rescue; end'
   mutation 'def foo; end'
+  mutation 'def foo; super; end'
 
   # Promote rescue resbody bodies
   mutation 'def foo; foo; end'
@@ -65,6 +69,8 @@ Mutant::Meta::Example.add :def do
   # Failing body
   mutation 'def a; raise; end'
 
+  # Superclass implementation
+  mutation 'def a; super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -85,6 +91,7 @@ Mutant::Meta::Example.add :def do
 
   mutation 'def foo; raise; end'
 
+  mutation 'def foo; super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -103,7 +110,7 @@ Mutant::Meta::Example.add :def do
 
   # Mutation of body
   mutation 'def foo(a, b); raise; end'
-
+  mutation 'def foo(a, b); super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -120,6 +127,7 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(b = nil); true; end'
   mutation 'def foo(a, _b = nil); true; end'
   mutation 'def foo(a, b); true; end'
+  mutation 'def foo(a, b = nil); super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -127,6 +135,7 @@ Mutant::Meta::Example.add :def do
 
   mutation 'def foo(_unused); raise; end'
   mutation 'def foo; end'
+  mutation 'def foo(_unused); super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -137,6 +146,7 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(_unused = true); raise; end'
   mutation 'def foo(_unused); end'
   mutation 'def foo; end'
+  mutation 'def foo(_unused = true); super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -158,6 +168,7 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(a = 0, b = 0); a = 0; end'
   mutation 'def foo(a = 0, b = 0); b = 0; end'
   mutation 'def foo(a = 0, b = 0); raise; end'
+  mutation 'def foo(a = 0, b = 0); super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -170,6 +181,7 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(_a = true); end'
   mutation 'def foo(a = true); raise; end'
   mutation 'def foo(a = true); a = true; end'
+  mutation 'def foo(a = true); super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -189,6 +201,8 @@ Mutant::Meta::Example.add :def do
   mutation 'def self.foo; end'
 
   mutation 'def self.foo; raise; end'
+
+  mutation 'def self.foo; super; end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -208,4 +222,5 @@ Mutant::Meta::Example.add :def do
 
   # Mutation of body
   mutation 'def self.foo(a, b); raise; end'
+  mutation 'def self.foo(a, b); super; end'
 end

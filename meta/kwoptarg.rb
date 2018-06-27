@@ -3,6 +3,7 @@ Mutant::Meta::Example.add :kwarg do
 
   mutation 'def foo; end'
   mutation 'def foo(bar: baz); raise; end'
+  mutation 'def foo(bar: baz); super; end'
   mutation 'def foo(bar: nil); end'
   mutation 'def foo(bar: self); end'
   mutation 'def foo(bar:); end'
