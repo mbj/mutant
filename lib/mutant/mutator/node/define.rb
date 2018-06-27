@@ -14,6 +14,7 @@ module Mutant
           emit_optarg_body_assignments
           emit_restarg_body_mutation
           emit_body(N_RAISE)
+          emit_body(N_ZSUPER)
           emit_body(nil)
           emit_body_mutations if body
         end

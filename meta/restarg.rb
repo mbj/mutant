@@ -4,4 +4,5 @@ Mutant::Meta::Example.add :restarg do
   mutation 'def foo; end'
   mutation 'def foo(*bar); bar = []; end'
   mutation 'def foo(*bar); raise; end'
+  mutation 'def foo(*bar); super; end'
 end
