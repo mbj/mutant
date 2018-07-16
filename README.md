@@ -2,7 +2,6 @@ mutant
 ======
 
 [![Build Status](https://circleci.com/gh/mbj/mutant.svg?style=shield&circle-token=1afd77e8f0f9d0a11fd8f15f5d7b10270f4665e2)](https://circleci.com/gh/mbj/mutant/tree/master)
-[![Dependency Status](https://gemnasium.com/mbj/mutant.svg)](https://gemnasium.com/mbj/mutant)
 [![Code Climate](https://codeclimate.com/github/mbj/mutant.svg)](https://codeclimate.com/github/mbj/mutant)
 [![Inline docs](http://inch-ci.org/github/mbj/mutant.svg)](http://inch-ci.org/github/mbj/mutant)
 [![Gem Version](https://img.shields.io/gem/v/mutant.svg)](https://rubygems.org/gems/mutant)
