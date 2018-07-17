@@ -34,6 +34,7 @@ module Mutant
         @parser = Parser.new
         infect
         initialize_matchable_scopes
+        @integration = config.integration.new(config).setup
       end
 
       # Print warning message
@@ -99,7 +100,6 @@ module Mutant
       def infect
         config.includes.each(&config.load_path.method(:<<))
         config.requires.each(&config.kernel.method(:require))
-        @integration = config.integration.new(config).setup
       end
 
       # Matched subjects
