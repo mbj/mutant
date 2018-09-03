@@ -1,3 +1,7 @@
+# v0.8.16 2018-08-03
+
+* Support for rspec-3.x
+
 # v0.8.15 2018-07-17
 
 * Fix boot time issue

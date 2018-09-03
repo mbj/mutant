@@ -18,6 +18,8 @@
   exclude:
     - core/string/casecmp_spec.rb
     - core/symbol/casecmp_spec.rb
+    - language/source_encoding_spec.rb
+    - security/cve_2010_1330_spec.rb
 - name: regexp_parser
   namespace: Regexp
   repo_uri: 'https://github.com/ammar/regexp_parser.git'
