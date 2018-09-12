@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   # Class to create diffs from source code
   class Diff

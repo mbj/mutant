@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Mutant::Meta::Example.add :kwbegin do
   source 'begin; true; end'
 

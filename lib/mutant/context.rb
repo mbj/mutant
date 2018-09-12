@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   # An abstract context where mutations can be applied to.
   class Context

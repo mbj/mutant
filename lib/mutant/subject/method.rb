@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   class Subject
     # Abstract base class for method subjects

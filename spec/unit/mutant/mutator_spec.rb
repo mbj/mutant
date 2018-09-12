@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Mutator do
   describe '.handle' do
     subject do

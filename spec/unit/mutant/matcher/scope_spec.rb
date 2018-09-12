@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Matcher::Scope, '#call' do
   let(:scope)     { TestApp }
   let(:object)    { described_class.new(scope)       }

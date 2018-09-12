@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   class Reporter
     class CLI
@@ -18,7 +19,6 @@ module Mutant
             :env
           )
 
-          # rubocop:disable SpaceInsideBrackets
           FORMATS = IceNine.deep_freeze([
             [:info,   'Subjects:        %s',      :amount_subjects          ],
             [:info,   'Mutations:       %s',      :amount_mutations         ],

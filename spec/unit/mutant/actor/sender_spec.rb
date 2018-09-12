@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Actor::Sender do
   let(:object) { described_class.new(condition_variable, mutex, messages) }
 

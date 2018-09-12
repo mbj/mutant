@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
   setup_shared_context
 

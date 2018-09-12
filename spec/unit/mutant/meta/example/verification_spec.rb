@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Meta::Example::Verification do
   let(:object) { described_class.new(example, mutations) }
 

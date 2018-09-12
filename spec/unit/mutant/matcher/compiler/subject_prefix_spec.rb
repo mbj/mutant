@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Matcher::Compiler::SubjectPrefix, '#call' do
   let(:object)   { described_class.new(parse_expression('Foo*')) }
 

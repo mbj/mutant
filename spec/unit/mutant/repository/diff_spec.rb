@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe Mutant::Repository::Diff do
   describe '#touches?' do
     let(:object) do
@@ -28,8 +29,8 @@ describe Mutant::Repository::Diff do
     subject { object.touches?(path, line_range) }
 
     shared_context 'test if git tracks the file' do
-      # rubocop:disable Lint/UnneededSplatExpansion
       before do
+        # rubocop:disable Lint/UnneededSplatExpansion
         expect(config.kernel).to receive(:system)
           .ordered
           .with(

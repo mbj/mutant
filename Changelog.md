@@ -2,6 +2,7 @@
 
 * Drop support for Ruby < 2.3
 * Use frozen string literals globally
+* Update to parser ~> 2.5
 
 # v0.8.16 2018-08-03
 

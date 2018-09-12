@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   # Module providing isolation
   class Isolation

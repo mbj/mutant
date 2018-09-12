@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Reporter::Null do
   let(:object) { described_class.new     }
   let(:value)  { instance_double(Object) }

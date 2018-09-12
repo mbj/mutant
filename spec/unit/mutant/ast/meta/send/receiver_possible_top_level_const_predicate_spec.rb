@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::AST::Meta::Send, '#receiver_possible_top_level_const?' do
   subject { described_class.new(node).receiver_possible_top_level_const? }
 

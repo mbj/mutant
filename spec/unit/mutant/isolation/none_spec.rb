@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Isolation::None do
   describe '.call' do
     let(:object) { described_class.new }

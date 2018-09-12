@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   module AST
     # Mixin for node sexp syntax

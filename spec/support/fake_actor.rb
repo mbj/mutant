@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'mutant/actor'
 
 # A fake actor used from specs

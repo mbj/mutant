@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::AST::NamedChildren do
   describe '.included' do
     let(:klass) do

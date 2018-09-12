@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Parallel do
   describe '.async' do
     subject { described_class.async(config) }

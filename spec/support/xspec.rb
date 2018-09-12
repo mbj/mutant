@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module XSpec
   class MessageReaction
     include Concord.new(:event_list)
@@ -27,11 +28,11 @@ module XSpec
 
   private
 
-    def return(_, value)
+    def return(_event, value)
       value
     end
 
-    def exception(_, exception)
+    def exception(_event, exception)
       fail exception
     end
 

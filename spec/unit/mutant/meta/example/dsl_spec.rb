@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Meta::Example::DSL do
   describe '.call' do
     subject { described_class.call(file, type, block) }

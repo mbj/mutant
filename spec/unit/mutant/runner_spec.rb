@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Runner do
   describe '.call' do
     let(:reporter)    { instance_double(Mutant::Reporter, delay: delay) }

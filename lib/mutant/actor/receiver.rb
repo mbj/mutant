@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   module Actor
     # Receiver side of an actor

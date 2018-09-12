@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe 'Mutant on ruby corpus', mutant: false do
 
   before do

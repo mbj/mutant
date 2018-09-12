@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Selector::Expression do
   describe '#call' do
     let(:object) { described_class.new(integration) }

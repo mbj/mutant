@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Mutant::Meta::Example.add :while do
   source 'while true; foo; bar; end'
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   class Isolation
     # Isolation via the fork(2) systemcall.
