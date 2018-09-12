@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::AST::Meta::Send, '#proc?' do
   subject { described_class.new(node).proc? }
 

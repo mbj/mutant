@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   # Class to colorize strings
   class Color
@@ -25,7 +26,7 @@ module Mutant
         text
       end
 
-    private # rubocop:disable AccessModifierIndentation
+    private
 
       # Initialize null color
       #

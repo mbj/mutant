@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   subject { object.call(env) }
 

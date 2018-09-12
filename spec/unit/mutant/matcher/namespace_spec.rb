@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Matcher::Namespace, '#call' do
   let(:object)      { described_class.new(parse_expression('TestApp*')) }
   let(:env)         { instance_double(Mutant::Env)                      }

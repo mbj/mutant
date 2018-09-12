@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Actor::Receiver do
   let(:messages)           { instance_double(Array)             }
   let(:mutex)              { instance_double(Mutex)             }

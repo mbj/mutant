@@ -19,7 +19,7 @@ CollectionMethods:
     find_all: 'select'
 
 AccessModifierIndentation:
-  EnforcedStyle: outdent
+  Enabled: false
 
 # Limit line length
 LineLength:
@@ -181,5 +181,27 @@ AlignHash:
 Send:
   Enabled: true
 
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+Lint/BooleanSymbol:
+  Enabled: false
+Lint/InterpolationCheck:
+  Enabled: false
+Lint/MissingCopEnableDirective:
+  Enabled: false
 Lint/UnifiedInteger:
+  Enabled: false
+Naming/FileName:
+  Enabled: false
+Style/AccessModifierDeclarations:
+  Enabled: false
+Style/CommentedKeyword:
+  Enabled: false
+Style/MixinGrouping:
+  Enabled: false
+Style/RescueStandardError:
+  Enabled: false
+Style/StderrPuts:
   Enabled: false

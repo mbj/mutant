@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Reporter::Sequence do
   let(:object)     { described_class.new([reporter_a, reporter_b]) }
   let(:value)      { instance_double(Object)                       }

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Actor::Mailbox do
   let(:mutex)              { instance_double(Mutex)             }
   let(:condition_variable) { instance_double(ConditionVariable) }

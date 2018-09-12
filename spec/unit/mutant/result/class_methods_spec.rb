@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # The effect of this private module is done at boot time.
 # Hence there is no way to kill the mutations at runtime
 # so we have to directly hook into the private moduel via

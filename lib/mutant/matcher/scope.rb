@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   class Matcher
     # Matcher expanding Mutant::Scope objects into method matches

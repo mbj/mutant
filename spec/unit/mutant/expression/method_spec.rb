@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Expression::Method do
   let(:object)           { parse_expression(input)   }
   let(:env)              { Fixtures::TEST_ENV        }

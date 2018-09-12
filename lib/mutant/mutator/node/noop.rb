@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   class Mutator
     class Node
@@ -6,7 +7,7 @@ module Mutant
       # Mutation emitter to handle noop nodes
       class Noop < self
 
-        handle(:block_pass, :cbase)
+        handle(:__ENCODING__, :block_pass, :cbase)
 
       private
 

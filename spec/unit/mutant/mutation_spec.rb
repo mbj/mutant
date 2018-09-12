@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Mutation do
   let(:mutation_class) do
     Class.new(Mutant::Mutation) do

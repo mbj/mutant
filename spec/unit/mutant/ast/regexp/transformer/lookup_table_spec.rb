@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::AST::Regexp::Transformer::LookupTable do
   subject(:pair) { mapper.new(s(:regexp_fake)).pair }
 

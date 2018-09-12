@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   # Namespace for mutant metadata
   module Meta
@@ -15,6 +16,8 @@ module Mutant
       # Add example
       #
       # @return [undefined]
+      #
+      # rubocop:disable Performance/Caller
       def self.add(type, &block)
         file = caller.first.split(':in', 2).first
         ALL << DSL.call(file, type, block)

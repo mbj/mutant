@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   class Matcher
     # Matcher returning subjects already known at its creation time

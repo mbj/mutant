@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Mutant::Meta::Example.add :restarg do
   source 'def foo(*bar); end'
 

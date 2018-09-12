@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Matcher::Config do
   describe '#inspect' do
     subject { object.inspect }

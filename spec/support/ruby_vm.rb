@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module MutantSpec
   # Not a real VM, just kidding. It connects the require / eval triggers
   # require semantics Zombifier relies on in a way we can avoid having to
@@ -25,6 +26,7 @@ module MutantSpec
         super(DEFAULTS.merge(attributes))
       end
 
+      # rubocop:disable Naming/UncommunicativeMethodParamName
       def handle(vm, observation)
         unless match?(observation)
           fail "Unexpected event observation: #{observation.inspect}, expected #{inspect}"

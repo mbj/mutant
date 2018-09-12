@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require File.expand_path('../lib/mutant/version', __FILE__)
+
+require File.expand_path('lib/mutant/version', __dir__)
 
 Gem::Specification.new do |gem|
   gem.name        = 'mutant-rspec'

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   module AST
     # Groups of node types

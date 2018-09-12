@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Env do
   context '#kill' do
     let(:object) do

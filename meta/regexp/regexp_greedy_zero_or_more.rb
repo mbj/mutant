@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Mutant::Meta::Example.add :regexp_greedy_zero_or_more do
   source '/\d*/'
 

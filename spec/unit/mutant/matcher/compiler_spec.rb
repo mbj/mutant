@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Matcher::Compiler, '#call' do
   let(:object)         { described_class                  }
   let(:matcher_config) { Mutant::Matcher::Config::DEFAULT }

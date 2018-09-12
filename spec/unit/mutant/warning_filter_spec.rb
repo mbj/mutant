@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::WarningFilter do
   before do
     if RUBY_ENGINE.eql?('rbx')
@@ -70,7 +71,7 @@ RSpec.describe Mutant::WarningFilter do
 
     it 'returns warnings generated within block' do
       warnings = object.use do
-        # rubocop:disable Lint/Eval
+        # rubocop:disable Style/EvalWithLocation
         eval(<<-RUBY)
           Class.new do
             def foo

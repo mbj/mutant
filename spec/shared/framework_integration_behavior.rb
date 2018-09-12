@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.shared_examples_for 'framework integration' do
   def system_with_gemfile(*command)
     Kernel.system({ 'BUNDLE_GEMFILE' => gemfile }, *command)

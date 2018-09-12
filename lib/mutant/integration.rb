@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
 
   # Abstract base class mutant test framework integrations

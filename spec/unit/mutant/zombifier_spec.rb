@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Zombifier do
   let(:root_require) { Pathname.new('project') }
   let(:pathname)     { class_double(Pathname)  }

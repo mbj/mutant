@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Mutant::Meta::Example.add :yield do
   source 'yield true'
 

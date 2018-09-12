@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Actor::Message do
 
   let(:type)    { instance_double(Symbol) }

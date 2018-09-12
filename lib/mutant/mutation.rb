@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   # Represent a mutated node with its subject
   class Mutation

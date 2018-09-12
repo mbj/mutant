@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Reporter::CLI::Printer do
   let(:output) { StringIO.new }
 

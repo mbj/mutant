@@ -1,5 +1,7 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Isolation::Fork, mutant: false do
+  # rubocop:disable Lint/AmbiguousBlockAssociation
   specify do
     a = 1
     expect do

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::AST::Regexp::Transformer do
   before do
     stub_const("#{described_class}::REGISTRY", Mutant::Registry.new)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.describe Mutant::Actor::Env do
   let(:thread)      { instance_double(Thread) }
   let(:thread_root) { class_double(Thread)    }

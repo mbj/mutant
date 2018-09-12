@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mutant
   # Namespace and mixin module for results
   module Result
