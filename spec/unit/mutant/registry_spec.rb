@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Registry do
   let(:lookup)  { object.lookup(type)           }
   let(:object)  { described_class.new           }

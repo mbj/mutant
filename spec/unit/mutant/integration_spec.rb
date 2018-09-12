@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Integration do
 
   let(:class_under_test) do

@@ -4,4 +4,4 @@ AllCops:
     - 'test_app/**/*'
     - 'tmp/**/*'
     - 'vendor/**/*'
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3

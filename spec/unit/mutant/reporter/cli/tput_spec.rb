@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Reporter::CLI::Tput do
   describe '.detect' do
     subject { described_class.detect }

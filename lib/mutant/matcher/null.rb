@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutant
   class Matcher
     # A null matcher, that does not match any subjects

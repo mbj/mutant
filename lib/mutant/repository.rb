@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutant
   module Repository
     # Error raised on repository interaction problems

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 mutations = {
   [:regexp_digit_type,           '/\d/'] => [:regexp_nondigit_type,           '/\D/'],
   [:regexp_hex_type,             '/\h/'] => [:regexp_nonhex_type,             '/\H/'],

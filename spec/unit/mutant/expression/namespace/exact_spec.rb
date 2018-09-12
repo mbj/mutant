@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Expression::Namespace::Exact do
   let(:object) { parse_expression(input) }
   let(:input)  { 'TestApp::Literal'      }

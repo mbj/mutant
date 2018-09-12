@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Mutant::Meta::Example.add :and_asgn do
   source 'a &&= 1'
 

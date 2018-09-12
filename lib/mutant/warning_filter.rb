@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutant
   # Stream filter for warnings
   class WarningFilter

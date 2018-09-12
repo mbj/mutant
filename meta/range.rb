@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Mutant::Meta::Example.add :irange do
   source '1..100'
 

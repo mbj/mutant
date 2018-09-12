@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RegexpSpec
   class Expression < SimpleDelegator
     NO_EXPRESSIONS = Object.new.freeze

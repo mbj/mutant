@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.shared_examples_for 'a method matcher' do
   let(:node)              { mutation_subject.node    }
   let(:context)           { mutation_subject.context }

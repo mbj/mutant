@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutant
   class Matcher
     # Abstract base class for method matchers

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::AST::Sexp do
   let(:object) do
     Class.new do

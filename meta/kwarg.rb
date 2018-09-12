@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Mutant::Meta::Example.add :kwarg do
   source 'def foo(bar:); end'
 

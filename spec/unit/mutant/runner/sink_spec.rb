@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 describe Mutant::Runner::Sink do
   setup_shared_context
 

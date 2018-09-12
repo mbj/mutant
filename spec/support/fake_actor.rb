@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'mutant/actor'
 
 # A fake actor used from specs
@@ -14,7 +15,7 @@ module FakeActor
       unless eql?(other)
         fail "Got:\n#{other.inspect}\nExpected:\n#{inspect}"
       end
-      block.call(other.message) if block
+      block&.call(other.message)
     end
   end # Expectation
 

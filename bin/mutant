@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 trap('INT') do |status|
   effective_status = status ? status + 128 : 128

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # This spec is a good example for:
 #
 # If test look that ugly the class under test sucks.

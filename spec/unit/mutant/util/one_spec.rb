@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Util, '.one' do
   let(:first) { instance_double(Object)                          }
   let(:array) { instance_double(Array, one?: true, first: first) }

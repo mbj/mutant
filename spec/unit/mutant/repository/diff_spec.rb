@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 describe Mutant::Repository::Diff do
   describe '#touches?' do
     let(:object) do

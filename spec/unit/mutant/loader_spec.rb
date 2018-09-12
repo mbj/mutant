@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Loader, '.call' do
   subject do
     described_class.call(

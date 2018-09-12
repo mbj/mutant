@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable ModuleLength
 module SharedContext
   # Prepend an anonymous module with the new `with` method

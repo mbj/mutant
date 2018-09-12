@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The fork isolation is all about managing a series of systemcalls with proper error handling
 #
 # So creating a unit spec for this is challenging. Especially under mutation testing.

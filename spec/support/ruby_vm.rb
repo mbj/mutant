@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module MutantSpec
   # Not a real VM, just kidding. It connects the require / eval triggers
   # require semantics Zombifier relies on in a way we can avoid having to

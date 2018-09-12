@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutant
   class Matcher
     # Matcher chaining results of other matchers together

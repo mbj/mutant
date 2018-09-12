@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Mutant::Meta::Example.add :rescue do
   source 'begin; rescue ExceptionA, ExceptionB => error; true; end'
 

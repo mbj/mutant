@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Mutant::Meta::Example.add :until do
   source 'until true; foo; bar; end'
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::AST do
   let(:object) { described_class }
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Parallel::Worker do
   let(:actor_env) do
     FakeActor::Env.new(message_sequence, actor_names)

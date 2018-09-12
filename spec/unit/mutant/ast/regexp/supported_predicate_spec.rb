@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::AST::Regexp, '.supported?' do
   subject { described_class.supported?(expression) }
 

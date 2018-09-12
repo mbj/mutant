@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Mutant::Meta::Example.add :op_asgn do
   source '@a.b += 1'
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module XSpec
   class MessageReaction
     include Concord.new(:event_list)
