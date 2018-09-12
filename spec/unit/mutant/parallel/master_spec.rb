@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Parallel::Master do
   let(:message_sequence)     { FakeActor::MessageSequence.new                                             }
   let(:actor_names)          { %i[master worker_a worker_b]                                               }

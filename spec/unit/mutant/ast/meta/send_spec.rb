@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::AST::Meta::Send do
   let(:object) { described_class.new(node) }
 

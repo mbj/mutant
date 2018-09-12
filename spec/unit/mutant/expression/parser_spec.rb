@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Expression::Parser do
   let(:object) { Mutant::Config::DEFAULT.expression_parser }
 

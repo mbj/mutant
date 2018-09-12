@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutant
   module AST
     module Regexp
@@ -99,7 +100,7 @@ module Mutant
             #
             # @return [String]
             def interval_text
-              interval = [min, max].map { |num| num if num > 0 }.uniq
+              interval = [min, max].map { |num| num if num.positive? }.uniq
               "{#{interval.join(',')}}"
             end
           end # ASTToExpression

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Actor::Binding do
   let(:actor_a)    { instance_double(Mutant::Actor::Mailbox, sender: sender_a, receiver: receiver_a) }
   let(:sender_a)   { instance_double(Mutant::Actor::Sender)                                          }

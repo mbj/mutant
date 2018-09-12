@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutant
   # Abstract base class for test that might kill a mutation
   class Test

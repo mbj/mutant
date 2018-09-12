@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Reporter::CLI::Printer do
   let(:output) { StringIO.new }
 
@@ -8,7 +9,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
       allow(output).to receive(:tty?).and_return(tty?)
       subject
       output.rewind
-      expect(output.read).to eql(strip_indent(expectation))
+      expect(output.read).to eql(expectation)
     end
   end
 
@@ -62,12 +63,12 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
 
     context 'on tty' do
       context 'on success' do
-        it_reports Mutant::Color::GREEN.format('foo bar') << "\n"
+        it_reports Mutant::Color::GREEN.format('foo bar') + "\n"
       end
 
       context 'on failure' do
         let(:success?) { false }
-        it_reports Mutant::Color::RED.format('foo bar') << "\n"
+        it_reports Mutant::Color::RED.format('foo bar') + "\n"
       end
     end
 
@@ -150,7 +151,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
     end
 
     context 'when output is a tty?' do
-      it_reports Mutant::Color::RED.format('foo') << "\n"
+      it_reports Mutant::Color::RED.format('foo') + "\n"
     end
 
     context 'when output is NOT a tty?' do

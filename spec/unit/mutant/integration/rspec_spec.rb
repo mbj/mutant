@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'mutant/integration/rspec'
 
 RSpec.describe Mutant::Integration::Rspec do

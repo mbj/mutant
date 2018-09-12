@@ -1,3 +1,8 @@
+# v0.8.17 2018-09-12
+
+* Drop support for Ruby < 2.3
+* Use frozen string literals globally
+
 # v0.8.16 2018-08-03
 
 * Support for rspec-3.x

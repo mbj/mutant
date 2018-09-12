@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::AST::Regexp::Transformer::LookupTable::Table do
   subject { table.lookup(:regexp_fake_thing) }
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 if ENV['COVERAGE'] == 'true'
   require 'simplecov'
 
@@ -58,7 +59,6 @@ end # MessageHelper
 
 RSpec.configure do |config|
   config.extend(SharedContext)
-  config.include(CompressHelper)
   config.include(MessageHelper)
   config.include(ParserHelper)
   config.include(Mutant::AST::Sexp)

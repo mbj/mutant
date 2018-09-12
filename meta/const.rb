@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Mutant::Meta::Example.add :const do
   source 'A::B::C'
 

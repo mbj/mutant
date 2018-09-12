@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Matcher::Filter, '#call' do
   subject { object.call(env) }
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Reporter::CLI::Printer::Status do
   setup_shared_context
 
@@ -7,7 +8,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
     context 'with empty scheduler' do
       with(:env_result) { { subject_results: [] } }
 
-      it_reports <<-REPORT
+      it_reports <<~REPORT
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
@@ -32,7 +33,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
       context 'without progress' do
         with(:status) { { active_jobs: [].to_set } }
 
-        it_reports(<<-REPORT)
+        it_reports(<<~REPORT)
           Mutant configuration:
           Matcher:         #<Mutant::Matcher::Config empty>
           Integration:     Mutant::Integration::Null
@@ -59,7 +60,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
         context 'on failure' do
           with(:mutation_a_test_result) { { passed: true } }
 
-          it_reports(<<-REPORT)
+          it_reports(<<~REPORT)
             Mutant configuration:
             Matcher:         #<Mutant::Matcher::Config empty>
             Integration:     Mutant::Integration::Null
@@ -87,7 +88,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Status do
         end
 
         context 'on success' do
-          it_reports(<<-REPORT)
+          it_reports(<<~REPORT)
             Mutant configuration:
             Matcher:         #<Mutant::Matcher::Config empty>
             Integration:     Mutant::Integration::Null

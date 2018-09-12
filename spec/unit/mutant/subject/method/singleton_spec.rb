@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Subject::Method::Singleton do
 
   let(:object)  { described_class.new(context, node) }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutant
   # Registry for mapping AST types to classes
   class Registry

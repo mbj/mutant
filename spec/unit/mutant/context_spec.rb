@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Context do
   describe '.wrap' do
     subject { described_class.wrap(scope, node) }

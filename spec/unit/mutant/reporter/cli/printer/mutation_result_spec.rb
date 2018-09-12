@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
   setup_shared_context
 
@@ -26,7 +27,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           end
 
           context 'on non tty' do
-            it_reports(<<-'STR')
+            it_reports(<<~'STR')
               evil:subject-a:d27d2
               @@ -1,2 +1,2 @@
               -true
@@ -43,7 +44,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           # Unparses exactly the same way as above node
           let(:mutation_a_node) { s(:zsuper) }
 
-          it_reports(<<-REPORT)
+          it_reports(<<~REPORT)
             evil:subject-a:a5bc7
             --- Internal failure ---
             BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!
@@ -67,7 +68,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           Mutant::Mutation::Neutral.new(subject_a, s(:true))
         end
 
-        it_reports(<<-REPORT)
+        it_reports(<<~REPORT)
           neutral:subject-a:d5318
           --- Neutral failure ---
           Original code was inserted unmutated. And the test did NOT PASS.
@@ -92,7 +93,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           Mutant::Mutation::Noop.new(subject_a, s(:true))
         end
 
-        it_reports(<<-REPORT)
+        it_reports(<<~REPORT)
           noop:subject-a:d5318
           ---- Noop failure -----
           No code was inserted. And the test did NOT PASS.

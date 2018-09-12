@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::CLI do
   let(:object) { described_class }
 
@@ -107,21 +108,21 @@ RSpec.describe Mutant::CLI do
       it_should_behave_like 'a cli parser'
 
       let(:expected_message) do
-        strip_indent(<<-MESSAGE)
-usage: mutant [options] MATCH_EXPRESSION ...
-Environment:
-        --zombie                     Run mutant zombified
-    -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
-    -r, --require NAME               Require file with NAME
-    -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
+        <<~MESSAGE
+          usage: mutant [options] MATCH_EXPRESSION ...
+          Environment:
+                  --zombie                     Run mutant zombified
+              -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
+              -r, --require NAME               Require file with NAME
+              -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
 
-Options:
-        --use INTEGRATION            Use INTEGRATION to kill mutations
-        --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
-        --since REVISION             Only select subjects touched since REVISION
-        --fail-fast                  Fail fast
-        --version                    Print mutants version
-    -h, --help                       Show this message
+          Options:
+                  --use INTEGRATION            Use INTEGRATION to kill mutations
+                  --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
+                  --since REVISION             Only select subjects touched since REVISION
+                  --fail-fast                  Fail fast
+                  --version                    Print mutants version
+              -h, --help                       Show this message
         MESSAGE
       end
     end

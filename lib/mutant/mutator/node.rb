@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutant
 
   # Generator for mutations
@@ -124,7 +125,7 @@ module Mutant
       # @return [nil]
       #   otherwise
       def parent_node
-        parent.node if parent
+        parent&.node
       end
 
       # Parent type
@@ -135,7 +136,7 @@ module Mutant
       # @return [nil]
       #   otherwise
       def parent_type
-        parent_node.type if parent_node
+        parent_node&.type
       end
 
       # Test if the node is the left of an or_asgn or op_asgn

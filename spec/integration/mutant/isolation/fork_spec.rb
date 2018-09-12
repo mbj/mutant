@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Isolation::Fork, mutant: false do
   specify do
     a = 1

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Mutant::Meta::Example::ALL.each.group_by(&:node_type).each do |type, examples|
   RSpec.describe Mutant::Mutator::REGISTRY.lookup(type) do
     toplevel_nodes = examples.map { |example| example.node.type }.uniq

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Mutant::Meta::Example.add :lvasgn do
   source 'a = true'
 

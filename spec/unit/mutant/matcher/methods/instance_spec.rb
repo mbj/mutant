@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
   let(:object) { described_class.new(class_under_test) }
   let(:env)    { Fixtures::TEST_ENV                    }

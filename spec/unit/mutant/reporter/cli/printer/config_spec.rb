@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Reporter::CLI::Printer::Config do
   setup_shared_context
 
@@ -5,7 +6,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
 
   describe '.call' do
     context 'on default config' do
-      it_reports(<<-REPORT)
+      it_reports(<<~REPORT)
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
@@ -16,7 +17,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
     end
 
     context 'with non default coverage expectation' do
-      it_reports(<<-REPORT)
+      it_reports(<<~REPORT)
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null

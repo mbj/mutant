@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutant
   # Abstract base class for mutant environments
   class Env

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe 'rspec integration', mutant: false do
 
   let(:base_cmd) { 'bundle exec mutant -I lib --require test_app --use rspec' }

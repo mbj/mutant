@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Mutant::Result::Subject do
   let(:object) do
     described_class.new(
