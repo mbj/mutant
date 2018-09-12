@@ -7,7 +7,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
   let(:reportable) { env_result }
 
   describe '.call' do
-    it_reports <<-'STR'
+    it_reports <<~'STR'
       subject-a
       - test-a
       evil:subject-a:d27d2

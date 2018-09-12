@@ -9,7 +9,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
       allow(output).to receive(:tty?).and_return(tty?)
       subject
       output.rewind
-      expect(output.read).to eql(strip_indent(expectation))
+      expect(output.read).to eql(expectation)
     end
   end
 

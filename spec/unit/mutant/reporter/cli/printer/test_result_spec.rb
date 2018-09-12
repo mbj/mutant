@@ -5,7 +5,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::TestResult do
   let(:reportable) { mutation_a_test_result }
 
   describe '.call' do
-    it_reports <<-'STR'
+    it_reports <<~'STR'
       - 1 @ runtime: 1.0
         - test-a
       Test Output:

@@ -63,7 +63,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
       let(:expected_nodes) { [s(:false), s(:nil)] }
 
       specify do
-        should eql(strip_indent(<<-'REPORT'))
+        should eql(<<~'REPORT')
           ---
           file: foo.rb
           original_ast: s(:true)
@@ -83,7 +83,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
       let(:generated_nodes) { [s(:false), s(:nil)] }
 
       specify do
-        should eql(strip_indent(<<-'REPORT'))
+        should eql(<<~'REPORT')
           ---
           file: foo.rb
           original_ast: s(:true)
@@ -104,7 +104,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
       let(:generated_nodes) { [s(:true)] }
 
       specify do
-        should eql(strip_indent(<<-'REPORT'))
+        should eql(<<~'REPORT')
           ---
           file: foo.rb
           original_ast: s(:true)

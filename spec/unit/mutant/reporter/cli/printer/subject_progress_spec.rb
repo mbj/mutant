@@ -6,7 +6,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectProgress do
 
   describe '.call' do
     context 'on full coverage' do
-      it_reports <<-'STR'
+      it_reports <<~'STR'
         subject-a mutations: 2
         ..
         (02/02) 100% - killtime: 2.00s runtime: 2.00s overhead: 0.00s
@@ -16,7 +16,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectProgress do
     context 'on partial coverage' do
       with(:mutation_a_test_result) { { passed: true } }
 
-      it_reports <<-'STR'
+      it_reports <<~'STR'
         subject-a mutations: 2
         F.
         (01/02)  50% - killtime: 2.00s runtime: 2.00s overhead: 0.00s
@@ -26,7 +26,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectProgress do
     context 'without results' do
       with(:subject_a_result) { { mutation_results: [] } }
 
-      it_reports <<-'STR'
+      it_reports <<~'STR'
         subject-a mutations: 2
         (00/02) 100% - killtime: 0.00s runtime: 0.00s overhead: 0.00s
       STR

@@ -28,7 +28,7 @@ module SharedContext
     it 'writes expected report to output' do
       described_class.call(output, reportable)
       output.rewind
-      expect(output.read).to eql(strip_indent(expected_content))
+      expect(output.read).to eql(expected_content)
     end
   end
 

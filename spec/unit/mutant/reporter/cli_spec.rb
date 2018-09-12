@@ -35,7 +35,7 @@ RSpec.describe Mutant::Reporter::CLI do
   def self.it_reports(expected_content)
     it 'writes expected report to output' do
       expect(subject).to be(object)
-      expect(contents).to eql(strip_indent(expected_content))
+      expect(contents).to eql(expected_content)
     end
   end
 
@@ -119,7 +119,7 @@ RSpec.describe Mutant::Reporter::CLI do
     context 'on progressive format' do
       let(:format) { progressive_format }
 
-      it_reports(<<-REPORT)
+      it_reports(<<~REPORT)
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null
@@ -137,7 +137,7 @@ RSpec.describe Mutant::Reporter::CLI do
   describe '#report' do
     subject { object.report(env_result) }
 
-    it_reports(<<-REPORT)
+    it_reports(<<~REPORT)
       Mutant configuration:
       Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     Mutant::Integration::Null
@@ -163,7 +163,7 @@ RSpec.describe Mutant::Reporter::CLI do
     context 'on framed format' do
       let(:format) { framed_format }
 
-      it_reports(<<-REPORT)
+      it_reports(<<~REPORT)
         [tput-restore]Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     Mutant::Integration::Null

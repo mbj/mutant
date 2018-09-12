@@ -6,7 +6,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
 
   describe '.call' do
     context 'on full coverage' do
-      it_reports <<-'STR'
+      it_reports <<~'STR'
         subject-a
         - test-a
       STR
@@ -15,7 +15,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
     context 'on partial coverage' do
       with(:mutation_a_test_result) { { passed: true } }
 
-      it_reports <<-'STR'
+      it_reports <<~'STR'
         subject-a
         - test-a
         evil:subject-a:d27d2
@@ -29,7 +29,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
     context 'without results' do
       with(:subject_a_result) { { mutation_results: [] } }
 
-      it_reports <<-'STR'
+      it_reports <<~'STR'
         subject-a
         - test-a
       STR
