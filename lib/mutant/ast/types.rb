@@ -57,9 +57,8 @@ module Mutant
         regexp_capture_group
         regexp_carriage_escape
         regexp_character_set
-        regexp_character_set
-        regexp_codepoint_list_escape
         regexp_codepoint_escape
+        regexp_codepoint_list_escape
         regexp_comment_free_space
         regexp_comment_group
         regexp_control_escape
@@ -96,10 +95,10 @@ module Mutant
         regexp_nlookahead_assertion
         regexp_nlookbehind_assertion
         regexp_nondigit_type
+        regexp_nonhex_type
         regexp_nonspace_type
         regexp_nonword_boundary_anchor
         regexp_nonword_type
-        regexp_nonhex_type
         regexp_number_backref
         regexp_one_or_more_escape
         regexp_open_conditional
@@ -109,6 +108,8 @@ module Mutant
         regexp_possessive_one_or_more
         regexp_possessive_zero_or_more
         regexp_possessive_zero_or_one
+        regexp_print_nonproperty
+        regexp_print_property
         regexp_reluctant_interval
         regexp_reluctant_one_or_more
         regexp_reluctant_zero_or_more
