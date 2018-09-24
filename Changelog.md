@@ -1,3 +1,7 @@
+# v0.8.18 2018-10-24
+
+* Add support for regexp unicode print nodes https://github.com/mbj/mutant/pull/749
+
 # v0.8.17 2018-09-12
 
 * Drop support for Ruby < 2.3
