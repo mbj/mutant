@@ -108,6 +108,7 @@ module Mutant
         regexp_possessive_one_or_more
         regexp_possessive_zero_or_more
         regexp_possessive_zero_or_one
+        regexp_print_nonproperty
         regexp_print_property
         regexp_reluctant_interval
         regexp_reluctant_one_or_more

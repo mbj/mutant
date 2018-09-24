@@ -69,6 +69,7 @@ module Mutant
               [:regexp_nonword_boundary_anchor,  [:anchor,   :nonword_boundary, '\\B'],          ::Regexp::Expression::Anchor::NonWordBoundary],
               [:regexp_nonword_type,             [:type,     :nonword,          '\W'],           ::Regexp::Expression::CharacterType::NonWord],
               [:regexp_one_or_more_escape,       [:escape,   :one_or_more,      '\+'],           ::Regexp::Expression::EscapeSequence::Literal],
+              [:regexp_print_nonproperty,        [:property, :nonprint,         '\P{Print}'],    ::Regexp::Expression::UnicodeProperty::Print],
               [:regexp_print_property,           [:property, :print,            '\p{Print}'],    ::Regexp::Expression::UnicodeProperty::Print],
               [:regexp_script_arabic_property,   [:property, :script_arabic,    '\p{Arabic}'],   ::Regexp::Expression::UnicodeProperty::Script],
               [:regexp_script_han_property,      [:property, :script_han,       '\p{Han}'],      ::Regexp::Expression::UnicodeProperty::Script],
