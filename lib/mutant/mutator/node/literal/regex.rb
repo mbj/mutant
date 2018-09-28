@@ -43,7 +43,6 @@ module Mutant
           # @return [undefined]
           def mutate_body
             return unless body.all?(&method(:n_str?))
-            return unless AST::Regexp.supported?(body_expression)
 
             Mutator.mutate(body_ast).each do |mutation|
               source = AST::Regexp.to_expression(mutation).to_s

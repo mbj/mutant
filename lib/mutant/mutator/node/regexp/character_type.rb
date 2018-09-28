@@ -12,7 +12,7 @@ module Mutant
             regexp_space_type:           :regexp_nonspace_type,
             regexp_word_boundary_anchor: :regexp_nonword_boundary_anchor,
             regexp_word_type:            :regexp_nonword_type,
-            regexp_xgrapheme_type:       :regexp_space_type
+            regexp_xgrapheme_type:       :regexp_linebreak_type
           }
 
           MAP = IceNine.deep_freeze(map.merge(map.invert))

@@ -23,13 +23,11 @@
 - name: regexp_parser
   namespace: Regexp
   repo_uri: 'https://github.com/ammar/regexp_parser.git'
-  repo_ref: 'v0.4.4'
+  repo_ref: 'v1.2.0'
   ruby_glob_pattern: '**/*.rb'
   mutation_coverage: false
   mutation_generation: true
-  expected_errors:
-    "Regexp::Syntax::Ruby::V233 does not implement: [escape:codepoint]":
-     - regexp_parser/test/parser/test_escapes.rb
+  expected_errors: {}
   exclude: []
 - name: auom
   namespace: AUOM

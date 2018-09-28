@@ -47,6 +47,7 @@ module Mutant
           regexp_eos_ob_eol_anchor
           regexp_greedy_zero_or_more
           regexp_hex_type
+          regexp_linebreak_type
           regexp_nondigit_type
           regexp_nonhex_type
           regexp_nonspace_type

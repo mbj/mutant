@@ -21,15 +21,21 @@ module Mutant
             include LookupTable
 
             # rubocop:disable LineLength
+            # Expression::Sequence represents conditional branches, alternation branches, and intersection branches
             TABLE = Table.create(
-              [:regexp_alternation_meta,      [:meta,      :alternation, '|'],    ::Regexp::Expression::Alternation],
-              [:regexp_nlookahead_assertion,  [:assertion, :nlookahead,  '(?!'],  ::Regexp::Expression::Assertion::NegativeLookahead],
-              [:regexp_passive_group,         [:group,     :passive,     '(?:'],  ::Regexp::Expression::Group::Passive],
-              [:regexp_nlookbehind_assertion, [:assertion, :nlookbehind, '(?<!'], ::Regexp::Expression::Assertion::NegativeLookbehind],
-              [:regexp_lookbehind_assertion,  [:assertion, :lookbehind,  '(?<='], ::Regexp::Expression::Assertion::Lookbehind],
-              [:regexp_lookahead_assertion,   [:assertion, :lookahead,   '(?='],  ::Regexp::Expression::Assertion::Lookahead],
-              [:regexp_atomic_group,          [:group,     :atomic,      '(?>'],  ::Regexp::Expression::Group::Atomic],
-              [:regexp_capture_group,         [:group,     :capture,     '('],    ::Regexp::Expression::Group::Capture]
+              [:regexp_alternation_meta,      [:meta,        :alternation,  '|'],    ::Regexp::Expression::Alternation],
+              [:regexp_atomic_group,          [:group,       :atomic,       '(?>'],  ::Regexp::Expression::Group::Atomic],
+              [:regexp_capture_group,         [:group,       :capture,      '('],    ::Regexp::Expression::Group::Capture],
+              [:regexp_character_set,         [:set,         :character,    '['],    ::Regexp::Expression::CharacterSet],
+              [:regexp_intersection_set,      [:set,         :intersection, '&&'],   ::Regexp::Expression::CharacterSet::Intersection],
+              [:regexp_lookahead_assertion,   [:assertion,   :lookahead,    '(?='],  ::Regexp::Expression::Assertion::Lookahead],
+              [:regexp_lookbehind_assertion,  [:assertion,   :lookbehind,   '(?<='], ::Regexp::Expression::Assertion::Lookbehind],
+              [:regexp_nlookahead_assertion,  [:assertion,   :nlookahead,   '(?!'],  ::Regexp::Expression::Assertion::NegativeLookahead],
+              [:regexp_nlookbehind_assertion, [:assertion,   :nlookbehind,  '(?<!'], ::Regexp::Expression::Assertion::NegativeLookbehind],
+              [:regexp_open_conditional,      [:conditional, :open,         '(?'],   ::Regexp::Expression::Conditional::Expression],
+              [:regexp_passive_group,         [:group,       :passive,      '(?:'],  ::Regexp::Expression::Group::Passive],
+              [:regexp_range_set,             [:set,         :range,        '-'],    ::Regexp::Expression::CharacterSet::Range],
+              [:regexp_sequence_expression,   [:expression,  :sequence,     ''],     ::Regexp::Expression::Sequence]
             )
 
           private

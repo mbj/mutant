@@ -6,7 +6,7 @@ mutations = {
   [:regexp_space_type,           '/\s/'] => [:regexp_nonspace_type,           '/\S/'],
   [:regexp_word_boundary_anchor, '/\b/'] => [:regexp_nonword_boundary_anchor, '/\B/'],
   [:regexp_word_type,            '/\w/'] => [:regexp_nonword_type,            '/\W/'],
-  [:regexp_xgrapheme_type,       '/\X/'] => [:regexp_space_type,              '/\s/']
+  [:regexp_xgrapheme_type,       '/\X/'] => [:regexp_linebreak_type,          '/\R/']
 }
 
 mutations = mutations.merge(mutations.invert)

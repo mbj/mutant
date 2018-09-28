@@ -7,6 +7,7 @@ module Mutant
         # Transformer for option groups
         class OptionsGroup < self
           register :regexp_options_group
+          register :regexp_options_switch_group
 
           # Mapper from `Regexp::Expression` to `Parser::AST::Node`
           class ExpressionToAST < Transformer::ExpressionToAST
@@ -15,7 +16,7 @@ module Mutant
             #
             # @return [Parser::AST::Node]
             def call
-              quantify(ast(expression.options, *children))
+              quantify(ast(expression.option_changes, *children))
             end
           end # ExpressionToAST
 
@@ -23,11 +24,11 @@ module Mutant
           class ASTToExpression < Transformer::ASTToExpression
             include NamedChildren
 
-            children :options
+            children :option_changes
 
           private
 
-            # Covnert node into expression
+            # Convert node into expression
             #
             # @return [Regexp::Expression::Group::Options]
             def transform
@@ -48,17 +49,31 @@ module Mutant
             # @return [Regexp::Expression::Group::Options]
             def options_group
               ::Regexp::Expression::Group::Options.new(
-                ::Regexp::Token.new(:group, :options, text)
+                ::Regexp::Token.new(:group, type, text)
               )
             end
 
-            # Flag text constructed from enabled options
+            # Options group type derived from node type
+            #
+            # @return [Symbol]
+            def type
+              {
+                regexp_options_group:        :options,
+                regexp_options_switch_group: :options_switch
+              }.fetch(node.type)
+            end
+
+            # Flag text constructed from enabled and disabled options
             #
             # @return [String]
             def text
-              flags = options.map { |key, value| key if value }.join
+              pos, neg = option_changes.partition { |_opt, val| val }.map do |arr|
+                arr.map(&:first).join
+              end
+              neg_opt_sep = '-' unless neg.empty?
+              content_sep = ':' unless type.equal?(:options_switch)
 
-              "(?#{flags}-:"
+              "(?#{pos}#{neg_opt_sep}#{neg}#{content_sep}"
             end
           end # ASTToExpression
         end # OptionsGroup
