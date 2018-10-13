@@ -202,17 +202,53 @@ end
 RegexpSpec.expect_mapping(/[ab]+/, :regexp_character_set) do
   s(:regexp_root_expression,
     s(:regexp_greedy_one_or_more, 1, -1,
-      s(:regexp_character_set, 'a', 'b')))
+      s(:regexp_character_set,
+        s(:regexp_literal_literal, 'a'),
+        s(:regexp_literal_literal, 'b'))))
 end
 
 RegexpSpec.expect_mapping(/[ab]/, :regexp_character_set) do
   s(:regexp_root_expression,
-    s(:regexp_character_set, 'a', 'b'))
+    s(:regexp_character_set,
+      s(:regexp_literal_literal, 'a'),
+      s(:regexp_literal_literal, 'b')))
 end
 
 RegexpSpec.expect_mapping(/[a-j]/, :regexp_character_set) do
   s(:regexp_root_expression,
-    s(:regexp_character_set, 'a-j'))
+    s(:regexp_character_set,
+      s(:regexp_range_set,
+        s(:regexp_literal_literal, 'a'),
+        s(:regexp_literal_literal, 'j'))))
+end
+
+RegexpSpec.expect_mapping(/[\b]/, :regexp_backspace_escape) do
+  s(:regexp_root_expression,
+    s(:regexp_character_set,
+      s(:regexp_backspace_escape)))
+end
+
+RegexpSpec.expect_mapping(/()(?(1)a|b)/, :regexp_open_conditional) do
+  s(:regexp_root_expression,
+    s(:regexp_capture_group),
+    s(:regexp_open_conditional,
+      s(:regexp_condition_conditional, '(1)'),
+      s(:regexp_sequence_expression,
+        s(:regexp_literal_literal, 'a')),
+      s(:regexp_sequence_expression,
+        s(:regexp_literal_literal, 'b'))))
+end
+
+RegexpSpec.expect_mapping(/[ab&&bc]/, :regexp_intersection_set) do
+  s(:regexp_root_expression,
+    s(:regexp_character_set,
+      s(:regexp_intersection_set,
+        s(:regexp_sequence_expression,
+          s(:regexp_literal_literal, 'a'),
+          s(:regexp_literal_literal, 'b')),
+        s(:regexp_sequence_expression,
+          s(:regexp_literal_literal, 'b'),
+          s(:regexp_literal_literal, 'c')))))
 end
 
 RegexpSpec.expect_mapping(/\u{9879}/, :regexp_codepoint_list_escape) do
@@ -225,7 +261,7 @@ RegexpSpec.expect_mapping(/(?#foo)/, :regexp_comment_group) do
     s(:regexp_comment_group, '(?#foo)'))
 end
 
-RegexpSpec.expect_mapping(/(?x-: # comment
+RegexpSpec.expect_mapping(/(?x: # comment
 )/, :regexp_comment_free_space) do
   s(:regexp_root_expression,
     s(:regexp_options_group, {
@@ -304,7 +340,9 @@ end
 RegexpSpec.expect_mapping(/[ab]+/, :regexp_greedy_one_or_more) do
   s(:regexp_root_expression,
     s(:regexp_greedy_one_or_more, 1, -1,
-      s(:regexp_character_set, 'a', 'b')))
+      s(:regexp_character_set,
+        s(:regexp_literal_literal, 'a'),
+        s(:regexp_literal_literal, 'b'))))
 end
 
 RegexpSpec.expect_mapping(/(a)*/, :regexp_greedy_zero_or_more) do
@@ -336,6 +374,11 @@ RegexpSpec.expect_mapping(/\(/, :regexp_group_open_escape) do
     s(:regexp_group_open_escape))
 end
 
+RegexpSpec.expect_mapping(/\101/, :regexp_octal_escape) do
+  s(:regexp_root_expression,
+    s(:regexp_octal_escape, '\\101'))
+end
+
 RegexpSpec.expect_mapping(/\xFF/n, :regexp_hex_escape) do
   s(:regexp_root_expression,
     s(:regexp_hex_escape, '\\xFF'))
@@ -346,9 +389,14 @@ RegexpSpec.expect_mapping(/\h/, :regexp_hex_type) do
     s(:regexp_hex_type))
 end
 
-RegexpSpec.expect_mapping(/\H/, :regexp_hex_type) do
+RegexpSpec.expect_mapping(/\H/, :regexp_nonhex_type) do
   s(:regexp_root_expression,
     s(:regexp_nonhex_type))
+end
+
+RegexpSpec.expect_mapping(/\R/, :regexp_linebreak_type) do
+  s(:regexp_root_expression,
+    s(:regexp_linebreak_type))
 end
 
 RegexpSpec.expect_mapping(/\X/, :regexp_xgrapheme_type) do
@@ -366,9 +414,9 @@ RegexpSpec.expect_mapping(/\{/, :regexp_interval_open_escape) do
     s(:regexp_interval_open_escape))
 end
 
-RegexpSpec.expect_mapping(/\p{L}/, :regexp_letter_any_property) do
+RegexpSpec.expect_mapping(/\p{L}/, :regexp_letter_property) do
   s(:regexp_root_expression,
-    s(:regexp_letter_any_property))
+    s(:regexp_letter_property))
 end
 
 RegexpSpec.expect_mapping(/\-/, :regexp_literal_escape) do
@@ -424,14 +472,16 @@ RegexpSpec.expect_mapping(/\G/, :regexp_match_start_anchor) do
     s(:regexp_match_start_anchor))
 end
 
-RegexpSpec.expect_mapping(/(?<foo>)/, :regexp_named_group) do
+RegexpSpec.expect_mapping(/(?<foo>a)+/, :regexp_named_group) do
   s(:regexp_root_expression,
-    s(:regexp_named_group, '(?<foo>'))
+    s(:regexp_greedy_one_or_more, 1, -1,
+      s(:regexp_named_group, 'foo',
+        s(:regexp_literal_literal, 'a'))))
 end
 
 RegexpSpec.expect_mapping(/(?<a>)\g<a>/, :regexp_name_call_backref) do
   s(:regexp_root_expression,
-    s(:regexp_named_group, '(?<a>'),
+    s(:regexp_named_group, 'a'),
     s(:regexp_name_call_backref, '\\g<a>'))
 end
 
@@ -477,7 +527,7 @@ RegexpSpec.expect_mapping(/\+/, :regexp_one_or_more_escape) do
     s(:regexp_one_or_more_escape))
 end
 
-RegexpSpec.expect_mapping(/(?i-:a)+/, :regexp_options_group) do
+RegexpSpec.expect_mapping(/(?i:a)+/, :regexp_options_group) do
   s(:regexp_root_expression,
     s(:regexp_greedy_one_or_more, 1, -1,
       s(:regexp_options_group,
@@ -487,7 +537,25 @@ RegexpSpec.expect_mapping(/(?i-:a)+/, :regexp_options_group) do
         s(:regexp_literal_literal, 'a'))))
 end
 
-RegexpSpec.expect_mapping(/(?x-: #{"\n"} )/, :regexp_whitespace_free_space) do
+RegexpSpec.expect_mapping(/(?i-x:a)+/, :regexp_options_group) do
+  s(:regexp_root_expression,
+    s(:regexp_greedy_one_or_more, 1, -1,
+      s(:regexp_options_group,
+        {
+          i: true,
+          x: false
+        },
+        s(:regexp_literal_literal, 'a'))))
+end
+
+RegexpSpec.expect_mapping(/a(?i)b/, :regexp_options_switch_group) do
+  s(:regexp_root_expression,
+    s(:regexp_literal_literal, 'a'),
+    s(:regexp_options_switch_group, i: true),
+    s(:regexp_literal_literal, 'b'))
+end
+
+RegexpSpec.expect_mapping(/(?x: #{"\n"} )/, :regexp_whitespace_free_space) do
   s(:regexp_root_expression,
     s(:regexp_options_group,
       {
@@ -526,6 +594,23 @@ RegexpSpec.expect_mapping(/.?+/, :regexp_possessive_zero_or_one) do
       s(:regexp_dot_meta)))
 end
 
+RegexpSpec.expect_mapping(/\P{Print}/, :regexp_print_nonproperty) do
+  s(:regexp_root_expression,
+    s(:regexp_print_nonproperty))
+end
+
+RegexpSpec.expect_mapping(/[[:print:]]/, :regexp_print_posixclass) do
+  s(:regexp_root_expression,
+    s(:regexp_character_set,
+      s(:regexp_print_posixclass)))
+end
+
+RegexpSpec.expect_mapping(/[[:^print:]]/, :regexp_print_nonposixclass) do
+  s(:regexp_root_expression,
+    s(:regexp_character_set,
+      s(:regexp_print_nonposixclass)))
+end
+
 RegexpSpec.expect_mapping(/.{1,3}?/, :regexp_reluctant_interval) do
   s(:regexp_root_expression,
     s(:regexp_reluctant_interval, 1, 3,
@@ -544,29 +629,29 @@ RegexpSpec.expect_mapping(/.*?/, :regexp_reluctant_zero_or_more) do
       s(:regexp_dot_meta)))
 end
 
-RegexpSpec.expect_mapping(/\p{Arabic}/, :regexp_script_arabic_property) do
+RegexpSpec.expect_mapping(/\p{Arabic}/, :regexp_arabic_property) do
   s(:regexp_root_expression,
-    s(:regexp_script_arabic_property))
+    s(:regexp_arabic_property))
 end
 
-RegexpSpec.expect_mapping(/\p{Han}/, :regexp_script_han_property) do
+RegexpSpec.expect_mapping(/\p{Han}/, :regexp_han_property) do
   s(:regexp_root_expression,
-    s(:regexp_script_han_property))
+    s(:regexp_han_property))
 end
 
-RegexpSpec.expect_mapping(/\p{Hangul}/, :regexp_script_hangul_property) do
+RegexpSpec.expect_mapping(/\p{Hangul}/, :regexp_hangul_property) do
   s(:regexp_root_expression,
-    s(:regexp_script_hangul_property))
+    s(:regexp_hangul_property))
 end
 
-RegexpSpec.expect_mapping(/\p{Hiragana}/, :regexp_script_hiragana_property) do
+RegexpSpec.expect_mapping(/\p{Hiragana}/, :regexp_hiragana_property) do
   s(:regexp_root_expression,
-    s(:regexp_script_hiragana_property))
+    s(:regexp_hiragana_property))
 end
 
-RegexpSpec.expect_mapping(/\p{Katakana}/, :regexp_script_katakana_property) do
+RegexpSpec.expect_mapping(/\p{Katakana}/, :regexp_katakana_property) do
   s(:regexp_root_expression,
-    s(:regexp_script_katakana_property))
+    s(:regexp_katakana_property))
 end
 
 RegexpSpec.expect_mapping(/foo|bar/, :regexp_sequence_expression) do

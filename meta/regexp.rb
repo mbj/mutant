@@ -71,6 +71,9 @@ Mutant::Meta::Example.add :regexp do
 
   singleton_mutations
   regexp_mutations
+
+  mutation '/(?(1)(?:foo)(bar))/'
+  mutation '/(?(1)(foo)(?:bar))/'
 end
 
 Pathname
