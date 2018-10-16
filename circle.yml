@@ -10,14 +10,19 @@ jobs:
   ruby_2_3:
     <<: *defaults
     docker:
-      - image: circleci/ruby:2.3.4
+      - image: circleci/ruby:2.3.7
   ruby_2_4:
     <<: *defaults
     docker:
-      - image: circleci/ruby:2.4.1
+      - image: circleci/ruby:2.4.4
+  ruby_2_5:
+    <<: *defaults
+    docker:
+      - image: circleci/ruby:2.5.1
 workflows:
   version: 2
   test:
     jobs:
       - ruby_2_3
       - ruby_2_4
+      - ruby_2_5
