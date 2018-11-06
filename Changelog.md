@@ -1,3 +1,8 @@
+# v0.8.19 2018-11-06
+
+* Drop support for Ruby < 2.5
+* Fix bug when mutating a module that includes Memoizable
+
 # v0.8.18 2018-10-24
 
 * Add support for regexp unicode print nodes https://github.com/mbj/mutant/pull/749
