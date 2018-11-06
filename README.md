@@ -353,7 +353,7 @@ Sorted by recency:
 [sitepoint]: http://www.sitepoint.com/mutation-testing-mutant/
 [arkency1]: http://blog.arkency.com/2015/06/how-good-are-your-ruby-tests-testing-your-tests-with-mutant/
 [arkency2]: http://blog.arkency.com/2015/05/mutation-testing-and-continuous-integration/
-[arkency3]: http://blog.arkency.com/2015/04/why-i-want-to-introduce-mutation-testing-to-the-rails-event-store-gem/  
+[arkency3]: http://blog.arkency.com/2015/04/why-i-want-to-introduce-mutation-testing-to-the-rails-event-store-gem/
 [solnic]: http://solnic.eu/2013/01/23/mutation-testing-with-mutant.html
 
 Support
