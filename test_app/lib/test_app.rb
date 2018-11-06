@@ -7,7 +7,7 @@ $VERBOSE = false
 # Namespace for test application
 module TestApp
   module InstanceMethodTests
-    class WithMemoizer
+    module WithMemoizer
       include Adamantium
 
       def bar; end; def baz; end
