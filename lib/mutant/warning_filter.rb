@@ -36,7 +36,7 @@ module Mutant
     #
     # @return [self]
     def write(message)
-      if WARNING_PATTERN =~ message
+      if WARNING_PATTERN.match?(message)
         warnings << message
       else
         target.write(message)

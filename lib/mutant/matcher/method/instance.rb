@@ -12,10 +12,12 @@ module Mutant
         # @param [UnboundMethod] method
         #
         # @return [Matcher::Method::Instance]
+        #
+        # :reek:ManualDispatch
         def self.new(scope, target_method)
           name = target_method.name
           evaluator =
-            if scope.include?(Memoizable) && scope.memoized?(name)
+            if scope.respond_to?(:memoized?) && scope.memoized?(name)
               Evaluator::Memoized
             else
               Evaluator
