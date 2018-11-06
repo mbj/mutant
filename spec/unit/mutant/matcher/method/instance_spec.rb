@@ -28,8 +28,8 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'when method is defined inside eval' do
-    let(:scope)             { base::WithMemoizer          }
-    let(:method)            { scope.instance_method(:boz) }
+    let(:scope)  { base::WithMemoizer          }
+    let(:method) { scope.instance_method(:boz) }
 
     let(:expected_warnings) do
       [
@@ -41,8 +41,8 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'when method is defined without source location' do
-    let(:scope)             { Module                            }
-    let(:method)            { scope.instance_method(:object_id) }
+    let(:scope)  { Module                            }
+    let(:method) { scope.instance_method(:object_id) }
 
     let(:expected_warnings) do
       [
