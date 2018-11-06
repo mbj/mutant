@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
   gem.extra_rdoc_files = %w[LICENSE]
   gem.executables      = %w[mutant]
 
-  gem.required_ruby_version = '>= 2.3'
+  gem.required_ruby_version = '>= 2.5'
 
   gem.add_runtime_dependency('abstract_type', '~> 0.0.7')
   gem.add_runtime_dependency('adamantium',    '~> 0.2.0')
