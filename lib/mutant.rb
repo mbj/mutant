@@ -7,12 +7,12 @@ require 'concord'
 require 'diff/lcs'
 require 'diff/lcs/hunk'
 require 'digest/sha1'
+require 'etc'
 require 'equalizer'
 require 'ice_nine'
 require 'morpher'
 require 'open3'
 require 'optparse'
-require 'parallel'
 require 'parser'
 require 'parser/current'
 require 'pathname'
@@ -228,7 +228,7 @@ module Mutant
         marshal: Marshal,
         process: Process
       ),
-      jobs:              ::Parallel.processor_count,
+      jobs:              Etc.nprocessors,
       kernel:            Kernel,
       load_path:         $LOAD_PATH,
       matcher:           Matcher::Config::DEFAULT,

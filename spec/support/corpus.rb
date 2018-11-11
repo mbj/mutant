@@ -3,6 +3,7 @@
 require 'anima'
 require 'morpher'
 require 'mutant'
+require 'parallel'
 
 # @api private
 module MutantSpec
@@ -188,7 +189,7 @@ module MutantSpec
         if ENV.key?('CI')
           CIRCLE_CI_CONTAINER_PROCESSES
         else
-          Parallel.processor_count
+          Etc.nprocessors
         end
       end
 
