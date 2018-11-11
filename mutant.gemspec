@@ -33,7 +33,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('ice_nine',      '~> 0.11.1')
   gem.add_runtime_dependency('memoizable',    '~> 0.4.2')
   gem.add_runtime_dependency('morpher',       '~> 0.2.6')
-  gem.add_runtime_dependency('parallel',      '~> 1.3')
   gem.add_runtime_dependency('parser',        '~> 2.5.1')
   gem.add_runtime_dependency('procto',        '~> 0.0.2')
   gem.add_runtime_dependency('regexp_parser', '~> 1.2')
@@ -42,4 +41,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('bundler',  '~> 1.10')
   gem.add_development_dependency('devtools', '~> 0.1.21')
   gem.add_development_dependency('ffi',      '~> 1.9.6')
+  gem.add_development_dependency('parallel', '~> 1.3')
 end
