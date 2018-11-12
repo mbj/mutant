@@ -40,6 +40,5 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency('bundler',  '~> 1.10')
   gem.add_development_dependency('devtools', '~> 0.1.21')
-  gem.add_development_dependency('ffi',      '~> 1.9.6')
   gem.add_development_dependency('parallel', '~> 1.3')
 end
