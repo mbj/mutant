@@ -22,7 +22,7 @@ RSpec.describe Mutant::Expression::Namespace::Recursive do
     context 'when other is an equivalent expression' do
       let(:other) { parse_expression(object.syntax) }
 
-      it { should be(0) }
+      it { should be(object.syntax.length) }
     end
 
     context 'when other expression describes a shorter prefix' do
