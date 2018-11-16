@@ -44,7 +44,9 @@ module Mutant
         #
         # @return [Integer]
         def match_length(expression)
-          if @recursion_pattern.match?(expression.syntax)
+          if eql?(expression)
+            syntax.length
+          elsif @recursion_pattern.match?(expression.syntax)
             scope_name.length
           else
             0
