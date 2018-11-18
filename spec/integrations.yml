@@ -41,6 +41,16 @@
   mutation_generation: true
   expected_errors: {}
   exclude: []
+- name: auom
+  namespace: AUOM
+  repo_uri: 'https://github.com/mbj/auom.git'
+  repo_ref: 'origin/add/minitest'
+  ruby_glob_pattern: '**/*.rb'
+  integration: minitest
+  mutation_coverage: true
+  mutation_generation: true
+  expected_errors: {}
+  exclude: []
 - name: axiom
   namespace: Axiom
   repo_uri: 'https://github.com/dkubb/axiom.git'

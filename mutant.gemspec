@@ -14,9 +14,9 @@ Gem::Specification.new do |gem|
 
   gem.require_paths = %w[lib]
 
-  mutant_integration_files = `git ls-files -- lib/mutant/integration/*.rb`.split("\n")
+  exclusion = `git ls-files -- lib/mutant/{minitest,integration}`.split("\n")
 
-  gem.files            = `git ls-files`.split("\n") - mutant_integration_files
+  gem.files            = `git ls-files`.split("\n") - exclusion
   gem.test_files       = `git ls-files -- spec/{unit,integration}`.split("\n")
   gem.extra_rdoc_files = %w[LICENSE]
   gem.executables      = %w[mutant]
