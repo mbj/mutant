@@ -8,7 +8,7 @@ RSpec.describe 'Mutant on ruby corpus', mutant: false do
   end
 
   MutantSpec::Corpus::Project::ALL.select(&:mutation_coverage).each do |project|
-    specify "#{project.name} does have expected mutation coverage" do
+    specify "#{project.name} (#{project.integration}) does have expected mutation coverage" do
       project.verify_mutation_coverage
     end
   end

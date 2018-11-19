@@ -37,6 +37,7 @@ module MutantSpec
         :expected_errors,
         :mutation_coverage,
         :mutation_generation,
+        :integration,
         :name,
         :namespace,
         :repo_uri,
@@ -59,7 +60,7 @@ module MutantSpec
             system(
               %W[
                 bundle exec mutant
-                --use rspec
+                --use #{integration}
                 --include lib
                 --require #{name}
                 #{namespace}*
@@ -315,6 +316,7 @@ module MutantSpec
                 s(:key_symbolize, :ruby_glob_pattern,   s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :name,                s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :namespace,           s(:guard, s(:primitive, String))),
+                s(:key_symbolize, :integration,         s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :mutation_coverage,
                   s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
                 s(:key_symbolize, :mutation_generation,

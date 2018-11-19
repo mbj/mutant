@@ -3,6 +3,7 @@
   namespace: Rubyspec
   repo_uri: 'https://github.com/ruby/rubyspec.git'
   repo_ref: 'origin/master'
+  integration: mspec
   ruby_glob_pattern: '**/*_spec.rb'
   mutation_coverage: false
   mutation_generation: true
@@ -24,6 +25,7 @@
   namespace: Regexp
   repo_uri: 'https://github.com/ammar/regexp_parser.git'
   repo_ref: 'v1.2.0'
+  integration: rspec
   ruby_glob_pattern: '**/*.rb'
   mutation_coverage: false
   mutation_generation: true
@@ -34,6 +36,7 @@
   repo_uri: 'https://github.com/mbj/auom.git'
   repo_ref: 'origin/master'
   ruby_glob_pattern: '**/*.rb'
+  integration: rspec
   mutation_coverage: true
   mutation_generation: true
   expected_errors: {}
@@ -43,6 +46,7 @@
   repo_uri: 'https://github.com/dkubb/axiom.git'
   repo_ref: 'origin/master'
   ruby_glob_pattern: '**/*.rb'
+  integration: rspec
   mutation_coverage: false
   mutation_generation: true
   expected_errors: {}
