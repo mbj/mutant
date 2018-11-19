@@ -44,7 +44,7 @@
 - name: auom
   namespace: AUOM
   repo_uri: 'https://github.com/mbj/auom.git'
-  repo_ref: 'origin/add/minitest'
+  repo_ref: 'origin/master'
   ruby_glob_pattern: '**/*.rb'
   integration: minitest
   mutation_coverage: true
