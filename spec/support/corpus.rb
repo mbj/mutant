@@ -54,16 +54,18 @@ module MutantSpec
       def verify_mutation_coverage
         checkout
         Dir.chdir(repo_path) do
-          install_mutant
-          system(
-            %W[
-              bundle exec mutant
-              --use rspec
-              --include lib
-              --require #{name}
-              #{namespace}*
-            ]
-          )
+          Bundler.with_clean_env do
+            install_mutant
+            system(
+              %W[
+                bundle exec mutant
+                --use rspec
+                --include lib
+                --require #{name}
+                #{namespace}*
+              ]
+            )
+          end
         end
       end
 
