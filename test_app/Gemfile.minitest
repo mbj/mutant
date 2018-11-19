@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'minitest',        '~> 5.11'
+gem 'mutant',          path: '../'
+gem 'mutant-minitest', path: '../'
+gem 'adamantium'

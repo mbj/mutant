@@ -10,6 +10,12 @@ jobs:
       - checkout
       - run: bundle install
       - run: bundle exec rspec spec/unit
+  integration_minitest:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: bundle install
+      - run: bundle exec rspec spec/integration -e minitest
   integration_rspec:
     <<: *defaults
     steps:
@@ -21,7 +27,7 @@ jobs:
     steps:
       - checkout
       - run: bundle install
-      - run: bundle exec rspec spec/integration -e 'generation'
+      - run: bundle exec rspec spec/integration -e generation
   metrics:
     <<: *defaults
     steps:
