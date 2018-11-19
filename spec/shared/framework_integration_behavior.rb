@@ -6,22 +6,25 @@ RSpec.shared_examples_for 'framework integration' do
   end
 
   around do |example|
-    Dir.chdir(TestApp.root) do
-      Kernel.system('bundle', 'install', '--gemfile', gemfile) || fail('Bundle install failed!')
-      example.run
+    Bundler.with_clean_env do
+      Dir.chdir(TestApp.root) do
+        Kernel.system('bundle', 'install', '--gemfile', gemfile) || fail('Bundle install failed!')
+        example.run
+      end
     end
   end
 
   specify 'it allows to kill mutations' do
-    expect(Kernel.system("#{base_cmd} TestApp::Literal#string")).to be(true)
+    expect(system_with_gemfile("#{base_cmd} TestApp::Literal#string")).to be(true)
   end
 
   specify 'it allows to exclude mutations' do
     cli = <<-CMD.split("\n").join(' ')
       #{base_cmd}
+      --ignore-subject TestApp::Literal#uncovered_string
+      --
       TestApp::Literal#string
       TestApp::Literal#uncovered_string
-        --ignore-subject TestApp::Literal#uncovered_string
     CMD
     expect(system_with_gemfile(cli)).to be(true)
   end

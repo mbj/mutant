@@ -37,6 +37,7 @@ module MutantSpec
         :expected_errors,
         :mutation_coverage,
         :mutation_generation,
+        :integration,
         :name,
         :namespace,
         :repo_uri,
@@ -54,16 +55,18 @@ module MutantSpec
       def verify_mutation_coverage
         checkout
         Dir.chdir(repo_path) do
-          install_mutant
-          system(
-            %W[
-              bundle exec mutant
-              --use rspec
-              --include lib
-              --require #{name}
-              #{namespace}*
-            ]
-          )
+          Bundler.with_clean_env do
+            install_mutant
+            system(
+              %W[
+                bundle exec mutant
+                --use #{integration}
+                --include lib
+                --require #{name}
+                #{namespace}*
+              ]
+            )
+          end
         end
       end
 
@@ -313,6 +316,7 @@ module MutantSpec
                 s(:key_symbolize, :ruby_glob_pattern,   s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :name,                s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :namespace,           s(:guard, s(:primitive, String))),
+                s(:key_symbolize, :integration,         s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :mutation_coverage,
                   s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
                 s(:key_symbolize, :mutation_generation,
