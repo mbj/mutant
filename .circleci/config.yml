@@ -49,6 +49,7 @@ workflows:
     jobs:
       - unit_specs
       - integration_rspec
+      - integration_minitest
       - integration_mutation_generation
       - metrics
       - mutant
