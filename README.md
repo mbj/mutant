@@ -12,13 +12,10 @@ Mutant is a mutation testing tool for Ruby.
 The idea is that if code can be changed and your tests do not notice, then either that code isn't being covered
 or it does not have a speced side effect.
 
-Mutant supports ruby >= 2.1, while support for JRuby is planned.
-It should also work under any Ruby engine that supports POSIX-fork(2) semantics.
+Mutant supports ruby >= 2.5, MRI only.
 
 Mutant uses a pure Ruby [parser](https://github.com/whitequark/parser) and an [unparser](https://github.com/mbj/unparser)
 to do its magic.
-
-Mutant does not have really good "getting started" documentation currently so please refer to presentations and blog posts below.
 
 Installation
 ------------
@@ -29,8 +26,6 @@ It'll pull the `mutant` gem (in the correct version), that contains the main eng
 ```ruby
 gem install mutant-rspec
 ```
-
-The minitest integration is still in the [works](https://github.com/mbj/mutant/pull/445).
 
 Examples
 --------
@@ -254,6 +249,7 @@ Only Mutating Changed Code
 --------------------------
 
 Running mutant for the first time on an existing codebase can be a rather disheartening experience due to the large number of alive mutations found! Mutant has a setting that can help. Using the `--since` argument, mutant will only mutate code that has been modified. This allows you to introduce mutant into an existing code base without drowning in errors. Example usage that will mutate all code changed between master and the current branch:
+
 ```
 bundle exec mutant --include lib --require virtus --since master --use rspec Virtus::Attribute#type
 ```
