@@ -27,8 +27,6 @@ It'll pull the `mutant` gem (in the correct version), that contains the main eng
 gem install mutant-rspec
 ```
 
-The minitest integration is still in the [works](https://github.com/mbj/mutant/pull/445).
-
 Examples
 --------
 
