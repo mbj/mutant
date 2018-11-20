@@ -12,8 +12,7 @@ Mutant is a mutation testing tool for Ruby.
 The idea is that if code can be changed and your tests do not notice, then either that code isn't being covered
 or it does not have a speced side effect.
 
-Mutant supports ruby >= 2.1, while support for JRuby is planned.
-It should also work under any Ruby engine that supports POSIX-fork(2) semantics.
+Mutant supports ruby >= 2.5, MRI only.
 
 Mutant uses a pure Ruby [parser](https://github.com/whitequark/parser) and an [unparser](https://github.com/mbj/unparser)
 to do its magic.
