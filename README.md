@@ -17,8 +17,6 @@ Mutant supports ruby >= 2.5, MRI only.
 Mutant uses a pure Ruby [parser](https://github.com/whitequark/parser) and an [unparser](https://github.com/mbj/unparser)
 to do its magic.
 
-Mutant does not have really good "getting started" documentation currently so please refer to presentations and blog posts below.
-
 Installation
 ------------
 
