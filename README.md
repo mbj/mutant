@@ -17,6 +17,22 @@ Mutant supports ruby >= 2.5, MRI only.
 Mutant uses a pure Ruby [parser](https://github.com/whitequark/parser) and an [unparser](https://github.com/mbj/unparser)
 to do its magic.
 
+Sponsoring
+----------
+
+Mutant, as published in the opensource version, would not exist without the help
+of [contributors](https://github.com/mbj/mutant/graphs/contributors) spending lots
+of their private time.
+
+Additionally, the following features where sponsored by organizations:
+
+* The `mutant-minitest` integration was sponsored by [Arkency](https://arkency.com/)
+* Mutant's initial concurrency support was sponsored by an undisclosed company that does
+  currently not wish to be listed here.
+
+If your organization is interested in sponsoring a feature, general maintainership or bugfixes, contact
+[Markus Schirp](mailto:mbj@schirp-dso.com).
+
 Nomenclature
 ------------
 
