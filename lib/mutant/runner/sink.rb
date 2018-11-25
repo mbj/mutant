@@ -10,7 +10,7 @@ module Mutant
       # @return [undefined]
       def initialize(*)
         super
-        @start           = Time.now
+        @start           = Timer.now
         @subject_results = {}
       end
 
@@ -20,7 +20,7 @@ module Mutant
       def status
         Result::Env.new(
           env:             env,
-          runtime:         Time.now - @start,
+          runtime:         Timer.now - @start,
           subject_results: @subject_results.values
         )
       end

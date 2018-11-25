@@ -82,7 +82,7 @@ module Mutant
       def call(tests)
         test_cases = tests.map(&all_tests_index.method(:fetch))
         output     = StringIO.new
-        start      = Time.now
+        start      = Timer.now
 
         reporter = ::Minitest::SummaryReporter.new(output)
 
@@ -98,7 +98,7 @@ module Mutant
           passed:  reporter.passed?,
           tests:   tests,
           output:  output.read,
-          runtime: Time.now - start
+          runtime: Timer.now - start
         )
       end
 

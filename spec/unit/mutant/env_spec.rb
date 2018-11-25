@@ -57,7 +57,7 @@ RSpec.describe Mutant::Env do
         .with(mutation_subject)
         .and_return(tests)
 
-      allow(Time).to receive_messages(now: Time.at(0))
+      allow(Mutant::Timer).to receive(:now).and_return(2.0, 3.0)
     end
 
     context 'when isolation does not raise error' do
@@ -91,7 +91,7 @@ RSpec.describe Mutant::Env do
         Mutant::Result::Test.new(
           output:  'test-error',
           passed:  false,
-          runtime: 0.0,
+          runtime: 1.0,
           tests:   tests
         )
       end

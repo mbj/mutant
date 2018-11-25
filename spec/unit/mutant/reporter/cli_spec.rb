@@ -41,7 +41,7 @@ RSpec.describe Mutant::Reporter::CLI do
   end
 
   before do
-    allow(Time).to receive(:now).and_return(Time.now)
+    allow(Mutant::Timer).to receive_messages(now: Mutant::Timer.now)
   end
 
   describe '.build' do

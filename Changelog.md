@@ -1,3 +1,7 @@
+# v0.8.20 2018-11-25
+
+* Replace internal timers with monotonic ones.
+
 # v0.8.19 2018-11-06
 
 * Drop support for Ruby < 2.5
