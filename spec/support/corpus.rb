@@ -79,7 +79,7 @@ module MutantSpec
       #   otherwise
       def verify_mutation_generation
         checkout
-        start = Time.now
+        start = Mutant::Timer.now
 
         options = {
           finish:       method(:finish),
@@ -90,7 +90,7 @@ module MutantSpec
         total = Parallel.map(effective_ruby_paths, options, &method(:count_mutations_and_check_errors))
           .inject(DEFAULT_MUTATION_COUNT, :+)
 
-        took = Time.now - start
+        took = Mutant::Timer.now - start
         puts MUTATION_GENERATION_MESSAGE % [total, took, total / took]
         self
       end

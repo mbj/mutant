@@ -42,7 +42,7 @@ module Mutant
     #
     # rubocop:disable MethodLength
     def run_mutation_tests(mutation)
-      start = Time.now
+      start = Timer.now
       tests = selector.call(mutation.subject)
 
       config.isolation.call do
@@ -53,7 +53,7 @@ module Mutant
       Result::Test.new(
         output:  error.message,
         passed:  false,
-        runtime: Time.now - start,
+        runtime: Timer.now - start,
         tests:   tests
       )
     end

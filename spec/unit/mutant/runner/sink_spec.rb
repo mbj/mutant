@@ -19,7 +19,7 @@ describe Mutant::Runner::Sink do
   let(:object) { described_class.new(env) }
 
   before do
-    allow(Time).to receive(:now).and_return(Time.now)
+    allow(Mutant::Timer).to receive_messages(now: Mutant::Timer.now)
   end
 
   describe '#result' do
