@@ -5,7 +5,7 @@ module XSpec
     include Concord.new(:event_list)
 
     TERMINATE_EVENTS = IceNine.deep_freeze(%i[return exception].to_set)
-    VALID_EVENTS     = IceNine.deep_freeze(%i[return exception yields].to_set)
+    VALID_EVENTS     = IceNine.deep_freeze(%i[return execute exception yields].to_set)
 
     private_constant(*constants(false))
 
@@ -30,6 +30,10 @@ module XSpec
 
     def return(_event, value)
       value
+    end
+
+    def execute(_event, block)
+      block.call
     end
 
     def exception(_event, exception)
@@ -140,7 +144,7 @@ module XSpec
     include Concord.new(:expectations)
 
     def call(observation)
-      expectation = expectations.shift or fail "No expected message but observed #{observation}"
+      expectation = expectations.shift or fail "No expected message but observed #{observation.inspect}"
       expectation.call(observation)
     end
 

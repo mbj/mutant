@@ -208,22 +208,24 @@ require 'mutant/reporter/cli/printer/test_result'
 require 'mutant/reporter/cli/tput'
 require 'mutant/reporter/cli/format'
 require 'mutant/repository'
+require 'mutant/variable'
 require 'mutant/zombifier'
 
 module Mutant
   # Reopen class to initialize constant to avoid dep circle
   class Config
     DEFAULT = new(
-      expression_parser: Expression::Parser.new([
+      condition_variable: ConditionVariable,
+      expression_parser:  Expression::Parser.new([
         Expression::Method,
         Expression::Methods,
         Expression::Namespace::Exact,
         Expression::Namespace::Recursive
       ]),
-      fail_fast:         false,
-      includes:          EMPTY_ARRAY,
-      integration:       Integration::Null,
-      isolation:         Mutant::Isolation::Fork.new(
+      fail_fast:          false,
+      includes:           EMPTY_ARRAY,
+      integration:        Integration::Null,
+      isolation:          Mutant::Isolation::Fork.new(
         devnull: ->(&block) { File.open(File::NULL, File::WRONLY, &block) },
         stdout:  $stdout,
         stderr:  $stderr,
@@ -231,15 +233,16 @@ module Mutant
         marshal: Marshal,
         process: Process
       ),
-      jobs:              Etc.nprocessors,
-      kernel:            Kernel,
-      load_path:         $LOAD_PATH,
-      matcher:           Matcher::Config::DEFAULT,
-      open3:             Open3,
-      pathname:          Pathname,
-      requires:          EMPTY_ARRAY,
-      reporter:          Reporter::CLI.build($stdout),
-      zombie:            false
+      jobs:               Etc.nprocessors,
+      kernel:             Kernel,
+      load_path:          $LOAD_PATH,
+      matcher:            Matcher::Config::DEFAULT,
+      mutex:              Mutex,
+      open3:              Open3,
+      pathname:           Pathname,
+      requires:           EMPTY_ARRAY,
+      reporter:           Reporter::CLI.build($stdout),
+      zombie:             false
     )
   end # Config
 end # Mutant

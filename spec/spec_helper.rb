@@ -58,11 +58,23 @@ module MessageHelper
   end
 end # MessageHelper
 
+module XSpecHelper
+  def verify_events
+    expectations = raw_expectations
+      .map(&XSpec::MessageExpectation.method(:parse))
+
+    XSpec::ExpectationVerifier.verify(self, expectations) do
+      yield
+    end
+  end
+end # XSpecHelper
+
 RSpec.configure do |config|
   config.extend(SharedContext)
-  config.include(MessageHelper)
   config.include(ParserHelper)
+  config.include(MessageHelper)
   config.include(Mutant::AST::Sexp)
+  config.include(XSpecHelper)
 
   config.after(:suite) do
     $stderr = STDERR
