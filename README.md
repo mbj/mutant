@@ -24,6 +24,7 @@ Topics
 * [Reading Reports](/docs/reading-reports.md)
 * [Known Problems](/docs/known-problems.md)
 * [Limitations](/docs/limitations.md)
+* [Concurrency](/docs/concurrency.md)
 
 Sponsoring
 ----------
@@ -96,27 +97,6 @@ Example for a subject like `Foo::Bar#baz` it will run all example groups with de
 `Foo::Bar#baz`, `Foo::Bar` and `Foo`. The order is important, so if mutant finds example groups in the
 current prefix level, these example groups *must* kill the mutation.
 
-
-Concurrency
------------
-
-By default, mutant will test mutations in parallel by running up to one process for each core on your system. You can control the number of processes created using the `--jobs` argument.
-
-Mutant forks a new process for each mutation to be tested to prevent side affects in your specs and the lack of thread safety in rspec from impacting the results.
-
-If the code under test relies on a database, you may experience problems when running mutant because of conflicting data in the database. For example, if you have a test like this:
-```
-m = MyModel.create!(...)
-expect(MyModel.first.name).to eql(m.name)
-```
-It might fail if some other test wrote a record to the MyModel table at the same time as this test was executed. (It would find the MyModel record created by the other test.) Most of these issues can be fixed by writing more specific tests. Here is a concurrent safe version of the same test:
-```
-m = MyModel.create!(...)
-expect(MyModel.find_by_id(m.id).name).to eql(m.name)
-```
-You may also try wrapping your test runs in transactions.
-
-Note that some databases, SQLite in particular, are not designed for concurrent access and will fail if used in this manner. If you are using SQLite, you should set the `--jobs` to 1.
 
 Neutral (noop) Tests
 --------------------
