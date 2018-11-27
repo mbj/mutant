@@ -1,4 +1,4 @@
-# v0.8.20 2018-11-25
+# v0.8.20 2018-11-27
 
 * Replace internal timers with monotonic ones.
 
