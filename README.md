@@ -26,6 +26,7 @@ Topics
 * [Limitations](/docs/limitations.md)
 * [Concurrency](/docs/concurrency.md)
 * [Rspec Integration](/docs/mutant-rspec.md)
+* [Minitest Integration](/docs/mutant-minitest.md)
 
 Sponsoring
 ----------
