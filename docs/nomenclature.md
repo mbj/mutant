@@ -68,8 +68,8 @@ The method used to determine if a specific inserted mutation is covered by tests
 
 Currently mutant supports integrations for:
 
-* rspec (https://rubygems.org/gems/mutant-rspec)
-* minitest (https://rubygems.org/gems/mutant-minitest)
+* [mutant-rspec](/docs/mutant-rspec.md) for [rspec](https://rspec.info)
+* `mutant-minitest` for [minitest](https://github.com/seattlerb/minitest)
 
 ## Report
 
