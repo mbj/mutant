@@ -23,6 +23,7 @@ Topics
 * [Nomenclature](/docs/nomenclature.md)
 * [Reading Reports](/docs/reading-reports.md)
 * [Known Problems](/docs/known-problems.md)
+* [Limitations](/docs/limitations.md)
 
 Sponsoring
 ----------
@@ -75,54 +76,6 @@ You can control some aspects of RSpec using the `SPEC_OPTS` environment variable
 SPEC_OPTS="--pattern spec/subdir_only/**/*_spec.rb" bundle exec mutant --use rspec SomeClass
 ```
 
-Limitations
------------
-
-Mutant cannot emit mutations for...
-
-* methods defined within a closure.  For example, methods defined using `module_eval`, `class_eval`,
-  `define_method`, or `define_singleton_method`:
-
-    ```ruby
-    class Example
-      class_eval do
-        def example1
-        end
-      end
-
-      module_eval do
-        def example2
-        end
-      end
-
-      define_method(:example3) do
-      end
-
-      define_singleton_method(:example4) do
-      end
-    end
-    ```
-
-* singleton methods not defined on a constant or `self`
-
-    ```ruby
-    class Foo
-      def self.bar; end   # ok
-      def Foo.baz; end    # ok
-
-      myself = self
-      def myself.qux; end # cannot mutate
-    end
-    ```
-
-* methods defined with eval:
-
-    ```ruby
-    class Foo
-      class_eval('def bar; end') # cannot mutate
-    end
-    ```
-
 Mutation-Operators
 ------------------
 
@@ -130,12 +83,6 @@ Mutant supports a wide range of mutation operators. An exhaustive list can be fo
 The `mutant-meta` is arranged to the AST-Node-Types of parser. Refer to parsers [AST documentation](https://github.com/whitequark/parser/blob/master/doc/AST_FORMAT.md) in doubt.
 
 There is no easy and universal way to count the number of mutation operators a tool supports.
-
-Subjects
---------
-
-Mutant currently mutates code in instance and singleton methods. It is planned to support mutation
-of constant definitions and domain specific languages, DSL probably as plugins.
 
 Test-Selection
 --------------
