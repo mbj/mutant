@@ -17,6 +17,16 @@ Mutant supports ruby >= 2.5, MRI only.
 Mutant uses a pure Ruby [parser](https://github.com/whitequark/parser) and an [unparser](https://github.com/mbj/unparser)
 to do its magic.
 
+Topics
+------
+
+* [Nomenclature](/docs/nomenclature.md)
+* [Reading Reports](/docs/reading-reports.md)
+* [Known Problems](/docs/known-problems.md)
+* [Limitations](/docs/limitations.md)
+* [Concurrency](/docs/concurrency.md)
+* [Rspec Integration](/docs/mutant-rspec.md)
+
 Sponsoring
 ----------
 
@@ -33,172 +43,6 @@ Additionally, the following features where sponsored by organizations:
 If your organization is interested in sponsoring a feature, general maintainership or bugfixes, contact
 [Markus Schirp](mailto:mbj@schirp-dso.com).
 
-Nomenclature
-------------
-
-The following explains several nouns you may experience in mutant's documentation.
-It's a good idea to familiarize yourself before moving on.
-
-### AST
-
-Acronym for [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
-and the level of abstraction mutant operates on.
-
-### Subject
-
-An addressable piece of code to be targeted for mutation testing.
-
-Mutant currently supports the following subjects:
-
-* Instance methods
-* Singleton (class) methods
-
-Other subjects (constants, class bodies for DSLs, ...) are possible but aren't
-implemented in the OSS version.
-
-### Mutation operator
-
-A transformation applied to the AST of a subject. Mutant knows the following high level operator
-classes:
-
-* Semantic Reduction
-* Orthogonal Replacement
-* [Noop](#neutral-noop-tests)
-
-An exhaustive list can be found in the [mutant-meta](https://github.com/mbj/mutant/tree/master/meta)
-subdirectory of the source.
-
-### Mutation
-
-The result of applying a mutation operator to the AST of a subject. A mutation represents a
-hypothesis that ideally gets falsified by the tests.
-
-### Insertion
-
-The process of inserting a mutation into the runtime environment.
-Mutant currently supports insertion via dynamically created monkeypatches.
-
-Other insertion strategies (such as "boot time") are possible but aren't implemented
-in the OSS version.
-
-### Isolation
-
-The attempt to isolate the (side) effects of killing a mutation via an integration
-to prevent a mutation leaking into adjacent concurrent, or future mutations.
-
-Examples of sources for leaks are
-
-* Global variable writes
-* Thread local writes
-* DB State
-* File system
-
-Natively, mutant offers fork isolation. This works for any state within the executing
-Ruby process. For all state reachable via IO, it's the test author's responsibility to
-provide proper isolation.
-
-### Integration
-
-The method used to determine if a specific inserted mutation is covered by tests.
-
-Currently mutant supports integrations for:
-
-* rspec (https://rubygems.org/gems/mutant-rspec)
-* minitest (https://rubygems.org/gems/mutant-minitest)
-
-### Report
-
-Mutant currently provides two different reporters:
-
-* Progress (printed during mutation testing).
-* Summary (printed at the end of a finished analysis run)
-
-A reporter producing a machine readable report does not exist in the OSS version
-at the time of writing this documentation.
-
-Examples
---------
-
-```
-cd virtus
-# Run mutant on virtus namespace
-bundle exec mutant --include lib --require virtus --use rspec Virtus*
-# Run mutant on specific virtus class
-bundle exec mutant --include lib --require virtus --use rspec Virtus::Attribute
-# Run mutant on specific virtus class method
-bundle exec mutant --include lib --require virtus --use rspec Virtus::Attribute.build
-# Run mutant on specific virtus instance method
-bundle exec mutant --include lib --require virtus --use rspec Virtus::Attribute#type
-```
-
-Rails
--------
-
-To mutation test Rails models with rspec, comment out ```require 'rspec/autorun'``` from your spec_helper.rb file.  Having done so you should be able to use commands like the following:
-
-```sh
-RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec User
-```
-
-Passing in RSpec Options
-------------------------
-
-**NOTE: Experimental**
-
-You can control some aspects of RSpec using the `SPEC_OPTS` environment variable as usual. If you want mutant to only pay attention to specs in a certain directory, you can run
-
-```sh
-SPEC_OPTS="--pattern spec/subdir_only/**/*_spec.rb" bundle exec mutant --use rspec SomeClass
-```
-
-Limitations
------------
-
-Mutant cannot emit mutations for...
-
-* methods defined within a closure.  For example, methods defined using `module_eval`, `class_eval`,
-  `define_method`, or `define_singleton_method`:
-
-    ```ruby
-    class Example
-      class_eval do
-        def example1
-        end
-      end
-
-      module_eval do
-        def example2
-        end
-      end
-
-      define_method(:example3) do
-      end
-
-      define_singleton_method(:example4) do
-      end
-    end
-    ```
-
-* singleton methods not defined on a constant or `self`
-
-    ```ruby
-    class Foo
-      def self.bar; end   # ok
-      def Foo.baz; end    # ok
-
-      myself = self
-      def myself.qux; end # cannot mutate
-    end
-    ```
-
-* methods defined with eval:
-
-    ```ruby
-    class Foo
-      class_eval('def bar; end') # cannot mutate
-    end
-    ```
-
 Mutation-Operators
 ------------------
 
@@ -206,118 +50,6 @@ Mutant supports a wide range of mutation operators. An exhaustive list can be fo
 The `mutant-meta` is arranged to the AST-Node-Types of parser. Refer to parsers [AST documentation](https://github.com/whitequark/parser/blob/master/doc/AST_FORMAT.md) in doubt.
 
 There is no easy and universal way to count the number of mutation operators a tool supports.
-
-Subjects
---------
-
-Mutant currently mutates code in instance and singleton methods. It is planned to support mutation
-of constant definitions and domain specific languages, DSL probably as plugins.
-
-Test-Selection
---------------
-
-Mutation testing is slow. The key to making it fast is selecting the correct set of tests to run.
-Mutant currently supports the following built-in strategy for selecting tests/specs:
-
-Mutant uses the "longest rspec example group descriptions prefix match" to select the tests to run.
-
-Example for a subject like `Foo::Bar#baz` it will run all example groups with description prefixes in
-`Foo::Bar#baz`, `Foo::Bar` and `Foo`. The order is important, so if mutant finds example groups in the
-current prefix level, these example groups *must* kill the mutation.
-
-Reading Reports
----------------
-
-Mutation output is grouped by selection groups. Each group contains three sections:
-
-1. An identifier for the current group.
-
-   **Format**:
-
-   ```text
-   [SUBJECT EXPRESSION]:[SOURCE LOCATION]:[LINENO]
-   ```
-
-   **Example**:
-
-   ```text
-   Book#add_page:Book#add_page:/home/dev/mutant-examples/lib/book.rb:18
-   ```
-
-2. A list of specs that mutant ran to try to kill mutations for the current group.
-
-   **Format**:
-
-   ```text
-   - [INTEGRATION]:0:[SPEC LOCATION]:[SPEC DESCRIPTION]
-   - [INTEGRATION]:1:[SPEC LOCATION]:[SPEC DESCRIPTION]
-   ```
-
-   **Example**:
-
-   ```text
-   - rspec:0:./spec/unit/book_spec.rb:9/Book#add_page should return self
-   - rspec:1:./spec/unit/book_spec.rb:13/Book#add_page should add page to book
-   ```
-
-3. A list of unkilled mutations diffed against the original unparsed source
-
-   **Format**:
-
-   ```text
-   [MUTATION TYPE]:[SUBJECT EXPRESSION]:[SOURCE LOCATION]:[SOURCE LINENO]:[IDENTIFIER]
-   [DIFF]
-   -----------------------
-   ```
-
-   - `[MUTATION TYPE]` will be one of the following:
-      - `evil` - a mutation of your source was not killed by your tests
-      - `neutral` your original source was injected and one or more tests failed
-   - `[IDENTIFIER]` - Unique identifier for this mutation
-
-   **Example**:
-
-   ```diff
-   evil:Book#add_page:Book#add_page:/home/dev/mutant-examples/lib/book.rb:18:01f69
-   @@ -1,6 +1,6 @@
-    def add_page(page)
-   -  @pages << page
-   +  @pages
-      @index[page.number] = page
-      self
-    end
-   -----------------------
-   evil:Book#add_page:Book#add_page:/home/dev/mutant-examples/lib/book.rb:18:b1ff2
-   @@ -1,6 +1,6 @@
-    def add_page(page)
-   -  @pages << page
-   +  self
-      @index[page.number] = page
-      self
-    end
-   -----------------------
-   ```
-
-Concurrency
------------
-
-By default, mutant will test mutations in parallel by running up to one process for each core on your system. You can control the number of processes created using the `--jobs` argument.
-
-Mutant forks a new process for each mutation to be tested to prevent side affects in your specs and the lack of thread safety in rspec from impacting the results.
-
-If the code under test relies on a database, you may experience problems when running mutant because of conflicting data in the database. For example, if you have a test like this:
-```
-m = MyModel.create!(...)
-expect(MyModel.first.name).to eql(m.name)
-```
-It might fail if some other test wrote a record to the MyModel table at the same time as this test was executed. (It would find the MyModel record created by the other test.) Most of these issues can be fixed by writing more specific tests. Here is a concurrent safe version of the same test:
-```
-m = MyModel.create!(...)
-expect(MyModel.find_by_id(m.id).name).to eql(m.name)
-```
-You may also try wrapping your test runs in transactions.
-
-Note that some databases, SQLite in particular, are not designed for concurrent access and will fail if used in this manner. If you are using SQLite, you should set the `--jobs` to 1.
 
 Neutral (noop) Tests
 --------------------
@@ -343,51 +75,6 @@ Running mutant for the first time on an existing codebase can be a rather dishea
 bundle exec mutant --include lib --require virtus --since master --use rspec Virtus::Attribute#type
 ```
 
-Known Problems
-==============
-
-Mutations with Infinite Runtimes
----------------------------------
-
-Occasionally mutant will produce a mutation with an infinite runtime. When this happens
-mutant will look like it is running indefinitely without killing a remaining mutation. To
-avoid mutations like this, consider adding a timeout around your tests. For example, in
-RSpec you can add the following to your `spec_helper`:
-```ruby
-config.around(:each) do |example|
-  Timeout.timeout(5, &example)
-end
-```
-which will fail specs which run for longer than 5 seconds.
-
-The Crash / Stuck Problem (MRI)
--------------------------------
-
-Mutations generated by mutant can cause MRI to enter VM states its not prepared for.
-All MRI versions > 1.9 and < 2.2.1 are affected by this depending on your compiler flags,
-compiler version, and OS scheduling behavior.
-
-This can have the following unintended effects:
-
-* MRI crashes with a segfault. Mutant kills each mutation in a dedicated fork to isolate
-  the mutations side effects when this fork terminates abnormally (segfault) mutant
-  counts the mutation as killed.
-
-* MRI crashes with a segfault and gets stuck when handling the segfault.
-  Depending on the number of active kill jobs mutant might appear to continue normally until
-  all workers are stuck into this state when it begins to hang.
-  Currently mutant must assume that your test suite simply not terminated yet as from the outside
-  (parent process) the difference between a long running test and a stuck MRI is not observable.
-  Its planned to implement a timeout enforced from the parent process, but ideally MRI simply gets fixed.
-
-References:
-
-* [MRI fix](https://github.com/ruby/ruby/commit/8fe95fea9d238a6deb70c8953ceb3a28a67f4636)
-* [MRI backport to 2.2.1](https://github.com/ruby/ruby/commit/8fe95fea9d238a6deb70c8953ceb3a28a67f4636)
-* [Mutant issue](https://github.com/mbj/mutant/issues/265)
-* [Upstream bug redmine](https://bugs.ruby-lang.org/issues/10460)
-* [Upstream bug github](https://github.com/ruby/ruby/pull/822)
-
 Presentations
 -------------
 
@@ -397,7 +84,6 @@ There are some presentations about mutant in the wild:
 * [Wrocloverb 2014](http://wrocloverb.com/) / https://www.youtube.com/watch?v=rz-lFKEioLk
 * [eurucamp 2013](http://2013.eurucamp.org/) / FrOSCon-2013 http://slid.es/markusschirp/mutation-testing
 * [Cologne.rb](http://www.colognerb.de/topics/mutation-testing-mit-mutant) / https://github.com/DonSchado/colognerb-on-mutant/blob/master/mutation_testing_slides.pdf
-
 
 Planning a presentation?
 ------------------------
