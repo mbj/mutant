@@ -69,7 +69,7 @@ The method used to determine if a specific inserted mutation is covered by tests
 Currently mutant supports integrations for:
 
 * [mutant-rspec](/docs/mutant-rspec.md) for [rspec](https://rspec.info)
-* `mutant-minitest` for [minitest](https://github.com/seattlerb/minitest)
+* [mutant-minitest](/docs/mutant-minitest.md) for [minitest](https://github.com/seattlerb/minitest)
 
 ## Report
 
