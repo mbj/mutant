@@ -1,28 +1,118 @@
 mutant-rspec
 ============
 
-The integration into rspec.
+Before starting with mutant its recommended to understand the
+[nomenclature](/docs/nomenclature.md).
 
-Install `mutant-rspec` and use the `--use rspec` switch in your mutant command line.
+## Setup
+
+To add mutant to your rspec code base you need to:
+
+1. Add `mutant-rspec` as development dependency to your `Gemfile` or `.gemspec`
+
+   This may look like:
+
+   ```ruby
+   # A gemfile
+   gem 'mutant-rspec'
+   ```
+
+2. Run mutant against the rspec integration
+
+   ```sh
+   bundle exec mutant --include lib --require 'your_library.rb' --use minitest -- 'YourLibrary*'
+   ```
+
+## Run through example
+
+This uses [mbj/auom](https://github.com/mbj/auom) a small library that
+has 100% mutation coverage. Its tests execute very fast and do not have any IO
+so its a good playground example to interact with.
+
+All the setup described above is already done.
 
 ```sh
-bundle exec mutant --include lib --require 'your_code' --use rspec -- 'YourCode*'
+git clone https://github.com/mbj/auom
+cd auom
+bundle install # gemfile references mutant-rspec already
+bundle exec mutant --include lib --require auom --use rspec -- 'AUOM*'
 ```
 
-Examples
---------
+This prints a report like:
 
+```sh
+Mutant configuration:
+Matcher:         #<Mutant::Matcher::Config match_expressions: [AUOM*]>
+Integration:     Mutant::Integration::Rspec
+Jobs:            8
+Includes:        ["lib"]
+Requires:        ["auom"]
+Subjects:        23
+Mutations:       1003
+Results:         1003
+Kills:           1003
+Alive:           0
+Runtime:         51.52s
+Killtime:        200.13s
+Overhead:        -74.26%
+Mutations/s:     19.47
+Coverage:        100.00%
 ```
-cd virtus
-# Run mutant on virtus namespace
-bundle exec mutant --include lib --require virtus --use rspec Virtus*
-# Run mutant on specific virtus class
-bundle exec mutant --include lib --require virtus --use rspec Virtus::Attribute
-# Run mutant on specific virtus class method
-bundle exec mutant --include lib --require virtus --use rspec Virtus::Attribute.build
-# Run mutant on specific virtus instance method
-bundle exec mutant --include lib --require virtus --use rspec Virtus::Attribute#type
+
+Now lets try adding some redundant (or unspecified) code:
+
+```sh
+patch -p1 <<'PATCH'
+--- a/lib/auom/unit.rb
++++ b/lib/auom/unit.rb
+@@ -170,7 +170,7 @@ module AUOM
+     # TODO: Move defaults coercions etc to .build method
+     #
+     def self.new(scalar, numerators = nil, denominators = nil)
+-      scalar = rational(scalar)
++      scalar = rational(scalar) if true
+
+       scalar, numerators   = resolve([*numerators], scalar, :*)
+       scalar, denominators = resolve([*denominators], scalar, :/)
+PATCH
 ```
+
+Running mutant again prints the following:
+
+```sh
+evil:AUOM::Unit.new:/home/mrh-dev/example/auom/lib/auom/unit.rb:172:45e17
+@@ -1,9 +1,7 @@
+ def self.new(scalar, numerators = nil, denominators = nil)
+-  if true
+-    scalar = rational(scalar)
+-  end
++  scalar = rational(scalar)
+   scalar, numerators = resolve([*numerators], scalar, :*)
+   scalar, denominators = resolve([*denominators], scalar, :/)
+   super(scalar, *[numerators, denominators].map(&:sort)).freeze
+ end
+-----------------------
+Mutant configuration:
+Matcher:         #<Mutant::Matcher::Config match_expressions: [AUOM*]>
+Integration:     Mutant::Integration::Rspec
+Jobs:            8
+Includes:        ["lib"]
+Requires:        ["auom"]
+Subjects:        23
+Mutations:       1009
+Results:         1009
+Kills:           1008
+Alive:           1
+Runtime:         50.93s
+Killtime:        190.09s
+Overhead:        -73.21%
+Mutations/s:     19.81
+Coverage:        99.90%
+```
+
+This shows mutant detected the redundant alive conditional.
+Feel free to also remove some tests. Or do other modifications to either tests or code.
+The integration into rspec.
 
 Test-Selection
 --------------
