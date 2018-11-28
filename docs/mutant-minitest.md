@@ -55,6 +55,7 @@ All the setup described above is already done.
 
 ```sh
 git clone https://github.com/mbj/auom
+cd auom
 bundle install # gemfile references mutant-minitest already
 bundle exec mutant --include lib --require auom --use minitest -- 'AUOM*'
 ```
