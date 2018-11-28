@@ -144,5 +144,6 @@ Mutations/s:     107.60
 Coverage:        99.90%
 ```
 
-This shows mutant detected the redundant alive conditional.
-Feel free to also remove some tests. Or do other modifications to either tests or code.
+This shows mutant detected the alive mutation. Which shows the conditional we deliberately added above is redundant.
+
+Feel free to also remove some tests. Or do other modifications to either test or code.
