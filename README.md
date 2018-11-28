@@ -7,12 +7,29 @@ mutant
 [![Gem Version](https://img.shields.io/gem/v/mutant.svg)](https://rubygems.org/gems/mutant)
 [![Slack Status](https://mutation-testing-slack.herokuapp.com/badge.svg)](https://mutation-testing.slack.com/messages/mutant)
 
-Mutant is a mutation testing tool for Ruby.
+## What is Mutant?
 
-The idea is that if code can be changed and your tests do not notice, then either that code isn't being covered
-or it does not have a speced side effect.
+Mutant is a mutation testing tool for Ruby. Mutation testing is a technique to verify semantic coverage of your code.
 
-Mutant supports ruby >= 2.5, MRI only.
+## Why do I want it?
+
+Mutant adds to your toolbox: Detection of uncovered semantics in your code.
+Coverage becomes a meaninful metric!
+
+On each detection of uncovered semantics you have the opportunity to:
+
+* Delete dead code, as you do not want the extra semantics not specified by the tests
+* Add (or improve a test) to cover the unwanted semantics.
+* Learn something new about the semantics of Ruby and your direct and indirect dependencies.
+
+## How Do I use it?
+
+* Start with reading the [nomenclature](/docs/nomenclature.md) documentation.
+* Than select and setup your [integration](/docs/nomenclature.md#interation), also make sure
+  you can reproduce the examples in the integration specific documentation.
+* Identify your preferred mutation testing strategy. Its recommended to start at the commit level,
+  to test only the code you had been touching. See the [incremental](#only-mutating-changed-code)
+  mutation testing documentation.
 
 Mutant uses a pure Ruby [parser](https://github.com/whitequark/parser) and an [unparser](https://github.com/mbj/unparser)
 to do its magic.
