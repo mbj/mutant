@@ -67,7 +67,6 @@ module Mutant
           end
 
         end # Optional
-
       end # Argument
     end # Node
   end # Mutator

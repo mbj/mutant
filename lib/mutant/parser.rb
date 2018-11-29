@@ -18,7 +18,7 @@ module Mutant
     #
     # @return [AST::Node]
     def call(path)
-      @cache[path] ||= ::Parser::CurrentRuby.parse(path.read)
+      @cache[path] ||= Unparser.parse(path.read)
     end
 
   end # Parser

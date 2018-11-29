@@ -4,7 +4,7 @@ RSpec.describe Mutant::AST::Meta::Send, '#proc?' do
   subject { described_class.new(node).proc? }
 
   shared_context 'proc send' do |source|
-    let(:node) { Parser::CurrentRuby.parse(source).children.first }
+    let(:node) { Unparser.parse(source).children.first }
   end
 
   shared_examples 'proc definition' do |*args|
