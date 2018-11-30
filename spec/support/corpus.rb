@@ -132,30 +132,46 @@ module MutantSpec
       def check_generation(path)
         relative_path = path.relative_path_from(repo_path)
 
-        count = count_mutations(path)
+        node = Parser::CurrentRuby.parse(path.read)
+        fail "Cannot parse: #{path}" unless node
+
+        mutations = Mutant::Mutator.mutate(node)
+
+        mutations.each do |mutation|
+          check_generation_invariants(node, mutation)
+        end
 
         expected_errors.assert_success(relative_path)
 
-        count
+        mutations.length
       rescue Exception => exception # rubocop:disable Lint/RescueException
         expected_errors.assert_error(relative_path, exception)
 
         DEFAULT_MUTATION_COUNT
       end
 
-      # Count mutations generated for provided source file
+      # Check generation invariants
       #
-      # @param path [Pathname] path to a source file
+      # @param [Parser::AST::Node] original
+      # @param [Parser::AST::Node] mutation
       #
-      # @raise [Exception] any error specified by integrations.yml
+      # @return [undefined]
       #
-      # @return [Integer] number of mutations generated
-      def count_mutations(path)
-        node = Parser::CurrentRuby.parse(path.read)
+      # @raise [Exception]
+      def check_generation_invariants(original, mutation)
+        return unless ENV['MUTANT_CORPUS_EXPENSIVE']
 
-        fail "Cannot parse: #{path}" unless node
+        original_source = Unparser.unparse(original)
+        mutation_source = Unparser.unparse(mutation)
 
-        Mutant::Mutator.mutate(node).length
+        Mutant::Diff.build(original_source, mutation_source) and return
+
+        fail Mutant::Reporter::CLI::NO_DIFF_MESSAGE % [
+          original_source,
+          original.inspect,
+          mutation_source,
+          mutation.inspect
+        ]
       end
 
       # Install mutant
