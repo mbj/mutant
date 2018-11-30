@@ -11,44 +11,44 @@ module Mutant
 
           delegate :mutation, :test_result
 
-          DIFF_ERROR_MESSAGE =
-            'BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!'.freeze
-
           MAP = {
             Mutant::Mutation::Evil    => :evil_details,
             Mutant::Mutation::Neutral => :neutral_details,
             Mutant::Mutation::Noop    => :noop_details
           }.freeze
 
-          NEUTRAL_MESSAGE =
-            "--- Neutral failure ---\n" \
-            "Original code was inserted unmutated. And the test did NOT PASS.\n" \
-            "Your tests do not pass initially or you found a bug in mutant / unparser.\n" \
-            "Subject AST:\n" \
-            "%s\n" \
-            "Unparsed Source:\n" \
-            "%s\n" \
-            "Test Result:\n".freeze
+          NEUTRAL_MESSAGE = <<~'MESSAGE'
+            --- Neutral failure ---
+            Original code was inserted unmutated. And the test did NOT PASS.
+            Your tests do not pass initially or you found a bug in mutant / unparser.
+            Subject AST:
+            %s
+            Unparsed Source:
+            %s
+            Test Result:
+          MESSAGE
 
-          NO_DIFF_MESSAGE =
-            "--- Internal failure ---\n" \
-            "BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!\n" \
-            "Original unparsed source:\n" \
-            "%s\n" \
-            "Original AST:\n" \
-            "%s\n" \
-            "Mutated unparsed source:\n" \
-            "%s\n" \
-            "Mutated AST:\n" \
-            "%s\n".freeze
+          NO_DIFF_MESSAGE = <<~'MESSAGE'
+            --- Internal failure ---
+            BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!
+            Original unparsed source:
+            %s
+            Original AST:
+            %s
+            Mutated unparsed source:
+            %s
+            Mutated AST:
+            %s
+          MESSAGE
 
-          NOOP_MESSAGE    =
-            "---- Noop failure -----\n" \
-            "No code was inserted. And the test did NOT PASS.\n" \
-            "This is typically a problem of your specs not passing unmutated.\n" \
-            "Test Result:\n".freeze
+          NOOP_MESSAGE = <<~'MESSAGE'
+            ---- Noop failure -----
+            No code was inserted. And the test did NOT PASS.
+            This is typically a problem of your specs not passing unmutated.
+            Test Result:
+          MESSAGE
 
-          FOOTER = '-----------------------'.freeze
+          FOOTER = '-----------------------'
 
           # Run report printer
           #
