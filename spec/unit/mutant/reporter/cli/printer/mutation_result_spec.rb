@@ -48,7 +48,9 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           it_reports(<<~REPORT)
             evil:subject-a:a5bc7
             --- Internal failure ---
-            BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!
+            BUG: A generted mutation did not result in exactly one diff hunk!
+            This is an invariant violation by the mutation generation engine.
+            Please report a reproduction to https://github.com/mbj/mutant
             Original unparsed source:
             super
             Original AST:

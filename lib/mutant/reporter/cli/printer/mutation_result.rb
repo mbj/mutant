@@ -30,7 +30,9 @@ module Mutant
 
           NO_DIFF_MESSAGE = <<~'MESSAGE'
             --- Internal failure ---
-            BUG: Mutation NOT resulted in exactly one diff hunk. Please report a reproduction!
+            BUG: A generted mutation did not result in exactly one diff hunk!
+            This is an invariant violation by the mutation generation engine.
+            Please report a reproduction to https://github.com/mbj/mutant
             Original unparsed source:
             %s
             Original AST:
