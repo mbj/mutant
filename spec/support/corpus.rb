@@ -87,7 +87,7 @@ module MutantSpec
           in_processes: parallel_processes
         }
 
-        total = Parallel.map(effective_ruby_paths, options, &method(:count_mutations_and_check_errors))
+        total = Parallel.map(effective_ruby_paths, options, &method(:check_generation))
           .inject(DEFAULT_MUTATION_COUNT, :+)
 
         took = Mutant::Timer.now - start
@@ -129,7 +129,7 @@ module MutantSpec
       # @param path [Pathname] path responsible for exception
       #
       # @return [Integer] mutations generated
-      def count_mutations_and_check_errors(path)
+      def check_generation(path)
         relative_path = path.relative_path_from(repo_path)
 
         count = count_mutations(path)
