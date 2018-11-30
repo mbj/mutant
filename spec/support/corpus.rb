@@ -153,7 +153,7 @@ module MutantSpec
       def count_mutations(path)
         node = Parser::CurrentRuby.parse(path.read)
 
-        return DEFAULT_MUTATION_COUNT unless node
+        fail "Cannot parse: #{path}" unless node
 
         Mutant::Mutator.mutate(node).length
       end
