@@ -20,7 +20,7 @@ To add mutant to your rspec code base you need to:
 2. Run mutant against the rspec integration
 
    ```sh
-   bundle exec mutant --include lib --require 'your_library.rb' --use minitest -- 'YourLibrary*'
+   bundle exec mutant --include lib --require 'your_library.rb' --use rspec -- 'YourLibrary*'
    ```
 
 ## Run through example
