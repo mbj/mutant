@@ -11,7 +11,7 @@ module Mutant
         #
         # @return [Boolean]
         def success?
-          [missing, unexpected, no_diffs].all?(&:empty?)
+          [missing, unexpected, no_diffs, invalid_syntax].all?(&:empty?)
         end
 
         # Error report
@@ -26,6 +26,7 @@ module Mutant
             'original_source' => example.source,
             'missing'         => format_mutations(missing),
             'unexpected'      => format_mutations(unexpected),
+            'invalid_syntax'  => format_mutations(invalid_syntax),
             'no_diff'         => no_diff_report
           )
         end
@@ -51,6 +52,17 @@ module Mutant
           end
         end
         memoize :missing
+
+        # Mutations that generated invalid syntax
+        #
+        # @return [Enumerable<Mutation>]
+        def invalid_syntax
+          mutations.reject do |mutation|
+            ::Parser::CurrentRuby.parse(mutation.source)
+          rescue ::Parser::SyntaxError # rubocop:disable Lint/HandleExceptions
+          end
+        end
+        memoize :invalid_syntax
 
         # Mutations with no diff to original
         #
