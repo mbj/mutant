@@ -173,14 +173,13 @@ IndentArray:
 MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
-# Align keys and values in a multiline hash
-AlignHash:
-  EnforcedColonStyle: table
-
 # Prefer `public_send` and `__send__` over `send`
 Send:
   Enabled: true
 
+Layout/AlignHash:
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
 Layout/SpaceInsideArrayLiteralBrackets:

@@ -80,7 +80,7 @@ RSpec.describe Mutant::Zombifier do
   let(:file_entries) do
     {
       'a/project.rb' => { file: true, contents: 'module Project; end' },
-      'b/bar.rb' =>     { file: true, contents: 'module Bar; end'     }
+      'b/bar.rb'     => { file: true, contents: 'module Bar; end'     }
     }
   end
 

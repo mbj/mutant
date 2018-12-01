@@ -38,7 +38,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('regexp_parser', '~> 1.2')
   gem.add_runtime_dependency('unparser',      '~> 0.3.0')
 
-  gem.add_development_dependency('bundler',  '~> 1.10')
-  gem.add_development_dependency('devtools', '~> 0.1.21')
+  gem.add_development_dependency('devtools', '~> 0.1.22')
   gem.add_development_dependency('parallel', '~> 1.3')
 end
