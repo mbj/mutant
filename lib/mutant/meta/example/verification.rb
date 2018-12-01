@@ -11,7 +11,7 @@ module Mutant
         #
         # @return [Boolean]
         def success?
-          missing.empty? && unexpected.empty? && no_diffs.empty?
+          [missing, unexpected, no_diffs].all?(&:empty?)
         end
 
         # Error report
