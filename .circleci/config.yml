@@ -35,8 +35,6 @@ jobs:
       - run: bundle install
       - run: bundle exec rake metrics:rubocop
       - run: bundle exec rake metrics:reek
-      - run: bundle exec rake metrics:flay
-      - run: bundle exec rake metrics:flog
   mutant:
     <<: *defaults
     steps:
