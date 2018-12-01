@@ -75,6 +75,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
           - node: s(:nil)
             source: nil
           unexpected: []
+          invalid_syntax: []
           no_diff: []
         REPORT
       end
@@ -95,6 +96,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
             source: 'false'
           - node: s(:nil)
             source: nil
+          invalid_syntax: []
           no_diff: []
         REPORT
       end
@@ -112,9 +114,39 @@ RSpec.describe Mutant::Meta::Example::Verification do
           original_source: 'true'
           missing: []
           unexpected: []
+          invalid_syntax: []
           no_diff:
           - node: s(:true)
             source: 'true'
+        REPORT
+      end
+    end
+
+    context 'when the generated node is invalid syntax after unparsed' do
+      let(:invalid_node) do
+        s(:op_asgn, s(:send, s(:self), :at, s(:int, 1)), :+, s(:int, 1))
+      end
+
+      let(:expected_nodes)  { [invalid_node] }
+      let(:generated_nodes) { [invalid_node] }
+
+      specify do
+        should eql(<<~'REPORT')
+          ---
+          file: foo.rb
+          original_ast: s(:true)
+          original_source: 'true'
+          missing: []
+          unexpected: []
+          invalid_syntax:
+          - node: |-
+              s(:op_asgn,
+                s(:send,
+                  s(:self), :at,
+                  s(:int, 1)), :+,
+                s(:int, 1))
+            source: self.at(1) += 1
+          no_diff: []
         REPORT
       end
     end

@@ -11,7 +11,7 @@ module Mutant
         #
         # @return [Boolean]
         def success?
-          missing.empty? && unexpected.empty? && no_diffs.empty?
+          [missing, unexpected, no_diffs, invalid_syntax].all?(&:empty?)
         end
 
         # Error report
@@ -26,6 +26,7 @@ module Mutant
             'original_source' => example.source,
             'missing'         => format_mutations(missing),
             'unexpected'      => format_mutations(unexpected),
+            'invalid_syntax'  => format_mutations(invalid_syntax),
             'no_diff'         => no_diff_report
           )
         end
@@ -34,11 +35,34 @@ module Mutant
 
         # Unexpected mutations
         #
-        # @return [Array<Parser::AST::Node>]
+        # @return [Array<Mutation>]
         def unexpected
-          mutations.map(&:node) - example.expected
+          mutations.reject do |mutation|
+            example.expected.include?(mutation.node)
+          end
         end
         memoize :unexpected
+
+        # Missing mutations
+        #
+        # @return [Array<Mutation>]
+        def missing
+          (example.expected - mutations.map(&:node)).map do |node|
+            Mutation::Evil.new(self, node)
+          end
+        end
+        memoize :missing
+
+        # Mutations that generated invalid syntax
+        #
+        # @return [Enumerable<Mutation>]
+        def invalid_syntax
+          mutations.reject do |mutation|
+            ::Parser::CurrentRuby.parse(mutation.source)
+          rescue ::Parser::SyntaxError # rubocop:disable Lint/HandleExceptions
+          end
+        end
+        memoize :invalid_syntax
 
         # Mutations with no diff to original
         #
@@ -50,14 +74,14 @@ module Mutant
 
         # Mutation report
         #
-        # @param [Array<Parser::AST::Node>] nodes
+        # @param [Array<Mutation>] mutations
         #
         # @return [Array<Hash>]
-        def format_mutations(nodes)
-          nodes.map do |node|
+        def format_mutations(mutations)
+          mutations.map do |mutation|
             {
-              'node'   => node.inspect,
-              'source' => Unparser.unparse(node)
+              'node'   => mutation.node.inspect,
+              'source' => mutation.source
             }
           end
         end
@@ -73,14 +97,6 @@ module Mutant
             }
           end
         end
-
-        # Missing mutations
-        #
-        # @return [Array<Parser::AST::Node>]
-        def missing
-          example.expected - mutations.map(&:node)
-        end
-        memoize :missing
 
       end # Verification
     end # Example
