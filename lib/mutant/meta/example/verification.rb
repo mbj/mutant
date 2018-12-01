@@ -34,11 +34,23 @@ module Mutant
 
         # Unexpected mutations
         #
-        # @return [Array<Parser::AST::Node>]
+        # @return [Array<Mutation>]
         def unexpected
-          mutations.map(&:node) - example.expected
+          mutations.reject do |mutation|
+            example.expected.include?(mutation.node)
+          end
         end
         memoize :unexpected
+
+        # Missing mutations
+        #
+        # @return [Array<Mutation>]
+        def missing
+          (example.expected - mutations.map(&:node)).map do |node|
+            Mutation::Evil.new(self, node)
+          end
+        end
+        memoize :missing
 
         # Mutations with no diff to original
         #
@@ -50,14 +62,14 @@ module Mutant
 
         # Mutation report
         #
-        # @param [Array<Parser::AST::Node>] nodes
+        # @param [Array<Mutation>] mutations
         #
         # @return [Array<Hash>]
-        def format_mutations(nodes)
-          nodes.map do |node|
+        def format_mutations(mutations)
+          mutations.map do |mutation|
             {
-              'node'   => node.inspect,
-              'source' => Unparser.unparse(node)
+              'node'   => mutation.node.inspect,
+              'source' => mutation.source
             }
           end
         end
@@ -73,14 +85,6 @@ module Mutant
             }
           end
         end
-
-        # Missing mutations
-        #
-        # @return [Array<Parser::AST::Node>]
-        def missing
-          example.expected - mutations.map(&:node)
-        end
-        memoize :missing
 
       end # Verification
     end # Example
