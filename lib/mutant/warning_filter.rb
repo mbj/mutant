@@ -5,7 +5,7 @@ module Mutant
   class WarningFilter
     include Equalizer.new(:target)
 
-    WARNING_PATTERN = /\A(?:.+):(?:\d+): warning: (?:.+)\n\z/
+    WARNING_PATTERN = /\A(?:.+):(?:\d+): warning: (?:.+)\n\z/.freeze
 
     # Initialize object
     #
