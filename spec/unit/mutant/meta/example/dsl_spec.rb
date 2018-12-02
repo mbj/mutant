@@ -2,19 +2,19 @@
 
 RSpec.describe Mutant::Meta::Example::DSL do
   describe '.call' do
-    subject { described_class.call(file, type, block) }
+    subject { described_class.call(file, types, block) }
 
-    let(:file)     { 'foo.rb'  }
-    let(:node)     { s(:false) }
-    let(:type)     { node.type }
-    let(:expected) { []        }
+    let(:file)     { 'foo.rb'             }
+    let(:node)     { s(:false)            }
+    let(:types)    { Set.new([node.type]) }
+    let(:expected) { []                   }
 
     let(:expected_example) do
       Mutant::Meta::Example.new(
-        file:      file,
-        node:      node,
-        node_type: type,
-        expected:  expected
+        file:     file,
+        node:     node,
+        types:    types,
+        expected: expected
       )
     end
 

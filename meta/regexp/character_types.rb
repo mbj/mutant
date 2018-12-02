@@ -12,7 +12,7 @@ mutations = {
 mutations = mutations.merge(mutations.invert)
 
 mutations.each do |(source_type, source_mutation), (_, regexp_mutation)|
-  Mutant::Meta::Example.add source_type do
+  Mutant::Meta::Example.add :regexp, source_type do
     source(source_mutation)
 
     singleton_mutations
