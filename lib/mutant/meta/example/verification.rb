@@ -13,6 +13,7 @@ module Mutant
         def success?
           [missing, unexpected, no_diffs, invalid_syntax].all?(&:empty?)
         end
+        memoize :success?
 
         # Error report
         #
@@ -30,6 +31,7 @@ module Mutant
             'no_diff'         => no_diff_report
           )
         end
+        memoize :error_report
 
       private
 

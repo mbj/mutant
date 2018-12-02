@@ -11,6 +11,7 @@ module Mutant
       def verification
         Verification.new(self, generated)
       end
+      memoize :verification
 
       # Normalized source
       #
