@@ -80,10 +80,3 @@ Pathname
   .glob(Pathname.new(__dir__).join('regexp', '*.rb'))
   .sort
   .each(&Kernel.public_method(:require))
-
-# Re-register examples for all regular expression nodes for node_type `:regexp`
-Mutant::Meta::Example::ALL.each do |example|
-  next unless example.node_type.to_s.start_with?('regexp_')
-
-  Mutant::Meta::Example::ALL << example.with(node_type: :regexp)
-end
