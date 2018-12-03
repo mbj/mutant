@@ -40,7 +40,6 @@ module Mutant
           values_at:     %i[fetch_values],
           match:         %i[match?],
           '=~':          %i[match?],
-          :[] =>         %i[at fetch key?],
           :== =>         %i[eql? equal?],
           :>= =>         %i[> == eql? equal?],
           :<= =>         %i[< == eql? equal?],
@@ -61,17 +60,7 @@ module Mutant
         # @return [undefined]
         def dispatch
           emit_singletons
-          if meta.index_assignment?
-            run(Index::Assign)
-          else
-            non_index_dispatch
-          end
-        end
 
-        # Perform non index dispatch
-        #
-        # @return [undefined]
-        def non_index_dispatch
           if meta.binary_method_operator?
             run(Binary)
           elsif meta.attribute_assignment?
@@ -117,7 +106,6 @@ module Mutant
           emit_dig_mutation
           emit_double_negation_mutation
           emit_lambda_mutation
-          emit_drop_mutation
         end
 
         # Emit selector mutations specific to top level constants
@@ -167,19 +155,6 @@ module Mutant
           emit(s(:send, fetch_mutation, :dig, *tail))
         end
 
-        # Emit mutation `foo[n..-1]` -> `foo.drop(n)`
-        #
-        # @return [undefined]
-        def emit_drop_mutation
-          return if !selector.equal?(:[]) || !arguments.one? || !n_irange?(arguments.first)
-
-          start, ending = *arguments.first
-
-          return unless ending.eql?(s(:int, -1))
-
-          emit(s(:send, receiver, :drop, start))
-        end
-
         # Emit mutation from `to_i` to `Integer(...)`
         #
         # @return [undefined]
@@ -227,8 +202,7 @@ module Mutant
         #
         # @return [undefined]
         def emit_argument_propagation
-          node = arguments.first
-          emit(node) if arguments.one? && !NOT_STANDALONE.include?(node.type)
+          emit_propagation(Mutant::Util.one(arguments)) if arguments.one?
         end
 
         # Emit receiver mutations

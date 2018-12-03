@@ -19,7 +19,7 @@ RSpec.describe Mutant::Subject do
   let(:object) { class_under_test.new(context, node) }
 
   let(:node) do
-    Parser::CurrentRuby.parse(<<-RUBY)
+    Unparser.parse(<<-RUBY)
       def foo
       end
     RUBY

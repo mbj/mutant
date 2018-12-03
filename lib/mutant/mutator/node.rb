@@ -96,6 +96,13 @@ module Mutant
         emit(::Parser::AST::Node.new(node.type, children))
       end
 
+      # Emit propagation if node can stand alone
+      #
+      # @return [undefined]
+      def emit_propagation(node)
+        emit(node) unless AST::Types::NOT_STANDALONE.include?(node.type)
+      end
+
       # Emit singleton literals
       #
       # @return [undefined]

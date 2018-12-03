@@ -30,26 +30,12 @@ module Mutant
           naked_proc? || proc_new?
         end
 
-        # Test if AST node is a valid assignment target
-        #
-        # @return [Boolean]
-        def assignment?
-          index_assignment? || attribute_assignment?
-        end
-
-        # Test if AST node is an attribute assignment?
+        # Test if AST node is a valid attribute assignment
         #
         # @return [Boolean]
         def attribute_assignment?
           !Types::METHOD_OPERATORS.include?(selector) &&
           selector.to_s.end_with?(ATTRIBUTE_ASSIGNMENT_SELECTOR_SUFFIX)
-        end
-
-        # Test if AST node is an index assign
-        #
-        # @return [Boolean]
-        def index_assignment?
-          selector.equal?(INDEX_ASSIGNMENT_SELECTOR)
         end
 
         # Test for binary operator implemented as method

@@ -44,7 +44,7 @@ module ParserHelper
   end
 
   def parse(string)
-    Unparser::Preprocessor.run(Parser::CurrentRuby.parse(string))
+    Unparser::Preprocessor.run(Unparser.parse(string))
   end
 
   def parse_expression(string)
