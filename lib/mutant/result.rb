@@ -108,6 +108,14 @@ module Mutant
         env.subjects.length
       end
 
+      # Test if processing needs to stop
+      #
+      # @return [Boolean]
+      #
+      def stop?
+        env.config.fail_fast && !subject_results.all?(&:success?)
+      end
+
     end # Env
 
     # Test result

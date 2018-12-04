@@ -29,7 +29,7 @@ module Mutant
       #
       # @return [Boolean]
       def stop?
-        env.config.fail_fast && !status.subject_results.all?(&:success?)
+        status.stop?
       end
 
       # Handle mutation finish
