@@ -21,8 +21,6 @@ Gem::Specification.new do |gem|
   gem.extra_rdoc_files = %w[LICENSE]
   gem.executables      = %w[mutant]
 
-  gem.required_ruby_version = '>= 2.5'
-
   gem.add_runtime_dependency('abstract_type', '~> 0.0.7')
   gem.add_runtime_dependency('adamantium',    '~> 0.2.0')
   gem.add_runtime_dependency('anima',         '~> 0.3.0')
@@ -36,7 +34,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('parser',        '~> 2.5.1')
   gem.add_runtime_dependency('procto',        '~> 0.0.2')
   gem.add_runtime_dependency('regexp_parser', '~> 1.2')
-  gem.add_runtime_dependency('unparser',      '~> 0.4.1')
+  gem.add_runtime_dependency('unparser',      '~> 0.4.2')
 
   gem.add_development_dependency('devtools', '~> 0.1.22')
   gem.add_development_dependency('parallel', '~> 1.3')

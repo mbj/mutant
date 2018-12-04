@@ -1,3 +1,7 @@
+# v0.8.22 2018-12-04
+
+* Remove hard ruby version requirement. 2.5 is still the only officially supported version.
+
 # v0.8.21 2018-12-03
 
 * Change to modern ast format via unparser-0.4.1.

@@ -19,6 +19,4 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency('mutant', "~> #{gem.version}")
   gem.add_runtime_dependency('rspec-core', '>= 3.4.0', '< 4.0.0')
-
-  gem.add_development_dependency('bundler', '~> 1.3', '>= 1.3.5')
 end
