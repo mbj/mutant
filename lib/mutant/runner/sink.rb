@@ -43,7 +43,7 @@ module Mutant
         @subject_results[subject] = Result::Subject.new(
           subject:          subject,
           mutation_results: previous_mutation_results(subject) + [mutation_result],
-          tests:            mutation_result.test_result.tests
+          tests:            env.selections.fetch(subject)
         )
 
         self

@@ -36,17 +36,26 @@ module SharedContext
   # rubocop:disable MethodLength
   # rubocop:disable AbcSize
   def setup_shared_context
-    let(:env)              { instance_double(Mutant::Env, config: config, subjects: [subject_a], mutations: mutations) }
-    let(:job_a)            { Mutant::Parallel::Job.new(index: 0, payload: mutation_a)                                  }
-    let(:job_b)            { Mutant::Parallel::Job.new(index: 1, payload: mutation_b)                                  }
-    let(:test_a)           { instance_double(Mutant::Test, identification: 'test-a')                                   }
-    let(:output)           { StringIO.new                                                                              }
-    let(:mutations)        { [mutation_a, mutation_b]                                                                  }
-    let(:mutation_a_node)  { s(:false)                                                                                 }
-    let(:mutation_b_node)  { s(:nil)                                                                                   }
-    let(:mutation_b)       { Mutant::Mutation::Evil.new(subject_a, mutation_b_node)                                    }
-    let(:mutation_a)       { Mutant::Mutation::Evil.new(subject_a, mutation_a_node)                                    }
-    let(:subject_a_node)   { s(:true)                                                                                  }
+    let(:job_a)           { Mutant::Parallel::Job.new(index: 0, payload: mutation_a) }
+    let(:job_b)           { Mutant::Parallel::Job.new(index: 1, payload: mutation_b) }
+    let(:mutation_a)      { Mutant::Mutation::Evil.new(subject_a, mutation_a_node)   }
+    let(:mutation_a_node) { s(:false)                                                }
+    let(:mutation_b)      { Mutant::Mutation::Evil.new(subject_a, mutation_b_node)   }
+    let(:mutation_b_node) { s(:nil)                                                  }
+    let(:mutations)       { [mutation_a, mutation_b]                                 }
+    let(:output)          { StringIO.new                                             }
+    let(:subject_a_node)  { s(:true)                                                 }
+    let(:test_a)          { instance_double(Mutant::Test, identification: 'test-a')  }
+
+    let(:env) do
+      instance_double(
+        Mutant::Env,
+        config:     config,
+        mutations:  mutations,
+        selections: { subject_a => [test_a] },
+        subjects:   [subject_a]
+      )
+    end
 
     let(:status) do
       Mutant::Parallel::Status.new(

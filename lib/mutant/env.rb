@@ -31,6 +31,16 @@ module Mutant
       )
     end
 
+    # The test selections
+    #
+    # @return Hash{Mutation => Enumerable<Test>}
+    def selections
+      subjects.map do |subject|
+        [subject, selector.call(subject)]
+      end.to_h
+    end
+    memoize :selections
+
   private
 
     # Kill mutation under isolation with integration
@@ -43,7 +53,7 @@ module Mutant
     # rubocop:disable MethodLength
     def run_mutation_tests(mutation)
       start = Timer.now
-      tests = selector.call(mutation.subject)
+      tests = selections.fetch(mutation.subject)
 
       config.isolation.call do
         mutation.insert(config.kernel)
