@@ -1,44 +1,52 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Env do
-  context '#kill' do
-    let(:object) do
-      described_class.new(
-        actor_env:        Mutant::Actor::Env.new(Thread),
-        config:           config,
-        integration:      integration,
-        matchable_scopes: [],
-        mutations:        [],
-        selector:         selector,
-        subjects:         [],
-        parser:           Mutant::Parser.new
-      )
-    end
+  let(:object) do
+    described_class.new(
+      actor_env:        Mutant::Actor::Env.new(Thread),
+      config:           config,
+      integration:      integration,
+      matchable_scopes: [],
+      mutations:        [],
+      selector:         selector,
+      subjects:         [mutation_subject],
+      parser:           Mutant::Parser.new
+    )
+  end
 
-    let(:integration)       { instance_double(Mutant::Integration)     }
-    let(:test_a)            { instance_double(Mutant::Test)            }
-    let(:test_b)            { instance_double(Mutant::Test)            }
-    let(:tests)             { [test_a, test_b]                         }
-    let(:selector)          { instance_double(Mutant::Selector)        }
-    let(:integration_class) { Mutant::Integration::Null                }
-    let(:isolation)         { instance_double(Mutant::Isolation::Fork) }
-    let(:mutation_subject)  { instance_double(Mutant::Subject)         }
+  let(:integration)       { instance_double(Mutant::Integration)     }
+  let(:test_a)            { instance_double(Mutant::Test)            }
+  let(:test_b)            { instance_double(Mutant::Test)            }
+  let(:tests)             { [test_a, test_b]                         }
+  let(:selector)          { instance_double(Mutant::Selector)        }
+  let(:integration_class) { Mutant::Integration::Null                }
+  let(:isolation)         { instance_double(Mutant::Isolation::Fork) }
+  let(:mutation_subject)  { instance_double(Mutant::Subject)         }
 
-    let(:mutation) do
-      instance_double(
-        Mutant::Mutation,
-        subject: mutation_subject
-      )
-    end
+  let(:mutation) do
+    instance_double(
+      Mutant::Mutation,
+      subject: mutation_subject
+    )
+  end
 
-    let(:config) do
-      Mutant::Config::DEFAULT.with(
-        isolation:   isolation,
-        integration: integration_class,
-        kernel:      class_double(Kernel)
-      )
-    end
+  let(:config) do
+    Mutant::Config::DEFAULT.with(
+      isolation:   isolation,
+      integration: integration_class,
+      kernel:      class_double(Kernel)
+    )
+  end
 
+  before do
+    expect(selector).to receive(:call)
+      .with(mutation_subject)
+      .and_return(tests)
+
+    allow(Mutant::Timer).to receive(:now).and_return(2.0, 3.0)
+  end
+
+  describe '#kill' do
     subject { object.kill(mutation) }
 
     shared_examples_for 'mutation kill' do
@@ -50,14 +58,6 @@ RSpec.describe Mutant::Env do
           )
         )
       end
-    end
-
-    before do
-      expect(selector).to receive(:call)
-        .with(mutation_subject)
-        .and_return(tests)
-
-      allow(Mutant::Timer).to receive(:now).and_return(2.0, 3.0)
     end
 
     context 'when isolation does not raise error' do
@@ -97,6 +97,14 @@ RSpec.describe Mutant::Env do
       end
 
       include_examples 'mutation kill'
+    end
+  end
+
+  describe '#selections' do
+    subject { object.selections }
+
+    it 'returns expected selections' do
+      expect(subject).to eql(mutation_subject => tests)
     end
   end
 end
