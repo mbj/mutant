@@ -1,3 +1,7 @@
+# v0.8.23 2018-12-04
+
+* Errors between isolation and tests do not kill mutations anymore.
+
 # v0.8.22 2018-12-04
 
 * Remove hard ruby version requirement. 2.5 is still the only officially supported version.

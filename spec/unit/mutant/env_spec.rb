@@ -14,14 +14,14 @@ RSpec.describe Mutant::Env do
     )
   end
 
-  let(:integration)       { instance_double(Mutant::Integration)     }
-  let(:test_a)            { instance_double(Mutant::Test)            }
-  let(:test_b)            { instance_double(Mutant::Test)            }
-  let(:tests)             { [test_a, test_b]                         }
-  let(:selector)          { instance_double(Mutant::Selector)        }
-  let(:integration_class) { Mutant::Integration::Null                }
-  let(:isolation)         { instance_double(Mutant::Isolation::Fork) }
-  let(:mutation_subject)  { instance_double(Mutant::Subject)         }
+  let(:integration)       { instance_double(Mutant::Integration) }
+  let(:test_a)            { instance_double(Mutant::Test)        }
+  let(:test_b)            { instance_double(Mutant::Test)        }
+  let(:tests)             { [test_a, test_b]                     }
+  let(:selector)          { instance_double(Mutant::Selector)    }
+  let(:integration_class) { Mutant::Integration::Null            }
+  let(:isolation)         { Mutant::Isolation::None.new          }
+  let(:mutation_subject)  { instance_double(Mutant::Subject)     }
 
   let(:mutation) do
     instance_double(
@@ -39,7 +39,7 @@ RSpec.describe Mutant::Env do
   end
 
   before do
-    expect(selector).to receive(:call)
+    allow(selector).to receive(:call)
       .with(mutation_subject)
       .and_return(tests)
 
@@ -53,8 +53,9 @@ RSpec.describe Mutant::Env do
       specify do
         should eql(
           Mutant::Result::Mutation.new(
-            mutation:    mutation,
-            test_result: test_result
+            isolation_result: isolation_result,
+            mutation:         mutation,
+            runtime:          1.0
           )
         )
       end
@@ -64,10 +65,6 @@ RSpec.describe Mutant::Env do
       let(:test_result) { instance_double(Mutant::Result::Test) }
 
       before do
-        expect(isolation).to receive(:call)
-          .ordered
-          .and_yield
-
         expect(mutation).to receive(:insert)
           .ordered
           .with(config.kernel)
@@ -78,22 +75,22 @@ RSpec.describe Mutant::Env do
           .and_return(test_result)
       end
 
+      let(:isolation_result) do
+        Mutant::Isolation::Result::Success.new(test_result)
+      end
+
       include_examples 'mutation kill'
     end
 
-    context 'when isolation does raise error' do
+    context 'when code does raise error' do
+      let(:exception) { RuntimeError.new('foo') }
+
       before do
-        expect(isolation).to receive(:call)
-          .and_raise(Mutant::Isolation::Error, 'test-error')
+        expect(mutation).to receive(:insert).and_raise(exception)
       end
 
-      let(:test_result) do
-        Mutant::Result::Test.new(
-          output:  'test-error',
-          passed:  false,
-          runtime: 1.0,
-          tests:   tests
-        )
+      let(:isolation_result) do
+        Mutant::Isolation::Result::Error.new(exception)
       end
 
       include_examples 'mutation kill'

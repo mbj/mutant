@@ -4,15 +4,20 @@ RSpec.describe Mutant::Isolation::None do
   describe '.call' do
     let(:object) { described_class.new }
 
-    it 'return block value' do
-      expect(object.call { :foo }).to be(:foo)
+    context 'without exception' do
+      it 'returns success result' do
+        expect(object.call { :foo })
+          .to eql(Mutant::Isolation::Result::Success.new(:foo))
+      end
     end
 
-    it 'wraps *all* exceptions' do
-      expect { object.call { fail 'foo' } }.to raise_error(
-        Mutant::Isolation::Error,
-        'foo'
-      )
+    context 'with exception' do
+      let(:exception) { RuntimeError.new('foo') }
+
+      it 'returns error result' do
+        expect(object.call { fail exception })
+          .to eql(Mutant::Isolation::Result::Error.new(exception))
+      end
     end
   end
 end

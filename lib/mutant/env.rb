@@ -24,10 +24,12 @@ module Mutant
     #
     # @return [Result::Mutation]
     def kill(mutation)
-      test_result = run_mutation_tests(mutation)
+      start = Timer.now
+
       Result::Mutation.new(
-        mutation:    mutation,
-        test_result: test_result
+        isolation_result: run_mutation_tests(mutation),
+        mutation:         mutation,
+        runtime:          Timer.now - start
       )
     end
 
@@ -48,24 +50,12 @@ module Mutant
     # @param [Isolation] isolation
     # @param [Integration] integration
     #
-    # @return [Result::Test]
-    #
-    # rubocop:disable MethodLength
+    # @return [Result::Isolation]
     def run_mutation_tests(mutation)
-      start = Timer.now
-      tests = selections.fetch(mutation.subject)
-
       config.isolation.call do
         mutation.insert(config.kernel)
-        integration.call(tests)
+        integration.call(selections.fetch(mutation.subject))
       end
-    rescue Isolation::Error => error
-      Result::Test.new(
-        output:  error.message,
-        passed:  false,
-        runtime: Timer.now - start,
-        tests:   tests
-      )
     end
 
   end # Env

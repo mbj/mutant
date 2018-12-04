@@ -95,16 +95,22 @@ module SharedContext
 
     let(:mutation_a_result) do
       Mutant::Result::Mutation.new(
-        mutation:    mutation_a,
-        test_result: mutation_a_test_result
+        mutation:         mutation_a,
+        isolation_result: mutation_a_isolation_result,
+        runtime:          1.0
       )
     end
 
     let(:mutation_b_result) do
       Mutant::Result::Mutation.new(
-        mutation:    mutation_a,
-        test_result: mutation_b_test_result
+        isolation_result: mutation_b_isolation_result,
+        mutation:         mutation_b,
+        runtime:          1.0
       )
+    end
+
+    let(:mutation_a_isolation_result) do
+      Mutant::Isolation::Result::Success.new(mutation_a_test_result)
     end
 
     let(:mutation_a_test_result) do
@@ -123,6 +129,10 @@ module SharedContext
         runtime: 1.0,
         output:  'mutation b test result output'
       )
+    end
+
+    let(:mutation_b_isolation_result) do
+      Mutant::Isolation::Result::Success.new(mutation_b_test_result)
     end
 
     let(:subject_a_result) do
