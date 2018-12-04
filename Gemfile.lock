@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mutant (0.8.20)
+    mutant (0.8.22)
       abstract_type (~> 0.0.7)
       adamantium (~> 0.2.0)
       anima (~> 0.3.0)
@@ -15,9 +15,9 @@ PATH
       parser (~> 2.5.1)
       procto (~> 0.0.2)
       regexp_parser (~> 1.2)
-      unparser (~> 0.4.0)
-    mutant-rspec (0.8.20)
-      mutant (~> 0.8.20)
+      unparser (~> 0.4.2)
+    mutant-rspec (0.8.22)
+      mutant (~> 0.8.22)
       rspec-core (>= 3.4.0, < 4.0.0)
 
 GEM
@@ -141,7 +141,7 @@ GEM
     simplecov-html (0.10.2)
     thread_safe (0.3.6)
     unicode-display_width (1.4.0)
-    unparser (0.4.0)
+    unparser (0.4.2)
       abstract_type (~> 0.0.7)
       adamantium (~> 0.2.0)
       concord (~> 0.1.5)
