@@ -26,8 +26,9 @@ RSpec.describe Mutant::Mutation do
   describe '#insert' do
     subject { object.insert(kernel) }
 
-    let(:root_node) { s(:foo)                 }
-    let(:kernel)    { instance_double(Kernel) }
+    let(:expected_source) { '1'                     }
+    let(:kernel)          { instance_double(Kernel) }
+    let(:root_node)       { s(:int, 1)              }
 
     before do
       expect(context).to receive(:root)
@@ -43,7 +44,7 @@ RSpec.describe Mutant::Mutation do
         .with(
           binding: TOPLEVEL_BINDING,
           kernel:  kernel,
-          node:    root_node,
+          source:  expected_source,
           subject: mutation_subject
         )
         .and_return(Mutant::Loader)

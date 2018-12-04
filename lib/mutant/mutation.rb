@@ -33,6 +33,14 @@ module Mutant
     end
     memoize :source
 
+    # The monkeypatch to insert the mutation
+    #
+    # @return [String]
+    def monkeypatch
+      Unparser.unparse(subject.context.root(node))
+    end
+    memoize :monkeypatch
+
     # Normalized original source
     #
     # @return [String]
@@ -59,7 +67,7 @@ module Mutant
       Loader.call(
         binding: TOPLEVEL_BINDING,
         kernel:  kernel,
-        node:    root,
+        source:  monkeypatch,
         subject: subject
       )
       self
@@ -74,13 +82,6 @@ module Mutant
       Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
     end
     memoize :sha1
-
-    # Mutated root node
-    #
-    # @return [Parser::AST::Node]
-    def root
-      subject.context.root(node)
-    end
 
     # Evil mutation that should case mutations to fail tests
     class Evil < self

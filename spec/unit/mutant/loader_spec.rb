@@ -5,7 +5,7 @@ RSpec.describe Mutant::Loader, '.call' do
     described_class.call(
       binding: binding,
       kernel:  kernel,
-      node:    node,
+      source:  source,
       subject: mutation_subject
     )
   end
@@ -27,10 +27,6 @@ RSpec.describe Mutant::Loader, '.call' do
   end
 
   it 'performs expected kernel interaction' do
-    expect(Unparser).to receive(:unparse)
-      .with(node)
-      .and_return(source)
-
     expect(kernel).to receive(:eval)
       .with(
         source,
