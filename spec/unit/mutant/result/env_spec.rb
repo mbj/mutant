@@ -5,13 +5,16 @@ RSpec.describe Mutant::Result::Env do
     described_class.new(
       runtime:         instance_double(Float),
       env:             env,
-      subject_results: [subject_result]
+      subject_results: subject_results
     )
   end
+
+  let(:subject_results) { [subject_result] }
 
   let(:env) do
     instance_double(
       Mutant::Env,
+      config:    instance_double(Mutant::Config, fail_fast: fail_fast),
       subjects:  [instance_double(Mutant::Subject)],
       mutations: [instance_double(Mutant::Mutation)]
     )
@@ -22,12 +25,14 @@ RSpec.describe Mutant::Result::Env do
       Mutant::Result::Subject,
       amount_mutation_results: results,
       amount_mutations_killed: killed,
-      success?:                true
+      success?:                subject_success?
     )
   end
 
-  let(:results) { 1 }
-  let(:killed)  { 0 }
+  let(:fail_fast)        { false }
+  let(:killed)           { 0     }
+  let(:results)          { 1     }
+  let(:subject_success?) { true }
 
   describe '#success?' do
     subject { object.success? }
@@ -80,5 +85,47 @@ RSpec.describe Mutant::Result::Env do
     subject { object.amount_subjects }
 
     it { should eql(1) }
+  end
+
+  describe '#stop?' do
+    subject { object.stop? }
+
+    context 'without fail fast' do
+      context 'on empty subjects' do
+        let(:subject_results) { [] }
+
+        it { should be(false) }
+      end
+
+      context 'on failed subject' do
+        let(:subject_success?) { false }
+
+        it { should be(false) }
+      end
+
+      context 'on successful subject' do
+        it { should be(false) }
+      end
+    end
+
+    context 'with fail fast' do
+      let(:fail_fast) { true }
+
+      context 'on empty subjects' do
+        let(:subject_results) { [] }
+
+        it { should be(false) }
+      end
+
+      context 'on failed subject' do
+        let(:subject_success?) { false }
+
+        it { should be(true) }
+      end
+
+      context 'on successful subject' do
+        it { should be(false) }
+      end
+    end
   end
 end
