@@ -3,7 +3,7 @@
 module Mutant
   # Base class for code loaders
   class Loader
-    include Anima.new(:binding, :kernel, :node, :subject)
+    include Anima.new(:binding, :kernel, :source, :subject)
 
     # Call loader
     #
@@ -19,7 +19,7 @@ module Mutant
     # @return [undefined]
     def call
       kernel.eval(
-        Unparser.unparse(node),
+        source,
         binding,
         subject.source_path.to_s,
         subject.source_line
