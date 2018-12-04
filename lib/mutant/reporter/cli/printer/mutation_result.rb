@@ -9,7 +9,7 @@ module Mutant
         # :reek:TooManyConstants
         class MutationResult < self
 
-          delegate :mutation, :test_result
+          delegate :mutation, :isolation_result
 
           MAP = {
             Mutant::Mutation::Evil    => :evil_details,
@@ -101,7 +101,7 @@ module Mutant
           # @return [String]
           def noop_details
             info(NOOP_MESSAGE)
-            visit_test_result
+            visit_isolation_result
           end
 
           # Neutral details
@@ -109,14 +109,14 @@ module Mutant
           # @return [String]
           def neutral_details
             info(NEUTRAL_MESSAGE, original_node.inspect, mutation.source)
-            visit_test_result
+            visit_isolation_result
           end
 
           # Visit failed test results
           #
           # @return [undefined]
-          def visit_test_result
-            visit(TestResult, test_result)
+          def visit_isolation_result
+            visit(IsolationResult, isolation_result)
           end
 
           # Original node

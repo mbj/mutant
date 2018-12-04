@@ -128,12 +128,14 @@ RSpec.describe Mutant::Isolation::Fork do
 
       specify do
         XSpec::ExpectationVerifier.verify(self, expectations) do
-          expect(subject).to be(block_return)
+          expect(subject).to eql(Mutant::Isolation::Result::Success.new(block_return))
         end
       end
     end
 
     context 'when fork fails' do
+      let(:exception) { RuntimeError.new('fork(2)') }
+
       let(:expectations) do
         [
           *prefork_expectations,
@@ -141,7 +143,7 @@ RSpec.describe Mutant::Isolation::Fork do
             receiver: process,
             selector: :fork,
             reaction: {
-              exception: RuntimeError.new('fork(2)')
+              exception: exception
             }
           }
         ].map(&XSpec::MessageExpectation.method(:parse))
@@ -149,7 +151,7 @@ RSpec.describe Mutant::Isolation::Fork do
 
       specify do
         XSpec::ExpectationVerifier.verify(self, expectations) do
-          expect { expect(subject) }.to raise_error(described_class::Error, 'fork(2)')
+          expect(subject).to eql(Mutant::Isolation::Result::Error.new(exception))
         end
       end
     end

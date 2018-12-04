@@ -3,8 +3,6 @@
 module Mutant
   # Module providing isolation
   class Isolation
-    Error = Class.new(RuntimeError)
-
     # Absolutly no isolation
     #
     # Only useful for debugging.
@@ -12,14 +10,13 @@ module Mutant
 
       # Call block in no isolation
       #
-      # @return [Object]
+      # @return [Result]
       #
-      # @raise [Error]
-      #   if block terminates abnormal
+      # ignore :reek:UtilityFunction
       def call
-        yield
+        Result::Success.new(yield)
       rescue => exception
-        raise Error, exception
+        Result::Error.new(exception)
       end
 
     end # None

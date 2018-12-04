@@ -3,10 +3,6 @@
 module Mutant
   class Isolation
     # Isolation via the fork(2) systemcall.
-    #
-    # We do inject so many globals and common patterns to make this unit
-    # specifiable without mocking the globals and more important: Not having
-    # mutations that bypass mocks into a real world side effect.
     class Fork < self
       include Anima.new(:process, :stderr, :stdout, :io, :devnull, :marshal)
 
@@ -15,17 +11,14 @@ module Mutant
 
       # Call block in isolation
       #
-      # @return [Object]
-      #   returns block execution result
-      #
-      # @raise [Error]
-      #   if block terminates abnormal
+      # @return [Result]
+      #   execution result
       def call(&block)
         io.pipe(binmode: true) do |pipes|
           parent(*pipes, &block)
         end
       rescue => exception
-        raise Error, exception
+        Result::Error.new(exception)
       end
 
       # Handle parent process
@@ -40,9 +33,10 @@ module Mutant
         end
 
         writer.close
-        marshal.load(reader)
-      ensure
-        process.waitpid(pid) if pid
+
+        Result::Success.new(marshal.load(reader)).tap do
+          process.waitpid(pid)
+        end
       end
 
       # Handle child process

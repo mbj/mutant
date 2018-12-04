@@ -197,30 +197,30 @@ module Mutant
     # Mutation result
     class Mutation
       include Result, Anima.new(
+        :isolation_result,
         :mutation,
-        :test_result
+        :runtime
       )
 
-      # The runtime
+      # Time the tests had been running
       #
       # @return [Float]
-      def runtime
-        test_result.runtime
+      def killtime
+        if isolation_result.success?
+          isolation_result.value.runtime
+        else
+          0.0
+        end
       end
-
-      # The time spent on killing
-      #
-      # @return [Float]
-      #
-      # @api private
-      alias_method :killtime, :runtime
 
       # Test if mutation was handled successfully
       #
       # @return [Boolean]
       def success?
-        mutation.class.success?(test_result)
+        isolation_result.success? &&
+          mutation.class.success?(isolation_result.value)
       end
+      memoize :success?
 
     end # Mutation
   end # Result
