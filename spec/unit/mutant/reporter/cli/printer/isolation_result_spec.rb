@@ -4,7 +4,20 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
   setup_shared_context
 
   describe '.call' do
-    context 'on failed isolation' do
+    context 'on sucessful isolation' do
+      let(:reportable) do
+        Mutant::Isolation::Result::Success.new(mutation_a_test_result)
+      end
+
+      it_reports <<~'STR'
+        - 1 @ runtime: 1.0
+          - test-a
+        Test Output:
+        mutation a test result output
+      STR
+    end
+
+    context 'on exception isolation error' do
       let(:exception) do
         Class.new(RuntimeError) do
           def inspect
@@ -18,7 +31,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       end
 
       let(:reportable) do
-        Mutant::Isolation::Result::Error.new(exception)
+        Mutant::Isolation::Result::Exception.new(exception)
       end
 
       it_reports <<~'STR'
@@ -42,16 +55,19 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       STR
     end
 
-    context 'on sucessful isolation' do
+    context 'on fork isolation error' do
       let(:reportable) do
-        Mutant::Isolation::Result::Success.new(mutation_a_test_result)
+        Mutant::Isolation::Fork::ForkError.new
       end
 
       it_reports <<~'STR'
-        - 1 @ runtime: 1.0
-          - test-a
-        Test Output:
-        mutation a test result output
+        Forking the child process to isolate the mutation in failed.
+        This meant that the either the RubyVM or your OS was under
+        too much pressure to add another child process.
+
+        Possible solutions are:
+        * Reduce concurrency
+        * Reduce locks
       STR
     end
   end

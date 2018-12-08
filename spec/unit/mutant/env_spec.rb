@@ -90,7 +90,7 @@ RSpec.describe Mutant::Env do
       end
 
       let(:isolation_result) do
-        Mutant::Isolation::Result::Error.new(exception)
+        Mutant::Isolation::Result::Exception.new(exception)
       end
 
       include_examples 'mutation kill'

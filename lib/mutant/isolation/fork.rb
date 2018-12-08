@@ -9,6 +9,11 @@ module Mutant
       # Prevent mutation from `process.fork` to `fork` to call Kernel#fork
       undef_method :fork
 
+      # Unsucessful result as fork failed
+      class ForkError < Result
+        include Equalizer.new
+      end # ForkError
+
       # Call block in isolation
       #
       # @return [Result]
@@ -18,7 +23,7 @@ module Mutant
           parent(*pipes, &block)
         end
       rescue => exception
-        Result::Error.new(exception)
+        Result::Exception.new(exception)
       end
 
       # Handle parent process
@@ -31,6 +36,8 @@ module Mutant
         pid = process.fork do
           child(reader, writer, &block)
         end
+
+        return ForkError.new unless pid
 
         writer.close
 

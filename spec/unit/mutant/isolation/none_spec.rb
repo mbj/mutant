@@ -16,7 +16,7 @@ RSpec.describe Mutant::Isolation::None do
 
       it 'returns error result' do
         expect(object.call { fail exception })
-          .to eql(Mutant::Isolation::Result::Error.new(exception))
+          .to eql(Mutant::Isolation::Result::Exception.new(exception))
       end
     end
   end

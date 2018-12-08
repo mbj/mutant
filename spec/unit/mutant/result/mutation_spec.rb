@@ -24,7 +24,7 @@ RSpec.describe Mutant::Result::Mutation do
 
   shared_examples_for 'unsuccessful isolation' do
     let(:isolation_result) do
-      Mutant::Isolation::Result::Error.new(RuntimeError.new('foo'))
+      Mutant::Isolation::Result::Exception.new(RuntimeError.new('foo'))
     end
   end
 
