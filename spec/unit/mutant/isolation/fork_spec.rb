@@ -151,7 +151,7 @@ RSpec.describe Mutant::Isolation::Fork do
 
       specify do
         XSpec::ExpectationVerifier.verify(self, expectations) do
-          expect(subject).to eql(Mutant::Isolation::Result::Error.new(exception))
+          expect(subject).to eql(Mutant::Isolation::Result::Exception.new(exception))
         end
       end
     end

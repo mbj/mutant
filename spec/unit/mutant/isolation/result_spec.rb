@@ -17,9 +17,9 @@ RSpec.describe Mutant::Isolation::Result do
     end
 
     context 'on error instance' do
-      let(:effective_class) { described_class::Error }
+      let(:effective_class) { described_class::Exception }
 
-      it 'returns true' do
+      it 'returns false' do
         expect(apply).to be(false)
       end
     end

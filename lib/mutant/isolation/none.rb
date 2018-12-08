@@ -16,7 +16,7 @@ module Mutant
       def call
         Result::Success.new(yield)
       rescue => exception
-        Result::Error.new(exception)
+        Result::Exception.new(exception)
       end
 
     end # None

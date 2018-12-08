@@ -18,7 +18,7 @@ module Mutant
           parent(*pipes, &block)
         end
       rescue => exception
-        Result::Error.new(exception)
+        Result::Exception.new(exception)
       end
 
       # Handle parent process

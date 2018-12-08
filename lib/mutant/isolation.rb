@@ -19,12 +19,14 @@ module Mutant
         instance_of?(Success)
       end
 
+      # Succesful result producing value
       class Success < self
         include Concord::Public.new(:value)
       end # Success
 
-      class Error < self
-        include Concord::Public.new(:error)
+      # Unsuccessful result by unexpected exception
+      class Exception < self
+        include Concord::Public.new(:value)
       end # Error
     end # Result
 

@@ -18,7 +18,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       end
 
       let(:reportable) do
-        Mutant::Isolation::Result::Error.new(exception)
+        Mutant::Isolation::Result::Exception.new(exception)
       end
 
       it_reports <<~'STR'

@@ -8,7 +8,7 @@ module Mutant
         #
         # :reek:TooManyConstants
         class IsolationResult < self
-          ERROR_MESSAGE = <<~'MESSAGE'
+          EXCEPTION_ERROR_MESSAGE = <<~'MESSAGE'
             Killing the mutation resulted in an integration error.
             This is the case when the tests selected for the current mutation
             did not produce a test result, but instead an exception was raised.
@@ -27,29 +27,37 @@ module Mutant
             ```
           MESSAGE
 
+          MAP = {
+            Isolation::Result::Success   => :visit_success,
+            Isolation::Result::Exception => :visit_exception
+          }.freeze
+
           private_constant(*constants(false))
 
           # Run report printer
           #
           # @return [undefined]
           def run
-            if object.success?
-              visit(TestResult, object.value)
-            else
-              visit_error_result
-            end
+            __send__(MAP.fetch(object.class))
           end
 
         private
 
-          # Visit failed test results
+          # Visit successful isolation result
           #
           # @return [undefined]
-          def visit_error_result
-            exception = object.error
+          def visit_success
+            visit(TestResult, object.value)
+          end
+
+          # Visit exception isolation result
+          #
+          # @return [undefined]
+          def visit_exception
+            exception = object.value
 
             puts(
-              ERROR_MESSAGE % [
+              EXCEPTION_ERROR_MESSAGE % [
                 exception.inspect,
                 exception.backtrace.join("\n")
               ]
