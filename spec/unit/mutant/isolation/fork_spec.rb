@@ -133,8 +133,8 @@ RSpec.describe Mutant::Isolation::Fork do
       end
     end
 
-    context 'when fork fails' do
-      let(:exception) { RuntimeError.new('fork(2)') }
+    context 'when unexpected exception was raised' do
+      let(:exception) { RuntimeError.new }
 
       let(:expectations) do
         [
@@ -152,6 +152,29 @@ RSpec.describe Mutant::Isolation::Fork do
       specify do
         XSpec::ExpectationVerifier.verify(self, expectations) do
           expect(subject).to eql(Mutant::Isolation::Result::Exception.new(exception))
+        end
+      end
+    end
+
+    context 'when fork fails' do
+      let(:result_class) { described_class::ForkError }
+
+      let(:expectations) do
+        [
+          *prefork_expectations,
+          {
+            receiver: process,
+            selector: :fork,
+            reaction: {
+              return: nil
+            }
+          }
+        ].map(&XSpec::MessageExpectation.method(:parse))
+      end
+
+      specify do
+        XSpec::ExpectationVerifier.verify(self, expectations) do
+          expect(subject).to eql(result_class.new)
         end
       end
     end
