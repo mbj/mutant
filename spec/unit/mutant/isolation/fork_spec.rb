@@ -23,6 +23,10 @@ RSpec.describe Mutant::Isolation::Fork do
   let(:writer)            { instance_double(IO, :writer)                }
   let(:nullio)            { instance_double(IO, :nullio)                }
 
+  let(:status_success) do
+    instance_double(Process::Status, success?: true)
+  end
+
   let(:fork_success) do
     {
       receiver: process,
@@ -34,11 +38,14 @@ RSpec.describe Mutant::Isolation::Fork do
     }
   end
 
-  let(:waitpid) do
+  let(:child_wait) do
     {
       receiver:  process,
-      selector:  :waitpid,
-      arguments: [pid]
+      selector:  :wait2,
+      arguments: [pid],
+      reaction:  {
+        return: [pid, status_success]
+      }
     }
   end
 
@@ -46,6 +53,17 @@ RSpec.describe Mutant::Isolation::Fork do
     {
       receiver: writer,
       selector: :close
+    }
+  end
+
+  let(:load_success) do
+    {
+      receiver:  marshal,
+      selector:  :load,
+      arguments: [reader],
+      reaction:  {
+        return: block_return
+      }
     }
   end
 
@@ -128,15 +146,8 @@ RSpec.describe Mutant::Isolation::Fork do
           fork_success,
           *killfork,
           writer_close,
-          {
-            receiver:  marshal,
-            selector:  :load,
-            arguments: [reader],
-            reaction:  {
-              return: block_return
-            }
-          },
-          waitpid
+          load_success,
+          child_wait
         ].map(&XSpec::MessageExpectation.method(:parse))
       end
 
@@ -164,7 +175,7 @@ RSpec.describe Mutant::Isolation::Fork do
                   exception: exception
                 }
               },
-              waitpid
+              child_wait
             ].map(&XSpec::MessageExpectation.method(:parse))
           end
 
@@ -196,6 +207,43 @@ RSpec.describe Mutant::Isolation::Fork do
       specify do
         XSpec::ExpectationVerifier.verify(self, expectations) do
           expect(subject).to eql(result_class.new)
+        end
+      end
+    end
+
+    context 'when child exits nonzero' do
+      let(:status_error) do
+        instance_double(Process::Status, success?: false)
+      end
+
+      let(:expected_result) do
+        Mutant::Isolation::Result::ErrorChain.new(
+          described_class::ChildError.new(status_error),
+          Mutant::Isolation::Result::Success.new(block_return)
+        )
+      end
+
+      let(:expectations) do
+        [
+          *prefork_expectations,
+          fork_success,
+          *killfork,
+          writer_close,
+          load_success,
+          {
+            receiver:  process,
+            selector:  :wait2,
+            arguments: [pid],
+            reaction:  {
+              return: [pid, status_error]
+            }
+          }
+        ].map(&XSpec::MessageExpectation.method(:parse))
+      end
+
+      specify do
+        XSpec::ExpectationVerifier.verify(self, expectations) do
+          expect(subject).to eql(expected_result)
         end
       end
     end
