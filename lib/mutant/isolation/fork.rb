@@ -36,8 +36,6 @@ module Mutant
           pid = start_child or return ForkError.new
 
           read_child_result(pid)
-        rescue => exception
-          Result::Exception.new(exception)
         end
 
       private
@@ -58,6 +56,8 @@ module Mutant
           writer.close
 
           Result::Success.new(marshal.load(reader))
+        rescue ArgumentError, EOFError => exception
+          Result::Exception.new(exception)
         ensure
           process.waitpid(pid)
         end

@@ -147,28 +147,32 @@ RSpec.describe Mutant::Isolation::Fork do
       end
     end
 
-    context 'when unexpected exception was raised' do
-      let(:exception) { RuntimeError.new }
+    context 'when expected exception was raised when reading from child' do
+      [ArgumentError, EOFError].each do |exception_class|
+        context "on #{exception_class}" do
+          let(:exception) { exception_class.new }
 
-      let(:expectations) do
-        [
-          *prefork_expectations,
-          fork_success,
-          *killfork,
-          {
-            receiver: writer,
-            selector: :close,
-            reaction: {
-              exception: exception
-            }
-          },
-          waitpid
-        ].map(&XSpec::MessageExpectation.method(:parse))
-      end
+          let(:expectations) do
+            [
+              *prefork_expectations,
+              fork_success,
+              *killfork,
+              {
+                receiver: writer,
+                selector: :close,
+                reaction: {
+                  exception: exception
+                }
+              },
+              waitpid
+            ].map(&XSpec::MessageExpectation.method(:parse))
+          end
 
-      specify do
-        XSpec::ExpectationVerifier.verify(self, expectations) do
-          expect(subject).to eql(Mutant::Isolation::Result::Exception.new(exception))
+          specify do
+            XSpec::ExpectationVerifier.verify(self, expectations) do
+              expect(subject).to eql(Mutant::Isolation::Result::Exception.new(exception))
+            end
+          end
         end
       end
     end
