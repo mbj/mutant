@@ -7,7 +7,7 @@ module Mutant
 
     # Isolated computation result
     class Result
-      include AbstractType
+      include AbstractType, Adamantium
 
       abstract_method :value
       abstract_method :error
