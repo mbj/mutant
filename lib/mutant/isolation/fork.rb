@@ -39,9 +39,11 @@ module Mutant
 
         return ForkError.new unless pid
 
-        writer.close
+        begin
+          writer.close
 
-        Result::Success.new(marshal.load(reader)).tap do
+          Result::Success.new(marshal.load(reader))
+        ensure
           process.waitpid(pid)
         end
       end

@@ -8,16 +8,6 @@ module Mutant
         #
         # :reek:TooManyConstants
         class IsolationResult < self
-          FORK_ERROR_MESSAGE = <<~'MESSAGE'
-            Forking the child process to isolate the mutation in failed.
-            This meant that the either the RubyVM or your OS was under
-            too much pressure to add another child process.
-
-            Possible solutions are:
-            * Reduce concurrency
-            * Reduce locks
-          MESSAGE
-
           EXCEPTION_ERROR_MESSAGE = <<~'MESSAGE'
             Killing the mutation resulted in an integration error.
             This is the case when the tests selected for the current mutation
@@ -37,10 +27,20 @@ module Mutant
             ```
           MESSAGE
 
+          FORK_ERROR_MESSAGE = <<~'MESSAGE'
+            Forking the child process to isolate the mutation in failed.
+            This meant that the either the RubyVM or your OS was under
+            too much pressure to add another child process.
+
+            Possible solutions are:
+            * Reduce concurrency
+            * Reduce locks
+          MESSAGE
+
           MAP = {
-            Isolation::Result::Success   => :visit_success,
+            Isolation::Fork::ForkError   => :visit_fork_error,
             Isolation::Result::Exception => :visit_exception,
-            Isolation::Fork::ForkError   => :visit_fork_error
+            Isolation::Result::Success   => :visit_success
           }.freeze
 
           private_constant(*constants(false))
