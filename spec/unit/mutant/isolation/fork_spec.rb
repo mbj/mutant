@@ -161,7 +161,8 @@ RSpec.describe Mutant::Isolation::Fork do
             reaction: {
               exception: exception
             }
-          }
+          },
+          waitpid
         ].map(&XSpec::MessageExpectation.method(:parse))
       end
 
