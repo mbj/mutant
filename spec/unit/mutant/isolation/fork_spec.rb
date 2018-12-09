@@ -23,6 +23,77 @@ RSpec.describe Mutant::Isolation::Fork do
   let(:writer)            { instance_double(IO, :writer)                }
   let(:nullio)            { instance_double(IO, :nullio)                }
 
+  let(:fork_success) do
+    {
+      receiver: process,
+      selector: :fork,
+      reaction: {
+        yields: [],
+        return: pid
+      }
+    }
+  end
+
+  let(:waitpid) do
+    {
+      receiver:  process,
+      selector:  :waitpid,
+      arguments: [pid]
+    }
+  end
+
+  let(:writer_close) do
+    {
+      receiver: writer,
+      selector: :close
+    }
+  end
+
+  let(:killfork) do
+    [
+      # Inside the killfork
+      {
+        receiver: reader,
+        selector: :close
+      },
+      {
+        receiver: writer,
+        selector: :binmode
+      },
+      {
+        receiver: devnull,
+        selector: :call,
+        reaction: {
+          yields: [nullio]
+        }
+      },
+      {
+        receiver:  stderr,
+        selector:  :reopen,
+        arguments: [nullio]
+      },
+      {
+        receiver:  stdout,
+        selector:  :reopen,
+        arguments: [nullio]
+      },
+      {
+        receiver:  marshal,
+        selector:  :dump,
+        arguments: [block_return],
+        reaction:  {
+          return: block_return_blob
+        }
+      },
+      {
+        receiver:  writer,
+        selector:  :syswrite,
+        arguments: [block_return_blob]
+      },
+      writer_close
+    ]
+  end
+
   describe '#call' do
     let(:object) do
       described_class.new(
@@ -54,62 +125,9 @@ RSpec.describe Mutant::Isolation::Fork do
       let(:expectations) do
         [
           *prefork_expectations,
-          {
-            receiver: process,
-            selector: :fork,
-            reaction: {
-              yields: [],
-              return: pid
-            }
-          },
-          # Inside the killfork
-          {
-            receiver: reader,
-            selector: :close
-          },
-          {
-            receiver: writer,
-            selector: :binmode
-          },
-          {
-            receiver: devnull,
-            selector: :call,
-            reaction: {
-              yields: [nullio]
-            }
-          },
-          {
-            receiver:  stderr,
-            selector:  :reopen,
-            arguments: [nullio]
-          },
-          {
-            receiver:  stdout,
-            selector:  :reopen,
-            arguments: [nullio]
-          },
-          {
-            receiver:  marshal,
-            selector:  :dump,
-            arguments: [block_return],
-            reaction:  {
-              return: block_return_blob
-            }
-          },
-          {
-            receiver:  writer,
-            selector:  :syswrite,
-            arguments: [block_return_blob]
-          },
-          {
-            receiver: writer,
-            selector: :close
-          },
-          # Outside the killfork
-          {
-            receiver: writer,
-            selector: :close
-          },
+          fork_success,
+          *killfork,
+          writer_close,
           {
             receiver:  marshal,
             selector:  :load,
@@ -118,11 +136,7 @@ RSpec.describe Mutant::Isolation::Fork do
               return: block_return
             }
           },
-          {
-            receiver:  process,
-            selector:  :waitpid,
-            arguments: [pid]
-          }
+          waitpid
         ].map(&XSpec::MessageExpectation.method(:parse))
       end
 
@@ -139,9 +153,11 @@ RSpec.describe Mutant::Isolation::Fork do
       let(:expectations) do
         [
           *prefork_expectations,
+          fork_success,
+          *killfork,
           {
-            receiver: process,
-            selector: :fork,
+            receiver: writer,
+            selector: :close,
             reaction: {
               exception: exception
             }
