@@ -8,6 +8,11 @@ module Mutant
         #
         # :reek:TooManyConstants
         class IsolationResult < self
+          CHILD_ERROR_MESSAGE = <<~'MESSAGE'
+            Killfork exited nonzero. Its result (if any) was ignored:
+            %s
+          MESSAGE
+
           EXCEPTION_ERROR_MESSAGE = <<~'MESSAGE'
             Killing the mutation resulted in an integration error.
             This is the case when the tests selected for the current mutation
@@ -38,9 +43,11 @@ module Mutant
           MESSAGE
 
           MAP = {
-            Isolation::Fork::ForkError   => :visit_fork_error,
-            Isolation::Result::Exception => :visit_exception,
-            Isolation::Result::Success   => :visit_success
+            Isolation::Fork::ChildError   => :visit_child_error,
+            Isolation::Fork::ForkError    => :visit_fork_error,
+            Isolation::Result::ErrorChain => :visit_chain,
+            Isolation::Result::Exception  => :visit_exception,
+            Isolation::Result::Success    => :visit_success
           }.freeze
 
           private_constant(*constants(false))
@@ -59,6 +66,13 @@ module Mutant
           # @return [undefined]
           def visit_success
             visit(TestResult, object.value)
+          end
+
+          # Visit child error isolation result
+          #
+          # @return [undefined]
+          def visit_child_error
+            puts(CHILD_ERROR_MESSAGE % object.value.inspect)
           end
 
           # Visit fork error isolation result
@@ -80,6 +94,16 @@ module Mutant
                 exception.backtrace.join("\n")
               ]
             )
+          end
+
+          # Visit chain
+          #
+          # @return [undefined]
+          def visit_chain
+            printer = self.class
+
+            visit(printer, object.value)
+            visit(printer, object.next)
           end
         end # IsolationResult
       end # Printer

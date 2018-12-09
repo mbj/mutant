@@ -70,5 +70,55 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
         * Reduce locks
       STR
     end
+
+    context 'on child isolation error' do
+      let(:reportable) do
+        Mutant::Isolation::Fork::ChildError.new(
+          instance_double(
+            Process::Status,
+            'unsuccessful status'
+          )
+        )
+      end
+
+      it_reports <<~'STR'
+        Killfork exited nonzero. Its result (if any) was ignored:
+        #<InstanceDouble(Process::Status) "unsuccessful status">
+      STR
+    end
+
+    context 'on child isolation error' do
+      let(:fork_error) do
+        Mutant::Isolation::Fork::ForkError.new
+      end
+
+      let(:child_error) do
+        Mutant::Isolation::Fork::ChildError.new(
+          instance_double(
+            Process::Status,
+            'unsuccessful status'
+          )
+        )
+      end
+
+      let(:reportable) do
+        Mutant::Isolation::Result::ErrorChain.new(
+          fork_error,
+          child_error
+        )
+      end
+
+      it_reports <<~'STR'
+        Forking the child process to isolate the mutation in failed.
+        This meant that the either the RubyVM or your OS was under
+        too much pressure to add another child process.
+
+        Possible solutions are:
+        * Reduce concurrency
+        * Reduce locks
+        Killfork exited nonzero. Its result (if any) was ignored:
+        #<InstanceDouble(Process::Status) "unsuccessful status">
+      STR
+    end
   end
 end

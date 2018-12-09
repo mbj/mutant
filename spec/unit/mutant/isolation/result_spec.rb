@@ -24,4 +24,18 @@ RSpec.describe Mutant::Isolation::Result do
       end
     end
   end
+
+  describe 'add_error' do
+    let(:other)  { described_class::Success.new(object) }
+    let(:value)  { double('Object')                     }
+    let(:object) { described_class::Success.new(value)  }
+
+    def apply
+      object.add_error(other)
+    end
+
+    it 'returns chain instance' do
+      expect(apply).to eql(described_class::ErrorChain.new(other, object))
+    end
+  end
 end

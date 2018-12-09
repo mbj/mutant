@@ -11,14 +11,19 @@ module Mutant
 
       ATTRIBUTES = (anima.attribute_names + %i[block reader writer]).freeze
 
+      # Unsucessful result as child exited nonzero
+      class ChildError < Result
+        include Concord::Public.new(:value)
+      end # ChildError
+
       # Unsucessful result as fork failed
       class ForkError < Result
         include Equalizer.new
       end # ForkError
 
+      # ignore :reek:InstanceVariableAssumption
       class Parent
         include(
-          Adamantium::Flat,
           Anima.new(*ATTRIBUTES),
           Procto.call
         )
@@ -31,11 +36,13 @@ module Mutant
         # @param [IO] reader
         # @param [IO] writer
         #
-        # @return [undefined]
+        # @return [Result]
         def call
           pid = start_child or return ForkError.new
 
           read_child_result(pid)
+
+          @result
         end
 
       private
@@ -51,15 +58,33 @@ module Mutant
         #
         # @param [Integer] pid
         #
-        # @return [Result]
+        # @return [undefined]
         def read_child_result(pid)
           writer.close
 
-          Result::Success.new(marshal.load(reader))
+          add_result(Result::Success.new(marshal.load(reader)))
         rescue ArgumentError, EOFError => exception
-          Result::Exception.new(exception)
+          add_result(Result::Exception.new(exception))
         ensure
-          process.waitpid(pid)
+          wait_child(pid)
+        end
+
+        # Wait for child process
+        #
+        # @param [Integer] pid
+        #
+        # @return [undefined]
+        def wait_child(pid)
+          _pid, status = process.wait2(pid)
+
+          add_result(ChildError.new(status)) unless status.success?
+        end
+
+        # Add a result
+        #
+        # @param [Result]
+        def add_result(result)
+          @result = defined?(@result) ? @result.add_error(result) : result
         end
       end # Parent
 
@@ -97,7 +122,7 @@ module Mutant
         end
       end # Child
 
-      private_constant(*(constants(false) - %i[ForkError]))
+      private_constant(*(constants(false) - %i[ChildError ForkError]))
 
       # Call block in isolation
       #
