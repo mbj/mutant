@@ -34,8 +34,8 @@ module Mutant
 
           FORK_ERROR_MESSAGE = <<~'MESSAGE'
             Forking the child process to isolate the mutation in failed.
-            This meant that the either the RubyVM or your OS was under
-            too much pressure to add another child process.
+            This meant that either the RubyVM or your OS was under too much
+            pressure to add another child process.
 
             Possible solutions are:
             * Reduce concurrency
