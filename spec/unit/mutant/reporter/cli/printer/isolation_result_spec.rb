@@ -62,8 +62,8 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
 
       it_reports <<~'STR'
         Forking the child process to isolate the mutation in failed.
-        This meant that the either the RubyVM or your OS was under
-        too much pressure to add another child process.
+        This meant that either the RubyVM or your OS was under too much
+        pressure to add another child process.
 
         Possible solutions are:
         * Reduce concurrency
@@ -110,8 +110,8 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
 
       it_reports <<~'STR'
         Forking the child process to isolate the mutation in failed.
-        This meant that the either the RubyVM or your OS was under
-        too much pressure to add another child process.
+        This meant that either the RubyVM or your OS was under too much
+        pressure to add another child process.
 
         Possible solutions are:
         * Reduce concurrency
