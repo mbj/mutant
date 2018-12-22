@@ -25,7 +25,6 @@ module Mutant
             %s
             Unparsed Source:
             %s
-            Test Result:
           MESSAGE
 
           NO_DIFF_MESSAGE = <<~'MESSAGE'
@@ -47,7 +46,6 @@ module Mutant
             ---- Noop failure -----
             No code was inserted. And the test did NOT PASS.
             This is typically a problem of your specs not passing unmutated.
-            Test Result:
           MESSAGE
 
           FOOTER = '-----------------------'
@@ -68,6 +66,8 @@ module Mutant
           # @return [undefined]
           def print_details
             __send__(MAP.fetch(mutation.class))
+
+            visit_isolation_result unless isolation_result.success?
           end
 
           # Evil mutation details
@@ -101,7 +101,6 @@ module Mutant
           # @return [String]
           def noop_details
             info(NOOP_MESSAGE)
-            visit_isolation_result
           end
 
           # Neutral details
@@ -109,7 +108,6 @@ module Mutant
           # @return [String]
           def neutral_details
             info(NEUTRAL_MESSAGE, original_node.inspect, mutation.source)
-            visit_isolation_result
           end
 
           # Visit failed test results

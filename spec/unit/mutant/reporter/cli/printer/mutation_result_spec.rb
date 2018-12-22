@@ -6,7 +6,27 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
   let(:reportable) { mutation_a_result }
 
   describe '.call' do
-    context 'failed kill' do
+    context 'isolation problem' do
+      let(:status) do
+        instance_double(Process::Status)
+      end
+
+      let(:mutation_a_isolation_result) do
+        Mutant::Isolation::Fork::ChildError.new(status)
+      end
+
+      it_reports(<<~'REPORT')
+        evil:subject-a:d27d2
+        @@ -1,2 +1,2 @@
+        -true
+        +false
+        Killfork exited nonzero. Its result (if any) was ignored:
+        #<InstanceDouble(Process::Status) (anonymous)>
+        -----------------------
+      REPORT
+    end
+
+    context 'unsucessful result' do
       with(:mutation_a_test_result) { { passed: true } }
 
       context 'on evil mutation' do
@@ -80,11 +100,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           s(:true)
           Unparsed Source:
           true
-          Test Result:
-          - 1 @ runtime: 1.0
-            - test-a
-          Test Output:
-          mutation a test result output
           -----------------------
         REPORT
       end
@@ -101,11 +116,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           ---- Noop failure -----
           No code was inserted. And the test did NOT PASS.
           This is typically a problem of your specs not passing unmutated.
-          Test Result:
-          - 1 @ runtime: 1.0
-            - test-a
-          Test Output:
-          mutation a test result output
           -----------------------
         REPORT
       end
