@@ -2,5 +2,5 @@
 
 module Mutant
   # Current mutant version
-  VERSION = '0.8.22'.freeze
+  VERSION = '0.8.23'.freeze
 end # Mutant
