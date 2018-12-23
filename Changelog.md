@@ -1,5 +1,6 @@
-# v0.8.23 2018-12-04
+# v0.8.23 2018-12-23
 
+* Improved isolation error reporting
 * Errors between isolation and tests do not kill mutations anymore.
 
 # v0.8.22 2018-12-04
