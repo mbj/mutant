@@ -9,6 +9,8 @@ module Mutant
 
           handle(:array)
 
+          children :first
+
         private
 
           # Emit mutations
@@ -19,7 +21,7 @@ module Mutant
             emit_type
             mutate_body
             return unless children.one?
-            emit(children.first)
+            emit(first) unless n_splat?(first)
           end
 
           # Mutate body
