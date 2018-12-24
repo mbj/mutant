@@ -121,3 +121,61 @@ Mutant::Meta::Example.add :block do
   mutation 'foo { }'
   mutation 'foo'
 end
+
+Mutant::Meta::Example.add :block do
+  source 'foo { next if true }'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'foo { }'
+  mutation 'foo { self }'
+  mutation 'foo { nil }'
+  mutation 'foo { raise }'
+  mutation 'foo { self if true }'
+  mutation 'foo { nil if true }'
+  mutation 'foo { break if true }'
+  mutation 'foo { next if !true }'
+  mutation 'foo { next if false }'
+  mutation 'foo { next if nil }'
+  mutation 'foo { next }'
+end
+
+Mutant::Meta::Example.add :block do
+  source 'foo { next }'
+
+  singleton_mutations
+  mutation 'foo { nil }'
+  mutation 'foo { raise }'
+  mutation 'foo { self }'
+  mutation 'foo { break }'
+  mutation 'foo { }'
+  mutation 'foo'
+end
+
+Mutant::Meta::Example.add :block do
+  source 'foo { break if true }'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'foo { }'
+  mutation 'foo { self }'
+  mutation 'foo { nil }'
+  mutation 'foo { raise }'
+  mutation 'foo { self if true }'
+  mutation 'foo { nil if true }'
+  mutation 'foo { break if !true }'
+  mutation 'foo { break if false }'
+  mutation 'foo { break if nil }'
+  mutation 'foo { break }'
+end
+
+Mutant::Meta::Example.add :block do
+  source 'foo { break }'
+
+  singleton_mutations
+  mutation 'foo { nil }'
+  mutation 'foo { raise }'
+  mutation 'foo { self }'
+  mutation 'foo { }'
+  mutation 'foo'
+end
