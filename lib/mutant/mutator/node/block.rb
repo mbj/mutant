@@ -32,10 +32,19 @@ module Mutant
           emit_body(N_RAISE)
 
           return unless body
-          emit(body)
+          emit(body) unless body_has_control?
           emit_body_mutations
 
           mutate_body_receiver
+        end
+
+        # Test if body has control structures
+        #
+        # @return [Boolean]
+        def body_has_control?
+          AST.find_last_path(body) do |node|
+            n_break?(node) || n_next?(node)
+          end.any?
         end
 
         # Mutate method send in body scope of `send`
