@@ -75,7 +75,7 @@ describe Mutant::Repository::Diff do
       end
 
       let(:expected_git_log_command) do
-        %W[git log from_rev...to_rev -L 1,2:#{path}]
+        %W[git log from_rev...to_rev --ignore-all-space -L 1,2:#{path}]
       end
 
       context 'on failure of git log command' do
