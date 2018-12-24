@@ -76,6 +76,15 @@ Mutant::Meta::Example.add :regexp do
   mutation '/(?(1)(foo)(?:bar))/'
 end
 
+# Case where MRI would accept an expression but regexp_parser not.
+Mutant::Meta::Example.add :regexp do
+  source '/u{/'
+
+  singleton_mutations
+  mutation '//'
+  mutation '/nomatch\A/'
+end
+
 Pathname
   .glob(Pathname.new(__dir__).join('regexp', '*.rb'))
   .sort

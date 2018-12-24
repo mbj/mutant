@@ -8,10 +8,15 @@ module Mutant
       #
       # @param regexp [String]
       #
-      # @return [Regexp::Expression]
+      # @return [Regexp::Expression, nil]
+      #
+      # rubocop:disable Lint/HandleExceptions
       def self.parse(regexp)
         ::Regexp::Parser.parse(regexp)
+      # regexp_parser is more strict than MRI
+      rescue ::Regexp::Scanner::PrematureEndError
       end
+      # rubocop:enable Lint/HandleExceptions
 
       # Convert expression into ast node
       #
