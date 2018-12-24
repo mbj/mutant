@@ -7,15 +7,7 @@
   ruby_glob_pattern: '**/*_spec.rb'
   mutation_coverage: false
   mutation_generation: true
-  expected_errors:
-    "#<Parser::SyntaxError: invalid multibyte escape: /\xAA/>":
-      - language/regexp/escapes_spec.rb
-    '#<RegexpError: invalid multibyte escape: /\xAA/>':
-      - language/regexp/escapes_spec.rb
-    "#<Regexp::Scanner::PrematureEndError: Premature end of pattern at #{str}>":
-      - language/regexp/interpolation_spec.rb
-    '#<Regexp::Scanner::PrematureEndError: Premature end of pattern at \xA>':
-      - language/regexp/escapes_spec.rb
+  expected_errors: {}
   exclude:
     - core/string/casecmp_spec.rb
     - core/symbol/casecmp_spec.rb
