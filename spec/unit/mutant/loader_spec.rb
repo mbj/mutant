@@ -29,7 +29,7 @@ RSpec.describe Mutant::Loader, '.call' do
   it 'performs expected kernel interaction' do
     expect(kernel).to receive(:eval)
       .with(
-        source,
+        "# frozen_string_literal: true\n#[InstanceDouble(String) (anonymous)]",
         binding,
         path_str,
         line

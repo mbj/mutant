@@ -1,3 +1,7 @@
+# v0.8.24 2018-12-xx
+
+* Change to always insert mutations with frozen string literals
+
 # v0.8.23 2018-12-23
 
 * Improved isolation error reporting
