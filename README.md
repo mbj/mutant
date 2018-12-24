@@ -93,6 +93,8 @@ Running mutant for the first time on an existing codebase can be a rather dishea
 bundle exec mutant --include lib --require virtus --since master --use rspec Virtus::Attribute#type
 ```
 
+Note that this feature requires at least git `2.13.0`.
+
 Presentations
 -------------
 
