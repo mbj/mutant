@@ -3,7 +3,6 @@
 module Mutant
   class Mutator
     class Node
-      # Emitter for mutations on 19 blocks
       class Block < self
 
         handle(:block)
@@ -18,7 +17,7 @@ module Mutant
         def dispatch
           emit_singletons
           emit(send) unless n_lambda?(send)
-          emit_send_mutations(&method(:n_send?))
+          emit_send_mutations(&method(:valid_send_mutation?))
           emit_arguments_mutations
 
           mutate_body
@@ -56,6 +55,17 @@ module Mutant
           body_meta = AST::Meta::Send.new(body)
 
           emit(s(:send, send, body_meta.selector, *body_meta.arguments))
+        end
+
+        # Test for valid send mutations
+        #
+        # @return [true, false, nil]
+        def valid_send_mutation?(node)
+          return unless n_send?(node)
+
+          last = AST::Meta::Send.new(node).arguments.last
+
+          !last&.type.equal?(:block_pass)
         end
 
       end # Block
