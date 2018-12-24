@@ -5,6 +5,10 @@ module Mutant
   class Loader
     include Anima.new(:binding, :kernel, :source, :subject)
 
+    FROZEN_STRING_FORMAT = "# frozen_string_literal: true\n%s"
+
+    private_constant(*constants(false))
+
     # Call loader
     #
     # @return [self]
@@ -19,7 +23,7 @@ module Mutant
     # @return [undefined]
     def call
       kernel.eval(
-        source,
+        FROZEN_STRING_FORMAT % source,
         binding,
         subject.source_path.to_s,
         subject.source_line
