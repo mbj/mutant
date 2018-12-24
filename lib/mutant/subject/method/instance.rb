@@ -25,7 +25,11 @@ module Mutant
           #
           # @return [self]
           def prepare
-            scope.__send__(:memoized_methods).instance_variable_get(:@memory).delete(name)
+            scope
+              .__send__(:memoized_methods)
+              .instance_variable_get(:@memory)
+              .delete(name)
+
             super()
           end
 

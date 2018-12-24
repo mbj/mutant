@@ -55,7 +55,10 @@ RSpec.describe Mutant::Subject::Method::Instance do
     subject { object.prepare }
 
     it 'undefines method on scope' do
-      expect { subject }.to change { scope.instance_methods.include?(:foo) }.from(true).to(false)
+      expect { subject }
+        .to change { scope.instance_methods.include?(:foo) }
+        .from(true)
+        .to(false)
     end
 
     it_should_behave_like 'a command method'
@@ -64,22 +67,23 @@ RSpec.describe Mutant::Subject::Method::Instance do
   describe '#source' do
     subject { object.source }
 
-    it { should eql("def foo\nend") }
+    specify do
+      should eql(<<~'RUBY'.chomp)
+        def foo
+        end
+      RUBY
+    end
   end
 end
 
 RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   let(:object)  { described_class.new(context, node) }
-  let(:context) { double('Context')                  }
-
-  let(:node) do
-    s(:def, :foo, s(:args))
-  end
+  let(:context) { instance_double(Mutant::Context)   }
+  let(:node)    { s(:def, :foo, s(:args))            }
 
   describe '#prepare' do
-
     let(:context) do
-      Mutant::Context.new(scope, double('Source Path'))
+      Mutant::Context.new(scope, instance_double(Array))
     end
 
     let(:scope) do
@@ -93,11 +97,17 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     subject { object.prepare }
 
     it 'undefines memoizer' do
-      expect { subject }.to change { scope.memoized?(:foo) }.from(true).to(false)
+      expect { subject }
+        .to change { scope.memoized?(:foo) }
+        .from(true)
+        .to(false)
     end
 
     it 'undefines method on scope' do
-      expect { subject }.to change { scope.instance_methods.include?(:foo) }.from(true).to(false)
+      expect { subject }
+        .to change { scope.instance_methods.include?(:foo) }
+        .from(true)
+        .to(false)
     end
 
     it_should_behave_like 'a command method'
@@ -106,27 +116,25 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   describe '#mutations', mutant_expression: 'Mutant::Subject#mutations' do
     subject { object.mutations }
 
+    let(:memoize) { s(:send, nil, :memoize, s(:args, s(:sym, :foo))) }
+
     let(:expected) do
       [
         Mutant::Mutation::Neutral.new(
           object,
-          s(:begin,
-            s(:def, :foo, s(:args)), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))
+          s(:begin, s(:def, :foo, s(:args)), memoize)
         ),
         Mutant::Mutation::Evil.new(
           object,
-          s(:begin,
-            s(:def, :foo, s(:args), s(:send, nil, :raise)), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))
+          s(:begin, s(:def, :foo, s(:args), s(:send, nil, :raise)), memoize)
         ),
         Mutant::Mutation::Evil.new(
           object,
-          s(:begin,
-            s(:def, :foo, s(:args), s(:zsuper)), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))
+          s(:begin, s(:def, :foo, s(:args), s(:zsuper)), memoize)
         ),
         Mutant::Mutation::Evil.new(
           object,
-          s(:begin,
-            s(:def, :foo, s(:args), nil), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))
+          s(:begin, s(:def, :foo, s(:args), nil), memoize)
         )
       ]
     end
@@ -137,6 +145,12 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   describe '#source' do
     subject { object.source }
 
-    it { should eql("def foo\nend\nmemoize(:foo)") }
+    specify do
+      should eql(<<~'RUBY'.chomp)
+        def foo
+        end
+        memoize(:foo)
+      RUBY
+    end
   end
 end
