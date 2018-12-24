@@ -43,9 +43,9 @@ module Mutant
         #
         # @return [Enumerable<Subject>]
         def call
-          return EMPTY_ARRAY if skip?
+          return EMPTY_ARRAY if skip? || matched_node_path.empty?
 
-          [subject].compact
+          [subject(matched_node_path.last)]
         end
 
       private
@@ -107,16 +107,12 @@ module Mutant
 
         # Matched subject
         #
-        # @return [Subject]
-        #   if there is a matched node
+        # @param [Parser::AST::Node] node
         #
-        # @return [nil]
-        #   otherwise
-        def subject
-          node = matched_node_path.last || return
+        # @return [Subject]
+        def subject(node)
           self.class::SUBJECT_CLASS.new(context, node)
         end
-        memoize :subject
 
         # Matched node path
         #
