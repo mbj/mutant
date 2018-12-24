@@ -51,7 +51,7 @@ module Mutant
         #
         # @return [undefined]
         def mutate_body_receiver
-          return unless n_send?(body)
+          return if n_lambda?(send) || !n_send?(body)
 
           body_meta = AST::Meta::Send.new(body)
 
