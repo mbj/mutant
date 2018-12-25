@@ -12,11 +12,11 @@ module Mutant
         :subject_filters
       )
 
-      INSPECT_FORMAT      = "#<#{self} %s>".freeze
-      ATTRIBUTE_DELIMITER = ' '.freeze
-      ATTRIBUTE_FORMAT    = '%s: [%s]'.freeze
-      ENUM_DELIMITER      = ','.freeze
-      EMPTY_ATTRIBUTES    = 'empty'.freeze
+      INSPECT_FORMAT      = "#<#{self} %s>"
+      ATTRIBUTE_DELIMITER = ' '
+      ATTRIBUTE_FORMAT    = '%s: [%s]'
+      ENUM_DELIMITER      = ','
+      EMPTY_ATTRIBUTES    = 'empty'
       PRESENTATIONS       = IceNine.deep_freeze(
         ignore_expressions: :syntax,
         match_expressions:  :syntax,

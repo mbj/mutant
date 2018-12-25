@@ -97,7 +97,7 @@ module Mutant
         class Framed < self
           include anima.add(:tput)
 
-          BUFFER_FLAGS = 'a+'.freeze
+          BUFFER_FLAGS = 'a+'
 
           REPORT_FREQUENCY = 20.0
           REPORT_DELAY     = 1 / REPORT_FREQUENCY

@@ -7,7 +7,7 @@ module Mutant
       class Instance < self
 
         NAME_INDEX = 0
-        SYMBOL     = '#'.freeze
+        SYMBOL     = '#'
 
         # Prepare subject for mutation insertion
         #

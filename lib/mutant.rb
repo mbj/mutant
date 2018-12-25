@@ -29,10 +29,10 @@ Thread.abort_on_exception = true
 #
 # @api private
 module Mutant
-  EMPTY_STRING   = ''.freeze
+  EMPTY_STRING   = ''
   EMPTY_ARRAY    = [].freeze
   EMPTY_HASH     = {}.freeze
-  SCOPE_OPERATOR = '::'.freeze
+  SCOPE_OPERATOR = '::'
 
   # Test if CI is detected via environment
   #

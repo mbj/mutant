@@ -7,7 +7,7 @@ module Mutant
       # Utility symbol mutator
       class Symbol < self
 
-        POSTFIX = '__mutant__'.freeze
+        POSTFIX = '__mutant__'
 
       private
 

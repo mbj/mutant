@@ -5,9 +5,9 @@ module Mutant
   class Diff
     include Adamantium::Flat, Concord.new(:old, :new)
 
-    ADDITION = '+'.freeze
-    DELETION = '-'.freeze
-    NEWLINE  = "\n".freeze
+    ADDITION = '+'
+    DELETION = '-'
+    NEWLINE  = "\n"
 
     # Unified source diff between old and new
     #

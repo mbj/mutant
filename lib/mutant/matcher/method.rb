@@ -13,10 +13,10 @@ module Mutant
       BLACKLIST = %r{\A(kernel/|\(eval\)\z)}.freeze
 
       SOURCE_LOCATION_WARNING_FORMAT =
-        '%s does not have a valid source location, unable to emit subject'.freeze
+        '%s does not have a valid source location, unable to emit subject'
 
       CLOSURE_WARNING_FORMAT =
-        '%s is dynamically defined in a closure, unable to emit subject'.freeze
+        '%s is dynamically defined in a closure, unable to emit subject'
 
       # Matched subjects
       #

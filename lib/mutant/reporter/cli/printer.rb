@@ -35,7 +35,7 @@ module Mutant
 
         delegate :success?
 
-        NL = "\n".freeze
+        NL = "\n"
 
         # Run printer
         #
