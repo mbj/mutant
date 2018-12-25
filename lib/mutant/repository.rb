@@ -24,7 +24,7 @@ module Mutant
     class Diff
       include Adamantium, Anima.new(:config, :from, :to)
 
-      HEAD = 'HEAD'.freeze
+      HEAD = 'HEAD'
 
       # Test if diff changes file at line range
       #

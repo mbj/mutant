@@ -7,7 +7,7 @@ module Mutant
       class Singleton < self
 
         NAME_INDEX = 1
-        SYMBOL     = '.'.freeze
+        SYMBOL     = '.'
 
         # Prepare subject for mutation insertion
         #

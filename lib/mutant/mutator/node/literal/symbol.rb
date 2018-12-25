@@ -11,7 +11,7 @@ module Mutant
 
           children :value
 
-          PREFIX = '__mutant__'.freeze
+          PREFIX = '__mutant__'
 
         private
 

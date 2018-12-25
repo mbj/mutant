@@ -10,7 +10,7 @@ module Mutant
           handle(:regexp)
 
           # No input can ever be matched with this
-          NULL_REGEXP_SOURCE = 'nomatch\A'.freeze
+          NULL_REGEXP_SOURCE = 'nomatch\A'
 
         private
 

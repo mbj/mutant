@@ -6,7 +6,7 @@ module Mutant
     include AbstractType, Adamantium::Flat
     include Concord::Public.new(:subject, :node)
 
-    CODE_DELIMITER = "\0".freeze
+    CODE_DELIMITER = "\0"
     CODE_RANGE     = (0..4).freeze
 
     # Identification string
@@ -86,7 +86,7 @@ module Mutant
     # Evil mutation that should case mutations to fail tests
     class Evil < self
 
-      SYMBOL            = 'evil'.freeze
+      SYMBOL            = 'evil'
       TEST_PASS_SUCCESS = false
 
     end # Evil
@@ -94,7 +94,7 @@ module Mutant
     # Neutral mutation that should not cause mutations to fail tests
     class Neutral < self
 
-      SYMBOL            = 'neutral'.freeze
+      SYMBOL            = 'neutral'
       TEST_PASS_SUCCESS = true
 
     end # Neutral
@@ -102,7 +102,7 @@ module Mutant
     # Noop mutation, special case of neutral
     class Noop < Neutral
 
-      SYMBOL            = 'noop'.freeze
+      SYMBOL            = 'noop'
       TEST_PASS_SUCCESS = true
 
     end # Noop

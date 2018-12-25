@@ -6,7 +6,7 @@ module Mutant
       class Printer
         # Reporter for progressive output format on scheduler Status objects
         class StatusProgressive < self
-          FORMAT = '(%02d/%02d) %3d%% - killtime: %0.02fs runtime: %0.02fs overhead: %0.02fs'.freeze
+          FORMAT = '(%02d/%02d) %3d%% - killtime: %0.02fs runtime: %0.02fs overhead: %0.02fs'
 
           delegate(
             :coverage,

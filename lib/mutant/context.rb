@@ -6,7 +6,7 @@ module Mutant
     include Adamantium::Flat, Concord::Public.new(:scope, :source_path)
     extend AST::Sexp
 
-    NAMESPACE_DELIMITER = '::'.freeze
+    NAMESPACE_DELIMITER = '::'
 
     # Return root node for mutation
     #

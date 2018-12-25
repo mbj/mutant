@@ -3,7 +3,7 @@
 RSpec.describe Mutant::Mutation do
   let(:mutation_class) do
     Class.new(Mutant::Mutation) do
-      const_set(:SYMBOL, 'test'.freeze)
+      const_set(:SYMBOL, 'test')
       const_set(:TEST_PASS_SUCCESS, true)
     end
   end

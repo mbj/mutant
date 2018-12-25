@@ -21,7 +21,7 @@ module Mutant
           SUBJECT_CLASS    = Subject::Method::Singleton
           RECEIVER_INDEX   = 0
           NAME_INDEX       = 1
-          RECEIVER_WARNING = 'Can only match :defs on :self or :const got %p unable to match'.freeze
+          RECEIVER_WARNING = 'Can only match :defs on :self or :const got %p unable to match'
 
         private
 

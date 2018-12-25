@@ -150,10 +150,6 @@ SignalException:
 Alias:
   EnforcedStyle: prefer_alias_method
 
-# Teaching people to ignore singleton class is pointless
-RedundantFreeze:
-  Enabled: false
-
 # Do not waste my horizontal or vertical space
 IndentArray:
   Enabled: false

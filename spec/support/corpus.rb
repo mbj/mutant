@@ -14,7 +14,7 @@ module MutantSpec
   # rubocop:disable MethodLength
   module Corpus
     TMP                 = ROOT.join('tmp').freeze
-    EXCLUDE_GLOB_FORMAT = '{%s}'.freeze
+    EXCLUDE_GLOB_FORMAT = '{%s}'
 
     # Not in the docs. Number from chatting with their support.
     # 2 processors allocated per container, 4 processes works well.
@@ -27,9 +27,9 @@ module MutantSpec
     class Project
       MUTEX = Mutex.new
 
-      MUTATION_GENERATION_MESSAGE = 'Total Mutations/Time/Parse-Errors: %s/%0.2fs - %0.2f/s'.freeze
-      START_MESSAGE               = 'Starting - %s'.freeze
-      FINISH_MESSAGE              = 'Mutations - %4i - %s'.freeze
+      MUTATION_GENERATION_MESSAGE = 'Total Mutations/Time/Parse-Errors: %s/%0.2fs - %0.2f/s'
+      START_MESSAGE               = 'Starting - %s'
+      FINISH_MESSAGE              = 'Mutations - %4i - %s'
 
       DEFAULT_MUTATION_COUNT = 0
 
@@ -272,7 +272,7 @@ module MutantSpec
       # Mapping of files which we expect to cause errors during mutation generation
       class ErrorWhitelist
         class UnnecessaryExpectation < StandardError
-          MESSAGE = 'Expected to encounter %s while mutating "%s"'.freeze
+          MESSAGE = 'Expected to encounter %s while mutating "%s"'
 
           def initialize(*error_info)
             super(MESSAGE % error_info)

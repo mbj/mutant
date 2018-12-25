@@ -16,7 +16,7 @@ module Mutant
 
     SEMANTICS_MESSAGE =
       "Fix your lib to follow normal ruby semantics!\n" \
-      '{Module,Class}#name should return resolvable constant name as String or nil'.freeze
+      '{Module,Class}#name should return resolvable constant name as String or nil'
 
     # Kill mutation
     #

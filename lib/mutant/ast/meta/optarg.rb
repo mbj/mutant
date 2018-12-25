@@ -9,7 +9,7 @@ module Mutant
       class Optarg
         include NamedChildren, Concord.new(:node)
 
-        UNDERSCORE = '_'.freeze
+        UNDERSCORE = '_'
 
         children :name, :default_value
 

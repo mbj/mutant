@@ -10,7 +10,7 @@ module Mutant
 
     # Undefined message payload
     Undefined = Class.new do
-      INSPECT = 'Mutant::Actor::Undefined'.freeze
+      INSPECT = 'Mutant::Actor::Undefined'
 
       # Object inspection
       #

@@ -9,9 +9,9 @@ module Mutant
 
           delegate :tests, :runtime
 
-          STATUS_FORMAT = '- %d @ runtime: %s'.freeze
-          OUTPUT_HEADER = 'Test Output:'.freeze
-          TEST_FORMAT   = '  - %s'.freeze
+          STATUS_FORMAT = '- %d @ runtime: %s'
+          OUTPUT_HEADER = 'Test Output:'
+          TEST_FORMAT   = '  - %s'
 
           # Run test result reporter
           #

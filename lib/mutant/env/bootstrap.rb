@@ -8,13 +8,13 @@ module Mutant
 
       SEMANTICS_MESSAGE_FORMAT =
         "%<message>s. Fix your lib to follow normal ruby semantics!\n" \
-        '{Module,Class}#name should return resolvable constant name as String or nil'.freeze
+        '{Module,Class}#name should return resolvable constant name as String or nil'
 
       CLASS_NAME_RAISED_EXCEPTION =
-        '%<scope_class>s#name from: %<scope>s raised an error: %<exception>s'.freeze
+        '%<scope_class>s#name from: %<scope>s raised an error: %<exception>s'
 
       CLASS_NAME_TYPE_MISMATCH_FORMAT =
-        '%<scope_class>s#name from: %<scope>s returned %<name>s'.freeze
+        '%<scope_class>s#name from: %<scope>s returned %<name>s'
 
       private_constant(*constants(false))
 

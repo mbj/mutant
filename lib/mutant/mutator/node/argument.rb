@@ -8,7 +8,7 @@ module Mutant
       class Argument < self
         handle(:arg, :kwarg)
 
-        UNDERSCORE = '_'.freeze
+        UNDERSCORE = '_'
 
         children :name
 

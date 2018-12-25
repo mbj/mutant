@@ -14,7 +14,7 @@ module MutantSpec
     end
 
     class UnexpectedWarnings < StandardError
-      MSG = 'Unexpected warnings: %s'.freeze
+      MSG = 'Unexpected warnings: %s'
 
       def initialize(warnings)
         super(MSG % warnings.join("\n"))

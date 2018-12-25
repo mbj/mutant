@@ -6,8 +6,8 @@ module Mutant
       class Printer
         # Printer for mutation progress results
         class MutationProgressResult < self
-          SUCCESS = '.'.freeze
-          FAILURE = 'F'.freeze
+          SUCCESS = '.'
+          FAILURE = 'F'
 
           # Run printer
           #

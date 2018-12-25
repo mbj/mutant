@@ -8,7 +8,7 @@ module Mutant
 
     fragment             = /[A-Za-z][A-Za-z\d_]*/.freeze
     SCOPE_NAME_PATTERN   = /(?<scope_name>#{fragment}(?:#{SCOPE_OPERATOR}#{fragment})*)/.freeze
-    SCOPE_SYMBOL_PATTERN = '(?<scope_symbol>[.#])'.freeze
+    SCOPE_SYMBOL_PATTERN = '(?<scope_symbol>[.#])'
 
     private_constant(*constants(false))
 
