@@ -31,9 +31,6 @@ On each detection of uncovered semantics you have the opportunity to:
   to test only the code you had been touching. See the [incremental](#only-mutating-changed-code)
   mutation testing documentation.
 
-Mutant uses a pure Ruby [parser](https://github.com/whitequark/parser) and an [unparser](https://github.com/mbj/unparser)
-to do its magic.
-
 Topics
 ------
 
