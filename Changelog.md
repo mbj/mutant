@@ -1,6 +1,8 @@
-# v0.8.24 2018-12-xx
+# v0.8.24 2018-12-29
 
 * Change to always insert mutations with frozen string literals
+* Fix various invalid AST or source mutations
+* Handle regexp `regexp_parser` cannot parse but MRI accepts gracefully
 
 # v0.8.23 2018-12-23
 
