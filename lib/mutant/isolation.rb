@@ -9,6 +9,10 @@ module Mutant
     class Result
       include AbstractType, Adamantium
 
+      NULL_LOG = ''
+
+      private_constant(*constants(false))
+
       abstract_method :error
       abstract_method :next
       abstract_method :value
@@ -22,6 +26,13 @@ module Mutant
         ErrorChain.new(error, self)
       end
 
+      # The log captured from integration
+      #
+      # @return [String]
+      def log
+        NULL_LOG
+      end
+
       # Test for success
       #
       # @return [Boolean]
@@ -31,7 +42,11 @@ module Mutant
 
       # Succesful result producing value
       class Success < self
-        include Concord::Public.new(:value)
+        include Concord::Public.new(:value, :log)
+
+        def self.new(_value, _log = '')
+          super
+        end
       end # Success
 
       # Unsuccessful result by unexpected exception

@@ -77,13 +77,17 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
           instance_double(
             Process::Status,
             'unsuccessful status'
-          )
+          ),
+          'log message'
         )
       end
 
       it_reports <<~'STR'
-        Killfork exited nonzero. Its result (if any) was ignored:
+        Killfork exited nonzero. Its result (if any) was ignored.
+        Process status:
         #<InstanceDouble(Process::Status) "unsuccessful status">
+        Log messages (combined stderr and stdout):
+        log message
       STR
     end
 
@@ -97,7 +101,8 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
           instance_double(
             Process::Status,
             'unsuccessful status'
-          )
+          ),
+          'log message'
         )
       end
 
@@ -116,8 +121,11 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
         Possible solutions are:
         * Reduce concurrency
         * Reduce locks
-        Killfork exited nonzero. Its result (if any) was ignored:
+        Killfork exited nonzero. Its result (if any) was ignored.
+        Process status:
         #<InstanceDouble(Process::Status) "unsuccessful status">
+        Log messages (combined stderr and stdout):
+        log message
       STR
     end
   end

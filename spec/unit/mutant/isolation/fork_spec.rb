@@ -11,17 +11,19 @@
 RSpec.describe Mutant::Isolation::Fork do
   let(:block_return)      { instance_double(Object, :block_return)      }
   let(:block_return_blob) { instance_double(String, :block_return_blob) }
-  let(:devnull)           { instance_double(Proc, :devnull)             }
   let(:io)                { class_double(IO)                            }
   let(:isolated_block)    { -> { block_return }                         }
+  let(:log_fragment)      { 'log message'                               }
+  let(:log_reader)        { instance_double(IO, :log_reader)            }
+  let(:log_writer)        { instance_double(IO, :log_writer)            }
   let(:marshal)           { class_double(Marshal)                       }
-  let(:process)           { class_double(Process)                       }
   let(:pid)               { class_double(0.class)                       }
-  let(:reader)            { instance_double(IO, :reader)                }
+  let(:process)           { class_double(Process)                       }
+  let(:result_fragment)   { 'result body'                               }
+  let(:result_reader)     { instance_double(IO, :result_reader)         }
+  let(:result_writer)     { instance_double(IO, :result_writer)         }
   let(:stderr)            { instance_double(IO, :stderr)                }
   let(:stdout)            { instance_double(IO, :stdout)                }
-  let(:writer)            { instance_double(IO, :writer)                }
-  let(:nullio)            { instance_double(IO, :nullio)                }
 
   let(:status_success) do
     instance_double(Process::Status, success?: true)
@@ -49,9 +51,9 @@ RSpec.describe Mutant::Isolation::Fork do
     }
   end
 
-  let(:writer_close) do
+  def close(descriptor)
     {
-      receiver: writer,
+      receiver: descriptor,
       selector: :close
     }
   end
@@ -60,36 +62,82 @@ RSpec.describe Mutant::Isolation::Fork do
     {
       receiver:  marshal,
       selector:  :load,
-      arguments: [reader],
+      arguments: [result_fragment],
       reaction:  {
         return: block_return
       }
     }
   end
 
+  let(:read_fragments) do
+    [
+      {
+        receiver:  io,
+        selector:  :select,
+        arguments: [[log_reader, result_reader]],
+        reaction:  { return: [[log_reader, result_reader], []] }
+      },
+      {
+        receiver: log_reader,
+        selector: :eof?,
+        reaction: { return: false }
+      },
+      {
+        receiver:  log_reader,
+        selector:  :read_nonblock,
+        arguments: [4096],
+        reaction:  { return: log_fragment }
+      },
+      {
+        receiver: result_reader,
+        selector: :eof?,
+        reaction: { return: false }
+      },
+      {
+        receiver:  result_reader,
+        selector:  :read_nonblock,
+        arguments: [4096],
+        reaction:  { return: result_fragment }
+      },
+      {
+        receiver:  io,
+        selector:  :select,
+        arguments: [[log_reader, result_reader]],
+        reaction:  { return: [[log_reader, result_reader], []] }
+      },
+      {
+        receiver: log_reader,
+        selector: :eof?,
+        reaction: { return: true }
+      },
+      {
+        receiver: result_reader,
+        selector: :eof?,
+        reaction: { return: true }
+      }
+    ]
+  end
+
   let(:killfork) do
     [
       # Inside the killfork
       {
-        receiver: reader,
+        receiver: log_reader,
         selector: :close
       },
       {
-        receiver: devnull,
-        selector: :call,
-        reaction: {
-          yields: [nullio]
-        }
+        receiver: result_reader,
+        selector: :close
       },
       {
         receiver:  stderr,
         selector:  :reopen,
-        arguments: [nullio]
+        arguments: [log_writer]
       },
       {
         receiver:  stdout,
         selector:  :reopen,
-        arguments: [nullio]
+        arguments: [log_writer]
       },
       {
         receiver:  marshal,
@@ -100,18 +148,18 @@ RSpec.describe Mutant::Isolation::Fork do
         }
       },
       {
-        receiver:  writer,
+        receiver:  result_writer,
         selector:  :syswrite,
         arguments: [block_return_blob]
       },
-      writer_close
+      close(result_writer),
+      close(log_writer)
     ]
   end
 
   describe '#call' do
     let(:object) do
       described_class.new(
-        devnull: devnull,
         io:      io,
         marshal: marshal,
         process: process,
@@ -129,7 +177,15 @@ RSpec.describe Mutant::Isolation::Fork do
           selector:  :pipe,
           arguments: [binmode: true],
           reaction:  {
-            yields: [[reader, writer]]
+            yields: [[result_reader, result_writer]]
+          }
+        },
+        {
+          receiver:  io,
+          selector:  :pipe,
+          arguments: [binmode: true],
+          reaction:  {
+            yields: [[log_reader, log_writer]]
           }
         }
       ]
@@ -141,7 +197,8 @@ RSpec.describe Mutant::Isolation::Fork do
           *prefork_expectations,
           fork_success,
           *killfork,
-          writer_close,
+          close(result_writer),
+          *read_fragments,
           load_success,
           child_wait
         ].map(&XSpec::MessageExpectation.method(:parse))
@@ -149,37 +206,36 @@ RSpec.describe Mutant::Isolation::Fork do
 
       specify do
         XSpec::ExpectationVerifier.verify(self, expectations) do
-          expect(subject).to eql(Mutant::Isolation::Result::Success.new(block_return))
+          expect(subject).to eql(Mutant::Isolation::Result::Success.new(block_return, log_fragment))
         end
       end
     end
 
-    context 'when expected exception was raised when reading from child' do
-      [ArgumentError, EOFError].each do |exception_class|
-        context "on #{exception_class}" do
-          let(:exception) { exception_class.new }
+    context 'when expected exception was raised when loading result' do
+      let(:exception) { ArgumentError.new }
 
-          let(:expectations) do
-            [
-              *prefork_expectations,
-              fork_success,
-              *killfork,
-              {
-                receiver: writer,
-                selector: :close,
-                reaction: {
-                  exception: exception
-                }
-              },
-              child_wait
-            ].map(&XSpec::MessageExpectation.method(:parse))
-          end
+      let(:expectations) do
+        [
+          *prefork_expectations,
+          fork_success,
+          *killfork,
+          close(result_writer),
+          *read_fragments,
+          {
+            receiver:  marshal,
+            selector:  :load,
+            arguments: [result_fragment],
+            reaction:  {
+              exception: exception
+            }
+          },
+          child_wait
+        ].map(&XSpec::MessageExpectation.method(:parse))
+      end
 
-          specify do
-            XSpec::ExpectationVerifier.verify(self, expectations) do
-              expect(subject).to eql(Mutant::Isolation::Result::Exception.new(exception))
-            end
-          end
+      specify do
+        XSpec::ExpectationVerifier.verify(self, expectations) do
+          expect(subject).to eql(Mutant::Isolation::Result::Exception.new(exception))
         end
       end
     end
@@ -214,8 +270,8 @@ RSpec.describe Mutant::Isolation::Fork do
 
       let(:expected_result) do
         Mutant::Isolation::Result::ErrorChain.new(
-          described_class::ChildError.new(status_error),
-          Mutant::Isolation::Result::Success.new(block_return)
+          described_class::ChildError.new(status_error, log_fragment),
+          Mutant::Isolation::Result::Success.new(block_return, log_fragment)
         )
       end
 
@@ -224,7 +280,8 @@ RSpec.describe Mutant::Isolation::Fork do
           *prefork_expectations,
           fork_success,
           *killfork,
-          writer_close,
+          close(result_writer),
+          *read_fragments,
           load_success,
           {
             receiver:  process,

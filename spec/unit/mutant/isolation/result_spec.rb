@@ -38,4 +38,36 @@ RSpec.describe Mutant::Isolation::Result do
       expect(apply).to eql(described_class::ErrorChain.new(other, object))
     end
   end
+
+  describe '#log' do
+    let(:value) { double('Object') }
+
+    def apply
+      object.log
+    end
+
+    context 'on exception result' do
+      let(:object) { described_class::Exception.new(value) }
+
+      it 'returns the empty string' do
+        expect(apply).to eql('')
+      end
+    end
+
+    context 'on sucess result' do
+      let(:object) { described_class::Success.new(value) }
+
+      it 'returns the empty string' do
+        expect(apply).to eql('')
+      end
+    end
+
+    context 'on argument' do
+      let(:object) { described_class::Success.new(value, 'foo') }
+
+      it 'returns the empty string' do
+        expect(apply).to eql('foo')
+      end
+    end
+  end
 end

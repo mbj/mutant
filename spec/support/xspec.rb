@@ -149,7 +149,7 @@ module XSpec
     end
 
     def assert_done
-      expectations.empty? or fail "unconsumed expectations:\n#{expectations.map(&:inspect).join}"
+      expectations.empty? or fail "unconsumed expectations:\n#{expectations.map(&:inspect).join("\n")}"
     end
 
     # rubocop:disable MethodLength
