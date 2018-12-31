@@ -75,10 +75,6 @@ RSpec.describe Mutant::Isolation::Fork do
         selector: :close
       },
       {
-        receiver: writer,
-        selector: :binmode
-      },
-      {
         receiver: devnull,
         selector: :call,
         reaction: {

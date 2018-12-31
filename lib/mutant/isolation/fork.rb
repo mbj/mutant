@@ -97,7 +97,6 @@ module Mutant
         # @return [undefined]
         def call
           reader.close
-          writer.binmode
           writer.syswrite(marshal.dump(result(&block)))
           writer.close
         end
