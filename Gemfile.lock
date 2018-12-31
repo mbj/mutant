@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mutant (0.8.24)
+    mutant (0.8.25)
       abstract_type (~> 0.0.7)
       adamantium (~> 0.2.0)
       anima (~> 0.3.0)
@@ -16,8 +16,8 @@ PATH
       procto (~> 0.0.2)
       regexp_parser (~> 1.2)
       unparser (~> 0.4.2)
-    mutant-rspec (0.8.24)
-      mutant (~> 0.8.24)
+    mutant-rspec (0.8.25)
+      mutant (~> 0.8.25)
       rspec-core (>= 3.4.0, < 4.0.0)
 
 GEM
