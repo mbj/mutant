@@ -33,9 +33,6 @@ module Mutant
 
         # Parent process
         #
-        # @param [IO] reader
-        # @param [IO] writer
-        #
         # @return [Result]
         def call
           pid = start_child or return ForkError.new
@@ -97,13 +94,9 @@ module Mutant
 
         # Handle child process
         #
-        # @param [IO] reader
-        # @param [IO] writer
-        #
         # @return [undefined]
         def call
           reader.close
-          writer.binmode
           writer.syswrite(marshal.dump(result(&block)))
           writer.close
         end
