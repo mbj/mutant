@@ -4,32 +4,65 @@ module Mutant
   # Parallel execution engine of arbitrary payloads
   module Parallel
 
-    # Driver for parallelized execution
-    class Driver
-      include Concord.new(:binding)
-
-      # Scheduler status
-      #
-      # @return [Object]
-      def status
-        binding.call(__method__)
-      end
-
-      # Stop master gracefully
-      #
-      # @return [self]
-      def stop
-        binding.call(__method__)
-        self
-      end
-    end # Driver
-
     # Run async computation returning driver
+    #
+    # @param [Config] config
     #
     # @return [Driver]
     def self.async(config)
-      Driver.new(config.env.new_mailbox.bind(Master.call(config)))
+      shared = {
+        var_active_jobs: shared(Variable::IVar, config, value: Set.new),
+        var_final:       shared(Variable::IVar, config),
+        var_sink:        shared(Variable::IVar, config, value: config.sink)
+      }
+
+      Driver.new(
+        threads: threads(config, worker(config, **shared)),
+        **shared
+      )
     end
+
+    # The worker
+    #
+    # @param [Config] config
+    #
+    # @return [Worker]
+    def self.worker(config, **shared)
+      Worker.new(
+        processor:   config.processor,
+        var_running: shared(Variable::MVar, config, value: config.jobs),
+        var_source:  shared(Variable::IVar, config, value: config.source),
+        **shared
+      )
+    end
+
+    # Start threads
+    #
+    # @param [Config] config
+    # @param [Worker] worker
+    #
+    # @return [Array<Thread>]
+    def self.threads(config, worker)
+      Array.new(config.jobs) { config.thread.new(&worker.method(:call)) }
+    end
+    private_class_method :threads
+
+    # Create shared variable
+    #
+    # @param [Class] klass
+    # @param [Config] config
+    #
+    # @return [Mutant::Variable]
+    #
+    # ignore :reek:LongParameterList
+    def self.shared(klass, config, **attributes)
+      klass.new(
+        condition_variable: config.condition_variable,
+        mutex:              config.mutex,
+        **attributes
+      )
+    end
+    private_class_method :shared
 
     # Job result sink
     class Sink
@@ -42,7 +75,7 @@ module Mutant
       # @return [self]
       abstract_method :result
 
-      # Sink status
+      # The sink status
       #
       # @return [Object]
       abstract_method :status
@@ -53,30 +86,16 @@ module Mutant
       abstract_method :stop?
     end # Sink
 
-    # Job to push to workers
-    class Job
-      include Adamantium::Flat, Anima.new(
-        :index,
-        :payload
-      )
-    end # Job
-
-    # Job result object received from workers
-    class JobResult
-      include Adamantium::Flat, Anima.new(
-        :job,
-        :payload
-      )
-    end # JobResult
-
     # Parallel run configuration
     class Config
       include Adamantium::Flat, Anima.new(
-        :env,
+        :condition_variable,
         :jobs,
+        :mutex,
         :processor,
         :sink,
-        :source
+        :source,
+        :thread
       )
     end # Config
 
@@ -87,6 +106,8 @@ module Mutant
         :done,
         :payload
       )
+
+      alias_method :done?, :done
     end # Status
 
   end # Parallel

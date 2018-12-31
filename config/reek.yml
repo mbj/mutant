@@ -125,7 +125,6 @@ detectors:
     enabled: true
     exclude:
     - Mutant::AST::Sexp#s
-    - Mutant::Actor::Env#new_mailbox
     - Mutant::CLI#reporter
     - Mutant::Integration::Null#call
     - Mutant::Integration::Rspec#parse_example

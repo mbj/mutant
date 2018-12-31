@@ -1,49 +1,57 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Parallel::Source::Array do
-  let(:object) { described_class.new(jobs) }
+  subject { described_class.new(payloads) }
 
-  let(:job_a) { instance_double(Mutant::Parallel::Job) }
-  let(:job_b) { instance_double(Mutant::Parallel::Job) }
-  let(:job_c) { instance_double(Mutant::Parallel::Job) }
-
-  let(:jobs) { [job_a, job_b, job_c] }
+  let(:payloads) { %i[a b c] }
 
   describe '#next' do
-    subject { object.next }
+    def job(**attributes)
+      Mutant::Parallel::Source::Job.new(attributes)
+    end
+
+    def apply
+      subject.next
+    end
 
     context 'when there is a next job' do
       it 'returns that job' do
-        should be(job_a)
+        expect(apply).to eql(job(index: 0, payload: :a))
       end
 
       it 'does not return the same job twice' do
-        expect(object.next).to be(job_a)
-        expect(object.next).to be(job_b)
-        expect(object.next).to be(job_c)
+        expect(apply).to eql(job(index: 0, payload: :a))
+        expect(apply).to eql(job(index: 1, payload: :b))
+        expect(apply).to eql(job(index: 2, payload: :c))
       end
     end
 
     context 'when there is no next job' do
-      let(:jobs) { [] }
+      let(:payloads) { [] }
 
       it 'raises error' do
-        expect { subject }.to raise_error(Mutant::Parallel::Source::NoJobError)
+        expect { apply }.to raise_error(Mutant::Parallel::Source::NoJobError)
       end
     end
   end
 
   describe '#next?' do
-    subject { object.next? }
+    def apply
+      subject.next?
+    end
 
     context 'when there is a next job' do
-      it { should be(true) }
+      it 'returns true' do
+        expect(apply).to be(true)
+      end
     end
 
     context 'when there is no next job' do
-      let(:jobs) { [] }
+      let(:payloads) { [] }
 
-      it { should be(false) }
+      it 'returns false' do
+        expect(apply).to be(false)
+      end
     end
   end
 end

@@ -17,14 +17,6 @@ module SharedContext
     prepend(new_definition)
   end
 
-  def messages(&block)
-    let(:message_sequence) do
-      FakeActor::MessageSequence.new.tap do |sequence|
-        sequence.instance_eval(&block)
-      end
-    end
-  end
-
   def it_reports(expected_content)
     it 'writes expected report to output' do
       described_class.call(output, reportable)
@@ -36,8 +28,6 @@ module SharedContext
   # rubocop:disable MethodLength
   # rubocop:disable AbcSize
   def setup_shared_context
-    let(:job_a)           { Mutant::Parallel::Job.new(index: 0, payload: mutation_a) }
-    let(:job_b)           { Mutant::Parallel::Job.new(index: 1, payload: mutation_b) }
     let(:mutation_a)      { Mutant::Mutation::Evil.new(subject_a, mutation_a_node)   }
     let(:mutation_a_node) { s(:false)                                                }
     let(:mutation_b)      { Mutant::Mutation::Evil.new(subject_a, mutation_b_node)   }
@@ -46,6 +36,20 @@ module SharedContext
     let(:output)          { StringIO.new                                             }
     let(:subject_a_node)  { s(:true)                                                 }
     let(:test_a)          { instance_double(Mutant::Test, identification: 'test-a')  }
+
+    let(:job_a) do
+      Mutant::Parallel::Source::Job.new(
+        index:   0,
+        payload: mutation_a
+      )
+    end
+
+    let(:job_b) do
+      Mutant::Parallel::Source::Job.new(
+        index:   1,
+        payload: mutation_b
+      )
+    end
 
     let(:env) do
       instance_double(
