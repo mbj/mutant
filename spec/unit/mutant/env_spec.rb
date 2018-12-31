@@ -3,7 +3,6 @@
 RSpec.describe Mutant::Env do
   let(:object) do
     described_class.new(
-      actor_env:        Mutant::Actor::Env.new(Thread),
       config:           config,
       integration:      integration,
       matchable_scopes: [],

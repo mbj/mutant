@@ -57,7 +57,6 @@ module Mutant
       def env
         subjects = matched_subjects
         Env.new(
-          actor_env:        Actor::Env.new(Thread),
           config:           config,
           integration:      integration,
           matchable_scopes: matchable_scopes,

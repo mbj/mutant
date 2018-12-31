@@ -52,12 +52,6 @@ module ParserHelper
   end
 end # ParserHelper
 
-module MessageHelper
-  def message(*arguments)
-    Mutant::Actor::Message.new(*arguments)
-  end
-end # MessageHelper
-
 module XSpecHelper
   def verify_events
     expectations = raw_expectations
@@ -72,7 +66,6 @@ end # XSpecHelper
 RSpec.configure do |config|
   config.extend(SharedContext)
   config.include(ParserHelper)
-  config.include(MessageHelper)
   config.include(Mutant::AST::Sexp)
   config.include(XSpecHelper)
 

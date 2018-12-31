@@ -28,7 +28,6 @@ RSpec.describe Mutant::Env::Bootstrap do
 
   let(:expected_env) do
     Mutant::Env.new(
-      actor_env:        Mutant::Actor::Env.new(Thread),
       config:           config,
       integration:      integration,
       matchable_scopes: [],
