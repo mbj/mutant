@@ -1,3 +1,8 @@
+# v0.8.25 2018-12-31
+
+* Change to {I,M}Var based concurrency
+* Remove actors
+
 # v0.8.24 2018-12-29
 
 * Change to always insert mutations with frozen string literals
