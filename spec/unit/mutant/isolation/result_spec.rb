@@ -25,7 +25,7 @@ RSpec.describe Mutant::Isolation::Result do
     end
   end
 
-  describe 'add_error' do
+  describe '#add_error' do
     let(:other)  { described_class::Success.new(object) }
     let(:value)  { double('Object')                     }
     let(:object) { described_class::Success.new(value)  }
