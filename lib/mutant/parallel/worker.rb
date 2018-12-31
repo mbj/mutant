@@ -2,74 +2,92 @@
 
 module Mutant
   module Parallel
-    # Parallel execution worker
     class Worker
       include Adamantium::Flat, Anima.new(
-        :mailbox,
-        :parent,
-        :processor
+        :processor,
+        :var_active_jobs,
+        :var_final,
+        :var_running,
+        :var_sink,
+        :var_source
       )
 
-      # Run worker
-      #
-      # @param [Hash<Symbol, Object] attributes
+      private(*anima.attribute_names)
+
+      # Run worker payload
       #
       # @return [self]
-      def self.run(attributes)
-        new(attributes).run
+      #
+      # ignore :reek:TooManyStatements
+      def call
+        loop do
+          job = next_job or break
+
+          job_start(job)
+
+          result = processor.call(job.payload)
+
+          job_done(job)
+
+          break if add_result(result)
+        end
+
+        finalize
+
         self
-      end
-
-      private_class_method :new
-
-      # Worker loop
-      #
-      # @return [self]
-      #
-      # rubocop:disable Lint/Loop
-      def run
-        begin
-          parent.call(Actor::Message.new(:ready, mailbox.sender))
-        end until handle(mailbox.receiver.call)
       end
 
     private
 
-      # Handle job
+      # Next job, if any
       #
-      # @param [Message] message
-      #
-      # @return [Boolean]
-      def handle(message)
-        type, payload = message.type, message.payload
-        case message.type
-        when :job
-          handle_job(payload)
-          nil
-        when :stop
-          true
-        else
-          fail Actor::ProtocolError, "Unknown command: #{type.inspect}"
+      # @return [Job, nil]
+      def next_job
+        var_source.with do |source|
+          source.next if source.next?
         end
       end
 
-      # Handle mutation
+      # Add result
+      #
+      # @param [Object] result
+      #
+      # @return [Boolean]
+      def add_result(result)
+        var_sink.with do |sink|
+          sink.result(result)
+          sink.stop?
+        end
+      end
+
+      # Register job to be started
       #
       # @param [Job] job
       #
       # @return [undefined]
-      def handle_job(job)
-        result = processor.call(job.payload)
+      def job_start(job)
+        var_active_jobs.with do |active_jobs|
+          active_jobs << job
+        end
+      end
 
-        parent.call(
-          Actor::Message.new(
-            :result,
-            JobResult.new(
-              job:     job,
-              payload: result
-            )
-          )
-        )
+      # Register job to be done
+      #
+      # @param [Job] job
+      # @param [Object] result
+      #
+      # @return [undefined]
+      def job_done(job)
+        var_active_jobs.with do |active_jobs|
+          active_jobs.delete(job)
+        end
+      end
+
+      # Finalize worker
+      #
+      # @return [undefined]
+      def finalize
+        var_final.put(nil) if var_running.modify(&:pred).zero?
       end
 
     end # Worker

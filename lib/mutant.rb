@@ -79,9 +79,9 @@ require 'mutant/isolation'
 require 'mutant/isolation/none'
 require 'mutant/isolation/fork'
 require 'mutant/parallel'
-require 'mutant/parallel/master'
-require 'mutant/parallel/worker'
+require 'mutant/parallel/driver'
 require 'mutant/parallel/source'
+require 'mutant/parallel/worker'
 require 'mutant/warning_filter'
 require 'mutant/require_highjack'
 require 'mutant/mutation'
@@ -240,8 +240,9 @@ module Mutant
       mutex:              Mutex,
       open3:              Open3,
       pathname:           Pathname,
-      requires:           EMPTY_ARRAY,
       reporter:           Reporter::CLI.build($stdout),
+      requires:           EMPTY_ARRAY,
+      thread:             Thread,
       zombie:             false
     )
   end # Config

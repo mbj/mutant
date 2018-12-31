@@ -38,19 +38,11 @@ module Mutant
     # @return [Object]
     #   the last returned status payload
     def run_driver(driver)
-      status = nil
-      sleep  = env.config.kernel.method(:sleep)
-
       loop do
-        status = driver.status
+        status = driver.wait_timeout(reporter.delay)
+        break status.payload if status.done?
         reporter.progress(status)
-        break if status.done
-        sleep.call(reporter.delay)
       end
-
-      driver.stop
-
-      status.payload
     end
 
     # Configuration for parallel execution engine
@@ -58,11 +50,13 @@ module Mutant
     # @return [Parallel::Config]
     def mutation_test_config
       Parallel::Config.new(
-        env:       env.actor_env,
-        jobs:      config.jobs,
-        processor: env.method(:kill),
-        sink:      Sink.new(env),
-        source:    Parallel::Source::Array.new(env.mutations)
+        condition_variable: config.condition_variable,
+        jobs:               config.jobs,
+        mutex:              config.mutex,
+        processor:          env.method(:kill),
+        sink:               Sink.new(env),
+        source:             Parallel::Source::Array.new(env.mutations),
+        thread:             config.thread
       )
     end
 

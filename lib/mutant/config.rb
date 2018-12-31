@@ -10,8 +10,8 @@ module Mutant
       :condition_variable,
       :expression_parser,
       :fail_fast,
-      :integration,
       :includes,
+      :integration,
       :isolation,
       :jobs,
       :kernel,
@@ -20,8 +20,9 @@ module Mutant
       :mutex,
       :open3,
       :pathname,
-      :requires,
       :reporter,
+      :requires,
+      :thread,
       :zombie
     )
 
