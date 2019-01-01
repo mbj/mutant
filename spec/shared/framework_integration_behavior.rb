@@ -20,10 +20,18 @@ RSpec.shared_examples_for 'framework integration' do
     end
   end
 
+  let(:effective_base_cmd) do
+    if ENV.key?('MUTANT_JOBS')
+      [*base_cmd, '--jobs', ENV.fetch('MUTANT_JOBS')]
+    else
+      base_cmd
+    end
+  end
+
   specify 'it allows to kill mutations' do
     expect(
       system_with_gemfile(
-        *base_cmd,
+        *effective_base_cmd,
         'TestApp::Literal#string'
       )
     ).to be(true)
@@ -32,7 +40,7 @@ RSpec.shared_examples_for 'framework integration' do
   specify 'it allows to exclude mutations' do
     expect(
       system_with_gemfile(
-        *base_cmd,
+        *effective_base_cmd,
         '--ignore-subject',
         'TestApp::Literal#uncovered_string',
         '--',
@@ -45,7 +53,7 @@ RSpec.shared_examples_for 'framework integration' do
   specify 'fails to kill mutations when they are not covered' do
     expect(
       system_with_gemfile(
-        *base_cmd,
+        *effective_base_cmd,
         'TestApp::Literal#uncovered_string'
       )
     ).to be(false)
@@ -54,7 +62,7 @@ RSpec.shared_examples_for 'framework integration' do
   specify 'fails when some mutations are not covered' do
     expect(
       system_with_gemfile(
-        *base_cmd,
+        *effective_base_cmd,
         'TestApp::Literal'
       )
     ).to be(false)
