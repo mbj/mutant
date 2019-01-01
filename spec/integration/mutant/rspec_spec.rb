@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe 'rspec integration', mutant: false do
-
-  let(:base_cmd) { 'bundle exec mutant -I lib --require test_app --use rspec' }
+  let(:base_cmd) do
+    %w[bundle exec mutant -I lib --require test_app --use rspec]
+  end
 
   %w[3.7 3.8].each do |version|
     context "RSpec #{version}" do
