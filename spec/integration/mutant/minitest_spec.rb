@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe 'minitest integration', mutant: false do
-
-  let(:base_cmd) { 'bundle exec mutant -I test -I lib --require test_app --use minitest' }
+  let(:base_cmd) do
+    %w[bundle exec mutant -I test -I lib --require test_app --use minitest]
+  end
 
   let(:gemfile) { 'Gemfile.minitest' }
 

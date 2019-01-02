@@ -1,7 +1,9 @@
 defaults: &defaults
   working_directory: ~/mutant
   docker:
-    - image: circleci/ruby:2.5.3
+    - environment:
+        MUTANT_JOBS: 4
+      image: circleci/ruby:2.5.3
 version: 2
 jobs:
   unit_specs:
