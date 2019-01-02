@@ -3,7 +3,7 @@ defaults: &defaults
   docker:
     - environment:
         MUTANT_JOBS: 4
-      image: circleci/ruby:2.5.3
+      image: circleci/ruby:2.6.0
 version: 2
 jobs:
   unit_specs:
