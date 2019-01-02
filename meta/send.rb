@@ -634,3 +634,17 @@ Mutant::Meta::Example.add :send do
   mutation '//'
   mutation '/nomatch\A/.match(a)'
 end
+
+Mutant::Meta::Example.add :send do
+  source 'foo(bar { nil; nil })'
+
+  singleton_mutations
+  mutation 'bar { nil; nil }'
+  mutation 'foo'
+  mutation 'foo(bar { nil })'
+  mutation 'foo(bar { raise })'
+  mutation 'foo(bar {})'
+  mutation 'foo(bar)'
+  mutation 'foo(self)'
+  mutation 'foo(nil)'
+end

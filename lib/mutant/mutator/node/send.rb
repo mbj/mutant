@@ -193,9 +193,18 @@ module Mutant
         def mutate_arguments
           emit_type(receiver, selector)
           remaining_children_with_index.each do |_node, index|
-            mutate_child(index)
+            mutate_argument_index(index)
             delete_child(index)
           end
+        end
+
+        # Mutate argument
+        #
+        # @param [Integer] index
+        #
+        # @return [undefined]
+        def mutate_argument_index(index)
+          mutate_child(index) { |node| !n_begin?(node) }
         end
 
         # Emit argument propagation
