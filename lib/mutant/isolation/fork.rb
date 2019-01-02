@@ -6,14 +6,17 @@ module Mutant
     class Fork < self
       include(
         Adamantium::Flat,
-        Anima.new(:devnull, :io, :marshal, :process, :stderr, :stdout)
+        Anima.new(:io, :marshal, :process, :stderr, :stdout)
       )
 
-      ATTRIBUTES = (anima.attribute_names + %i[block reader writer]).freeze
+      READ_SIZE = 4096
+
+      ATTRIBUTES =
+        (anima.attribute_names + %i[block log_pipe result_pipe]).freeze
 
       # Unsucessful result as child exited nonzero
       class ChildError < Result
-        include Concord::Public.new(:value)
+        include Concord::Public.new(:value, :log)
       end # ChildError
 
       # Unsucessful result as fork failed
@@ -21,10 +24,40 @@ module Mutant
         include Equalizer.new
       end # ForkError
 
+      # Pipe abstraction
+      class Pipe
+        include Adamantium::Flat, Anima.new(:reader, :writer)
+
+        # Run block with pipe in binmode
+        #
+        # @return [undefined]
+        def self.with(io)
+          io.pipe(binmode: true) do |(reader, writer)|
+            yield new(reader: reader, writer: writer)
+          end
+        end
+
+        # Child writer end of the pipe
+        #
+        # @return [IO]
+        def child
+          reader.close
+          writer
+        end
+
+        # Parent reader end of the pipe
+        #
+        # @return [IO]
+        def parent
+          writer.close
+          reader
+        end
+      end # Pipe
+
       # ignore :reek:InstanceVariableAssumption
       class Parent
         include(
-          Anima.new(*ATTRIBUTES),
+          Anima.new(*(ATTRIBUTES + %i[io])),
           Procto.call
         )
 
@@ -48,7 +81,14 @@ module Mutant
         #
         # @return [Integer]
         def start_child
-          process.fork { Child.call(to_h) }
+          process.fork do
+            Child.call(
+              to_h.merge(
+                log_pipe:    log_pipe.child,
+                result_pipe: result_pipe.child
+              )
+            )
+          end
         end
 
         # Read child result
@@ -56,14 +96,46 @@ module Mutant
         # @param [Integer] pid
         #
         # @return [undefined]
+        #
+        # rubocop:disable Metrics/MethodLength
         def read_child_result(pid)
-          writer.close
+          result_fragments = []
+          log_fragments    = []
 
-          add_result(Result::Success.new(marshal.load(reader)))
-        rescue ArgumentError, EOFError => exception
-          add_result(Result::Exception.new(exception))
+          read_fragments(
+            log_pipe.parent    => log_fragments,
+            result_pipe.parent => result_fragments
+          )
+
+          begin
+            result = marshal.load(result_fragments.join)
+          rescue ArgumentError => exception
+            add_result(Result::Exception.new(exception))
+          else
+            add_result(Result::Success.new(result, log_fragments.join))
+          end
         ensure
-          wait_child(pid)
+          wait_child(pid, log_fragments)
+        end
+        # rubocop:enable Metrics/MethodLength
+
+        # Read fragments
+        #
+        # @param [Hash{FD => Array<String}] targets
+        #
+        # @return [undefined]
+        def read_fragments(targets)
+          until targets.empty?
+            ready, = io.select(targets.keys)
+
+            ready.each do |fd|
+              if fd.eof?
+                targets.delete(fd)
+              else
+                targets.fetch(fd) << fd.read_nonblock(READ_SIZE)
+              end
+            end
+          end
         end
 
         # Wait for child process
@@ -71,10 +143,12 @@ module Mutant
         # @param [Integer] pid
         #
         # @return [undefined]
-        def wait_child(pid)
+        def wait_child(pid, log_fragments)
           _pid, status = process.wait2(pid)
 
-          add_result(ChildError.new(status)) unless status.success?
+          unless status.success? # rubocop:disable Style/GuardClause
+            add_result(ChildError.new(status, log_fragments.join))
+          end
         end
 
         # Add a result
@@ -96,23 +170,12 @@ module Mutant
         #
         # @return [undefined]
         def call
-          reader.close
-          writer.syswrite(marshal.dump(result(&block)))
-          writer.close
+          stderr.reopen(log_pipe)
+          stdout.reopen(log_pipe)
+          result_pipe.syswrite(marshal.dump(block.call))
+          result_pipe.close
         end
 
-      private
-
-        # The block result computed under silencing
-        #
-        # @return [Object]
-        def result
-          devnull.call do |null|
-            stderr.reopen(null)
-            stdout.reopen(null)
-            yield
-          end
-        end
       end # Child
 
       private_constant(*(constants(false) - %i[ChildError ForkError]))
@@ -121,11 +184,24 @@ module Mutant
       #
       # @return [Result]
       #   execution result
+      #
+      # ignore :reek:NestedIterators
+      #
+      # rubocop:disable Metrics/MethodLength
       def call(&block)
-        io.pipe(binmode: true) do |(reader, writer)|
-          Parent.call(to_h.merge(block: block, reader: reader, writer: writer))
+        Pipe.with(io) do |result|
+          Pipe.with(io) do |log|
+            Parent.call(
+              to_h.merge(
+                block:       block,
+                log_pipe:    log,
+                result_pipe: result
+              )
+            )
+          end
         end
       end
+      # rubocop:enable Metrics/MethodLength
     end # Fork
   end # Isolation
 end # Mutant

@@ -221,12 +221,11 @@ module Mutant
       includes:           EMPTY_ARRAY,
       integration:        Integration::Null,
       isolation:          Mutant::Isolation::Fork.new(
-        devnull: ->(&block) { File.open(File::NULL, File::WRONLY, &block) },
-        stdout:  $stdout,
-        stderr:  $stderr,
         io:      IO,
         marshal: Marshal,
-        process: Process
+        process: Process,
+        stderr:  $stderr,
+        stdout:  $stdout
       ),
       jobs:               Etc.nprocessors,
       kernel:             Kernel,

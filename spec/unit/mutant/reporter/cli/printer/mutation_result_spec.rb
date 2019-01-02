@@ -12,7 +12,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
       end
 
       let(:mutation_a_isolation_result) do
-        Mutant::Isolation::Fork::ChildError.new(status)
+        Mutant::Isolation::Fork::ChildError.new(status, 'log message')
       end
 
       it_reports(<<~'REPORT')
@@ -20,8 +20,11 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
         @@ -1,2 +1,2 @@
         -true
         +false
-        Killfork exited nonzero. Its result (if any) was ignored:
+        Killfork exited nonzero. Its result (if any) was ignored.
+        Process status:
         #<InstanceDouble(Process::Status) (anonymous)>
+        Log messages (combined stderr and stdout):
+        log message
         -----------------------
       REPORT
     end

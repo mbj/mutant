@@ -9,7 +9,10 @@ module Mutant
         # :reek:TooManyConstants
         class IsolationResult < self
           CHILD_ERROR_MESSAGE = <<~'MESSAGE'
-            Killfork exited nonzero. Its result (if any) was ignored:
+            Killfork exited nonzero. Its result (if any) was ignored.
+            Process status:
+            %s
+            Log messages (combined stderr and stdout):
             %s
           MESSAGE
 
@@ -72,7 +75,7 @@ module Mutant
           #
           # @return [undefined]
           def visit_child_error
-            puts(CHILD_ERROR_MESSAGE % object.value.inspect)
+            puts(CHILD_ERROR_MESSAGE % [object.value.inspect, object.log])
           end
 
           # Visit fork error isolation result
