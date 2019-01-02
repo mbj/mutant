@@ -64,9 +64,20 @@ module MutantSpec
                 --include lib
                 --require #{name}
                 #{namespace}*
-              ]
+              ] + concurrency_limits
             )
           end
+        end
+      end
+
+      # The concurrency limits, if any
+      #
+      # @return [Array<String>]
+      def concurrency_limits
+        if ENV.key?('MUTANT_JOBS')
+          %W[--jobs #{ENV.fetch('MUTANT_JOBS')}]
+        else
+          []
         end
       end
 
