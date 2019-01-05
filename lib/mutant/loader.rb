@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Mutant
-  # Base class for code loaders
   class Loader
     include Anima.new(:binding, :kernel, :source, :subject)
 
