@@ -24,11 +24,16 @@ RSpec.describe Mutant::Mutation do
   end
 
   describe '#insert' do
-    subject { object.insert(kernel) }
+    subject { object }
 
-    let(:expected_source) { '1'                     }
-    let(:kernel)          { instance_double(Kernel) }
-    let(:root_node)       { s(:int, 1)              }
+    def apply
+      subject.insert(kernel)
+    end
+
+    let(:expected_source) { '1'                                     }
+    let(:kernel)          { instance_double(Kernel)                 }
+    let(:loader_result)   { instance_double(Mutant::Loader::Result) }
+    let(:root_node)       { s(:int, 1)                              }
 
     before do
       expect(context).to receive(:root)
@@ -47,10 +52,12 @@ RSpec.describe Mutant::Mutation do
           source:  expected_source,
           subject: mutation_subject
         )
-        .and_return(Mutant::Loader)
+        .and_return(loader_result)
     end
 
-    it_should_behave_like 'a command method'
+    it 'returns loader result' do
+      expect(apply).to be(loader_result)
+    end
   end
 
   describe '#code' do
