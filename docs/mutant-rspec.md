@@ -139,14 +139,3 @@ commands like the following:
 ```sh
 RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec User
 ```
-
-Passing in RSpec Options
-------------------------
-
-**NOTE: Experimental**
-
-You can control some aspects of RSpec using the `SPEC_OPTS` environment variable as usual. If you want mutant to only pay attention to specs in a certain directory, you can run
-
-```sh
-SPEC_OPTS="--pattern spec/subdir_only/**/*_spec.rb" bundle exec mutant --use rspec SomeClass
-```
