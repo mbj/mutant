@@ -146,14 +146,7 @@ Sorted by recency:
 Support
 -------
 
-I'm very happy to receive/answer feedback/questions and criticism.
-
-Your options:
-
-* [GitHub Issues](https://github.com/mbj/mutant/issues)
-* Ping me on [twitter](https://twitter.com/_m_b_j_)
-
-There is also a mutation testing slack chat. Get an invite [here](https://mutation-testing-slack.herokuapp.com).
+The mutation testing slack chat, or github issues. Get an invite [here](https://mutation-testing-slack.herokuapp.com).
 For discussing this project, join [#mutant](https://mutation-testing.slack.com/messages/#mutant).
 
 Other Channels:
