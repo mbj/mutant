@@ -129,13 +129,6 @@ description prefixes in `Foo::Bar#baz`, `Foo::Bar` and `Foo`. The order is
 important, so if mutant finds example groups in the current prefix level,
 these example groups *must* kill the mutation.
 
-Rails
--------
-
-To mutation test Rails models with rspec, comment out `require 'rspec/autorun'`
-from your `spec_helper.rb` file. Having done so you should be able to use
-commands like the following:
-
 ```sh
 RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec User
 ```
