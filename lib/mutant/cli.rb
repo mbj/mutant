@@ -5,7 +5,6 @@ module Mutant
   class CLI
     include Adamantium::Flat, Equalizer.new(:config), Procto.call(:config)
 
-    # Error failed when CLI argv is invalid
     Error = Class.new(RuntimeError)
 
     # Run cli with arguments
