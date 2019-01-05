@@ -61,7 +61,7 @@ module Mutant
     #
     # @param kernel [Kernel]
     #
-    # @return [self]
+    # @return [Loader::Result]
     def insert(kernel)
       subject.prepare
       Loader.call(
@@ -70,7 +70,6 @@ module Mutant
         source:  monkeypatch,
         subject: subject
       )
-      self
     end
 
   private

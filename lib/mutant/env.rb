@@ -46,14 +46,16 @@ module Mutant
 
     # Kill mutation under isolation with integration
     #
-    # @param [Isolation] isolation
-    # @param [Integration] integration
-    #
     # @return [Result::Isolation]
     def run_mutation_tests(mutation)
       config.isolation.call do
-        mutation.insert(config.kernel)
-        integration.call(selections.fetch(mutation.subject))
+        result = mutation.insert(config.kernel)
+
+        if result.equal?(Loader::Result::VoidValue.instance)
+          Result::Test::VoidValue.instance
+        else
+          integration.call(selections.fetch(mutation.subject))
+        end
       end
     end
 

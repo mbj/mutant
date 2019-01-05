@@ -46,11 +46,21 @@ RSpec.describe Mutant::Env do
   end
 
   describe '#kill' do
-    subject { object.kill(mutation) }
+    def apply
+      object.kill(mutation)
+    end
 
-    shared_examples_for 'mutation kill' do
-      specify do
-        should eql(
+    before do
+      allow(isolation).to receive(:call) do |&block|
+        Mutant::Isolation::Result::Success.new(block.call)
+      end
+
+      allow(mutation).to receive_messages(insert: loader_result)
+    end
+
+    shared_examples 'mutation kill' do
+      it 'returns expected result' do
+        expect(apply).to eql(
           Mutant::Result::Mutation.new(
             isolation_result: isolation_result,
             mutation:         mutation,
@@ -60,36 +70,41 @@ RSpec.describe Mutant::Env do
       end
     end
 
-    context 'when isolation does not raise error' do
-      let(:test_result) { instance_double(Mutant::Result::Test) }
-
-      before do
-        expect(mutation).to receive(:insert)
-          .ordered
-          .with(config.kernel)
-
-        expect(integration).to receive(:call)
-          .ordered
-          .with(tests)
-          .and_return(test_result)
-      end
+    context 'when loader is successful' do
+      let(:loader_result) { Mutant::Loader::Result::Success.instance }
+      let(:test_result)   { instance_double(Mutant::Result::Test)    }
 
       let(:isolation_result) do
         Mutant::Isolation::Result::Success.new(test_result)
       end
 
+      before do
+        allow(integration).to receive_messages(call: test_result)
+      end
+
+      it 'performs IO in expected sequence' do
+        apply
+
+        expect(isolation).to have_received(:call).ordered
+        expect(mutation).to have_received(:insert).ordered.with(config.kernel)
+        expect(integration).to have_received(:call).ordered.with(tests)
+      end
+
       include_examples 'mutation kill'
     end
 
-    context 'when code does raise error' do
-      let(:exception) { RuntimeError.new('foo') }
-
-      before do
-        expect(mutation).to receive(:insert).and_raise(exception)
-      end
+    context 'when loader reports void value' do
+      let(:loader_result) { Mutant::Loader::Result::VoidValue.instance }
 
       let(:isolation_result) do
-        Mutant::Isolation::Result::Exception.new(exception)
+        Mutant::Isolation::Result::Success.new(Mutant::Result::Test::VoidValue.instance)
+      end
+
+      it 'performs IO in expected sequence' do
+        apply
+
+        expect(isolation).to have_received(:call).ordered
+        expect(mutation).to have_received(:insert).ordered.with(config.kernel)
       end
 
       include_examples 'mutation kill'

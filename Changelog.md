@@ -1,3 +1,8 @@
+# v0.9.0
+
+* New license.
+* Fix mutations to void value expressions to not be reported as integration error.
+
 # v0.8.25 2018-12-31
 
 * Change to {I,M}Var based concurrency

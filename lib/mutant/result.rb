@@ -126,6 +126,22 @@ module Mutant
         :runtime,
         :tests
       )
+
+      class VoidValue < self
+        include Singleton
+
+        # Initialize object
+        #
+        # @return [undefined]
+        def initialize
+          super(
+            output:  '',
+            passed:  false,
+            runtime: 0.0,
+            tests:   []
+          )
+        end
+      end # VoidValue
     end # Test
 
     # Subject result
