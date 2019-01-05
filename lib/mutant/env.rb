@@ -46,9 +46,6 @@ module Mutant
 
     # Kill mutation under isolation with integration
     #
-    # @param [Isolation] isolation
-    # @param [Integration] integration
-    #
     # @return [Result::Isolation]
     def run_mutation_tests(mutation)
       config.isolation.call do
