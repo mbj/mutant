@@ -55,7 +55,7 @@ RSpec.describe Mutant::Loader, '.call' do
   context 'with void value syntax error' do
     before do
       allow(kernel).to receive(:eval)
-        .and_raise(SyntaxError, '(eval):1: void value expression')
+        .and_raise(SyntaxError, '/some/path.rb:1: void value expression')
     end
 
     it 'returns void value result' do

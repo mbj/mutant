@@ -5,7 +5,7 @@ module Mutant
     include Anima.new(:binding, :kernel, :source, :subject)
 
     FROZEN_STRING_FORMAT = "# frozen_string_literal: true\n%s"
-    VOID_VALUE_REGEXP    = /\A\(eval\):\d+: void value expression/.freeze
+    VOID_VALUE_REGEXP    = /\A[^:]+:\d+: void value expression/.freeze
 
     private_constant(*constants(false))
 
