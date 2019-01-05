@@ -30,15 +30,50 @@ RSpec.describe Mutant::Loader, '.call' do
     allow(kernel).to receive_messages(eval: nil)
   end
 
-  it 'performs expected kernel interaction' do
-    apply
+  shared_examples 'kernel eval' do
+    it 'performs eval' do
+      apply
 
-    expect(kernel).to have_received(:eval)
-      .with(
-        "# frozen_string_literal: true\n#[InstanceDouble(String) (anonymous)]",
-        binding,
-        path_str,
-        line
-      )
+      expect(kernel).to have_received(:eval)
+        .with(
+          "# frozen_string_literal: true\n#[InstanceDouble(String) (anonymous)]",
+          binding,
+          path_str,
+          line
+        )
+    end
+  end
+
+  context 'without exception being raised' do
+    it 'returns success result' do
+      expect(apply).to be(described_class::Result::Success.instance)
+    end
+
+    include_examples 'kernel eval'
+  end
+
+  context 'with void value syntax error' do
+    before do
+      allow(kernel).to receive(:eval)
+        .and_raise(SyntaxError, '(eval):1: void value expression')
+    end
+
+    it 'returns void value result' do
+      expect(apply).to be(described_class::Result::VoidValue.instance)
+    end
+
+    include_examples 'kernel eval'
+  end
+
+  context 'with other syntax error' do
+    let(:message) { '(eval):1: some other error' }
+
+    before do
+      allow(kernel).to receive(:eval).and_raise(SyntaxError, message)
+    end
+
+    it 'raises exception' do
+      expect { apply }.to raise_error(SyntaxError, message)
+    end
   end
 end

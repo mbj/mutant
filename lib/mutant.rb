@@ -18,6 +18,7 @@ require 'parser/current'
 require 'pathname'
 require 'regexp_parser'
 require 'set'
+require 'singleton'
 require 'stringio'
 require 'unparser'
 
