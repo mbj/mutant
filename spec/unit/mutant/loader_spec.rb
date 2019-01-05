@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Loader, '.call' do
-  subject do
+  def apply
     described_class.call(
       binding: binding,
       kernel:  kernel,
@@ -26,15 +26,19 @@ RSpec.describe Mutant::Loader, '.call' do
     )
   end
 
+  before do
+    allow(kernel).to receive_messages(eval: nil)
+  end
+
   it 'performs expected kernel interaction' do
-    expect(kernel).to receive(:eval)
+    apply
+
+    expect(kernel).to have_received(:eval)
       .with(
         "# frozen_string_literal: true\n#[InstanceDouble(String) (anonymous)]",
         binding,
         path_str,
         line
       )
-
-    subject
   end
 end
