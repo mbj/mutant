@@ -122,7 +122,7 @@ module Mutant
       #
       # @return [undefined]
       def emit_nil
-        emit(N_NIL) unless asgn_left?
+        emit(N_NIL) unless left_assignment?
       end
 
       # Parent node
@@ -150,7 +150,7 @@ module Mutant
       # Test if the node is the left of an or_asgn or op_asgn
       #
       # @return [Boolean]
-      def asgn_left?
+      def left_assignment?
         AST::Types::OP_ASSIGN.include?(parent_type) && parent.node.children.first.equal?(node)
       end
 
