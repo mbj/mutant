@@ -7,10 +7,7 @@
   ruby_glob_pattern: '**/*_spec.rb'
   mutation_coverage: false
   mutation_generation: true
-  expected_errors:
-    "#<ArgumentError: No valid target found for '?' >":
-    - core/matchdata/begin_spec.rb
-    - core/matchdata/end_spec.rb
+  expected_errors: {}
   exclude:
     - core/string/casecmp_spec.rb
     - core/symbol/casecmp_spec.rb
