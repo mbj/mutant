@@ -84,9 +84,7 @@ Only Mutating Changed Code
 
 Running mutant for the first time on an existing codebase can be a rather disheartening experience due to the large number of alive mutations found! Mutant has a setting that can help. Using the `--since` argument, mutant will only mutate code that has been modified. This allows you to introduce mutant into an existing code base without drowning in errors. Example usage that will mutate all code changed between master and the current branch:
 
-```
-bundle exec mutant --include lib --require virtus --since master --use rspec Virtus::Attribute#type
-```
+Specify any valid git ref as argument, like `--since master`.
 
 Note that this feature requires at least git `2.13.0`.
 
