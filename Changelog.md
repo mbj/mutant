@@ -3,6 +3,7 @@
 * New license.
 * Fix mutations to void value expressions to not be reported as integration error.
 * Remove regexp body mutations
+* Remove restarg mutations
 
 # v0.8.25 2018-12-31
 
