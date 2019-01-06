@@ -38,8 +38,6 @@ module Mutant
           at:            %i[fetch key?],
           fetch:         %i[key?],
           values_at:     %i[fetch_values],
-          match:         %i[match?],
-          '=~':          %i[match?],
           :== =>         %i[eql? equal?],
           :>= =>         %i[> == eql? equal?],
           :<= =>         %i[< == eql? equal?],
