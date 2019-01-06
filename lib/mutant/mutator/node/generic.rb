@@ -38,31 +38,9 @@ module Mutant
           __LINE__
         ]
 
-        unsupported_regexp_nodes = AST::Types::REGEXP.to_a - %i[
-          regexp_alternation_meta
-          regexp_bol_anchor
-          regexp_capture_group
-          regexp_digit_type
-          regexp_eol_anchor
-          regexp_eos_ob_eol_anchor
-          regexp_greedy_zero_or_more
-          regexp_hex_type
-          regexp_linebreak_type
-          regexp_nondigit_type
-          regexp_nonhex_type
-          regexp_nonspace_type
-          regexp_nonword_boundary_anchor
-          regexp_nonword_type
-          regexp_root_expression
-          regexp_space_type
-          regexp_word_boundary_anchor
-          regexp_word_type
-          regexp_xgrapheme_type
-        ]
-
         # These nodes still need a dedicated mutator,
         # your contribution is that close!
-        handle(*(unsupported_nodes + unsupported_regexp_nodes))
+        handle(*unsupported_nodes)
 
       private
 
