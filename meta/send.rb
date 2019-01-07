@@ -138,13 +138,6 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
-  source 'to_i'
-
-  singleton_mutations
-  mutation 'to_int'
-end
-
-Mutant::Meta::Example.add :send do
   source 'foo.to_s'
 
   singleton_mutations
