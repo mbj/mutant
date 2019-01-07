@@ -1,20 +1,6 @@
 Known Problems
 ==============
 
-Mutations with Infinite Runtimes
----------------------------------
-
-Occasionally mutant will produce a mutation with an infinite runtime. When this happens
-mutant will look like it is running indefinitely without killing a remaining mutation. To
-avoid mutations like this, consider adding a timeout around your tests. For example, in
-RSpec you can add the following to your `spec_helper`:
-```ruby
-config.around(:each) do |example|
-  Timeout.timeout(5, &example)
-end
-```
-which will fail specs which run for longer than 5 seconds.
-
 The Crash / Stuck Problem (MRI)
 -------------------------------
 
