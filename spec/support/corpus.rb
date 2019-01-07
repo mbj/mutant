@@ -30,6 +30,7 @@ module MutantSpec
       MUTATION_GENERATION_MESSAGE = 'Total Mutations/Time/Parse-Errors: %s/%0.2fs - %0.2f/s'
       START_MESSAGE               = 'Starting - %s'
       FINISH_MESSAGE              = 'Mutations - %4i - %s'
+      RUBY_GLOB_PATTERN           = '**/*.rb'
 
       DEFAULT_MUTATION_COUNT = 0
 
@@ -42,7 +43,6 @@ module MutantSpec
         :namespace,
         :repo_uri,
         :repo_ref,
-        :ruby_glob_pattern,
         :exclude
       )
 
@@ -207,7 +207,7 @@ module MutantSpec
       # @return [Array<Pathname>]
       def effective_ruby_paths
         Pathname
-          .glob(repo_path.join(ruby_glob_pattern))
+          .glob(repo_path.join(RUBY_GLOB_PATTERN))
           .sort_by(&:size)
           .reverse
           .reject { |path| exclude.include?(path.relative_path_from(repo_path).to_s) }
@@ -341,7 +341,6 @@ module MutantSpec
               s(:hash_transform,
                 s(:key_symbolize, :repo_uri,            s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :repo_ref,            s(:guard, s(:primitive, String))),
-                s(:key_symbolize, :ruby_glob_pattern,   s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :name,                s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :namespace,           s(:guard, s(:primitive, String))),
                 s(:key_symbolize, :integration,         s(:guard, s(:primitive, String))),

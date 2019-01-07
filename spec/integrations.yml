@@ -4,13 +4,23 @@
   repo_uri: 'https://github.com/ruby/rubyspec.git'
   repo_ref: 'origin/master'
   integration: mspec
-  ruby_glob_pattern: '**/*_spec.rb'
   mutation_coverage: false
   mutation_generation: true
   expected_errors: {}
   exclude:
+    - command_line/fixtures/bad_syntax.rb
+    - command_line/fixtures/freeze_flag_required_diff_enc.rb
+    - core/module/fixtures/autoload_empty.rb
+    - core/module/fixtures/autoload_never_set.rb
+    - core/module/fixtures/path2/load_path.rb
     - core/string/casecmp_spec.rb
+    - core/string/shared/to_sym.rb
     - core/symbol/casecmp_spec.rb
+    - language/fixtures/freeze_magic_comment_required_diff_enc.rb
+    - language/fixtures/utf16-be-nobom.rb
+    - language/fixtures/utf16-le-nobom.rb
+    - language/predefined/fixtures/data4.rb
+    - language/predefined/fixtures/data_only.rb
     - language/source_encoding_spec.rb
     - security/cve_2010_1330_spec.rb
 - name: regexp_parser
@@ -18,7 +28,6 @@
   repo_uri: 'https://github.com/ammar/regexp_parser.git'
   repo_ref: 'v1.2.0'
   integration: rspec
-  ruby_glob_pattern: '**/*.rb'
   mutation_coverage: false
   mutation_generation: true
   expected_errors: {}
@@ -27,7 +36,6 @@
   namespace: AUOM
   repo_uri: 'https://github.com/mbj/auom.git'
   repo_ref: 'origin/master'
-  ruby_glob_pattern: '**/*.rb'
   integration: rspec
   mutation_coverage: true
   mutation_generation: true
@@ -37,7 +45,6 @@
   namespace: AUOM
   repo_uri: 'https://github.com/mbj/auom.git'
   repo_ref: 'origin/master'
-  ruby_glob_pattern: '**/*.rb'
   integration: minitest
   mutation_coverage: true
   mutation_generation: true
@@ -47,7 +54,6 @@
   namespace: Axiom
   repo_uri: 'https://github.com/dkubb/axiom.git'
   repo_ref: 'origin/master'
-  ruby_glob_pattern: '**/*.rb'
   integration: rspec
   mutation_coverage: false
   mutation_generation: true
