@@ -47,7 +47,7 @@ module Mutant
 
     # Configuration for parallel execution engine
     #
-    # @return [Parallel::Config]
+    # @return [Object]
     def mutation_test_config
       Parallel::Config.new(
         condition_variable: config.condition_variable,
