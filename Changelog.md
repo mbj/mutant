@@ -4,6 +4,7 @@
 * Fix mutations to void value expressions to not be reported as integration error.
 * Remove regexp body mutations
 * Remove restarg mutations
+* Remove support for rspec-3.{4,5,6}
 
 # v0.8.25 2018-12-31
 
