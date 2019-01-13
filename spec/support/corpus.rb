@@ -332,6 +332,8 @@ module MutantSpec
         end
       end # ErrorWhitelist
 
+      # rubocop:disable ClosingParenthesisIndentation
+      # rubocop:disable Layout/MultilineMethodCallBraceLayout
       LOADER = Morpher.build do
         s(:block,
           s(:guard, s(:primitive, Array)),
@@ -356,10 +358,18 @@ module MutantSpec
                         ->(hash) { hash.map { |key, values| [key, values.map(&Pathname.method(:new))] }.to_h },
                         ->(hash) { hash.map { |key, values| [key, values.map(&:to_s)]                 }.to_h }
                       ]),
-                    s(:load_attribute_hash, s(:param, ErrorWhitelist)))),
-                s(:key_symbolize, :exclude, s(:map, s(:guard, s(:primitive, String))))),
-              s(:anima_load, Project))))
+                    s(:load_attribute_hash, s(:param, ErrorWhitelist))
+                  )
+                ),
+                s(:key_symbolize, :exclude, s(:map, s(:guard, s(:primitive, String))))
+              ),
+              s(:anima_load, Project)
+            )
+          )
+        )
       end
+      # rubocop:enable ClosingParenthesisIndentation
+      # rubocop:enable Layout/MultilineMethodCallBraceLayout
 
       ALL = LOADER.call(YAML.load_file(ROOT.join('spec', 'integrations.yml')))
     end # Project
