@@ -3,8 +3,6 @@
 module Mutant
   class Matcher
     # Subject matcher configuration
-    #
-    # :reek:TooManyConstants
     class Config
       include Adamantium, Anima.new(
         :ignore_expressions,

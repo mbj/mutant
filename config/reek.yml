@@ -61,6 +61,8 @@ detectors:
     - Mutant::Mutator
     - Mutant::Meta::Example::DSL
     max_ifs: 1
+  TooManyConstants:
+    enabled: false
   TooManyInstanceVariables:
     enabled: true
     exclude:

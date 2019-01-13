@@ -3,8 +3,6 @@
 module Mutant
   module AST
     # Groups of node types
-    #
-    # :reek:TooManyConstants
     module Types
       ASSIGNABLE_VARIABLES = Set.new(%i[ivasgn lvasgn cvasgn gvasgn]).freeze
 

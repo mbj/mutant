@@ -5,8 +5,6 @@ module Mutant
     class CLI
       class Printer
         # Reporter for mutation results
-        #
-        # :reek:TooManyConstants
         class IsolationResult < self
           CHILD_ERROR_MESSAGE = <<~'MESSAGE'
             Killfork exited nonzero. Its result (if any) was ignored.
