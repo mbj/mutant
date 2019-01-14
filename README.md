@@ -23,7 +23,7 @@ On each detection of uncovered semantics you have the opportunity to:
 ## How Do I use it?
 
 * Start with reading the [nomenclature](/docs/nomenclature.md) documentation.
-* Than select and setup your [integration](/docs/nomenclature.md#interation), also make sure
+* Than select and setup your [integration](/docs/nomenclature.md#integration), also make sure
   you can reproduce the examples in the integration specific documentation.
 * Identify your preferred mutation testing strategy. Its recommended to start at the commit level,
   to test only the code you had been touching. See the [incremental](#only-mutating-changed-code)
