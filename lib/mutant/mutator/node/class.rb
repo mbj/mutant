@@ -15,15 +15,7 @@ module Mutant
         #
         # @return [undefined]
         def dispatch
-          mutate_type
           emit_body_mutations if body
-        end
-
-        # Emit class -> type mutations
-        #
-        # @return [undefined]
-        def mutate_type
-          emit(s(:module, klass, body))
         end
       end # Class
     end # Node
