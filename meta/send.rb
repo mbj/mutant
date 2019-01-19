@@ -510,21 +510,6 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
-  source 'sample'
-
-  singleton_mutations
-  mutation 'first'
-  mutation 'last'
-end
-
-Mutant::Meta::Example.add :send do
-  source 'first'
-
-  singleton_mutations
-  mutation 'last'
-end
-
-Mutant::Meta::Example.add :send do
   source '!!foo'
 
   singleton_mutations
