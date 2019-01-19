@@ -21,8 +21,6 @@ module Mutant
           reverse_merge: %i[merge],
           map:           %i[each],
           flat_map:      %i[map],
-          sample:        %i[first last],
-          first:         %i[last],
           send:          %i[public_send __send__],
           __send__:      %i[public_send],
           method:        %i[public_method],
