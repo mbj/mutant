@@ -153,7 +153,6 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'self.to_a'
   mutation 'foo.to_ary'
-  mutation 'foo.to_set'
 end
 
 Mutant::Meta::Example.add :send do
