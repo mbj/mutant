@@ -17,11 +17,7 @@ To add mutant to your rspec code base you need to:
    gem 'mutant-rspec'
    ```
 
-2. Run mutant against the rspec integration
-
-   ```sh
-   bundle exec mutant --include lib --require 'your_library.rb' --use rspec -- 'YourLibrary*'
-   ```
+2. Run mutant against the rspec integration via the `--use rspec` flag.
 
 ## Run through example
 
