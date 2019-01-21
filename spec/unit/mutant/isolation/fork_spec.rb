@@ -17,7 +17,7 @@ RSpec.describe Mutant::Isolation::Fork do
   let(:log_reader)        { instance_double(IO, :log_reader)            }
   let(:log_writer)        { instance_double(IO, :log_writer)            }
   let(:marshal)           { class_double(Marshal)                       }
-  let(:pid)               { class_double(0.class)                       }
+  let(:pid)               { class_double(Integer)                       }
   let(:process)           { class_double(Process)                       }
   let(:result_fragment)   { 'result body'                               }
   let(:result_reader)     { instance_double(IO, :result_reader)         }
