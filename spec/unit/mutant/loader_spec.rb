@@ -12,7 +12,7 @@ RSpec.describe Mutant::Loader, '.call' do
 
   let(:path)     { instance_double(Pathname, to_s: path_str) }
   let(:path_str) { instance_double(String)                   }
-  let(:line)     { instance_double(0.class)                  }
+  let(:line)     { instance_double(Integer)                  }
   let(:kernel)   { class_double(Kernel)                      }
   let(:binding)  { instance_double(Binding)                  }
   let(:source)   { instance_double(String)                   }
