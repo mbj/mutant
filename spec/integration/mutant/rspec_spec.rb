@@ -5,7 +5,7 @@ RSpec.describe 'rspec integration', mutant: false do
     %w[bundle exec mutant -I lib --require test_app --use rspec]
   end
 
-  %w[3.7 3.8].each do |version|
+  %w[3.8].each do |version|
     context "RSpec #{version}" do
       let(:gemfile) { "Gemfile.rspec#{version}" }
 
