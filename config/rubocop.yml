@@ -196,6 +196,8 @@ Style/CommentedKeyword:
   Enabled: false
 Style/MixinGrouping:
   Enabled: false
+Style/RaiseArgs:
+  Enabled: false
 Style/RescueStandardError:
   Enabled: false
 Style/StderrPuts:
