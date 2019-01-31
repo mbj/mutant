@@ -2,10 +2,22 @@
 
 module Mutant
   # Commandline parser / runner
+  #
+  # rubocop:disable Metrics/ClassLength
   class CLI
-    include Adamantium::Flat, Equalizer.new(:config), Procto.call(:config)
+    include Concord.new(:config)
 
-    Error = Class.new(RuntimeError)
+    private_class_method :new
+
+    OPTIONS =
+      %i[
+        add_environment_options
+        add_mutation_options
+        add_filter_options
+        add_debug_options
+      ].freeze
+
+    private_constant(*constants(false))
 
     # Run cli with arguments
     #
@@ -16,29 +28,28 @@ module Mutant
     #   the user provided arguments
     #
     # @return [Boolean]
+    #
+    # rubocop:disable Style/Semicolon
     def self.run(config, arguments)
-      Runner.call(Env::Bootstrap.call(call(config, arguments))).success?
-    rescue Error => exception
-      config.stderr.puts(exception.message)
-      false
+      apply(config, arguments)
+        .fmap(&Env::Bootstrap.method(:call))
+        .fmap(&Runner.method(:call))
+        .from_right { |error| config.stderr.puts(error); return false }
+        .success?
     end
+    # rubocop:enable Style/Semicolon
 
-    # Initialize object
+    # Parse arguments into config
     #
     # @param [Config] config
     # @param [Array<String>] arguments
     #
-    # @return [undefined]
-    def initialize(config, arguments)
-      @config = config
-
-      parse(arguments)
+    # @return [Either<OptionParser::ParseError, Config>]
+    def self.apply(config, arguments)
+      Either
+        .wrap_error(OptionParser::ParseError) { new(config).parse(arguments) }
+        .lmap(&:message)
     end
-
-    # Config parsed from CLI
-    #
-    # @return [Config]
-    attr_reader :config
 
     # Local opt out of option parser defaults
     class OptionParser < ::OptionParser
@@ -47,29 +58,26 @@ module Mutant
       define_method(:add_officious) {}
     end # OptionParser
 
-  private
-
     # Parse the command-line options
     #
     # @param [Array<String>] arguments
     #   Command-line options and arguments to be parsed.
     #
-    # @fail [Error]
-    #   An error occurred while parsing the options.
-    #
-    # @return [undefined]
+    # @return [Config]
     def parse(arguments)
       opts = OptionParser.new do |builder|
         builder.banner = 'usage: mutant [options] MATCH_EXPRESSION ...'
-        %i[add_environment_options add_mutation_options add_filter_options add_debug_options].each do |name|
+        OPTIONS.each do |name|
           __send__(name, builder)
         end
       end
 
       parse_match_expressions(opts.parse!(arguments))
-    rescue OptionParser::ParseError => error
-      raise(Error, error)
+
+      config
     end
+
+  private
 
     # Parse matchers
     #
@@ -113,7 +121,10 @@ module Mutant
     def setup_integration(name)
       with(integration: Integration.setup(config.kernel, name))
     rescue LoadError
-      raise Error, "Could not load integration #{name.inspect} (you may want to try installing the gem mutant-#{name})"
+      raise(
+        OptionParser::InvalidArgument,
+        "Could not load integration #{name.inspect} (you may want to try installing the gem mutant-#{name})"
+      )
     end
 
     # Add mutation options

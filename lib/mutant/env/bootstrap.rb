@@ -4,7 +4,7 @@ module Mutant
   class Env
     # Bootstrap environment
     class Bootstrap
-      include Adamantium::Flat, Concord::Public.new(:config), Procto.call(:env)
+      include Adamantium::Flat, Concord::Public.new(:config)
 
       SEMANTICS_MESSAGE_FORMAT =
         "%<message>s. Fix your lib to follow normal ruby semantics!\n" \
@@ -27,6 +27,15 @@ module Mutant
       #
       # @return [Parser]
       attr_reader :parser
+
+      # Run Bootstrap
+      #
+      # @param [Config] config
+      #
+      # @return [Env]
+      def self.call(config)
+        new(config).env
+      end
 
       # Initialize object
       #

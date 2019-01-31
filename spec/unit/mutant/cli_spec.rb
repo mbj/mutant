@@ -47,16 +47,17 @@ RSpec.describe Mutant::CLI do
       described_class.run(config, arguments)
     end
 
-    let(:arguments)      { instance_double(Array)       }
-    let(:env)            { instance_double(Mutant::Env) }
-    let(:report_success) { true                         }
+    let(:arguments)      { instance_double(Array)            }
+    let(:env)            { instance_double(Mutant::Env)      }
+    let(:report_success) { true                              }
+    let(:cli_result)     { Mutant::Either::Right.new(config) }
 
     let(:report) do
       instance_double(Mutant::Result::Env, success?: report_success)
     end
 
     before do
-      allow(Mutant::CLI).to receive_messages(call: config)
+      allow(Mutant::CLI).to receive_messages(apply: cli_result)
       allow(Mutant::Env::Bootstrap).to receive_messages(call: env)
       allow(Mutant::Runner).to receive_messages(call: report)
     end
@@ -64,9 +65,20 @@ RSpec.describe Mutant::CLI do
     it 'performs calls in expected sequence' do
       apply
 
-      expect(Mutant::CLI).to have_received(:call).with(config, arguments).ordered
-      expect(Mutant::Env::Bootstrap).to have_received(:call).with(config).ordered
-      expect(Mutant::Runner).to have_received(:call).with(env).ordered
+      expect(Mutant::CLI)
+        .to have_received(:apply)
+        .with(config, arguments)
+        .ordered
+
+      expect(Mutant::Env::Bootstrap)
+        .to have_received(:call)
+        .with(config)
+        .ordered
+
+      expect(Mutant::Runner)
+        .to have_received(:call)
+        .with(env)
+        .ordered
     end
 
     context 'when report signals success' do
@@ -85,30 +97,27 @@ RSpec.describe Mutant::CLI do
       end
     end
 
-    context 'when execution raises an Mutant::CLI::Error' do
-      let(:exception)        { Mutant::CLI::Error.new('test-error') }
-      let(:expected_message) { 'test-error'                         }
-      let(:report_success)   { false                                }
-      let(:target_stream)    { stderr                               }
-
-      before do
-        allow(report).to receive(:success?).and_raise(exception)
-      end
-
-      it 'exits with failure' do
-        expect(apply).to be(false)
-      end
+    context 'when parts of the chain fail' do
+      let(:cli_result)       { Mutant::Either::Left.new(expected_message) }
+      let(:expected_message) { 'cli-error'                                }
+      let(:target_stream)    { stderr                                     }
 
       include_examples 'prints expected message'
+
+      it 'exits failure' do
+        expect(apply).to be(false)
+      end
     end
   end
 
-  describe '.new' do
+  describe '.apply' do
+    def apply
+      described_class.apply(config, arguments)
+    end
+
     shared_examples 'invalid arguments' do
-      it 'raises error' do
-        expect do
-          apply
-        end.to raise_error(Mutant::CLI::Error, expected_message)
+      it 'returns left error' do
+        expect(apply).to eql(Mutant::Either::Left.new(expected_message))
       end
     end
 
@@ -127,12 +136,8 @@ RSpec.describe Mutant::CLI do
     end
 
     shared_examples_for 'cli parser' do
-      it { expect(apply.config.integration).to eql(expected_integration) }
-      it { expect(apply.config.matcher).to eql(expected_matcher_config)  }
-    end
-
-    def apply
-      described_class.new(config, arguments)
+      it { expect(apply.from_right.integration).to eql(expected_integration) }
+      it { expect(apply.from_right.matcher).to eql(expected_matcher_config)  }
     end
 
     before do
@@ -192,7 +197,7 @@ RSpec.describe Mutant::CLI do
       include_examples 'no explicit exit'
 
       it 'configures includes' do
-        expect(apply.config.includes).to eql(%w[foo])
+        expect(apply.from_right.includes).to eql(%w[foo])
       end
     end
 
@@ -222,15 +227,18 @@ RSpec.describe Mutant::CLI do
       context 'when integration does NOT exist' do
         let(:options) { %w[--use other] }
 
+        let(:expected_message) do
+          'invalid argument: '                                    \
+          '--use Could not load integration "other" '             \
+          '(you may want to try installing the gem mutant-other)'
+        end
+
         before do
           allow(Mutant::Integration).to receive(:setup).and_raise(LoadError)
         end
 
-        it 'raises error' do
-          expect { apply }.to raise_error(
-            Mutant::CLI::Error,
-            'Could not load integration "other" (you may want to try installing the gem mutant-other)'
-          )
+        it 'returns error' do
+          expect(apply).to eql(Mutant::Either::Left.new(expected_message))
         end
       end
     end
@@ -251,7 +259,7 @@ RSpec.describe Mutant::CLI do
       include_examples 'no explicit exit'
 
       it 'configures expected coverage' do
-        expect(apply.config.jobs).to eql(0)
+        expect(apply.from_right.jobs).to eql(0)
       end
     end
 
@@ -262,7 +270,7 @@ RSpec.describe Mutant::CLI do
       include_examples 'no explicit exit'
 
       it 'configures requires' do
-        expect(apply.config.requires).to eql(%w[foo bar])
+        expect(apply.from_right.requires).to eql(%w[foo bar])
       end
     end
 
@@ -305,7 +313,7 @@ RSpec.describe Mutant::CLI do
       include_examples 'no explicit exit'
 
       it 'sets the fail fast option' do
-        expect(apply.config.fail_fast).to be(true)
+        expect(apply.from_right.fail_fast).to be(true)
       end
     end
 
@@ -316,7 +324,7 @@ RSpec.describe Mutant::CLI do
       include_examples 'no explicit exit'
 
       it 'sets the zombie option' do
-        expect(apply.config.zombie).to be(true)
+        expect(apply.from_right.zombie).to be(true)
       end
     end
   end
