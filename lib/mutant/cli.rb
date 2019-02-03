@@ -2,8 +2,6 @@
 
 module Mutant
   # Commandline parser / runner
-  #
-  # rubocop:disable Metrics/ClassLength
   class CLI
     include Concord.new(:world, :config)
 
@@ -37,7 +35,7 @@ module Mutant
     # ignore :reek:LongParameterList
     def self.run(world, config, arguments)
       apply(world, config, arguments)
-        .fmap { |cli_config| Env::Bootstrap.call(world, cli_config) }
+        .apply { |cli_config| Env::Bootstrap.apply(world, cli_config) }
         .fmap(&Runner.method(:call))
         .from_right { |error| world.stderr.puts(error); return false }
         .success?
@@ -121,20 +119,6 @@ module Mutant
       end
     end
 
-    # Use integration
-    #
-    # @param [String] name
-    #
-    # @return [undefined]
-    def setup_integration(name)
-      with(integration: Integration.setup(world.kernel, name))
-    rescue LoadError
-      raise(
-        OptionParser::InvalidArgument,
-        "Could not load integration #{name.inspect} (you may want to try installing the gem mutant-#{name})"
-      )
-    end
-
     # Add mutation options
     #
     # @param [OptionParser] opts
@@ -144,7 +128,9 @@ module Mutant
       opts.separator(nil)
       opts.separator('Options:')
 
-      opts.on('--use INTEGRATION', 'Use INTEGRATION to kill mutations', &method(:setup_integration))
+      opts.on('--use INTEGRATION', 'Use INTEGRATION to kill mutations') do |name|
+        with(integration: name)
+      end
     end
 
     # Add filter options

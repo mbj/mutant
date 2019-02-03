@@ -23,20 +23,27 @@ module Mutant
       # @param [World] world
       # @param [Config] config
       #
-      # @return [Env]
-      def self.call(world, config)
-        env         = Env.empty(world, config).tap(&method(:infect))
-        env         = env.with(matchable_scopes: matchable_scopes(env))
-        subjects    = Matcher::Compiler.call(config.matcher).call(env)
-        integration = config.integration.new(config).setup
+      # @return [Either<String, Env>]
+      #
+      # rubocop:disable Metrics/MethodLength
+      def self.apply(world, config)
+        env = Env
+          .empty(world, config)
+          .tap(&method(:infect))
+          .with(matchable_scopes: matchable_scopes(world, config))
 
-        env.with(
-          integration: integration,
-          mutations:   subjects.flat_map(&:mutations),
-          selector:    Selector::Expression.new(integration),
-          subjects:    subjects
-        )
+        subjects = Matcher::Compiler.call(env.config.matcher).call(env)
+
+        Integration.setup(env).fmap do |integration|
+          env.with(
+            integration: integration,
+            mutations:   subjects.flat_map(&:mutations),
+            selector:    Selector::Expression.new(integration),
+            subjects:    subjects
+          )
+        end
       end
+      # rubocop:enable Metrics/MethodLength
 
       # Infect environment
       #
@@ -51,13 +58,12 @@ module Mutant
 
       # Matchable scopes
       #
-      # @param [Env] env
+      # @param [World] world
+      # @param [Config] config
       #
       # @return [Array<Scope>]
-      def self.matchable_scopes(env)
-        config = env.config
-
-        scopes = env.world.object_space.each_object(Module).each_with_object([]) do |scope, aggregate|
+      def self.matchable_scopes(world, config)
+        scopes = world.object_space.each_object(Module).each_with_object([]) do |scope, aggregate|
           expression = expression(config.reporter, config.expression_parser, scope) || next
           aggregate << Scope.new(scope, expression)
         end

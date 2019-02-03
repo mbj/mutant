@@ -10,7 +10,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
       it_reports(<<~REPORT)
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
-        Integration:     Mutant::Integration::Null
+        Integration:     null
         Jobs:            1
         Includes:        []
         Requires:        []
@@ -21,7 +21,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
       it_reports(<<~REPORT)
         Mutant configuration:
         Matcher:         #<Mutant::Matcher::Config empty>
-        Integration:     Mutant::Integration::Null
+        Integration:     null
         Jobs:            1
         Includes:        []
         Requires:        []

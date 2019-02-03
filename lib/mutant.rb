@@ -159,6 +159,7 @@ require 'mutant/expression/namespace'
 require 'mutant/test'
 require 'mutant/timer'
 require 'mutant/integration'
+require 'mutant/integration/null'
 require 'mutant/selector'
 require 'mutant/selector/expression'
 require 'mutant/selector/null'
@@ -219,7 +220,7 @@ module Mutant
       ]),
       fail_fast:         false,
       includes:          EMPTY_ARRAY,
-      integration:       Integration::Null,
+      integration:       'null',
       isolation:         Mutant::Isolation::Fork.new(WORLD),
       jobs:              Etc.nprocessors,
       matcher:           Matcher::Config::DEFAULT,
