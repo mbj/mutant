@@ -22,6 +22,8 @@ module Mutant
       :pathname,
       :reporter,
       :requires,
+      :stderr,
+      :stdout,
       :thread,
       :zombie
     )

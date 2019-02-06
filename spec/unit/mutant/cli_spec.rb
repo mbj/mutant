@@ -1,17 +1,55 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::CLI do
-  let(:kernel) { Mutant::Config::DEFAULT.kernel }
+  let(:default_config) { Mutant::Config::DEFAULT                        }
+  let(:kernel)         { instance_double('kernel', exit: undefined)     }
+  let(:stderr)         { instance_double(IO, 'stderr', puts: undefined) }
+  let(:stdout)         { instance_double(IO, 'stdout', puts: undefined) }
+  let(:target_stream)  { stdout                                         }
+  let(:undefined)      { instance_double('undefined')                   }
+
+  let(:config) do
+    attributes = Mutant::Config.anima.attribute_names.map do |name|
+      [name, instance_double(Object, name)]
+    end.to_h
+
+    Mutant::Config.new(
+      attributes.merge(
+        expression_parser: default_config.expression_parser,
+        fail_fast:         false,
+        includes:          [],
+        integration:       default_config.integration,
+        kernel:            kernel,
+        matcher:           default_config.matcher,
+        requires:          [],
+        stderr:            stderr,
+        stdout:            stdout
+      )
+    )
+  end
+
+  shared_examples 'prints expected message' do
+
+    it 'prints expected message' do
+      apply
+
+      expect(target_stream).to have_received(:puts).with(expected_message)
+    end
+  end
+
+  before do
+    allow(stderr).to receive_messages(puts: undefined)
+    allow(stdout).to receive_messages(puts: undefined)
+  end
 
   describe '.run' do
     def apply
-      described_class.run(arguments)
+      described_class.run(config, arguments)
     end
 
-    let(:arguments)      { instance_double(Array)          }
-    let(:config)         { instance_double(Mutant::Config) }
-    let(:env)            { instance_double(Mutant::Env)    }
-    let(:report_success) { true                            }
+    let(:arguments)      { instance_double(Array)       }
+    let(:env)            { instance_double(Mutant::Env) }
+    let(:report_success) { true                         }
 
     let(:report) do
       instance_double(Mutant::Result::Env, success?: report_success)
@@ -26,7 +64,7 @@ RSpec.describe Mutant::CLI do
     it 'performs calls in expected sequence' do
       apply
 
-      expect(Mutant::CLI).to have_received(:call).with(arguments).ordered
+      expect(Mutant::CLI).to have_received(:call).with(config, arguments).ordered
       expect(Mutant::Env::Bootstrap).to have_received(:call).with(config).ordered
       expect(Mutant::Runner).to have_received(:call).with(env).ordered
     end
@@ -48,17 +86,20 @@ RSpec.describe Mutant::CLI do
     end
 
     context 'when execution raises an Mutant::CLI::Error' do
-      let(:exception)      { Mutant::CLI::Error.new('test-error') }
-      let(:report_success) { false                                }
+      let(:exception)        { Mutant::CLI::Error.new('test-error') }
+      let(:expected_message) { 'test-error'                         }
+      let(:report_success)   { false                                }
+      let(:target_stream)    { stderr                               }
 
       before do
         allow(report).to receive(:success?).and_raise(exception)
       end
 
-      it 'exits failure' do
-        expect($stderr).to receive(:puts).with('test-error')
+      it 'exits with failure' do
         expect(apply).to be(false)
       end
+
+      include_examples 'prints expected message'
     end
   end
 
@@ -85,35 +126,24 @@ RSpec.describe Mutant::CLI do
       end
     end
 
-    shared_examples 'prints expected message' do
-      it 'prints expected message' do
-        apply
-
-        expect($stdout).to have_received(:puts).with(expected_message)
-      end
-    end
-
     shared_examples_for 'cli parser' do
       it { expect(apply.config.integration).to eql(expected_integration) }
-      it { expect(apply.config.reporter).to eql(expected_reporter)       }
       it { expect(apply.config.matcher).to eql(expected_matcher_config)  }
     end
 
     def apply
-      described_class.new(arguments)
+      described_class.new(config, arguments)
     end
 
     before do
-      allow($stdout).to receive_messages(puts: nil)
       allow(kernel).to receive_messages(exit: nil)
     end
 
-    let(:arguments)               { options + expressions            }
-    let(:expected_integration)    { Mutant::Integration::Null        }
-    let(:expected_matcher_config) { default_matcher_config           }
-    let(:expected_reporter)       { Mutant::Config::DEFAULT.reporter }
-    let(:expressions)             { %w[TestApp*]                     }
-    let(:options)                 { []                               }
+    let(:arguments)               { options + expressions     }
+    let(:expected_integration)    { Mutant::Integration::Null }
+    let(:expected_matcher_config) { default_matcher_config    }
+    let(:expressions)             { %w[TestApp*]              }
+    let(:options)                 { []                        }
 
     let(:default_matcher_config) do
       Mutant::Matcher::Config::DEFAULT
@@ -244,7 +274,7 @@ RSpec.describe Mutant::CLI do
           subject_filters: [
             Mutant::Repository::SubjectFilter.new(
               Mutant::Repository::Diff.new(
-                config: Mutant::Config::DEFAULT,
+                config: config,
                 from:   'HEAD',
                 to:     'master'
               )

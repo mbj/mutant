@@ -37,4 +37,4 @@ namespace =
     Mutant
   end
 
-Kernel.exit(namespace::CLI.run(ARGV))
+Kernel.exit(namespace::CLI.run(namespace::Config::DEFAULT, ARGV))
