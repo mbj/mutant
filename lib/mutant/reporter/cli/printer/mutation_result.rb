@@ -65,7 +65,8 @@ module Mutant
           def print_details
             __send__(MAP.fetch(mutation.class))
 
-            visit_isolation_result unless isolation_result.success?
+            puts(FOOTER)
+            visit_isolation_result
           end
 
           # Evil mutation details

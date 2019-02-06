@@ -16,6 +16,11 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       -true
       +false
       -----------------------
+      - 1 @ runtime: 1.0
+        - test-a
+      Test Output:
+      mutation a test result output
+      -----------------------
       Mutant configuration:
       Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     Mutant::Integration::Null
