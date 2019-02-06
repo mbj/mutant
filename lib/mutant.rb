@@ -208,8 +208,8 @@ module Mutant
         io:      IO,
         marshal: Marshal,
         process: Process,
-        stderr:  $stderr,
-        stdout:  $stdout
+        stderr:  STDOUT,
+        stdout:  STDOUT
       ),
       jobs:               Etc.nprocessors,
       kernel:             Kernel,
@@ -218,8 +218,10 @@ module Mutant
       mutex:              Mutex,
       open3:              Open3,
       pathname:           Pathname,
-      reporter:           Reporter::CLI.build($stdout),
+      reporter:           Reporter::CLI.build(STDOUT),
       requires:           EMPTY_ARRAY,
+      stderr:             STDERR,
+      stdout:             STDOUT,
       thread:             Thread,
       zombie:             false
     )

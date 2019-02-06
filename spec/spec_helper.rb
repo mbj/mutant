@@ -71,6 +71,15 @@ RSpec.configure do |config|
 
   config.after(:suite) do
     $stderr = STDERR
-    MutantSpec::Warning.assert_no_warnings
+
+    # The warning mechanism cannot currently make individual specs fail.
+    # Instead the warning mechanism causes a nonzero killfork exit without
+    # making specs fail. This gets detected as a valid isolation error.
+    #
+    # Before we can make warnings kill mutations we need to change the
+    # warning mechanism to cause individual spec failures.
+    unless $ARGV.include?('--zombie')
+      MutantSpec::Warning.assert_no_warnings
+    end
   end
 end

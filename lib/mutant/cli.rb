@@ -9,23 +9,28 @@ module Mutant
 
     # Run cli with arguments
     #
-    # @param [Array<String>] arguments
+    # @param [Config] config
+    #   the default config
+    #
+    # @param [Array<String>]
+    #   the user provided arguments
     #
     # @return [Boolean]
-    def self.run(arguments)
-      Runner.call(Env::Bootstrap.call(call(arguments))).success?
+    def self.run(config, arguments)
+      Runner.call(Env::Bootstrap.call(call(config, arguments))).success?
     rescue Error => exception
-      $stderr.puts(exception.message)
+      config.stderr.puts(exception.message)
       false
     end
 
     # Initialize object
     #
-    # @param [Array<String>]
+    # @param [Config] config
+    # @param [Array<String>] arguments
     #
     # @return [undefined]
-    def initialize(arguments)
-      @config = Config::DEFAULT
+    def initialize(config, arguments)
+      @config = config
 
       parse(arguments)
     end
@@ -34,6 +39,13 @@ module Mutant
     #
     # @return [Config]
     attr_reader :config
+
+    # Local opt out of option parser defaults
+    class OptionParser < ::OptionParser
+      # Kill defaults added by option parser that
+      # inference with ours under mutation testing.
+      define_method(:add_officious) {}
+    end # OptionParser
 
   private
 
@@ -149,11 +161,11 @@ module Mutant
         with(fail_fast: true)
       end
       opts.on('--version', 'Print mutants version') do
-        puts("mutant-#{VERSION}")
+        config.stdout.puts("mutant-#{VERSION}")
         config.kernel.exit
       end
       opts.on_tail('-h', '--help', 'Show this message') do
-        puts(opts.to_s)
+        config.stdout.puts(opts.to_s)
         config.kernel.exit
       end
     end
