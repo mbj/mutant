@@ -1,41 +1,41 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::CLI do
-  let(:object) { described_class }
-
-  shared_examples_for 'an invalid cli run' do
-    it 'raises error' do
-      expect do
-        subject
-      end.to raise_error(Mutant::CLI::Error, expected_message)
-    end
-  end
-
-  shared_examples_for 'a cli parser' do
-    it { expect(subject.config.integration).to eql(expected_integration) }
-    it { expect(subject.config.reporter).to eql(expected_reporter)       }
-    it { expect(subject.config.matcher).to eql(expected_matcher_config)  }
-  end
+  let(:kernel) { Mutant::Config::DEFAULT.kernel }
 
   describe '.run' do
-    subject { object.run(arguments) }
+    def apply
+      described_class.run(arguments)
+    end
 
-    let(:arguments) { instance_double(Array)                                         }
-    let(:report)    { instance_double(Mutant::Result::Env, success?: report_success) }
-    let(:config)    { instance_double(Mutant::Config)                                }
-    let(:env)       { instance_double(Mutant::Env)                                   }
+    let(:arguments)      { instance_double(Array)          }
+    let(:config)         { instance_double(Mutant::Config) }
+    let(:env)            { instance_double(Mutant::Env)    }
+    let(:report_success) { true                            }
+
+    let(:report) do
+      instance_double(Mutant::Result::Env, success?: report_success)
+    end
 
     before do
-      expect(Mutant::CLI).to receive(:call).with(arguments).and_return(config)
-      expect(Mutant::Env::Bootstrap).to receive(:call).with(config).and_return(env)
-      expect(Mutant::Runner).to receive(:call).with(env).and_return(report)
+      allow(Mutant::CLI).to receive_messages(call: config)
+      allow(Mutant::Env::Bootstrap).to receive_messages(call: env)
+      allow(Mutant::Runner).to receive_messages(call: report)
+    end
+
+    it 'performs calls in expected sequence' do
+      apply
+
+      expect(Mutant::CLI).to have_received(:call).with(arguments).ordered
+      expect(Mutant::Env::Bootstrap).to have_received(:call).with(config).ordered
+      expect(Mutant::Runner).to have_received(:call).with(env).ordered
     end
 
     context 'when report signals success' do
       let(:report_success) { true }
 
       it 'exits failure' do
-        expect(subject).to be(true)
+        expect(apply).to be(true)
       end
     end
 
@@ -43,70 +43,93 @@ RSpec.describe Mutant::CLI do
       let(:report_success) { false }
 
       it 'exits failure' do
-        expect(subject).to be(false)
+        expect(apply).to be(false)
       end
     end
 
     context 'when execution raises an Mutant::CLI::Error' do
-      let(:exception) { Mutant::CLI::Error.new('test-error') }
-      let(:report_success) { nil }
+      let(:exception)      { Mutant::CLI::Error.new('test-error') }
+      let(:report_success) { false                                }
 
       before do
-        expect(report).to receive(:success?).and_raise(exception)
+        allow(report).to receive(:success?).and_raise(exception)
       end
 
       it 'exits failure' do
         expect($stderr).to receive(:puts).with('test-error')
-        expect(subject).to be(false)
+        expect(apply).to be(false)
       end
     end
   end
 
   describe '.new' do
-    let(:object) { described_class }
+    shared_examples 'invalid arguments' do
+      it 'raises error' do
+        expect do
+          apply
+        end.to raise_error(Mutant::CLI::Error, expected_message)
+      end
+    end
 
-    subject { object.new(arguments) }
+    shared_examples 'explicit exit' do
+      it 'prints explicitly exits' do
+        apply
 
-    # Defaults
+        expect(kernel).to have_received(:exit)
+      end
+    end
+
+    shared_examples 'no explicit exit' do
+      it 'does not exit' do
+        expect(kernel).to_not have_received(:exit)
+      end
+    end
+
+    shared_examples 'prints expected message' do
+      it 'prints expected message' do
+        apply
+
+        expect($stdout).to have_received(:puts).with(expected_message)
+      end
+    end
+
+    shared_examples_for 'cli parser' do
+      it { expect(apply.config.integration).to eql(expected_integration) }
+      it { expect(apply.config.reporter).to eql(expected_reporter)       }
+      it { expect(apply.config.matcher).to eql(expected_matcher_config)  }
+    end
+
+    def apply
+      described_class.new(arguments)
+    end
+
+    before do
+      allow($stdout).to receive_messages(puts: nil)
+      allow(kernel).to receive_messages(exit: nil)
+    end
+
+    let(:arguments)               { options + expressions            }
     let(:expected_integration)    { Mutant::Integration::Null        }
-    let(:expected_reporter)       { Mutant::Config::DEFAULT.reporter }
     let(:expected_matcher_config) { default_matcher_config           }
+    let(:expected_reporter)       { Mutant::Config::DEFAULT.reporter }
+    let(:expressions)             { %w[TestApp*]                     }
+    let(:options)                 { []                               }
 
     let(:default_matcher_config) do
       Mutant::Matcher::Config::DEFAULT
         .with(match_expressions: expressions.map(&method(:parse_expression)))
     end
 
-    let(:flags)       { []           }
-    let(:expressions) { %w[TestApp*] }
-
-    let(:arguments) { flags + expressions }
-
-    context 'with unknown flag' do
-      let(:flags) { %w[--invalid] }
-
+    context 'with --invalid option' do
+      let(:options)          { %w[--invalid]               }
       let(:expected_message) { 'invalid option: --invalid' }
 
-      it_should_behave_like 'an invalid cli run'
+      include_examples 'invalid arguments'
+      include_examples 'no explicit exit'
     end
 
-    context 'with unknown option' do
-      let(:flags) { %w[--invalid Foo] }
-
-      let(:expected_message) { 'invalid option: --invalid' }
-
-      it_should_behave_like 'an invalid cli run'
-    end
-
-    context 'with include help flag' do
-      let(:flags) { %w[--help] }
-
-      before do
-        expect($stdout).to receive(:puts).with(expected_message)
-        expect(Kernel).to receive(:exit)
-      end
-
-      it_should_behave_like 'a cli parser'
+    context 'with --help option' do
+      let(:options) { %w[--help] }
 
       let(:expected_message) do
         <<~MESSAGE
@@ -126,38 +149,55 @@ RSpec.describe Mutant::CLI do
               -h, --help                       Show this message
         MESSAGE
       end
+
+      include_examples 'cli parser'
+      include_examples 'explicit exit'
+      include_examples 'prints expected message'
     end
 
-    context 'with include flag' do
-      let(:flags) { %w[--include foo] }
+    context 'with --include option' do
+      let(:options) { %w[--include foo] }
 
-      it_should_behave_like 'a cli parser'
+      include_examples 'cli parser'
+      include_examples 'no explicit exit'
 
       it 'configures includes' do
-        expect(subject.config.includes).to eql(%w[foo])
+        expect(apply.config.includes).to eql(%w[foo])
       end
     end
 
-    context 'with use flag' do
+    context 'with --use option' do
       context 'when integration exists' do
-        let(:flags) { %w[--use rspec] }
+        let(:expected_integration) { integration                          }
+        let(:options)              { %w[--use rspec]                      }
+        let(:integration)          { instance_double(Mutant::Integration) }
 
         before do
-          expect(Kernel).to receive(:require)
-            .with('mutant/integration/rspec')
-            .and_call_original
+          allow(Mutant::Integration).to receive_messages(setup: integration)
         end
 
-        it_should_behave_like 'a cli parser'
+        include_examples 'cli parser'
+        include_examples 'no explicit exit'
 
-        let(:expected_integration) { Mutant::Integration::Rspec }
+        it 'does integration setup' do
+          apply
+
+          expect(Mutant::Integration).to have_received(:setup) do |kernel_arg, name|
+            expect(kernel_arg).to be(kernel)
+            expect(name).to eql('rspec')
+          end
+        end
       end
 
       context 'when integration does NOT exist' do
-        let(:flags) { %w[--use other] }
+        let(:options) { %w[--use other] }
+
+        before do
+          allow(Mutant::Integration).to receive(:setup).and_raise(LoadError)
+        end
 
         it 'raises error' do
-          expect { subject }.to raise_error(
+          expect { apply }.to raise_error(
             Mutant::CLI::Error,
             'Could not load integration "other" (you may want to try installing the gem mutant-other)'
           )
@@ -165,39 +205,39 @@ RSpec.describe Mutant::CLI do
       end
     end
 
-    context 'with version flag' do
-      let(:flags) { %w[--version] }
+    context 'with --version option' do
+      let(:expected_message) { "mutant-#{Mutant::VERSION}" }
+      let(:options)          { %w[--version]               }
 
-      before do
-        expect(Kernel).to receive(:exit)
-        expect($stdout).to receive(:puts).with("mutant-#{Mutant::VERSION}")
-      end
-
-      it_should_behave_like 'a cli parser'
+      include_examples 'cli parser'
+      include_examples 'explicit exit'
+      include_examples 'prints expected message'
     end
 
-    context 'with jobs flag' do
-      let(:flags) { %w[--jobs 0] }
+    context 'with --jobs option' do
+      let(:options) { %w[--jobs 0] }
 
-      it_should_behave_like 'a cli parser'
+      include_examples 'cli parser'
+      include_examples 'no explicit exit'
 
       it 'configures expected coverage' do
-        expect(subject.config.jobs).to eql(0)
+        expect(apply.config.jobs).to eql(0)
       end
     end
 
-    context 'with require flags' do
-      let(:flags) { %w[--require foo --require bar] }
+    context 'with --require options' do
+      let(:options) { %w[--require foo --require bar] }
 
-      it_should_behave_like 'a cli parser'
+      include_examples 'cli parser'
+      include_examples 'no explicit exit'
 
       it 'configures requires' do
-        expect(subject.config.requires).to eql(%w[foo bar])
+        expect(apply.config.requires).to eql(%w[foo bar])
       end
     end
 
-    context 'with --since flag' do
-      let(:flags) { %w[--since master] }
+    context 'with --since option' do
+      let(:options) { %w[--since master] }
 
       let(:expected_matcher_config) do
         default_matcher_config.with(
@@ -213,36 +253,40 @@ RSpec.describe Mutant::CLI do
         )
       end
 
-      it_should_behave_like 'a cli parser'
+      include_examples 'cli parser'
+      include_examples 'no explicit exit'
     end
 
-    context 'with subject-ignore flag' do
-      let(:flags) { %w[--ignore-subject Foo::Bar] }
+    context 'with --subject-ignore option' do
+      let(:options) { %w[--ignore-subject Foo::Bar] }
 
       let(:expected_matcher_config) do
         default_matcher_config.with(ignore_expressions: [parse_expression('Foo::Bar')])
       end
 
-      it_should_behave_like 'a cli parser'
+      include_examples 'cli parser'
+      include_examples 'no explicit exit'
     end
 
-    context 'with fail-fast flag' do
-      let(:flags) { %w[--fail-fast] }
+    context 'with --fail-fast option' do
+      let(:options) { %w[--fail-fast] }
 
-      it_should_behave_like 'a cli parser'
+      include_examples 'cli parser'
+      include_examples 'no explicit exit'
 
       it 'sets the fail fast option' do
-        expect(subject.config.fail_fast).to be(true)
+        expect(apply.config.fail_fast).to be(true)
       end
     end
 
-    context 'with zombie flag' do
-      let(:flags) { %w[--zombie] }
+    context 'with --zombie option' do
+      let(:options) { %w[--zombie] }
 
-      it_should_behave_like 'a cli parser'
+      include_examples 'cli parser'
+      include_examples 'no explicit exit'
 
       it 'sets the zombie option' do
-        expect(subject.config.zombie).to be(true)
+        expect(apply.config.zombie).to be(true)
       end
     end
   end
