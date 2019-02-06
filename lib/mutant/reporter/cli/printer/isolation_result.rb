@@ -10,6 +10,9 @@ module Mutant
             Killfork exited nonzero. Its result (if any) was ignored.
             Process status:
             %s
+          MESSAGE
+
+          LOG_MESSAGES = <<~'MESSAGE'
             Log messages (combined stderr and stdout):
             %s
           MESSAGE
@@ -58,6 +61,7 @@ module Mutant
           # @return [undefined]
           def run
             __send__(MAP.fetch(object.class))
+            print_log_messages
           end
 
         private
@@ -69,11 +73,20 @@ module Mutant
             visit(TestResult, object.value)
           end
 
+          # Print log messages
+          #
+          # @return [undefined]
+          def print_log_messages
+            log = object.log
+
+            puts(LOG_MESSAGES % log) unless log.empty?
+          end
+
           # Visit child error isolation result
           #
           # @return [undefined]
           def visit_child_error
-            puts(CHILD_ERROR_MESSAGE % [object.value.inspect, object.log])
+            puts(CHILD_ERROR_MESSAGE % object.value.inspect)
           end
 
           # Visit fork error isolation result
