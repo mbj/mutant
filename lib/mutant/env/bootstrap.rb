@@ -4,7 +4,7 @@ module Mutant
   class Env
     # Bootstrap environment
     class Bootstrap
-      include Adamantium::Flat, Concord::Public.new(:config)
+      include Adamantium::Flat, Concord::Public.new(:world, :config)
 
       SEMANTICS_MESSAGE_FORMAT =
         "%<message>s. Fix your lib to follow normal ruby semantics!\n" \
@@ -30,11 +30,12 @@ module Mutant
 
       # Run Bootstrap
       #
+      # @param [World] world
       # @param [Config] config
       #
       # @return [Env]
-      def self.call(config)
-        new(config).env
+      def self.call(world, config)
+        new(world, config).env
       end
 
       # Initialize object
@@ -72,7 +73,8 @@ module Mutant
           mutations:        subjects.flat_map(&:mutations),
           parser:           parser,
           selector:         Selector::Expression.new(integration),
-          subjects:         subjects
+          subjects:         subjects,
+          world:            world
         )
       end
 
@@ -108,8 +110,8 @@ module Mutant
       #
       # @return [undefined]
       def infect
-        config.includes.each(&config.load_path.method(:<<))
-        config.requires.each(&config.kernel.method(:require))
+        config.includes.each(&world.load_path.method(:<<))
+        config.requires.each(&world.kernel.method(:require))
       end
 
       # Matched subjects

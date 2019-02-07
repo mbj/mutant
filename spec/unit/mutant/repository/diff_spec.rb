@@ -4,15 +4,15 @@ describe Mutant::Repository::Diff do
   describe '#touches?' do
     let(:object) do
       described_class.new(
-        config: config,
-        from:   'from_rev',
-        to:     'to_rev'
+        world: world,
+        from:  'from_rev',
+        to:    'to_rev'
       )
     end
 
-    let(:config) do
+    let(:world) do
       instance_double(
-        Mutant::Config,
+        Mutant::World,
         kernel:   kernel,
         open3:    open3,
         pathname: pathname
@@ -31,7 +31,7 @@ describe Mutant::Repository::Diff do
     shared_context 'test if git tracks the file' do
       before do
         # rubocop:disable Lint/UnneededSplatExpansion
-        expect(config.kernel).to receive(:system)
+        expect(world.kernel).to receive(:system)
           .ordered
           .with(
             *%W[git ls-files --error-unmatch -- #{path}],
@@ -45,7 +45,7 @@ describe Mutant::Repository::Diff do
       let(:path) { Pathname.new('/baz/bar.rb') }
 
       before do
-        expect(config.kernel).to_not receive(:system)
+        expect(world.kernel).to_not receive(:system)
       end
 
       it { should be(false) }
@@ -68,7 +68,7 @@ describe Mutant::Repository::Diff do
       include_context 'test if git tracks the file'
 
       before do
-        expect(config.open3).to receive(:capture2)
+        expect(world.open3).to receive(:capture2)
           .ordered
           .with(*expected_git_log_command, binmode: true)
           .and_return([stdout, status])

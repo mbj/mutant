@@ -1,19 +1,21 @@
 # frozen_string_literal: true
 
-# This spec is a good example for:
-#
-# If test look that ugly the class under test sucks.
-#
-# As the bootstrap needs to infect global VM state
-# this is to some degree acceptable.
-#
-# Still the bootstrap needs to be cleaned up.
-# And the change that added this warning did the groundwork.
 RSpec.describe Mutant::Env::Bootstrap do
-  let(:matcher_config)       { Mutant::Matcher::Config::DEFAULT     }
   let(:integration)          { instance_double(Mutant::Integration) }
   let(:integration_class)    { instance_double(Class)               }
+  let(:load_path)            { %w[original]                         }
+  let(:matcher_config)       { Mutant::Matcher::Config::DEFAULT     }
   let(:object_space_modules) { []                                   }
+  let(:kernel)               { instance_double(Object, 'kernel')    }
+
+  let(:world) do
+    instance_double(
+      Mutant::World,
+      kernel:    kernel,
+      load_path: load_path,
+      pathname:  Pathname
+    )
+  end
 
   let(:config) do
     Mutant::Config::DEFAULT.with(
@@ -34,12 +36,15 @@ RSpec.describe Mutant::Env::Bootstrap do
       mutations:        [],
       parser:           Mutant::Parser.new,
       selector:         Mutant::Selector::Expression.new(integration),
-      subjects:         []
+      subjects:         [],
+      world:            world
     )
   end
 
   shared_examples_for 'bootstrap call' do
-    it { should eql(expected_env) }
+    it 'returns expected env' do
+      expect(apply).to eql(expected_env)
+    end
   end
 
   def expect_warning
@@ -61,8 +66,8 @@ RSpec.describe Mutant::Env::Bootstrap do
   end
 
   describe '#warn' do
-    let(:object)           { described_class.new(config) }
-    let(:expected_warning) { instance_double(String)     }
+    let(:object)           { described_class.new(world, config) }
+    let(:expected_warning) { instance_double(String)            }
 
     subject { object.warn(expected_warning) }
 
@@ -72,7 +77,9 @@ RSpec.describe Mutant::Env::Bootstrap do
   end
 
   describe '.call' do
-    subject { described_class.call(config) }
+    def apply
+      described_class.call(world, config)
+    end
 
     context 'when Module#name calls result in exceptions' do
       let(:object_space_modules) { [invalid_class] }
@@ -104,14 +111,15 @@ RSpec.describe Mutant::Env::Bootstrap do
     end
 
     context 'when requires are configured' do
-      let(:config) { super().with(requires: %w[foo bar]) }
+      let(:config)   { super().with(requires: %w[foo bar]) }
+      let(:requires) { []                                  }
 
       before do
-        %w[foo bar].each do |component|
-          expect(Kernel).to receive(:require)
-            .with(component)
-            .and_return(true)
-        end
+        allow(kernel).to receive(:require, &requires.method(:<<))
+      end
+
+      it 'executes requires' do
+        expect { apply }.to change(requires, :to_a).from([]).to(%w[foo bar])
       end
 
       include_examples 'bootstrap call'
@@ -120,12 +128,11 @@ RSpec.describe Mutant::Env::Bootstrap do
     context 'when includes are configured' do
       let(:config) { super().with(includes: %w[foo bar]) }
 
-      before do
-        %w[foo bar].each do |component|
-          expect($LOAD_PATH).to receive(:<<)
-            .with(component)
-            .and_return($LOAD_PATH)
-        end
+      it 'appends to load path' do
+        expect { apply }
+          .to change(load_path, :to_a)
+          .from(load_path.dup)
+          .to(%w[original foo bar])
       end
 
       include_examples 'bootstrap call'

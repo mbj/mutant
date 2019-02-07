@@ -35,7 +35,7 @@ require 'test_app'
 
 module Fixtures
   TEST_CONFIG = Mutant::Config::DEFAULT.with(reporter: Mutant::Reporter::Null.new)
-  TEST_ENV    = Mutant::Env::Bootstrap.(TEST_CONFIG)
+  TEST_ENV    = Mutant::Env::Bootstrap.call(Mutant::WORLD, TEST_CONFIG)
 end # Fixtures
 
 module ParserHelper

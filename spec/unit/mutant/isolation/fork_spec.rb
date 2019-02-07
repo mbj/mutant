@@ -29,6 +29,17 @@ RSpec.describe Mutant::Isolation::Fork do
     instance_double(Process::Status, success?: true)
   end
 
+  let(:world) do
+    instance_double(
+      Mutant::World,
+      io:      io,
+      marshal: marshal,
+      process: process,
+      stderr:  stderr,
+      stdout:  stdout
+    )
+  end
+
   let(:fork_success) do
     {
       receiver: process,
@@ -158,17 +169,11 @@ RSpec.describe Mutant::Isolation::Fork do
   end
 
   describe '#call' do
-    let(:object) do
-      described_class.new(
-        io:      io,
-        marshal: marshal,
-        process: process,
-        stderr:  stderr,
-        stdout:  stdout
-      )
-    end
+    subject { described_class.new(world) }
 
-    subject { object.call(&isolated_block) }
+    def apply
+      subject.call(&isolated_block)
+    end
 
     let(:prefork_expectations) do
       [
@@ -206,7 +211,7 @@ RSpec.describe Mutant::Isolation::Fork do
 
       specify do
         XSpec::ExpectationVerifier.verify(self, expectations) do
-          expect(subject).to eql(Mutant::Isolation::Result::Success.new(block_return, log_fragment))
+          expect(apply).to eql(Mutant::Isolation::Result::Success.new(block_return, log_fragment))
         end
       end
     end
@@ -235,7 +240,7 @@ RSpec.describe Mutant::Isolation::Fork do
 
       specify do
         XSpec::ExpectationVerifier.verify(self, expectations) do
-          expect(subject).to eql(Mutant::Isolation::Result::Exception.new(exception))
+          expect(apply).to eql(Mutant::Isolation::Result::Exception.new(exception))
         end
       end
     end
@@ -258,7 +263,7 @@ RSpec.describe Mutant::Isolation::Fork do
 
       specify do
         XSpec::ExpectationVerifier.verify(self, expectations) do
-          expect(subject).to eql(result_class.new)
+          expect(apply).to eql(result_class.new)
         end
       end
     end
@@ -296,7 +301,7 @@ RSpec.describe Mutant::Isolation::Fork do
 
       specify do
         XSpec::ExpectationVerifier.verify(self, expectations) do
-          expect(subject).to eql(expected_result)
+          expect(apply).to eql(expected_result)
         end
       end
     end

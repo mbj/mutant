@@ -5,7 +5,7 @@ module Mutant
   #
   # rubocop:disable Metrics/ClassLength
   class CLI
-    include Concord.new(:config)
+    include Concord.new(:world, :config)
 
     private_class_method :new
 
@@ -21,6 +21,9 @@ module Mutant
 
     # Run cli with arguments
     #
+    # @param [World] world
+    #   the outside world
+    #
     # @param [Config] config
     #   the default config
     #
@@ -30,24 +33,29 @@ module Mutant
     # @return [Boolean]
     #
     # rubocop:disable Style/Semicolon
-    def self.run(config, arguments)
-      apply(config, arguments)
-        .fmap(&Env::Bootstrap.method(:call))
+    #
+    # ignore :reek:LongParameterList
+    def self.run(world, config, arguments)
+      apply(world, config, arguments)
+        .fmap { |cli_config| Env::Bootstrap.call(world, cli_config) }
         .fmap(&Runner.method(:call))
-        .from_right { |error| config.stderr.puts(error); return false }
+        .from_right { |error| world.stderr.puts(error); return false }
         .success?
     end
     # rubocop:enable Style/Semicolon
 
     # Parse arguments into config
     #
+    # @param [World] world
     # @param [Config] config
     # @param [Array<String>] arguments
     #
     # @return [Either<OptionParser::ParseError, Config>]
-    def self.apply(config, arguments)
+    #
+    # ignore :reek:LongParameterList
+    def self.apply(world, config, arguments)
       Either
-        .wrap_error(OptionParser::ParseError) { new(config).parse(arguments) }
+        .wrap_error(OptionParser::ParseError) { new(world, config).parse(arguments) }
         .lmap(&:message)
     end
 
@@ -119,7 +127,7 @@ module Mutant
     #
     # @return [undefined]
     def setup_integration(name)
-      with(integration: Integration.setup(config.kernel, name))
+      with(integration: Integration.setup(world.kernel, name))
     rescue LoadError
       raise(
         OptionParser::InvalidArgument,
@@ -153,9 +161,9 @@ module Mutant
           :subject_filters,
           Repository::SubjectFilter.new(
             Repository::Diff.new(
-              config: config,
-              from:   Repository::Diff::HEAD,
-              to:     revision
+              from:  Repository::Diff::HEAD,
+              to:    revision,
+              world: world
             )
           )
         )
@@ -172,12 +180,12 @@ module Mutant
         with(fail_fast: true)
       end
       opts.on('--version', 'Print mutants version') do
-        config.stdout.puts("mutant-#{VERSION}")
-        config.kernel.exit
+        world.stdout.puts("mutant-#{VERSION}")
+        world.kernel.exit
       end
       opts.on_tail('-h', '--help', 'Show this message') do
-        config.stdout.puts(opts.to_s)
-        config.kernel.exit
+        world.stdout.puts(opts.to_s)
+        world.kernel.exit
       end
     end
 

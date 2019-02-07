@@ -9,22 +9,19 @@ RSpec.describe Mutant::CLI do
   let(:undefined)      { instance_double('undefined')                   }
 
   let(:config) do
-    attributes = Mutant::Config.anima.attribute_names.map do |name|
-      [name, instance_double(Object, name)]
-    end.to_h
+    default_config.with(
+      fail_fast: false,
+      includes:  [],
+      requires:  []
+    )
+  end
 
-    Mutant::Config.new(
-      attributes.merge(
-        expression_parser: default_config.expression_parser,
-        fail_fast:         false,
-        includes:          [],
-        integration:       default_config.integration,
-        kernel:            kernel,
-        matcher:           default_config.matcher,
-        requires:          [],
-        stderr:            stderr,
-        stdout:            stdout
-      )
+  let(:world) do
+    instance_double(
+      Mutant::World,
+      kernel: kernel,
+      stderr: stderr,
+      stdout: stdout
     )
   end
 
@@ -44,13 +41,14 @@ RSpec.describe Mutant::CLI do
 
   describe '.run' do
     def apply
-      described_class.run(config, arguments)
+      described_class.run(world, config, arguments)
     end
 
-    let(:arguments)      { instance_double(Array)            }
-    let(:env)            { instance_double(Mutant::Env)      }
-    let(:report_success) { true                              }
-    let(:cli_result)     { Mutant::Either::Right.new(config) }
+    let(:arguments)      { instance_double(Array)                           }
+    let(:env)            { instance_double(Mutant::Env)                     }
+    let(:report_success) { true                                             }
+    let(:cli_result)     { Mutant::Either::Right.new(new_config)            }
+    let(:new_config)     { instance_double(Mutant::Config, 'parsed config') }
 
     let(:report) do
       instance_double(Mutant::Result::Env, success?: report_success)
@@ -67,12 +65,12 @@ RSpec.describe Mutant::CLI do
 
       expect(Mutant::CLI)
         .to have_received(:apply)
-        .with(config, arguments)
+        .with(world, config, arguments)
         .ordered
 
       expect(Mutant::Env::Bootstrap)
         .to have_received(:call)
-        .with(config)
+        .with(world, new_config)
         .ordered
 
       expect(Mutant::Runner)
@@ -112,7 +110,7 @@ RSpec.describe Mutant::CLI do
 
   describe '.apply' do
     def apply
-      described_class.apply(config, arguments)
+      described_class.apply(world, config, arguments)
     end
 
     shared_examples 'invalid arguments' do
@@ -282,9 +280,9 @@ RSpec.describe Mutant::CLI do
           subject_filters: [
             Mutant::Repository::SubjectFilter.new(
               Mutant::Repository::Diff.new(
-                config: config,
-                from:   'HEAD',
-                to:     'master'
+                from:  'HEAD',
+                to:    'master',
+                world: world
               )
             )
           ]

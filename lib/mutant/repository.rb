@@ -22,7 +22,7 @@ module Mutant
 
     # Diff between two objects in repository
     class Diff
-      include Adamantium, Anima.new(:config, :from, :to)
+      include Adamantium, Anima.new(:world, :from, :to)
 
       HEAD = 'HEAD'
 
@@ -45,7 +45,7 @@ module Mutant
           -L #{line_range.begin},#{line_range.end}:#{path}
         ]
 
-        stdout, status = config.open3.capture2(*command, binmode: true)
+        stdout, status = world.open3.capture2(*command, binmode: true)
 
         fail RepositoryError, "Command #{command} failed!" unless status.success?
 
@@ -63,7 +63,7 @@ module Mutant
       # @return [Boolean]
       def tracks?(path)
         command = %W[git ls-files --error-unmatch -- #{path}]
-        config.kernel.system(
+        world.kernel.system(
           *command,
           out: File::NULL,
           err: File::NULL
@@ -76,7 +76,7 @@ module Mutant
       #
       # @return [TrueClass, nil]
       def within_working_directory?(path)
-        working_directory = config.pathname.pwd
+        working_directory = world.pathname.pwd
         path.ascend { |parent| return true if working_directory.eql?(parent) }
       end
 

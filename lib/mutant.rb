@@ -191,39 +191,39 @@ require 'mutant/variable'
 require 'mutant/zombifier'
 
 module Mutant
+  WORLD = World.new(
+    condition_variable: ConditionVariable,
+    io:                 IO,
+    kernel:             Kernel,
+    load_path:          $LOAD_PATH,
+    marshal:            Marshal,
+    mutex:              Mutex,
+    open3:              Open3,
+    pathname:           Pathname,
+    process:            Process,
+    stderr:             STDOUT,
+    stdout:             STDOUT,
+    thread:             Thread
+  )
+
   # Reopen class to initialize constant to avoid dep circle
   class Config
     DEFAULT = new(
-      condition_variable: ConditionVariable,
-      expression_parser:  Expression::Parser.new([
+      expression_parser: Expression::Parser.new([
         Expression::Method,
         Expression::Methods,
         Expression::Namespace::Exact,
         Expression::Namespace::Recursive
       ]),
-      fail_fast:          false,
-      includes:           EMPTY_ARRAY,
-      integration:        Integration::Null,
-      isolation:          Mutant::Isolation::Fork.new(
-        io:      IO,
-        marshal: Marshal,
-        process: Process,
-        stderr:  STDOUT,
-        stdout:  STDOUT
-      ),
-      jobs:               Etc.nprocessors,
-      kernel:             Kernel,
-      load_path:          $LOAD_PATH,
-      matcher:            Matcher::Config::DEFAULT,
-      mutex:              Mutex,
-      open3:              Open3,
-      pathname:           Pathname,
-      reporter:           Reporter::CLI.build(STDOUT),
-      requires:           EMPTY_ARRAY,
-      stderr:             STDERR,
-      stdout:             STDOUT,
-      thread:             Thread,
-      zombie:             false
+      fail_fast:         false,
+      includes:          EMPTY_ARRAY,
+      integration:       Integration::Null,
+      isolation:         Mutant::Isolation::Fork.new(WORLD),
+      jobs:              Etc.nprocessors,
+      matcher:           Matcher::Config::DEFAULT,
+      reporter:          Reporter::CLI.build(WORLD.stdout),
+      requires:          EMPTY_ARRAY,
+      zombie:            false
     )
   end # Config
 end # Mutant
