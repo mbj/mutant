@@ -68,13 +68,40 @@ RSpec.describe Mutant::Either::Left do
     include_examples 'returns self'
   end
 
-  describe '#unwrap_error' do
+  describe '#from_right' do
     def apply
-      subject.unwrap_error(TestError)
+      subject.from_right(&block)
     end
 
-    it 'raises exception' do
-      expect { apply }.to raise_error(TestError, value.to_s)
+    context 'without block' do
+      let(:block) { nil }
+
+      it 'raises RuntimeError error' do
+        expect { apply }.to raise_error(
+          RuntimeError,
+          "Expected right value, got #{subject.inspect}"
+        )
+      end
+    end
+
+    context 'with block' do
+      let(:yields)       { []                                      }
+      let(:block_return) { instance_double(Object, 'block-return') }
+
+      let(:block) do
+        lambda do |value|
+          yields << value
+          block_return
+        end
+      end
+
+      it 'calls block with left value' do
+        expect { apply }.to change(yields, :to_a).from([]).to([value])
+      end
+
+      it 'returns block value' do
+        expect(apply).to be(block_return)
+      end
     end
   end
 end
@@ -111,15 +138,15 @@ RSpec.describe Mutant::Either::Right do
     include_examples 'Applicative#apply block evaluation'
   end
 
-  describe '#unwrap_error' do
-    let(:exception) { class_double(Exception) }
-
+  describe '#from_right' do
     def apply
-      subject.unwrap_error(exception)
+      subject.from_right(&block)
     end
 
-    it 'returns value' do
+    it 'returns right value' do
       expect(apply).to be(value)
     end
+
+    include_examples 'no block evaluation'
   end
 end

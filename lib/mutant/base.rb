@@ -108,14 +108,19 @@ module Mutant
         require_block(&block)
       end
 
-      # Unwrap error
+      # Unwrap value from right
       #
-      # @param [Class:Exception] error
+      # @return [Object]
       #
-      # @raise [Exception]
-      def unwrap_error(error)
-        fail error.new(value)
+      # rubocop:disable Style/GuardClause
+      def from_right
+        if block_given?
+          yield(value)
+        else
+          fail "Expected right value, got #{inspect}"
+        end
       end
+      # rubocop:enable Style/GuardClause
     end # Left
 
     class Right < self
@@ -133,12 +138,10 @@ module Mutant
         yield(value)
       end
 
-      # Unwrap error
-      #
-      # @param [Class:Exception]
+      # Unwrap value from right
       #
       # @return [Object]
-      def unwrap_error(_error)
+      def from_right
         value
       end
     end # Right
