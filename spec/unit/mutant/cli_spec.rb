@@ -142,11 +142,11 @@ RSpec.describe Mutant::CLI do
       allow(kernel).to receive_messages(exit: nil)
     end
 
-    let(:arguments)               { options + expressions     }
-    let(:expected_integration)    { Mutant::Integration::Null }
-    let(:expected_matcher_config) { default_matcher_config    }
-    let(:expressions)             { %w[TestApp*]              }
-    let(:options)                 { []                        }
+    let(:arguments)               { (options + expressions).freeze }
+    let(:expected_integration)    { Mutant::Integration::Null      }
+    let(:expected_matcher_config) { default_matcher_config         }
+    let(:expressions)             { %w[TestApp*]                   }
+    let(:options)                 { []                             }
 
     let(:default_matcher_config) do
       Mutant::Matcher::Config::DEFAULT
