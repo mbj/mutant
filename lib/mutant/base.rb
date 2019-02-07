@@ -107,15 +107,6 @@ module Mutant
       def apply(&block)
         require_block(&block)
       end
-
-      # Unwrap error
-      #
-      # @param [Class:Exception] error
-      #
-      # @raise [Exception]
-      def unwrap_error(error)
-        fail error.new(value)
-      end
     end # Left
 
     class Right < self
@@ -131,15 +122,6 @@ module Mutant
       # @return [Either<Object>]
       def apply
         yield(value)
-      end
-
-      # Unwrap error
-      #
-      # @param [Class:Exception]
-      #
-      # @return [Object]
-      def unwrap_error(_error)
-        value
       end
     end # Right
   end # Either

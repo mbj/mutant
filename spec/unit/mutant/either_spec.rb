@@ -67,16 +67,6 @@ RSpec.describe Mutant::Either::Left do
     include_examples 'requires block'
     include_examples 'returns self'
   end
-
-  describe '#unwrap_error' do
-    def apply
-      subject.unwrap_error(TestError)
-    end
-
-    it 'raises exception' do
-      expect { apply }.to raise_error(TestError, value.to_s)
-    end
-  end
 end
 
 RSpec.describe Mutant::Either::Right do
@@ -109,17 +99,5 @@ RSpec.describe Mutant::Either::Right do
 
     include_examples 'requires block'
     include_examples 'Applicative#apply block evaluation'
-  end
-
-  describe '#unwrap_error' do
-    let(:exception) { class_double(Exception) }
-
-    def apply
-      subject.unwrap_error(exception)
-    end
-
-    it 'returns value' do
-      expect(apply).to be(value)
-    end
   end
 end
