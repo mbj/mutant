@@ -43,8 +43,16 @@ end
 RSpec.describe Mutant::Either::Left do
   subject { described_class.new(value) }
 
-  let(:block) { -> {}                            }
-  let(:value) { instance_double(Object, 'value') }
+  let(:block_result) { instance_double(Object, 'block result') }
+  let(:value)        { instance_double(Object, 'value')        }
+  let(:yields)       { []                                      }
+
+  let(:block) do
+    lambda do |value|
+      yields << value
+      block_result
+    end
+  end
 
   class TestError < RuntimeError; end
 
@@ -104,6 +112,15 @@ RSpec.describe Mutant::Either::Left do
       end
     end
   end
+
+  describe '#lmap' do
+    def apply
+      subject.lmap(&block)
+    end
+
+    include_examples 'requires block'
+    include_examples 'Functor#fmap block evaluation'
+  end
 end
 
 RSpec.describe Mutant::Either::Right do
@@ -148,5 +165,18 @@ RSpec.describe Mutant::Either::Right do
     end
 
     include_examples 'no block evaluation'
+  end
+
+  describe '#lmap' do
+    def apply
+      subject.lmap(&block)
+    end
+
+    include_examples 'requires block'
+    include_examples 'no block evaluation'
+
+    it 'returns self' do
+      expect(apply).to be(subject)
+    end
   end
 end

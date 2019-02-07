@@ -121,6 +121,13 @@ module Mutant
         end
       end
       # rubocop:enable Style/GuardClause
+
+      # Map over left value
+      #
+      # @return [Either::Right<Object>]
+      def lmap
+        Left.new(yield(value))
+      end
     end # Left
 
     class Right < self
@@ -143,6 +150,13 @@ module Mutant
       # @return [Object]
       def from_right
         value
+      end
+
+      # Map over left value
+      #
+      # @return [Either::Right<Object>]
+      def lmap(&block)
+        require_block(&block)
       end
     end # Right
   end # Either
