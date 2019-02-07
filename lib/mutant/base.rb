@@ -107,6 +107,20 @@ module Mutant
       def apply(&block)
         require_block(&block)
       end
+
+      # Unwrap value from right
+      #
+      # @return [Object]
+      #
+      # rubocop:disable Style/GuardClause
+      def from_right
+        if block_given?
+          yield(value)
+        else
+          fail "Expected right value, got #{inspect}"
+        end
+      end
+      # rubocop:enable Style/GuardClause
     end # Left
 
     class Right < self
@@ -122,6 +136,13 @@ module Mutant
       # @return [Either<Object>]
       def apply
         yield(value)
+      end
+
+      # Unwrap value from right
+      #
+      # @return [Object]
+      def from_right
+        value
       end
     end # Right
   end # Either
