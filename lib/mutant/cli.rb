@@ -80,7 +80,7 @@ module Mutant
         end
       end
 
-      parse_match_expressions(opts.parse!(arguments))
+      parse_match_expressions(opts.parse!(arguments.dup))
 
       config
     end
