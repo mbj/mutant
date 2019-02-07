@@ -3,19 +3,21 @@
 RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   subject { object.call(env) }
 
-  let(:object)       { described_class.new(scope, method)                }
-  let(:method_name)  { :foo                                              }
-  let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
-  let(:method)       { scope.instance_method(method_name)                }
-  let(:type)         { :def                                              }
-  let(:method_arity) { 0                                                 }
-  let(:base)         { TestApp::InstanceMethodTests                      }
+  let(:base)         { TestApp::InstanceMethodTests                       }
+  let(:method)       { scope.instance_method(method_name)                 }
+  let(:method_arity) { 0                                                  }
+  let(:method_name)  { :foo                                               }
+  let(:object)       { described_class.new(scope, method)                 }
+  let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb')  }
+  let(:type)         { :def                                               }
+  let(:world)        { instance_double(Mutant::World, pathname: Pathname) }
 
   let(:env) do
     instance_double(
       Mutant::Env::Bootstrap,
       config: Mutant::Config::DEFAULT,
-      parser: Fixtures::TEST_ENV.parser
+      parser: Fixtures::TEST_ENV.parser,
+      world:  world
     )
   end
 

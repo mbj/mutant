@@ -87,7 +87,7 @@ module Mutant
         #
         # @return [Pathname]
         def source_path
-          env.config.pathname.new(source_location.first)
+          env.world.pathname.new(source_location.first)
         end
         memoize :source_path
 

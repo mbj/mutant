@@ -37,4 +37,10 @@ namespace =
     Mutant
   end
 
-Kernel.exit(namespace::CLI.run(namespace::Config::DEFAULT, ARGV))
+Kernel.exit(
+  namespace::CLI.run(
+    namespace::WORLD,
+    namespace::Config::DEFAULT,
+    ARGV
+  )
+)

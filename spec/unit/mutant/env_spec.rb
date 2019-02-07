@@ -9,18 +9,20 @@ RSpec.describe Mutant::Env do
       mutations:        [],
       selector:         selector,
       subjects:         [mutation_subject],
-      parser:           Mutant::Parser.new
+      parser:           Mutant::Parser.new,
+      world:            world
     )
   end
 
   let(:integration)       { instance_double(Mutant::Integration) }
+  let(:integration_class) { Mutant::Integration::Null            }
+  let(:isolation)         { Mutant::Isolation::None.new          }
+  let(:kernel)            { instance_double(Object, 'kernel')    }
+  let(:mutation_subject)  { instance_double(Mutant::Subject)     }
+  let(:selector)          { instance_double(Mutant::Selector)    }
   let(:test_a)            { instance_double(Mutant::Test)        }
   let(:test_b)            { instance_double(Mutant::Test)        }
   let(:tests)             { [test_a, test_b]                     }
-  let(:selector)          { instance_double(Mutant::Selector)    }
-  let(:integration_class) { Mutant::Integration::Null            }
-  let(:isolation)         { Mutant::Isolation::None.new          }
-  let(:mutation_subject)  { instance_double(Mutant::Subject)     }
 
   let(:mutation) do
     instance_double(
@@ -32,8 +34,14 @@ RSpec.describe Mutant::Env do
   let(:config) do
     Mutant::Config::DEFAULT.with(
       isolation:   isolation,
-      integration: integration_class,
-      kernel:      class_double(Kernel)
+      integration: integration_class
+    )
+  end
+
+  let(:world) do
+    instance_double(
+      Mutant::World,
+      kernel: kernel
     )
   end
 
@@ -86,7 +94,7 @@ RSpec.describe Mutant::Env do
         apply
 
         expect(isolation).to have_received(:call).ordered
-        expect(mutation).to have_received(:insert).ordered.with(config.kernel)
+        expect(mutation).to have_received(:insert).ordered.with(kernel)
         expect(integration).to have_received(:call).ordered.with(tests)
       end
 
@@ -104,7 +112,7 @@ RSpec.describe Mutant::Env do
         apply
 
         expect(isolation).to have_received(:call).ordered
-        expect(mutation).to have_received(:insert).ordered.with(config.kernel)
+        expect(mutation).to have_received(:insert).ordered.with(kernel)
       end
 
       include_examples 'mutation kill'

@@ -10,7 +10,8 @@ module Mutant
       :mutations,
       :parser,
       :selector,
-      :subjects
+      :subjects,
+      :world
     )
 
     SEMANTICS_MESSAGE =
@@ -49,7 +50,7 @@ module Mutant
     # @return [Result::Isolation]
     def run_mutation_tests(mutation)
       config.isolation.call do
-        result = mutation.insert(config.kernel)
+        result = mutation.insert(world.kernel)
 
         if result.equal?(Loader::Result::VoidValue.instance)
           Result::Test::VoidValue.instance

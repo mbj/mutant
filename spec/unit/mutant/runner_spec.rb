@@ -16,18 +16,25 @@ RSpec.describe Mutant::Runner do
       instance_double(
         Mutant::Env,
         config:    config,
-        mutations: []
+        mutations: [],
+        world:     world
       )
     end
 
     let(:config) do
       instance_double(
         Mutant::Config,
+        jobs:     1,
+        reporter: reporter
+      )
+    end
+
+    let(:world) do
+      instance_double(
+        Mutant::World,
         condition_variable: condition_variable,
-        jobs:               1,
         kernel:             kernel,
         mutex:              mutex,
-        reporter:           reporter,
         thread:             thread
       )
     end

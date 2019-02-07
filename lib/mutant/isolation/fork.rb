@@ -4,15 +4,11 @@ module Mutant
   class Isolation
     # Isolation via the fork(2) systemcall.
     class Fork < self
-      include(
-        Adamantium::Flat,
-        Anima.new(:io, :marshal, :process, :stderr, :stdout)
-      )
+      include(Adamantium::Flat, Concord.new(:world))
 
       READ_SIZE = 4096
 
-      ATTRIBUTES =
-        (anima.attribute_names + %i[block log_pipe result_pipe]).freeze
+      ATTRIBUTES = %i[block log_pipe result_pipe world].freeze
 
       # Unsucessful result as child exited nonzero
       class ChildError < Result
@@ -57,7 +53,7 @@ module Mutant
       # ignore :reek:InstanceVariableAssumption
       class Parent
         include(
-          Anima.new(*(ATTRIBUTES + %i[io])),
+          Anima.new(*ATTRIBUTES),
           Procto.call
         )
 
@@ -81,7 +77,7 @@ module Mutant
         #
         # @return [Integer]
         def start_child
-          process.fork do
+          world.process.fork do
             Child.call(
               to_h.merge(
                 log_pipe:    log_pipe.child,
@@ -108,7 +104,7 @@ module Mutant
           )
 
           begin
-            result = marshal.load(result_fragments.join)
+            result = world.marshal.load(result_fragments.join)
           rescue ArgumentError => exception
             add_result(Result::Exception.new(exception))
           else
@@ -126,7 +122,7 @@ module Mutant
         # @return [undefined]
         def read_fragments(targets)
           until targets.empty?
-            ready, = io.select(targets.keys)
+            ready, = world.io.select(targets.keys)
 
             ready.each do |fd|
               if fd.eof?
@@ -144,7 +140,7 @@ module Mutant
         #
         # @return [undefined]
         def wait_child(pid, log_fragments)
-          _pid, status = process.wait2(pid)
+          _pid, status = world.process.wait2(pid)
 
           unless status.success? # rubocop:disable Style/GuardClause
             add_result(ChildError.new(status, log_fragments.join))
@@ -170,9 +166,9 @@ module Mutant
         #
         # @return [undefined]
         def call
-          stderr.reopen(log_pipe)
-          stdout.reopen(log_pipe)
-          result_pipe.syswrite(marshal.dump(block.call))
+          world.stderr.reopen(log_pipe)
+          world.stdout.reopen(log_pipe)
+          result_pipe.syswrite(world.marshal.dump(block.call))
           result_pipe.close
         end
 
@@ -189,14 +185,14 @@ module Mutant
       #
       # rubocop:disable Metrics/MethodLength
       def call(&block)
+        io = world.io
         Pipe.with(io) do |result|
           Pipe.with(io) do |log|
             Parent.call(
-              to_h.merge(
-                block:       block,
-                log_pipe:    log,
-                result_pipe: result
-              )
+              block:       block,
+              log_pipe:    log,
+              result_pipe: result,
+              world:       world
             )
           end
         end

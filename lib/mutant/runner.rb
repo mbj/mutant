@@ -50,13 +50,13 @@ module Mutant
     # @return [Object]
     def mutation_test_config
       Parallel::Config.new(
-        condition_variable: config.condition_variable,
+        condition_variable: world.condition_variable,
         jobs:               config.jobs,
-        mutex:              config.mutex,
+        mutex:              world.mutex,
         processor:          env.method(:kill),
         sink:               Sink.new(env),
         source:             Parallel::Source::Array.new(env.mutations),
-        thread:             config.thread
+        thread:             world.thread
       )
     end
 
@@ -72,6 +72,13 @@ module Mutant
     # @return [Config]
     def config
       env.config
+    end
+
+    # Currently executing world
+    #
+    # @return [World]
+    def world
+      env.world
     end
 
   end # Runner
