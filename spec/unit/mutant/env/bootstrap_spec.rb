@@ -3,17 +3,19 @@
 RSpec.describe Mutant::Env::Bootstrap do
   let(:integration)          { instance_double(Mutant::Integration) }
   let(:integration_class)    { instance_double(Class)               }
+  let(:kernel)               { instance_double(Object, 'kernel')    }
   let(:load_path)            { %w[original]                         }
   let(:matcher_config)       { Mutant::Matcher::Config::DEFAULT     }
+  let(:object_space)         { class_double(ObjectSpace)            }
   let(:object_space_modules) { []                                   }
-  let(:kernel)               { instance_double(Object, 'kernel')    }
 
   let(:world) do
     instance_double(
       Mutant::World,
-      kernel:    kernel,
-      load_path: load_path,
-      pathname:  Pathname
+      kernel:       kernel,
+      load_path:    load_path,
+      object_space: object_space,
+      pathname:     Pathname
     )
   end
 
@@ -60,7 +62,7 @@ RSpec.describe Mutant::Env::Bootstrap do
 
     expect(integration).to receive_messages(setup: integration)
 
-    expect(ObjectSpace).to receive(:each_object)
+    expect(object_space).to receive(:each_object)
       .with(Module)
       .and_return(object_space_modules.each)
   end

@@ -125,7 +125,7 @@ module Mutant
       #
       # @return [undefined]
       def initialize_matchable_scopes
-        scopes = ObjectSpace.each_object(Module).each_with_object([]) do |scope, aggregate|
+        scopes = world.object_space.each_object(Module).each_with_object([]) do |scope, aggregate|
           expression = expression(scope) || next
           aggregate << Scope.new(scope, expression)
         end
