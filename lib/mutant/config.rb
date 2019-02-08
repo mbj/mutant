@@ -10,6 +10,7 @@ module Mutant
       :load_path,
       :marshal,
       :mutex,
+      :object_space,
       :open3,
       :pathname,
       :process,

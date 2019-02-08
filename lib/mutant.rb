@@ -198,6 +198,7 @@ module Mutant
     load_path:          $LOAD_PATH,
     marshal:            Marshal,
     mutex:              Mutex,
+    object_space:       ObjectSpace,
     open3:              Open3,
     pathname:           Pathname,
     process:            Process,
