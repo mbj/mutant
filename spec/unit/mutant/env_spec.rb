@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Env do
-  let(:object) do
+  subject do
     described_class.new(
       config:           config,
       integration:      integration,
@@ -19,6 +19,7 @@ RSpec.describe Mutant::Env do
   let(:isolation)         { Mutant::Isolation::None.new          }
   let(:kernel)            { instance_double(Object, 'kernel')    }
   let(:mutation_subject)  { instance_double(Mutant::Subject)     }
+  let(:reporter)          { instance_double(Mutant::Reporter)    }
   let(:selector)          { instance_double(Mutant::Selector)    }
   let(:test_a)            { instance_double(Mutant::Test)        }
   let(:test_b)            { instance_double(Mutant::Test)        }
@@ -32,9 +33,11 @@ RSpec.describe Mutant::Env do
   end
 
   let(:config) do
-    Mutant::Config::DEFAULT.with(
+    instance_double(
+      Mutant::Config,
+      integration: integration_class,
       isolation:   isolation,
-      integration: integration_class
+      reporter:    reporter
     )
   end
 
@@ -55,7 +58,7 @@ RSpec.describe Mutant::Env do
 
   describe '#kill' do
     def apply
-      object.kill(mutation)
+      subject.kill(mutation)
     end
 
     before do
@@ -120,10 +123,34 @@ RSpec.describe Mutant::Env do
   end
 
   describe '#selections' do
-    subject { object.selections }
+    def apply
+      subject.selections
+    end
 
     it 'returns expected selections' do
-      expect(subject).to eql(mutation_subject => tests)
+      expect(apply).to eql(mutation_subject => tests)
+    end
+  end
+
+  describe '#warn' do
+    def apply
+      subject.warn(message)
+    end
+
+    before do
+      allow(reporter).to receive_messages(warn: reporter)
+    end
+
+    let(:message) { 'test-warning' }
+
+    it 'warns via the reporter' do
+      apply
+
+      expect(reporter).to have_received(:warn).with(message)
+    end
+
+    it 'returns self' do
+      expect(apply).to be(subject)
     end
   end
 end
