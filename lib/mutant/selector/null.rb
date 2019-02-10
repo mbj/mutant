@@ -4,6 +4,8 @@ module Mutant
   class Selector
     # Selector that never returns tests
     class Null < self
+      include Equalizer.new
+
       # Tests for subject
       #
       # @param [Subject] subject

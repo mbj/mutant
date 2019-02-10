@@ -26,7 +26,7 @@ module Mutant
 
       # Report start
       #
-      # @param [Env::Bootstrap] env
+      # @param [Env] env
       #
       # @return [self]
       def start(env)

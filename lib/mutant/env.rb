@@ -18,6 +18,25 @@ module Mutant
       "Fix your lib to follow normal ruby semantics!\n" \
       '{Module,Class}#name should return resolvable constant name as String or nil'
 
+    # Construct minimal empty env
+    #
+    # @param [World] world
+    # @param [Config] config
+    #
+    # @return [Env]
+    def self.empty(world, config)
+      new(
+        config:           config,
+        integration:      Integration::Null.new(config),
+        matchable_scopes: EMPTY_ARRAY,
+        mutations:        EMPTY_ARRAY,
+        parser:           Parser.new,
+        selector:         Selector::Null.new,
+        subjects:         EMPTY_ARRAY,
+        world:            world
+      )
+    end
+
     # Kill mutation
     #
     # @param [Mutation] mutation

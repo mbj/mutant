@@ -8,7 +8,7 @@ module Mutant
 
       # Enumerate matches
       #
-      # @param [Env::Bootstrap] env
+      # @param [Env] env
       #
       # @return [Enumerable<Subject>]
       def call(env)

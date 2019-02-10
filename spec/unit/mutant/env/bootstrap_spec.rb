@@ -66,7 +66,6 @@ RSpec.describe Mutant::Env::Bootstrap do
 
       expect(object_space)
         .to have_received(:each_object)
-        .with(Module)
         .ordered
 
       expect(integration_class)
@@ -84,24 +83,9 @@ RSpec.describe Mutant::Env::Bootstrap do
     allow(integration_class).to receive_messages(new: integration)
     allow(integration).to receive_messages(setup: integration)
 
-    allow(object_space).to receive_messages(
-      each_object: object_space_modules.each
-    )
-  end
-
-  describe '#warn' do
-    subject { described_class.new(world, config) }
-
-    def apply
-      subject.warn(expected_warning)
-    end
-
-    let(:expected_warning) { instance_double(String) }
-
-    include_examples 'expected warning'
-
-    it 'returns self' do
-      expect(apply).to be(subject)
+    allow(object_space).to receive(:each_object) do |argument|
+      expect(argument).to be(Module)
+      object_space_modules.each
     end
   end
 

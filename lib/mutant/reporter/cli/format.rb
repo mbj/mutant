@@ -11,7 +11,7 @@ module Mutant
 
         # Start representation
         #
-        # @param [Env::Bootstrap] env
+        # @param [Env] env
         #
         # @return [String]
         abstract_method :start

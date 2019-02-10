@@ -153,4 +153,25 @@ RSpec.describe Mutant::Env do
       expect(apply).to be(subject)
     end
   end
+
+  describe '.empty' do
+    def apply
+      described_class.empty(world, config)
+    end
+
+    it 'returns empty env' do
+      expect(apply).to eql(
+        described_class.new(
+          config:           config,
+          integration:      Mutant::Integration::Null.new(config),
+          matchable_scopes: Mutant::EMPTY_ARRAY,
+          mutations:        Mutant::EMPTY_ARRAY,
+          parser:           Mutant::Parser.new,
+          selector:         Mutant::Selector::Null.new,
+          subjects:         Mutant::EMPTY_ARRAY,
+          world:            world
+        )
+      )
+    end
+  end
 end

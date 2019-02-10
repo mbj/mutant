@@ -3,8 +3,8 @@
 module Mutant
   class Env
     # Bootstrap environment
-    class Bootstrap
-      include Adamantium::Flat, Concord::Public.new(:world, :config)
+    module Bootstrap
+      include Adamantium::Flat, Anima.new(:config, :parser, :world)
 
       SEMANTICS_MESSAGE_FORMAT =
         "%<message>s. Fix your lib to follow normal ruby semantics!\n" \
@@ -18,16 +18,6 @@ module Mutant
 
       private_constant(*constants(false))
 
-      # Scopes that are eligible for matching
-      #
-      # @return [Enumerable<Matcher::Scope>]
-      attr_reader :matchable_scopes
-
-      # Parser for this environment
-      #
-      # @return [Parser]
-      attr_reader :parser
-
       # Run Bootstrap
       #
       # @param [World] world
@@ -35,55 +25,46 @@ module Mutant
       #
       # @return [Env]
       def self.call(world, config)
-        new(world, config).env
-      end
+        env         = Env.empty(world, config).tap(&method(:infect))
+        env         = env.with(matchable_scopes: matchable_scopes(env))
+        subjects    = Matcher::Compiler.call(config.matcher).call(env)
+        integration = config.integration.new(config).setup
 
-      # Initialize object
-      #
-      # @return [Object]
-      def initialize(*)
-        super
-        @parser = Parser.new
-        infect
-        initialize_matchable_scopes
-        @integration = config.integration.new(config).setup
-      end
-
-      # Print warning message
-      #
-      # @param [String]
-      #
-      # @return [self]
-      def warn(message)
-        config.reporter.warn(message)
-        self
-      end
-
-      # Environment after bootstraping
-      #
-      # @return [Env]
-      # rubocop:disable MethodLength
-      #
-      def env
-        subjects = matched_subjects
-        Env.new(
-          config:           config,
-          integration:      integration,
-          matchable_scopes: matchable_scopes,
-          mutations:        subjects.flat_map(&:mutations),
-          parser:           parser,
-          selector:         Selector::Expression.new(integration),
-          subjects:         subjects,
-          world:            world
+        env.with(
+          integration: integration,
+          mutations:   subjects.flat_map(&:mutations),
+          selector:    Selector::Expression.new(integration),
+          subjects:    subjects
         )
       end
 
-    private
-
-      # Configured mutant integration
+      # Infect environment
       #
-      # @return [Mutant::Integration]
-      attr_reader :integration
+      # @return [undefined]
+      def self.infect(env)
+        config, world = env.config, env.world
+
+        config.includes.each(&world.load_path.method(:<<))
+        config.requires.each(&world.kernel.method(:require))
+      end
+      private_class_method :infect
+
+      # Matchable scopes
+      #
+      # @param [Env] env
+      #
+      # @return [Array<Scope>]
+      def self.matchable_scopes(env)
+        config = env.config
+
+        scopes = env.world.object_space.each_object(Module).each_with_object([]) do |scope, aggregate|
+          expression = expression(config.reporter, config.expression_parser, scope) || next
+          aggregate << Scope.new(scope, expression)
+        end
+
+        scopes.sort_by { |scope| scope.expression.syntax }
+      end
+      private_class_method :matchable_scopes
 
       # Scope name from scoping object
       #
@@ -94,10 +75,11 @@ module Mutant
       #
       # @return [nil]
       #   otherwise
-      def scope_name(scope)
+      def self.scope_name(reporter, scope)
         scope.name
       rescue => exception
         semantics_warning(
+          reporter,
           CLASS_NAME_RAISED_EXCEPTION,
           exception:   exception.inspect,
           scope:       scope,
@@ -105,36 +87,11 @@ module Mutant
         )
         nil
       end
-
-      # Infect environment
-      #
-      # @return [undefined]
-      def infect
-        config.includes.each(&world.load_path.method(:<<))
-        config.requires.each(&world.kernel.method(:require))
-      end
-
-      # Matched subjects
-      #
-      # @return [Enumerable<Subject>]
-      def matched_subjects
-        Matcher::Compiler.call(config.matcher).call(self)
-      end
-
-      # Initialize matchable scopes
-      #
-      # @return [undefined]
-      def initialize_matchable_scopes
-        scopes = world.object_space.each_object(Module).each_with_object([]) do |scope, aggregate|
-          expression = expression(scope) || next
-          aggregate << Scope.new(scope, expression)
-        end
-
-        @matchable_scopes = scopes.sort_by { |scope| scope.expression.syntax }
-      end
+      private_class_method :scope_name
 
       # Try to turn scope into expression
       #
+      # @param [Expression::Parser] expression_parser
       # @param [Class, Module] scope
       #
       # @return [Expression]
@@ -142,11 +99,16 @@ module Mutant
       #
       # @return [nil]
       #   otherwise
-      def expression(scope)
-        name = scope_name(scope) or return
+      #
+      # rubocop:disable Metrics/MethodLength
+      #
+      # ignore :reek:LongParameterList
+      def self.expression(reporter, expression_parser, scope)
+        name = scope_name(reporter, scope) or return
 
         unless name.instance_of?(String)
           semantics_warning(
+            reporter,
             CLASS_NAME_TYPE_MISMATCH_FORMAT,
             name:        name,
             scope_class: scope.class,
@@ -155,16 +117,20 @@ module Mutant
           return
         end
 
-        config.expression_parser.try_parse(name)
+        expression_parser.try_parse(name)
       end
+      private_class_method :expression
+      # rubocop:enable Metrics/MethodLength
 
       # Write a semantics warning
       #
       # @return [undefined]
-      def semantics_warning(format, options)
-        message = format % options
-        warn(SEMANTICS_MESSAGE_FORMAT % { message: message })
+      #
+      # ignore :reek:LongParameterList
+      def self.semantics_warning(reporter, format, options)
+        reporter.warn(SEMANTICS_MESSAGE_FORMAT % { message: format % options })
       end
+      private_class_method :semantics_warning
     end # Bootstrap
   end # Env
 end # Mutant

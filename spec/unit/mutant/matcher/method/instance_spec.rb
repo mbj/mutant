@@ -14,7 +14,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
 
   let(:env) do
     instance_double(
-      Mutant::Env::Bootstrap,
+      Mutant::Env,
       config: Mutant::Config::DEFAULT,
       parser: Fixtures::TEST_ENV.parser,
       world:  world
