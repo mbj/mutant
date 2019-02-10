@@ -43,6 +43,16 @@ module Mutant
     end
     memoize :selections
 
+    # Emit warning
+    #
+    # @param [String] warning
+    #
+    # @return [self]
+    def warn(message)
+      config.reporter.warn(message)
+      self
+    end
+
   private
 
     # Kill mutation under isolation with integration
