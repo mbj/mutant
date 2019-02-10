@@ -7,7 +7,7 @@ module Mutant
 
     # Call matcher
     #
-    # @param [Env::Bootstrap] env
+    # @param [Env] env
     #
     # @return [Enumerable<Subject>]
     #

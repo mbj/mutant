@@ -8,6 +8,7 @@ RSpec.describe Mutant::Env::Bootstrap do
   let(:matcher_config)       { Mutant::Matcher::Config::DEFAULT     }
   let(:object_space)         { class_double(ObjectSpace)            }
   let(:object_space_modules) { []                                   }
+  let(:parser)               { instance_double(Mutant::Parser)      }
 
   let(:world) do
     instance_double(
@@ -43,39 +44,49 @@ RSpec.describe Mutant::Env::Bootstrap do
     )
   end
 
+  shared_examples 'expected warning' do
+    let(:warns) { [] }
+
+    before do
+      allow(config.reporter).to receive(:warn, &warns.method(:<<))
+    end
+
+    it 'warns with expected warning' do
+      expect { apply }.to change(warns, :to_a).from([]).to([expected_warning])
+    end
+  end
+
   shared_examples_for 'bootstrap call' do
     it 'returns expected env' do
       expect(apply).to eql(expected_env)
     end
-  end
 
-  def expect_warning
-    expect(config.reporter).to receive(:warn)
-      .with(expected_warning)
-      .and_return(config.reporter)
+    it 'performs IO in expected sequence' do
+      apply
+
+      expect(object_space)
+        .to have_received(:each_object)
+        .ordered
+
+      expect(integration_class)
+        .to have_received(:new)
+        .with(config)
+        .ordered
+
+      expect(integration)
+        .to have_received(:setup)
+        .ordered
+    end
   end
 
   before do
-    expect(integration_class).to receive(:new)
-      .with(config)
-      .and_return(integration)
+    allow(integration_class).to receive_messages(new: integration)
+    allow(integration).to receive_messages(setup: integration)
 
-    expect(integration).to receive_messages(setup: integration)
-
-    expect(object_space).to receive(:each_object)
-      .with(Module)
-      .and_return(object_space_modules.each)
-  end
-
-  describe '#warn' do
-    let(:object)           { described_class.new(world, config) }
-    let(:expected_warning) { instance_double(String)            }
-
-    subject { object.warn(expected_warning) }
-
-    before { expect_warning }
-
-    it_behaves_like 'a command method'
+    allow(object_space).to receive(:each_object) do |argument|
+      expect(argument).to be(Module)
+      object_space_modules.each
+    end
   end
 
   describe '.call' do
@@ -87,27 +98,27 @@ RSpec.describe Mutant::Env::Bootstrap do
       let(:object_space_modules) { [invalid_class] }
 
       let(:expected_warning) do
-        "Class#name from: #{invalid_class} raised an error: " \
+        "Object#name from: #{invalid_class} raised an error: " \
         "RuntimeError. #{Mutant::Env::SEMANTICS_MESSAGE}"
       end
 
+      # Not really a class, but does not leak a "wrong" class
+      # into later specs.
       let(:invalid_class) do
-        Class.new do
-          def self.name
+        Object.new.tap do |object|
+          def object.name
             fail
           end
         end
       end
 
-      after do
-        # Fix Class#name so other specs do not see this one
-        class << invalid_class
-          undef :name
-          def name; end
-        end
-      end
+      include_examples 'expected warning'
+      include_examples 'bootstrap call'
+    end
 
-      before { expect_warning }
+    context 'when Module#name calls return nil' do
+      let(:anonymous_class)      { Class.new         }
+      let(:object_space_modules) { [anonymous_class] }
 
       include_examples 'bootstrap call'
     end
@@ -164,8 +175,7 @@ RSpec.describe Mutant::Env::Bootstrap do
         end
       end
 
-      before { expect_warning }
-
+      include_examples 'expected warning'
       include_examples 'bootstrap call'
     end
 

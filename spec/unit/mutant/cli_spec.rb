@@ -6,7 +6,6 @@ RSpec.describe Mutant::CLI do
   let(:stderr)         { instance_double(IO, 'stderr', puts: undefined) }
   let(:stdout)         { instance_double(IO, 'stdout', puts: undefined) }
   let(:target_stream)  { stdout                                         }
-  let(:undefined)      { instance_double('undefined')                   }
 
   let(:config) do
     default_config.with(
