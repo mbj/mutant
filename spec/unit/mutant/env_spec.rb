@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Env do
-  let(:object) do
+  subject do
     described_class.new(
       config:           config,
       integration:      integration,
@@ -55,7 +55,7 @@ RSpec.describe Mutant::Env do
 
   describe '#kill' do
     def apply
-      object.kill(mutation)
+      subject.kill(mutation)
     end
 
     before do
@@ -120,10 +120,12 @@ RSpec.describe Mutant::Env do
   end
 
   describe '#selections' do
-    subject { object.selections }
+    def apply
+      subject.selections
+    end
 
     it 'returns expected selections' do
-      expect(subject).to eql(mutation_subject => tests)
+      expect(apply).to eql(mutation_subject => tests)
     end
   end
 end
