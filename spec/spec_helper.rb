@@ -61,6 +61,10 @@ module XSpecHelper
       yield
     end
   end
+
+  def undefined
+    double('undefined')
+  end
 end # XSpecHelper
 
 RSpec.configure do |config|
