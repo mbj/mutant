@@ -18,6 +18,17 @@ module Mutant
       :stdout,
       :thread
     )
+
+    INSPECT = '#<Mutant::World>'
+
+    private_constant(*constants(false))
+
+    # Object inspection
+    #
+    # @return [String]
+    def inspect
+      INSPECT
+    end
   end # World
 
   # Standalone configuration of a mutant execution.
