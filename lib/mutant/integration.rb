@@ -6,22 +6,76 @@ module Mutant
   class Integration
     include AbstractType, Adamantium::Flat, Concord.new(:config)
 
+    LOAD_MESSAGE = <<~'MESSAGE'
+      Unable to load integration mutant-%<integration_name>s:
+      %<exception>s
+      You may have to install the gem mutant-%<integration_name>s!
+    MESSAGE
+
+    CONST_MESSAGE = <<~'MESSAGE'
+      Unable to load integration mutant-%<integration_name>s:
+      %<exception>s
+      This is a bug in the integration you have to report.
+      The integration is supposed to define %<constant_name>s!
+    MESSAGE
+
+    private_constant(*constants(false))
+
     # Setup integration
     #
-    # Integrations are supposed to define a constant under
-    # Mutant::Integration named after the capitalized +name+
-    # parameter.
+    # @param env [Bootstrap]
     #
-    # This avoids having to maintain a mutable registry.
-    #
-    # @param kernel [Kernel]
-    # @param name [String]
-    #
-    # @return [Class<Integration>]
-    def self.setup(kernel, name)
-      kernel.require("mutant/integration/#{name}")
-      const_get(name.capitalize)
+    # @return [Either<String, Integration>]
+    def self.setup(env)
+      attempt_require(env)
+        .apply { attempt_const_get(env) }
+        .fmap { |klass| klass.new(env.config).setup }
     end
+
+    # Attempt to require integration
+    #
+    # @param env [Bootstrap]
+    #
+    # @return [Either<String, undefined>]
+    #
+    # @api private
+    #
+    # rubocop:disable Style/MultilineBlockChain
+    def self.attempt_require(env)
+      integration_name = env.config.integration
+
+      Either.wrap_error(LoadError) do
+        env.world.kernel.require("mutant/integration/#{integration_name}")
+      end.lmap do |exception|
+        LOAD_MESSAGE % {
+          exception:        exception.inspect,
+          integration_name: integration_name
+        }
+      end
+    end
+    private_class_method :attempt_require
+    # rubocop:enable Style/MultilineBlockChain
+
+    # Attempt const get
+    #
+    # @param env [Boostrap]
+    #
+    # @return [Either<String, Class<Integration>>]
+    #
+    # @api private
+    def self.attempt_const_get(env)
+      integration_name = env.config.integration
+      constant_name    = integration_name.capitalize
+
+      Either.wrap_error(NameError) { const_get(constant_name) }.lmap do |exception|
+        CONST_MESSAGE % {
+          constant_name:    "#{self}::#{constant_name}",
+          exception:        exception.inspect,
+          integration_name: integration_name
+        }
+      end
+    end
+    private_class_method :attempt_const_get
 
     # Perform integration setup
     #
@@ -50,31 +104,5 @@ module Mutant
     def expression_parser
       config.expression_parser
     end
-
-    # Null integration that never kills a mutation
-    class Null < self
-
-      # Available tests for integration
-      #
-      # @return [Enumerable<Test>]
-      def all_tests
-        EMPTY_ARRAY
-      end
-
-      # Run a collection of tests
-      #
-      # @param [Enumerable<Mutant::Test>] tests
-      #
-      # @return [Result::Test]
-      def call(tests)
-        Result::Test.new(
-          output:  '',
-          passed:  true,
-          runtime: 0.0,
-          tests:   tests
-        )
-      end
-
-    end # Null
   end # Integration
 end # Mutant

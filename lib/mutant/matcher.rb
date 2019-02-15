@@ -12,6 +12,5 @@ module Mutant
     # @return [Enumerable<Subject>]
     #
     abstract_method :call
-
   end # Matcher
 end # Mutant

@@ -45,6 +45,7 @@ RSpec.describe Mutant::CLI do
 
     let(:arguments)      { instance_double(Array)                           }
     let(:env)            { instance_double(Mutant::Env)                     }
+    let(:env_result)     { Mutant::Either::Right.new(env)                   }
     let(:report_success) { true                                             }
     let(:cli_result)     { Mutant::Either::Right.new(new_config)            }
     let(:new_config)     { instance_double(Mutant::Config, 'parsed config') }
@@ -55,7 +56,7 @@ RSpec.describe Mutant::CLI do
 
     before do
       allow(Mutant::CLI).to receive_messages(apply: cli_result)
-      allow(Mutant::Env::Bootstrap).to receive_messages(call: env)
+      allow(Mutant::Env::Bootstrap).to receive_messages(apply: env_result)
       allow(Mutant::Runner).to receive_messages(call: report)
     end
 
@@ -68,7 +69,7 @@ RSpec.describe Mutant::CLI do
         .ordered
 
       expect(Mutant::Env::Bootstrap)
-        .to have_received(:call)
+        .to have_received(:apply)
         .with(world, new_config)
         .ordered
 
@@ -142,7 +143,7 @@ RSpec.describe Mutant::CLI do
     end
 
     let(:arguments)               { (options + expressions).freeze }
-    let(:expected_integration)    { Mutant::Integration::Null      }
+    let(:expected_integration)    { 'null'                         }
     let(:expected_matcher_config) { default_matcher_config         }
     let(:expressions)             { %w[TestApp*]                   }
     let(:options)                 { []                             }
@@ -200,43 +201,11 @@ RSpec.describe Mutant::CLI do
 
     context 'with --use option' do
       context 'when integration exists' do
-        let(:expected_integration) { integration                          }
-        let(:options)              { %w[--use rspec]                      }
-        let(:integration)          { instance_double(Mutant::Integration) }
-
-        before do
-          allow(Mutant::Integration).to receive_messages(setup: integration)
-        end
+        let(:expected_integration) { 'some'         }
+        let(:options)              { %w[--use some] }
 
         include_examples 'cli parser'
         include_examples 'no explicit exit'
-
-        it 'does integration setup' do
-          apply
-
-          expect(Mutant::Integration).to have_received(:setup) do |kernel_arg, name|
-            expect(kernel_arg).to be(kernel)
-            expect(name).to eql('rspec')
-          end
-        end
-      end
-
-      context 'when integration does NOT exist' do
-        let(:options) { %w[--use other] }
-
-        let(:expected_message) do
-          'invalid argument: '                                    \
-          '--use Could not load integration "other" '             \
-          '(you may want to try installing the gem mutant-other)'
-        end
-
-        before do
-          allow(Mutant::Integration).to receive(:setup).and_raise(LoadError)
-        end
-
-        it 'returns error' do
-          expect(apply).to eql(Mutant::Either::Left.new(expected_message))
-        end
       end
     end
 

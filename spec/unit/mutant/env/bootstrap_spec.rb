@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Env::Bootstrap do
-  let(:integration)          { instance_double(Mutant::Integration) }
-  let(:integration_class)    { instance_double(Class)               }
-  let(:kernel)               { instance_double(Object, 'kernel')    }
-  let(:load_path)            { %w[original]                         }
-  let(:matcher_config)       { Mutant::Matcher::Config::DEFAULT     }
-  let(:object_space)         { class_double(ObjectSpace)            }
-  let(:object_space_modules) { []                                   }
-  let(:parser)               { instance_double(Mutant::Parser)      }
+  let(:integration)          { instance_double(Mutant::Integration)   }
+  let(:integration_name)     { instance_double(String)                }
+  let(:integration_result)   { Mutant::Either::Right.new(integration) }
+  let(:kernel)               { instance_double(Object, 'kernel')      }
+  let(:load_path)            { %w[original]                           }
+  let(:matcher_config)       { Mutant::Matcher::Config::DEFAULT       }
+  let(:object_space)         { class_double(ObjectSpace)              }
+  let(:object_space_modules) { []                                     }
+  let(:parser)               { instance_double(Mutant::Parser)        }
 
   let(:world) do
     instance_double(
@@ -23,7 +24,7 @@ RSpec.describe Mutant::Env::Bootstrap do
   let(:config) do
     Mutant::Config::DEFAULT.with(
       includes:    [],
-      integration: integration_class,
+      integration: integration,
       jobs:        1,
       matcher:     matcher_config,
       reporter:    instance_double(Mutant::Reporter),
@@ -32,17 +33,17 @@ RSpec.describe Mutant::Env::Bootstrap do
   end
 
   let(:expected_env) do
-    Mutant::Env.new(
-      config:           config,
-      integration:      integration,
-      matchable_scopes: [],
-      mutations:        [],
-      parser:           Mutant::Parser.new,
-      selector:         Mutant::Selector::Expression.new(integration),
-      subjects:         [],
-      world:            world
+    env_with_scopes.with(
+      integration: integration,
+      selector:    Mutant::Selector::Expression.new(integration)
     )
   end
+
+  let(:env_empty) do
+    Mutant::Env.empty(world, config)
+  end
+
+  let(:env_with_scopes) { env_empty }
 
   shared_examples 'expected warning' do
     let(:warns) { [] }
@@ -58,7 +59,7 @@ RSpec.describe Mutant::Env::Bootstrap do
 
   shared_examples_for 'bootstrap call' do
     it 'returns expected env' do
-      expect(apply).to eql(expected_env)
+      expect(apply).to eql(Mutant::Either::Right.new(expected_env))
     end
 
     it 'performs IO in expected sequence' do
@@ -68,20 +69,15 @@ RSpec.describe Mutant::Env::Bootstrap do
         .to have_received(:each_object)
         .ordered
 
-      expect(integration_class)
-        .to have_received(:new)
-        .with(config)
-        .ordered
-
-      expect(integration)
+      expect(Mutant::Integration)
         .to have_received(:setup)
+        .with(env_with_scopes)
         .ordered
     end
   end
 
   before do
-    allow(integration_class).to receive_messages(new: integration)
-    allow(integration).to receive_messages(setup: integration)
+    allow(Mutant::Integration).to receive_messages(setup: integration_result)
 
     allow(object_space).to receive(:each_object) do |argument|
       expect(argument).to be(Module)
@@ -89,9 +85,9 @@ RSpec.describe Mutant::Env::Bootstrap do
     end
   end
 
-  describe '.call' do
+  describe '.apply' do
     def apply
-      described_class.call(world, config)
+      described_class.apply(world, config)
     end
 
     context 'when Module#name calls result in exceptions' do
@@ -187,16 +183,21 @@ RSpec.describe Mutant::Env::Bootstrap do
         super().with(match_expressions: match_expressions)
       end
 
+      let(:env_with_scopes) do
+        env_empty.with(
+          matchable_scopes: [
+            Mutant::Scope.new(TestApp::Empty,   match_expressions.last),
+            Mutant::Scope.new(TestApp::Literal, match_expressions.first)
+          ]
+        )
+      end
+
       let(:expected_env) do
         subjects = Mutant::Matcher::Scope.new(TestApp::Literal).call(Fixtures::TEST_ENV)
 
         super().with(
-          matchable_scopes: [
-            Mutant::Scope.new(TestApp::Empty,   match_expressions.last),
-            Mutant::Scope.new(TestApp::Literal, match_expressions.first)
-          ],
-          mutations:        subjects.flat_map(&:mutations),
-          subjects:         subjects
+          mutations: subjects.flat_map(&:mutations),
+          subjects:  subjects
         )
       end
 
