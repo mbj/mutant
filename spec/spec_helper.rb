@@ -37,7 +37,7 @@ module Fixtures
   TEST_CONFIG = Mutant::Config::DEFAULT
     .with(reporter: Mutant::Reporter::Null.new)
 
-  TEST_ENV = Mutant::Env::Bootstrap
+  TEST_ENV = Mutant::Bootstrap
     .apply(Mutant::WORLD, TEST_CONFIG).from_right
 
 end # Fixtures

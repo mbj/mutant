@@ -35,7 +35,7 @@ module Mutant
     # ignore :reek:LongParameterList
     def self.run(world, config, arguments)
       apply(world, config, arguments)
-        .apply { |cli_config| Env::Bootstrap.apply(world, cli_config) }
+        .apply { |cli_config| Bootstrap.apply(world, cli_config) }
         .fmap(&Runner.method(:call))
         .from_right { |error| world.stderr.puts(error); return false }
         .success?

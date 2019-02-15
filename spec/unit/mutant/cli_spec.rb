@@ -56,7 +56,7 @@ RSpec.describe Mutant::CLI do
 
     before do
       allow(Mutant::CLI).to receive_messages(apply: cli_result)
-      allow(Mutant::Env::Bootstrap).to receive_messages(apply: env_result)
+      allow(Mutant::Bootstrap).to receive_messages(apply: env_result)
       allow(Mutant::Runner).to receive_messages(call: report)
     end
 
@@ -68,7 +68,7 @@ RSpec.describe Mutant::CLI do
         .with(world, config, arguments)
         .ordered
 
-      expect(Mutant::Env::Bootstrap)
+      expect(Mutant::Bootstrap)
         .to have_received(:apply)
         .with(world, new_config)
         .ordered

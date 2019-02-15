@@ -43,9 +43,9 @@ module Mutant
 end # Mutant
 
 require 'mutant/base'
+require 'mutant/bootstrap'
 require 'mutant/version'
 require 'mutant/env'
-require 'mutant/env/bootstrap'
 require 'mutant/util'
 require 'mutant/registry'
 require 'mutant/ast'

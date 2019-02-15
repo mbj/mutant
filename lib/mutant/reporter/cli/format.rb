@@ -104,7 +104,7 @@ module Mutant
 
           # Format start
           #
-          # @param [Env::Bootstrap] env
+          # @param [Bootstrap] env
           #
           # @return [String]
           def start(_env)
