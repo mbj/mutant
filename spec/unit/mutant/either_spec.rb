@@ -121,6 +121,14 @@ RSpec.describe Mutant::Either::Left do
     include_examples 'requires block'
     include_examples 'Functor#fmap block evaluation'
   end
+
+  describe '#either' do
+    def apply
+      subject.either(block, -> { fail })
+    end
+
+    include_examples 'Applicative#apply block evaluation'
+  end
 end
 
 RSpec.describe Mutant::Either::Right do
@@ -178,5 +186,13 @@ RSpec.describe Mutant::Either::Right do
     it 'returns self' do
       expect(apply).to be(subject)
     end
+  end
+
+  describe '#either' do
+    def apply
+      subject.either(-> { fail }, block)
+    end
+
+    include_examples 'Applicative#apply block evaluation'
   end
 end
