@@ -128,6 +128,14 @@ module Mutant
       def lmap
         Left.new(yield(value))
       end
+
+      # Evaluate left side of branch
+      #
+      # @param [#call] left
+      # @param [#call] _right
+      def either(left, _right)
+        left.call(value)
+      end
     end # Left
 
     class Right < self
@@ -157,6 +165,14 @@ module Mutant
       # @return [Either::Right<Object>]
       def lmap(&block)
         require_block(&block)
+      end
+
+      # Evaluate right side of branch
+      #
+      # @param [#call] _left
+      # @param [#call] right
+      def either(_left, right)
+        right.call(value)
       end
     end # Right
   end # Either
