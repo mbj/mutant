@@ -118,7 +118,8 @@ module Mutant
     def self.load_contents(path)
       Transform::Named
         .new(path.to_s, TRANSFORM)
-        .apply(path).lmap(&:compact_message)
+        .apply(path)
+        .lmap(&:compact_message)
     end
     private_class_method :load_contents
   end # Config
