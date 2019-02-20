@@ -7,14 +7,6 @@ RSpec.describe Mutant::CLI do
   let(:stdout)         { instance_double(IO, 'stdout', puts: undefined) }
   let(:target_stream)  { stdout                                         }
 
-  let(:config) do
-    default_config.with(
-      fail_fast: false,
-      includes:  [],
-      requires:  []
-    )
-  end
-
   let(:world) do
     instance_double(
       Mutant::World,
@@ -40,21 +32,24 @@ RSpec.describe Mutant::CLI do
 
   describe '.run' do
     def apply
-      described_class.run(world, config, arguments)
+      described_class.run(world, default_config, arguments)
     end
 
-    let(:arguments)      { instance_double(Array)                           }
-    let(:env)            { instance_double(Mutant::Env)                     }
-    let(:env_result)     { Mutant::Either::Right.new(env)                   }
-    let(:report_success) { true                                             }
-    let(:cli_result)     { Mutant::Either::Right.new(new_config)            }
-    let(:new_config)     { instance_double(Mutant::Config, 'parsed config') }
+    let(:arguments)      { instance_double(Array)                         }
+    let(:cli_config)     { instance_double(Mutant::Config, 'cli config')  }
+    let(:cli_result)     { Mutant::Either::Right.new(cli_config)          }
+    let(:env)            { instance_double(Mutant::Env)                   }
+    let(:env_result)     { Mutant::Either::Right.new(env)                 }
+    let(:file_config)    { instance_double(Mutant::Config, 'file config') }
+    let(:file_result)    { Mutant::Either::Right.new(file_config)         }
+    let(:report_success) { true                                           }
 
     let(:report) do
       instance_double(Mutant::Result::Env, success?: report_success)
     end
 
     before do
+      allow(Mutant::Config).to receive_messages(load_config_file: file_result)
       allow(Mutant::CLI).to receive_messages(apply: cli_result)
       allow(Mutant::Bootstrap).to receive_messages(apply: env_result)
       allow(Mutant::Runner).to receive_messages(call: report)
@@ -63,14 +58,19 @@ RSpec.describe Mutant::CLI do
     it 'performs calls in expected sequence' do
       apply
 
+      expect(Mutant::Config)
+        .to have_received(:load_config_file)
+        .with(world, default_config)
+        .ordered
+
       expect(Mutant::CLI)
         .to have_received(:apply)
-        .with(world, config, arguments)
+        .with(world, file_config, arguments)
         .ordered
 
       expect(Mutant::Bootstrap)
         .to have_received(:apply)
-        .with(world, new_config)
+        .with(world, cli_config)
         .ordered
 
       expect(Mutant::Runner)
@@ -110,7 +110,7 @@ RSpec.describe Mutant::CLI do
 
   describe '.apply' do
     def apply
-      described_class.apply(world, config, arguments)
+      described_class.apply(world, default_config, arguments)
     end
 
     shared_examples 'invalid arguments' do

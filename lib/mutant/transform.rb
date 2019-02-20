@@ -487,5 +487,20 @@ module Mutant
         success(current)
       end
     end # Sequence
+
+    # Generic exception transformer
+    class Exception < self
+      include Concord.new(:error_class, :block)
+
+      # Apply transformation to input
+      #
+      # @param [Object]
+      #
+      # @return [Either<Error, Object>]
+      def apply(input)
+        Either.wrap_error(error_class) { block.call(input) }
+          .lmap { |exception| error(input: input, message: exception.to_s) }
+      end
+    end # Exception
   end # Transform
 end # Mutant
