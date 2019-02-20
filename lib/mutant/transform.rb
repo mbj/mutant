@@ -278,17 +278,19 @@ module Mutant
       #
       # rubocop:disable Metrics/MethodLength
       def run(input)
-        input.each_with_index do |value, index|
-          transform.apply(value).lmap do |error|
-            return failure(
-              error(
-                cause:   Index.wrap(error, index),
-                message: MESSAGE % { index: index },
-                input:   input
+        success(
+          input.each_with_index do |value, index|
+            transform.apply(value).lmap do |error|
+              return failure(
+                error(
+                  cause:   Index.wrap(error, index),
+                  message: MESSAGE % { index: index },
+                  input:   input
+                )
               )
-            )
+            end
           end
-        end.then(&Either::Right.method(:new))
+        )
       end
       # rubocop:enable Metrics/MethodLength
     end # Array
@@ -396,17 +398,18 @@ module Mutant
       #
       # rubocop:disable Metrics/MethodLength
       def transform_keys(keys, input)
-        keys
-          .map do |key|
-            [
-              key.value,
-              coerce_key(key, input).from_right do |error|
-                return failure(error)
-              end
-            ]
-          end
-          .to_h
-          .then(&method(:success))
+        success(
+          keys
+            .map do |key|
+              [
+                key.value,
+                coerce_key(key, input).from_right do |error|
+                  return failure(error)
+                end
+              ]
+            end
+            .to_h
+        )
       end
       # rubocop:enable Metrics/MethodLength
 
