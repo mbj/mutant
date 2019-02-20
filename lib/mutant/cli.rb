@@ -2,6 +2,8 @@
 
 module Mutant
   # Commandline parser / runner
+  #
+  # rubocop:disable Metrics/ClassLength
   class CLI
     include Concord.new(:world, :config)
 
@@ -22,7 +24,7 @@ module Mutant
     # @param [World] world
     #   the outside world
     #
-    # @param [Config] config
+    # @param [Config] default_config
     #   the default config
     #
     # @param [Array<String>]
@@ -33,8 +35,9 @@ module Mutant
     # rubocop:disable Style/Semicolon
     #
     # ignore :reek:LongParameterList
-    def self.run(world, config, arguments)
-      apply(world, config, arguments)
+    def self.run(world, default_config, arguments)
+      Config.load_config_file(world, default_config)
+        .apply { |file_config| apply(world, file_config, arguments) }
         .apply { |cli_config| Bootstrap.apply(world, cli_config) }
         .fmap(&Runner.method(:call))
         .from_right { |error| world.stderr.puts(error); return false }
@@ -209,6 +212,6 @@ module Mutant
     def add_matcher(attribute, value)
       with(matcher: config.matcher.add(attribute, value))
     end
-
   end # CLI
+  # rubocop:enable Metrics/ClassLength
 end # Mutant

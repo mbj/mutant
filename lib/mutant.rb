@@ -20,6 +20,7 @@ require 'set'
 require 'singleton'
 require 'stringio'
 require 'unparser'
+require 'yaml'
 
 # This setting is done to make errors within the parallel
 # reporter / execution visible in the main thread.

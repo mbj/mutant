@@ -11,10 +11,7 @@ namespace :metrics do
   task mutant: :coverage do
     arguments = %w[
       bundle exec mutant
-      --include lib
       --since HEAD~1
-      --require mutant
-      --use rspec
       --zombie
     ]
     arguments.concat(%w[--jobs 4]) if ENV.key?('CIRCLECI')

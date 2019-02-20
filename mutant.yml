@@ -1,0 +1,6 @@
+---
+includes:
+- lib
+integration: rspec
+requires:
+- mutant
