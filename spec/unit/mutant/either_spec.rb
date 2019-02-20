@@ -76,6 +76,18 @@ RSpec.describe Mutant::Either::Left do
     include_examples 'returns self'
   end
 
+  describe '#from_left' do
+    def apply
+      subject.from_left(&block)
+    end
+
+    it 'returns left value' do
+      expect(apply).to be(value)
+    end
+
+    include_examples 'no block evaluation'
+  end
+
   describe '#from_right' do
     def apply
       subject.from_right(&block)
@@ -161,6 +173,43 @@ RSpec.describe Mutant::Either::Right do
 
     include_examples 'requires block'
     include_examples 'Applicative#apply block evaluation'
+  end
+
+  describe '#from_left' do
+    def apply
+      subject.from_left(&block)
+    end
+
+    context 'without block' do
+      let(:block) { nil }
+
+      it 'raises RuntimeError error' do
+        expect { apply }.to raise_error(
+          RuntimeError,
+          "Expected left value, got #{subject.inspect}"
+        )
+      end
+    end
+
+    context 'with block' do
+      let(:yields)       { []                                      }
+      let(:block_return) { instance_double(Object, 'block-return') }
+
+      let(:block) do
+        lambda do |value|
+          yields << value
+          block_return
+        end
+      end
+
+      it 'calls block with right value' do
+        expect { apply }.to change(yields, :to_a).from([]).to([value])
+      end
+
+      it 'returns block value' do
+        expect(apply).to be(block_return)
+      end
+    end
   end
 
   describe '#from_right' do

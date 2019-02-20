@@ -108,6 +108,13 @@ module Mutant
         require_block(&block)
       end
 
+      # Unwrap value from left
+      #
+      # @return [Object]
+      def from_left
+        value
+      end
+
       # Unwrap value from right
       #
       # @return [Object]
@@ -152,6 +159,20 @@ module Mutant
       def apply
         yield(value)
       end
+
+      # Unwrap value from left
+      #
+      # @return [Object]
+      #
+      # rubocop:disable Style/GuardClause
+      def from_left
+        if block_given?
+          yield(value)
+        else
+          fail "Expected left value, got #{inspect}"
+        end
+      end
+      # rubocop:enable Style/GuardClause
 
       # Unwrap value from right
       #
