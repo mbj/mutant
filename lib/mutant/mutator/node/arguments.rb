@@ -78,7 +78,7 @@ module Mutant
         #
         # @return [Enumerable<Parser::AST::Node, Integer>]
         def mlhs_childs_with_index
-          children.each_with_index.select do |child, _index|
+          children.each_with_index.select do |child,|
             n_mlhs?(child)
           end
         end
