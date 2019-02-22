@@ -62,7 +62,7 @@ module Mutant
     TRANSFORM = Transform::Sequence.new(
       [
         Transform::Exception.new(SystemCallError, :read.to_proc),
-        Transform::Exception.new(YAML::SyntaxError, YAML.method(:load)),
+        Transform::Exception.new(YAML::SyntaxError, YAML.method(:safe_load)),
         Transform::Hash.new(
           optional: [
             Transform::Hash::Key.new('fail_fast',   boolean),
