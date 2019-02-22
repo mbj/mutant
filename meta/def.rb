@@ -107,7 +107,7 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(a, b = nil); super; end'
 end
 
-Mutant::Meta::Example.add :def do
+Mutant::Meta::Example.add :def, :arg do
   source 'def foo(_unused); end'
 
   mutation 'def foo(_unused); raise; end'
