@@ -118,7 +118,7 @@ module Mutant
       # @return [Expression]
       def parse_expression(metadata)
         if metadata.key?(:mutant_expression)
-          expression_parser.(metadata.fetch(:mutant_expression))
+          expression_parser.call(metadata.fetch(:mutant_expression))
         else
           match = EXPRESSION_CANDIDATE.match(metadata.fetch(:full_description))
           expression_parser.try_parse(match.captures.first) || ALL_EXPRESSION

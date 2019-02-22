@@ -9,11 +9,11 @@ RSpec.describe Mutant::Selector::Expression do
 
       Class.new(Mutant::Subject) do
         define_method(:expression) do
-          parse.('SubjectA')
+          parse.call('SubjectA')
         end
 
         define_method(:match_expressions) do
-          [expression] << parse.('SubjectB')
+          [expression] << parse.call('SubjectB')
         end
       end
     end

@@ -113,10 +113,6 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Enabled: false
 
-# Do not prefer lambda.call(...) over lambda.(...)
-LambdaCall:
-  Enabled: false
-
 # Buggy cop, returns false positive for our code base
 NonLocalExitFromIterator:
   Enabled: false

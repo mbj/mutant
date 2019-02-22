@@ -95,7 +95,7 @@ module Mutant
     # @return [undefined]
     def parse_match_expressions(expressions)
       expressions.each do |expression|
-        add_matcher(:match_expressions, config.expression_parser.(expression))
+        add_matcher(:match_expressions, config.expression_parser.call(expression))
       end
     end
 
@@ -143,7 +143,7 @@ module Mutant
     # @return [undefined]
     def add_filter_options(opts)
       opts.on('--ignore-subject EXPRESSION', 'Ignore subjects that match EXPRESSION as prefix') do |pattern|
-        add_matcher(:ignore_expressions, config.expression_parser.(pattern))
+        add_matcher(:ignore_expressions, config.expression_parser.call(pattern))
       end
       opts.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
         add_matcher(
