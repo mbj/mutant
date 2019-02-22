@@ -223,8 +223,7 @@ module Mutant
         # @return [undefined]
         def emit_implicit_self
           emit_receiver(nil) if n_self?(receiver) && !(
-            KEYWORDS.include?(selector)         ||
-            METHOD_OPERATORS.include?(selector) ||
+            KEYWORDS.include?(selector) ||
             meta.attribute_assignment?
           )
         end
