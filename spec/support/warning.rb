@@ -59,7 +59,7 @@ module MutantSpec
     end
 
     warnings  = Pathname.new(__dir__).join('warnings.yml').freeze
-    whitelist = IceNine.deep_freeze(YAML.load(warnings.read)) # rubocop:disable Security/YAMLLoad
+    whitelist = IceNine.deep_freeze(YAML.safe_load(warnings.read))
 
     EXTRACTOR = Extractor.new(STDERR, whitelist)
   end
