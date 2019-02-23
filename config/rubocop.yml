@@ -111,7 +111,9 @@ Metrics/AbcSize:
   Max: 21.02
 
 Metrics/BlockLength:
-  Enabled: false
+  Exclude:
+  - 'spec/**/*.rb'
+  - 'mutant.gemspec'
 
 # Buggy cop, returns false positive for our code base
 NonLocalExitFromIterator:
