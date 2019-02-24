@@ -1,3 +1,26 @@
+GIT
+  remote: https://github.com/mbj/devtools.git
+  revision: 26ba0a1053e6cf7b79fc72d513a73457f9a38ead
+  ref: 26ba0a1053e6cf7b79fc72d513a73457f9a38ead
+  specs:
+    devtools (0.1.23)
+      abstract_type (~> 0.0.7)
+      adamantium (~> 0.2.0)
+      anima (~> 0.3.0)
+      concord (~> 0.1.5)
+      flay (~> 2.12.0)
+      flog (~> 4.6.2)
+      procto (~> 0.0.3)
+      rake (~> 12.3.0)
+      reek (~> 5.3.0)
+      rspec (~> 3.8.0)
+      rspec-core (~> 3.8.0)
+      rspec-its (~> 1.2.0)
+      rubocop (~> 0.61.1)
+      simplecov (~> 0.16.1)
+      yard (~> 0.9.16)
+      yardstick (~> 0.9.9)
+
 PATH
   remote: .
   specs:
@@ -15,9 +38,6 @@ PATH
       parser (~> 2.6.0)
       procto (~> 0.0.2)
       unparser (~> 0.4.3)
-    mutant-rspec (0.8.25)
-      mutant (~> 0.8.25)
-      rspec-core (>= 3.8.0, < 4.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -44,25 +64,6 @@ GEM
       equalizer (~> 0.0.9)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
-    devtools (0.1.23)
-      abstract_type (~> 0.0.7)
-      adamantium (~> 0.2.0)
-      anima (~> 0.3.0)
-      concord (~> 0.1.5)
-      flay (~> 2.12.0)
-      flog (~> 4.6.2)
-      mutant (~> 0.8.24)
-      mutant-rspec (~> 0.8.24)
-      procto (~> 0.0.3)
-      rake (~> 12.3.0)
-      reek (~> 5.3.0)
-      rspec (~> 3.8.0)
-      rspec-core (~> 3.8.0)
-      rspec-its (~> 1.2.0)
-      rubocop (~> 0.61.1)
-      simplecov (~> 0.16.1)
-      yard (~> 0.9.16)
-      yardstick (~> 0.9.9)
     diff-lcs (1.3)
     docile (1.3.1)
     equalizer (0.0.11)
@@ -162,7 +163,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  devtools (~> 0.1.23)
+  devtools!
   mutant!
   parallel (~> 1.3)
 

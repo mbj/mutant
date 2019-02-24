@@ -42,7 +42,7 @@ jobs:
     steps:
       - checkout
       - run: bundle install
-      - run: bundle exec rake metrics:mutant
+      - run: bundle exec mutant --jobs 4 --since origin/master --zombie -- 'Mutant*'
 workflows:
   version: 2
   test:
