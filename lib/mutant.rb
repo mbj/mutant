@@ -34,13 +34,6 @@ module Mutant
   EMPTY_ARRAY    = [].freeze
   EMPTY_HASH     = {}.freeze
   SCOPE_OPERATOR = '::'
-
-  # Test if CI is detected via environment
-  #
-  # @return [Boolean]
-  def self.ci?
-    ENV.key?('CI')
-  end
 end # Mutant
 
 require 'mutant/base'
