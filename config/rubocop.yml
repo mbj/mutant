@@ -94,10 +94,6 @@ PercentLiteralDelimiters:
 SymbolArray:
   Enabled: true
 
-# Align if/else blocks with the variable assignment
-EndAlignment:
-  EnforcedStyleAlignWith: variable
-
 # Prefer #kind_of? over #is_a?
 ClassCheck:
   EnforcedStyle: kind_of?
