@@ -278,19 +278,21 @@ module Mutant
       #
       # rubocop:disable Metrics/MethodLength
       def run(input)
-        success(
-          input.each_with_index do |value, index|
-            transform.apply(value).lmap do |error|
-              return failure(
-                error(
-                  cause:   Index.wrap(error, index),
-                  message: MESSAGE % { index: index },
-                  input:   input
-                )
+        output = []
+
+        input.each_with_index do |value, index|
+          output << transform.apply(value).lmap do |error|
+            return failure(
+              error(
+                cause:   Index.wrap(error, index),
+                message: MESSAGE % { index: index },
+                input:   input
               )
-            end
-          end
-        )
+            )
+          end.from_right
+        end
+
+        success(output)
       end
       # rubocop:enable Metrics/MethodLength
     end # Array

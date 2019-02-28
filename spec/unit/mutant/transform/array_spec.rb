@@ -61,6 +61,15 @@ RSpec.describe Mutant::Transform::Array do
           expect(apply).to eql(Mutant::Either::Left.new(error))
         end
       end
+
+      context 'transformed elements' do
+        let(:input)     { [{ 'foo' => 'bar' }]                   }
+        let(:transform) { Mutant::Transform::Hash::Symbolize.new }
+
+        it 'returns transformed elements' do
+          expect(apply).to eql(Mutant::Either::Right.new([foo: 'bar']))
+        end
+      end
     end
 
     context 'on other input' do
