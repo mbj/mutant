@@ -35,7 +35,6 @@ module MutantSpec
       DEFAULT_MUTATION_COUNT = 0
 
       include Adamantium, Anima.new(
-        :expected_errors,
         :mutation_coverage,
         :mutation_generation,
         :integration,
@@ -141,8 +140,6 @@ module MutantSpec
       #
       # @return [Integer] mutations generated
       def check_generation(path)
-        relative_path = path.relative_path_from(repo_path)
-
         node = Parser::CurrentRuby.parse(path.read)
         fail "Cannot parse: #{path}" unless node
 
@@ -152,13 +149,7 @@ module MutantSpec
           check_generation_invariants(node, mutation)
         end
 
-        expected_errors.assert_success(relative_path)
-
         mutations.length
-      rescue Exception => exception # rubocop:disable Lint/RescueException
-        expected_errors.assert_error(relative_path, exception)
-
-        DEFAULT_MUTATION_COUNT
       end
 
       # Check generation invariants
@@ -280,58 +271,6 @@ module MutantSpec
         end
       end
 
-      # Mapping of files which we expect to cause errors during mutation generation
-      class ErrorWhitelist
-        class UnnecessaryExpectation < StandardError
-          MESSAGE = 'Expected to encounter %s while mutating "%s"'
-
-          def initialize(*error_info)
-            super(MESSAGE % error_info)
-          end
-        end # UnnecessaryExpectation
-
-        include Concord.new(:map), Adamantium
-
-        # Assert that we expect to encounter the provided exception for this path
-        #
-        # @param path [Pathname]
-        # @param exception [Exception]
-        #
-        # @raise provided exception if we are not expecting this error
-        #
-        # This method is reraising exceptions but rubocop can't tell
-        # rubocop:disable Style/SignalException
-        #
-        # @return [undefined]
-        def assert_error(path, exception)
-          original_error = exception.cause || exception
-
-          raise exception unless map.fetch(original_error.inspect, []).include?(path)
-        end
-
-        # Assert that we expect to not encounter an error for the specified path
-        #
-        # @param path [Pathname]
-        #
-        # @raise [UnnecessaryExpectation] if we are expecting an exception for this path
-        #
-        # @return [undefined]
-        def assert_success(path)
-          map.each do |error, paths|
-            fail UnnecessaryExpectation.new(error, path) if paths.include?(path)
-          end
-        end
-
-        # Return representation as hash
-        #
-        # @note this method is necessary for morpher loader to be invertible
-        #
-        # @return [Hash{Pathname => String}]
-        def to_h
-          map
-        end
-      end # ErrorWhitelist
-
       # rubocop:disable ClosingParenthesisIndentation
       # rubocop:disable Layout/MultilineMethodCallBraceLayout
       LOADER = Morpher.build do
@@ -350,17 +289,6 @@ module MutantSpec
                   s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
                 s(:key_symbolize, :mutation_generation,
                   s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
-                s(:key_symbolize, :expected_errors,
-                  s(:block,
-                    s(:guard, s(:primitive, Hash)),
-                    s(:custom,
-                      [
-                        ->(hash) { hash.map { |key, values| [key, values.map(&Pathname.method(:new))] }.to_h },
-                        ->(hash) { hash.map { |key, values| [key, values.map(&:to_s)]                 }.to_h }
-                      ]),
-                    s(:load_attribute_hash, s(:param, ErrorWhitelist))
-                  )
-                ),
                 s(:key_symbolize, :exclude, s(:map, s(:guard, s(:primitive, String))))
               ),
               s(:anima_load, Project)
