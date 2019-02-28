@@ -7,7 +7,7 @@ module Mutant
       #
       # rubocop:disable FormatString
       class Format
-        include AbstractType, Anima.new(:tty)
+        include AbstractType, Concord.new(:tty)
 
         # Start representation
         #
@@ -92,49 +92,6 @@ module Mutant
           end
 
         end # Progressive
-
-        # Format for framed rewindable output
-        class Framed < self
-          include anima.add(:tput)
-
-          BUFFER_FLAGS = 'a+'
-
-          REPORT_FREQUENCY = 20.0
-          REPORT_DELAY     = 1 / REPORT_FREQUENCY
-
-          # Format start
-          #
-          # @param [Bootstrap] env
-          #
-          # @return [String]
-          def start(_env)
-            tput.prepare
-          end
-
-          # Format progress
-          #
-          # @param [Runner::Status] status
-          #
-          # @return [String]
-          def progress(status)
-            format(Printer::Status, status)
-          end
-
-        private
-
-          # New buffer
-          #
-          # @return [StringIO]
-          def new_buffer
-            # For some reason this raises an Errno::EACCESS error:
-            #
-            #  StringIO.new(Tput::INSTANCE.restore, BUFFER_FLAGS)
-            #
-            buffer = StringIO.new
-            buffer << tput.restore
-          end
-
-        end # Framed
       end # Format
     end # CLI
   end # Reporter
