@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'anima'
-require 'morpher'
 require 'mutant'
 require 'parallel'
 
@@ -271,35 +270,49 @@ module MutantSpec
         end
       end
 
-      # rubocop:disable ClosingParenthesisIndentation
-      # rubocop:disable Layout/MultilineMethodCallBraceLayout
-      LOADER = Morpher.build do
-        s(:block,
-          s(:guard, s(:primitive, Array)),
-          s(:map,
-            s(:block,
-              s(:guard, s(:primitive, Hash)),
-              s(:hash_transform,
-                s(:key_symbolize, :repo_uri,            s(:guard, s(:primitive, String))),
-                s(:key_symbolize, :repo_ref,            s(:guard, s(:primitive, String))),
-                s(:key_symbolize, :name,                s(:guard, s(:primitive, String))),
-                s(:key_symbolize, :namespace,           s(:guard, s(:primitive, String))),
-                s(:key_symbolize, :integration,         s(:guard, s(:primitive, String))),
-                s(:key_symbolize, :mutation_coverage,
-                  s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
-                s(:key_symbolize, :mutation_generation,
-                  s(:guard, s(:or, s(:primitive, TrueClass), s(:primitive, FalseClass)))),
-                s(:key_symbolize, :exclude, s(:map, s(:guard, s(:primitive, String))))
-              ),
-              s(:anima_load, Project)
-            )
-          )
-        )
-      end
-      # rubocop:enable ClosingParenthesisIndentation
-      # rubocop:enable Layout/MultilineMethodCallBraceLayout
+      Transform = Mutant::Transform
 
-      ALL = LOADER.call(YAML.load_file(ROOT.join('spec', 'integrations.yml')))
+      boolean      = Transform::Boolean.new
+      string       = Transform::Primitive.new(String)
+      string_array = Transform::Array.new(string)
+
+      integration = Transform::Sequence.new(
+        [
+          Transform::Hash.new(
+            optional: [],
+            required: [
+              Transform::Hash::Key.new('exclude',             string_array),
+              Transform::Hash::Key.new('integration',         string),
+              Transform::Hash::Key.new('mutation_coverage',   boolean),
+              Transform::Hash::Key.new('mutation_generation', boolean),
+              Transform::Hash::Key.new('name',                string),
+              Transform::Hash::Key.new('namespace',           string),
+              Transform::Hash::Key.new('repo_ref',            string),
+              Transform::Hash::Key.new('repo_uri',            string)
+            ]
+          ),
+          Transform::Hash::Symbolize.new,
+          Transform::Exception.new(RuntimeError, Project.method(:new))
+        ]
+      )
+
+      transform =
+        Transform::Sequence.new(
+          [
+            Transform::Exception.new(SystemCallError, :read.to_proc),
+            Transform::Exception.new(YAML::SyntaxError, YAML.method(:safe_load)),
+            Transform::Array.new(integration)
+          ]
+        )
+
+      path = ROOT.join('spec', 'integrations.yml')
+
+      ALL = Transform::Named
+        .new(path, transform)
+        .apply(path)
+        .lmap(&:compact_message)
+        .lmap(&method(:fail))
+        .from_right
     end # Project
   end # Corpus
 end # MutantSpec
