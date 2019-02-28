@@ -6,7 +6,6 @@
   integration: mspec
   mutation_coverage: false
   mutation_generation: true
-  expected_errors: {}
   exclude:
     - command_line/fixtures/bad_syntax.rb
     - command_line/fixtures/freeze_flag_required_diff_enc.rb
@@ -30,7 +29,6 @@
   integration: rspec
   mutation_coverage: false
   mutation_generation: true
-  expected_errors: {}
   exclude: []
 - name: auom
   namespace: AUOM
@@ -39,7 +37,6 @@
   integration: rspec
   mutation_coverage: true
   mutation_generation: true
-  expected_errors: {}
   exclude: []
 - name: auom
   namespace: AUOM
@@ -48,7 +45,6 @@
   integration: minitest
   mutation_coverage: true
   mutation_generation: true
-  expected_errors: {}
   exclude: []
 - name: axiom
   namespace: Axiom
@@ -57,5 +53,4 @@
   integration: rspec
   mutation_coverage: false
   mutation_generation: true
-  expected_errors: {}
   exclude: []
