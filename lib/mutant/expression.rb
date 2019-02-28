@@ -14,6 +14,11 @@ module Mutant
 
     # Syntax of expression
     #
+    # @return [Matcher]
+    abstract_method :matcher
+
+    # Syntax of expression
+    #
     # @return [String]
     abstract_method :syntax
 
@@ -23,7 +28,7 @@ module Mutant
     #
     # @return [Integer]
     def match_length(other)
-      if eql?(other)
+      if syntax.eql?(other.syntax)
         syntax.length
       else
         0
