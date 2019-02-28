@@ -14,14 +14,10 @@ module Mutant
       #
       # :reek:ManualDispatch
       def self.build(output)
-        tput = Tput.detect
-        tty = output.respond_to?(:tty?) && output.tty?
-        format = if !Mutant.ci? && tty && tput
-          Format::Framed.new(tty:  tty, tput: tput)
-        else
-          Format::Progressive.new(tty: tty)
-        end
-        new(output, format)
+        new(
+          output,
+          Format::Progressive.new(output.respond_to?(:tty?) && output.tty?)
+        )
       end
 
       # Report start
