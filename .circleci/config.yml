@@ -1,9 +1,7 @@
 defaults: &defaults
   working_directory: ~/mutant
   docker:
-    - environment:
-        MUTANT_JOBS: 4
-      image: circleci/ruby:2.6.0
+  - image: circleci/ruby:2.6.0
 version: 2
 jobs:
   unit_specs:
@@ -42,7 +40,7 @@ jobs:
     steps:
       - checkout
       - run: bundle install
-      - run: bundle exec mutant --jobs 4 --since origin/master --zombie -- 'Mutant*'
+      - run: bundle exec mutant --jobs 4 --since HEAD~1 --zombie -- 'Mutant*'
 workflows:
   version: 2
   test:
