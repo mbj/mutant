@@ -16,10 +16,6 @@ if ENV['COVERAGE'] == 'true'
   end
 end
 
-# Require warning support first in order to catch any warnings emitted during boot
-require_relative './support/warning'
-$stderr = MutantSpec::Warning::EXTRACTOR
-
 require 'tempfile'
 require 'concord'
 require 'anima'
@@ -76,18 +72,4 @@ RSpec.configure do |config|
   config.include(ParserHelper)
   config.include(Mutant::AST::Sexp)
   config.include(XSpecHelper)
-
-  config.after(:suite) do
-    $stderr = STDERR
-
-    # The warning mechanism cannot currently make individual specs fail.
-    # Instead the warning mechanism causes a nonzero killfork exit without
-    # making specs fail. This gets detected as a valid isolation error.
-    #
-    # Before we can make warnings kill mutations we need to change the
-    # warning mechanism to cause individual spec failures.
-    unless $ARGV.include?('--zombie')
-      MutantSpec::Warning.assert_no_warnings
-    end
-  end
 end
