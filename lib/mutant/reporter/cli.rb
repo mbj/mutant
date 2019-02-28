@@ -42,8 +42,6 @@ module Mutant
 
       # Report delay in seconds
       #
-      # TODO: Move this to a callback registration
-      #
       # @return [Float]
       def delay
         format.delay
