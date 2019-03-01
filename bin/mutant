@@ -25,7 +25,6 @@ namespace =
       includes:         %w[
         mutant
         unparser
-        morpher
         adamantium
         equalizer
         anima

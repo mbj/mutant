@@ -36,7 +36,7 @@ module Mutant
         .tap(&method(:infect))
         .with(matchable_scopes: matchable_scopes(world, config))
 
-      subjects = Matcher::Compiler.call(env.config.matcher).call(env)
+      subjects = Matcher.from_config(env.config.matcher).call(env)
 
       Integration.setup(env).fmap do |integration|
         env.with(
