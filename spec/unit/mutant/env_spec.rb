@@ -14,16 +14,18 @@ RSpec.describe Mutant::Env do
     )
   end
 
-  let(:integration_class) { Mutant::Integration::Null            }
-  let(:isolation)         { Mutant::Isolation::None.new          }
-  let(:kernel)            { instance_double(Object, 'kernel')    }
-  let(:subject_a)         { instance_double(Mutant::Subject, :a) }
-  let(:subject_b)         { instance_double(Mutant::Subject, :b) }
-  let(:reporter)          { instance_double(Mutant::Reporter)    }
-  let(:selector)          { instance_double(Mutant::Selector)    }
-  let(:test_a)            { instance_double(Mutant::Test, :a)    }
-  let(:test_b)            { instance_double(Mutant::Test, :b)    }
-  let(:test_c)            { instance_double(Mutant::Test, :c)    }
+  let(:integration_class) { Mutant::Integration::Null                 }
+  let(:isolation)         { Mutant::Isolation::None.new               }
+  let(:kernel)            { instance_double(Object, 'kernel')         }
+  let(:reporter)          { instance_double(Mutant::Reporter)         }
+  let(:selector)          { instance_double(Mutant::Selector)         }
+  let(:subject_a)         { instance_double(Mutant::Subject, :a)      }
+  let(:subject_b)         { instance_double(Mutant::Subject, :b)      }
+  let(:test_a)            { instance_double(Mutant::Test, :a)         }
+  let(:test_b)            { instance_double(Mutant::Test, :b)         }
+  let(:test_c)            { instance_double(Mutant::Test, :c)         }
+  let(:selector_result_a) { Mutant::Maybe::Just.new([test_a, test_b]) }
+  let(:selector_result_b) { Mutant::Maybe::Just.new([test_b, test_c]) }
 
   let(:integration) do
     instance_double(Mutant::Integration, all_tests: [test_a, test_b, test_c])
@@ -55,11 +57,11 @@ RSpec.describe Mutant::Env do
   before do
     allow(selector).to receive(:call)
       .with(subject_a)
-      .and_return([test_a, test_b])
+      .and_return(selector_result_a)
 
     allow(selector).to receive(:call)
       .with(subject_b)
-      .and_return([test_b, test_c])
+      .and_return(selector_result_b)
 
     allow(Mutant::Timer).to receive(:now).and_return(2.0, 3.0)
   end
@@ -135,11 +137,22 @@ RSpec.describe Mutant::Env do
       subject.selections
     end
 
-    it 'returns expected selections' do
-      expect(apply).to eql(
-        subject_a => [test_a, test_b],
-        subject_b => [test_b, test_c]
-      )
+    context 'when selector returns values' do
+      it 'returns expected selections' do
+        expect(apply).to eql(
+          subject_a => [test_a, test_b],
+          subject_b => [test_b, test_c]
+        )
+      end
+    end
+
+    context 'when selector fails to return values' do
+      let(:selector_result_a) { Mutant::Maybe::Nothing.new }
+      let(:selector_result_b) { Mutant::Maybe::Nothing.new }
+
+      it 'returns expected selections' do
+        expect(apply).to eql(subject_a => [], subject_b => [])
+      end
     end
   end
 

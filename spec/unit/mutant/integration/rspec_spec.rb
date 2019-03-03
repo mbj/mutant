@@ -12,7 +12,7 @@ RSpec.describe Mutant::Integration::Rspec do
     double(
       'Example A',
       metadata: {
-        location:         'example-a-location',
+        location:         'example-a-location:1',
         full_description: 'example-a-full-description'
       }
     )
@@ -22,7 +22,7 @@ RSpec.describe Mutant::Integration::Rspec do
     double(
       'Example B',
       metadata: {
-        location:         'example-b-location',
+        location:         'example-b-location:2',
         full_description: 'example-b-full-description',
         mutant:           false
       }
@@ -33,7 +33,7 @@ RSpec.describe Mutant::Integration::Rspec do
     double(
       'Example C',
       metadata: {
-        location:         'example-c-location',
+        location:         'example-c-location:3',
         full_description: 'Example::C blah'
       }
     )
@@ -43,7 +43,7 @@ RSpec.describe Mutant::Integration::Rspec do
     double(
       'Example D',
       metadata: {
-        location:         'example-d-location',
+        location:         'example-d-location:4',
         full_description: "Example::D\nblah"
       }
     )
@@ -53,7 +53,7 @@ RSpec.describe Mutant::Integration::Rspec do
     double(
       'Example E',
       metadata: {
-        location:          'example-e-location',
+        location:          'example-e-location:5',
         full_description:  'Example::E',
         mutant_expression: 'Foo'
       }
@@ -98,20 +98,28 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:all_tests) do
     [
       Mutant::Test.new(
-        id:         'rspec:0:example-a-location/example-a-full-description',
-        expression: parse_expression('*')
+        expression: parse_expression('*'),
+        id:         'rspec:0:example-a-location:1/example-a-full-description',
+        lineno:     1,
+        path:       Pathname.pwd.join('example-a-location').to_s
       ),
       Mutant::Test.new(
-        id:         'rspec:1:example-c-location/Example::C blah',
-        expression: parse_expression('Example::C')
+        expression: parse_expression('Example::C'),
+        id:         'rspec:1:example-c-location:3/Example::C blah',
+        lineno:     3,
+        path:       Pathname.pwd.join('example-c-location').to_s
       ),
       Mutant::Test.new(
-        id:         "rspec:2:example-d-location/Example::D\nblah",
-        expression: parse_expression('*')
+        expression: parse_expression('*'),
+        id:         "rspec:2:example-d-location:4/Example::D\nblah",
+        lineno:     4,
+        path:       Pathname.pwd.join('example-d-location').to_s
       ),
       Mutant::Test.new(
-        id:         'rspec:3:example-e-location/Example::E',
-        expression: parse_expression('Foo')
+        expression: parse_expression('Foo'),
+        id:         'rspec:3:example-e-location:5/Example::E',
+        lineno:     5,
+        path:       Pathname.pwd.join('example-e-location').to_s
       )
     ]
   end

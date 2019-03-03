@@ -31,31 +31,31 @@ RSpec.describe Mutant::Selector::Expression do
     context 'without available tests' do
       let(:all_tests) { [] }
 
-      it { should eql([]) }
+      it { should eql(Mutant::Maybe::Just.new([])) }
     end
 
     context 'without qualifying tests' do
       let(:all_tests) { [test_c] }
 
-      it { should eql([]) }
+      it { should eql(Mutant::Maybe::Just.new([])) }
     end
 
     context 'with qualifying tests for first match expression' do
       let(:all_tests) { [test_a] }
 
-      it { should eql([test_a]) }
+      it { should eql(Mutant::Maybe::Just.new([test_a])) }
     end
 
     context 'with qualifying tests for second match expression' do
       let(:all_tests) { [test_b] }
 
-      it { should eql([test_b]) }
+      it { should eql(Mutant::Maybe::Just.new([test_b])) }
     end
 
     context 'with qualifying tests for the first and second match expression' do
       let(:all_tests) { [test_a, test_b] }
 
-      it { should eql([test_a]) }
+      it { should eql(Mutant::Maybe::Just.new([test_a])) }
     end
   end
 end

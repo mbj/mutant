@@ -19,6 +19,14 @@ module Mutant
     end
     memoize :mutations
 
+    # Trace location
+    #
+    # @return [String]
+    def trace_location
+      "#{source_path}:#{source_line}"
+    end
+    memoize :trace_location
+
     # Source path
     #
     # @return [Pathname]

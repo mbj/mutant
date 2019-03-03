@@ -99,15 +99,21 @@ module Mutant
       def parse_example(example, index)
         metadata = example.metadata
 
+        location = metadata.fetch(:location)
+
+        path, lineno = location.split(':', 2)
+
         id = TEST_ID_FORMAT % {
           index:       index,
-          location:    metadata.fetch(:location),
+          location:    location,
           description: metadata.fetch(:full_description)
         }
 
         Test.new(
           expression: parse_expression(metadata),
-          id:         id
+          id:         id,
+          lineno:     Integer(lineno),
+          path:       Pathname.pwd.join(path).to_s
         )
       end
 

@@ -23,7 +23,7 @@ module Mutant
 
     # Setup integration
     #
-    # @param env [Bootstrap]
+    # @param env [Env]
     #
     # @return [Either<String, Integration>]
     def self.setup(env)
@@ -34,7 +34,7 @@ module Mutant
 
     # Attempt to require integration
     #
-    # @param env [Bootstrap]
+    # @param env [Env]
     #
     # @return [Either<String, undefined>]
     #
@@ -58,7 +58,7 @@ module Mutant
 
     # Attempt const get
     #
-    # @param env [Boostrap]
+    # @param env [Env]
     #
     # @return [Either<String, Class<Integration>>]
     #

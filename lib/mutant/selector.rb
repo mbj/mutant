@@ -9,7 +9,7 @@ module Mutant
     #
     # @param [Subject] subject
     #
-    # @return [Enumerable<Test>]
+    # @return [Maybe<Enumerable<Test>>]
     abstract_method :call
 
   end # Selector

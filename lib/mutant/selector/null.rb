@@ -10,9 +10,9 @@ module Mutant
       #
       # @param [Subject] subject
       #
-      # @return [Enumerable<Test>]
+      # @return [Maybe<Enumerable<Test>>]
       def call(_subject)
-        EMPTY_ARRAY
+        Maybe::Just.new(EMPTY_ARRAY)
       end
     end # Null
   end # Selector
