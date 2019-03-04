@@ -67,7 +67,7 @@ RSpec.describe Mutant::Runner do
     end
 
     def apply
-      described_class.call(env)
+      described_class.apply(env)
     end
 
     let(:raw_expectations) do
@@ -115,7 +115,7 @@ RSpec.describe Mutant::Runner do
     end
 
     it 'returns env result' do
-      verify_events { expect(apply).to eql(env_result) }
+      verify_events { expect(apply).to eql(Mutant::Either::Right.new(env_result)) }
     end
   end
 end

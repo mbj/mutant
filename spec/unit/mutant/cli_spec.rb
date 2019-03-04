@@ -44,15 +44,17 @@ RSpec.describe Mutant::CLI do
     let(:file_result)    { Mutant::Either::Right.new(file_config)         }
     let(:report_success) { true                                           }
 
-    let(:report) do
-      instance_double(Mutant::Result::Env, success?: report_success)
+    let(:runner_result) do
+      Mutant::Either::Right.new(
+        instance_double(Mutant::Result::Env, success?: report_success)
+      )
     end
 
     before do
       allow(Mutant::Config).to receive_messages(load_config_file: file_result)
       allow(Mutant::CLI).to receive_messages(apply: cli_result)
       allow(Mutant::Bootstrap).to receive_messages(apply: env_result)
-      allow(Mutant::Runner).to receive_messages(call: report)
+      allow(Mutant::Runner).to receive_messages(apply: runner_result)
     end
 
     it 'performs calls in expected sequence' do
@@ -74,7 +76,7 @@ RSpec.describe Mutant::CLI do
         .ordered
 
       expect(Mutant::Runner)
-        .to have_received(:call)
+        .to have_received(:apply)
         .with(env)
         .ordered
     end

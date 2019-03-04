@@ -39,7 +39,7 @@ module Mutant
       Config.load_config_file(world, default_config)
         .apply { |file_config| apply(world, file_config, arguments) }
         .apply { |cli_config| Bootstrap.apply(world, cli_config) }
-        .fmap(&Runner.method(:call))
+        .apply(&Runner.method(:apply))
         .from_right { |error| world.stderr.puts(error); return false }
         .success?
     end
