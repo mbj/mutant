@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  class Runner
+  module Runner
     class Sink
       include Concord.new(:env)
 

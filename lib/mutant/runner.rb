@@ -1,57 +1,57 @@
 # frozen_string_literal: true
 
 module Mutant
-  # Runner baseclass
-  class Runner
-    include Adamantium::Flat, Concord.new(:env), Procto.call(:result)
-
-    # Initialize object
+  # Runner
+  module Runner
+    # Run against env
     #
-    # @return [undefined]
-    def initialize(*)
-      super
+    # @return [Either<String, Result>]
+    def self.apply(env)
+      reporter(env).start(env)
 
-      reporter.start(env)
-
-      run_mutation_analysis
+      Either::Right.new(run_mutation_analysis(env))
     end
-
-    # Final result
-    #
-    # @return [Result::Env]
-    attr_reader :result
-
-  private
 
     # Run mutation analysis
     #
     # @return [undefined]
-    def run_mutation_analysis
-      @result = run_driver(Parallel.async(mutation_test_config))
-      reporter.report(result)
+    def self.run_mutation_analysis(env)
+      reporter = reporter(env)
+
+      run_driver(
+        reporter,
+        Parallel.async(mutation_test_config(env))
+      ).tap do |result|
+        reporter.report(result)
+      end
     end
+    private_class_method :run_mutation_analysis
 
     # Run driver
     #
+    # @param [Reporter] reporter
     # @param [Driver] driver
     #
     # @return [Object]
     #   the last returned status payload
-    def run_driver(driver)
+    def self.run_driver(reporter, driver)
       loop do
         status = driver.wait_timeout(reporter.delay)
         break status.payload if status.done?
         reporter.progress(status)
       end
     end
+    private_class_method :run_driver
 
     # Configuration for parallel execution engine
     #
-    # @return [Object]
-    def mutation_test_config
+    # @return [Parallell::Config]
+    def self.mutation_test_config(env)
+      world = env.world
+
       Parallel::Config.new(
         condition_variable: world.condition_variable,
-        jobs:               config.jobs,
+        jobs:               env.config.jobs,
         mutex:              world.mutex,
         processor:          env.method(:kill),
         sink:               Sink.new(env),
@@ -59,27 +59,17 @@ module Mutant
         thread:             world.thread
       )
     end
+    private_class_method :mutation_test_config
 
     # Reporter to use
     #
+    # @param [Env] env
+    #
     # @return [Reporter]
-    def reporter
+    def self.reporter(env)
       env.config.reporter
     end
-
-    # Config for this mutant execution
-    #
-    # @return [Config]
-    def config
-      env.config
-    end
-
-    # Currently executing world
-    #
-    # @return [World]
-    def world
-      env.world
-    end
+    private_class_method :reporter
 
   end # Runner
 end # Mutant
