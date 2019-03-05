@@ -45,8 +45,10 @@ module Mutant
     def kill(mutation)
       start = Timer.now
 
+      tests = selections.fetch(mutation.subject)
+
       Result::Mutation.new(
-        isolation_result: run_mutation_tests(mutation),
+        isolation_result: run_mutation_tests(mutation, tests),
         mutation:         mutation,
         runtime:          Timer.now - start
       )
@@ -76,15 +78,18 @@ module Mutant
 
     # Kill mutation under isolation with integration
     #
+    # @param [Mutation] mutation
+    # @param [Array<Test>] test
+    #
     # @return [Result::Isolation]
-    def run_mutation_tests(mutation)
+    def run_mutation_tests(mutation, tests)
       config.isolation.call do
         result = mutation.insert(world.kernel)
 
         if result.equal?(Loader::Result::VoidValue.instance)
           Result::Test::VoidValue.instance
         else
-          integration.call(selections.fetch(mutation.subject))
+          integration.call(tests)
         end
       end
     end
