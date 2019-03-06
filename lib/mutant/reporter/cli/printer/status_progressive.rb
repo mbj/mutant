@@ -6,16 +6,16 @@ module Mutant
       class Printer
         # Reporter for progressive output format on scheduler Status objects
         class StatusProgressive < self
-          FORMAT = '(%02d/%02d) %3d%% - killtime: %0.02fs runtime: %0.02fs overhead: %0.02fs'
+          FORMAT = 'progress: %02d/%02d alive: %d runtime: %0.02fs killtime: %0.02fs mutations/s: %0.02f'
 
           delegate(
-            :coverage,
-            :runtime,
-            :amount_mutations_killed,
-            :amount_mutations,
             :amount_mutation_results,
+            :amount_mutations,
+            :amount_mutations_alive,
+            :amount_mutations_killed,
             :killtime,
-            :overhead
+            :overhead,
+            :runtime
           )
 
           # Run printer
@@ -24,12 +24,12 @@ module Mutant
           def run
             status(
               FORMAT,
-              amount_mutations_killed,
+              amount_mutation_results,
               amount_mutations,
-              coverage * 100,
-              killtime,
+              amount_mutations_alive,
               runtime,
-              overhead
+              killtime,
+              mutations_per_second
             )
           end
 
@@ -40,6 +40,15 @@ module Mutant
           # @return [Result::Env]
           def object
             super().payload
+          end
+
+          # Mutations processed per second
+          #
+          # @return [Float]
+          #
+          # @api private
+          def mutations_per_second
+            amount_mutation_results / runtime
           end
         end # StatusProgressive
       end # Printer

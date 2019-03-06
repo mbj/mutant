@@ -107,20 +107,22 @@ RSpec.describe Mutant::Reporter::CLI do
 
       let(:tty?) { true }
 
-      it_reports Mutant::Color::GREEN.format('(00/02) 100% - killtime: 0.00s runtime: 4.00s overhead: 4.00s') + "\n"
+      # rubocop:disable Metrics/LineLength
+      it_reports Mutant::Color::GREEN.format('progress: 00/02 alive: 0 runtime: 4.00s killtime: 0.00s mutations/s: 0.00') + "\n"
+      # rubocop:enable Metrics/LineLength
     end
 
     context 'with last mutation present' do
       with(:env_result) { { subject_results: [subject_a_result] } }
 
       context 'when mutation is successful' do
-        it_reports "(02/02) 100% - killtime: 2.00s runtime: 4.00s overhead: 2.00s\n"
+        it_reports "progress: 02/02 alive: 0 runtime: 4.00s killtime: 2.00s mutations/s: 0.50\n"
       end
 
       context 'when mutation is NOT successful' do
         with(:mutation_a_test_result) { { passed: true } }
 
-        it_reports "(01/02)  50% - killtime: 2.00s runtime: 4.00s overhead: 2.00s\n"
+        it_reports "progress: 02/02 alive: 1 runtime: 4.00s killtime: 2.00s mutations/s: 0.50\n"
       end
     end
   end
