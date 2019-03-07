@@ -29,6 +29,21 @@ module Mutant
     def inspect
       INSPECT
     end
+
+    # Capture stdout of a command
+    #
+    # @param [Array<String>] command
+    #
+    # @return [Either<String,String>]
+    def capture_stdout(command)
+      stdout, status = open3.capture2(*command, binmode: true)
+
+      if status.success?
+        Either::Right.new(stdout)
+      else
+        Either::Left.new("Command #{command} failed!")
+      end
+    end
   end # World
 
   # Standalone configuration of a mutant execution.
