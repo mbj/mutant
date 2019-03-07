@@ -182,6 +182,7 @@ require 'mutant/reporter/cli/format'
 require 'mutant/repository'
 require 'mutant/variable'
 require 'mutant/zombifier'
+require 'mutant/range'
 
 module Mutant
   WORLD = World.new(
