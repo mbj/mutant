@@ -2,106 +2,119 @@
 
 describe Mutant::Repository::Diff do
   describe '#touches?' do
-    let(:object) do
-      described_class.new(
-        world: world,
-        from:  'from_rev',
-        to:    'to_rev'
-      )
+    def apply
+      subject.touches?(path, line_range)
     end
 
-    let(:world) do
-      instance_double(
-        Mutant::World,
-        kernel:   kernel,
-        open3:    open3,
-        pathname: pathname
-      )
-    end
+    subject { described_class.new(world: world, to: 'to_rev') }
 
     let(:pathname)   { class_double(Pathname, pwd: pwd) }
     let(:open3)      { class_double(Open3)              }
     let(:kernel)     { class_double(Kernel)             }
     let(:pwd)        { Pathname.new('/foo')             }
     let(:path)       { Pathname.new('/foo/bar.rb')      }
-    let(:line_range) { 1..2                             }
+    let(:line_range) { 4..5                             }
 
-    subject { object.touches?(path, line_range) }
+    let(:world) do
+      instance_double(
+        Mutant::World,
+        kernel:   kernel,
+        pathname: pathname
+      )
+    end
 
-    shared_context 'test if git tracks the file' do
-      before do
-        # rubocop:disable Lint/UnneededSplatExpansion
-        expect(world.kernel).to receive(:system)
-          .ordered
-          .with(
-            *%W[git ls-files --error-unmatch -- #{path}],
-            out: File::NULL,
-            err: File::NULL
-          ).and_return(git_ls_success?)
+    let(:allowed_paths) do
+      %w[bar.rb baz.rb].map do |path|
+        [path, Pathname.new(path)]
+      end.to_h
+    end
+
+    let(:file_diff_expectations) { [] }
+
+    let(:raw_expectations) do
+      [
+        {
+          receiver:  world,
+          selector:  :capture_stdout,
+          arguments: [%w[git diff-index to_rev]],
+          reaction:  { return: Mutant::Either::Right.new(index_stdout) }
+        },
+        *file_diff_expectations
+      ]
+    end
+
+    before do
+      allow(pathname).to receive(:new, &allowed_paths.method(:fetch))
+    end
+
+    context 'when file is not touched in the diff' do
+      let(:index_stdout) { '' }
+
+      it 'returns false' do
+        verify_events { expect(apply).to be(false) }
       end
     end
 
-    context 'when file is in a different subdirectory' do
-      let(:path) { Pathname.new('/baz/bar.rb') }
+    context 'when a diff-index line is invalid' do
+      let(:index_stdout) { 'invalid-line' }
 
-      before do
-        expect(world.kernel).to_not receive(:system)
-      end
-
-      it { should be(false) }
-    end
-
-    context 'when file is NOT tracked in repository' do
-      let(:git_ls_success?) { false }
-
-      include_context 'test if git tracks the file'
-
-      it { should be(false) }
-    end
-
-    context 'when file is tracked in repository' do
-      let(:git_ls_success?) { true                                                 }
-      let(:status)          { instance_double(Process::Status, success?: success?) }
-      let(:stdout)          { instance_double(String, empty?: stdout_empty?)       }
-      let(:stdout_empty?)   { false                                                }
-
-      include_context 'test if git tracks the file'
-
-      before do
-        expect(world.open3).to receive(:capture2)
-          .ordered
-          .with(*expected_git_log_command, binmode: true)
-          .and_return([stdout, status])
-      end
-
-      let(:expected_git_log_command) do
-        %W[git log from_rev...to_rev --ignore-all-space -L 1,2:#{path}]
-      end
-
-      context 'on failure of git log command' do
-        let(:success?) { false }
-
-        it 'raises error' do
-          expect { subject }.to raise_error(
-            Mutant::Repository::RepositoryError,
-            "Command #{expected_git_log_command} failed!"
+      it 'raises error' do
+        expect { verify_events { apply } }
+          .to raise_error(
+            described_class::Error,
+            'Invalid git diff-index line: invalid-line'
           )
+      end
+    end
+
+    context 'when file is touched in the diff' do
+      let(:index_stdout) do
+        <<~STR
+          :000000 000000 0000000000000000000000000000000000000000 0000000000000000000000000000000000000000 M\tbar.rb
+          :000000 000000 0000000000000000000000000000000000000000 0000000000000000000000000000000000000000 M\tbaz.rb
+        STR
+      end
+
+      let(:file_diff_expectations) do
+        [
+          {
+            receiver:  world,
+            selector:  :capture_stdout,
+            arguments: [%w[git diff --unified=0 to_rev -- /foo/bar.rb]],
+            reaction:  { return: Mutant::Either::Right.new(diff_stdout) }
+          }
+        ]
+      end
+
+      context 'and diff touches the line range' do
+        let(:diff_stdout) do
+          <<~'DIFF'
+            --- bar.rb
+            +++ bar.rb
+            @@ -4 +4 @@ header
+            -a
+            +b
+          DIFF
+        end
+
+        it 'returns true' do
+          verify_events { expect(apply).to be(true) }
         end
       end
 
-      context 'on suuccess of git command' do
-        let(:success?) { true }
-
-        context 'on empty stdout' do
-          let(:stdout_empty?) { true }
-
-          it { should be(false) }
+      context 'and diff does not touch the line range' do
+        let(:diff_stdout) do
+          <<~'DIFF'
+            --- bar.rb
+            +++ bar.rb
+            @@ -3 +3 @@ header
+            -a
+            +b
+          DIFF
         end
 
-        context 'on non empty stdout' do
-          let(:stdout_empty?) { false }
-
-          it { should be(true) }
+        it 'returns false' do
+          verify_events { expect(apply).to be(false) }
         end
       end
     end

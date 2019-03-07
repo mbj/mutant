@@ -2,8 +2,6 @@
 
 module Mutant
   # Commandline parser / runner
-  #
-  # rubocop:disable Metrics/ClassLength
   class CLI
     include Concord.new(:world, :config)
 
@@ -149,11 +147,7 @@ module Mutant
         add_matcher(
           :subject_filters,
           Repository::SubjectFilter.new(
-            Repository::Diff.new(
-              from:  Repository::Diff::HEAD,
-              to:    revision,
-              world: world
-            )
+            Repository::Diff.new(to: revision, world: world)
           )
         )
       end
@@ -213,5 +207,4 @@ module Mutant
       with(matcher: config.matcher.add(attribute, value))
     end
   end # CLI
-  # rubocop:enable Metrics/ClassLength
 end # Mutant

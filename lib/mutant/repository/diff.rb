@@ -2,11 +2,15 @@
 
 module Mutant
   module Repository
-    # Diff between two objects in repository
+    # Diff index between HEAD and a tree reference
     class Diff
-      include Adamantium, Anima.new(:world, :from, :to)
+      include Adamantium, Anima.new(:world, :to)
 
-      HEAD = 'HEAD'
+      FORMAT = /\A:\d{6} \d{6} [a-f\d]{40} [a-f\d]{40} [ACDMRTUX]\t(.*)\n\z/.freeze
+
+      private_constant(*constants(false))
+
+      class Error < RuntimeError; end
 
       # Test if diff changes file at line range
       #
@@ -18,50 +22,83 @@ module Mutant
       # @raise [RepositoryError]
       #   when git command failed
       def touches?(path, line_range)
-        return false unless within_working_directory?(path) && tracks?(path)
-
-        command = %W[
-          git log
-          #{from}...#{to}
-          --ignore-all-space
-          -L #{line_range.begin},#{line_range.end}:#{path}
-        ]
-
-        stdout, status = world.open3.capture2(*command, binmode: true)
-
-        fail RepositoryError, "Command #{command} failed!" unless status.success?
-
-        !stdout.empty?
+        touched_paths
+          .fetch(path) { return false }
+          .touches?(line_range)
       end
 
     private
 
-      # Test if path is tracked in repository
+      # Touched paths
       #
-      # FIXME: Cache results, to avoid spending time on producing redundant results.
+      # @return [Hash{Pathname => Path}]
       #
-      # @param [Pathname] path
+      # rubocop:disable Metrics/MethodLength
+      def touched_paths
+        pathname = world.pathname
+        work_dir = pathname.pwd
+
+        world
+          .capture_stdout(%W[git diff-index #{to}])
+          .from_right
+          .lines
+          .map do |line|
+            path = parse_line(work_dir, line)
+            [path.path, path]
+          end
+          .to_h
+      end
+      memoize :touched_paths
+
+      # Parse path
       #
-      # @return [Boolean]
-      def tracks?(path)
-        command = %W[git ls-files --error-unmatch -- #{path}]
-        world.kernel.system(
-          *command,
-          out: File::NULL,
-          err: File::NULL
+      # @param [Pathname] work_dir
+      # @param [String] line
+      #
+      # @return [Path]
+      def parse_line(work_dir, line)
+        match = FORMAT.match(line) or fail Error, "Invalid git diff-index line: #{line}"
+
+        Path.new(
+          path:  work_dir.join(match.captures.first),
+          to:    to,
+          world: world
         )
       end
 
-      # Test if the path is within the current working directory
-      #
-      # @param [Pathname] path
-      #
-      # @return [TrueClass, nil]
-      def within_working_directory?(path)
-        working_directory = world.pathname.pwd
-        path.ascend { |parent| return true if working_directory.eql?(parent) }
-      end
+      # Path touched by a diff
+      class Path
+        include Adamantium, Anima.new(:world, :to, :path)
 
+        DECIMAL = /(?:0|[1-9]\d*)/.freeze
+        REGEXP  = /\A@@ -(#{DECIMAL})(?:,(#{DECIMAL}))? \+(#{DECIMAL})(?:,(#{DECIMAL}))? @@/.freeze
+
+        private_constant(*constants(false))
+
+        # Test if diff path touches a line range
+        #
+        # @param [Range<Integer>] range
+        #
+        # @return [Boolean]
+        def touches?(line_range)
+          diff_ranges.any? do |range|
+            Range.overlap?(range, line_range)
+          end
+        end
+
+      private
+
+        # Ranges of hunks in the diff
+        #
+        # @return [Array<Range<Integer>>]
+        def diff_ranges
+          world
+            .capture_stdout(%W[git diff --unified=0 #{to} -- #{path}])
+            .fmap(&Ranges.method(:parse))
+            .from_right
+        end
+        memoize :diff_ranges
+      end # Path
     end # Diff
   end # Repository
 end # Mutant
