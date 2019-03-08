@@ -250,7 +250,6 @@ RSpec.describe Mutant::CLI do
           subject_filters: [
             Mutant::Repository::SubjectFilter.new(
               Mutant::Repository::Diff.new(
-                from:  'HEAD',
                 to:    'master',
                 world: world
               )

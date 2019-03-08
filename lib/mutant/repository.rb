@@ -2,9 +2,6 @@
 
 module Mutant
   module Repository
-    # Error raised on repository interaction problems
-    RepositoryError = Class.new(RuntimeError)
-
     # Subject filter based on repository diff
     class SubjectFilter
       include Adamantium, Concord.new(:diff)
