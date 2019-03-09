@@ -14,9 +14,18 @@ RSpec.describe Mutant::Result::Env do
   let(:env) do
     instance_double(
       Mutant::Env,
-      config:    instance_double(Mutant::Config, fail_fast: fail_fast),
-      subjects:  [instance_double(Mutant::Subject)],
-      mutations: [instance_double(Mutant::Mutation)]
+      config:      instance_double(Mutant::Config, fail_fast: fail_fast),
+      integration: integration,
+      mutations:   [instance_double(Mutant::Mutation)],
+      selections:  selections,
+      subjects:    [subject_a, subject_b]
+    )
+  end
+
+  let(:integration) do
+    instance_double(
+      Mutant::Integration,
+      all_tests: [test_a, test_b]
     )
   end
 
@@ -27,6 +36,33 @@ RSpec.describe Mutant::Result::Env do
       amount_mutations_killed: killed,
       success?:                subject_success?
     )
+  end
+
+  let(:selections) do
+    {
+      subject_a: [test_a],
+      subject_b: [test_a, test_b, test_c]
+    }
+  end
+
+  let(:subject_a) do
+    instance_double(Mutant::Subject, :a)
+  end
+
+  let(:subject_b) do
+    instance_double(Mutant::Subject, :b)
+  end
+
+  let(:test_a) do
+    instance_double(Mutant::Test, :a)
+  end
+
+  let(:test_b) do
+    instance_double(Mutant::Test, :b)
+  end
+
+  let(:test_c) do
+    instance_double(Mutant::Test, :c)
   end
 
   let(:fail_fast)        { false }
@@ -84,7 +120,19 @@ RSpec.describe Mutant::Result::Env do
   describe '#amount_subjects' do
     subject { object.amount_subjects }
 
-    it { should eql(1) }
+    it { should eql(2) }
+  end
+
+  describe '#amount_total_tests' do
+    subject { object.amount_total_tests }
+
+    it { should eql(2) }
+  end
+
+  describe '#test_subject_ratio' do
+    subject { object.test_subject_ratio }
+
+    it { should eql(Rational(3, 2)) }
   end
 
   describe '#stop?' do

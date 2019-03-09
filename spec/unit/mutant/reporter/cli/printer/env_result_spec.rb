@@ -28,6 +28,9 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       Includes:        []
       Requires:        []
       Subjects:        1
+      Total-Tests:     1
+      Selected-Tests:  1
+      Tests/Subject:   1.00 avg
       Mutations:       2
       Results:         2
       Kills:           1

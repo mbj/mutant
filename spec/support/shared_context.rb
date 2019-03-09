@@ -54,10 +54,18 @@ module SharedContext
     let(:env) do
       instance_double(
         Mutant::Env,
-        config:     config,
-        mutations:  mutations,
-        selections: { subject_a => [test_a] },
-        subjects:   [subject_a]
+        config:      config,
+        integration: integration,
+        mutations:   mutations,
+        selections:  { subject_a => [test_a] },
+        subjects:    [subject_a]
+      )
+    end
+
+    let(:integration) do
+      instance_double(
+        Mutant::Integration,
+        all_tests: [test_a]
       )
     end
 
