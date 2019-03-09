@@ -7,16 +7,16 @@ module Mutant
         # Env progress printer
         class EnvProgress < self
           delegate(
-            :coverage,
-            :amount_subjects,
+            :amount_mutation_results,
             :amount_mutations,
             :amount_mutations_alive,
             :amount_mutations_killed,
-            :amount_mutation_results,
-            :runtime,
+            :amount_subjects,
+            :coverage,
+            :env,
             :killtime,
             :overhead,
-            :env
+            :runtime
           )
 
           FORMATS = IceNine.deep_freeze([
