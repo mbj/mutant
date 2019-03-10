@@ -21,7 +21,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       Test Output:
       mutation a test result output
       -----------------------
-      Mutant configuration:
+      Mutant environment:
       Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     null
       Jobs:            1

@@ -13,7 +13,6 @@ module Mutant
           #
           # @return [undefined]
           def run
-            info 'Mutant configuration:'
             info 'Matcher:         %s', object.matcher.inspect
             info 'Integration:     %s', object.integration
             info 'Jobs:            %d', object.jobs

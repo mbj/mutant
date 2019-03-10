@@ -10,7 +10,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
       with(:subject_a_result) { { mutation_results: [] } }
 
       it_reports <<~'STR'
-        Mutant configuration:
+        Mutant environment:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
         Jobs:            1
@@ -34,7 +34,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
 
     context 'on full coverage' do
       it_reports <<~'STR'
-        Mutant configuration:
+        Mutant environment:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
         Jobs:            1
@@ -60,7 +60,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
       with(:mutation_a_test_result) { { passed: true } }
 
       it_reports <<~'STR'
-        Mutant configuration:
+        Mutant environment:
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
         Jobs:            1

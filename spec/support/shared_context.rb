@@ -36,6 +36,7 @@ module SharedContext
     let(:output)          { StringIO.new                                             }
     let(:subject_a_node)  { s(:true)                                                 }
     let(:test_a)          { instance_double(Mutant::Test, identification: 'test-a')  }
+    let(:subjects)        { [subject_a]                                              }
 
     let(:job_a) do
       Mutant::Parallel::Source::Job.new(
@@ -54,12 +55,22 @@ module SharedContext
     let(:env) do
       instance_double(
         Mutant::Env,
-        config:      config,
-        integration: integration,
-        mutations:   mutations,
-        selections:  { subject_a => [test_a] },
-        subjects:    [subject_a]
+        amount_mutations:      mutations.length,
+        amount_selected_tests: selections.values.flatten.to_set.length,
+        amount_subjects:       subjects.length,
+        amount_total_tests:    integration.all_tests.length,
+        config:                config,
+        integration:           integration,
+        mutations:             mutations,
+        selected_tests:        [test_a].to_set,
+        selections:            selections,
+        subjects:              subjects,
+        test_subject_ratio:    Rational(1)
       )
+    end
+
+    let(:selections) do
+      { subject_a => [test_a] }
     end
 
     let(:integration) do
