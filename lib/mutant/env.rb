@@ -118,6 +118,8 @@ module Mutant
     #
     # @return [Rational]
     def test_subject_ratio
+      return Rational(0) if amount_subjects.zero?
+
       Rational(amount_selected_tests, amount_subjects)
     end
     memoize :test_subject_ratio

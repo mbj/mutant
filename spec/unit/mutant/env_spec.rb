@@ -8,7 +8,7 @@ RSpec.describe Mutant::Env do
       matchable_scopes: [],
       mutations:        [],
       selector:         selector,
-      subjects:         [subject_a, subject_b],
+      subjects:         subjects,
       parser:           Mutant::Parser.new,
       world:            world
     )
@@ -17,10 +17,11 @@ RSpec.describe Mutant::Env do
   let(:integration_class) { Mutant::Integration::Null            }
   let(:isolation)         { Mutant::Isolation::None.new          }
   let(:kernel)            { instance_double(Object, 'kernel')    }
-  let(:subject_a)         { instance_double(Mutant::Subject, :a) }
-  let(:subject_b)         { instance_double(Mutant::Subject, :b) }
   let(:reporter)          { instance_double(Mutant::Reporter)    }
   let(:selector)          { instance_double(Mutant::Selector)    }
+  let(:subject_a)         { instance_double(Mutant::Subject, :a) }
+  let(:subject_b)         { instance_double(Mutant::Subject, :b) }
+  let(:subjects)          { [subject_a, subject_b]               }
   let(:test_a)            { instance_double(Mutant::Test, :a)    }
   let(:test_b)            { instance_double(Mutant::Test, :b)    }
   let(:test_c)            { instance_double(Mutant::Test, :c)    }
@@ -190,10 +191,18 @@ RSpec.describe Mutant::Env do
       subject.test_subject_ratio
     end
 
-    let(:subjects) { [subject_a, instance_double(Mutant::Subject)] }
+    context 'on empty subjects' do
+      let(:subjects) { [] }
 
-    it 'returns expected value' do
-      expect(apply).to eql(Rational(3, 2))
+      it 'returns expected value' do
+        expect(apply).to eql(Rational(0))
+      end
+    end
+
+    context 'on non empty subjects' do
+      it 'returns expected value' do
+        expect(apply).to eql(Rational(3, 2))
+      end
     end
   end
 
