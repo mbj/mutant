@@ -43,4 +43,20 @@ RSpec.describe Mutant::Expression::Method do
       end
     end
   end
+
+  describe '#syntax' do
+    subject { object.syntax }
+
+    context 'on instance method' do
+      let(:input) { instance_method }
+
+      it { should eql(instance_method) }
+    end
+
+    context 'on singleton method' do
+      let(:input) { singleton_method }
+
+      it { should eql(singleton_method) }
+    end
+  end
 end
