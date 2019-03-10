@@ -155,7 +155,9 @@ require 'mutant/integration'
 require 'mutant/integration/null'
 require 'mutant/selector'
 require 'mutant/selector/expression'
+require 'mutant/selector/intersection'
 require 'mutant/selector/null'
+require 'mutant/selector/trace'
 require 'mutant/config'
 require 'mutant/cli'
 require 'mutant/color'
@@ -186,6 +188,7 @@ require 'mutant/repository/diff/ranges'
 require 'mutant/variable'
 require 'mutant/zombifier'
 require 'mutant/range'
+require 'mutant/line_trace'
 
 module Mutant
   WORLD = World.new(

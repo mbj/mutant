@@ -52,6 +52,20 @@ module Mutant
       def apply(&block)
         require_block(&block)
       end
+
+      # Unwrap just
+      #
+      # @return [Object]
+      #
+      # rubocop:disable Style/GuardClause
+      def from_just
+        if block_given?
+          yield
+        else
+          fail "Expected just value, got #{inspect}"
+        end
+      end
+      # rubocop:enable Style/GuardClause
     end # Nothing
 
     class Just < self
@@ -66,9 +80,16 @@ module Mutant
 
       # Evalute applicative block
       #
-      # @return [Maybe]
+      # @return [Maybe<Object>]
       def apply
         yield(value)
+      end
+
+      # Unwrap just
+      #
+      # @return [Object]
+      def from_just
+        value
       end
     end # Just
   end # Maybe

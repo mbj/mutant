@@ -11,7 +11,7 @@ RSpec.describe Mutant::Selector::Null do
     end
 
     it 'returns no tests' do
-      expect(apply).to eql([])
+      expect(apply).to eql(Mutant::Maybe::Just.new([]))
     end
   end
 end

@@ -7,9 +7,9 @@ module Mutant
 
     # Tests for subject
     #
-    # @param [Subject] subjecto
+    # @param [Subject] subject
     #
-    # @return [Enumerable<Test>]
+    # @return [Maybe<Enumerable<Test>>]
     abstract_method :call
 
   end # Selector

@@ -5,13 +5,27 @@ module Mutant
   class Test
     include Adamantium::Flat, Anima.new(
       :expression,
-      :id
+      :id,
+      :lineno,
+      :path
     )
 
     # Identification string
     #
     # @return [String]
     alias_method :identification, :id
+
+    # Trace location
+    #
+    # @return [String]
+    def trace_location
+      "#{path}:#{lineno}"
+    end
+    memoize :trace_location
+
+    def <=>(other)
+      id <=> other.id
+    end
 
   end # Test
 end # Mutant
