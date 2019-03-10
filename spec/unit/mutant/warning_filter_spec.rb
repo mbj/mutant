@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::WarningFilter do
-  before do
-    if RUBY_ENGINE.eql?('rbx')
-      skip 'Disabled because expected warnings are from MRI'
-    end
-  end
-
   let(:object) { described_class.new(target) }
 
   let(:target) do

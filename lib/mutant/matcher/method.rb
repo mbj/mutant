@@ -8,9 +8,8 @@ module Mutant
               Adamantium::Flat,
               Concord::Public.new(:scope, :target_method, :evaluator)
 
-      # Methods within rbx kernel directory are precompiled and their source
-      # cannot be accessed via reading source location. Same for methods created by eval.
-      BLACKLIST = %r{\A(kernel/|\(eval\)\z)}.freeze
+      # Source locations we cannot acces
+      BLACKLIST = %w[(eval) <internal:prelude>].to_set.freeze
 
       SOURCE_LOCATION_WARNING_FORMAT =
         '%s does not have a valid source location, unable to emit subject'
@@ -55,7 +54,7 @@ module Mutant
         # @return [Truthy]
         def skip?
           location = source_location
-          if location.nil? || BLACKLIST.match(location.first)
+          if location.nil? || BLACKLIST.include?(location.first)
             env.warn(SOURCE_LOCATION_WARNING_FORMAT % target_method)
           elsif matched_node_path.any?(&method(:n_block?))
             env.warn(CLOSURE_WARNING_FORMAT % target_method)
