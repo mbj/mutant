@@ -74,6 +74,54 @@ module Mutant
       self
     end
 
+    # Selected tests
+    #
+    # @return [Set<Test>]
+    def selected_tests
+      selections.values.flatten.to_set
+    end
+    memoize :selected_tests
+
+    # Amount of mutations
+    #
+    # @return [Integer]
+    def amount_mutations
+      mutations.length
+    end
+    memoize :amount_mutations
+
+    # Amount of tests reachable by integration
+    #
+    # @return [Integer]
+    def amount_total_tests
+      integration.all_tests.length
+    end
+    memoize :amount_total_tests
+
+    # Amount of selected subjects
+    #
+    # @return [Integer]
+    def amount_subjects
+      subjects.length
+    end
+    memoize :amount_subjects
+
+    # Amount of selected tests
+    #
+    # @return [Integer]
+    def amount_selected_tests
+      selected_tests.length
+    end
+    memoize :amount_selected_tests
+
+    # Ratio between selected tests and subjects
+    #
+    # @return [Rational]
+    def test_subject_ratio
+      Rational(amount_selected_tests, amount_subjects)
+    end
+    memoize :test_subject_ratio
+
   private
 
     # Kill mutation under isolation with integration

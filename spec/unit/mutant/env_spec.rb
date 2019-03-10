@@ -8,27 +8,31 @@ RSpec.describe Mutant::Env do
       matchable_scopes: [],
       mutations:        [],
       selector:         selector,
-      subjects:         [mutation_subject],
+      subjects:         [subject_a, subject_b],
       parser:           Mutant::Parser.new,
       world:            world
     )
   end
 
-  let(:integration)       { instance_double(Mutant::Integration) }
   let(:integration_class) { Mutant::Integration::Null            }
   let(:isolation)         { Mutant::Isolation::None.new          }
   let(:kernel)            { instance_double(Object, 'kernel')    }
-  let(:mutation_subject)  { instance_double(Mutant::Subject)     }
+  let(:subject_a)         { instance_double(Mutant::Subject, :a) }
+  let(:subject_b)         { instance_double(Mutant::Subject, :b) }
   let(:reporter)          { instance_double(Mutant::Reporter)    }
   let(:selector)          { instance_double(Mutant::Selector)    }
-  let(:test_a)            { instance_double(Mutant::Test)        }
-  let(:test_b)            { instance_double(Mutant::Test)        }
-  let(:tests)             { [test_a, test_b]                     }
+  let(:test_a)            { instance_double(Mutant::Test, :a)    }
+  let(:test_b)            { instance_double(Mutant::Test, :b)    }
+  let(:test_c)            { instance_double(Mutant::Test, :c)    }
+
+  let(:integration) do
+    instance_double(Mutant::Integration, all_tests: [test_a, test_b, test_c])
+  end
 
   let(:mutation) do
     instance_double(
       Mutant::Mutation,
-      subject: mutation_subject
+      subject: subject_a
     )
   end
 
@@ -50,8 +54,12 @@ RSpec.describe Mutant::Env do
 
   before do
     allow(selector).to receive(:call)
-      .with(mutation_subject)
-      .and_return(tests)
+      .with(subject_a)
+      .and_return([test_a, test_b])
+
+    allow(selector).to receive(:call)
+      .with(subject_b)
+      .and_return([test_b, test_c])
 
     allow(Mutant::Timer).to receive(:now).and_return(2.0, 3.0)
   end
@@ -98,7 +106,7 @@ RSpec.describe Mutant::Env do
 
         expect(isolation).to have_received(:call).ordered
         expect(mutation).to have_received(:insert).ordered.with(kernel)
-        expect(integration).to have_received(:call).ordered.with(tests)
+        expect(integration).to have_received(:call).ordered.with([test_a, test_b])
       end
 
       include_examples 'mutation kill'
@@ -128,7 +136,10 @@ RSpec.describe Mutant::Env do
     end
 
     it 'returns expected selections' do
-      expect(apply).to eql(mutation_subject => tests)
+      expect(apply).to eql(
+        subject_a => [test_a, test_b],
+        subject_b => [test_b, test_c]
+      )
     end
   end
 
@@ -151,6 +162,38 @@ RSpec.describe Mutant::Env do
 
     it 'returns self' do
       expect(apply).to be(subject)
+    end
+  end
+
+  describe '#amount_mutations' do
+    def apply
+      subject.amount_mutations
+    end
+
+    it 'returns expected value' do
+      expect(apply).to be(0)
+    end
+  end
+
+  describe '#amount_total_tests' do
+    def apply
+      subject.amount_total_tests
+    end
+
+    it 'returns expected value' do
+      expect(apply).to be(3)
+    end
+  end
+
+  describe '#test_subject_ratio' do
+    def apply
+      subject.test_subject_ratio
+    end
+
+    let(:subjects) { [subject_a, instance_double(Mutant::Subject)] }
+
+    it 'returns expected value' do
+      expect(apply).to eql(Rational(3, 2))
     end
   end
 

@@ -101,35 +101,6 @@ module Mutant
         env.mutations.length
       end
 
-      # Amount of subjects
-      #
-      # @return [Integer]
-      def amount_subjects
-        env.subjects.length
-      end
-
-      # Amount of tests reachable by integration
-      #
-      # @return [Integer]
-      def amount_total_tests
-        env.integration.all_tests.length
-      end
-
-      # Amount of selected tests
-      #
-      # @return [Integer]
-      def amount_selected_tests
-        env.selections.values.flatten.to_set.length
-      end
-      memoize :amount_selected_tests
-
-      # Ratio between selected tests and subjects
-      #
-      # @return [Rational]
-      def test_subject_ratio
-        Rational(amount_selected_tests, amount_subjects)
-      end
-
       # Test if processing needs to stop
       #
       # @return [Boolean]

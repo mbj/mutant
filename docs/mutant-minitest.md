@@ -63,7 +63,7 @@ bundle exec mutant --include lib --require auom --use minitest -- 'AUOM*'
 This prints a report like:
 
 ```sh
-Mutant configuration:
+Mutant environment:
 Matcher:         #<Mutant::Matcher::Config match_expressions: [AUOM*]>
 Integration:     Mutant::Integration::Minitest
 Jobs:            8

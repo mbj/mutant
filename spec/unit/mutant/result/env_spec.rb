@@ -117,24 +117,6 @@ RSpec.describe Mutant::Result::Env do
     it { should eql(1) }
   end
 
-  describe '#amount_subjects' do
-    subject { object.amount_subjects }
-
-    it { should eql(2) }
-  end
-
-  describe '#amount_total_tests' do
-    subject { object.amount_total_tests }
-
-    it { should eql(2) }
-  end
-
-  describe '#test_subject_ratio' do
-    subject { object.test_subject_ratio }
-
-    it { should eql(Rational(3, 2)) }
-  end
-
   describe '#stop?' do
     subject { object.stop? }
 

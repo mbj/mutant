@@ -72,7 +72,7 @@ module Mutant
           #
           # @return [String]
           def start(env)
-            format(Printer::Config, env.config)
+            format(Printer::Env, env)
           end
 
           # Progress representation

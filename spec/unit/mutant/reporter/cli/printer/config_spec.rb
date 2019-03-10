@@ -6,26 +6,12 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
   let(:reportable) { config }
 
   describe '.call' do
-    context 'on default config' do
-      it_reports(<<~REPORT)
-        Mutant configuration:
-        Matcher:         #<Mutant::Matcher::Config empty>
-        Integration:     null
-        Jobs:            1
-        Includes:        []
-        Requires:        []
-      REPORT
-    end
-
-    context 'with non default coverage expectation' do
-      it_reports(<<~REPORT)
-        Mutant configuration:
-        Matcher:         #<Mutant::Matcher::Config empty>
-        Integration:     null
-        Jobs:            1
-        Includes:        []
-        Requires:        []
-      REPORT
-    end
+    it_reports(<<~'REPORT')
+      Matcher:         #<Mutant::Matcher::Config empty>
+      Integration:     null
+      Jobs:            1
+      Includes:        []
+      Requires:        []
+    REPORT
   end
 end

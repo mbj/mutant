@@ -67,12 +67,17 @@ RSpec.describe Mutant::Reporter::CLI do
     subject { object.start(env) }
 
     it_reports(<<~REPORT)
-      Mutant configuration:
+      Mutant environment:
       Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     null
       Jobs:            1
       Includes:        []
       Requires:        []
+      Subjects:        1
+      Total-Tests:     1
+      Selected-Tests:  1
+      Tests/Subject:   1.00 avg
+      Mutations:       2
     REPORT
   end
 
@@ -80,7 +85,7 @@ RSpec.describe Mutant::Reporter::CLI do
     subject { object.report(env_result) }
 
     it_reports(<<~REPORT)
-      Mutant configuration:
+      Mutant environment:
       Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     null
       Jobs:            1
