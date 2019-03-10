@@ -7,29 +7,35 @@ module Mutant
         # Env progress printer
         class EnvProgress < self
           delegate(
-            :coverage,
-            :amount_subjects,
+            :amount_mutation_results,
             :amount_mutations,
             :amount_mutations_alive,
             :amount_mutations_killed,
-            :amount_mutation_results,
-            :runtime,
+            :amount_selected_tests,
+            :amount_subjects,
+            :amount_total_tests,
+            :coverage,
+            :env,
             :killtime,
             :overhead,
-            :env
+            :runtime,
+            :test_subject_ratio
           )
 
           FORMATS = IceNine.deep_freeze([
-            [:info,   'Subjects:        %s',      :amount_subjects          ],
-            [:info,   'Mutations:       %s',      :amount_mutations         ],
-            [:info,   'Results:         %s',      :amount_mutation_results  ],
-            [:info,   'Kills:           %s',      :amount_mutations_killed  ],
-            [:info,   'Alive:           %s',      :amount_mutations_alive   ],
-            [:info,   'Runtime:         %0.2fs',  :runtime                  ],
-            [:info,   'Killtime:        %0.2fs',  :killtime                 ],
-            [:info,   'Overhead:        %0.2f%%', :overhead_percent         ],
-            [:info,   'Mutations/s:     %0.2f',   :mutations_per_second     ],
-            [:status, 'Coverage:        %0.2f%%', :coverage_percent         ]
+            [:info,   'Subjects:        %s',        :amount_subjects         ],
+            [:info,   'Total-Tests:     %s',        :amount_total_tests      ],
+            [:info,   'Selected-Tests:  %s',        :amount_selected_tests   ],
+            [:info,   'Tests/Subject:   %0.2f avg', :test_subject_ratio      ],
+            [:info,   'Mutations:       %s',        :amount_mutations        ],
+            [:info,   'Results:         %s',        :amount_mutation_results ],
+            [:info,   'Kills:           %s',        :amount_mutations_killed ],
+            [:info,   'Alive:           %s',        :amount_mutations_alive  ],
+            [:info,   'Runtime:         %0.2fs',    :runtime                 ],
+            [:info,   'Killtime:        %0.2fs',    :killtime                ],
+            [:info,   'Overhead:        %0.2f%%',   :overhead_percent        ],
+            [:info,   'Mutations/s:     %0.2f',     :mutations_per_second    ],
+            [:status, 'Coverage:        %0.2f%%',   :coverage_percent        ]
           ])
 
           # Run printer
