@@ -20,17 +20,10 @@ module Mutant
     end
   end # Functor
 
-  module Applicative
-    include AbstractType
-
-    abstract_method :apply # formerly known as <*>
-  end # Applicative
-
   class Maybe
     include(
       AbstractType,
       Adamantium::Flat,
-      Applicative,
       Functor
     )
 
@@ -77,7 +70,6 @@ module Mutant
     include(
       AbstractType,
       Adamantium::Flat,
-      Applicative,
       Concord.new(:value),
       Functor
     )
