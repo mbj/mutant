@@ -106,7 +106,7 @@ module Mutant
         }
 
         Test.new(
-          expression: parse_expression(metadata),
+          expression: parse_metadata(metadata),
           id:         id
         )
       end
@@ -116,13 +116,23 @@ module Mutant
       # @param [RSpec::Core::Example::MetaData] metadata
       #
       # @return [Expression]
-      def parse_expression(metadata)
+      def parse_metadata(metadata)
         if metadata.key?(:mutant_expression)
-          expression_parser.call(metadata.fetch(:mutant_expression))
+          parse_expression(metadata.fetch(:mutant_expression))
         else
           match = EXPRESSION_CANDIDATE.match(metadata.fetch(:full_description))
-          expression_parser.try_parse(match.captures.first) || ALL_EXPRESSION
+          parse_expression(match.captures.first) { ALL_EXPRESSION }
         end
+      end
+
+      # Parse expression
+      #
+      # @param [String] input
+      # @param [Proc] default
+      #
+      # @return [Expression]
+      def parse_expression(input, &default)
+        expression_parser.apply(input).from_right(&default)
       end
 
       # Available rspec examples

@@ -52,10 +52,7 @@ RSpec.describe Mutant::Matcher do
     end
 
     def expression(input, matcher = anon_matcher)
-      expression_class.new(
-        Mutant::Config::DEFAULT.expression_parser.call(input),
-        matcher
-      )
+      expression_class.new(parse_expression(input), matcher)
     end
 
     context 'empty ignores and empty filter' do

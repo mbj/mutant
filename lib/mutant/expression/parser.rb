@@ -5,45 +5,24 @@ module Mutant
     class Parser
       include Concord.new(:types)
 
-      class ParserError < RuntimeError
-        include AbstractType
-      end # ParserError
-
-      # Error raised on invalid expressions
-      class InvalidExpressionError < ParserError; end
-
-      # Error raised on ambiguous expressions
-      class AmbiguousExpressionError < ParserError; end
-
-      # Parse input into expression or raise
-      #
-      # @param [String] syntax
-      #
-      # @return [Expression]
-      #   if expression is valid
-      #
-      # @raise [ParserError]
-      #   otherwise
-      def call(input)
-        try_parse(input) or fail InvalidExpressionError, "Expression: #{input.inspect} is not valid"
-      end
-
-      # Try to parse input into expression
+      # Apply expression parsing
       #
       # @param [String] input
       #
-      # @return [Expression]
+      # @return [Either<String, Expression>]
       #   if expression is valid
       #
       # @return [nil]
       #   otherwise
-      def try_parse(input)
+      def apply(input)
         expressions = expressions(input)
         case expressions.length
-        when 0, 1
-          expressions.first
+        when 0
+          Either::Left.new("Expression: #{input.inspect} is invalid")
+        when 1
+          Either::Right.new(expressions.first)
         else
-          fail AmbiguousExpressionError, "Ambiguous expression: #{input.inspect}"
+          Either::Left.new("Expression: #{input.inspect} is ambiguous")
         end
       end
 
@@ -57,8 +36,7 @@ module Mutant
       #   if expressions can be parsed from input
       def expressions(input)
         types.each_with_object([]) do |type, aggregate|
-          expression = type.try_parse(input)
-          aggregate << expression if expression
+          expression = type.try_parse(input) and aggregate << expression
         end
       end
 

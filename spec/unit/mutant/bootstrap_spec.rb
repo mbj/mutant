@@ -168,6 +168,21 @@ RSpec.describe Mutant::Bootstrap do
       include_examples 'bootstrap call'
     end
 
+    context 'when object name cannot be parsed as expression' do
+      let(:object_space_modules) { [invalid_class] }
+
+      let(:invalid_class) do
+        # intentionally an object to not actually pollute object space
+        Object.new.tap do |object|
+          def object.name
+            'invalid expression'
+          end
+        end
+      end
+
+      include_examples 'bootstrap call'
+    end
+
     context 'when scope matches expression' do
       let(:object_space_modules) { [TestApp::Literal, TestApp::Empty]                               }
       let(:match_expressions)    { object_space_modules.map(&:name).map(&method(:parse_expression)) }
