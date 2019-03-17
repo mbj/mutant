@@ -139,7 +139,7 @@ RSpec.describe Mutant::Either::Left do
       subject.either(block, -> { fail })
     end
 
-    include_examples 'Applicative#apply block evaluation'
+    include_examples '#apply block evaluation'
   end
 end
 
@@ -172,7 +172,7 @@ RSpec.describe Mutant::Either::Right do
     end
 
     include_examples 'requires block'
-    include_examples 'Applicative#apply block evaluation'
+    include_examples '#apply block evaluation'
   end
 
   describe '#from_left' do
@@ -242,6 +242,6 @@ RSpec.describe Mutant::Either::Right do
       subject.either(-> { fail }, block)
     end
 
-    include_examples 'Applicative#apply block evaluation'
+    include_examples '#apply block evaluation'
   end
 end

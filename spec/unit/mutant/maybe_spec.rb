@@ -55,6 +55,6 @@ RSpec.describe Mutant::Maybe::Just do
     end
 
     include_examples 'requires block'
-    include_examples 'Applicative#apply block evaluation'
+    include_examples '#apply block evaluation'
   end
 end
