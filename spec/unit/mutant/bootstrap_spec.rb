@@ -151,24 +151,17 @@ RSpec.describe Mutant::Bootstrap do
       let(:object_space_modules) { [invalid_class] }
 
       let(:invalid_class) do
-        Class.new do
-          def self.name
+        # intentionally an object to not actually pollute object space
+        Object.new.tap do |object|
+          def object.name
             Object
           end
         end
       end
 
       let(:expected_warning) do
-        "Class#name from: #{invalid_class} " \
+        "Object#name from: #{invalid_class} " \
         "returned Object. #{Mutant::Env::SEMANTICS_MESSAGE}"
-      end
-
-      after do
-        # Fix Class#name so other specs do not see this one
-        class << invalid_class
-          undef :name
-          def name; end
-        end
       end
 
       include_examples 'expected warning'
