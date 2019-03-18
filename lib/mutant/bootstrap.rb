@@ -127,7 +127,7 @@ module Mutant
         return
       end
 
-      expression_parser.try_parse(name)
+      expression_parser.apply(name).from_right {}
     end
     private_class_method :expression
     # rubocop:enable Metrics/MethodLength

@@ -48,7 +48,7 @@ module ParserHelper
   end
 
   def parse_expression(string)
-    Mutant::Config::DEFAULT.expression_parser.call(string)
+    Mutant::Config::DEFAULT.expression_parser.apply(string).from_right
   end
 end # ParserHelper
 

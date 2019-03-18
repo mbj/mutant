@@ -1,21 +1,19 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Expression do
-  let(:parser) { Mutant::Config::DEFAULT.expression_parser }
-
   describe '#prefix?' do
-    let(:object) { parser.call('Foo*') }
+    let(:object) { parse_expression('Foo*') }
 
     subject { object.prefix?(other) }
 
     context 'when object is a prefix of other' do
-      let(:other) { parser.call('Foo::Bar') }
+      let(:other) { parse_expression('Foo::Bar') }
 
       it { should be(true) }
     end
 
     context 'when other is not a prefix of other' do
-      let(:other) { parser.call('Bar') }
+      let(:other) { parse_expression('Bar') }
 
       it { should be(false) }
     end

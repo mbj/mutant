@@ -1,46 +1,41 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Expression::Parser do
-  let(:object) { Mutant::Config::DEFAULT.expression_parser }
+  subject do
+    Mutant::Config::DEFAULT.expression_parser
+  end
 
-  describe '#call' do
-    subject { object.call(input) }
+  def apply
+    subject.apply(input)
+  end
 
-    context 'on nonsense' do
-      let(:input) { 'foo bar' }
+  describe '#apply' do
+    context 'on a valid expression' do
+      let(:input) { 'Foo' }
 
-      it 'raises an exception' do
-        expect { subject }.to raise_error(
-          Mutant::Expression::Parser::InvalidExpressionError,
-          'Expression: "foo bar" is not valid'
+      it 'returns sucess' do
+        expect(apply).to eql(
+          Mutant::Either::Right.new(
+            Mutant::Expression::Namespace::Exact.new(scope_name: 'Foo')
+          )
         )
       end
     end
 
-    context 'on a valid expression' do
-      let(:input) { 'Foo' }
-
-      it { should eql(Mutant::Expression::Namespace::Exact.new(scope_name: 'Foo')) }
-    end
-  end
-
-  describe '.try_parse' do
-    subject { object.try_parse(input) }
-
-    context 'on nonsense' do
+    context 'on invalid input' do
       let(:input) { 'foo bar' }
 
-      it { should be(nil) }
+      it 'returns returns error' do
+        expect(apply).to eql(
+          Mutant::Either::Left.new('Expression: "foo bar" is invalid')
+        )
+      end
     end
 
-    context 'on a valid expression' do
-      let(:input) { 'Foo' }
-
-      it { should eql(Mutant::Expression::Namespace::Exact.new(scope_name: 'Foo')) }
-    end
-
-    context 'on ambiguous expression' do
-      let(:object) { described_class.new([test_a, test_b]) }
+    context 'on ambiguous input' do
+      subject do
+        described_class.new([test_a, test_b])
+      end
 
       let(:test_a) do
         Class.new(Mutant::Expression) do
@@ -58,10 +53,11 @@ RSpec.describe Mutant::Expression::Parser do
 
       let(:input) { 'test-syntax' }
 
-      it 'raises expected exception' do
-        expect { subject }.to raise_error(
-          Mutant::Expression::Parser::AmbiguousExpressionError,
-          'Ambiguous expression: "test-syntax"'
+      it 'returns error' do
+        expect(apply).to eql(
+          Mutant::Either::Left.new(
+            'Expression: "test-syntax" is ambiguous'
+          )
         )
       end
     end

@@ -133,7 +133,7 @@ module Mutant
       def construct_test(test_case)
         Test.new(
           id:         test_case.identification,
-          expression: config.expression_parser.call(test_case.expression_syntax)
+          expression: config.expression_parser.apply(test_case.expression_syntax).from_right
         )
       end
 
