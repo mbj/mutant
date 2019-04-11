@@ -7,7 +7,12 @@ module Mutant
     class Null < self
       include Equalizer.new
 
-      %w[warn report start progress].each do |name|
+      %w[
+        alive
+        report
+        start progress
+        warn
+      ].each do |name|
         define_method name do |_object|
           self
         end

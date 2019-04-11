@@ -20,6 +20,14 @@ module Mutant
         )
       end
 
+      # Report alive evil mutation
+      #
+      # @return [self]
+      def alive(mutation_result)
+        write(format.alive(mutation_result))
+        self
+      end
+
       # Report start
       #
       # @param [Env] env

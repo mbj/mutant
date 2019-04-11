@@ -60,7 +60,7 @@ RSpec.describe Mutant::Runner do
         jobs:               1,
         mutex:              mutex,
         processor:          processor,
-        sink:               Mutant::Runner::Sink.new(env),
+        sink:               Mutant::Runner::Sink.new(env, reporter),
         source:             Mutant::Parallel::Source::Array.new(env.mutations),
         thread:             thread
       )

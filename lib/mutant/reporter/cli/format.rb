@@ -68,6 +68,13 @@ module Mutant
           REPORT_FREQUENCY = 1.0
           REPORT_DELAY     = 1 / REPORT_FREQUENCY
 
+          # Alive evil representation
+          #
+          # @return [String]
+          def alive(mutation_result)
+            format(Printer::MutationResult, mutation_result)
+          end
+
           # Start representation
           #
           # @return [String]

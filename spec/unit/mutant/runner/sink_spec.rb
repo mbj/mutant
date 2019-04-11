@@ -5,30 +5,42 @@ describe Mutant::Runner::Sink do
 
   shared_context 'one result' do
     before do
-      object.result(mutation_a_result)
+      subject.result(mutation_a_result)
     end
   end
 
   shared_context 'two results' do
     before do
-      object.result(mutation_a_result)
-      object.result(mutation_b_result)
+      subject.result(mutation_a_result)
+      subject.result(mutation_b_result)
     end
   end
 
-  let(:object) { described_class.new(env) }
+  let(:reporter) { instance_double(Mutant::Reporter) }
+
+  subject do
+    described_class.new(env, reporter)
+  end
 
   before do
     allow(Mutant::Timer).to receive_messages(now: Mutant::Timer.now)
+    allow(reporter).to receive_messages(alive: undefined)
   end
 
   describe '#result' do
-    subject { object.result(mutation_a_result) }
+    def apply
+      subject.result(mutation_a_result)
+      subject.result(mutation_b_result)
+    end
+
+    it 'returns self' do
+      expect(apply).to be(subject)
+    end
 
     it 'aggregates results in #status' do
-      subject
-      object.result(mutation_b_result)
-      expect(object.status).to eql(
+      apply
+
+      expect(subject.status).to eql(
         Mutant::Result::Env.new(
           env:             env,
           runtime:         0.0,
@@ -36,12 +48,12 @@ describe Mutant::Runner::Sink do
         )
       )
     end
-
-    it_should_behave_like 'a command method'
   end
 
   describe '#status' do
-    subject { object.status }
+    def apply
+      subject.status
+    end
 
     context 'no results' do
       let(:expected_status) do
@@ -52,7 +64,9 @@ describe Mutant::Runner::Sink do
         )
       end
 
-      it { should eql(expected_status) }
+      it 'returns expected status' do
+        expect(apply).to eql(expected_status)
+      end
     end
 
     context 'one result' do
@@ -68,7 +82,9 @@ describe Mutant::Runner::Sink do
         )
       end
 
-      it { should eql(expected_status) }
+      it 'returns expected status' do
+        expect(apply).to eql(expected_status)
+      end
     end
 
     context 'two results' do
@@ -82,29 +98,39 @@ describe Mutant::Runner::Sink do
         )
       end
 
-      it { should eql(expected_status) }
+      it 'returns expected status' do
+        expect(apply).to eql(expected_status)
+      end
     end
   end
 
   describe '#stop?' do
-    subject { object.stop? }
+    def apply
+      subject.stop?
+    end
 
     context 'without fail fast' do
       context 'no results' do
-        it { should be(false) }
+        it 'returns expected value' do
+          expect(apply).to eql(false)
+        end
       end
 
       context 'one result' do
         include_context 'one result'
 
         context 'when result is successful' do
-          it { should be(false) }
+          it 'returns expected value' do
+            expect(apply).to eql(false)
+          end
         end
 
         context 'when result failed' do
           with(:mutation_a_test_result) { { passed: true } }
 
-          it { should be(false) }
+          it 'returns expected value' do
+            expect(apply).to eql(false)
+          end
         end
       end
 
@@ -112,19 +138,25 @@ describe Mutant::Runner::Sink do
         include_context 'two results'
 
         context 'when results are successful' do
-          it { should be(false) }
+          it 'returns expected value' do
+            expect(apply).to eql(false)
+          end
         end
 
         context 'when first result is unsuccessful' do
           with(:mutation_a_test_result) { { passed: true } }
 
-          it { should be(false) }
+          it 'returns expected value' do
+            expect(apply).to eql(false)
+          end
         end
 
         context 'when second result is unsuccessful' do
           with(:mutation_b_test_result) { { passed: true } }
 
-          it { should be(false) }
+          it 'returns expected value' do
+            expect(apply).to eql(false)
+          end
         end
       end
     end
@@ -133,20 +165,26 @@ describe Mutant::Runner::Sink do
       with(:config) { { fail_fast: true } }
 
       context 'no results' do
-        it { should be(false) }
+        it 'returns expected value' do
+          expect(apply).to eql(false)
+        end
       end
 
       context 'one result' do
         include_context 'one result'
 
         context 'when result is successful' do
-          it { should be(false) }
+          it 'returns expected value' do
+            expect(apply).to eql(false)
+          end
         end
 
         context 'when result failed' do
           with(:mutation_a_test_result) { { passed: true } }
 
-          it { should be(true) }
+          it 'returns expected value' do
+            expect(apply).to eql(true)
+          end
         end
       end
 
@@ -154,19 +192,25 @@ describe Mutant::Runner::Sink do
         include_context 'two results'
 
         context 'when results are successful' do
-          it { should be(false) }
+          it 'returns expected value' do
+            expect(apply).to eql(false)
+          end
         end
 
         context 'when first result is unsuccessful' do
           with(:mutation_a_test_result) { { passed: true } }
 
-          it { should be(true) }
+          it 'returns expected value' do
+            expect(apply).to eql(true)
+          end
         end
 
         context 'when second result is unsuccessful' do
           with(:mutation_b_test_result) { { passed: true } }
 
-          it { should be(true) }
+          it 'returns expected value' do
+            expect(apply).to eql(true)
+          end
         end
       end
     end

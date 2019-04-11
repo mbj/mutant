@@ -20,7 +20,7 @@ module Mutant
 
       run_driver(
         reporter,
-        Parallel.async(mutation_test_config(env))
+        Parallel.async(mutation_test_config(env, reporter))
       ).tap do |result|
         reporter.report(result)
       end
@@ -45,8 +45,11 @@ module Mutant
 
     # Configuration for parallel execution engine
     #
+    # @param [Env] env
+    # @param [Reporter] reporter
+    #
     # @return [Parallell::Config]
-    def self.mutation_test_config(env)
+    def self.mutation_test_config(env, reporter)
       world = env.world
 
       Parallel::Config.new(
@@ -54,7 +57,7 @@ module Mutant
         jobs:               env.config.jobs,
         mutex:              world.mutex,
         processor:          env.method(:kill),
-        sink:               Sink.new(env),
+        sink:               Sink.new(env, reporter),
         source:             Parallel::Source::Array.new(env.mutations),
         thread:             world.thread
       )

@@ -3,7 +3,7 @@
 module Mutant
   module Runner
     class Sink
-      include Concord.new(:env)
+      include Concord.new(:env, :reporter)
 
       # Initialize object
       #
@@ -38,6 +38,8 @@ module Mutant
       #
       # @return [self]
       def result(mutation_result)
+        report(mutation_result)
+
         subject = mutation_result.mutation.subject
 
         @subject_results[subject] = Result::Subject.new(
@@ -59,6 +61,15 @@ module Mutant
       def previous_mutation_results(subject)
         subject_result = @subject_results.fetch(subject) { return EMPTY_ARRAY }
         subject_result.mutation_results
+      end
+
+      # Report mutation result
+      #
+      # @param [Result::Mutation] mutation_result
+      #
+      # @return [undefined]
+      def report(mutation_result)
+        reporter.alive(mutation_result) unless mutation_result.success?
       end
 
     end # Sink

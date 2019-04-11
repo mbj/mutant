@@ -5,6 +5,13 @@ module Mutant
   class Reporter
     include AbstractType
 
+    # Report alive mutation
+    #
+    # @param [Mutation::Result] mutation_result
+    #
+    # @return [self]
+    abstract_method :alive
+
     # Write warning message
     #
     # @param [String] message
