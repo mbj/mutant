@@ -40,6 +40,7 @@ PATH
 
 GEM
   remote: https://rubygems.org/
+  remote: https://Px2ENN7S91OmWaD5G7MIQJi1dmtmYrEh@gem.mutant.dev/
   specs:
     abstract_type (0.0.7)
     adamantium (0.2.0)
@@ -82,6 +83,7 @@ GEM
     kwalify (0.7.2)
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
+    mutant-license (0.0.1)
     parallel (1.13.0)
     parser (2.6.0.0)
       ast (~> 2.4.0)
@@ -155,6 +157,7 @@ PLATFORMS
 DEPENDENCIES
   devtools!
   mutant!
+  mutant-license!
   parallel (~> 1.3)
 
 BUNDLED WITH
