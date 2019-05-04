@@ -34,6 +34,7 @@ PATH
       equalizer (~> 0.0.9)
       ice_nine (~> 0.11.1)
       memoizable (~> 0.4.2)
+      mutant-license (~> 0.0.1)
       parser (~> 2.6.0)
       procto (~> 0.0.2)
       unparser (~> 0.4.3)
