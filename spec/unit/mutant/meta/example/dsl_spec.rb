@@ -23,7 +23,7 @@ RSpec.describe Mutant::Meta::Example::DSL do
 
       specify do
         # Kill mutations to warnings
-        warnings = Mutant::WarningFilter.use do
+        warnings = Mutant::WORLD.warnings.call do
           should eql(expected_example)
         end
         expect(warnings).to eql([])

@@ -61,7 +61,6 @@ require 'mutant/parallel'
 require 'mutant/parallel/driver'
 require 'mutant/parallel/source'
 require 'mutant/parallel/worker'
-require 'mutant/warning_filter'
 require 'mutant/require_highjack'
 require 'mutant/mutation'
 require 'mutant/mutator'
@@ -202,7 +201,8 @@ module Mutant
     process:            Process,
     stderr:             STDOUT,
     stdout:             STDOUT,
-    thread:             Thread
+    thread:             Thread,
+    warnings:           Warnings.new(Warning)
   )
 
   # Reopen class to initialize constant to avoid dep circle

@@ -80,5 +80,10 @@ RSpec.describe Mutant::Warnings do
       cause_warnings
       expect_original_messages
     end
+
+    it 'rejects re-entrant use' do
+      expect { subject.call { subject.call } }
+        .to raise_error(described_class::RecursiveUseError)
+    end
   end
 end
