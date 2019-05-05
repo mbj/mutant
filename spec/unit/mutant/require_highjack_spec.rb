@@ -28,7 +28,7 @@ RSpec.describe Mutant::RequireHighjack do
     end
 
     it 'prevents warnings' do
-      expect(Mutant::WarningFilter.use(&method(:apply))).to eql([])
+      expect(Mutant::WORLD.warnings.call(&method(:apply))).to eql([])
     end
 
     it 'returns the original implementation from singleton' do
