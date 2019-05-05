@@ -184,6 +184,7 @@ require 'mutant/repository'
 require 'mutant/repository/diff'
 require 'mutant/repository/diff/ranges'
 require 'mutant/variable'
+require 'mutant/warnings'
 require 'mutant/zombifier'
 require 'mutant/range'
 
