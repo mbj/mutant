@@ -14,6 +14,12 @@ module Mutant
       :world
     )
 
+    class Selection
+      include Concord::Public.new(:mutation, :tests)
+    end
+
+    private_constant(*constants(false))
+
     SEMANTICS_MESSAGE =
       "Fix your lib to follow normal ruby semantics!\n" \
       '{Module,Class}#name should return resolvable constant name as String or nil'
@@ -48,7 +54,7 @@ module Mutant
       tests = selections.fetch(mutation.subject)
 
       Result::Mutation.new(
-        isolation_result: run_mutation_tests(mutation, tests),
+        isolation_result: run_selection_isolation(Selection.new(mutation, tests)),
         mutation:         mutation,
         runtime:          Timer.now - start
       )
@@ -128,21 +134,28 @@ module Mutant
 
     # Kill mutation under isolation with integration
     #
-    # @param [Mutation] mutation
-    # @param [Array<Test>] test
+    # @param [Selection] selection
     #
     # @return [Result::Isolation]
-    def run_mutation_tests(mutation, tests)
+    def run_selection_isolation(selection)
       config.isolation.call do
-        result = mutation.insert(world.kernel)
-
-        if result.equal?(Loader::Result::VoidValue.instance)
-          Result::Test::VoidValue.instance
-        else
-          integration.call(tests)
-        end
+        run_selection_integration(selection)
       end
     end
 
+    # Kill mutation with integration
+    #
+    # @param [Selection] selection
+    #
+    # @return [Result::Test]
+    def run_selection_integration(selection)
+      result = selection.mutation.insert(world.kernel)
+
+      if result.equal?(Loader::Result::VoidValue.instance)
+        Result::Test::VoidValue.instance
+      else
+        integration.call(selection.tests)
+      end
+    end
   end # Env
 end # Mutant
