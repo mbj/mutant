@@ -16,7 +16,8 @@ module Mutant
       :process,
       :stderr,
       :stdout,
-      :thread
+      :thread,
+      :warnings
     )
 
     INSPECT = '#<Mutant::World>'

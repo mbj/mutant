@@ -202,7 +202,8 @@ module Mutant
     process:            Process,
     stderr:             STDOUT,
     stdout:             STDOUT,
-    thread:             Thread
+    thread:             Thread,
+    warnings:           Warnings.new(Warning)
   )
 
   # Reopen class to initialize constant to avoid dep circle
