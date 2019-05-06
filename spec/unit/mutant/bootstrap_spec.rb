@@ -9,7 +9,6 @@ RSpec.describe Mutant::Bootstrap do
   let(:matcher_config)       { Mutant::Matcher::Config::DEFAULT       }
   let(:object_space)         { class_double(ObjectSpace)              }
   let(:object_space_modules) { []                                     }
-  let(:parser)               { instance_double(Mutant::Parser)        }
 
   let(:world) do
     instance_double(
