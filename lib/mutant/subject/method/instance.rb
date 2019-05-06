@@ -13,7 +13,9 @@ module Mutant
         #
         # @return [self]
         def prepare
-          scope.__send__(:undef_method, name)
+          warnings.call do
+            scope.public_send(:undef_method, name)
+          end
           self
         end
 

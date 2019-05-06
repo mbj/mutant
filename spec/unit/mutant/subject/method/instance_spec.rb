@@ -1,7 +1,16 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Subject::Method::Instance do
-  let(:object)  { described_class.new(context: context, node: node) }
+  let(:object) do
+    described_class.new(
+      context:  context,
+      node:     node,
+      warnings: warnings
+    )
+  end
+
+  let(:call_block?) { true                              }
+  let(:warnings)    { instance_double(Mutant::Warnings) }
 
   let(:context) do
     Mutant::Context.new(
@@ -30,6 +39,12 @@ RSpec.describe Mutant::Subject::Method::Instance do
     end
   end
 
+  before do
+    allow(warnings).to receive(:call) do |&block|
+      block.call if call_block?
+    end
+  end
+
   describe '#expression' do
     subject { object.expression }
 
@@ -47,7 +62,6 @@ RSpec.describe Mutant::Subject::Method::Instance do
   end
 
   describe '#prepare' do
-
     let(:context) do
       Mutant::Context.new(scope, instance_double(Pathname))
     end
@@ -55,7 +69,20 @@ RSpec.describe Mutant::Subject::Method::Instance do
     subject { object.prepare }
 
     it 'undefines method on scope' do
-      expect { subject }.to change { scope.instance_methods.include?(:foo) }.from(true).to(false)
+      expect { subject }
+        .to change { scope.instance_methods.include?(:foo) }
+        .from(true)
+        .to(false)
+    end
+
+    context 'within warning capture' do
+      let(:call_block?) { false }
+
+      it 'undefines method on scope' do
+        expect { subject }
+          .to_not change { scope.instance_methods.include?(:foo) }
+          .from(true)
+      end
     end
 
     it_should_behave_like 'a command method'
@@ -69,11 +96,23 @@ RSpec.describe Mutant::Subject::Method::Instance do
 end
 
 RSpec.describe Mutant::Subject::Method::Instance::Memoized do
-  let(:object)  { described_class.new(context: context, node: node) }
-  let(:context) { double('Context')                                 }
+  let(:object) do
+    described_class.new(
+      context:  context,
+      node:     node,
+      warnings: warnings
+    )
+  end
+
+  let(:context)  { double('Context')                 }
+  let(:warnings) { instance_double(Mutant::Warnings) }
 
   let(:node) do
     s(:def, :foo, s(:args))
+  end
+
+  before do
+    allow(warnings).to receive(:call).and_yield
   end
 
   describe '#prepare' do

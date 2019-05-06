@@ -3,14 +3,22 @@
 RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   subject { object.call(env) }
 
-  let(:object)       { described_class.new(scope, method)                 }
-  let(:method)       { scope.method(method_name)                          }
-  let(:type)         { :defs                                              }
-  let(:method_name)  { :foo                                               }
-  let(:method_arity) { 0                                                  }
-  let(:base)         { TestApp::SingletonMethodTests                      }
-  let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb')  }
-  let(:world)        { instance_double(Mutant::World, pathname: Pathname) }
+  let(:object)       { described_class.new(scope, method)                }
+  let(:method)       { scope.method(method_name)                         }
+  let(:type)         { :defs                                             }
+  let(:method_name)  { :foo                                              }
+  let(:method_arity) { 0                                                 }
+  let(:base)         { TestApp::SingletonMethodTests                     }
+  let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
+  let(:warnings)     { instance_double(Mutant::Warnings)                 }
+
+  let(:world) do
+    instance_double(
+      Mutant::World,
+      pathname: Pathname,
+      warnings: warnings
+    )
+  end
 
   let(:env) do
     instance_double(

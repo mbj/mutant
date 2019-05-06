@@ -4,6 +4,15 @@ RSpec.describe Mutant::Selector::Expression do
   describe '#call' do
     let(:object) { described_class.new(integration) }
 
+    let(:mutation_subject) { subject_class.new(context: context, node: node, warnings: warnings)     }
+    let(:context)          { instance_double(Mutant::Context)                                        }
+    let(:node)             { instance_double(Parser::AST::Node)                                      }
+    let(:integration)      { instance_double(Mutant::Integration, all_tests: all_tests)              }
+    let(:test_a)           { instance_double(Mutant::Test, expression: parse_expression('SubjectA')) }
+    let(:test_b)           { instance_double(Mutant::Test, expression: parse_expression('SubjectB')) }
+    let(:test_c)           { instance_double(Mutant::Test, expression: parse_expression('SubjectC')) }
+    let(:warnings)         { instance_double(Mutant::Warnings)                                       }
+
     let(:subject_class) do
       parse = method(:parse_expression)
 
@@ -17,14 +26,6 @@ RSpec.describe Mutant::Selector::Expression do
         end
       end
     end
-
-    let(:mutation_subject) { subject_class.new(context: context, node: node)                         }
-    let(:context)          { instance_double(Mutant::Context)                                        }
-    let(:node)             { instance_double(Parser::AST::Node)                                      }
-    let(:integration)      { instance_double(Mutant::Integration, all_tests: all_tests)              }
-    let(:test_a)           { instance_double(Mutant::Test, expression: parse_expression('SubjectA')) }
-    let(:test_b)           { instance_double(Mutant::Test, expression: parse_expression('SubjectB')) }
-    let(:test_c)           { instance_double(Mutant::Test, expression: parse_expression('SubjectC')) }
 
     subject { object.call(mutation_subject) }
 
