@@ -4,7 +4,7 @@ module Mutant
   # Subject of a mutation
   class Subject
     include AbstractType, Adamantium::Flat, Enumerable
-    include Concord::Public.new(:context, :node)
+    include Anima.new(:context, :node)
 
     # Mutations for this subject
     #

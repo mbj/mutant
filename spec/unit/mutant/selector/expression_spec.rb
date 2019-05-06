@@ -18,7 +18,7 @@ RSpec.describe Mutant::Selector::Expression do
       end
     end
 
-    let(:mutation_subject) { subject_class.new(context, node)                                        }
+    let(:mutation_subject) { subject_class.new(context: context, node: node)                         }
     let(:context)          { instance_double(Mutant::Context)                                        }
     let(:node)             { instance_double(Parser::AST::Node)                                      }
     let(:integration)      { instance_double(Mutant::Integration, all_tests: all_tests)              }
