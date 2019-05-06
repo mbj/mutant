@@ -113,7 +113,7 @@ module Mutant
         #   otherwise
         def subject
           node = matched_node_path.last || return
-          self.class::SUBJECT_CLASS.new(context, node)
+          self.class::SUBJECT_CLASS.new(context: context, node: node)
         end
         memoize :subject
 
