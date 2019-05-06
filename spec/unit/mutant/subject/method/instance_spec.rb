@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Subject::Method::Instance do
-  let(:object)  { described_class.new(context: context, node: node) }
+  let(:object) do
+    described_class.new(
+      context:  context,
+      node:     node,
+      warnings: warnings
+    )
+  end
+
+  let(:warnings) { instance_double(Mutant::Warnings) }
 
   let(:context) do
     Mutant::Context.new(
@@ -69,8 +77,16 @@ RSpec.describe Mutant::Subject::Method::Instance do
 end
 
 RSpec.describe Mutant::Subject::Method::Instance::Memoized do
-  let(:object)  { described_class.new(context: context, node: node) }
-  let(:context) { double('Context')                                 }
+  let(:object) do
+    described_class.new(
+      context:  context,
+      node:     node,
+      warnings: warnings
+    )
+  end
+
+  let(:context)  { double('Context')                 }
+  let(:warnings) { instance_double(Mutant::Warnings) }
 
   let(:node) do
     s(:def, :foo, s(:args))

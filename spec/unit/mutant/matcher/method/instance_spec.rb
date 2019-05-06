@@ -3,14 +3,22 @@
 RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   subject { object.call(env) }
 
-  let(:base)         { TestApp::InstanceMethodTests                       }
-  let(:method)       { scope.instance_method(method_name)                 }
-  let(:method_arity) { 0                                                  }
-  let(:method_name)  { :foo                                               }
-  let(:object)       { described_class.new(scope, method)                 }
-  let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb')  }
-  let(:type)         { :def                                               }
-  let(:world)        { instance_double(Mutant::World, pathname: Pathname) }
+  let(:base)          { TestApp::InstanceMethodTests                      }
+  let(:method)        { scope.instance_method(method_name)                }
+  let(:method_arity)  { 0                                                 }
+  let(:method_name)   { :foo                                              }
+  let(:object)        { described_class.new(scope, method)                }
+  let(:source_path)   { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
+  let(:type)          { :def                                              }
+  let(:warnings)      { instance_double(Mutant::Warnings)                 }
+
+  let(:world) do
+    instance_double(
+      Mutant::World,
+      pathname: Pathname,
+      warnings: warnings
+    )
+  end
 
   let(:env) do
     instance_double(
@@ -30,8 +38,9 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'when method is defined inside eval' do
-    let(:scope)  { base::WithMemoizer          }
-    let(:method) { scope.instance_method(:boz) }
+    let(:subject_class) { Mutant::Subject::Method::Instance::Memoized }
+    let(:scope)  { base::WithMemoizer                                 }
+    let(:method) { scope.instance_method(:boz)                        }
 
     let(:expected_warnings) do
       [
@@ -40,6 +49,10 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
+
+    it 'returns expected subjects' do
+      expect(subject).to eql([])
+    end
   end
 
   context 'when method is defined without source location' do
@@ -53,6 +66,10 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
+
+    it 'returns expected subjects' do
+      expect(subject).to eql([])
+    end
   end
 
   context 'in module eval' do
@@ -65,6 +82,10 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
+
+    it 'returns expected subjects' do
+      expect(subject).to eql([])
+    end
   end
 
   context 'in class eval' do
@@ -77,6 +98,10 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
+
+    it 'returns expected subjects' do
+      expect(subject).to eql([])
+    end
   end
 
   context 'when method is defined once' do
@@ -85,6 +110,23 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     let(:method_line) { 13                 }
 
     it_should_behave_like 'a method matcher'
+
+    it 'returns expected subjects' do
+      context = Mutant::Context.new(
+        TestApp::InstanceMethodTests::WithMemoizer,
+        MutantSpec::ROOT.join('test_app', 'lib', 'test_app.rb')
+      )
+
+      expect(subject).to eql(
+        [
+          Mutant::Subject::Method::Instance.new(
+            context:  context,
+            node:     s(:def, :bar, s(:args), nil),
+            warnings: warnings
+          )
+        ]
+      )
+    end
   end
 
   context 'when method is defined once with a memoizer' do

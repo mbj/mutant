@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Subject::Method::Singleton do
+  let(:object) do
+    described_class.new(
+      context:  context,
+      node:     node,
+      warnings: warnings
+    )
+  end
 
-  let(:object)  { described_class.new(context: context, node: node) }
-  let(:node)    { s(:defs, s(:self), :foo, s(:args))                }
+  let(:node)     { s(:defs, s(:self), :foo, s(:args)) }
+  let(:warnings) { instance_double(Mutant::Warnings)  }
 
   let(:context) do
     Mutant::Context.new(scope, instance_double(Pathname))

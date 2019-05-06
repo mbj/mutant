@@ -9,6 +9,7 @@ RSpec.describe Mutant::Bootstrap do
   let(:matcher_config)       { Mutant::Matcher::Config::DEFAULT       }
   let(:object_space)         { class_double(ObjectSpace)              }
   let(:object_space_modules) { []                                     }
+  let(:warnings)             { instance_double(Mutant::Warnings)      }
 
   let(:world) do
     instance_double(
@@ -16,7 +17,8 @@ RSpec.describe Mutant::Bootstrap do
       kernel:       kernel,
       load_path:    load_path,
       object_space: object_space,
-      pathname:     Pathname
+      pathname:     Pathname,
+      warnings:     warnings
     )
   end
 
@@ -200,7 +202,7 @@ RSpec.describe Mutant::Bootstrap do
       end
 
       let(:expected_env) do
-        subjects = Mutant::Matcher::Scope.new(TestApp::Literal).call(Fixtures::TEST_ENV)
+        subjects = Mutant::Matcher::Scope.new(TestApp::Literal).call(env_empty)
 
         super().with(
           mutations: subjects.flat_map(&:mutations),

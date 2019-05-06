@@ -16,7 +16,13 @@ RSpec.describe Mutant::Subject do
     end
   end
 
-  let(:object) { class_under_test.new(context: context, node: node) }
+  let(:object) do
+    class_under_test.new(
+      context:  context,
+      node:     node,
+      warnings: warnings
+    )
+  end
 
   let(:node) do
     Unparser.parse(<<-RUBY)
@@ -31,6 +37,8 @@ RSpec.describe Mutant::Subject do
       source_path: 'source_path'
     )
   end
+
+  let(:warnings) { instance_double(Mutant::Warnings) }
 
   describe '#identification' do
     subject { object.identification }
