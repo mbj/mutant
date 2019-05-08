@@ -12,7 +12,7 @@ Mutant is a mutation testing tool for Ruby. Mutation testing is a technique to v
 ## Why do I want it?
 
 Mutant adds to your toolbox: Detection of uncovered semantics in your code.
-Coverage becomes a meaninful metric!
+Coverage becomes a meaningful metric!
 
 On each detection of uncovered semantics you have the opportunity to:
 
