@@ -41,7 +41,7 @@ PATH
 
 GEM
   remote: https://rubygems.org/
-  remote: https://Px2ENN7S91OmWaD5G7MIQJi1dmtmYrEh@gem.mutant.dev/
+  remote: https://oss:Px2ENN7S91OmWaD5G7MIQJi1dmtmYrEh@gem.mutant.dev/
   specs:
     abstract_type (0.0.7)
     adamantium (0.2.0)

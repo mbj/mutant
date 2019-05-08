@@ -15,6 +15,6 @@ gem(
 # Mutant itself uses an opensource license key.
 # Scoped to https://github.com/mbj/mutant it'll
 # not be useful elsewhere.
-source 'https://Px2ENN7S91OmWaD5G7MIQJi1dmtmYrEh@gem.mutant.dev' do
+source 'https://oss:Px2ENN7S91OmWaD5G7MIQJi1dmtmYrEh@gem.mutant.dev' do
   gem 'mutant-license'
 end
