@@ -5,7 +5,9 @@ module Mutant
   class World
     include Adamantium::Flat, Anima.new(
       :condition_variable,
+      :gem,
       :io,
+      :json,
       :kernel,
       :load_path,
       :marshal,
