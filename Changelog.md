@@ -6,7 +6,6 @@
 * Remove restarg mutations
 * Remove support for rspec-3.{4,5,6}
 
-
 # v0.8.25 2018-12-31
 
 * Change to {I,M}Var based concurrency
