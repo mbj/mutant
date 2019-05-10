@@ -30,9 +30,9 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('ice_nine',       '~> 0.11.1')
   gem.add_runtime_dependency('memoizable',     '~> 0.4.2')
   gem.add_runtime_dependency('mutant-license', '~> 0.0.1')
-  gem.add_runtime_dependency('parser',         '~> 2.6.0')
+  gem.add_runtime_dependency('parser',         '~> 2.6.3')
   gem.add_runtime_dependency('procto',         '~> 0.0.2')
-  gem.add_runtime_dependency('unparser',       '~> 0.4.3')
+  gem.add_runtime_dependency('unparser',       '~> 0.4.5')
 
   gem.add_development_dependency('devtools', '~> 0.1.23')
   gem.add_development_dependency('parallel', '~> 1.3')
