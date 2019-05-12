@@ -34,7 +34,9 @@ module Mutant
     #
     # ignore :reek:LongParameterList
     def self.run(world, default_config, arguments)
-      Config.load_config_file(world, default_config)
+      License
+        .apply(world)
+        .apply { Config.load_config_file(world, default_config) }
         .apply { |file_config| apply(world, file_config, arguments) }
         .apply { |cli_config| Bootstrap.apply(world, cli_config) }
         .apply(&Runner.method(:apply))

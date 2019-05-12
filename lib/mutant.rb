@@ -10,6 +10,7 @@ require 'digest/sha1'
 require 'equalizer'
 require 'etc'
 require 'ice_nine'
+require 'json'
 require 'open3'
 require 'optparse'
 require 'parser'
@@ -20,6 +21,8 @@ require 'singleton'
 require 'stringio'
 require 'unparser'
 require 'yaml'
+
+gem 'mutant-license'
 
 # This setting is done to make errors within the parallel
 # reporter / execution visible in the main thread.
@@ -186,11 +189,17 @@ require 'mutant/variable'
 require 'mutant/warnings'
 require 'mutant/zombifier'
 require 'mutant/range'
+require 'mutant/license'
+require 'mutant/license/subscription'
+require 'mutant/license/subscription/opensource'
+require 'mutant/license/subscription/commercial'
 
 module Mutant
   WORLD = World.new(
     condition_variable: ConditionVariable,
+    gem:                Gem,
     io:                 IO,
+    json:               JSON,
     kernel:             Kernel,
     load_path:          $LOAD_PATH,
     marshal:            Marshal,

@@ -42,6 +42,7 @@ RSpec.describe Mutant::CLI do
     let(:env_result)     { Mutant::Either::Right.new(env)                 }
     let(:file_config)    { instance_double(Mutant::Config, 'file config') }
     let(:file_result)    { Mutant::Either::Right.new(file_config)         }
+    let(:license_result) { Mutant::Either::Right.new(true)                }
     let(:report_success) { true                                           }
 
     let(:runner_result) do
@@ -51,6 +52,7 @@ RSpec.describe Mutant::CLI do
     end
 
     before do
+      allow(Mutant::License).to receive_messages(apply: license_result)
       allow(Mutant::Config).to receive_messages(load_config_file: file_result)
       allow(Mutant::CLI).to receive_messages(apply: cli_result)
       allow(Mutant::Bootstrap).to receive_messages(apply: env_result)
@@ -59,6 +61,11 @@ RSpec.describe Mutant::CLI do
 
     it 'performs calls in expected sequence' do
       apply
+
+      expect(Mutant::License)
+        .to have_received(:apply)
+        .with(world)
+        .ordered
 
       expect(Mutant::Config)
         .to have_received(:load_config_file)
