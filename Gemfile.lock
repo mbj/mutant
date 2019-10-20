@@ -147,7 +147,7 @@ GEM
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
       equalizer (~> 0.0, >= 0.0.9)
-    yard (0.9.19)
+    yard (0.9.20)
     yardstick (0.9.9)
       yard (~> 0.8, >= 0.8.7.2)
 
