@@ -13,6 +13,7 @@
     - core/module/fixtures/autoload_never_set.rb
     - core/module/fixtures/path2/load_path.rb
     - core/string/casecmp_spec.rb
+    - core/string/encode_spec.rb
     - core/string/shared/to_sym.rb
     - core/symbol/casecmp_spec.rb
     - language/fixtures/freeze_magic_comment_required_diff_enc.rb

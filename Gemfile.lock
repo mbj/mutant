@@ -35,6 +35,7 @@ PATH
       ice_nine (~> 0.11.1)
       memoizable (~> 0.4.2)
       mutant-license (~> 0.1.0)
+      parser (= 2.6.3)
       procto (~> 0.0.2)
       unparser (~> 0.4.5)
 
