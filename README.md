@@ -33,7 +33,45 @@ On each detection of uncovered semantics you have the opportunity to:
 
 Mutant was recently transitioned commercial software, with a free usage plan for opensource projects.
 
-To inquire about licensing contact [Markus Schirp](mailto:mbj@schirp-dso.com?subject=Mutant%20License).
+Commercial projects have to acquire a license per developer, with unlimited repositories
+per developer.
+
+Opensource projects have to acquire their free license per repository.
+
+The license distribution happens through the `mutant-license` gem in mutants dependencies.
+This gem is dynamically generated per licensee and comes with a unique license gem source
+URL.
+
+After signup for a license the following has to be added to your `Gemfile` replacing `${key}`
+with the license key and `${plan}` with `com` for commercial or `oss` for opensource usage.
+
+```Gemfile
+source 'https://${plan}:${key}@gem.mutant.dev' do
+  gem 'mutant-license'
+end
+```
+
+The mutant license gem contains metadata that allows mutant to verify licensed use.
+
+For commercial licenses mutant checks the git commit author or the configured git email
+to be in the set of licensed developers.
+
+For opensource licenses mutant checks the git remotes against the license whitelist.
+This allows the project maintainer to sign up and not bother collaborators with the details.
+
+There are, apart from initial license gem installation, no remote interactions for
+license validation.
+
+To inquire for license please contact [Markus Schirp](mailto:mbj@schirp-dso.com?subject=Mutant%20License).
+
+### Pricing
+
+Only relevant for commercial use.
+
+Mutant offers a subscription model under a monthly plan.
+Yearly prepayments with discounts are available.
+
+For higher volumes different arrangements can be negotiated.
 
 ## Topics
 
