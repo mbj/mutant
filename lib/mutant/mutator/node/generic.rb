@@ -14,6 +14,7 @@ module Mutant
           arg_expr
           back_ref
           blockarg
+          blockarg_expr
           complex
           eflipflop
           empty
@@ -24,13 +25,19 @@ module Mutant
           kwrestarg
           kwsplat
           match_with_lvasgn
+          meth_ref
           module
+          objc_kwarg
+          objc_restarg
+          objc_varargs
           postexe
           preexe
           rational
           redo
           restarg
+          restarg_expr
           retry
+          root
           sclass
           shadowarg
           undef
