@@ -94,3 +94,28 @@ Additionally, the following features where sponsored by organizations:
 * The `mutant-minitest` integration was sponsored by [Arkency](https://arkency.com/)
 * Mutant's initial concurrency support was sponsored by an undisclosed company that does
   currently not wish to be listed here.
+
+### Legal
+
+contents of this repository are maintained by
+
+```
+Schirp DSO LTD
+Director: Markus Schirp
+Email: info@schirp-dso.com
+Vat-ID: MT24186727
+Registration: C80467
+
+Office address:
+2, Carob Lane,
+Sir Harry Luke Street
+Naxxar NXR 2209,
+Malta
+
+Registred Address
+Phoenix Business Centre,
+The Penthouse,
+Old Railway Track,
+Santa Venera SVR9022,
+Malta
+```
