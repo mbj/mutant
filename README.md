@@ -29,6 +29,12 @@ On each detection of uncovered semantics you have the opportunity to:
   to test only the code you had been touching. See the [incremental](#only-mutating-changed-code)
   mutation testing documentation.
 
+## Licensing
+
+Mutant was recently transitioned commercial software, with a free usage plan for opensource projects.
+
+To inquire about licensing contact [Markus Schirp](mailto:mbj@schirp-dso.com?subject=Mutant%20License).
+
 ## Topics
 
 * [Nomenclature](/docs/nomenclature.md)
