@@ -56,6 +56,3 @@ Additionally, the following features where sponsored by organizations:
 * The `mutant-minitest` integration was sponsored by [Arkency](https://arkency.com/)
 * Mutant's initial concurrency support was sponsored by an undisclosed company that does
   currently not wish to be listed here.
-
-If your organization is interested in sponsoring a feature, general maintainership or bugfixes, contact
-[Markus Schirp](mailto:mbj@schirp-dso.com).
