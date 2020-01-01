@@ -8,34 +8,35 @@ module Mutant
       class Generic < self
 
         unsupported_nodes = %i[
-          ensure
-          redo
-          retry
-          arg_expr
-          blockarg
-          kwrestarg
-          undef
-          module
-          empty
-          alias
-          for
-          xstr
-          back_ref
-          restarg
-          sclass
-          match_with_lvasgn
-          while_post
-          until_post
-          preexe
-          postexe
-          iflipflop
-          eflipflop
-          kwsplat
-          shadowarg
-          rational
-          complex
           __FILE__
           __LINE__
+          alias
+          arg_expr
+          back_ref
+          blockarg
+          complex
+          eflipflop
+          empty
+          ensure
+          for
+          ident
+          iflipflop
+          kwrestarg
+          kwsplat
+          match_with_lvasgn
+          module
+          postexe
+          preexe
+          rational
+          redo
+          restarg
+          retry
+          sclass
+          shadowarg
+          undef
+          until_post
+          while_post
+          xstr
         ]
 
         # These nodes still need a dedicated mutator,
