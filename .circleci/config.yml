@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - run: bundle install
-      - run: bundle exec rspec spec/unit
+      - run: bundle exec rspec spec/unit spec/integration/mutant/test_mutator_handles_types_spec.rb
   integration_minitest:
     <<: *defaults
     steps:
