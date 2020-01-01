@@ -20,7 +20,9 @@ module Mutant
       #
       # @api public
       def cover(expression)
-        fail "#{self} already declares to cover: #{@covers}" if @covers
+        if defined?(@cover_expression)
+          fail "#{self} already declares to cover: #{@cover_expression.inspect}"
+        end
 
         @cover_expression = expression
       end
