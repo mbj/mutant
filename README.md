@@ -45,7 +45,7 @@ URL.
 After signup for a license the following has to be added to your `Gemfile` replacing `${key}`
 with the license key and `${plan}` with `com` for commercial or `oss` for opensource usage.
 
-```Gemfile
+```ruby
 source 'https://${plan}:${key}@gem.mutant.dev' do
   gem 'mutant-license'
 end
