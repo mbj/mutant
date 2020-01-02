@@ -45,7 +45,7 @@ URL.
 After signup for a license the following has to be added to your `Gemfile` replacing `${key}`
 with the license key and `${plan}` with `com` for commercial or `oss` for opensource usage.
 
-```Gemfile
+```ruby
 source 'https://${plan}:${key}@gem.mutant.dev' do
   gem 'mutant-license'
 end
@@ -83,6 +83,14 @@ For higher volumes different arrangements can be negotiated.
 * [Rspec Integration](/docs/mutant-rspec.md)
 * [Minitest Integration](/docs/mutant-minitest.md)
 
+## Communication
+
+Try the following:
+
+* [Github Issues](https://github.com/mbj/mutant/issues)
+* [Release Announcement Mailing List](https://announce.mutant.dev/signup)
+* [Slack channel](mutation-testing.slack.com) request invite from [Markus Schirp](mailto:mbj@schirp-dso.com?subject=Mutation%20Testing%20Slack%20Channel%20Invite).
+
 ## Sponsoring
 
 Mutant, as published in the opensource version, would not exist without the help
@@ -97,7 +105,7 @@ Additionally, the following features where sponsored by organizations:
 
 ### Legal
 
-contents of this repository are maintained by
+Contents of this repository are maintained by:
 
 ```
 Schirp DSO LTD
