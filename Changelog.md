@@ -1,4 +1,8 @@
-# v0.9.0
+# v0.9.1 2020-01-02
+
+* Packaging bugfix.
+
+# v0.9.0 2020-01-02
 
 * New license.
 * Fix mutations to void value expressions to not be reported as integration error.
