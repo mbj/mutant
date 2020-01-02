@@ -22,11 +22,15 @@ module Mutant
           for
           ident
           iflipflop
+          kwnilarg
           kwrestarg
           kwsplat
           match_with_lvasgn
           meth_ref
           module
+          numargs
+          numblock
+          numparam
           objc_kwarg
           objc_restarg
           objc_varargs

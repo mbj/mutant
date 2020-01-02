@@ -21,23 +21,9 @@ module Mutant
         #
         # @return [undefined]
         def dispatch
-          __send__(MAP.fetch(argument.class))
-        end
+          name = Mutant::Util.one(argument.children)
 
-        # Emit argument symbol mutations
-        #
-        # @return [undefined]
-        def emit_argument_symbol_mutations
-          emit_type(:"_#{argument}") unless argument.to_s.start_with?('_')
-        end
-
-        # Emit argument node mutations
-        #
-        # @return [undefined]
-        def emit_argument_node_mutations
-          emit_argument_mutations
-          first = Mutant::Util.one(argument.children)
-          emit_type(first)
+          emit_type(s(:arg, :"_#{name}")) unless name.to_s.start_with?('_')
         end
       end # ProcargZero
     end # Node
