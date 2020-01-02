@@ -8,6 +8,8 @@ module Mutant
 
         handle(:args)
 
+        PROCARG = %i[restarg mlhs].freeze
+
       private
 
         # Emit mutations
@@ -26,19 +28,10 @@ module Mutant
           emit_type
 
           Util::Array::Presence.call(children).each do |children|
-            if children.one? && n_mlhs?(Mutant::Util.one(children))
-              emit_procarg(Mutant::Util.one(children))
-            else
+            unless children.one? && n_mlhs?(children.first)
               emit_type(*children)
             end
           end
-        end
-
-        # Emit procarg form
-        #
-        # @return [undefined]
-        def emit_procarg(arg)
-          emit_type(s(:procarg0, *arg))
         end
 
         # Emit argument mutations

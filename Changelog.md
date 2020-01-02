@@ -1,3 +1,7 @@
+# v0.9.2 2020-01-02
+
+* Upgrade to parser ~> 2.6.5
+
 # v0.9.1 2020-01-02
 
 * Packaging bugfix.
