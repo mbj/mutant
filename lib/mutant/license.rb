@@ -2,31 +2,58 @@
 
 module Mutant
   module License
+    NAME    = 'mutant-license'
+    VERSION = '~> 0.1.0'
+    SLEEP   = 20
+
+    UNLICENSED =
+      IceNine.deep_freeze(
+        [
+          "Soft fail, continuing in #{SLEEP} seconds",
+          'Next major version will enforce the license',
+          'See https://github.com/mbj/mutant#licensing'
+        ]
+      )
+
     def self.apply(world)
       soft_fail(world, license_result(world))
     end
 
     def self.license_result(world)
-      Subscription.from_json(world.json.load(license_path(world))).apply(world)
+      load_mutant_license(world)
+        .fmap { license_path(world) }
+        .fmap { |path| Subscription.from_json(world.json.load(path)) }
+        .apply { |sub| sub.apply(world) }
     end
     private_class_method :license_result
 
-    def self.soft_fail(world, license_result)
-      license_result.lmap do |message|
+    # ignore :reek:NestedIterators
+    def self.soft_fail(world, result)
+      result.lmap do |message|
         stderr = world.stderr
         stderr.puts(message)
-        stderr.puts('Soft fail, continuing in 10 seconds')
-        world.kernel.sleep(10)
+        UNLICENSED.each { |line| stderr.puts(unlicensed(line)) }
+        world.kernel.sleep(SLEEP)
       end
 
       Either::Right.new(true)
     end
     private_class_method :soft_fail
 
+    def self.load_mutant_license(world)
+      Either
+        .wrap_error(LoadError) { world.gem_method.call(NAME, VERSION) }
+        .lmap(&method(:unlicensed))
+    end
+
+    def self.unlicensed(message)
+      "[Mutant-License-Error]: #{message}"
+    end
+
     def self.license_path(world)
       world
         .pathname
-        .new(world.gem.loaded_specs.fetch('mutant-license').full_gem_path)
+        .new(world.gem.loaded_specs.fetch(NAME).full_gem_path)
         .join('license.json')
     end
     private_class_method :license_path
