@@ -6,11 +6,13 @@ RSpec.describe Mutant::License do
   end
 
   let(:gem)              { class_double(Gem, loaded_specs: loaded_specs) }
+  let(:gem_method)       { instance_double(Method)                       }
   let(:gem_path)         { '/path/to/mutant-license'                     }
   let(:gem_pathname)     { instance_double(Pathname)                     }
   let(:json)             { class_double(JSON)                            }
   let(:kernel)           { class_double(Kernel)                          }
   let(:license_pathname) { instance_double(Pathname)                     }
+  let(:load_json)        { true                                          }
   let(:loaded_specs)     { { 'mutant-license' => spec }                  }
   let(:path)             { instance_double(Pathname)                     }
   let(:pathname)         { class_double(Pathname)                        }
@@ -26,15 +28,17 @@ RSpec.describe Mutant::License do
   let(:world) do
     instance_double(
       Mutant::World,
-      gem:      gem,
-      json:     json,
-      kernel:   kernel,
-      pathname: pathname,
-      stderr:   stderr
+      gem:        gem,
+      gem_method: gem_method,
+      json:       json,
+      kernel:     kernel,
+      pathname:   pathname,
+      stderr:     stderr
     )
   end
 
   before do
+    allow(gem_method).to receive_messages(call: undefined)
     allow(gem_pathname).to receive_messages(join: license_pathname)
     allow(json).to receive_messages(load: license_json)
     allow(kernel).to receive_messages(sleep: undefined)
@@ -66,6 +70,18 @@ RSpec.describe Mutant::License do
     it 'performs IO in expected sequence' do
       expect(apply).to eql(Mutant::Either::Right.new(true))
 
+      expect(gem_method)
+        .to have_received(:call)
+        .with('mutant-license', '~> 0.1.0')
+        .ordered
+
+      if load_json
+        expect(json)
+          .to have_received(:load)
+          .with(license_pathname)
+          .ordered
+      end
+
       expect(stderr)
         .to have_received(:puts)
         .with(expected)
@@ -73,12 +89,22 @@ RSpec.describe Mutant::License do
 
       expect(stderr)
         .to have_received(:puts)
-        .with('Soft fail, continuing in 10 seconds')
+        .with('[Mutant-License-Error]: Soft fail, continuing in 20 seconds')
+        .ordered
+
+      expect(stderr)
+        .to have_received(:puts)
+        .with('[Mutant-License-Error]: Next major version will enforce the license')
+        .ordered
+
+      expect(stderr)
+        .to have_received(:puts)
+        .with('[Mutant-License-Error]: See https://github.com/mbj/mutant#licensing')
         .ordered
 
       expect(kernel)
         .to have_received(:sleep)
-        .with(10)
+        .with(20)
         .ordered
     end
   end
@@ -252,6 +278,16 @@ RSpec.describe Mutant::License do
         Present:
         [none]
       MESSAGE
+    end
+
+    context 'when mutant-license gem cannot be loaded' do
+      let(:load_json) { false }
+
+      before do
+        allow(gem_method).to receive(:call).and_raise(Gem::LoadError, 'test-error')
+      end
+
+      it_fails_with_message '[Mutant-License-Error]: test-error'
     end
   end
 end

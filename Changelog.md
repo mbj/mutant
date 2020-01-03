@@ -1,3 +1,9 @@
+# v0.9.3 2020-01-03
+
+* Change to soft dependency on mutant-license.
+  Rationale its fine to bundle mutant if not used.
+  This can easily happen on transitive dependencies.
+
 # v0.9.2 2020-01-02
 
 * Upgrade to parser ~> 2.6.5

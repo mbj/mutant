@@ -6,6 +6,7 @@ module Mutant
     include Adamantium::Flat, Anima.new(
       :condition_variable,
       :gem,
+      :gem_method,
       :io,
       :json,
       :kernel,
