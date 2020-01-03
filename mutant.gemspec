@@ -7,8 +7,8 @@ Gem::Specification.new do |gem|
   gem.version     = Mutant::VERSION.dup
   gem.authors     = ['Markus Schirp']
   gem.email       = ['mbj@schirp-dso.com']
-  gem.description = 'Mutation testing for ruby'
-  gem.summary     = 'Mutation testing tool for ruby under MRI and Rubinius'
+  gem.description = 'Mutation Testing for Ruby.'
+  gem.summary     = ''
   gem.homepage    = 'https://github.com/mbj/mutant'
   gem.license     = 'Nonstandard'
 
