@@ -28,7 +28,7 @@ module Mutant
     # @return [Either<String, Integration>]
     def self.setup(env)
       attempt_require(env)
-        .apply { attempt_const_get(env) }
+        .bind { attempt_const_get(env) }
         .fmap { |klass| klass.new(env.config).setup }
     end
 

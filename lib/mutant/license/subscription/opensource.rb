@@ -53,7 +53,7 @@ module Mutant
           world
             .capture_stdout(%w[git remote --verbose])
             .fmap(&method(:parse_remotes))
-            .apply(&method(:check_subscription))
+            .bind(&method(:check_subscription))
         end
 
       private
