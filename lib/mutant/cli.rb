@@ -36,10 +36,10 @@ module Mutant
     def self.run(world, default_config, arguments)
       License
         .apply(world)
-        .apply { Config.load_config_file(world, default_config) }
-        .apply { |file_config| apply(world, file_config, arguments) }
-        .apply { |cli_config| Bootstrap.apply(world, cli_config) }
-        .apply(&Runner.method(:apply))
+        .bind { Config.load_config_file(world, default_config) }
+        .bind { |file_config| apply(world, file_config, arguments) }
+        .bind { |cli_config| Bootstrap.apply(world, cli_config) }
+        .bind(&Runner.method(:apply))
         .from_right { |error| world.stderr.puts(error); return false }
         .success?
     end

@@ -263,7 +263,7 @@ module Mutant
         PRIMITIVE
           .apply(input)
           .lmap(&method(:lift_error))
-          .apply(&method(:run))
+          .bind(&method(:run))
       end
 
     private
@@ -351,8 +351,8 @@ module Mutant
         PRIMITIVE
           .apply(input)
           .lmap(&method(:lift_error))
-          .apply(&method(:reject_keys))
-          .apply(&method(:transform))
+          .bind(&method(:reject_keys))
+          .bind(&method(:transform))
       end
 
     private
@@ -363,7 +363,7 @@ module Mutant
       #
       # @return [Either<Error, Hash>]
       def transform(input)
-        transform_required(input).apply do |required|
+        transform_required(input).bind do |required|
           transform_optional(input).fmap(&required.method(:merge))
         end
       end
@@ -503,7 +503,8 @@ module Mutant
       #
       # @return [Either<Error, Object>]
       def apply(input)
-        Either.wrap_error(error_class) { block.call(input) }
+        Either
+          .wrap_error(error_class) { block.call(input) }
           .lmap { |exception| error(input: input, message: exception.to_s) }
       end
     end # Exception

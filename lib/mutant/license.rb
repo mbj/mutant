@@ -23,7 +23,7 @@ module Mutant
       load_mutant_license(world)
         .fmap { license_path(world) }
         .fmap { |path| Subscription.from_json(world.json.load(path)) }
-        .apply { |sub| sub.apply(world) }
+        .bind { |sub| sub.apply(world) }
     end
     private_class_method :license_result
 

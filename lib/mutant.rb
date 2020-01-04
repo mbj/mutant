@@ -10,6 +10,7 @@ require 'digest/sha1'
 require 'equalizer'
 require 'etc'
 require 'ice_nine'
+require 'mprelude'
 require 'json'
 require 'open3'
 require 'optparse'
@@ -30,13 +31,14 @@ Thread.abort_on_exception = true
 #
 # @api private
 module Mutant
+  Either = MPrelude::Either
+
   EMPTY_STRING   = ''
   EMPTY_ARRAY    = [].freeze
   EMPTY_HASH     = {}.freeze
   SCOPE_OPERATOR = '::'
 end # Mutant
 
-require 'mutant/base'
 require 'mutant/bootstrap'
 require 'mutant/version'
 require 'mutant/env'
