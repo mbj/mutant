@@ -6,8 +6,6 @@ gemspec name: 'mutant'
 
 eval_gemfile File.expand_path('Gemfile.shared', __dir__)
 
-gem 'unparser', git: 'https://github.com/mbj/unparser.git'
-
 gem(
   'devtools',
   git: 'https://github.com/mbj/devtools.git',
