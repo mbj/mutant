@@ -12,28 +12,43 @@ module Mutant
           __LINE__
           alias
           arg_expr
+          array_pattern
+          array_pattern_with_tail
           back_ref
           blockarg
           blockarg_expr
+          case_match
           complex
+          const_pattern
           eflipflop
           empty
           ensure
           for
+          forward_args
+          forwarded_args
+          hash_pattern
           ident
+          if_guard
           iflipflop
+          in_match
+          in_pattern
           kwnilarg
           kwrestarg
           kwsplat
+          match_alt
+          match_as
+          match_nil_pattern
+          match_rest
+          match_var
           match_with_lvasgn
-          meth_ref
+          match_with_trailing_comma
           module
           numargs
           numblock
-          numparam
           objc_kwarg
           objc_restarg
           objc_varargs
+          pin
           postexe
           preexe
           rational
@@ -45,6 +60,7 @@ module Mutant
           sclass
           shadowarg
           undef
+          unless_guard
           until_post
           while_post
           xstr

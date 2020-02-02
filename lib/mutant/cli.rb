@@ -105,7 +105,7 @@ module Mutant
     #
     # @return [undefined]
     #
-    # rubocop:disable MethodLength
+    # rubocop:disable Metrics/MethodLength
     def add_environment_options(opts)
       opts.separator('Environment:')
       opts.on('--zombie', 'Run mutant zombified') do

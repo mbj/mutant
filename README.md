@@ -29,6 +29,15 @@ On each detection of uncovered semantics you have the opportunity to:
   to test only the code you had been touching. See the [incremental](#only-mutating-changed-code)
   mutation testing documentation.
 
+## Ruby Versions
+
+Mutant currently only works on cRuby/MRI. Starting with version 2.5.x. It supports all syntax features upto and
+including Ruby 2.6.
+
+Support for 2.7 syntax features is pending, see unparser issue: https://github.com/mbj/unparser/issues/129.
+
+Mutant will work under Ruby 2.7 just fine, unless a 2.7 syntax feature is used. This will be resolved shortly.
+
 ## Licensing
 
 Mutant was recently transitioned commercial software, with a free usage plan for opensource projects.

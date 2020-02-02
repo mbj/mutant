@@ -10,7 +10,7 @@ module MutantSpec
 
   # Namespace module for corpus testing
   #
-  # rubocop:disable MethodLength
+  # rubocop:disable Metrics/MethodLength
   module Corpus
     TMP                 = ROOT.join('tmp').freeze
     EXCLUDE_GLOB_FORMAT = '{%s}'
@@ -22,7 +22,7 @@ module MutantSpec
     private_constant(*constants(false))
 
     # Project under corpus test
-    # rubocop:disable ClassLength
+    # rubocop:disable Metrics/ClassLength
     class Project
       MUTEX = Mutex.new
 
@@ -259,7 +259,7 @@ module MutantSpec
       #
       # @param [Array<String>] arguments
       #
-      # rubocop:disable GuardClause - guard clause without else does not make sense
+      # rubocop:disable Style/GuardClause - guard clause without else does not make sense
       def system(arguments)
         return if Kernel.system(*arguments)
 

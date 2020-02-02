@@ -1,3 +1,8 @@
+# v0.9.5 2020-02-02
+
+* Change to 2.7 parser series.
+  This does not drop support for < 2.7 but enables to in the future add full Ruby 2.7 support.
+
 # v0.9.4 2020-01-03
 
 * Bump unparser dependency

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable ModuleLength
+# rubocop:disable Metrics/ModuleLength
 module SharedContext
   # Prepend an anonymous module with the new `with` method
   #
@@ -25,8 +25,8 @@ module SharedContext
     end
   end
 
-  # rubocop:disable MethodLength
-  # rubocop:disable AbcSize
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def setup_shared_context
     let(:mutation_a)      { Mutant::Mutation::Evil.new(subject_a, mutation_a_node)   }
     let(:mutation_a_node) { s(:false)                                                }

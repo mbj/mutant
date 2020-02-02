@@ -10,14 +10,12 @@ module Mutant
     # Mutation example
     class Example
 
-      # rubocop:disable MutableConstant
+      # rubocop:disable Style/MutableConstant
       ALL = []
 
       # Add example
       #
       # @return [undefined]
-      #
-      # rubocop:disable Performance/Caller
       def self.add(*types, &block)
         file = caller.first.split(':in', 2).first
         ALL << DSL.call(file, Set.new(types), block)

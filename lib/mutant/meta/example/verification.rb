@@ -61,7 +61,7 @@ module Mutant
         def invalid_syntax
           mutations.reject do |mutation|
             ::Parser::CurrentRuby.parse(mutation.source)
-          rescue ::Parser::SyntaxError # rubocop:disable Lint/HandleExceptions
+          rescue ::Parser::SyntaxError # rubocop:disable Lint/SuppressedException
           end
         end
         memoize :invalid_syntax

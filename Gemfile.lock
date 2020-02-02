@@ -1,26 +1,3 @@
-GIT
-  remote: https://github.com/mbj/devtools.git
-  revision: 26ba0a1053e6cf7b79fc72d513a73457f9a38ead
-  ref: 26ba0a1053e6cf7b79fc72d513a73457f9a38ead
-  specs:
-    devtools (0.1.23)
-      abstract_type (~> 0.0.7)
-      adamantium (~> 0.2.0)
-      anima (~> 0.3.0)
-      concord (~> 0.1.5)
-      flay (~> 2.12.0)
-      flog (~> 4.6.2)
-      procto (~> 0.0.3)
-      rake (~> 12.3.0)
-      reek (~> 5.3.0)
-      rspec (~> 3.8.0)
-      rspec-core (~> 3.8.0)
-      rspec-its (~> 1.2.0)
-      rubocop (~> 0.61.1)
-      simplecov (~> 0.16.1)
-      yard (~> 0.9.16)
-      yardstick (~> 0.9.9)
-
 PATH
   remote: .
   specs:
@@ -35,7 +12,7 @@ PATH
       ice_nine (~> 0.11.1)
       memoizable (~> 0.4.2)
       mprelude (~> 0.1.0)
-      parser (~> 2.6.5)
+      parser (~> 2.7.0.2)
       procto (~> 0.0.2)
       unparser (~> 0.4.6)
 
@@ -65,6 +42,23 @@ GEM
       equalizer (~> 0.0.9)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
+    devtools (0.1.25)
+      abstract_type (~> 0.0.7)
+      adamantium (~> 0.2.0)
+      anima (~> 0.3.0)
+      concord (~> 0.1.5)
+      flay (~> 2.12.0)
+      flog (~> 4.6.2)
+      procto (~> 0.0.3)
+      rake (~> 12.3.0)
+      reek (~> 5.6.0)
+      rspec (~> 3.8.0)
+      rspec-core (~> 3.8.0)
+      rspec-its (~> 1.2.0)
+      rubocop (~> 0.79.0)
+      simplecov (~> 0.16.1)
+      yard (~> 0.9.16)
+      yardstick (~> 0.9.9)
     diff-lcs (1.3)
     docile (1.3.2)
     equalizer (0.0.11)
@@ -93,18 +87,17 @@ GEM
       procto (~> 0.0.2)
     mutant-license (0.1.0)
     parallel (1.19.1)
-    parser (2.6.5.0)
+    parser (2.7.0.2)
       ast (~> 2.4.0)
     path_expander (1.1.0)
-    powerpack (0.1.2)
     procto (0.0.3)
     psych (3.1.0)
     rainbow (3.0.0)
     rake (12.3.3)
-    reek (5.3.2)
+    reek (5.6.0)
       codeclimate-engine-rb (~> 0.4.0)
       kwalify (~> 0.7.0)
-      parser (>= 2.5.0.0, < 2.7, != 2.5.1.1)
+      parser (>= 2.5.0.0, < 2.8, != 2.5.1.1)
       psych (~> 3.1.0)
       rainbow (>= 2.0, < 4.0)
     rspec (3.8.0)
@@ -123,14 +116,13 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.3)
-    rubocop (0.61.1)
+    rubocop (0.79.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.5, != 2.5.1.1)
-      powerpack (~> 0.1)
+      parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
-      unicode-display_width (~> 1.4.0)
+      unicode-display_width (>= 1.4.0, < 1.7)
     ruby-progressbar (1.10.1)
     ruby_parser (3.14.1)
       sexp_processor (~> 4.9)
@@ -141,7 +133,7 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     thread_safe (0.3.6)
-    unicode-display_width (1.4.1)
+    unicode-display_width (1.6.1)
     unparser (0.4.7)
       abstract_type (~> 0.0.7)
       adamantium (~> 0.2.0)
@@ -155,7 +147,7 @@ GEM
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
       equalizer (~> 0.0, >= 0.0.9)
-    yard (0.9.22)
+    yard (0.9.24)
     yardstick (0.9.9)
       yard (~> 0.8, >= 0.8.7.2)
 
@@ -163,7 +155,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  devtools!
+  devtools (~> 0.1.25)
   mutant!
   mutant-license!
   parallel (~> 1.3)
