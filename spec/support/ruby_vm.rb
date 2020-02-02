@@ -26,8 +26,7 @@ module MutantSpec
         super(DEFAULTS.merge(attributes))
       end
 
-      # rubocop:disable Naming/UncommunicativeMethodParamName
-      def handle(vm, observation)
+      def handle(vm, observation) # rubocop:disable Naming/MethodParameterName
         unless match?(observation)
           fail "Unexpected event observation: #{observation.inspect}, expected #{inspect}"
         end

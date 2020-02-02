@@ -79,7 +79,7 @@ module Mutant
       #
       # @return [Result::Test]
       #
-      # rubocop:disable MethodLength
+      # rubocop:disable Metrics/MethodLength
       #
       # ignore :reek:TooManyStatements
       def call(tests)

@@ -5,7 +5,7 @@ module Mutant
     class CLI
       # CLI output format
       #
-      # rubocop:disable FormatString
+      # rubocop:disable Style/FormatString
       class Format
         include AbstractType, Concord.new(:tty)
 

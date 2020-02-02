@@ -99,7 +99,7 @@ ClassCheck:
   EnforcedStyle: kind_of?
 
 # Do not prefer double quotes to be used when %q or %Q is more appropriate
-UnneededPercentQ:
+Style/RedundantPercentQ:
   Enabled: false
 
 # Allow a maximum ABC score
@@ -145,7 +145,7 @@ Alias:
   EnforcedStyle: prefer_alias_method
 
 # Do not waste my horizontal or vertical space
-IndentArray:
+Layout/FirstArrayElementIndentation:
   Enabled: false
 
 # Prefer
@@ -167,7 +167,7 @@ MultilineMethodCallIndentation:
 Send:
   Enabled: true
 
-Layout/AlignHash:
+Layout/HashAlignment:
   EnforcedColonStyle: table
   EnforcedHashRocketStyle: table
 Layout/EmptyLineAfterGuardClause:
@@ -196,3 +196,10 @@ Style/RescueStandardError:
   Enabled: false
 Style/StderrPuts:
   Enabled: false
+# suggesting single letter variablesl bah
+Naming/RescuedExceptionsVariableName:
+  Enabled: false
+# false positive on private keywords
+Layout/IndentationWidth:
+  Enabled: false
+

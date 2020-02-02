@@ -55,7 +55,7 @@ module Mutant
       #
       # @return [Result::Test]
       #
-      # rubocop:disable MethodLength
+      # rubocop:disable Metrics/MethodLength
       def call(tests)
         examples = tests.map(&all_tests_index.method(:fetch))
         filter_examples(&examples.method(:include?))

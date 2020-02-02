@@ -5,7 +5,7 @@ module Mutant
     class Node
 
       # Namespace for send mutators
-      # rubocop:disable ClassLength
+      # rubocop:disable Metrics/ClassLength
       class Send < self
         include AST::Types
 
