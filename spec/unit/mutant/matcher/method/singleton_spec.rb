@@ -55,17 +55,24 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
     it_should_behave_like 'a method matcher'
   end
 
+  context 'when defined on metaclass' do
+    let(:scope)       { base::DefinedOnMetaclass }
+    let(:method_line) { 66                       }
+
+    it_should_behave_like 'a method matcher'
+  end
+
   context 'when defined on constant' do
     context 'inside namespace' do
       let(:scope)       { base::DefinedOnConstant::InsideNamespace }
-      let(:method_line) { 71                                       }
+      let(:method_line) { 77                                       }
 
       it_should_behave_like 'a method matcher'
     end
 
     context 'outside namespace' do
       let(:scope)       { base::DefinedOnConstant::OutsideNamespace }
-      let(:method_line) { 78                                        }
+      let(:method_line) { 84                                        }
 
       it_should_behave_like 'a method matcher'
     end
@@ -74,7 +81,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   context 'when defined multiple times in the same line' do
     context 'with method on different scope' do
       let(:scope)        { base::DefinedMultipleTimes::SameLine::DifferentScope }
-      let(:method_line)  { 97                                                   }
+      let(:method_line)  { 103                                                   }
       let(:method_arity) { 1                                                    }
 
       it_should_behave_like 'a method matcher'
@@ -82,7 +89,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
 
     context 'with different name' do
       let(:scope)        { base::DefinedMultipleTimes::SameLine::DifferentName }
-      let(:method_line)  { 101                                                 }
+      let(:method_line)  { 107                                                 }
 
       it_should_behave_like 'a method matcher'
     end

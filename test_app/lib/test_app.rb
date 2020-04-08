@@ -61,6 +61,12 @@ module TestApp
       def self.foo; end
     end
 
+    module DefinedOnMetaclass
+      class << self
+        def foo; end
+      end
+    end
+
     module DefinedOnLvar
       a = self
       def a.foo; end
