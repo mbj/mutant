@@ -14,8 +14,8 @@ module Mutant
       private(*anima.attribute_names)
 
       MATCHERS = IceNine.deep_freeze(
-        '.' => Matcher::Methods::Singleton,
-        '#' => Matcher::Methods::Instance
+        '.' => [Matcher::Methods::Singleton, Matcher::Methods::Metaclass],
+        '#' => [Matcher::Methods::Instance]
       )
 
       METHOD_NAME_PATTERN = Regexp.union(
@@ -39,7 +39,10 @@ module Mutant
       #
       # @return [Matcher]
       def matcher
-        methods_matcher = MATCHERS.fetch(scope_symbol).new(scope)
+        matcher_candidates = MATCHERS.fetch(scope_symbol)
+          .map { |submatcher| submatcher.new(scope) }
+
+        methods_matcher = Matcher::Chain.new(matcher_candidates)
 
         Matcher::Filter.new(methods_matcher, ->(subject) { subject.expression.eql?(self) })
       end
