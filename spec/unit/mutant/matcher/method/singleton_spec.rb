@@ -55,20 +55,6 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
     it_should_behave_like 'a method matcher'
   end
 
-  context 'when defined on metaclass' do
-    let(:scope)       { base::DefinedOnMetaclass }
-    let(:type)        { :def }
-    let(:method_line) { 66                       }
-    def name
-      node.children.fetch(0)
-    end
-
-    def arguments
-      node.children.fetch(1)
-    end
-
-    it_should_behave_like 'a method matcher'
-  end
 
   context 'when defined on constant' do
     context 'inside namespace' do

@@ -3,8 +3,11 @@
 module Mutant
   class Matcher
     class Method
-      # Matcher for singleton methods
-      class Singleton < self
+      # Matcher for metaclass methods
+      # i.e. ones defined using class << self or class << CONSTANT. It might??
+      # work for methods defined like class << obj, but I don't think the
+      # plumbing will be in place in the subject for that to work
+      class Metaclass < self
 
         # New singleton method matcher
         #
@@ -18,10 +21,11 @@ module Mutant
 
         # Singleton method evaluator
         class Evaluator < Evaluator
-          SUBJECT_CLASS    = Subject::Method::Singleton
-          RECEIVER_INDEX   = 0
-          NAME_INDEX       = 1
-          RECEIVER_WARNING = 'Can only match :defs on :self or :const got %p unable to match'
+          SUBJECT_CLASS     = Subject::Method::Instance
+          RECEIVER_INDEX    = 0
+          NAME_INDEX        = 0
+          SCLASS_NAME_INDEX = 1
+          RECEIVER_WARNING  = 'Can only match :sclass with :self or :const got %p unable to match'
 
         private
 
@@ -31,7 +35,7 @@ module Mutant
           #
           # @return [Boolean]
           def match?(node)
-            n_defs?(node) && name?(node) && line?(node) && receiver?(node)
+            n_def?(node) && name?(node) && line?(node) && metaclass_receiver?(node)
           end
 
           def metaclass_receiver?(node)
@@ -48,6 +52,7 @@ module Mutant
               end
             end.last
           end
+
 
           # Test for line match
           # @param [Parser::AST::Node] node
@@ -66,7 +71,8 @@ module Mutant
           #
           # @return [Boolean]
           def name?(node)
-            node.children.fetch(NAME_INDEX).equal?(method_name)
+            n_def?(node) &&
+              node.children.fetch(NAME_INDEX).equal?(method_name)
           end
 
           # Test for receiver match
@@ -93,7 +99,7 @@ module Mutant
           #
           # @return [Boolean]
           def receiver_name?(node)
-            name = node.children.fetch(NAME_INDEX)
+            name = node.children.fetch(SCLASS_NAME_INDEX)
             name.to_s.eql?(context.unqualified_name)
           end
 
