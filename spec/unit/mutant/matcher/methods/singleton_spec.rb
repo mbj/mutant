@@ -43,7 +43,7 @@ RSpec.describe Mutant::Matcher::Methods::Singleton, '#call' do
   let(:subject_g) { instance_double(Mutant::Subject, 'G') }
   let(:subject_h) { instance_double(Mutant::Subject, 'H') }
 
-  let(:subjects) { [subject_a, subject_b, subject_c] }
+  let(:subjects) { [subject_a, subject_b, subject_c, subject_f, subject_g, subject_h] }
 
   before do
     matcher = Mutant::Matcher::Method::Singleton

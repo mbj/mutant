@@ -20,7 +20,8 @@ module Mutant
         class Evaluator < Evaluator
           SUBJECT_CLASS    = Subject::Method::Singleton
           RECEIVER_INDEX   = 0
-          NAME_INDEX       = 1
+          DEFS_NAME_INDEX  = 1
+          DEF_NAME_INDEX    = 0
           RECEIVER_WARNING = 'Can only match :defs on :self or :const got %p unable to match'
 
         private
@@ -31,11 +32,34 @@ module Mutant
           #
           # @return [Boolean]
           def match?(node)
-            n_defs?(node) && line?(node) && name?(node) && receiver?(node)
+            match_simple_singleton?(node) || match_metaclass_singleton?(node)
           end
 
+          def match_simple_singleton?(node)
+            n_defs?(node) && name?(node) && line?(node) && receiver?(node)
+          end
+
+          def match_metaclass_singleton?(node)
+            n_def?(node) && name?(node) && line?(node) && metaclass_receiver?(node)
+          end
+
+          def metaclass_receiver?(node)
+            mc = metaclass(node)
+            mc && receiver?(mc)
+          end
+
+          def metaclass(node)
+            Mutant::AST.find_last_path(ast) do |cur_node|
+              next unless n_sclass?(cur_node)
+
+              cur_node.children.index do |child|
+                child.equal? node
+              end
+            end.last
+          end
+
+
           # Test for line match
-          #
           # @param [Parser::AST::Node] node
           #
           # @return [Boolean]
@@ -52,7 +76,13 @@ module Mutant
           #
           # @return [Boolean]
           def name?(node)
-            node.children.fetch(NAME_INDEX).equal?(method_name)
+            (
+              n_defs?(node) &&
+              node.children.fetch(DEFS_NAME_INDEX).equal?(method_name)
+            ) || (
+              n_def?(node) &&
+                node.children.fetch(DEF_NAME_INDEX).equal?(method_name)
+            )
           end
 
           # Test for receiver match
@@ -79,7 +109,7 @@ module Mutant
           #
           # @return [Boolean]
           def receiver_name?(node)
-            name = node.children.fetch(NAME_INDEX)
+            name = node.children.fetch(DEFS_NAME_INDEX)
             name.to_s.eql?(context.unqualified_name)
           end
 
