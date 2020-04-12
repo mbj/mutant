@@ -13,8 +13,8 @@ module Mutant
       private(*anima.attribute_names)
 
       MATCHERS = IceNine.deep_freeze(
-        '.' => Matcher::Methods::Singleton,
-        '#' => Matcher::Methods::Instance
+        '.' => [Matcher::Methods::Singleton, Matcher::Methods::Metaclass],
+        '#' => [Matcher::Methods::Instance]
       )
       private_constant(*constants(false))
 
@@ -32,7 +32,10 @@ module Mutant
       #
       # @return [Matcher::Method]
       def matcher
-        MATCHERS.fetch(scope_symbol).new(scope)
+        matcher_candidates = Array(MATCHERS.fetch(scope_symbol))
+                             .map { |m| m.new(scope) }
+
+        Matcher::Chain.new(matcher_candidates)
       end
 
       # Length of match with other expression

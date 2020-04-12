@@ -86,29 +86,9 @@ module Mutant
       end # Singleton
 
       # Matcher for metaclass methods
-      class Metaclass < self
+      class Metaclass < Singleton
         MATCHER = Matcher::Method::Metaclass
-
-      private
-
-        # Method object on scope
-        #
-        # @param [Symbol] method_name
-        #
-        # @return [Method]
-        def access(method_name)
-          scope.method(method_name)
-        end
-
-        # Candidate scope
-        #
-        # @return [Class]
-        def candidate_scope
-          scope.singleton_class
-        end
-        memoize :candidate_scope, freezer: :noop
-
-      end # Singleton
+      end # Metaclass
 
       # Matcher for instance methods
       class Instance < self

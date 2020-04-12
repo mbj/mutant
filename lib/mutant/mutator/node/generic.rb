@@ -57,7 +57,6 @@ module Mutant
           restarg_expr
           retry
           root
-          sclass
           shadowarg
           undef
           unless_guard
