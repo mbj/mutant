@@ -13,7 +13,8 @@ module Mutant
 
       MATCHERS = [
         Matcher::Methods::Singleton,
-        Matcher::Methods::Instance
+        Matcher::Methods::Instance,
+        Matcher::Methods::Metaclass
       ].freeze
 
       private_constant(*constants(false))

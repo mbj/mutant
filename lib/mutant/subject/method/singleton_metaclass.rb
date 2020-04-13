@@ -5,6 +5,7 @@ module Mutant
     class Method
       # Singleton method defined using metaclass syntax (class << self)
       class SingletonMetaclass < self
+        include AST::Sexp
 
         NAME_INDEX = 0
         SYMBOL     = '.'
@@ -15,6 +16,10 @@ module Mutant
         def prepare
           scope.singleton_class.__send__(:undef_method, name)
           self
+        end
+
+        def wrap_node(mutant)
+          s(:sclass, AST::Nodes::N_SELF, mutant)
         end
       end # SingletonMetaclass
     end # Method
