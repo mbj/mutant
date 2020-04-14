@@ -39,17 +39,15 @@ module Mutant
           end
 
           def metaclass_receiver?(node)
-            mc = metaclass(node)
+            mc = metaclass_containing(node)
             mc && receiver?(mc)
           end
 
-          def metaclass(node)
+          def metaclass_containing(node)
             Mutant::AST.find_last_path(ast) do |cur_node|
               next unless n_sclass?(cur_node)
 
-              cur_node.children.index do |child|
-                child.equal? node
-              end
+              cur_node.children.include?(node)
             end.last
           end
 

@@ -34,21 +34,6 @@ module Mutant
             n_defs?(node) && name?(node) && line?(node) && receiver?(node)
           end
 
-          def metaclass_receiver?(node)
-            mc = metaclass(node)
-            mc && receiver?(mc)
-          end
-
-          def metaclass(node)
-            Mutant::AST.find_last_path(ast) do |cur_node|
-              next unless n_sclass?(cur_node)
-
-              cur_node.children.index do |child|
-                child.equal? node
-              end
-            end.last
-          end
-
           # Test for line match
           # @param [Parser::AST::Node] node
           #
