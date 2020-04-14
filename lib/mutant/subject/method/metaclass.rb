@@ -3,8 +3,9 @@
 module Mutant
   class Subject
     class Method
-      # Singleton method defined using metaclass syntax (class << self)
-      class SingletonMetaclass < self
+      # Singleton method defined using metaclass syntax
+      # (class << self; def foo; end; end)
+      class Metaclass < self
         include AST::Sexp
 
         NAME_INDEX = 0
@@ -21,7 +22,7 @@ module Mutant
         def wrap_node(mutant)
           s(:sclass, AST::Nodes::N_SELF, mutant)
         end
-      end # SingletonMetaclass
+      end # Metaclass
     end # Method
   end # Subject
 end # Mutant

@@ -21,7 +21,7 @@ module Mutant
 
         # Singleton method evaluator
         class Evaluator < Evaluator
-          SUBJECT_CLASS     = Subject::Method::SingletonMetaclass
+          SUBJECT_CLASS     = Subject::Method::Metaclass
           RECEIVER_INDEX    = 0
           NAME_INDEX        = 0
           SCLASS_NAME_INDEX = 1
