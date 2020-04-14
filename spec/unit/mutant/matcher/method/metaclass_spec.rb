@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Mutant::Matcher::Methods::Singleton, '#call' do
+RSpec.describe Mutant::Matcher::Methods::Metaclass, '#call' do
   let(:object) { described_class.new(class_under_test) }
   let(:env)    { Fixtures::TEST_ENV                    }
 
@@ -13,14 +13,6 @@ RSpec.describe Mutant::Matcher::Methods::Singleton, '#call' do
 
     Class.new do
       extend parent
-
-      def self.method_a; end
-
-      def self.method_b; end
-      class << self; protected :method_b; end
-
-      def self.method_c; end
-      private_class_method :method_c
 
       class << self
         def method_f; end
@@ -36,22 +28,16 @@ RSpec.describe Mutant::Matcher::Methods::Singleton, '#call' do
     end
   end
 
-  let(:subject_a) { instance_double(Mutant::Subject, 'A') }
-  let(:subject_b) { instance_double(Mutant::Subject, 'B') }
-  let(:subject_c) { instance_double(Mutant::Subject, 'C') }
   let(:subject_f) { instance_double(Mutant::Subject, 'F') }
   let(:subject_g) { instance_double(Mutant::Subject, 'G') }
   let(:subject_h) { instance_double(Mutant::Subject, 'H') }
 
-  let(:subjects) { [subject_a, subject_b, subject_c, subject_f, subject_g, subject_h] }
+  let(:subjects) { [subject_f, subject_g, subject_h] }
 
   before do
-    matcher = Mutant::Matcher::Method::Singleton
+    matcher = Mutant::Matcher::Method::Metaclass
 
     {
-      method_a: subject_a,
-      method_b: subject_b,
-      method_c: subject_c,
       method_f: subject_f,
       method_g: subject_g,
       method_h: subject_h
