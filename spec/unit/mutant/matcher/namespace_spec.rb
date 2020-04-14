@@ -13,8 +13,10 @@ RSpec.describe Mutant::Matcher::Namespace, '#call' do
     [
       [Mutant::Matcher::Methods::Singleton, raw_scope_b, [subject_b]],
       [Mutant::Matcher::Methods::Instance,  raw_scope_b, []],
+      [Mutant::Matcher::Methods::Metaclass, raw_scope_b, []],
       [Mutant::Matcher::Methods::Singleton, raw_scope_a, [subject_a]],
-      [Mutant::Matcher::Methods::Instance,  raw_scope_a, []]
+      [Mutant::Matcher::Methods::Instance,  raw_scope_a, []],
+      [Mutant::Matcher::Methods::Metaclass, raw_scope_a, []]
     ].each do |klass, scope, subjects|
       matcher = instance_double(Mutant::Matcher)
       expect(matcher).to receive(:call).with(env).and_return(subjects)
