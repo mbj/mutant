@@ -6,8 +6,10 @@ RSpec.describe Mutant::Matcher::Scope, '#call' do
   let(:env)       { instance_double(Mutant::Env)     }
   let(:matcher_a) { instance_double(Mutant::Matcher) }
   let(:matcher_b) { instance_double(Mutant::Matcher) }
+  let(:matcher_c) { instance_double(Mutant::Matcher) }
   let(:subject_a) { instance_double(Mutant::Subject) }
   let(:subject_b) { instance_double(Mutant::Subject) }
+  let(:subject_c) { instance_double(Mutant::Subject) }
 
   subject { object.call(env) }
 
@@ -20,6 +22,10 @@ RSpec.describe Mutant::Matcher::Scope, '#call' do
       .with(scope)
       .and_return(matcher_b)
 
+    expect(Mutant::Matcher::Methods::Metaclass).to receive(:new)
+      .with(scope)
+      .and_return(matcher_c)
+
     expect(matcher_a).to receive(:call)
       .with(env)
       .and_return([subject_a])
@@ -27,9 +33,13 @@ RSpec.describe Mutant::Matcher::Scope, '#call' do
     expect(matcher_b).to receive(:call)
       .with(env)
       .and_return([subject_b])
+
+    expect(matcher_c).to receive(:call)
+      .with(env)
+      .and_return([subject_c])
   end
 
   it 'concatenates subjects from matched singleton and instance methods' do
-    should eql([subject_a, subject_b])
+    should eql([subject_a, subject_b, subject_c])
   end
 end
