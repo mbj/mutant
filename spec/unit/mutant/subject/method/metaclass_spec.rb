@@ -10,7 +10,7 @@ RSpec.describe Mutant::Subject::Method::Metaclass do
   end
 
   let(:node)     { s(:def, :foo, s(:args)) }
-  let(:warnings) { instance_double(Mutant::Warnings)  }
+  let(:warnings) { instance_double(Mutant::Warnings) }
 
   let(:context) do
     Mutant::Context.new(scope, instance_double(Pathname))

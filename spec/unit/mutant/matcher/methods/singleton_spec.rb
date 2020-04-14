@@ -36,7 +36,7 @@ RSpec.describe Mutant::Matcher::Methods::Singleton, '#call' do
     {
       method_a: subject_a,
       method_b: subject_b,
-      method_c: subject_c,
+      method_c: subject_c
     }.each do |method, subject|
       allow(matcher).to receive(:new)
         .with(class_under_test, class_under_test.method(method))

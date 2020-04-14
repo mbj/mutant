@@ -55,7 +55,6 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
     it_should_behave_like 'a method matcher'
   end
 
-
   context 'when defined on constant' do
     context 'inside namespace' do
       let(:scope)       { base::DefinedOnConstant::InsideNamespace }
@@ -75,7 +74,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   context 'when defined multiple times in the same line' do
     context 'with method on different scope' do
       let(:scope)        { base::DefinedMultipleTimes::SameLine::DifferentScope }
-      let(:method_line)  { 103                                                   }
+      let(:method_line)  { 103                                                  }
       let(:method_arity) { 1                                                    }
 
       it_should_behave_like 'a method matcher'

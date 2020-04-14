@@ -53,7 +53,6 @@ module Mutant
             end.last
           end
 
-
           # Test for line match
           # @param [Parser::AST::Node] node
           #

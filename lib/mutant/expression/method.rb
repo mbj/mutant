@@ -40,7 +40,7 @@ module Mutant
       # @return [Matcher]
       def matcher
         matcher_candidates = Array(MATCHERS.fetch(scope_symbol))
-                             .map { |m| m.new(scope) }
+          .map { |m| m.new(scope) }
 
         methods_matcher = Matcher::Chain.new(matcher_candidates)
 
