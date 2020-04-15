@@ -1,54 +1,90 @@
 # frozen_string_literal: true
 
-RSpec.describe Mutant::Matcher::Methods::Metaclass, '#call' do
-  let(:object) { described_class.new(class_under_test) }
-  let(:env)    { Fixtures::TEST_ENV                    }
+RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
+  subject { object.call(env) }
 
-  let(:class_under_test) do
-    parent = Module.new do
-      def method_d; end
+  let(:object)       { described_class.new(scope, method)                }
+  let(:method)       { scope.method(method_name)                         }
+  let(:type)         { :def                                              }
+  let(:method_name)  { :foo                                              }
+  let(:method_arity) { 0                                                 }
+  let(:base)         { TestApp::MetaclassMethodTests                     }
+  let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app/metaclasses.rb') }
+  let(:warnings)     { instance_double(Mutant::Warnings)                 }
 
-      def method_e; end
+  let(:world) do
+    instance_double(
+      Mutant::World,
+      pathname: Pathname,
+      warnings: warnings
+    )
+  end
+
+  let(:env) do
+    instance_double(
+      Mutant::Env,
+      config: Mutant::Config::DEFAULT,
+      parser: Fixtures::TEST_ENV.parser,
+      world:  world
+    )
+  end
+
+  def name
+    node.children.fetch(0)
+  end
+
+  def arguments
+    node.children.fetch(1)
+  end
+
+  context 'when also defined on lvar' do
+    let(:scope) { base::DefinedOnLvar }
+    let(:expected_warnings) do
+      [
+        'Can only match :def inside :sclass on :self or :const, got :sclass on :lvar unable to match'
+      ]
     end
 
-    Class.new do
-      extend parent
+    include_examples 'skipped candidate'
+  end
 
-      class << self
-        def method_f; end
+  context 'when defined on self' do
+    let(:scope)       { base::DefinedOnSelf }
+    let(:method_line) { 7                 }
 
-        protected
+    it_should_behave_like 'a method matcher'
+  end
 
-        def method_g; end
+  context 'when defined on constant' do
+    context 'inside namespace' do
+      let(:scope)       { base::DefinedOnConstant::InsideNamespace }
+      let(:method_line) { 21                                       }
 
-        private
+      it_should_behave_like 'a method matcher'
+    end
 
-        def method_h; end
-      end
+    context 'outside namespace' do
+      let(:scope)       { base::DefinedOnConstant::OutsideNamespace }
+      let(:method_line) { 29                                        }
+
+      it_should_behave_like 'a method matcher'
     end
   end
 
-  let(:subject_f) { instance_double(Mutant::Subject, 'F') }
-  let(:subject_g) { instance_double(Mutant::Subject, 'G') }
-  let(:subject_h) { instance_double(Mutant::Subject, 'H') }
+  context 'when defined multiple times in the same line' do
+    context 'with method on different scope' do
+      let(:scope)        { base::DefinedMultipleTimes::SameLine::DifferentScope }
+      let(:method_line)  { 53                                                   }
+      let(:method_arity) { 1                                                    }
 
-  let(:subjects) { [subject_f, subject_g, subject_h] }
-
-  before do
-    matcher = Mutant::Matcher::Method::Metaclass
-
-    {
-      method_f: subject_f,
-      method_g: subject_g,
-      method_h: subject_h
-    }.each do |method, subject|
-      allow(matcher).to receive(:new)
-        .with(class_under_test, class_under_test.method(method))
-        .and_return(Mutant::Matcher::Static.new([subject]))
+      it_should_behave_like 'a method matcher'
     end
-  end
 
-  it 'returns expected subjects' do
-    expect(object.call(env)).to eql(subjects)
+    context 'with different name' do
+      let(:scope)        { base::DefinedMultipleTimes::SameLine::DifferentName }
+      let(:method_line)  { 57                                                  }
+
+      it_should_behave_like 'a method matcher'
+    end
   end
 end

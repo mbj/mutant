@@ -61,12 +61,6 @@ module TestApp
       def self.foo; end
     end
 
-    module DefinedOnMetaclass
-      class << self
-        def foo; end
-      end
-    end
-
     module DefinedOnLvar
       a = self
       def a.foo; end
@@ -111,5 +105,6 @@ module TestApp
   end
 end
 
+require 'test_app/metaclasses'
 require 'test_app/literal'
 $VERBOSE = original
