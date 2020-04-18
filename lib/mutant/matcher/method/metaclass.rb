@@ -27,7 +27,9 @@ module Mutant
           CONST_NAME_INDEX         = 1
           SCLASS_RECEIVER_INDEX    = 0
           SCLASS_BODY_INDEX        = 1
-          RECEIVER_WARNING         = 'Can only match :def inside :sclass on :self or :const, got :sclass on %p unable to match'
+          RECEIVER_WARNING         = 'Can only match :def inside :sclass on ' \
+                                     ':self or :const, got :sclass on %p ' \
+                                     'unable to match'
 
         private
 
