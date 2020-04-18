@@ -51,7 +51,7 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
 
   context 'when defined on self' do
     let(:scope)       { base::DefinedOnSelf }
-    let(:method_line) { 7                 }
+    let(:method_line) { 7                   }
 
     it_should_behave_like 'a method matcher'
 
