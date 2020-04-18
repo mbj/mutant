@@ -6,6 +6,29 @@ module TestApp
       class << self
         def foo; end
       end
+
+      # again this is a weird edge-case that's being checked for consistent
+      # behaviour, not something that people ought to be doing.
+      module InsideMetaclass
+        class << self
+          # some older versions of ruby don't have Object#singleton_class,
+          # this is just an implementation of that so we can grab
+          # InsideMetaclass.metaclass for use as the scope object
+          def metaclass
+            class << self
+              self
+            end
+          end
+
+          # InsideMetaclass.foo
+          def foo; end
+
+          class << self
+            # #<Class:InsideMetaclass>.foo
+            def foo; end
+          end
+        end
+      end
     end
 
     module DefinedOnLvar
