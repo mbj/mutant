@@ -136,3 +136,4 @@ detectors:
     - Mutant::Reporter::CLI::Printer::StatusProgressive#object # False positive calls super
     - Mutant::Repository::Diff#tracks? # intentional, private
     - Mutant::Repository::Diff#within_working_directory? # intentional, private
+    - Mutant::AST::FindMetaclassContaining#include_exact? # intentional, private

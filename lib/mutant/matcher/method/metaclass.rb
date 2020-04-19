@@ -21,12 +21,11 @@ module Mutant
 
         # Singleton method evaluator
         class Evaluator < Evaluator
-          # the "receiver" is the `self` in `class << self`
+          # Terminology note: the "receiver" is the `self` in `class << self`
           SUBJECT_CLASS            = Subject::Method::Metaclass
           NAME_INDEX               = 0
           CONST_NAME_INDEX         = 1
           SCLASS_RECEIVER_INDEX    = 0
-          SCLASS_BODY_INDEX        = 1
           RECEIVER_WARNING         = 'Can only match :def inside :sclass on ' \
                                      ':self or :const, got :sclass on %p ' \
                                      'unable to match'
@@ -39,7 +38,10 @@ module Mutant
           #
           # @return [Boolean]
           def match?(node)
-            n_def?(node) && name?(node) && line?(node) && metaclass_receiver?(node)
+            n_def?(node) &&
+              name?(node) &&
+              line?(node) &&
+              metaclass_receiver?(node)
           end
 
           def metaclass_receiver?(node)
@@ -48,21 +50,7 @@ module Mutant
           end
 
           def metaclass_containing(node)
-            Mutant::AST.find_last_path(ast) do |cur_node|
-              next unless n_sclass?(cur_node)
-
-              metaclass_of?(cur_node, node)
-            end.last
-          end
-
-          def metaclass_of?(sclass, node)
-              body = sclass.children.fetch(SCLASS_BODY_INDEX)
-              body.equal?(node) ||
-                (n_begin?(body) && include_exact?(body.children, node))
-          end
-
-          def include_exact?(haystack, needle)
-            haystack.index { |elem| elem.equal?(needle) }
+            AST::FindMetaclassContaining.new(ast).call(node)
           end
 
           # Test for line match
