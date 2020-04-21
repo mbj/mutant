@@ -16,15 +16,15 @@ RSpec.describe Mutant::Parallel::Driver do
   end
 
   let(:var_active_jobs) do
-    instance_double(Mutant::Variable::IVar, 'active jobs')
+    instance_double(Variable::IVar, 'active jobs')
   end
 
   let(:var_final) do
-    instance_double(Mutant::Variable::IVar, 'final')
+    instance_double(Variable::IVar, 'final')
   end
 
   let(:var_sink) do
-    instance_double(Mutant::Variable::IVar, 'sink')
+    instance_double(Variable::IVar, 'sink')
   end
 
   subject do
@@ -64,7 +64,7 @@ RSpec.describe Mutant::Parallel::Driver do
           receiver:  var_final,
           selector:  :take_timeout,
           arguments: [timeout],
-          reaction:  { return: Mutant::Variable.const_get(:Result)::Timeout.new }
+          reaction:  { return: Variable.const_get(:Result)::Timeout.new }
         },
         {
           receiver: var_active_jobs,
