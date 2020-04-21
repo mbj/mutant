@@ -52,7 +52,7 @@ module Mutant
     # @param [Class] klass
     # @param [Config] config
     #
-    # @return [Mutant::Variable]
+    # @return [Variable]
     #
     # ignore :reek:LongParameterList
     def self.shared(klass, config, **attributes)

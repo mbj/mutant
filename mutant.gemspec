@@ -34,6 +34,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('parser',        '~> 2.7.0.2')
   gem.add_runtime_dependency('procto',        '~> 0.0.2')
   gem.add_runtime_dependency('unparser',      '~> 0.4.6')
+  gem.add_runtime_dependency('variable',      '~> 0.0.1')
 
   gem.add_development_dependency('devtools', '~> 0.1.25')
   gem.add_development_dependency('parallel', '~> 1.3')
