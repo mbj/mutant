@@ -2,13 +2,14 @@
 - name: rubyspec
   namespace: Rubyspec
   repo_uri: 'https://github.com/ruby/rubyspec.git'
-  repo_ref: 'origin/master'
+  repo_ref: 249a36c2e9fcddbb208a0d618d05f6bd9a64fd17
   integration: mspec
   mutation_coverage: false
   mutation_generation: true
   exclude:
     - command_line/fixtures/bad_syntax.rb
     - command_line/fixtures/freeze_flag_required_diff_enc.rb
+    - core/file/stat_spec.rb
     - core/kernel/shared/sprintf_encoding.rb
     - core/module/fixtures/autoload_empty.rb
     - core/module/fixtures/autoload_never_set.rb
@@ -26,6 +27,7 @@
     - language/predefined/fixtures/data_only.rb
     - language/source_encoding_spec.rb
     - library/base64/decode64_spec.rb
+    - library/cgi/escapeHTML_spec.rb
     - security/cve_2010_1330_spec.rb
 - name: regexp_parser
   namespace: Regexp
