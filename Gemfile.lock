@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mutant (0.9.4)
+    mutant (0.9.6)
       abstract_type (~> 0.0.7)
       adamantium (~> 0.2.0)
       anima (~> 0.3.1)
@@ -15,6 +15,7 @@ PATH
       parser (~> 2.7.0.2)
       procto (~> 0.0.2)
       unparser (~> 0.4.6)
+      variable (~> 0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -142,6 +143,8 @@ GEM
       equalizer (~> 0.0.9)
       parser (>= 2.6.5)
       procto (~> 0.0.2)
+    variable (0.0.1)
+      equalizer (~> 0.0.11)
     virtus (1.0.5)
       axiom-types (~> 0.1)
       coercible (~> 1.0)

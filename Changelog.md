@@ -1,3 +1,8 @@
+# v0.9.6 2020-04-20
+
+* Dependencies upgrade, should not change user facing semantics.
+* Bump license nudge to 40s
+
 # v0.9.5 2020-02-02
 
 * Change to 2.7 parser series.

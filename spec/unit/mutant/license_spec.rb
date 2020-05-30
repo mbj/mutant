@@ -89,7 +89,7 @@ RSpec.describe Mutant::License do
 
       expect(stderr)
         .to have_received(:puts)
-        .with('[Mutant-License-Error]: Soft fail, continuing in 20 seconds')
+        .with('[Mutant-License-Error]: Soft fail, continuing in 40 seconds')
         .ordered
 
       expect(stderr)
@@ -104,7 +104,7 @@ RSpec.describe Mutant::License do
 
       expect(kernel)
         .to have_received(:sleep)
-        .with(20)
+        .with(40)
         .ordered
     end
   end

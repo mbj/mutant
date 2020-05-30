@@ -4,7 +4,7 @@ module Mutant
   module License
     NAME    = 'mutant-license'
     VERSION = '~> 0.1.0'
-    SLEEP   = 20
+    SLEEP   = 40
 
     UNLICENSED =
       IceNine.deep_freeze(
