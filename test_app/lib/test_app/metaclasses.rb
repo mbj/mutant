@@ -81,5 +81,28 @@ module TestApp
         end
       end
     end
+
+    module NotActuallyInAMetaclass
+      class << self
+        # some older versions of ruby don't have Object#singleton_class,
+        # this is just an implementation of that so we can grab
+        # InsideMetaclass.metaclass for use as the scope object
+        def metaclass
+          class << self
+            self
+          end
+        end
+
+        # this is a very weird construction that I do not recommend.
+        # to access SomeClass you have to do
+        # NotActuallyInAMetaclass.singleton_class::SomeClass. Very weird
+        # This is only here so we can test that metaclass_receiver? correctly
+        # returns false
+        class SomeClass
+          def foo
+          end
+        end
+      end
+    end
   end
 end

@@ -95,4 +95,14 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
       it_should_behave_like 'a method matcher'
     end
   end
+
+  # tests that the evaluator correctly returns nil when the metaclass doesn't
+  # directly contain the method
+  context 'when defined inside a class in a metaclass' do
+    let(:scope)       { base::NotActuallyInAMetaclass               }
+    let(:method)      { scope.metaclass::SomeClass.new.method(:foo) }
+    let(:method_line) { 93                                          }
+
+    it { is_expected.to be_empty }
+  end
 end
