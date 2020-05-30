@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Mutant::Meta::Example.add :sclass do
   source 'class << self; bar; end'
 
