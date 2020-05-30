@@ -22,7 +22,7 @@ module Mutant
       end
 
       def call(node)
-        Mutant::AST.find_last_path(@ast) do |cur_node|
+        AST.find_last_path(@ast) do |cur_node|
           next unless n_sclass?(cur_node)
 
           metaclass_of?(cur_node, node)
