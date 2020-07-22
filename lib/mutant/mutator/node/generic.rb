@@ -20,10 +20,15 @@ module Mutant
           case_match
           complex
           const_pattern
+          def_e
+          defs_e
           eflipflop
           empty
+          empty_else
           ensure
+          find_pattern
           for
+          forward_arg
           forward_args
           forwarded_args
           hash_pattern
@@ -43,6 +48,7 @@ module Mutant
           match_with_lvasgn
           match_with_trailing_comma
           module
+          mrasgn
           numargs
           numblock
           objc_kwarg
@@ -51,6 +57,7 @@ module Mutant
           pin
           postexe
           preexe
+          rasgn
           rational
           redo
           restarg
