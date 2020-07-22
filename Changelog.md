@@ -1,3 +1,9 @@
+# v0.9.7 2020-07-22
+
+* Bump parser dependency to 2.7.1, note this still does not support Ruby 2.7 syntax.
+  But it supports running bundling with that parser version.
+* Nail diff-lcs to 1.3 till output difference for 1.4 can be addressed.
+
 # v0.9.6 2020-04-20
 
 * Dependencies upgrade, should not change user facing semantics.
