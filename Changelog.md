@@ -1,3 +1,7 @@
+# v0.9.8
+
+* Change to generic catch all node mutator. This allows better cross parser version compatibility.
+
 # v0.9.7 2020-07-22
 
 * Bump parser dependency to 2.7.1, note this still does not support Ruby 2.7 syntax.
