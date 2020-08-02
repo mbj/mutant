@@ -283,11 +283,23 @@ RSpec.describe Mutant::License do
     context 'when mutant-license gem cannot be loaded' do
       let(:load_json) { false }
 
-      before do
-        allow(gem_method).to receive(:call).and_raise(Gem::LoadError, 'test-error')
+      def self.setup_error(message)
+        before do
+          allow(gem_method).to receive(:call).and_raise(Gem::LoadError, message)
+        end
       end
 
-      it_fails_with_message '[Mutant-License-Error]: test-error'
+      context 'while the mutant license gem from rubygems is present' do
+        setup_error %{can't activate mutant-license (~> 0.1.0), already activated mutant-license-0.0.0.}
+
+        it_fails_with_message '[Mutant-License-Error]: mutant-license gem from rubygems.org is a dummy'
+      end
+
+      context 'with other error message' do
+        setup_error 'test-error'
+
+        it_fails_with_message '[Mutant-License-Error]: test-error'
+      end
     end
   end
 end
