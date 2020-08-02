@@ -43,12 +43,23 @@ module Mutant
     def self.load_mutant_license(world)
       Either
         .wrap_error(LoadError) { world.gem_method.call(NAME, VERSION) }
+        .lmap(&:message)
+        .lmap(&method(:check_for_rubygems_mutant_license))
         .lmap(&method(:unlicensed))
     end
 
     def self.unlicensed(message)
       "[Mutant-License-Error]: #{message}"
     end
+
+    def self.check_for_rubygems_mutant_license(message)
+      if /already activated mutant-license-0.0.0/.match?(message)
+        'mutant-license gem from rubygems.org is a dummy'
+      else
+        message
+      end
+    end
+    private_class_method :check_for_rubygems_mutant_license
 
     def self.license_path(world)
       world
