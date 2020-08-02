@@ -1,4 +1,4 @@
-# v0.9.8
+# v0.9.8 2020-08-02
 
 * Change to generic catch all node mutator. This allows better cross parser version compatibility.
 
