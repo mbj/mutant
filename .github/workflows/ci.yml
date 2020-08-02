@@ -1,0 +1,121 @@
+name: CI
+
+on: push
+
+jobs:
+  base:
+    name: Base steps
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Whitespace
+      run: git diff --check -- HEAD~1
+  ruby-spec:
+    name: Unit Specs
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['2.6', '2.7']
+        os: [ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - run: |
+        gem install bundler
+        bundle install
+    - run: bundle exec rspec spec/unit
+  ruby-mutant:
+    name: Mutation coverage
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['2.6', '2.7']
+        os: [ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - run: |
+        gem install bundler
+        bundle install
+    - run: bundle exec mutant --since HEAD~1 --zombie -- 'Mutant*'
+  ruby-integration-minitest:
+    name: Integration Minitest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['2.6', '2.7']
+        os: [ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - run: gem list
+    - run: |
+        gem install bundler
+        bundle install
+    - run: bundle exec rspec spec/integration -e minitest
+  ruby-integration-rspec:
+    name: Integration RSpec
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['2.6', '2.7']
+        os: [ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - run: |
+        gem install bundler
+        bundle install
+    - run: bundle exec rspec spec/integration -e rspec
+  ruby-integration-generation:
+    name: Integration Mutation Generation
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['2.6', '2.7']
+        os: [ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - run: |
+        gem install bundler
+        bundle install
+    - run: bundle exec rspec spec/integration -e generation
+  ruby-rubocop:
+    name: Rubocop
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['2.7']
+        os: [ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - run: bundle install
+    - run: bundle exec rake metrics:rubocop
