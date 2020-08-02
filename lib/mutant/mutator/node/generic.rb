@@ -3,79 +3,8 @@
 module Mutant
   class Mutator
     class Node
-
       # Generic mutator
       class Generic < self
-
-        unsupported_nodes = %i[
-          __FILE__
-          __LINE__
-          alias
-          arg_expr
-          array_pattern
-          array_pattern_with_tail
-          back_ref
-          blockarg
-          blockarg_expr
-          case_match
-          complex
-          const_pattern
-          def_e
-          defs_e
-          eflipflop
-          empty
-          empty_else
-          ensure
-          find_pattern
-          for
-          forward_arg
-          forward_args
-          forwarded_args
-          hash_pattern
-          ident
-          if_guard
-          iflipflop
-          in_match
-          in_pattern
-          kwnilarg
-          kwrestarg
-          kwsplat
-          match_alt
-          match_as
-          match_nil_pattern
-          match_rest
-          match_var
-          match_with_lvasgn
-          match_with_trailing_comma
-          module
-          mrasgn
-          numargs
-          numblock
-          objc_kwarg
-          objc_restarg
-          objc_varargs
-          pin
-          postexe
-          preexe
-          rasgn
-          rational
-          redo
-          restarg
-          restarg_expr
-          retry
-          root
-          sclass
-          shadowarg
-          undef
-          unless_guard
-          until_post
-          while_post
-          xstr
-        ]
-
-        # These nodes still need a dedicated mutator,
-        # your contribution is that close!
-        handle(*unsupported_nodes)
 
       private
 

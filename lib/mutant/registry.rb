@@ -32,14 +32,9 @@ module Mutant
     #
     # @param [Symbol] type
     #
-    # @return [Class]
-    #
-    # @raise [ArgumentError]
-    #   raises argument error when class cannot be found
+    # @return [Class<Mutator>]
     def lookup(type)
-      contents.fetch(type) do
-        fail RegistryError, "No entry for: #{type.inspect}"
-      end
+      contents.fetch(type, Mutator::Node::Generic)
     end
 
   end # Registry
