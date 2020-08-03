@@ -53,7 +53,7 @@ module Mutant
     end
 
     def self.check_for_rubygems_mutant_license(message)
-      if /already activated mutant-license-0.0.0/.match?(message)
+      if message.include?('already activated mutant-license-0.0.0')
         'mutant-license gem from rubygems.org is a dummy'
       else
         message
