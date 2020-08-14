@@ -7,31 +7,42 @@ mutant
 
 ## What is Mutant?
 
-Mutant is a mutation testing tool for Ruby. Mutation testing is a technique to verify semantic coverage of your code.
+An automated code review tool, with a side effect of producing semantic code coverage
+metrics.
 
-## Why do I want it?
+Think of mutant as an expert developer proposing simplified versions of your code,
+and he only reports these simplification suggestions if they would pass existing tests.
 
-Mutant adds to your toolbox: Detection of uncovered semantics in your code.
-Coverage becomes a meaningful metric!
+That developer never has a bad day and is always ready to jump on your PR.
 
-On each detection of uncovered semantics you have the opportunity to:
+Each reported simplification signifies either:
 
-* Delete dead code, as you do not want the extra semantics not specified by the tests
-* Add (or improve a test) to cover the unwanted semantics.
-* Learn something new about the semantics of Ruby and your direct and indirect dependencies.
+A) A piece of code that does more than the tests ask for.
+   You can probably use the simplified version of the code. OR:
 
-## How Do I use it?
+B) If you have a reason to not take the simplified version as it violates a requirement:
+   There was no test that proves the extra requirement. Likely you are missing an
+   important test for that requirement.
 
-* Start with reading the [nomenclature](/docs/nomenclature.md) documentation.
+On extensive mutant use A) happens more often than B), which leads to overall less code enter
+your repository at higher confidence for both the author and the reviewer.
+
+BTW: Mutant is a mutation testing tool, which is a form of code coverage.
+But each reported uncovered mutation is actually a call to action, just like a flag in a code review
+would be.
+
+## Getting started:
+
+* Start with reading the [nomenclature](/docs/nomenclature.md). No way around that one, sorry.
 * Then select and setup your [integration](/docs/nomenclature.md#integration), also make sure
   you can reproduce the examples in the integration specific documentation.
-* Identify your preferred mutation testing strategy. It is recommended to start at the commit level,
-  to test only the code you had been touching. See the [incremental](#only-mutating-changed-code)
-  mutation testing documentation.
+* Use mutant during code reviews and on CI in [incremental](/docs/incremental.md) mode.
+* Do not merge code with new alive mutations. If you really must bypass:
+  Add the subjects with open problems to the ignored subjects.
 
 ## Ruby Versions
 
-Mutant currently only works on cRuby/MRI. Starting with version 2.5.x. It supports all syntax features upto and
+Mutant currently only works on cRuby/MRI. Starting with version 2.5.x. It supports all syntax features up to and
 including Ruby 2.6.
 
 Support for 2.7 syntax features is pending, see unparser issue: https://github.com/mbj/unparser/issues/129.
@@ -43,7 +54,7 @@ Mutant will work under Ruby 2.7 just fine, unless a 2.7 syntax feature is used. 
 Mutant was recently transitioned commercial software, with a free usage plan for opensource projects.
 
 Commercial projects have to acquire a license per developer, with unlimited repositories
-per developer.
+per developer. CI usage for licensed developers is included.
 
 Opensource projects have to acquire their free license per repository.
 
@@ -65,22 +76,52 @@ The mutant license gem contains metadata that allows mutant to verify licensed u
 For commercial licenses mutant checks the git commit author or the configured git email
 to be in the set of licensed developers.
 
-For opensource licenses mutant checks the git remotes against the license whitelist.
+For opensource licenses mutant checks the git remotes against the licensed git repositories.
 This allows the project maintainer to sign up and not bother collaborators with the details.
 
-There are, apart from initial license gem installation, no remote interactions for
+There are, apart from initial license gem installation, no remote interaction for
 license validation.
 
-To inquire for license please contact [Markus Schirp](mailto:mbj@schirp-dso.com?subject=Mutant%20License).
+### Getting an Opensource license
 
-### Pricing
+As stated above: Opensource projects of any kind are free to use mutant.
 
-Only relevant for commercial use.
+Just mail [me](mailto:mbj@schirp-dso.com?subject=Mutant%20Opensource%20License): Please
+include:
 
-Mutant offers a subscription model under a monthly plan.
-Yearly prepayments with discounts are available.
+* Just the git remote URL of your repository. Repository can be anywhere, must not be on Github, just has to be public.
 
-For higher volumes different arrangements can be negotiated.
+I do not need any more details.
+
+### Getting a commercial license
+
+Mutant offers a per developer subscription a monthly plan for 30$, or an annual plan for 300$.
+
+Above 10 developer licensees per customer I'm open to negotiate more discounts.
+
+Should you want to procure a commercial mutant license please [mail me](mailto:mbj@schirp-dso.com?subject=Mutant%20Commercial%20License).
+
+Please include the following information:
+
+* Your invoice address, including your Tax ID (For EU customers VAT-ID is mandatory)
+* Per licensed user the git author email address as returned by `git config user.email`
+
+Also feel free to ask any other question I forgot to proactively answer here.
+
+#### Payment methods
+
+* For monthly subscriptions: Exclusively CC.
+* For annual subscriptions: CC (worldwide) or ACH (US) / SEPA (EU) wire transfer.
+
+#### Pricing Why?
+
+The idea is to charge 1$ per developer per day. Mutant reduces the time spend on code reviews.
+
+This time saved should be worth way more than the 1$ per day.
+
+If you think this is not true for your code base, either my claims are wrong our your use of mutant is wrong.
+I'd be happy to hear about your case as I'm certainly willing to help you in using mutant right, and in case
+I'm wrong I'd be happy to improve mutant to the point I'm right again.
 
 ## Topics
 
