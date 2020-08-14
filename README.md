@@ -10,8 +10,7 @@ mutant
 An automated code review tool, with a side effect of producing semantic code coverage
 metrics.
 
-Think of mutant as an expert developer proposing simplified versions of your code,
-and he only reports these simplification suggestions if they would pass existing tests.
+Think of mutant as an expert developer that simplifies your code while making sure that all tests pass.
 
 That developer never has a bad day and is always ready to jump on your PR.
 
