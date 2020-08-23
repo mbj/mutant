@@ -6,9 +6,7 @@ Mutant::Meta::Example.add :or do
   singleton_mutations
   mutation 'true'
   mutation 'false'
-  mutation 'nil or false'
   mutation 'false or false'
-  mutation 'true or nil'
   mutation 'true or true'
   mutation 'true and false'
   mutation '!true or false'

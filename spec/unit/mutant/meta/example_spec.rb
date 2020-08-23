@@ -10,9 +10,9 @@ RSpec.describe Mutant::Meta::Example do
     )
   end
 
-  let(:file)           { 'foo/bar.rb'         }
-  let(:node)           { s(:true)             }
-  let(:mutation_nodes) { [s(:nil), s(:false)] }
+  let(:file)           { 'foo/bar.rb' }
+  let(:node)           { s(:true)     }
+  let(:mutation_nodes) { [s(:false)]  }
 
   let(:mutations) do
     mutation_nodes.map do |node|

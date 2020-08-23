@@ -5,6 +5,5 @@ Mutant::Meta::Example.add :break do
 
   singleton_mutations
   mutation 'break false'
-  mutation 'break nil'
   mutation 'break'
 end

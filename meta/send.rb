@@ -488,9 +488,7 @@ end
     mutation 'true'
     mutation 'false'
     mutation "false #{operator} false"
-    mutation "nil   #{operator} false"
     mutation "true  #{operator} true"
-    mutation "true  #{operator} nil"
   end
 end
 

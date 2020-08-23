@@ -1,3 +1,7 @@
+# Unreleased
+
+- Remove `true` -> `nil` and `false` -> `nil` mutations. [#1018](https://github.com/mbj/mutant/pull/1018)
+
 # v0.9.8 2020-08-02
 
 * Change to generic catch all node mutator. This allows better cross parser version compatibility.
