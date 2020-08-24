@@ -66,6 +66,22 @@ module Mutant
 
       end # Singleton
 
+      # Matcher for metaclass methods
+      class Metaclass < self
+        MATCHER = Matcher::Method::Metaclass
+
+      private
+
+        def access(method_name)
+          scope.method(method_name)
+        end
+
+        def candidate_scope
+          scope.singleton_class
+        end
+        memoize :candidate_scope, freezer: :noop
+      end # Metaclass
+
       # Matcher for instance methods
       class Instance < self
         MATCHER = Matcher::Method::Instance
