@@ -62,10 +62,6 @@ RSpec.describe Mutant::Subject::Method::Instance do
   end
 
   describe '#prepare' do
-    let(:context) do
-      Mutant::Context.new(scope, instance_double(Pathname))
-    end
-
     subject { object.prepare }
 
     it 'undefines method on scope' do
