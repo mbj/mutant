@@ -41,12 +41,33 @@ would be.
 
 ## Ruby Versions
 
-Mutant currently only works on cRuby/MRI. Starting with version 2.5.x. It supports all syntax features up to and
-including Ruby 2.6.
+Mutant supports multiple ruby versions at different levels. The levels arge staged:
 
-Support for 2.7 syntax features is pending, see unparser issue: https://github.com/mbj/unparser/issues/129.
+* Runtime, indicates mutant can execute on a specific Ruby Version / implementation.
+* Syntax, depends on Runtime support, and indicates syntax new to that Ruby version can be used.
+* Mutations, depends on Syntax support, and indicates syntax new to that Ruby verison is being analysed.
 
-Mutant will work under Ruby 2.7 just fine, unless a 2.7 syntax feature is used. This will be resolved shortly.
+Supported indicates if a specific Ruby version / Implementation is actively supported. Which means:
+
+* New releases will only be done if all tests pass on supported Ruby versions / implementations.
+* New features will be available.
+
+| Implementation | Version        | Runtime            | Syntax             | Mutations          | Supported          |
+| -------------- | -------------- | -------            | ------------------ | ------------------ | ------------------ |
+| cRUBY/MRI      | < 2.5          | :email:            | :email:            | :email:            | :no_entry:         |
+| cRUBY/MRI      | 2.5            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| cRUBY/MRI      | 2.6            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| cRUBY/MRI      | 2.7            | :heavy_check_mark: | :soon:             | :soon:             | :heavy_check_mark: |
+| jruby          | TBD            | :email:            | :email:            | :email:            | :email:            |
+| mruby          | TBD            | :email:            | :email:            | :email:            | :email:            |
+
+
+Labels:
+
+* :heavy_check_mark: Supported.
+* :soon: Active work in progress.
+* :email: Planned, please contact me on interest.
+* :no_entry: Not being planned, or considered, still contact me on interest.
 
 ## Licensing
 
