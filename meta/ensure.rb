@@ -5,5 +5,4 @@ Mutant::Meta::Example.add :ensure do
 
   singleton_mutations
   mutation 'begin; rescue; ensure; false; end'
-  mutation 'begin; rescue; ensure; nil; end'
 end

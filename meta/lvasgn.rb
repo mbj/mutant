@@ -6,7 +6,6 @@ Mutant::Meta::Example.add :lvasgn do
   singleton_mutations
   mutation 'a__mutant__ = true'
   mutation 'a = false'
-  mutation 'a = nil'
 end
 
 Mutant::Meta::Example.add :array, :lvasgn do
