@@ -5,7 +5,6 @@ Mutant::Meta::Example.add :next do
 
   singleton_mutations
   mutation 'next false'
-  mutation 'next nil'
   mutation 'next'
   mutation 'break true'
 end

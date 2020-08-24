@@ -20,7 +20,6 @@ module Mutant
           #
           # @return [undefined]
           def dispatch
-            emit_nil
             emit(s(MAP.fetch(node.type)))
           end
 
