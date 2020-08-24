@@ -116,7 +116,6 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   end
 
   describe '#prepare' do
-
     let(:context) do
       Mutant::Context.new(scope, double('Source Path'))
     end
