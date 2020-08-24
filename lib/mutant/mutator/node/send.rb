@@ -36,8 +36,8 @@ module Mutant
           :== =>         %i[eql? equal?],
           :>= =>         %i[> == eql? equal?],
           :<= =>         %i[< == eql? equal?],
-          :> =>          %i[== >= eql? equal?],
-          :< =>          %i[== <= eql? equal?]
+          :> =>          %i[== eql? equal?],
+          :< =>          %i[== eql? equal?]
         )
 
         RECEIVER_SELECTOR_REPLACEMENTS = IceNine.deep_freeze(

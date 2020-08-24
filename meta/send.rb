@@ -5,7 +5,6 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'a == b'
-  mutation 'a >= b'
   mutation 'a.eql?(b)'
   mutation 'a.equal?(b)'
   mutation 'nil > b'
@@ -90,7 +89,6 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'a == b'
-  mutation 'a <= b'
   mutation 'a.eql?(b)'
   mutation 'a.equal?(b)'
   mutation 'nil < b'

@@ -1,6 +1,7 @@
 # Unreleased
 
-- Remove `true` -> `nil` and `false` -> `nil` mutations. [#1018](https://github.com/mbj/mutant/pull/1018)
+- Remove `<` -> `<=` and `>` -> `>=` mutations as non canonical. [#1020](https://github.com/mbj/mutant/pull/1020)
+- Remove `true` -> `nil` and `false` -> `nil` mutations as non canonical. [#1018](https://github.com/mbj/mutant/pull/1018)
 
 # v0.9.8 2020-08-02
 
