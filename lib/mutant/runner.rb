@@ -12,9 +12,6 @@ module Mutant
       Either::Right.new(run_mutation_analysis(env))
     end
 
-    # Run mutation analysis
-    #
-    # @return [undefined]
     def self.run_mutation_analysis(env)
       reporter = reporter(env)
 
@@ -27,13 +24,6 @@ module Mutant
     end
     private_class_method :run_mutation_analysis
 
-    # Run driver
-    #
-    # @param [Reporter] reporter
-    # @param [Driver] driver
-    #
-    # @return [Object]
-    #   the last returned status payload
     def self.run_driver(reporter, driver)
       loop do
         status = driver.wait_timeout(reporter.delay)
@@ -43,9 +33,6 @@ module Mutant
     end
     private_class_method :run_driver
 
-    # Configuration for parallel execution engine
-    #
-    # @return [Parallell::Config]
     def self.mutation_test_config(env)
       world = env.world
 
@@ -61,11 +48,6 @@ module Mutant
     end
     private_class_method :mutation_test_config
 
-    # Reporter to use
-    #
-    # @param [Env] env
-    #
-    # @return [Reporter]
     def self.reporter(env)
       env.config.reporter
     end

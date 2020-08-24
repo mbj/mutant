@@ -11,18 +11,12 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             emit_singletons
             emit_type
             mutate_body
           end
 
-          # Mutate body
-          #
-          # @return [undefined]
           def mutate_body
             children.each_index do |index|
               mutate_child(index)
@@ -41,9 +35,6 @@ module Mutant
 
           private
 
-            # Emit mutations
-            #
-            # @return [undefined]
             def dispatch
               emit_key_mutations
               emit_value_mutations

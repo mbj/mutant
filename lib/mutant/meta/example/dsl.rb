@@ -49,21 +49,11 @@ module Mutant
 
       private
 
-        # Set original source
-        #
-        # @param [String,Parser::AST::Node] input
-        #
-        # @return [undefined]
         def source(input)
           fail 'source already defined' if @node
           @node = node(input)
         end
 
-        # Add expected mutation
-        #
-        # @param [String,Parser::AST::Node] input
-        #
-        # @return [undefined]
         def mutation(input)
           node = node(input)
           if @expected.include?(node)
@@ -72,22 +62,11 @@ module Mutant
           @expected << node
         end
 
-        # Add singleton mutations
-        #
-        # @return [undefined]
         def singleton_mutations
           mutation('nil')
           mutation('self')
         end
 
-        # Helper method to coerce input to node
-        #
-        # @param [String,Parser::AST::Node] input
-        #
-        # @return [Parser::AST::Node]
-        #
-        # @raise [RuntimeError]
-        #   in case input cannot be coerced
         def node(input)
           case input
           when String

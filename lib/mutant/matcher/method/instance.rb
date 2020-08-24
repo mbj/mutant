@@ -33,11 +33,6 @@ module Mutant
 
         private
 
-          # Check if node is matched
-          #
-          # @param [Parser::AST::Node] node
-          #
-          # @return [Boolean]
           def match?(node)
             n_def?(node)                           &&
             node.location.line.equal?(source_line) &&
@@ -50,9 +45,6 @@ module Mutant
 
           private
 
-            # Source location
-            #
-            # @return [Array{String,Integer}]
             def source_location
               scope
                 .unmemoized_instance_method(method_name)

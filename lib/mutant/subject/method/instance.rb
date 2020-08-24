@@ -33,11 +33,6 @@ module Mutant
 
         private
 
-          # Memoizer node for mutant
-          #
-          # @param [Parser::AST::Node] mutant
-          #
-          # @return [Parser::AST::Node]
           def wrap_node(mutant)
             s(:begin, mutant, s(:send, nil, :memoize, s(:args, s(:sym, name))))
           end

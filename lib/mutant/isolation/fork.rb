@@ -73,9 +73,6 @@ module Mutant
 
       private
 
-        # Start child process
-        #
-        # @return [Integer]
         def start_child
           world.process.fork do
             Child.call(
@@ -87,12 +84,6 @@ module Mutant
           end
         end
 
-        # Read child result
-        #
-        # @param [Integer] pid
-        #
-        # @return [undefined]
-        #
         # rubocop:disable Metrics/MethodLength
         def read_child_result(pid)
           result_fragments = []
@@ -115,11 +106,6 @@ module Mutant
         end
         # rubocop:enable Metrics/MethodLength
 
-        # Read fragments
-        #
-        # @param [Hash{FD => Array<String}] targets
-        #
-        # @return [undefined]
         def read_fragments(targets)
           until targets.empty?
             ready, = world.io.select(targets.keys)
@@ -134,11 +120,6 @@ module Mutant
           end
         end
 
-        # Wait for child process
-        #
-        # @param [Integer] pid
-        #
-        # @return [undefined]
         def wait_child(pid, log_fragments)
           _pid, status = world.process.wait2(pid)
 
@@ -147,9 +128,6 @@ module Mutant
           end
         end
 
-        # Add a result
-        #
-        # @param [Result]
         def add_result(result)
           @result = defined?(@result) ? @result.add_error(result) : result
         end

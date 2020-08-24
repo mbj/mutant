@@ -32,9 +32,6 @@ module Mutant
 
         private
 
-          # Print stats
-          #
-          # @return [undefined]
           def print_stats
             status(
               FORMAT,
@@ -47,16 +44,10 @@ module Mutant
             )
           end
 
-          # Print progress bar finish
-          #
-          # @return [undefined]
           def print_progress_bar_finish
             puts(nil) unless amount_mutation_results.zero?
           end
 
-          # Print mutation results
-          #
-          # @return [undefined]
           def print_mutation_results
             visit_collection(MutationProgressResult, object.mutation_results)
           end

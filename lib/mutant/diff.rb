@@ -58,25 +58,16 @@ module Mutant
 
   private
 
-    # Diffs between old and new
-    #
-    # @return [Array<Array>]
     def diffs
       ::Diff::LCS.diff(old, new)
     end
 
-    # Raw diff-lcs hunks
-    #
-    # @return [Array<Diff::LCS::Hunk>]
     def hunks
       diffs.map do |diff|
         ::Diff::LCS::Hunk.new(old.map(&:dup), new, diff, max_length, 0)
       end
     end
 
-    # Minimized hunk
-    #
-    # @return Diff::LCS::Hunk
     def minimized_hunk
       head, *tail = hunks
 
@@ -86,18 +77,10 @@ module Mutant
       end
     end
 
-    # Max length of source line in new and old
-    #
-    # @return [Integer]
     def max_length
       [old, new].map(&:length).max
     end
 
-    # Colorized a unified diff line
-    #
-    # @param [String] line
-    #
-    # @return [String]
     def self.colorize_line(line)
       case line[0]
       when ADDITION

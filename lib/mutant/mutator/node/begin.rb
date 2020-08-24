@@ -11,9 +11,6 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           mutate_single_child do |child|
             emit(child)

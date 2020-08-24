@@ -28,12 +28,6 @@ module Mutant
 
     private
 
-      # Expressions parsed from input
-      #
-      # @param [String] input
-      #
-      # @return [Array<Expression>]
-      #   if expressions can be parsed from input
       def expressions(input)
         types.each_with_object([]) do |type, aggregate|
           expression = type.try_parse(input) and aggregate << expression

@@ -29,10 +29,6 @@ module Mutant
 
     private
 
-      # Touched paths
-      #
-      # @return [Hash{Pathname => Path}]
-      #
       # rubocop:disable Metrics/MethodLength
       def touched_paths
         pathname = world.pathname
@@ -49,13 +45,8 @@ module Mutant
           .to_h
       end
       memoize :touched_paths
+      # rubocop:enable Metrics/MethodLength
 
-      # Parse path
-      #
-      # @param [Pathname] work_dir
-      # @param [String] line
-      #
-      # @return [Path]
       def parse_line(work_dir, line)
         match = FORMAT.match(line) or fail Error, "Invalid git diff-index line: #{line}"
 
@@ -88,9 +79,6 @@ module Mutant
 
       private
 
-        # Ranges of hunks in the diff
-        #
-        # @return [Array<Range<Integer>>]
         def diff_ranges
           world
             .capture_stdout(%W[git diff --unified=0 #{to} -- #{path}])

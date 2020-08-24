@@ -80,9 +80,6 @@ module Mutant
 
     private
 
-      # Index of available tests
-      #
-      # @return [Hash<Test, RSpec::Core::Example]
       def all_tests_index
         all_examples.each_with_index.each_with_object({}) do |(example, example_index), index|
           index[parse_example(example, example_index)] = example
@@ -90,12 +87,6 @@ module Mutant
       end
       memoize :all_tests_index
 
-      # Parse example into test
-      #
-      # @param [RSpec::Core::Example] example
-      # @param [Integer] index
-      #
-      # @return [Test]
       def parse_example(example, index)
         metadata = example.metadata
 
@@ -111,11 +102,6 @@ module Mutant
         )
       end
 
-      # Parse metadata into expression
-      #
-      # @param [RSpec::Core::Example::MetaData] metadata
-      #
-      # @return [Expression]
       def parse_metadata(metadata)
         if metadata.key?(:mutant_expression)
           parse_expression(metadata.fetch(:mutant_expression))
@@ -125,30 +111,16 @@ module Mutant
         end
       end
 
-      # Parse expression
-      #
-      # @param [String] input
-      # @param [Proc] default
-      #
-      # @return [Expression]
       def parse_expression(input, &default)
         expression_parser.apply(input).from_right(&default)
       end
 
-      # Available rspec examples
-      #
-      # @return [Array<String, RSpec::Core::Example]
       def all_examples
         @world.example_groups.flat_map(&:descendants).flat_map(&:examples).select do |example|
           example.metadata.fetch(:mutant, true)
         end
       end
 
-      # Filter examples
-      #
-      # @param [#call] predicate
-      #
-      # @return [undefined]
       def filter_examples(&predicate)
         @world.filtered_examples.each_value do |examples|
           examples.keep_if(&predicate)

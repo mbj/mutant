@@ -25,25 +25,11 @@ module Mutant
       )
     end
 
-    # Test if subject is allowed do
-    #
-    # @param [Config] config
-    # @param [Subject] subject
-    #
-    # @return [Boolean]
     def self.allowed_subject?(config, subject)
       select_subject?(config, subject) && !ignore_subject?(config, subject)
     end
     private_class_method :allowed_subject?
 
-    # Predicate that tests for selected subject
-    #
-    # @param [Config] config
-    # @param [Subject] subject
-    #
-    # @return [Boolean]
-    #
-    # @api private
     def self.select_subject?(config, subject)
       config.subject_filters.all? { |filter| filter.call(subject) }
     end

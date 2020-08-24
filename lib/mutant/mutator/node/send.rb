@@ -48,9 +48,6 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           emit_singletons
 
@@ -63,23 +60,14 @@ module Mutant
           end
         end
 
-        # AST metadata for node
-        #
-        # @return [AST::Meta::Send]
         def meta
           AST::Meta::Send.new(node)
         end
         memoize :meta
 
-        # Arguments being send
-        #
-        # @return [Enumerable<Parser::AST::Node>]
         alias_method :arguments, :remaining_children
         private :arguments
 
-        # Perform normal, non special case dispatch
-        #
-        # @return [undefined]
         def normal_dispatch
           emit_naked_receiver
           emit_selector_replacement
@@ -90,9 +78,6 @@ module Mutant
           mutate_arguments
         end
 
-        # Emit mutations which only correspond to one selector
-        #
-        # @return [undefined]
         def emit_selector_specific_mutations
           emit_const_get_mutation
           emit_integer_mutation
@@ -101,9 +86,6 @@ module Mutant
           emit_lambda_mutation
         end
 
-        # Emit selector mutations specific to top level constants
-        #
-        # @return [undefined]
         def emit_receiver_selector_mutations
           return unless meta.receiver_possible_top_level_const?
 
@@ -113,9 +95,6 @@ module Mutant
             .each(&method(:emit_selector))
         end
 
-        # Emit mutation from `!!foo` to `foo`
-        #
-        # @return [undefined]
         def emit_double_negation_mutation
           return unless selector.equal?(:!) && n_send?(receiver)
 
@@ -123,19 +102,10 @@ module Mutant
           emit(negated.receiver) if negated.selector.equal?(:!)
         end
 
-        # Emit mutation from proc definition to lambda
-        #
-        # @return [undefined]
         def emit_lambda_mutation
           emit(s(:send, nil, :lambda)) if meta.proc?
         end
 
-        # Emit mutation for `#dig`
-        #
-        # - Mutates `foo.dig(a, b)` to `foo.fetch(a).dig(b)`
-        # - Mutates `foo.dig(a)` to `foo.fetch(a)`
-        #
-        # @return [undefined]
         def emit_dig_mutation
           return if !selector.equal?(:dig) || arguments.none?
 
@@ -148,41 +118,26 @@ module Mutant
           emit(s(:send, fetch_mutation, :dig, *tail))
         end
 
-        # Emit mutation from `to_i` to `Integer(...)`
-        #
-        # @return [undefined]
         def emit_integer_mutation
           return unless selector.equal?(:to_i)
 
           emit(s(:send, nil, :Integer, receiver))
         end
 
-        # Emit mutation from `const_get` to const literal
-        #
-        # @return [undefined]
         def emit_const_get_mutation
           return unless selector.equal?(:const_get) && n_sym?(arguments.first)
 
           emit(s(:const, receiver, AST::Meta::Symbol.new(arguments.first).name))
         end
 
-        # Emit selector replacement
-        #
-        # @return [undefined]
         def emit_selector_replacement
           SELECTOR_REPLACEMENTS.fetch(selector, EMPTY_ARRAY).each(&method(:emit_selector))
         end
 
-        # Emit naked receiver mutation
-        #
-        # @return [undefined]
         def emit_naked_receiver
           emit(receiver) if receiver
         end
 
-        # Mutate arguments
-        #
-        # @return [undefined]
         def mutate_arguments
           emit_type(receiver, selector)
           remaining_children_with_index.each do |_node, index|
@@ -191,25 +146,14 @@ module Mutant
           end
         end
 
-        # Mutate argument
-        #
-        # @param [Integer] index
-        #
-        # @return [undefined]
         def mutate_argument_index(index)
           mutate_child(index) { |node| !n_begin?(node) }
         end
 
-        # Emit argument propagation
-        #
-        # @return [undefined]
         def emit_argument_propagation
           emit_propagation(Mutant::Util.one(arguments)) if arguments.one?
         end
 
-        # Emit receiver mutations
-        #
-        # @return [undefined]
         def mutate_receiver
           return unless receiver
           emit_implicit_self
@@ -218,9 +162,6 @@ module Mutant
           end
         end
 
-        # Emit implicit self mutation
-        #
-        # @return [undefined]
         def emit_implicit_self
           emit_receiver(nil) if n_self?(receiver) && !(
             KEYWORDS.include?(selector) ||

@@ -19,22 +19,12 @@ module Mutant
 
     private
 
-      # The matched scopes
-      #
-      # @param [Env] env
-      #
-      # @return [Enumerable<Scope>]
       def matched_scopes(env)
         env
           .matchable_scopes
           .select(&method(:match?))
       end
 
-      # Test scope if matches expression
-      #
-      # @param [Scope] scope
-      #
-      # @return [Boolean]
       def match?(scope)
         expression.prefix?(scope.expression)
       end

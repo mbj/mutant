@@ -66,39 +66,24 @@ module Mutant
 
         private
 
-          # Visit successful isolation result
-          #
-          # @return [undefined]
           def visit_success
             visit(TestResult, object.value)
           end
 
-          # Print log messages
-          #
-          # @return [undefined]
           def print_log_messages
             log = object.log
 
             puts(LOG_MESSAGES % log) unless log.empty?
           end
 
-          # Visit child error isolation result
-          #
-          # @return [undefined]
           def visit_child_error
             puts(CHILD_ERROR_MESSAGE % object.value.inspect)
           end
 
-          # Visit fork error isolation result
-          #
-          # @return [undefined]
           def visit_fork_error
             puts(FORK_ERROR_MESSAGE)
           end
 
-          # Visit exception isolation result
-          #
-          # @return [undefined]
           def visit_exception
             exception = object.value
 
@@ -110,9 +95,6 @@ module Mutant
             )
           end
 
-          # Visit chain
-          #
-          # @return [undefined]
           def visit_chain
             printer = self.class
 

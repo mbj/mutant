@@ -8,9 +8,6 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           children.each_with_index do |child, index|
             mutate_child(index) if child.instance_of?(::Parser::AST::Node)

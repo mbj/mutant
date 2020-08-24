@@ -49,9 +49,6 @@ module Mutant
     end
     # rubocop:enable Metrics/MethodLength
 
-    # Infect environment
-    #
-    # @return [undefined]
     def self.infect(env)
       config, world = env.config, env.world
 
@@ -60,12 +57,6 @@ module Mutant
     end
     private_class_method :infect
 
-    # Matchable scopes
-    #
-    # @param [World] world
-    # @param [Config] config
-    #
-    # @return [Array<Scope>]
     def self.matchable_scopes(world, config)
       scopes = world.object_space.each_object(Module).each_with_object([]) do |scope, aggregate|
         expression = expression(config.reporter, config.expression_parser, scope) || next
@@ -76,15 +67,6 @@ module Mutant
     end
     private_class_method :matchable_scopes
 
-    # Scope name from scoping object
-    #
-    # @param [Class, Module] scope
-    #
-    # @return [String]
-    #   if scope has a name and does not raise exceptions obtaining it
-    #
-    # @return [nil]
-    #   otherwise
     def self.scope_name(reporter, scope)
       scope.name
     rescue => exception
@@ -99,20 +81,7 @@ module Mutant
     end
     private_class_method :scope_name
 
-    # Try to turn scope into expression
-    #
-    # @param [Expression::Parser] expression_parser
-    # @param [Class, Module] scope
-    #
-    # @return [Expression]
-    #   if scope can be represented in an expression
-    #
-    # @return [nil]
-    #   otherwise
-    #
     # rubocop:disable Metrics/MethodLength
-    #
-    # ignore :reek:LongParameterList
     def self.expression(reporter, expression_parser, scope)
       name = scope_name(reporter, scope) or return
 
@@ -132,11 +101,6 @@ module Mutant
     private_class_method :expression
     # rubocop:enable Metrics/MethodLength
 
-    # Write a semantics warning
-    #
-    # @return [undefined]
-    #
-    # ignore :reek:LongParameterList
     def self.semantics_warning(reporter, format, options)
       reporter.warn(SEMANTICS_MESSAGE_FORMAT % { message: format % options })
     end

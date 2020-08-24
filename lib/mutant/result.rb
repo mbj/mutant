@@ -193,9 +193,6 @@ module Mutant
 
     private
 
-      # Killed mutation results
-      #
-      # @return [Array<Result::Mutation>]
       def killed_mutation_results
         mutation_results.select(&:success?)
       end

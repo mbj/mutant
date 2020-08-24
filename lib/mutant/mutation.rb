@@ -74,9 +74,6 @@ module Mutant
 
   private
 
-    # SHA1 sum of source and subject identification
-    #
-    # @return [String]
     def sha1
       Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
     end

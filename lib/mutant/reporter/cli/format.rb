@@ -49,12 +49,6 @@ module Mutant
 
       private
 
-        # Format object with printer
-        #
-        # @param [Class:Printer] printer
-        # @param [Object] object
-        #
-        # @return [String]
         def format(printer, object)
           buffer = new_buffer
           printer.call(Output.new(tty, buffer), object)
@@ -84,9 +78,6 @@ module Mutant
 
         private
 
-          # New buffer
-          #
-          # @return [StringIO]
           def new_buffer
             StringIO.new
           end

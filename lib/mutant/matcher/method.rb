@@ -49,9 +49,6 @@ module Mutant
 
       private
 
-        # Test if method should be skipped
-        #
-        # @return [Truthy]
         def skip?
           location = source_location
           if location.nil? || BLACKLIST.include?(location.first)
@@ -61,56 +58,31 @@ module Mutant
           end
         end
 
-        # Target method name
-        #
-        # @return [String]
         def method_name
           target_method.name
         end
 
-        # Target context
-        #
-        # @return [Context]
         def context
           Context.new(scope, source_path)
         end
 
-        # Root source node
-        #
-        # @return [Parser::AST::Node]
         def ast
           env.parser.call(source_path)
         end
 
-        # Path to source
-        #
-        # @return [Pathname]
         def source_path
           env.world.pathname.new(source_location.first)
         end
         memoize :source_path
 
-        # Source file line
-        #
-        # @return [Integer]
         def source_line
           source_location.last
         end
 
-        # Full source location
-        #
-        # @return [Array{String,Integer}]
         def source_location
           target_method.source_location
         end
 
-        # Matched subject
-        #
-        # @return [Subject]
-        #   if there is a matched node
-        #
-        # @return [nil]
-        #   otherwise
         def subject
           node = matched_node_path.last || return
 
@@ -122,9 +94,6 @@ module Mutant
         end
         memoize :subject
 
-        # Matched node path
-        #
-        # @return [Array<Parser::AST::Node>]
         def matched_node_path
           AST.find_last_path(ast, &method(:match?))
         end

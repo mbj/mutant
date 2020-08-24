@@ -92,9 +92,6 @@ module Mutant
 
   private
 
-    # Hook called when capturing a warning
-    #
-    # @return [undefined]
     def capture(*arguments)
       if @disabled
         @original.call(*arguments)
@@ -103,9 +100,6 @@ module Mutant
       end
     end
 
-    # Assert warnings capture does not call itself
-    #
-    # Its currently not supported nor intended to be supported.
     def assert_no_recursion
       fail RecursiveUseError unless @disabled
     end

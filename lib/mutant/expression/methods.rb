@@ -50,9 +50,6 @@ module Mutant
 
     private
 
-      # Scope object
-      #
-      # @return [Class, Method]
       def scope
         Object.const_get(scope_name)
       end

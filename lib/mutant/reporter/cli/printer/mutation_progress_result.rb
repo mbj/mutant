@@ -18,11 +18,6 @@ module Mutant
 
         private
 
-          # Write colorized char
-          #
-          # @param [String] char
-          #
-          # @return [undefined]
           def char(char)
             output.write(colorize(status_color, char))
           end
