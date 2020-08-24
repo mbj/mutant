@@ -1,4 +1,4 @@
-# Unreleased
+# v0.9.9 2020-09-25
 
 + Add support for mutating methods inside eigenclasses `class <<`. [#1009](https://github.com/mbj/mutant/pull/1009)
 - Remove `<` -> `<=` and `>` -> `>=` mutations as non canonical. [#1020](https://github.com/mbj/mutant/pull/1020)
