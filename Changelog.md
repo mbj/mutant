@@ -1,3 +1,7 @@
+# v0.9.10 unreleased
+
+* Fix memoized subjects to preserve freezer option [#973](https://github.com/mbj/mutant/pull/973).
+
 # v0.9.9 2020-09-25
 
 + Add support for mutating methods inside eigenclasses `class <<`. [#1009](https://github.com/mbj/mutant/pull/1009)
