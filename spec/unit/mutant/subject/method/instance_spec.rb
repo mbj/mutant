@@ -144,25 +144,25 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
       [
         Mutant::Mutation::Neutral.new(
           object,
-          s(:begin,
-            s(:def, :foo, s(:args)), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))
+          s(:begin, s(:def, :foo, s(:args)), memoize_node)
         ),
         Mutant::Mutation::Evil.new(
           object,
-          s(:begin,
-            s(:def, :foo, s(:args), s(:send, nil, :raise)), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))
+          s(:begin, s(:def, :foo, s(:args), s(:send, nil, :raise)), memoize_node)
         ),
         Mutant::Mutation::Evil.new(
           object,
-          s(:begin,
-            s(:def, :foo, s(:args), s(:zsuper)), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))
+          s(:begin, s(:def, :foo, s(:args), s(:zsuper)), memoize_node)
         ),
         Mutant::Mutation::Evil.new(
           object,
-          s(:begin,
-            s(:def, :foo, s(:args), nil), s(:send, nil, :memoize, s(:args, s(:sym, :foo))))
+          s(:begin, s(:def, :foo, s(:args), nil), memoize_node)
         )
       ]
+    end
+
+    let(:memoize_node) do
+      s(:send, nil, :memoize, s(:args, s(:sym, :foo)))
     end
 
     it { should eql(expected) }
