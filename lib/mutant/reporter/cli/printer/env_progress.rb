@@ -40,29 +40,14 @@ module Mutant
 
         private
 
-          # Mutations processed per second
-          #
-          # @return [Float]
-          #
-          # @api private
           def mutations_per_second
             amount_mutation_results / runtime
           end
 
-          # Coverage in percent
-          #
-          # @return [Float]
-          #
-          # @api private
           def coverage_percent
             coverage * 100
           end
 
-          # Overhead in percent
-          #
-          # @return [Float]
-          #
-          # @api private
           def overhead_percent
             (overhead / killtime) * 100
           end

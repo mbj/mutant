@@ -36,24 +36,11 @@ module Mutant
       )
     end
 
-    # Start threads
-    #
-    # @param [Config] config
-    # @param [Worker] worker
-    #
-    # @return [Array<Thread>]
     def self.threads(config, worker)
       Array.new(config.jobs) { config.thread.new(&worker.method(:call)) }
     end
     private_class_method :threads
 
-    # Create shared variable
-    #
-    # @param [Class] klass
-    # @param [Config] config
-    #
-    # @return [Variable]
-    #
     # ignore :reek:LongParameterList
     def self.shared(klass, config, **attributes)
       klass.new(

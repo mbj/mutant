@@ -126,14 +126,6 @@ module Mutant
       end
     end
 
-    # Load contents of file
-    #
-    # @param [Pathname] path
-    #
-    # @return [Config]
-    #
-    # @raise [Either<String, Hash{Symbol => Object}>]
-    #   in case of config file error
     def self.load_contents(path)
       Transform::Named
         .new(path.to_s, TRANSFORM)

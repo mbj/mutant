@@ -27,22 +27,12 @@ module Mutant
 
     private
 
-      # Possibly finalize the exeuction
-      #
-      # @param [Status]
-      #
-      # @return [Status]
       def finalize(status)
         status.tap do
           threads.each(&:join) if status.done?
         end
       end
 
-      # Get status
-      #
-      # @return [Status]
-      #
-      # ignore :reek:NestedIterators
       def status
         var_active_jobs.with do |active_jobs|
           var_sink.with do |sink|

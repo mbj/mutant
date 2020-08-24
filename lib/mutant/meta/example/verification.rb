@@ -35,9 +35,6 @@ module Mutant
 
       private
 
-        # Unexpected mutations
-        #
-        # @return [Array<Mutation>]
         def unexpected
           mutations.reject do |mutation|
             example.expected.include?(mutation.node)
@@ -45,9 +42,6 @@ module Mutant
         end
         memoize :unexpected
 
-        # Missing mutations
-        #
-        # @return [Array<Mutation>]
         def missing
           (example.expected - mutations.map(&:node)).map do |node|
             Mutation::Evil.new(self, node)
@@ -55,9 +49,6 @@ module Mutant
         end
         memoize :missing
 
-        # Mutations that generated invalid syntax
-        #
-        # @return [Enumerable<Mutation>]
         def invalid_syntax
           mutations.reject do |mutation|
             ::Parser::CurrentRuby.parse(mutation.source)
@@ -66,19 +57,11 @@ module Mutant
         end
         memoize :invalid_syntax
 
-        # Mutations with no diff to original
-        #
-        # @return [Enumerable<Mutation>]
         def no_diffs
           mutations.select { |mutation| mutation.source.eql?(example.source) }
         end
         memoize :no_diffs
 
-        # Mutation report
-        #
-        # @param [Array<Mutation>] mutations
-        #
-        # @return [Array<Hash>]
         def format_mutations(mutations)
           mutations.map do |mutation|
             {
@@ -88,9 +71,6 @@ module Mutant
           end
         end
 
-        # No diff mutation report
-        #
-        # @return [Array, nil]
         def no_diff_report
           no_diffs.map do |mutation|
             {

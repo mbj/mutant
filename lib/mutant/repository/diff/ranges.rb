@@ -18,11 +18,6 @@ module Mutant
           diff.lines.flat_map(&method(:parse_ranges)).to_set
         end
 
-        # Parse ranges from line
-        #
-        # @param [String] line
-        #
-        # @return [Array<Range<Integer>>]
         def self.parse_ranges(line)
           match = REGEXP.match(line) or return EMPTY_ARRAY
 
@@ -34,12 +29,6 @@ module Mutant
         end
         private_class_method :parse_ranges
 
-        # Construct a range from start point and offset
-        #
-        # @param [String] start
-        # @param [String, nil] offset
-        #
-        # @return [Range<Integer>]
         def self.mk_range(start, offset)
           start = Integer(start)
 

@@ -32,14 +32,6 @@ module Mutant
         .fmap { |klass| klass.new(env.config).setup }
     end
 
-    # Attempt to require integration
-    #
-    # @param env [Bootstrap]
-    #
-    # @return [Either<String, undefined>]
-    #
-    # @api private
-    #
     # rubocop:disable Style/MultilineBlockChain
     def self.attempt_require(env)
       integration_name = env.config.integration
@@ -56,13 +48,6 @@ module Mutant
     private_class_method :attempt_require
     # rubocop:enable Style/MultilineBlockChain
 
-    # Attempt const get
-    #
-    # @param env [Boostrap]
-    #
-    # @return [Either<String, Class<Integration>>]
-    #
-    # @api private
     def self.attempt_const_get(env)
       integration_name = env.config.integration
       constant_name    = integration_name.capitalize
@@ -98,9 +83,6 @@ module Mutant
 
   private
 
-    # Expression parser
-    #
-    # @return [Expression::Parser]
     def expression_parser
       config.expression_parser
     end

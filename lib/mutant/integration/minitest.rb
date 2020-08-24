@@ -115,9 +115,6 @@ module Mutant
 
     private
 
-      # The index of all tests to runnable test cases
-      #
-      # @return [Hash<Test,TestCase>]
       def all_tests_index
         all_test_cases.each_with_object({}) do |test_case, index|
           index[construct_test(test_case)] = test_case

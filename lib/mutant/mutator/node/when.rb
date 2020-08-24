@@ -11,9 +11,6 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           if body
             mutate_body
@@ -23,9 +20,6 @@ module Mutant
           mutate_conditions
         end
 
-        # Emit condition mutations
-        #
-        # @return [undefined]
         def mutate_conditions
           conditions = children.length - 1
           children[0..-2].each_index do |index|
@@ -34,27 +28,14 @@ module Mutant
           end
         end
 
-        # Emit body mutations
-        #
-        # @return [undefined]
         def mutate_body
           mutate_child(body_index)
         end
 
-        # Body node
-        #
-        # @return [Parser::AST::Node]
-        #   if body is present
-        #
-        # @return [nil]
-        #   otherwise
         def body
           children.fetch(body_index)
         end
 
-        # Index of body node
-        #
-        # @return [Integer]
         def body_index
           children.length - 1
         end

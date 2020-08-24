@@ -51,11 +51,6 @@ module Mutant
 
     private
 
-      # Return previous results
-      #
-      # @param [Subject]
-      #
-      # @return [Array<Result::Mutation>]
       def previous_mutation_results(subject)
         subject_result = @subject_results.fetch(subject) { return EMPTY_ARRAY }
         subject_result.mutation_results

@@ -9,9 +9,6 @@ module Mutant
 
       private
 
-        # Emit values
-        #
-        # @return [undefined]
         def emit_values
           values.each(&method(:emit_type))
         end

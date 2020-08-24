@@ -40,11 +40,6 @@ module Mutant
 
     private
 
-      # Attempt to resolve superclass cover expressio
-      #
-      # @return [String, nil]
-      #
-      # @api private
       def try_superclass_cover_expression
         return if superclass.equal?(::Minitest::Runnable)
 

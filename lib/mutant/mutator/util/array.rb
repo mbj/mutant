@@ -12,9 +12,6 @@ module Mutant
 
         private
 
-          # Emit element presence mutations
-          #
-          # @return [undefined]
           def dispatch
             input.each_index do |index|
               dup = dup_input
@@ -30,9 +27,6 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             input.each_with_index do |element, index|
               Mutator.mutate(element).each do |mutation|

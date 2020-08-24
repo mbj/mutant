@@ -8,9 +8,6 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           emit_arguments_mutations
           emit_optarg_body_assignments
@@ -20,9 +17,6 @@ module Mutant
           emit_body_mutations if body
         end
 
-        # Emit mutations with optional arguments as assignments in method
-        #
-        # @return [undefined]
         def emit_optarg_body_assignments
           arguments.children.each do |argument|
             next unless n_optarg?(argument) && AST::Meta::Optarg.new(argument).used?
@@ -31,11 +25,6 @@ module Mutant
           end
         end
 
-        # Emit valid body ASTs depending on instance body
-        #
-        # @param node [Parser::AST::Node]
-        #
-        # @return [undefined]
         def emit_body_prepend(node)
           if body
             emit_body(s(:begin, node, body))

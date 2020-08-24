@@ -14,9 +14,6 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             mutate_name
             return unless value # op asgn
@@ -24,16 +21,10 @@ module Mutant
             emit_remove_const
           end
 
-          # Emit remove_const
-          #
-          # @return [undefined]
           def emit_remove_const
             emit(s(:send, cbase, :remove_const, s(:sym, name)))
           end
 
-          # Emit name mutations
-          #
-          # @return [undefined]
           def mutate_name
             Util::Symbol.call(name).each do |name|
               emit_name(name.upcase)

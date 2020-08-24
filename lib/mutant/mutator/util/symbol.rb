@@ -11,9 +11,6 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           emit((input.to_s + POSTFIX).to_sym)
         end

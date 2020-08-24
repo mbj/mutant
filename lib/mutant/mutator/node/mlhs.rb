@@ -10,9 +10,6 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           mutate_single_child do |_child, index|
             delete_child(index)

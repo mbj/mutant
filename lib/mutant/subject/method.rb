@@ -34,9 +34,6 @@ module Mutant
 
     private
 
-      # The scope
-      #
-      # @return [Class, Module]
       def scope
         context.scope
       end

@@ -88,23 +88,12 @@ module Mutant
 
   private
 
-    # Parse matchers
-    #
-    # @param [Array<String>] expressions
-    #
-    # @return [undefined]
     def parse_match_expressions(expressions)
       expressions.each do |expression|
         add_matcher(:match_expressions, config.expression_parser.apply(expression).from_right)
       end
     end
 
-    # Add environmental options
-    #
-    # @param [Object] opts
-    #
-    # @return [undefined]
-    #
     # rubocop:disable Metrics/MethodLength
     def add_environment_options(opts)
       opts.separator('Environment:')
@@ -121,12 +110,8 @@ module Mutant
         with(jobs: Integer(number))
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
-    # Add mutation options
-    #
-    # @param [OptionParser] opts
-    #
-    # @return [undefined]
     def add_mutation_options(opts)
       opts.separator(nil)
       opts.separator('Options:')
@@ -136,11 +121,7 @@ module Mutant
       end
     end
 
-    # Add filter options
-    #
-    # @param [OptionParser] opts
-    #
-    # @return [undefined]
+    # rubocop:disable Metrics/MethodLength
     def add_filter_options(opts)
       opts.on('--ignore-subject EXPRESSION', 'Ignore subjects that match EXPRESSION as prefix') do |pattern|
         add_matcher(:ignore_expressions, config.expression_parser.apply(pattern).from_right)
@@ -154,12 +135,9 @@ module Mutant
         )
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
-    # Add debug options
-    #
-    # @param [OptionParser] opts
-    #
-    # @return [undefined]
+    # rubocop:disable Metrics/MethodLength
     def add_debug_options(opts)
       opts.on('--fail-fast', 'Fail fast') do
         with(fail_fast: true)
@@ -173,38 +151,16 @@ module Mutant
         world.kernel.exit
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
-    # With configuration
-    #
-    # @param [Hash<Symbol, Object>] attributes
-    #
-    # @return [undefined]
     def with(attributes)
       @config = config.with(attributes)
     end
 
-    # Add configuration
-    #
-    # @param [Symbol] attribute
-    #   the attribute to add to
-    #
-    # @param [Object] value
-    #   the value to add
-    #
-    # @return [undefined]
     def add(attribute, value)
       with(attribute => config.public_send(attribute) + [value])
     end
 
-    # Add matcher configuration
-    #
-    # @param [Symbol] attribute
-    #   the attribute to add to
-    #
-    # @param [Object] value
-    #   the value to add
-    #
-    # @return [undefined]
     def add_matcher(attribute, value)
       with(matcher: config.matcher.add(attribute, value))
     end

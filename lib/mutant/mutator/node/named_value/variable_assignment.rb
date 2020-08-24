@@ -25,18 +25,12 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             emit_singletons
             mutate_name
             emit_value_mutations if value # op asgn!
           end
 
-          # Emit name mutations
-          #
-          # @return [undefined]
           def mutate_name
             prefix, regexp = MAP.fetch(node.type)
             stripped = name.to_s.sub(regexp, EMPTY_STRING)

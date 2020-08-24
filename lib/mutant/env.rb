@@ -126,12 +126,6 @@ module Mutant
 
   private
 
-    # Kill mutation under isolation with integration
-    #
-    # @param [Mutation] mutation
-    # @param [Array<Test>] test
-    #
-    # @return [Result::Isolation]
     def run_mutation_tests(mutation, tests)
       config.isolation.call do
         result = mutation.insert(world.kernel)

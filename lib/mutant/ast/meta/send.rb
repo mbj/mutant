@@ -56,16 +56,10 @@ module Mutant
 
       private
 
-        # Test if node is `proc { ... }`
-        #
-        # @return [Boolean]
         def naked_proc?
           !receiver && selector.equal?(:proc)
         end
 
-        # Test if node is `Proc.new { ... }`
-        #
-        # @return [Boolean]
         def proc_new?
           receiver                &&
             selector.equal?(:new) &&

@@ -29,9 +29,6 @@ module Mutant
 
     private
 
-      # Effective matchers
-      #
-      # @return [Enumerable<Matcher>]
       def effective_matchers
         MATCHERS.map { |matcher| matcher.new(scope) }
       end

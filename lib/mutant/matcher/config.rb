@@ -44,16 +44,10 @@ module Mutant
 
     private
 
-      # Present attributes
-      #
-      # @return [Array<Symbol>]
       def present_attributes
         to_h.reject { |_key, value| value.empty? }.keys
       end
 
-      # Formatted attributes
-      #
-      # @return [String]
       def inspect_attributes
         attributes = present_attributes
           .map(&method(:format_attribute))
@@ -62,11 +56,6 @@ module Mutant
         attributes.empty? ? EMPTY_ATTRIBUTES : attributes
       end
 
-      # Format attribute
-      #
-      # @param [Symbol] attribute_name
-      #
-      # @return [String]
       def format_attribute(attribute_name)
         ATTRIBUTE_FORMAT %
           [

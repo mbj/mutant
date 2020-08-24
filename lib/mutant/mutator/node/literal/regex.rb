@@ -14,16 +14,10 @@ module Mutant
 
         private
 
-          # Original regexp options
-          #
-          # @return [Parser::AST::Node]
           def options
             children.last
           end
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             emit_singletons unless parent_node
             children.each_with_index do |child, index|
