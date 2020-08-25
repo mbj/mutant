@@ -118,4 +118,4 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
     - run: bundle install
-    - run: bundle exec rake metrics:rubocop
+    - run: bundle exec rubocop

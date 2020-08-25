@@ -36,6 +36,9 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('unparser',      '~> 0.4.8')
   gem.add_runtime_dependency('variable',      '~> 0.0.1')
 
-  gem.add_development_dependency('devtools', '~> 0.1.25')
-  gem.add_development_dependency('parallel', '~> 1.3')
+  gem.add_development_dependency('parallel',   '~> 1.3')
+  gem.add_development_dependency('rspec',      '~> 3.9')
+  gem.add_development_dependency('rspec-core', '~> 3.9')
+  gem.add_development_dependency('rspec-its',  '~> 1.2.0')
+  gem.add_development_dependency('rubocop',    '~> 0.79.0')
 end

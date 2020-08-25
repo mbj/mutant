@@ -103,6 +103,10 @@ module TestApp
       end
     end
   end
+
+  def self.root
+    File.expand_path('..', __dir__)
+  end
 end
 
 require 'test_app/metaclasses'
