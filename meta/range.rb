@@ -45,7 +45,6 @@ unless RUBY_VERSION.start_with?('2.5')
     singleton_mutations
     mutation '-1...'
     mutation '0...'
-    mutation '1..'
     mutation '2...'
     mutation 'nil...'
     mutation 'self...'
@@ -57,7 +56,6 @@ unless RUBY_VERSION.start_with?('2.5')
     singleton_mutations
     mutation '-1..'
     mutation '0..'
-    mutation '1...'
     mutation '2..'
     mutation 'nil..'
     mutation 'self..'
