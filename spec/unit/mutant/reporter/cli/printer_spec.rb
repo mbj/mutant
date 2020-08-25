@@ -64,12 +64,12 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
 
     context 'on tty' do
       context 'on success' do
-        it_reports Mutant::Color::GREEN.format('foo bar') + "\n"
+        it_reports Unparser::Color::GREEN.format('foo bar') + "\n"
       end
 
       context 'on failure' do
         let(:success?) { false }
-        it_reports Mutant::Color::RED.format('foo bar') + "\n"
+        it_reports Unparser::Color::RED.format('foo bar') + "\n"
       end
     end
 
@@ -146,13 +146,13 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
     let(:class_under_test) do
       Class.new(described_class) do
         def run
-          puts(colorize(Mutant::Color::RED, 'foo'))
+          puts(colorize(Unparser::Color::RED, 'foo'))
         end
       end
     end
 
     context 'when output is a tty?' do
-      it_reports Mutant::Color::RED.format('foo') + "\n"
+      it_reports Unparser::Color::RED.format('foo') + "\n"
     end
 
     context 'when output is NOT a tty?' do

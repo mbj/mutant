@@ -45,7 +45,7 @@ module Mutant
       private
 
         def status_color
-          success? ? Color::GREEN : Color::RED
+          success? ? Unparser::Color::GREEN : Unparser::Color::RED
         end
 
         def visit_collection(printer, collection)
@@ -71,7 +71,7 @@ module Mutant
         end
 
         def colorize(color, message)
-          color = Color::NONE unless tty?
+          color = Unparser::Color::NONE unless tty?
           color.format(message)
         end
 

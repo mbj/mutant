@@ -116,7 +116,7 @@ RSpec.describe Mutant::Reporter::CLI do
       let(:tty?) { true }
 
       # rubocop:disable Metrics/LineLength
-      it_reports Mutant::Color::GREEN.format('progress: 00/02 alive: 0 runtime: 4.00s killtime: 0.00s mutations/s: 0.00') + "\n"
+      it_reports Unparser::Color::GREEN.format('progress: 00/02 alive: 0 runtime: 4.00s killtime: 0.00s mutations/s: 0.00') + "\n"
       # rubocop:enable Metrics/LineLength
     end
 

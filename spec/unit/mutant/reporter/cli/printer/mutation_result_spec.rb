@@ -42,16 +42,16 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
 
             it_reports(
               [
-                [Mutant::Color::NONE,  "evil:subject-a:d27d2\n"],
-                [Mutant::Color::NONE,  "@@ -1,2 +1,2 @@\n"],
-                [Mutant::Color::RED,   "-true\n"],
-                [Mutant::Color::GREEN, "+false\n"],
-                [Mutant::Color::NONE,  "-----------------------\n"],
-                [Mutant::Color::NONE,  "- 1 @ runtime: 1.0\n"],
-                [Mutant::Color::NONE,  "  - test-a\n"],
-                [Mutant::Color::NONE,  "Test Output:\n"],
-                [Mutant::Color::NONE,  "mutation a test result output\n"],
-                [Mutant::Color::NONE,  "-----------------------\n"]
+                [Unparser::Color::NONE,  "evil:subject-a:d27d2\n"],
+                [Unparser::Color::NONE,  "@@ -1,2 +1,2 @@\n"],
+                [Unparser::Color::RED,   "-true\n"],
+                [Unparser::Color::GREEN, "+false\n"],
+                [Unparser::Color::NONE,  "-----------------------\n"],
+                [Unparser::Color::NONE,  "- 1 @ runtime: 1.0\n"],
+                [Unparser::Color::NONE,  "  - test-a\n"],
+                [Unparser::Color::NONE,  "Test Output:\n"],
+                [Unparser::Color::NONE,  "mutation a test result output\n"],
+                [Unparser::Color::NONE,  "-----------------------\n"]
               ].map { |color, text| color.format(text) }.join
             )
           end
