@@ -1,4 +1,4 @@
-# v0.9.10 unreleased
+# v0.9.10 2020-09-26
 
 * Remove bounds to allow `diff-lcs 1.4.x` [#1032](https://github.com/mbj/mutant/pull/1032).
 * Fix crash on endless ranges [#1026](https://github.com/mbj/mutant/pull/1026).
