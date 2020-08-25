@@ -1,10 +1,10 @@
-# v0.9.10 2020-09-26
+# v0.9.10 2020-08-25
 
 * Remove bounds to allow `diff-lcs 1.4.x` [#1032](https://github.com/mbj/mutant/pull/1032).
 * Fix crash on endless ranges [#1026](https://github.com/mbj/mutant/pull/1026).
 * Fix memoized subjects to preserve freezer option [#973](https://github.com/mbj/mutant/pull/973).
 
-# v0.9.9 2020-09-25
+# v0.9.9 2020-08-25
 
 + Add support for mutating methods inside eigenclasses `class <<`. [#1009](https://github.com/mbj/mutant/pull/1009)
 - Remove `<` -> `<=` and `>` -> `>=` mutations as non canonical. [#1020](https://github.com/mbj/mutant/pull/1020)
