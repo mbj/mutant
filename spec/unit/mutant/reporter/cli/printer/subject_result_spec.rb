@@ -20,7 +20,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
         subject-a
         - test-a
         evil:subject-a:d27d2
-        @@ -1,2 +1,2 @@
+        @@ -1 +1 @@
         -true
         +false
         -----------------------
