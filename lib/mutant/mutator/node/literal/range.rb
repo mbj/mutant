@@ -22,7 +22,7 @@ module Mutant
           def dispatch
             emit_singletons
             emit_inverse
-            emit_lower_bound_mutations
+            emit_lower_bound_mutations if lower_bound
             emit_upper_bound_mutations if upper_bound
           end
 

@@ -62,10 +62,6 @@ Mutant::Meta::Example.add :irange do
   mutation 'self..'
 end
 
-=begin
-
-# Test cases for full 2.7 support in unparser.
-
 Mutant::Meta::Example.add :erange do
   source '...1'
 
@@ -89,5 +85,3 @@ Mutant::Meta::Example.add :irange do
   mutation '..nil'
   mutation '..self'
 end
-
-=end
