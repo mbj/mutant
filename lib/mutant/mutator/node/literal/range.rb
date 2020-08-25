@@ -23,7 +23,7 @@ module Mutant
             emit_singletons
             emit_inverse
             emit_lower_bound_mutations
-            emit_upper_bound_mutations
+            emit_upper_bound_mutations if upper_bound
           end
 
           def emit_inverse
