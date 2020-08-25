@@ -67,7 +67,7 @@ module Mutant
           end
 
           def evil_details
-            diff = Diff.build(mutation.original_source, mutation.source)
+            diff = Unparser::Diff.build(mutation.original_source, mutation.source)
             diff = color? ? diff.colorized_diff : diff.diff
             if diff
               output.write(diff)
