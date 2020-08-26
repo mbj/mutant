@@ -115,9 +115,9 @@ RSpec.describe Mutant::Reporter::CLI do
 
       let(:tty?) { true }
 
-      # rubocop:disable Metrics/LineLength
+      # rubocop:disable Layout/LineLength
       it_reports Unparser::Color::GREEN.format('progress: 00/02 alive: 0 runtime: 4.00s killtime: 0.00s mutations/s: 0.00') + "\n"
-      # rubocop:enable Metrics/LineLength
+      # rubocop:enable Layout/LineLength
     end
 
     context 'with last mutation present' do
