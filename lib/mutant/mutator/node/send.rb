@@ -79,11 +79,24 @@ module Mutant
         end
 
         def emit_selector_specific_mutations
+          emit_static_send
           emit_const_get_mutation
           emit_integer_mutation
           emit_dig_mutation
           emit_double_negation_mutation
           emit_lambda_mutation
+        end
+
+        def emit_static_send
+          return unless %i[__send__ send public_send].include?(selector)
+
+          dynamic_selector, *actual_arguments = *arguments
+
+          return unless n_sym?(dynamic_selector)
+
+          method_name = AST::Meta::Symbol.new(dynamic_selector).name
+
+          emit(s(:send, receiver, method_name, *actual_arguments))
         end
 
         def emit_receiver_selector_mutations

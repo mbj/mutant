@@ -308,6 +308,68 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
+  source '__send__(:foo)'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation '__send__'
+  mutation 'public_send(:foo)'
+  mutation ':foo'
+  mutation '__send__(nil)'
+  mutation '__send__(self)'
+  mutation '__send__(:foo__mutant__)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.send(:bar)'
+
+  singleton_mutations
+  mutation 'foo.bar'
+  mutation 'foo.send'
+  mutation 'foo.__send__(:bar)'
+  mutation 'foo.public_send(:bar)'
+  mutation 'foo'
+  mutation ':bar'
+  mutation 'self.send(:bar)'
+  mutation 'foo.send(nil)'
+  mutation 'foo.send(self)'
+  mutation 'foo.send(:bar__mutant__)'
+end
+
+Mutant::Meta::Example.add :send do # rubocop:disable Metrics/BlockLength
+  source 'foo.public_send(:bar, 1, two: true, **kwargs, &block)'
+
+  singleton_mutations
+  mutation 'foo.bar(1, two: true, **kwargs, &block)'
+  mutation 'foo'
+  mutation 'self.public_send(:bar, 1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send'
+  mutation 'foo.public_send(nil, 1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(self, 1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar__mutant__, 1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, nil, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, self, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 0, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, -1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 2, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, nil, &block)'
+  mutation 'foo.public_send(:bar, 1, self, &block)'
+  mutation 'foo.public_send(:bar, 1, {}, &block)'
+  mutation 'foo.public_send(:bar, 1, { nil => true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, { self => true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, { two__mutant__: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, { two: false, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, { **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, { two: true, **nil }, &block)'
+  mutation 'foo.public_send(:bar, 1, { two: true, **self }, &block)'
+  mutation 'foo.public_send(:bar, 1, { two: true }, &block)'
+  mutation 'foo.public_send(:bar, 1, &block)'
+  mutation 'foo.public_send(:bar, 1, two: true, **kwargs)'
+end
+
+Mutant::Meta::Example.add :send do
   source 'foo.send(bar)'
 
   singleton_mutations
