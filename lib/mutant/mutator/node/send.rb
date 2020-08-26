@@ -79,11 +79,22 @@ module Mutant
         end
 
         def emit_selector_specific_mutations
+          emit_array_mutation
           emit_const_get_mutation
           emit_integer_mutation
           emit_dig_mutation
           emit_double_negation_mutation
           emit_lambda_mutation
+        end
+
+        def emit_array_mutation
+          return unless selector.equal?(:Array) && possible_kernel_method?
+
+          emit(s(:array, *arguments))
+        end
+
+        def possible_kernel_method?
+          receiver.nil? || receiver.eql?(s(:const, nil, :Kernel))
         end
 
         def emit_receiver_selector_mutations
