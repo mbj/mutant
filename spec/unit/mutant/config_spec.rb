@@ -96,11 +96,11 @@ RSpec.describe Mutant::Config do
             YAML
           end
 
-          # rubocop:disable Metrics/LineLength
+          # rubocop:disable Layout/LineLength
           let(:expected_message) do
             'mutant.yml/Mutant::Transform::Sequence/2/Mutant::Transform::Hash/["integration"]/String: Expected: String but got: TrueClass'
           end
-          # rubocop:enable Metrics/LineLength
+          # rubocop:enable Layout/LineLength
 
           it 'returns expected error' do
             expect(apply) .to eql(Mutant::Either::Left.new(expected_message))
