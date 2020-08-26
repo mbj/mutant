@@ -660,3 +660,39 @@ Mutant::Meta::Example.add :send do
   mutation 'foo(self)'
   mutation 'foo(nil)'
 end
+
+Mutant::Meta::Example.add :send do
+  source 'Array(a)'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'Array()'
+  mutation 'Array(nil)'
+  mutation 'Array(self)'
+  mutation '[a]'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'Kernel.Array(a)'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'Kernel'
+  mutation 'self.Array(a)'
+  mutation 'Kernel.Array'
+  mutation 'Kernel.Array(nil)'
+  mutation 'Kernel.Array(self)'
+  mutation '[a]'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.Array(a)'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'self.Array(a)'
+  mutation 'foo'
+  mutation 'foo.Array'
+  mutation 'foo.Array(nil)'
+  mutation 'foo.Array(self)'
+end
