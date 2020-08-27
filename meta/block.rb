@@ -204,3 +204,13 @@ Mutant::Meta::Example.add :block do
   mutation 'foo(nil, &nil).baz {}'
   mutation 'foo(nil, &:bar__mutant__).baz {}'
 end
+
+Mutant::Meta::Example.add :block do
+  source 'loop { true }'
+
+  singleton_mutations
+  mutation 'true'
+  mutation 'loop { false }'
+  mutation 'loop { raise }'
+  mutation 'loop'
+end
