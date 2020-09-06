@@ -184,6 +184,9 @@ Mutant::Meta::Example.add :block do
   mutation 'foo.baz { }'
   mutation 'foo(&:bar).baz'
   mutation 'self.baz {}'
+  mutation 'foo(&nil).baz {}'
+  mutation 'foo(&self).baz {}'
+  mutation 'foo(&:bar__mutant__).baz {}'
 end
 
 Mutant::Meta::Example.add :block do
@@ -196,4 +199,8 @@ Mutant::Meta::Example.add :block do
   mutation 'foo.baz { }'
   mutation 'self.baz { }'
   mutation 'foo(nil, &:bar).baz'
+
+  mutation 'foo(nil, &self).baz {}'
+  mutation 'foo(nil, &nil).baz {}'
+  mutation 'foo(nil, &:bar__mutant__).baz {}'
 end
