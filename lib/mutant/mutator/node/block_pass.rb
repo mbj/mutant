@@ -3,19 +3,18 @@
 module Mutant
   class Mutator
     class Node
+      class BlockPass < self
 
-      # Mutation emitter to handle noop nodes
-      class Noop < self
+        handle(:block_pass)
 
-        handle(:__ENCODING__, :cbase, :lambda)
+        children :argument
 
       private
 
         def dispatch
-          # noop
+          emit_argument_mutations
         end
-
-      end # Noop
+      end # Block
     end # Node
   end # Mutator
 end # Mutant
