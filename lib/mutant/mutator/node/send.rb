@@ -103,7 +103,7 @@ module Mutant
 
           method_name = AST::Meta::Symbol.new(dynamic_selector).name
 
-          emit(s(:send, receiver, method_name, *actual_arguments))
+          emit(s(node.type, receiver, method_name, *actual_arguments))
         end
 
         def possible_kernel_method?
