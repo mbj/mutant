@@ -38,7 +38,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'when method is defined inside eval' do
-    let(:subject_class) { Mutant::Subject::Method::Instance::Memoized }
     let(:scope)  { base::WithMemoizer                                 }
     let(:method) { scope.instance_method(:boz)                        }
 

@@ -197,8 +197,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
         Adamantium::Flat => :flat
       }.each do |memoize_provider, default_freezer_option|
         context "as include #{memoize_provider}" do
-          let(:memoize_provider)       { memoize_provider       }
-          let(:default_freezer_option) { default_freezer_option }
+          let(:memoize_provider) { memoize_provider }
 
           let(:options_node) do
             [s(:hash, s(:pair, s(:sym, :freezer), s(:sym, freezer_option)))]

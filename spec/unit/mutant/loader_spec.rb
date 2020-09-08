@@ -16,7 +16,6 @@ RSpec.describe Mutant::Loader, '.call' do
   let(:kernel)   { class_double(Kernel)                      }
   let(:binding)  { instance_double(Binding)                  }
   let(:source)   { instance_double(String)                   }
-  let(:node)     { instance_double(Parser::AST::Node)        }
 
   let(:mutation_subject) do
     instance_double(

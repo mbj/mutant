@@ -14,7 +14,6 @@ RSpec.describe Mutant::License do
   let(:license_pathname) { instance_double(Pathname)                     }
   let(:load_json)        { true                                          }
   let(:loaded_specs)     { { 'mutant-license' => spec }                  }
-  let(:path)             { instance_double(Pathname)                     }
   let(:pathname)         { class_double(Pathname)                        }
   let(:stderr)           { instance_double(IO)                           }
 
