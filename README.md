@@ -45,7 +45,7 @@ Mutant supports multiple ruby versions at different levels. The levels arge stag
 
 * Runtime, indicates mutant can execute on a specific Ruby Version / implementation.
 * Syntax, depends on Runtime support, and indicates syntax new to that Ruby version can be used.
-* Mutations, depends on Syntax support, and indicates syntax new to that Ruby verison is being analysed.
+* Mutations, depends on Syntax support, and indicates syntax new to that Ruby version is being analysed.
 
 Supported indicates if a specific Ruby version / Implementation is actively supported. Which means:
 

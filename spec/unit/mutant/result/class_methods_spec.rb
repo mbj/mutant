@@ -42,7 +42,7 @@ RSpec.describe 'Mutant::Result::ClassMethods' do
       it { should be(0) }
     end
 
-    context 'non-emtpy collection' do
+    context 'non-empty collection' do
       let(:collection) { [[1], [2, 3]] }
 
       it { should be(3) }

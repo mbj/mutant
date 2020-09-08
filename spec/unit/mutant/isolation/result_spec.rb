@@ -54,7 +54,7 @@ RSpec.describe Mutant::Isolation::Result do
       end
     end
 
-    context 'on sucess result' do
+    context 'on success result' do
       let(:object) { described_class::Success.new(value) }
 
       it 'returns the empty string' do

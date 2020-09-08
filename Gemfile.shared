@@ -5,6 +5,6 @@ source 'https://oss:Px2ENN7S91OmWaD5G7MIQJi1dmtmYrEh@gem.mutant.dev' do
   gem 'mutant-license'
 end
 
-# Place for shared git sources, used for developing updates to depedencies 
+# Place for shared git sources, used for developing updates to dependencies
 # where the git sources (without this file) need to be consistently edited 
 # into multiple Gemfiles.

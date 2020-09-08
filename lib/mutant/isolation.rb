@@ -40,7 +40,7 @@ module Mutant
         instance_of?(Success)
       end
 
-      # Succesful result producing value
+      # Successful result producing value
       class Success < self
         include Concord::Public.new(:value, :log)
 
