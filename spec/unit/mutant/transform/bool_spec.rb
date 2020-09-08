@@ -3,8 +3,6 @@
 RSpec.describe Mutant::Transform::Boolean do
   subject { described_class.new }
 
-  let(:primitive) { String }
-
   describe '#apply' do
     def apply
       subject.apply(input)

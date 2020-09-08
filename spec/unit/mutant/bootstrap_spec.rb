@@ -2,7 +2,6 @@
 
 RSpec.describe Mutant::Bootstrap do
   let(:integration)          { instance_double(Mutant::Integration)   }
-  let(:integration_name)     { instance_double(String)                }
   let(:integration_result)   { Mutant::Either::Right.new(integration) }
   let(:kernel)               { instance_double(Object, 'kernel')      }
   let(:load_path)            { %w[original]                           }

@@ -101,7 +101,6 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
   context 'when defined inside a class in a metaclass' do
     let(:scope)       { base::NotActuallyInAMetaclass               }
     let(:method)      { scope.metaclass::SomeClass.new.method(:foo) }
-    let(:method_line) { 93                                          }
 
     it { is_expected.to be_empty }
   end

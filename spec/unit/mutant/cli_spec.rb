@@ -155,7 +155,6 @@ RSpec.describe Mutant::CLI do
     let(:expected_integration)    { 'null'                         }
     let(:expected_matcher_config) { default_matcher_config         }
     let(:expressions)             { %w[TestApp*]                   }
-    let(:options)                 { []                             }
 
     let(:default_matcher_config) do
       Mutant::Matcher::Config::DEFAULT

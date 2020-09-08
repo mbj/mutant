@@ -9,7 +9,6 @@ describe Mutant::Repository::Diff do
     subject { described_class.new(world: world, to: 'to_rev') }
 
     let(:pathname)   { class_double(Pathname, pwd: pwd) }
-    let(:open3)      { class_double(Open3)              }
     let(:kernel)     { class_double(Kernel)             }
     let(:pwd)        { Pathname.new('/foo')             }
     let(:path)       { Pathname.new('/foo/bar.rb')      }
