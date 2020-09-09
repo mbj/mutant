@@ -3,7 +3,7 @@
 module Mutant
   # Module providing isolation
   class Isolation
-    # Absolutly no isolation
+    # Absolutely no isolation
     #
     # Only useful for debugging.
     class None < self

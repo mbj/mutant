@@ -38,7 +38,7 @@ describe Mutant::Repository::Diff::Ranges do
       let(:old) { '' }
       let(:new) { '' }
 
-      it 'returns emtpy set' do
+      it 'returns empty set' do
         expect(apply).to eql(Set.new)
       end
     end

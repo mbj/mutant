@@ -4,7 +4,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
   setup_shared_context
 
   describe '.call' do
-    context 'on sucessful isolation' do
+    context 'on successful isolation' do
       let(:reportable) do
         Mutant::Isolation::Result::Success.new(mutation_a_test_result)
       end

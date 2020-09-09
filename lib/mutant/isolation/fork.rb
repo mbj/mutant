@@ -10,12 +10,12 @@ module Mutant
 
       ATTRIBUTES = %i[block log_pipe result_pipe world].freeze
 
-      # Unsucessful result as child exited nonzero
+      # Unsuccessful result as child exited nonzero
       class ChildError < Result
         include Concord::Public.new(:value, :log)
       end # ChildError
 
-      # Unsucessful result as fork failed
+      # Unsuccessful result as fork failed
       class ForkError < Result
         include Equalizer.new
       end # ForkError
