@@ -28,7 +28,7 @@ module Mutant
             * Bug in your test suite
             * Bug in your test suite under concurrency
 
-            The following exception was raised:
+            The following exception was raised while reading the killfork result:
 
             ```
             %s
@@ -60,8 +60,8 @@ module Mutant
           #
           # @return [undefined]
           def run
-            __send__(MAP.fetch(object.class))
             print_log_messages
+            __send__(MAP.fetch(object.class))
           end
 
         private
@@ -73,7 +73,13 @@ module Mutant
           def print_log_messages
             log = object.log
 
-            puts(LOG_MESSAGES % log) unless log.empty?
+            return if log.empty?
+
+            puts('Log messages (combined stderr and stdout):')
+
+            log.each_line do |line|
+              puts('[killfork] %<line>s' % { line: line })
+            end
           end
 
           def visit_child_error

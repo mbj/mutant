@@ -45,7 +45,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
         * Bug in your test suite
         * Bug in your test suite under concurrency
 
-        The following exception was raised:
+        The following exception was raised while reading the killfork result:
 
         ```
         <TestException>
@@ -83,11 +83,11 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       end
 
       it_reports <<~'STR'
+        Log messages (combined stderr and stdout):
+        [killfork] log message
         Killfork exited nonzero. Its result (if any) was ignored.
         Process status:
         #<InstanceDouble(Process::Status) "unsuccessful status">
-        Log messages (combined stderr and stdout):
-        log message
       STR
     end
 
@@ -121,11 +121,11 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
         Possible solutions are:
         * Reduce concurrency
         * Reduce locks
+        Log messages (combined stderr and stdout):
+        [killfork] log message
         Killfork exited nonzero. Its result (if any) was ignored.
         Process status:
         #<InstanceDouble(Process::Status) "unsuccessful status">
-        Log messages (combined stderr and stdout):
-        log message
       STR
     end
   end
