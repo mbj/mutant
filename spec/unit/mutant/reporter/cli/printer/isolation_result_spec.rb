@@ -45,7 +45,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
         * Bug in your test suite
         * Bug in your test suite under concurrency
 
-        The following exception was raised:
+        The following exception was raised while reading the killfork result:
 
         ```
         <TestException>
