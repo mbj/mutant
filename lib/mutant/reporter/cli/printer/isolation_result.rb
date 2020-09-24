@@ -60,8 +60,8 @@ module Mutant
           #
           # @return [undefined]
           def run
-            __send__(MAP.fetch(object.class))
             print_log_messages
+            __send__(MAP.fetch(object.class))
           end
 
         private

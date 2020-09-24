@@ -21,11 +21,11 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
         -true
         +false
         -----------------------
+        Log messages (combined stderr and stdout):
+        [killfork] log message
         Killfork exited nonzero. Its result (if any) was ignored.
         Process status:
         #<InstanceDouble(Process::Status) (anonymous)>
-        Log messages (combined stderr and stdout):
-        [killfork] log message
         -----------------------
       REPORT
     end
