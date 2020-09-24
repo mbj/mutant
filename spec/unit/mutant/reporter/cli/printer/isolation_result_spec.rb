@@ -87,7 +87,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
         Process status:
         #<InstanceDouble(Process::Status) "unsuccessful status">
         Log messages (combined stderr and stdout):
-        log message
+        [killfork] log message
       STR
     end
 
@@ -125,7 +125,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
         Process status:
         #<InstanceDouble(Process::Status) "unsuccessful status">
         Log messages (combined stderr and stdout):
-        log message
+        [killfork] log message
       STR
     end
   end

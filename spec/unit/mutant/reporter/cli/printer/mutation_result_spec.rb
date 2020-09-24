@@ -25,7 +25,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
         Process status:
         #<InstanceDouble(Process::Status) (anonymous)>
         Log messages (combined stderr and stdout):
-        log message
+        [killfork] log message
         -----------------------
       REPORT
     end
