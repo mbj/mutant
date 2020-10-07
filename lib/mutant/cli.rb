@@ -2,6 +2,8 @@
 
 module Mutant
   # Commandline parser / runner
+  #
+  # rubocop:disable Metrics/ClassLength
   class CLI
     include Concord.new(:world, :config)
 
@@ -126,6 +128,9 @@ module Mutant
       opts.on('--ignore-subject EXPRESSION', 'Ignore subjects that match EXPRESSION as prefix') do |pattern|
         add_matcher(:ignore_expressions, config.expression_parser.apply(pattern).from_right)
       end
+      opts.on('--start-subject EXPRESSION', 'Start mutation testing at a specific subject') do |pattern|
+        add_matcher(:start_expressions, config.expression_parser.apply(pattern).from_right)
+      end
       opts.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
         add_matcher(
           :subject_filters,
@@ -165,4 +170,5 @@ module Mutant
       with(matcher: config.matcher.add(attribute, value))
     end
   end # CLI
+  # rubocop:enable Metrics/ClassLength
 end # Mutant

@@ -7,6 +7,7 @@ module Mutant
       include Adamantium, Anima.new(
         :ignore_expressions,
         :match_expressions,
+        :start_expressions,
         :subject_filters
       )
 
@@ -18,6 +19,7 @@ module Mutant
       PRESENTATIONS       = IceNine.deep_freeze(
         ignore_expressions: :syntax,
         match_expressions:  :syntax,
+        start_expressions:  :syntax,
         subject_filters:    :inspect
       )
       private_constant(*constants(false))

@@ -184,6 +184,7 @@ RSpec.describe Mutant::CLI do
           Options:
                   --use INTEGRATION            Use INTEGRATION to kill mutations
                   --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
+                  --start-subject EXPRESSION   Start mutation testing at a specific subject
                   --since REVISION             Only select subjects touched since REVISION
                   --fail-fast                  Fail fast
                   --version                    Print mutants version
@@ -273,6 +274,17 @@ RSpec.describe Mutant::CLI do
 
       let(:expected_matcher_config) do
         default_matcher_config.with(ignore_expressions: [parse_expression('Foo::Bar')])
+      end
+
+      include_examples 'cli parser'
+      include_examples 'no explicit exit'
+    end
+
+    context 'with --start-subject option' do
+      let(:options) { %w[--start-subject Foo::Bar] }
+
+      let(:expected_matcher_config) do
+        default_matcher_config.with(start_expressions: [parse_expression('Foo::Bar')])
       end
 
       include_examples 'cli parser'
