@@ -41,7 +41,7 @@ would be.
 
 ## Ruby Versions
 
-Mutant supports multiple ruby versions at different levels. The levels arge staged:
+Mutant supports multiple ruby versions at different levels:
 
 * Runtime, indicates mutant can execute on a specific Ruby Version / implementation.
 * Syntax, depends on Runtime support, and indicates syntax new to that Ruby version can be used.
