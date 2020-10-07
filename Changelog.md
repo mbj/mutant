@@ -1,7 +1,7 @@
-# v0.9.13 unreleased
+# v0.9.13 2020-10-07
 
 * Improve isolation error reporting [#1055](https://github.com/mbj/mutant/pull/1055).
-* Add --start-subject CLI option.
+* Add --start-subject CLI option. [#1057](https://github.com/mbj/mutant/pull/1057).
 
 # v0.9.12 2020-09-10
 
