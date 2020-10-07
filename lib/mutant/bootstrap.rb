@@ -36,7 +36,7 @@ module Mutant
         .tap(&method(:infect))
         .with(matchable_scopes: matchable_scopes(world, config))
 
-      subjects = Matcher.from_config(env.config.matcher).call(env)
+      subjects = start_subject(env, Matcher.from_config(env.config.matcher).call(env))
 
       Integration.setup(env).fmap do |integration|
         env.with(
@@ -48,6 +48,19 @@ module Mutant
       end
     end
     # rubocop:enable Metrics/MethodLength
+
+    def self.start_subject(env, subjects)
+      start_expressions = env.config.matcher.start_expressions
+
+      return subjects if start_expressions.empty?
+
+      subjects.drop_while do |subject|
+        start_expressions.none? do |expression|
+          expression.prefix?(subject.expression)
+        end
+      end
+    end
+    private_class_method :start_subject
 
     def self.infect(env)
       config, world = env.config, env.world

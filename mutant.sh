@@ -8,5 +8,6 @@ bundle exec mutant                                               \
   --ignore-subject Mutant::Mutator::Node::ProcargZero#dispatch   \
   --ignore-subject Mutant::Mutator::Node::When#mutate_conditions \
   --ignore-subject Mutant::Zombifier#call                        \
+  $*                                                             \
   --                                                             \
   'Mutant*'

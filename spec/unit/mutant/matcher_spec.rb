@@ -39,6 +39,7 @@ RSpec.describe Mutant::Matcher do
       Mutant::Matcher::Config.new(
         ignore_expressions: ignore_expressions,
         match_expressions:  [match_expression_a, match_expression_b],
+        start_expressions:  [],
         subject_filters:    subject_filters
       )
     end
