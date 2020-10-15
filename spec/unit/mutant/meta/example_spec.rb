@@ -3,10 +3,11 @@
 RSpec.describe Mutant::Meta::Example do
   let(:object) do
     described_class.new(
-      file:     file,
-      node:     node,
-      types:    [node.type],
-      expected: mutation_nodes
+      file:            file,
+      node:            node,
+      types:           [node.type],
+      original_source: 'true',
+      expected:        mutation_nodes
     )
   end
 
@@ -20,8 +21,8 @@ RSpec.describe Mutant::Meta::Example do
     end
   end
 
-  describe '#source' do
-    subject { object.source }
+  describe '#original_source_generated' do
+    subject { object.original_source_generated }
 
     it { should eql('true') }
   end

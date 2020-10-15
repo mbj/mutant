@@ -11,10 +11,11 @@ RSpec.describe Mutant::Meta::Example::DSL do
 
     let(:expected_example) do
       Mutant::Meta::Example.new(
-        file:     file,
-        node:     node,
-        types:    types,
-        expected: expected
+        expected:        expected,
+        file:            file,
+        node:            node,
+        original_source: source,
+        types:           types
       )
     end
 
@@ -39,12 +40,16 @@ RSpec.describe Mutant::Meta::Example::DSL do
     end
 
     context 'source as node' do
+      let(:source) { 'false' }
+
       expect_example do
         source s(:false)
       end
     end
 
     context 'source as string' do
+      let(:source) { 'false' }
+
       expect_example do
         source 'false'
       end
@@ -53,12 +58,15 @@ RSpec.describe Mutant::Meta::Example::DSL do
     context 'on node that needs unparser preprocessing to be normalized' do
       let(:node) { s(:send, s(:float, -1.0), :/, s(:float, 0.0)) }
 
+      let(:source) { '(-1.0) / 0.0' }
+
       expect_example do
         source '(-1.0) / 0.0'
       end
     end
 
     context 'using #mutation' do
+      let(:source)   { 'false'   }
       let(:expected) { [s(:nil)] }
 
       expect_example do
@@ -69,6 +77,7 @@ RSpec.describe Mutant::Meta::Example::DSL do
     end
 
     context 'using #singleton_mutations' do
+      let(:source)   { 'false' }
       let(:expected) { [s(:nil), s(:self)] }
 
       expect_example do
@@ -91,7 +100,7 @@ RSpec.describe Mutant::Meta::Example::DSL do
     end
 
     context 'uncoercable source' do
-      expect_error('Cannot coerce to node: nil') do
+      expect_error('Unsupported input: nil') do
         source nil
       end
     end

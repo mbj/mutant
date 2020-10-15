@@ -27,7 +27,7 @@ module Mutant
         def initialize(file, types)
           @file     = file
           @types    = types
-          @node     = nil
+          @source   = nil
           @expected = []
         end
 
@@ -38,21 +38,34 @@ module Mutant
         # @raise [RuntimeError]
         #   in case example cannot be build
         def example
-          fail 'source not defined' unless @node
+          fail 'source not defined' unless @source
           Example.new(
-            file:     @file,
-            node:     @node,
-            types:    @types,
-            expected: @expected
+            expected:        @expected,
+            file:            @file,
+            node:            @node,
+            original_source: @source,
+            types:           @types
           )
         end
 
       private
 
+        # rubocop:disable Metrics/MethodLength
         def source(input)
-          fail 'source already defined' if @node
-          @node = node(input)
+          fail 'source already defined' if @source
+
+          case input
+          when String
+            @source = input
+            @node   = Unparser::Preprocessor.run(Unparser.parse(input))
+          when ::Parser::AST::Node
+            @source = Unparser.unparse(input)
+            @node   = input
+          else
+            fail "Unsupported input: #{input.inspect}"
+          end
         end
+        # rubocop:enable Metrics/MethodLength
 
         def mutation(input)
           node = node(input)

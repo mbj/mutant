@@ -4,3 +4,4 @@ includes:
 integration: rspec
 requires:
 - mutant
+- mutant/meta

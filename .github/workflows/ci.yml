@@ -47,7 +47,7 @@ jobs:
     - run: |
         gem install bundler
         bundle install
-    - run: ./mutant.sh --since master -- 'Mutant*'
+    - run: ./mutant.sh --since HEAD~1 -- 'Mutant*'
   ruby-integration-minitest:
     name: Integration Minitest
     runs-on: ${{ matrix.os }}
