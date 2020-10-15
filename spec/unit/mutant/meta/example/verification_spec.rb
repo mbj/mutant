@@ -5,10 +5,11 @@ RSpec.describe Mutant::Meta::Example::Verification do
 
   let(:example) do
     Mutant::Meta::Example.new(
-      file:     'foo.rb',
-      node:     s(:true),
-      types:    [:true],
-      expected: expected_nodes
+      expected:        expected_nodes,
+      file:            'foo.rb',
+      node:            s(:true),
+      original_source: 'true',
+      types:           [:true]
     )
   end
 

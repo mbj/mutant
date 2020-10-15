@@ -24,7 +24,7 @@ module Mutant
           YAML.dump(
             'file'            => example.file,
             'original_ast'    => example.node.inspect,
-            'original_source' => example.source,
+            'original_source' => example.original_source,
             'missing'         => format_mutations(missing),
             'unexpected'      => format_mutations(unexpected),
             'invalid_syntax'  => format_mutations(invalid_syntax),
@@ -58,7 +58,7 @@ module Mutant
         memoize :invalid_syntax
 
         def no_diffs
-          mutations.select { |mutation| mutation.source.eql?(example.source) }
+          mutations.select { |mutation| mutation.source.eql?(example.original_source_generated) }
         end
         memoize :no_diffs
 
