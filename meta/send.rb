@@ -514,16 +514,16 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'foo'
   mutation '(left - right)'
-  mutation 'left / foo'
-  mutation 'right / foo'
+  mutation '(left) / foo'
+  mutation '(right) / foo'
   mutation '(left - right) / nil'
   mutation '(left - right) / self'
   mutation '(left - nil) / foo'
   mutation '(left - self) / foo'
   mutation '(nil - right) / foo'
   mutation '(self - right) / foo'
-  mutation 'nil / foo'
-  mutation 'self / foo'
+  mutation '(nil) / foo'
+  mutation '(self) / foo'
 end
 
 Mutant::Meta::Example.add :send do
@@ -596,7 +596,7 @@ Mutant::Meta::Example.add :send do
   mutation '!self'
   mutation '!foo'
   mutation '!self&.!'
-  mutation '!(!foo)'
+  mutation '!!foo'
 end
 
 Mutant::Meta::Example.add :send do

@@ -15,10 +15,24 @@ module Mutant
 
         def dispatch
           emit_singletons
+
+          left_mutations
+
+          emit_right_mutations
+        end
+
+        def left_mutations
           emit_left_mutations do |node|
             !n_self?(node)
           end
-          emit_right_mutations
+
+          emit_left_promotion if n_send?(left)
+        end
+
+        def emit_left_promotion
+          receiver = left.children.first
+
+          emit_left(s(:ivasgn, *receiver)) if n_ivar?(receiver)
         end
 
       end # OpAsgn

@@ -8,9 +8,9 @@ Mutant::Meta::Example.add :float do
   # edge cases
   mutation '0.0'
   mutation '1.0'
-  mutation '(0.0 / 0.0)'
-  mutation '(1.0 / 0.0)'
-  mutation '(-1.0 / 0.0)'
+  mutation '0.0 / 0.0'
+  mutation '1.0 / 0.0'
+  mutation '-1.0 / 0.0'
 
   # negative
   mutation '-10.0'
@@ -21,9 +21,9 @@ Mutant::Meta::Example.add :float do
 
   singleton_mutations
   mutation '1.0'
-  mutation '(0.0 / 0.0)'
-  mutation '(1.0 / 0.0)'
-  mutation '(-1.0 / 0.0)'
+  mutation '0.0 / 0.0'
+  mutation '1.0 / 0.0'
+  mutation '-1.0 / 0.0'
 end
 
 Mutant::Meta::Example.add :float do
@@ -31,7 +31,7 @@ Mutant::Meta::Example.add :float do
 
   singleton_mutations
   mutation '1.0'
-  mutation '(0.0 / 0.0)'
-  mutation '(1.0 / 0.0)'
-  mutation '(-1.0 / 0.0)'
+  mutation '0.0 / 0.0'
+  mutation '1.0 / 0.0'
+  mutation '-1.0 / 0.0'
 end

@@ -75,7 +75,7 @@ module Mutant
       end
 
       def emit_nil
-        emit(N_NIL) unless left_assignment?
+        emit(N_NIL) unless left_op_assignment?
       end
 
       def parent_node
@@ -86,7 +86,7 @@ module Mutant
         parent_node&.type
       end
 
-      def left_assignment?
+      def left_op_assignment?
         AST::Types::OP_ASSIGN.include?(parent_type) && parent.node.children.first.equal?(node)
       end
 

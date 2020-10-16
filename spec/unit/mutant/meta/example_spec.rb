@@ -3,11 +3,12 @@
 RSpec.describe Mutant::Meta::Example do
   let(:object) do
     described_class.new(
+      expected:        mutation_nodes,
       file:            file,
+      lvars:           [],
       node:            node,
-      types:           [node.type],
       original_source: 'true',
-      expected:        mutation_nodes
+      types:           [node.type]
     )
   end
 

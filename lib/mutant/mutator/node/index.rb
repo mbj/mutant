@@ -24,7 +24,7 @@ module Mutant
         end
 
         def emit_send_forms
-          return if left_assignment?
+          return if left_op_assignment?
 
           SEND_REPLACEMENTS.each do |selector|
             emit(s(:send, receiver, selector, *indices))
@@ -43,7 +43,7 @@ module Mutant
 
         def mutate_indices
           children_indices(index_range).each do |index|
-            emit_propagation(children.fetch(index)) unless left_assignment?
+            emit_propagation(children.fetch(index)) unless left_op_assignment?
             delete_child(index)
             mutate_child(index)
           end
@@ -77,7 +77,7 @@ module Mutant
           def dispatch
             super()
 
-            return if left_assignment?
+            return if left_op_assignment?
 
             emit_index_read
             emit(children.last)
@@ -89,7 +89,7 @@ module Mutant
           end
 
           def index_range
-            if left_assignment?
+            if left_op_assignment?
               NO_VALUE_RANGE
             else
               REGULAR_RANGE

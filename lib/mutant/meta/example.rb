@@ -3,7 +3,19 @@
 module Mutant
   module Meta
     class Example
-      include Adamantium, Anima.new(:file, :original_source, :node, :types, :expected)
+      include Adamantium
+      include Anima.new(
+        :expected,
+        :file,
+        :lvars,
+        :node,
+        :original_source,
+        :types
+      )
+
+      class Expected
+        include Anima.new(:original_source, :node)
+      end
 
       # Verification instance for example
       #

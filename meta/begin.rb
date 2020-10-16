@@ -13,8 +13,7 @@ Mutant::Meta::Example.add :begin do
 end
 
 Mutant::Meta::Example.add :begin do
+  source '(true)'
 
-  source s(:begin, s(:true))
-  # Mutation of each statement in block
-  mutation s(:begin, s(:false))
+  mutation '(false)'
 end
