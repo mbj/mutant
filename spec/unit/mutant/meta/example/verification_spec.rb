@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Meta::Example::Verification do
-  let(:object) { described_class.new(example, mutations) }
+  let(:object)          { described_class.new(example, mutations) }
+  let(:original_source) { 'true'                                  }
 
   let(:example) do
     Mutant::Meta::Example.new(
-      expected:        expected_nodes,
+      expected:        expected,
       file:            'foo.rb',
       node:            s(:true),
-      original_source: 'true',
+      lvars:           [],
+      original_source: original_source,
       types:           [:true]
     )
   end
@@ -20,136 +22,161 @@ RSpec.describe Mutant::Meta::Example::Verification do
   end
 
   let(:generated_nodes) { [] }
-  let(:expected_nodes)  { [] }
+  let(:expected)        { [] }
 
-  describe '#success?' do
-    subject { object.success? }
+  def make_expected(input)
+    Mutant::Meta::Example::Expected.new(
+      node:            Unparser.parse(input),
+      original_source: input
+    )
+  end
 
-    context 'when generated nodes equal expected nodes' do
-      it { should be(true) }
+  context 'when generated nodes equal expected nodes' do
+    it 'returns success' do
+      expect(object.success?).to be(true)
     end
 
-    context 'when expected node is missing' do
-      let(:expected_nodes) { [s(:false)] }
-
-      it { should be(false) }
-    end
-
-    context 'when there is extra generated node' do
-      let(:generated_nodes) { [s(:false)] }
-
-      it { should be(false) }
-    end
-
-    context 'when there is no diff to original source' do
-      let(:expected_nodes)  { [s(:true)] }
-      let(:generated_nodes) { [s(:true)] }
-
-      it { should be(false) }
+    it 'returns empty error report' do
+      expect(object.error_report).to eql(<<~'REPORT'.chomp)
+        foo.rb
+        Original:
+        (true)
+        true
+      REPORT
     end
   end
 
-  describe '#error_report' do
-    subject { object.error_report }
+  shared_examples_for 'failure' do
+    it 'returns failure' do
+      expect(object.success?).to be(false)
+    end
 
-    context 'on success' do
-      specify do
-        expect { subject }.to raise_error(
-          RuntimeError,
-          'no error report on successful validation'
+    it 'returns expected error report' do
+      expect(object.error_report).to eql(expected_report)
+    end
+  end
+
+  context 'when original source fails the unparser validation' do
+    let(:expected_report) do
+      <<~REPORT.chomp
+        foo.rb
+        Original:
+        (true)
+        true
+        [original] report
+        [original] lines
+      REPORT
+    end
+
+    let(:validation) do
+      instance_double(Unparser::Validation, success?: false, report: "report\nlines")
+    end
+
+    before do
+      allow(Unparser::Validation).to receive_messages(from_string: validation)
+    end
+
+    include_examples 'failure'
+  end
+
+  context 'when expected node is missing' do
+    let(:expected)        { [make_expected('false'), make_expected('nil')] }
+    let(:generated_nodes) { [s(:false)]                                    }
+
+    let(:expected_report) do
+      <<~'REPORT'.chomp
+        foo.rb
+        Original:
+        (true)
+        true
+        Missing mutations:
+        s(:nil)
+        nil
+      REPORT
+    end
+
+    include_examples 'failure'
+  end
+
+  context 'when there is unexpected generated node' do
+    let(:expected)        { [make_expected('false')] }
+    let(:generated_nodes) { [s(:false), s(:nil)] }
+
+    let(:expected_report) do
+      <<~'REPORT'.chomp
+        foo.rb
+        Original:
+        (true)
+        true
+        Unexpected mutations:
+        s(:nil)
+        nil
+      REPORT
+    end
+
+    include_examples 'failure'
+  end
+
+  context 'when mutation generates is no diff to original source' do
+    let(:expected)        { [make_expected('true')] }
+    let(:generated_nodes) { [s(:true)]              }
+
+    let(:expected_report) do
+      <<~'REPORT'.chomp
+        foo.rb
+        Original:
+        (true)
+        true
+        No-Diff mutations:
+        s(:true)
+        true
+      REPORT
+    end
+
+    include_examples 'failure'
+  end
+
+  context 'when the mutation is invalid' do
+    let(:invalid_node) do
+      s(:op_asgn, s(:send, s(:self), :at, s(:int, 1)), :+, s(:int, 1))
+    end
+
+    let(:generated_nodes) { [invalid_node] }
+
+    let(:expected) do
+      [
+        Mutant::Meta::Example::Expected.new(
+          node:            invalid_node,
+          original_source: 'self.at(1) += 1'
         )
-      end
+      ]
     end
 
-    context 'when expected node is missing' do
-      let(:expected_nodes) { [s(:false), s(:nil)] }
-
-      specify do
-        should eql(<<~'REPORT')
-          ---
-          file: foo.rb
-          original_ast: s(:true)
-          original_source: 'true'
-          missing:
-          - node: s(:false)
-            source: 'false'
-          - node: s(:nil)
-            source: nil
-          unexpected: []
-          invalid_syntax: []
-          no_diff: []
-        REPORT
-      end
+    let(:expected_report) do
+      <<~REPORT.chomp
+        foo.rb
+        Original:
+        (true)
+        true
+        [invalid-mutation] report
+        [invalid-mutation] lines
+      REPORT
     end
 
-    context 'when there is extra generated node' do
-      let(:generated_nodes) { [s(:false), s(:nil)] }
-
-      specify do
-        should eql(<<~'REPORT')
-          ---
-          file: foo.rb
-          original_ast: s(:true)
-          original_source: 'true'
-          missing: []
-          unexpected:
-          - node: s(:false)
-            source: 'false'
-          - node: s(:nil)
-            source: nil
-          invalid_syntax: []
-          no_diff: []
-        REPORT
-      end
+    let(:validation) do
+      instance_double(Unparser::Validation, success?: false, report: "report\nlines")
     end
 
-    context 'when there is no diff to original source' do
-      let(:expected_nodes)  { [s(:true)] }
-      let(:generated_nodes) { [s(:true)] }
-
-      specify do
-        should eql(<<~'REPORT')
-          ---
-          file: foo.rb
-          original_ast: s(:true)
-          original_source: 'true'
-          missing: []
-          unexpected: []
-          invalid_syntax: []
-          no_diff:
-          - node: s(:true)
-            source: 'true'
-        REPORT
-      end
+    before do
+      allow(Unparser::Validation).to receive_messages(from_node: validation)
     end
 
-    context 'when the generated node is invalid syntax after unparsed' do
-      let(:invalid_node) do
-        s(:op_asgn, s(:send, s(:self), :at, s(:int, 1)), :+, s(:int, 1))
-      end
+    include_examples 'failure'
 
-      let(:expected_nodes)  { [invalid_node] }
-      let(:generated_nodes) { [invalid_node] }
+    it 'genrates validation with expected node' do
+      object.success?
 
-      specify do
-        should eql(<<~'REPORT')
-          ---
-          file: foo.rb
-          original_ast: s(:true)
-          original_source: 'true'
-          missing: []
-          unexpected: []
-          invalid_syntax:
-          - node: |-
-              s(:op_asgn,
-                s(:send,
-                  s(:self), :at,
-                  s(:int, 1)), :+,
-                s(:int, 1))
-            source: self.at(1) += 1
-          no_diff: []
-        REPORT
-      end
+      expect(Unparser::Validation).to have_received(:from_node).with(invalid_node)
     end
   end
 end

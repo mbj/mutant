@@ -11,51 +11,93 @@ module Mutant
         #
         # @return [Boolean]
         def success?
-          [missing, unexpected, no_diffs, invalid_syntax].all?(&:empty?)
+          [
+            original_verification,
+            invalid,
+            missing,
+            no_diffs,
+            unexpected
+          ].all?(&:empty?)
         end
         memoize :success?
 
-        # Error report
-        #
-        # @return [String]
         def error_report
-          fail 'no error report on successful validation' if success?
-
-          YAML.dump(
-            'file'            => example.file,
-            'original_ast'    => example.node.inspect,
-            'original_source' => example.original_source,
-            'missing'         => format_mutations(missing),
-            'unexpected'      => format_mutations(unexpected),
-            'invalid_syntax'  => format_mutations(invalid_syntax),
-            'no_diff'         => no_diff_report
-          )
+          reports.join("\n")
         end
-        memoize :error_report
 
       private
 
+        def reports
+          reports = [example.file]
+          reports.concat(original)
+          reports.concat(original_verification)
+          reports.concat(make_report('Missing mutations:', missing))
+          reports.concat(make_report('Unexpected mutations:', unexpected))
+          reports.concat(make_report('No-Diff mutations:', no_diffs))
+          reports.concat(invalid)
+        end
+
+        def make_report(label, mutations)
+          if mutations.any?
+            [label, mutations.map(&method(:report_mutation))]
+          else
+            []
+          end
+        end
+
+        def report_mutation(mutation)
+          [
+            mutation.node.inspect,
+            mutation.source
+          ]
+        end
+
+        def original
+          [
+            'Original:',
+            example.node,
+            example.original_source
+          ]
+        end
+
+        def original_verification
+          validation = Unparser::Validation.from_string(example.original_source)
+          if validation.success?
+            []
+          else
+            [
+              prefix('[original]', validation.report)
+            ]
+          end
+        end
+
+        def prefix(prefix, string)
+          string.each_line.map do |line|
+            "#{prefix} #{line}"
+          end.join
+        end
+
+        def invalid
+          mutations.each_with_object([]) do |mutation, aggregate|
+            validation = Unparser::Validation.from_node(mutation.node)
+            aggregate << prefix('[invalid-mutation]', validation.report) unless validation.success?
+          end
+        end
+        memoize :invalid
+
         def unexpected
           mutations.reject do |mutation|
-            example.expected.include?(mutation.node)
+            example.expected.any? { |expected| expected.node.eql?(mutation.node) }
           end
         end
         memoize :unexpected
 
         def missing
-          (example.expected - mutations.map(&:node)).map do |node|
-            Mutation::Evil.new(self, node)
+          (example.expected.map(&:node) - mutations.map(&:node)).map do |node|
+            Mutation::Evil.new(nil, node)
           end
         end
         memoize :missing
-
-        def invalid_syntax
-          mutations.reject do |mutation|
-            ::Parser::CurrentRuby.parse(mutation.source)
-          rescue ::Parser::SyntaxError # rubocop:disable Lint/SuppressedException
-          end
-        end
-        memoize :invalid_syntax
 
         def no_diffs
           mutations.select { |mutation| mutation.source.eql?(example.original_source_generated) }

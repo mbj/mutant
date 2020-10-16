@@ -28,7 +28,7 @@ module MutantSpec
 
       def handle(vm, observation) # rubocop:disable Naming/MethodParameterName
         unless match?(observation)
-          fail "Unexpected event observation: #{observation.inspect}, expected #{inspect}"
+          fail "Unexpected event observation:\n#{observation.inspect}\nexpected:\n#{inspect}"
         end
 
         trigger_requires.each(&vm.method(:require))

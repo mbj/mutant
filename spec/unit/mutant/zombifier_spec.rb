@@ -39,7 +39,7 @@ RSpec.describe Mutant::Zombifier do
         MutantSpec::RubyVM::EventExpectation::Eval.new(
           expected_payload: {
             binding:         TOPLEVEL_BINDING,
-            source:          "module Zombie\n  module Project\n  end\nend",
+            source:          "module Zombie\n  module Project\n  end\nend\n",
             source_location: 'a/project.rb'
           },
           trigger_requires: %w[foo bar],
@@ -61,7 +61,7 @@ RSpec.describe Mutant::Zombifier do
         MutantSpec::RubyVM::EventExpectation::Eval.new(
           expected_payload: {
             binding:         TOPLEVEL_BINDING,
-            source:          "module Zombie\n  module Bar\n  end\nend",
+            source:          "module Zombie\n  module Bar\n  end\nend\n",
             source_location: 'b/bar.rb'
           },
           trigger_requires: %w[],

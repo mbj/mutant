@@ -178,7 +178,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     end
 
     let(:memoize_node) do
-      s(:send, nil, :memoize, s(:args, s(:sym, :foo), *options_node))
+      s(:send, nil, :memoize, s(:sym, :foo), *options_node)
     end
 
     let(:options_node) { nil }
@@ -232,7 +232,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     context 'when Memoizable is included in scope' do
       include_context 'memoizable scope setup'
 
-      let(:source) { "def foo\nend\nmemoize(:foo)" }
+      let(:source) { "def foo\nend\nmemoize(:foo)\n" }
 
       it { should eql(source) }
     end
@@ -241,7 +241,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
       include_context 'adamantium scope setup'
 
       let(:source) do
-        "def foo\nend\nmemoize(:foo, { freezer: #{freezer_option.inspect} })"
+        "def foo\nend\nmemoize(:foo, freezer: #{freezer_option.inspect})\n"
       end
 
       {

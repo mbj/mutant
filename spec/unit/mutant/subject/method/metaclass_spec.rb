@@ -58,6 +58,6 @@ RSpec.describe Mutant::Subject::Method::Metaclass do
   describe '#source' do
     subject { object.source }
 
-    it { should eql("class << self\n  def foo\n  end\nend") }
+    it { should eql("class << self\n  def foo\n  end\nend\n") }
   end
 end

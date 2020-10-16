@@ -159,7 +159,7 @@ module Mutant
         end
 
         def emit_naked_receiver
-          emit(receiver) if receiver
+          emit(receiver) if receiver && !left_op_assignment?
         end
 
         def mutate_arguments

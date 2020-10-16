@@ -25,10 +25,11 @@ module Mutant
         #
         # @return [undefined]
         def initialize(file, types)
-          @file     = file
-          @types    = types
-          @source   = nil
           @expected = []
+          @file     = file
+          @lvars    = []
+          @source   = nil
+          @types    = types
         end
 
         # Example captured by DSL
@@ -42,37 +43,37 @@ module Mutant
           Example.new(
             expected:        @expected,
             file:            @file,
+            lvars:           @lvars,
             node:            @node,
             original_source: @source,
             types:           @types
           )
         end
 
+        # Declare a local variable
+        #
+        # @param [Symbol]
+        def declare_lvar(name)
+          @lvars << name
+        end
+
       private
 
-        # rubocop:disable Metrics/MethodLength
         def source(input)
           fail 'source already defined' if @source
 
-          case input
-          when String
-            @source = input
-            @node   = Unparser::Preprocessor.run(Unparser.parse(input))
-          when ::Parser::AST::Node
-            @source = Unparser.unparse(input)
-            @node   = input
-          else
-            fail "Unsupported input: #{input.inspect}"
-          end
+          @source = input
+          @node   = node(input)
         end
-        # rubocop:enable Metrics/MethodLength
 
         def mutation(input)
-          node = node(input)
-          if @expected.include?(node)
+          expected = Expected.new(original_source: input, node: node(input))
+
+          if @expected.include?(expected)
             fail "Mutation for input: #{input.inspect} is already expected"
           end
-          @expected << node
+
+          @expected << expected
         end
 
         def singleton_mutations
@@ -83,14 +84,17 @@ module Mutant
         def node(input)
           case input
           when String
-            Unparser::Preprocessor.run(Unparser.parse(input))
-          when ::Parser::AST::Node
-            input
+            parser.parse(Unparser.buffer(input))
           else
-            fail "Cannot coerce to node: #{input.inspect}"
+            fail "Unsupported input: #{input.inspect}"
           end
         end
 
+        def parser
+          Unparser.parser.tap do |parser|
+            @lvars.each(&parser.static_env.public_method(:declare))
+          end
+        end
       end # DSL
     end # Example
   end # Meta

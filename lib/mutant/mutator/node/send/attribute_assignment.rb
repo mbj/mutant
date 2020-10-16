@@ -8,6 +8,7 @@ module Mutant
         class AttributeAssignment < self
 
           ATTRIBUTE_RANGE = (0..-2).freeze
+
           private_constant(*constants(false))
 
         private

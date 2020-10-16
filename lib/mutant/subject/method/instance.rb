@@ -42,7 +42,7 @@ module Mutant
         private
 
           def wrap_node(mutant)
-            s(:begin, mutant, s(:send, nil, :memoize, s(:args, s(:sym, name), *options)))
+            s(:begin, mutant, s(:send, nil, :memoize, s(:sym, name), *options))
           end
 
           # The optional AST node for adamantium memoization options

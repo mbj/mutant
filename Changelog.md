@@ -1,3 +1,7 @@
+# v0.9.14 2020-10-16
+
+* Add 2.7 syntax support. [#1062](https://github.com/mbj/mutant/pull/1062).
+
 # v0.9.13 2020-10-07
 
 * Improve isolation error reporting [#1055](https://github.com/mbj/mutant/pull/1055).
