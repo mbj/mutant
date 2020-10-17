@@ -47,13 +47,11 @@ module ParserHelper
 end # ParserHelper
 
 module XSpecHelper
-  def verify_events
+  def verify_events(&block)
     expectations = raw_expectations
       .map(&XSpec::MessageExpectation.method(:parse))
 
-    XSpec::ExpectationVerifier.verify(self, expectations) do
-      yield
-    end
+    XSpec::ExpectationVerifier.verify(self, expectations, &block)
   end
 
   def undefined
