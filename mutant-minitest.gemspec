@@ -17,6 +17,8 @@ Gem::Specification.new do |gem|
   gem.test_files       = `git ls-files -- spec/integration/mutant/minitest.rb`.split("\n")
   gem.extra_rdoc_files = %w[LICENSE]
 
+  gem.required_ruby_version = '>= 2.5'
+
   gem.add_runtime_dependency('minitest', '~> 5.11')
   gem.add_runtime_dependency('mutant',   "~> #{gem.version}")
 end
