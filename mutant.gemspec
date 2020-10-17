@@ -41,5 +41,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('rspec',      '~> 3.9')
   gem.add_development_dependency('rspec-core', '~> 3.9')
   gem.add_development_dependency('rspec-its',  '~> 1.2.0')
-  gem.add_development_dependency('rubocop',    '~> 0.79.0')
+  gem.add_development_dependency('rubocop',    '~> 0.93')
 end

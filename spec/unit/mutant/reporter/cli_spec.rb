@@ -116,7 +116,9 @@ RSpec.describe Mutant::Reporter::CLI do
       let(:tty?) { true }
 
       # rubocop:disable Layout/LineLength
+      # rubocop:disable Style/StringConcatenation
       it_reports Unparser::Color::GREEN.format('progress: 00/02 alive: 0 runtime: 4.00s killtime: 0.00s mutations/s: 0.00') + "\n"
+      # rubocop:enable Style/StringConcatenation
       # rubocop:enable Layout/LineLength
     end
 
