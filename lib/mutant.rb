@@ -211,8 +211,8 @@ module Mutant
     open3:              Open3,
     pathname:           Pathname,
     process:            Process,
-    stderr:             STDERR,
-    stdout:             STDOUT,
+    stderr:             $stderr,
+    stdout:             $stdout,
     thread:             Thread,
     warnings:           Warnings.new(Warning)
   )
