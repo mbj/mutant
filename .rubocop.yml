@@ -4,6 +4,7 @@ AllCops:
     - 'test_app/**/*'
     - 'tmp/**/*'
     - 'vendor/**/*'
+  NewCops: enable
   TargetRubyVersion: 2.5
 
 # Avoid parameter lists longer than five parameters.
@@ -207,4 +208,7 @@ Naming/RescuedExceptionsVariableName:
   Enabled: false
 # false positive on private keywords
 Layout/IndentationWidth:
+  Enabled: false
+# I do them alphabetically
+Style/KeywordParametersOrder:
   Enabled: false

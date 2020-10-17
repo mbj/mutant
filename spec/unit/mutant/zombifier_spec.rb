@@ -86,9 +86,7 @@ RSpec.describe Mutant::Zombifier do
 
   let(:file_system) do
     MutantSpec::FileSystem.new(
-      Hash[
-        file_entries.map { |key, attributes| [key, MutantSpec::FileState.new(attributes)] }
-      ]
+      file_entries.transform_values(&MutantSpec::FileState.method(:new))
     )
   end
 

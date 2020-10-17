@@ -10,7 +10,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
       allow(output).to receive(:tty?).and_return(tty?)
       subject
       output.rewind
-      expect(output.read).to eql(expectation)
+      expect(output.read).to eql("#{expectation}\n")
     end
   end
 
@@ -29,7 +29,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
 
     let(:reportable) { 'foo' }
 
-    it_reports "foo\n"
+    it_reports 'foo'
   end
 
   describe '.delegate' do
@@ -46,7 +46,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
       end
     end
 
-    it_reports "bar\nboz\n"
+    it_reports "bar\nboz"
 
     it 'sets delegation methods to private visibility' do
       expect(class_under_test.private_instance_methods).to include(:foo, :baz)
@@ -64,12 +64,12 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
 
     context 'on tty' do
       context 'on success' do
-        it_reports Unparser::Color::GREEN.format('foo bar') + "\n"
+        it_reports Unparser::Color::GREEN.format('foo bar')
       end
 
       context 'on failure' do
         let(:success?) { false }
-        it_reports Unparser::Color::RED.format('foo bar') + "\n"
+        it_reports Unparser::Color::RED.format('foo bar')
       end
     end
 
@@ -77,13 +77,13 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
       let(:tty?) { false }
 
       context 'on success' do
-        it_reports "foo bar\n"
+        it_reports 'foo bar'
       end
 
       context 'on failure' do
         let(:success?) { false }
 
-        it_reports "foo bar\n"
+        it_reports 'foo bar'
       end
     end
   end
@@ -106,7 +106,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
       end
     end
 
-    it_reports "foo\nbar\n"
+    it_reports "foo\nbar"
   end
 
   describe '#visit' do
@@ -127,7 +127,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
       end
     end
 
-    it_reports "foo\n"
+    it_reports 'foo'
   end
 
   describe '#info' do
@@ -139,7 +139,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
       end
     end
 
-    it_reports "foo - bar\n"
+    it_reports 'foo - bar'
   end
 
   describe '#colorize' do
@@ -152,12 +152,12 @@ RSpec.describe Mutant::Reporter::CLI::Printer do
     end
 
     context 'when output is a tty?' do
-      it_reports Unparser::Color::RED.format('foo') + "\n"
+      it_reports Unparser::Color::RED.format('foo')
     end
 
     context 'when output is NOT a tty?' do
       let(:tty?) { false }
-      it_reports "foo\n"
+      it_reports 'foo'
     end
   end
 end
