@@ -103,7 +103,7 @@ RSpec.describe Mutant::Config do
           # rubocop:enable Layout/LineLength
 
           it 'returns expected error' do
-            expect(apply) .to eql(Mutant::Either::Left.new(expected_message))
+            expect(apply).to eql(Mutant::Either::Left.new(expected_message))
           end
         end
       end
@@ -118,7 +118,7 @@ RSpec.describe Mutant::Config do
         end
 
         it 'returns expected error' do
-          expect(apply) .to eql(Mutant::Either::Left.new(expected_message))
+          expect(apply).to eql(Mutant::Either::Left.new(expected_message))
         end
       end
     end
