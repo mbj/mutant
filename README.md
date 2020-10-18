@@ -39,6 +39,10 @@ would be.
 * Do not merge code with new alive mutations. If you really must bypass:
   Add the subjects with open problems to the ignored subjects.
 
+## Operating Systems
+
+Mutant is supported and tested under Linux and Mac OS X.
+
 ## Ruby Versions
 
 Mutant supports multiple ruby versions at different levels:
