@@ -49,7 +49,7 @@ end # ParserHelper
 module XSpecHelper
   def verify_events(&block)
     expectations = raw_expectations
-      .map(&XSpec::MessageExpectation.method(:parse))
+      .map { |attributes| XSpec::MessageExpectation.parse(**attributes) }
 
     XSpec::ExpectationVerifier.verify(self, expectations, &block)
   end

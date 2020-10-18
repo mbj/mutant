@@ -57,7 +57,7 @@ Supported indicates if a specific Ruby version / Implementation is actively supp
 | cRUBY/MRI      | 2.5            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | cRUBY/MRI      | 2.6            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | cRUBY/MRI      | 2.7            | :heavy_check_mark: | :heavy_check_mark: | :soon:             | :heavy_check_mark: |
-| cRUBY/MRI      | 3.0            | :soon:             | :soon:             | :soon:             | :soon:             |
+| cRUBY/MRI      | 3.0            | :warning:          | :soon:             | :soon:             | :soon:             |
 | jruby          | TBD            | :email:            | :email:            | :email:            | :email:            |
 | mruby          | TBD            | :email:            | :email:            | :email:            | :email:            |
 | cRUBY/MRI      | < 2.5          | :no_entry:         | :no_entry:         | :no_entry:         | :no_entry:         |
@@ -66,6 +66,7 @@ Supported indicates if a specific Ruby version / Implementation is actively supp
 Labels:
 
 * :heavy_check_mark: Supported.
+* :warning: Experimental Support.
 * :soon: Active work in progress.
 * :email: Planned, please contact me on interest.
 * :no_entry: Not being planned, or considered, still contact me on interest.
