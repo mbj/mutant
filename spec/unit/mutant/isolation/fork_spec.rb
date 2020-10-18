@@ -206,7 +206,7 @@ RSpec.describe Mutant::Isolation::Fork do
           *read_fragments,
           load_success,
           child_wait
-        ].map(&XSpec::MessageExpectation.method(:parse))
+        ].map { |attributes| XSpec::MessageExpectation.parse(**attributes) }
       end
 
       specify do
@@ -235,7 +235,7 @@ RSpec.describe Mutant::Isolation::Fork do
             }
           },
           child_wait
-        ].map(&XSpec::MessageExpectation.method(:parse))
+        ].map { |attributes| XSpec::MessageExpectation.parse(**attributes) }
       end
 
       specify do
@@ -258,7 +258,7 @@ RSpec.describe Mutant::Isolation::Fork do
               return: nil
             }
           }
-        ].map(&XSpec::MessageExpectation.method(:parse))
+        ].map { |attributes| XSpec::MessageExpectation.parse(**attributes) }
       end
 
       specify do
@@ -296,7 +296,7 @@ RSpec.describe Mutant::Isolation::Fork do
               return: [pid, status_error]
             }
           }
-        ].map(&XSpec::MessageExpectation.method(:parse))
+        ].map { |attributes| XSpec::MessageExpectation.parse(**attributes) }
       end
 
       specify do
