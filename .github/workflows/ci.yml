@@ -17,16 +17,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['2.5', '2.6', '2.7']
+        ruby: [ruby-2.5, ruby-2.6, ruby-2.7]
         os: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-    - run: |
-        gem install bundler
-        bundle install
+    - run: bundle install
     - run: bundle exec rspec spec/unit
   ruby-mutant:
     name: Mutation coverage
@@ -35,18 +33,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['2.6', '2.7']
+        ruby: [ruby-2.6, ruby-2.7]
         os: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - uses: actions/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-    - run: |
-        gem install bundler
-        bundle install
+    - run: bundle install
     - run: ./mutant.sh --since HEAD~1 -- 'Mutant*'
   ruby-integration-minitest:
     name: Integration Minitest
@@ -55,17 +51,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['2.5', '2.6', '2.7']
+        ruby: [ruby-2.5, ruby-2.6, ruby-2.7]
         os: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-    - run: gem list
-    - run: |
-        gem install bundler
-        bundle install
+    - run: bundle install
     - run: bundle exec rspec spec/integration -e minitest
   ruby-integration-rspec:
     name: Integration RSpec
@@ -74,16 +67,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['2.5', '2.6', '2.7']
+        ruby: [ruby-2.5, ruby-2.6, ruby-2.7]
         os: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-    - run: |
-        gem install bundler
-        bundle install
+    - run: bundle install
     - run: bundle exec rspec spec/integration -e rspec
   ruby-integration-generation:
     name: Integration Mutation Generation
@@ -92,16 +83,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['2.5', '2.6', '2.7']
+        ruby: [ruby-2.5, ruby-2.6, ruby-2.7]
         os: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-    - run: |
-        gem install bundler
-        bundle install
+    - run: bundle install
     - run: bundle exec rspec spec/integration -e generation
   ruby-rubocop:
     name: Rubocop
@@ -110,11 +99,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ['2.7']
+        ruby: [ruby-2.7]
         os: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
     - run: bundle install
