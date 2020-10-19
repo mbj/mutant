@@ -1,6 +1,6 @@
 #/usr/bin/bash -ex
 
-bundle exec mutant                                               \
+bundle exec mutant run                                           \
   --zombie                                                       \
   --ignore-subject Mutant::CLI#add_debug_options                 \
   --ignore-subject Mutant::Mutator::Node::Argument#skip?         \

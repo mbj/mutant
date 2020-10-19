@@ -1,3 +1,8 @@
+# v0.10.0 2020-10-29
+
+* Add subcommad interface `mutant run|license` [#1073](https://github.com/mbj/mutant/pull/1073).
+* Add experimental Ruby 3.0 support [#1066](https://github.com/mbj/mutant/pull/1066)
+
 # v0.9.14 2020-10-16
 
 * Add 2.7 syntax support. [#1062](https://github.com/mbj/mutant/pull/1062).

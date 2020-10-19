@@ -42,7 +42,7 @@ To add mutant to your minitest code base you need to:
 4. Run mutant against the minitest integration
 
    ```sh
-   bundle exec mutant --include lib --require 'your_library.rb' --use minitest -- 'YourLibrary*'
+   bundle exec mutant run --include lib --require 'your_library.rb' --use minitest -- 'YourLibrary*'
    ```
 
 ## Run through example
@@ -57,7 +57,7 @@ All the setup described above is already done.
 git clone https://github.com/mbj/auom
 cd auom
 bundle install # gemfile references mutant-minitest already
-bundle exec mutant --include lib --require auom --use minitest -- 'AUOM*'
+bundle exec mutant run --include lib --require auom --use minitest -- 'AUOM*'
 ```
 
 This prints a report like:
