@@ -14,7 +14,9 @@ module Mutant
       def call(subject)
         subject.match_expressions.each do |match_expression|
           subject_tests = integration.all_tests.select do |test|
-            match_expression.prefix?(test.expression)
+            test.expressions.any? do |test_expression|
+              match_expression.prefix?(test_expression)
+            end
           end
           return subject_tests if subject_tests.any?
         end

@@ -98,20 +98,20 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:all_tests) do
     [
       Mutant::Test.new(
-        id:         'rspec:0:example-a-location/example-a-full-description',
-        expression: parse_expression('*')
+        id:          'rspec:0:example-a-location/example-a-full-description',
+        expressions: [parse_expression('*')]
       ),
       Mutant::Test.new(
-        id:         'rspec:1:example-c-location/Example::C blah',
-        expression: parse_expression('Example::C')
+        id:          'rspec:1:example-c-location/Example::C blah',
+        expressions: [parse_expression('Example::C')]
       ),
       Mutant::Test.new(
-        id:         "rspec:2:example-d-location/Example::D\nblah",
-        expression: parse_expression('*')
+        id:          "rspec:2:example-d-location/Example::D\nblah",
+        expressions: [parse_expression('*')]
       ),
       Mutant::Test.new(
-        id:         'rspec:3:example-e-location/Example::E',
-        expression: parse_expression('Foo')
+        id:          'rspec:3:example-e-location/Example::E',
+        expressions: [parse_expression('Foo')]
       )
     ]
   end

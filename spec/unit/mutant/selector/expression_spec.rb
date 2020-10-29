@@ -4,14 +4,34 @@ RSpec.describe Mutant::Selector::Expression do
   describe '#call' do
     let(:object) { described_class.new(integration) }
 
-    let(:mutation_subject) { subject_class.new(context: context, node: node, warnings: warnings)     }
-    let(:context)          { instance_double(Mutant::Context)                                        }
-    let(:node)             { instance_double(Parser::AST::Node)                                      }
-    let(:integration)      { instance_double(Mutant::Integration, all_tests: all_tests)              }
-    let(:test_a)           { instance_double(Mutant::Test, expression: parse_expression('SubjectA')) }
-    let(:test_b)           { instance_double(Mutant::Test, expression: parse_expression('SubjectB')) }
-    let(:test_c)           { instance_double(Mutant::Test, expression: parse_expression('SubjectC')) }
-    let(:warnings)         { instance_double(Mutant::Warnings)                                       }
+    let(:context)  { instance_double(Mutant::Context)   }
+    let(:node)     { instance_double(Parser::AST::Node) }
+    let(:test_a)   { mk_test('SubjectA')                }
+    let(:test_b)   { mk_test('SubjectB')                }
+    let(:test_c)   { mk_test('SubjectC')                }
+    let(:warnings) { instance_double(Mutant::Warnings)  }
+
+    let(:integration) do
+      instance_double(
+        Mutant::Integration,
+        all_tests: all_tests
+      )
+    end
+
+    let(:mutation_subject) do
+      subject_class.new(
+        context:  context,
+        node:     node,
+        warnings: warnings
+      )
+    end
+
+    def mk_test(expression)
+      instance_double(
+        Mutant::Test,
+        expressions: [parse_expression(expression)]
+      )
+    end
 
     let(:subject_class) do
       parse = method(:parse_expression)
