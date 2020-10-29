@@ -1,315 +1,588 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::CLI do
-  let(:default_config) { Mutant::Config::DEFAULT                        }
-  let(:kernel)         { instance_double('kernel', exit: undefined)     }
-  let(:stderr)         { instance_double(IO, 'stderr', puts: undefined) }
-  let(:stdout)         { instance_double(IO, 'stdout', puts: undefined) }
-  let(:target_stream)  { stdout                                         }
+  describe '.parse' do
+    let(:config)        { Mutant::Config::DEFAULT }
+    let(:kernel)        { class_double(Kernel)    }
+    let(:stderr)        { instance_double(IO)     }
+    let(:stdout)        { instance_double(IO)     }
+    let(:events)        { []                      }
+    let(:expect_zombie) { false                   }
 
-  let(:world) do
-    instance_double(
-      Mutant::World,
-      kernel: kernel,
-      stderr: stderr,
-      stdout: stdout
-    )
-  end
-
-  shared_examples 'prints expected message' do
-
-    it 'prints expected message' do
-      apply
-
-      expect(target_stream).to have_received(:puts).with(expected_message)
+    let(:world) do
+      instance_double(
+        Mutant::World,
+        kernel: kernel,
+        stderr: stderr,
+        stdout: stdout
+      )
     end
-  end
 
-  before do
-    allow(stderr).to receive_messages(puts: undefined)
-    allow(stdout).to receive_messages(puts: undefined)
-  end
-
-  describe '.run' do
     def apply
-      described_class.run(world, default_config, arguments)
-    end
-
-    let(:arguments)      { instance_double(Array)                         }
-    let(:cli_config)     { instance_double(Mutant::Config, 'cli config')  }
-    let(:cli_result)     { Mutant::Either::Right.new(cli_config)          }
-    let(:env)            { instance_double(Mutant::Env)                   }
-    let(:env_result)     { Mutant::Either::Right.new(env)                 }
-    let(:file_config)    { instance_double(Mutant::Config, 'file config') }
-    let(:file_result)    { Mutant::Either::Right.new(file_config)         }
-    let(:license_result) { Mutant::Either::Right.new(true)                }
-    let(:report_success) { true                                           }
-
-    let(:runner_result) do
-      Mutant::Either::Right.new(
-        instance_double(Mutant::Result::Env, success?: report_success)
+      described_class.parse(
+        arguments: Marshal.load(Marshal.dump(arguments)),
+        config:    config,
+        world:     world
       )
     end
 
     before do
-      allow(Mutant::License).to receive_messages(apply: license_result)
-      allow(Mutant::Config).to receive_messages(load_config_file: file_result)
-      allow(Mutant::CLI).to receive_messages(apply: cli_result)
-      allow(Mutant::Bootstrap).to receive_messages(apply: env_result)
-      allow(Mutant::Runner).to receive_messages(apply: runner_result)
+      allow(stderr)
+        .to receive(:puts) { |message| events << [:stderr, :puts, message] }
+
+      allow(stdout)
+        .to receive(:puts) { |message| events << [:stdout, :puts, message] }
     end
 
-    it 'performs calls in expected sequence' do
-      apply
+    shared_examples 'CLI run' do
+      it 'performs expected events' do
+        apply.call
 
-      expect(Mutant::License)
-        .to have_received(:apply)
-        .with(world)
-        .ordered
+        expect(YAML.dump(events)).to eql(YAML.dump(expected_events))
+      end
 
-      expect(Mutant::Config)
-        .to have_received(:load_config_file)
-        .with(world, default_config)
-        .ordered
+      it 'exits with expected value' do
+        expect(apply.call).to be(expected_exit)
+      end
 
-      expect(Mutant::CLI)
-        .to have_received(:apply)
-        .with(world, file_config, arguments)
-        .ordered
-
-      expect(Mutant::Bootstrap)
-        .to have_received(:apply)
-        .with(world, cli_config)
-        .ordered
-
-      expect(Mutant::Runner)
-        .to have_received(:apply)
-        .with(env)
-        .ordered
-    end
-
-    context 'when report signals success' do
-      let(:report_success) { true }
-
-      it 'exits failure' do
-        expect(apply).to be(true)
+      it 'sets expected zombie flag' do
+        expect(apply.zombie?).to be(expect_zombie)
       end
     end
 
-    context 'when report signals error' do
-      let(:report_success) { false }
+    shared_context 'license validation' do
+      let(:license_validation_event) do
+        [:license, :apply, world]
+      end
 
-      it 'exits failure' do
-        expect(apply).to be(false)
+      before do
+        allow(Mutant::License).to receive(:apply) do |world|
+          events << [:license, :apply, world]
+          license_result
+        end
       end
     end
 
-    context 'when parts of the chain fail' do
-      let(:cli_result)       { Mutant::Either::Left.new(expected_message) }
-      let(:expected_message) { 'cli-error'                                }
-      let(:target_stream)    { stderr                                     }
+    @tests = []
 
-      include_examples 'prints expected message'
-
-      it 'exits failure' do
-        expect(apply).to be(false)
-      end
-    end
-  end
-
-  describe '.apply' do
-    def apply
-      described_class.apply(world, default_config, arguments)
-    end
-
-    shared_examples 'invalid arguments' do
-      it 'returns left error' do
-        expect(apply).to eql(Mutant::Either::Left.new(expected_message))
-      end
-    end
-
-    shared_examples 'explicit exit' do
-      it 'prints explicitly exits' do
-        apply
-
-        expect(kernel).to have_received(:exit)
-      end
-    end
-
-    shared_examples 'no explicit exit' do
-      it 'does not exit' do
-        expect(kernel).to_not have_received(:exit)
-      end
-    end
-
-    shared_examples_for 'cli parser' do
-      it { expect(apply.from_right.integration).to eql(expected_integration) }
-      it { expect(apply.from_right.matcher).to eql(expected_matcher_config)  }
-    end
-
-    before do
-      allow(kernel).to receive_messages(exit: nil)
-    end
-
-    let(:arguments)               { (options + expressions).freeze }
-    let(:expected_integration)    { 'null'                         }
-    let(:expected_matcher_config) { default_matcher_config         }
-    let(:expressions)             { %w[TestApp*]                   }
-
-    let(:default_matcher_config) do
-      Mutant::Matcher::Config::DEFAULT
-        .with(match_expressions: expressions.map(&method(:parse_expression)))
-    end
-
-    context 'with --invalid option' do
-      let(:options)          { %w[--invalid]               }
-      let(:expected_message) { 'invalid option: --invalid' }
-
-      include_examples 'invalid arguments'
-      include_examples 'no explicit exit'
-    end
-
-    context 'with --help option' do
-      let(:options) { %w[--help] }
-
-      let(:expected_message) do
-        <<~MESSAGE
-          usage: mutant [options] MATCH_EXPRESSION ...
-          Environment:
-                  --zombie                     Run mutant zombified
-              -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
-              -r, --require NAME               Require file with NAME
-              -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
-
-          Options:
-                  --use INTEGRATION            Use INTEGRATION to kill mutations
-                  --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
-                  --start-subject EXPRESSION   Start mutation testing at a specific subject
-                  --since REVISION             Only select subjects touched since REVISION
-                  --fail-fast                  Fail fast
-                  --version                    Print mutants version
-              -h, --help                       Show this message
-        MESSAGE
+    @test_klass =
+      Class.new do
+        include Anima.new(:arguments, :expected_exit, :expected_events, :expected_zombie)
       end
 
-      include_examples 'cli parser'
-      include_examples 'explicit exit'
-      include_examples 'prints expected message'
+    def self.make
+      @tests << @test_klass.new(yield)
     end
 
-    context 'with --include option' do
-      let(:options) { %w[--include foo] }
+    make do
+      message = <<~'MESSAGE'
+        Missing required subcommand!
 
-      include_examples 'cli parser'
-      include_examples 'no explicit exit'
+        usage: mutant <run|subscription> [options]
 
-      it 'configures includes' do
-        expect(apply.from_right.includes).to eql(%w[foo])
+        Summary: mutation testing engine main command
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+
+        Available subcommands:
+
+        run          - Run code analysis
+        subscription - Subscription subcommands
+      MESSAGE
+
+      {
+        arguments:       %w[],
+        expected_events: [[:stderr, :puts, message]],
+        expected_exit:   false,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      message = 'mutant: Cannot find subcommand "unknown-subcommand"'
+
+      {
+        arguments:       %w[unknown-subcommand],
+        expected_events: [[:stderr, :puts, message]],
+        expected_exit:   false,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      message = 'mutant: invalid option: --unknown-option'
+
+      {
+        arguments:       %w[--unknown-option foo],
+        expected_events: [[:stderr, :puts, message]],
+        expected_exit:   false,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      message = <<~'MESSAGE'
+        usage: mutant <run|subscription> [options]
+
+        Summary: mutation testing engine main command
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+
+        Available subcommands:
+
+        run          - Run code analysis
+        subscription - Subscription subcommands
+      MESSAGE
+
+      {
+        arguments:       %w[--help],
+        expected_events: [[:stdout, :puts, message]],
+        expected_exit:   true,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      {
+        arguments:       %w[--version],
+        expected_events: [[:stdout, :puts, "mutant-#{Mutant::VERSION}"]],
+        expected_exit:   true,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      message = <<~'MESSAGE'
+        Missing required subcommand!
+
+        usage: mutant subscription <show|test> [options]
+
+        Summary: Subscription subcommands
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+
+        Available subcommands:
+
+        show - Show subscription status
+        test - Silently validates subscription, exits accordingly
+      MESSAGE
+
+      {
+        arguments:       %w[subscription],
+        expected_events: [[:stderr, :puts, message]],
+        expected_exit:   false,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      message = 'mutant subscription show: Does not expect extra arguments'
+
+      {
+        arguments:       %w[subscription show extra-argument],
+        expected_events: [[:stderr, :puts, message]],
+        expected_exit:   false,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      message = <<~'MESSAGE'
+        usage: mutant subscription show [options]
+
+        Summary: Show subscription status
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+      MESSAGE
+
+      {
+        arguments:       %w[subscription show --help],
+        expected_events: [[:stdout, :puts, message]],
+        expected_exit:   true,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      message = <<~'MESSAGE'
+        usage: mutant run [options]
+
+        Summary: Run code analysis
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+
+
+        Environment:
+                --zombie                     Run mutant zombified
+            -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
+            -r, --require NAME               Require file with NAME
+
+
+        Runner:
+                --fail-fast                  Fail fast
+            -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
+
+
+        Integration:
+                --use INTEGRATION            Use INTEGRATION to kill mutations
+
+
+        Matcher:
+                --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
+                --start-subject EXPRESSION   Start mutation testing at a specific subject
+                --since REVISION             Only select subjects touched since REVISION
+      MESSAGE
+
+      {
+        arguments:       %w[run --help],
+        expected_events: [[:stdout, :puts, message]],
+        expected_exit:   true,
+        expected_zombie: false
+      }
+    end
+
+    @tests.each do |example|
+      context example.arguments.inspect do
+        example.to_h.each do |key, value|
+          let(key) { value }
+        end
+
+        include_examples 'CLI run'
       end
     end
 
-    context 'with --use option' do
-      context 'when integration exists' do
-        let(:expected_integration) { 'some'         }
-        let(:options)              { %w[--use some] }
+    context 'subscription show' do
+      let(:arguments) { %w[subscription show] }
 
-        include_examples 'cli parser'
-        include_examples 'no explicit exit'
+      include_context 'license validation'
+
+      context 'on valid license' do
+        let(:expected_exit)  { true                                      }
+        let(:license_result) { MPrelude::Either::Right.new(subscription) }
+
+        let(:expected_events) do
+          [
+            license_validation_event,
+            [:stdout, :puts, 'License-Description']
+          ]
+        end
+
+        let(:subscription) do
+          instance_double(
+            Mutant::License::Subscription,
+            description: 'License-Description'
+          )
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'on invalid license' do
+        let(:expected_exit)  { false                                       }
+        let(:license_result) { MPrelude::Either::Left.new('error-message') }
+
+        let(:expected_events) do
+          [
+            license_validation_event,
+            [:stderr, :puts, 'error-message']
+          ]
+        end
+
+        include_examples 'CLI run'
       end
     end
 
-    context 'with --version option' do
-      let(:expected_message) { "mutant-#{Mutant::VERSION}" }
-      let(:options)          { %w[--version]               }
+    context 'license display test' do
+      let(:arguments) { %w[subscription test] }
 
-      include_examples 'cli parser'
-      include_examples 'explicit exit'
-      include_examples 'prints expected message'
-    end
+      let(:expected_events) do
+        [ [:license, :apply, world ] ]
+      end
 
-    context 'with --jobs option' do
-      let(:options) { %w[--jobs 0] }
+      include_context 'license validation'
 
-      include_examples 'cli parser'
-      include_examples 'no explicit exit'
+      context 'on valid license' do
+        let(:expected_exit)  { true                                      }
+        let(:license_result) { MPrelude::Either::Right.new(subscription) }
 
-      it 'configures expected coverage' do
-        expect(apply.from_right.jobs).to eql(0)
+        let(:subscription) do
+          instance_double(
+            Mutant::License::Subscription,
+            description: 'License-Description'
+          )
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'on invalid license' do
+        let(:expected_exit)   { false                                       }
+        let(:license_result)  { MPrelude::Either::Left.new('error-message') }
+
+        include_examples 'CLI run'
       end
     end
 
-    context 'with --require options' do
-      let(:options) { %w[--require foo --require bar] }
+    context 'run' do
+      let(:arguments)        { %w[run]                                              }
+      let(:bootstrap_result) { MPrelude::Either::Right.new(env)                     }
+      let(:env)              { Mutant::Env.empty(world, config)                     }
+      let(:env_result)       { instance_double(Mutant::Result::Env, success?: true) }
+      let(:expected_events)  { [license_validation_event]                           }
+      let(:expected_exit)    { true                                                 }
+      let(:license_result)   { MPrelude::Either::Right.new(subscription)            }
+      let(:runner_result)    { MPrelude::Either::Right.new(env_result)              }
 
-      include_examples 'cli parser'
-      include_examples 'no explicit exit'
+      include_context 'license validation'
 
-      it 'configures requires' do
-        expect(apply.from_right.requires).to eql(%w[foo bar])
+      def config_result(config)
+        MPrelude::Either::Right.new(config)
       end
-    end
 
-    context 'with --since option' do
-      let(:options) { %w[--since master] }
+      context 'with invalid expressions' do
+        let(:arguments)     { super() + [''] }
+        let(:expected_exit) { false          }
 
-      let(:expected_matcher_config) do
-        default_matcher_config.with(
-          subject_filters: [
-            Mutant::Repository::SubjectFilter.new(
-              Mutant::Repository::Diff.new(
-                to:    'master',
-                world: world
+        let(:expected_events) do
+          [
+            [:stderr, :puts, 'Expression: "" is invalid']
+          ]
+        end
+
+        include_examples 'CLI run'
+      end
+
+      before do
+        allow(Mutant::Config).to receive(:load_config_file) do |world, config|
+          events << [:load_config, world, config.inspect]
+          config_result(config)
+        end
+
+        allow(Mutant::Bootstrap).to receive(:apply) do |world, config|
+          events << [:bootstrap, world, config.inspect]
+          bootstrap_result
+        end
+
+        allow(Mutant::Runner).to receive(:apply) do |env|
+          events << [:runner, env.inspect]
+          runner_result
+        end
+
+        allow(kernel).to receive(:sleep) do |time|
+          events << [:sleep, time]
+          time
+        end
+      end
+
+      context 'on invalid license' do
+        let(:cli_config)     { config                                      }
+        let(:expected_exit)  { true                                        }
+        let(:license_result) { MPrelude::Either::Left.new('license-error') }
+
+        let(:expected_events) do
+          [
+            license_validation_event,
+            [:stderr, :puts, 'license-error'],
+            [:stderr, :puts, "[Mutant-License-Error]: Soft fail, continuing in 40 seconds\n"],
+            [:stderr, :puts, "[Mutant-License-Error]: Next major version will enforce the license\n"],
+            [:stderr, :puts, "[Mutant-License-Error]: See https://github.com/mbj/mutant#licensing\n"],
+            [:sleep, 40],
+            [
+              :load_config,
+              world,
+              cli_config.inspect
+            ],
+            [
+              :bootstrap,
+              world,
+              cli_config.inspect
+            ],
+            [
+              :runner,
+              env.inspect
+            ]
+          ]
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'on valid license' do
+        let(:subscription) do
+          instance_double(
+            Mutant::License::Subscription,
+            description: 'License-Description'
+          )
+        end
+
+        let(:expected_events) do
+          [
+            license_validation_event,
+            [
+              :load_config,
+              world,
+              cli_config.inspect
+            ],
+            [
+              :bootstrap,
+              world,
+              cli_config.inspect
+            ],
+            [
+              :runner,
+              env.inspect
+            ]
+          ]
+        end
+
+        context 'on runner fail' do
+          let(:cli_config)    { config }
+          let(:expected_exit) { false  }
+
+          let(:runner_result) do
+            MPrelude::Either::Left.new('runner failure')
+          end
+
+          let(:expected_events) do
+            [
+              *super(),
+              [
+                :stderr,
+                :puts,
+                'runner failure'
+              ]
+            ]
+          end
+
+          include_examples 'CLI run'
+        end
+
+        context 'with valid match expression' do
+          let(:arguments) { super() + ['Foo#bar'] }
+
+          let(:cli_config) do
+            config.with(
+              matcher: config.matcher.with(
+                match_expressions: [parse_expression('Foo#bar')]
               )
             )
-          ]
-        )
-      end
+          end
 
-      include_examples 'cli parser'
-      include_examples 'no explicit exit'
-    end
+          include_examples 'CLI run'
+        end
 
-    context 'with --subject-ignore option' do
-      let(:options) { %w[--ignore-subject Foo::Bar] }
+        context 'with valid start-subject expression' do
+          let(:arguments) do
+            super() + ['--start-subject', 'Foo#bar', '--start-subject', 'Foo#baz']
+          end
 
-      let(:expected_matcher_config) do
-        default_matcher_config.with(ignore_expressions: [parse_expression('Foo::Bar')])
-      end
+          let(:cli_config) do
+            config.with(
+              matcher: config.matcher.with(
+                start_expressions: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
+              )
+            )
+          end
 
-      include_examples 'cli parser'
-      include_examples 'no explicit exit'
-    end
+          include_examples 'CLI run'
+        end
 
-    context 'with --start-subject option' do
-      let(:options) { %w[--start-subject Foo::Bar] }
+        context 'with valid ignore-subject expression' do
+          let(:arguments) do
+            super() + ['--ignore-subject', 'Foo#bar', '--ignore-subject', 'Foo#baz']
+          end
 
-      let(:expected_matcher_config) do
-        default_matcher_config.with(start_expressions: [parse_expression('Foo::Bar')])
-      end
+          let(:cli_config) do
+            config.with(
+              matcher: config.matcher.with(
+                ignore_expressions: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
+              )
+            )
+          end
 
-      include_examples 'cli parser'
-      include_examples 'no explicit exit'
-    end
+          include_examples 'CLI run'
+        end
 
-    context 'with --fail-fast option' do
-      let(:options) { %w[--fail-fast] }
+        context 'with --include option' do
+          let(:arguments)  { super() + %w[--include lob]        }
+          let(:cli_config) { config.with(includes: %w[lib lob]) }
+          let(:config)     { super().with(includes: %w[lib])    }
 
-      include_examples 'cli parser'
-      include_examples 'no explicit exit'
+          include_examples 'CLI run'
+        end
 
-      it 'sets the fail fast option' do
-        expect(apply.from_right.fail_fast).to be(true)
-      end
-    end
+        context 'with --require option' do
+          let(:arguments)  { super() + %w[--require bar]        }
+          let(:cli_config) { config.with(requires: %w[foo bar]) }
+          let(:config)     { super().with(requires: %w[foo])    }
 
-    context 'with --zombie option' do
-      let(:options) { %w[--zombie] }
+          include_examples 'CLI run'
+        end
 
-      include_examples 'cli parser'
-      include_examples 'no explicit exit'
+        context 'with --jobs option' do
+          let(:arguments)  { super() + %w[--jobs 10] }
+          let(:cli_config) { config.with(jobs: 10)   }
 
-      it 'sets the zombie option' do
-        expect(apply.from_right.zombie).to be(true)
+          include_examples 'CLI run'
+        end
+
+        context 'with --zombie flag' do
+          let(:arguments)     { super() + %w[--zombie]    }
+          let(:cli_config)    { config.with(zombie: true) }
+          let(:expect_zombie) { true                      }
+
+          include_examples 'CLI run'
+        end
+
+        context 'with --fail-fast option' do
+          let(:arguments)  { super() + %w[--fail-fast]    }
+          let(:cli_config) { config.with(fail_fast: true) }
+
+          include_examples 'CLI run'
+        end
+
+        context 'with --use option' do
+          let(:arguments)     { super() + ['--use', 'example-integration']      }
+          let(:cli_config)    { config.with(integration: 'example-integration') }
+
+          include_examples 'CLI run'
+        end
+
+        context 'with --since option' do
+          let(:arguments)     { super() + ['--since', 'reference'] }
+
+          let(:cli_config) do
+            config.with(
+              matcher: config.matcher.with(
+                subject_filters: [
+                  Mutant::Repository::SubjectFilter.new(
+                    Mutant::Repository::Diff.new(
+                      to:    'reference',
+                      world: world
+                    )
+                  )
+                ]
+              )
+            )
+          end
+
+          include_examples 'CLI run'
+        end
       end
     end
   end

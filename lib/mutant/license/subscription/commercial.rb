@@ -4,8 +4,6 @@ module Mutant
   module License
     class Subscription
       class Commercial < self
-        include Concord.new(:authors)
-
         class Author
           include Concord.new(:email)
 
@@ -20,10 +18,10 @@ module Mutant
         def apply(world)
           candidates = candidates(world)
 
-          if (authors & candidates).any?
+          if (licensed & candidates).any?
             success
           else
-            failure(authors, candidates)
+            failure(licensed, candidates)
           end
         end
 

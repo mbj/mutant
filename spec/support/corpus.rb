@@ -57,7 +57,7 @@ module MutantSpec
             install_mutant
             system(
               %W[
-                bundle exec mutant
+                bundle exec mutant run
                 --use #{integration}
                 --include lib
                 --require #{name}

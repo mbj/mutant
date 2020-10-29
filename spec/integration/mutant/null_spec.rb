@@ -2,7 +2,7 @@
 
 RSpec.describe 'null integration', mutant: false do
 
-  let(:base_cmd) { 'bundle exec mutant -I lib --require test_app "TestApp*"' }
+  let(:base_cmd) { 'bundle exec mutant run -I lib --require test_app "TestApp*"' }
 
   around do |example|
     Dir.chdir(TestApp.root) do

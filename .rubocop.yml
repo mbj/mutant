@@ -203,6 +203,9 @@ Style/RescueStandardError:
   Enabled: false
 Style/StderrPuts:
   Enabled: false
+# Fine inside stabby lambdas
+Style/Semicolon:
+  Enabled: false
 # suggesting single letter variablesl bah
 Naming/RescuedExceptionsVariableName:
   Enabled: false
