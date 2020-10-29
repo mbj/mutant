@@ -1,3 +1,7 @@
+# v0.10.1 2020-10-29
+
+* Add support for multiple cover expressions in minitest integration [#1076](https://github.com/mbj/mutant/pull/1076)
+
 # v0.10.0 2020-10-29
 
 * Add subcommad interface `mutant run|license` [#1073](https://github.com/mbj/mutant/pull/1073).
