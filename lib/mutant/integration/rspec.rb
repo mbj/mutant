@@ -97,8 +97,8 @@ module Mutant
         }
 
         Test.new(
-          expression: parse_metadata(metadata),
-          id:         id
+          expressions: [parse_metadata(metadata)],
+          id:          id
         )
       end
 

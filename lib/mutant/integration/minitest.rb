@@ -51,13 +51,16 @@ module Mutant
           reporter.passed?
         end
 
-        # Cover expression syntaxes
+        # Parse expressions
         #
-        # @return [String, nil]
-        def expression_syntax
-          klass.resolve_cover_expression
+        # @param [ExpressionParser] parser
+        #
+        # @return [Array<Expression>]
+        def expressions(parser)
+          klass.resolve_cover_expressions.map do |syntax|
+            parser.apply(syntax).from_right
+          end
         end
-
       end # TestCase
 
       private_constant(*constants(false))
@@ -122,23 +125,13 @@ module Mutant
       end
       memoize :all_tests_index
 
-      # Construct test from test case
-      #
-      # @param [TestCase]
-      #
-      # @return [Test]
       def construct_test(test_case)
         Test.new(
-          id:         test_case.identification,
-          expression: config.expression_parser.apply(test_case.expression_syntax).from_right
+          id:          test_case.identification,
+          expressions: test_case.expressions(config.expression_parser)
         )
       end
 
-      # All minitest test cases
-      #
-      # Intentional utility method.
-      #
-      # @return [Array<TestCase>]
       def all_test_cases
         ::Minitest::Runnable
           .runnables
@@ -146,26 +139,10 @@ module Mutant
           .flat_map(&method(:test_case))
       end
 
-      # Test if runnable qualifies for mutation testing
-      #
-      # @param [Class]
-      #
-      # @return [Bool]
-      #
-      # ignore :reek:UtilityFunction
       def allow_runnable?(klass)
-        !klass.equal?(::Minitest::Runnable) && klass.resolve_cover_expression
+        !klass.equal?(::Minitest::Runnable) && klass.resolve_cover_expressions
       end
 
-      # Turn a minitest runnable into its test cases
-      #
-      # Intentional utility method.
-      #
-      # @param [Object] runnable
-      #
-      # @return [Array<TestCase>]
-      #
-      # ignore :reek:UtilityFunction
       def test_case(runnable)
         runnable.runnable_methods.map { |method| TestCase.new(runnable, method) }
       end
