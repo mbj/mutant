@@ -215,3 +215,6 @@ Layout/IndentationWidth:
 # I do them alphabetically
 Style/KeywordParametersOrder:
   Enabled: false
+# Empty blocks are useful
+Lint/EmptyBlock:
+  Enabled: false
