@@ -12,7 +12,7 @@ RSpec.describe Mutant::License::Subscription do
           [
             described_class::Commercial::Author.new('mbj@schirp-dso.com'),
             described_class::Commercial::Author.new('other@schirp-dso.com')
-          ]
+          ].to_set
         )
       end
 
@@ -32,7 +32,7 @@ RSpec.describe Mutant::License::Subscription do
           [
             described_class::Opensource::Repository.new('github.com', 'mbj/mutant'),
             described_class::Opensource::Repository.new('github.com', 'mbj/unparser')
-          ]
+          ].to_set
         )
       end
 
@@ -109,7 +109,7 @@ RSpec.describe Mutant::License::Subscription do
               'github.com',
               'mbj/mutant'
             )
-          ]
+          ].to_set
         )
       end
 

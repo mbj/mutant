@@ -46,6 +46,7 @@ module Mutant
             value
               .fetch('repositories')
               .map(&Repository.public_method(:parse))
+              .to_set
           )
         end
 
@@ -59,7 +60,7 @@ module Mutant
       private
 
         def check_subscription(actual)
-          if (licensed.to_set & actual).any?
+          if (licensed & actual).any?
             success
           else
             failure(licensed, actual)

@@ -38,7 +38,7 @@ module Mutant
       # @return [String]
       def description
         FORMAT % {
-          licensed:          licensed.join("\n"),
+          licensed:          licensed.to_a.join("\n"),
           subscription_name: subscription_name
         }
       end
