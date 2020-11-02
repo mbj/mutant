@@ -1,3 +1,8 @@
+# v0.10.2 2020-11-02
+
+* Fix type error on subscription show subcommand whith active commercial license.
+  [#1074](https://github.com/mbj/mutant/pull/1084)
+
 # v0.10.1 2020-10-29
 
 * Add support for multiple cover expressions in minitest integration [#1076](https://github.com/mbj/mutant/pull/1076)
