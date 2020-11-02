@@ -1,3 +1,7 @@
+# v0.10.4 2020-11-02
+
+* Fix mutant-minitest and mutant rspec to not rely on git anymore in gemspec. [#1087](https://github.com/mbj/mutant/pull/1087)
+
 # v0.10.3 2020-11-02
 
 * Fix mutant-minitest to ship minitest/coverge file. [#1086](https://github.com/mbj/mutant/pull/1086)
