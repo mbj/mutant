@@ -13,8 +13,7 @@ Gem::Specification.new do |gem|
   gem.license     = 'Nonstandard'
 
   gem.require_paths    = %w[lib]
-  gem.files            = `git ls-files -- lib/mutant/integration/rspec.rb`.split("\n")
-  gem.test_files       = `git ls-files -- spec/{integration,unit}/mutant/rspec_spec.rb}`.split("\n")
+  gem.files            = %w[lib/mutant/integration/rspec.rb]
   gem.extra_rdoc_files = %w[LICENSE]
 
   gem.required_ruby_version = '>= 2.5'
