@@ -1,3 +1,7 @@
+# v0.10.3 2020-11-02
+
+* Fix mutant-minitest to ship minitest/coverge file. [#1086](https://github.com/mbj/mutant/pull/1086)
+
 # v0.10.2 2020-11-02
 
 * Fix type error on subscription show subcommand whith active commercial license.
