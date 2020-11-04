@@ -1,9 +1,227 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Config do
+  describe '#merge' do
+    def apply
+      original.merge(other)
+    end
+
+    def expect_value(value)
+      expect(apply).to eql(original.with(key => value))
+    end
+
+    let(:original) do
+      Mutant::Config::DEFAULT.with(**{ key => original_value })
+    end
+
+    let(:other) do
+      Mutant::Config::DEFAULT.with(**{ key => other_value })
+    end
+
+    shared_examples 'overwrite value' do
+      it 'sets value to other value' do
+        expect(apply.public_send(key)).to be(other_value)
+      end
+    end
+
+    shared_examples 'array concat' do
+      let(:other_value)    { %w[foo] }
+      let(:original_value) { %w[bar] }
+
+      it 'adds other and orignial' do
+        expect_value(original_value + other_value)
+      end
+    end
+
+    shared_examples 'sticky boolean' do
+      context 'when original is false' do
+        let(:original_value) { false }
+
+        context 'when other value is false' do
+          let(:other_value) { false }
+
+          it 'sets value to false' do
+            expect_value(false)
+          end
+        end
+
+        context 'when other value is true' do
+          let(:other_value) { true }
+
+          it 'sets value to true' do
+            expect_value(true)
+          end
+        end
+      end
+
+      context 'when original is true' do
+        let(:original_value) { true }
+
+        context 'when other value is false' do
+          let(:other_value) { false }
+
+          it 'sets value to false' do
+            expect_value(true)
+          end
+        end
+
+        context 'when other value is true' do
+          let(:other_value) { true }
+
+          it 'sets value to true' do
+            expect_value(true)
+          end
+        end
+      end
+    end
+
+    shared_examples 'maybe value' do
+      context 'when original has value' do
+        context 'when other does not have value' do
+          let(:other_value) { nil }
+
+          it 'sets value to original value' do
+            expect_value(original_value)
+          end
+        end
+
+        context 'when other does have a value' do
+          it 'sets value to other value' do
+            expect_value(other_value)
+          end
+        end
+      end
+
+      context 'when original does not have value' do
+        let(:original_value) { nil }
+
+        context 'when other does not have value' do
+          let(:other_value) { nil }
+
+          it 'sets value to nil value' do
+            expect_value(nil)
+          end
+        end
+
+        context 'when other does have a value' do
+          it 'sets value to other value' do
+            expect_value(other_value)
+          end
+        end
+      end
+    end
+
+    context 'merging jobs' do
+      let(:key)            { :jobs }
+      let(:original_value) { 2     }
+      let(:other_value)    { 3     }
+
+      include_examples 'maybe value'
+    end
+
+    context 'merging integration' do
+      let(:key)            { :integration }
+      let(:original_value) { 'rspec'      }
+      let(:other_value)    { 'minitest'   }
+
+      include_examples 'maybe value'
+    end
+
+    context 'merging expression_parser' do
+      let(:key) { :expression_parser }
+
+      let(:original_value) do
+        instance_double(Mutant::Expression::Parser, 'config')
+      end
+
+      let(:other_value) do
+        instance_double(Mutant::Expression::Parser, 'other')
+      end
+
+      include_examples 'overwrite value'
+    end
+
+    context 'merging isolation' do
+      let(:key)            { :isolation                                   }
+      let(:original_value) { instance_double(Mutant::Isolation, 'config') }
+      let(:other_value)    { instance_double(Mutant::Isolation, 'other')  }
+
+      include_examples 'overwrite value'
+    end
+
+    context 'merging reporter' do
+      let(:key)            { :isolation                                  }
+      let(:original_value) { instance_double(Mutant::Reporter, 'config') }
+      let(:other_value)    { instance_double(Mutant::Reporter, 'other')  }
+
+      include_examples 'overwrite value'
+    end
+
+    context 'merging zombie' do
+      let(:key) { :zombie }
+
+      include_examples 'sticky boolean'
+    end
+
+    context 'merging fail fast' do
+      let(:key) { :fail_fast }
+
+      include_examples 'sticky boolean'
+    end
+
+    context 'merging includes' do
+      let(:key) { :includes }
+
+      include_examples 'array concat'
+    end
+
+    context 'merging requires' do
+      let(:key) { :requires }
+
+      include_examples 'array concat'
+    end
+
+    context 'merging matcher' do
+      let(:key)            { :matcher                                            }
+      let(:original_value) { instance_double(Mutant::Matcher::Config, :original) }
+      let(:other_value)    { instance_double(Mutant::Matcher::Config, :other)    }
+      let(:result_value)   { instance_double(Mutant::Matcher::Config, :result)   }
+
+      before do
+        allow(original_value).to receive_messages(merge: result_value)
+      end
+
+      it 'returns result value' do
+        expect(apply.public_send(:matcher)).to be(result_value)
+      end
+
+      it 'merges matchers' do
+        apply
+
+        expect(original_value).to have_received(:merge).with(other_value)
+      end
+    end
+  end
+
+  describe '.env' do
+    def apply
+      described_class.env
+    end
+
+    let(:nprocessors) { instance_double(Integer, :nprocessors) }
+
+    before do
+      allow(Etc).to receive_messages(nprocessors: nprocessors)
+    end
+
+    it 'returns expected env derived config' do
+      expect(apply).to eql(described_class::DEFAULT.with(jobs: nprocessors))
+    end
+  end
+
   describe '.load_config_file' do
     def apply
-      described_class.load_config_file(world, config)
+      described_class.load_config_file(world)
     end
 
     let(:config) { Mutant::Config::DEFAULT                            }

@@ -24,11 +24,16 @@ $LOAD_PATH << File.expand_path('../test_app/lib', __dir__)
 require 'test_app'
 
 module Fixtures
-  TEST_CONFIG = Mutant::Config::DEFAULT
-    .with(reporter: Mutant::Reporter::Null.new)
+  test_config = Mutant::Config::DEFAULT
+    .with(
+      integration: 'null',
+      jobs:        1,
+      reporter:    Mutant::Reporter::Null.new
+    )
 
   TEST_ENV = Mutant::Bootstrap
-    .apply(Mutant::WORLD, TEST_CONFIG).from_right
+    .apply(Mutant::WORLD, test_config)
+    .from_right
 
 end # Fixtures
 

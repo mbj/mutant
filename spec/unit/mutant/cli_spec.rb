@@ -2,12 +2,12 @@
 
 RSpec.describe Mutant::CLI do
   describe '.parse' do
-    let(:config)        { Mutant::Config::DEFAULT }
-    let(:kernel)        { class_double(Kernel)    }
-    let(:stderr)        { instance_double(IO)     }
-    let(:stdout)        { instance_double(IO)     }
-    let(:events)        { []                      }
-    let(:expect_zombie) { false                   }
+    let(:env_config)    { Mutant::Config::DEFAULT.with(jobs: 4) }
+    let(:events)        { []                                    }
+    let(:expect_zombie) { false                                 }
+    let(:kernel)        { class_double(Kernel)                  }
+    let(:stderr)        { instance_double(IO)                   }
+    let(:stdout)        { instance_double(IO)                   }
 
     let(:world) do
       instance_double(
@@ -21,7 +21,6 @@ RSpec.describe Mutant::CLI do
     def apply
       described_class.parse(
         arguments: Marshal.load(Marshal.dump(arguments)),
-        config:    config,
         world:     world
       )
     end
@@ -32,6 +31,8 @@ RSpec.describe Mutant::CLI do
 
       allow(stdout)
         .to receive(:puts) { |message| events << [:stdout, :puts, message] }
+
+      allow(Mutant::Config).to receive_messages(env: env_config)
     end
 
     shared_examples 'CLI run' do
@@ -339,20 +340,26 @@ RSpec.describe Mutant::CLI do
     end
 
     context 'run' do
-      let(:arguments)        { %w[run]                                              }
-      let(:bootstrap_result) { MPrelude::Either::Right.new(env)                     }
-      let(:env)              { Mutant::Env.empty(world, config)                     }
-      let(:env_result)       { instance_double(Mutant::Result::Env, success?: true) }
-      let(:expected_events)  { [license_validation_event]                           }
-      let(:expected_exit)    { true                                                 }
-      let(:license_result)   { MPrelude::Either::Right.new(subscription)            }
-      let(:runner_result)    { MPrelude::Either::Right.new(env_result)              }
+      let(:arguments)          { %w[run]                                              }
+      let(:bootstrap_config)   { env_config.merge(file_config)                        }
+      let(:bootstrap_result)   { MPrelude::Either::Right.new(env)                     }
+      let(:env)                { Mutant::Env.empty(world, Mutant::Config::DEFAULT)    }
+      let(:env_result)         { instance_double(Mutant::Result::Env, success?: true) }
+      let(:expected_events)    { [license_validation_event]                           }
+      let(:expected_exit)      { true                                                 }
+      let(:file_config)        { Mutant::Config::DEFAULT                              }
+      let(:file_config_result) { MPrelude::Either::Right.new(file_config)             }
+      let(:license_result)     { MPrelude::Either::Right.new(subscription)            }
+      let(:runner_result)      { MPrelude::Either::Right.new(env_result)              }
+
+      let(:file_config) do
+        Mutant::Config::DEFAULT.with(
+          includes: %w[lib],
+          requires: %w[foo]
+        )
+      end
 
       include_context 'license validation'
-
-      def config_result(config)
-        MPrelude::Either::Right.new(config)
-      end
 
       context 'with invalid expressions' do
         let(:arguments)     { super() + [''] }
@@ -368,9 +375,9 @@ RSpec.describe Mutant::CLI do
       end
 
       before do
-        allow(Mutant::Config).to receive(:load_config_file) do |world, config|
-          events << [:load_config, world, config.inspect]
-          config_result(config)
+        allow(Mutant::Config).to receive(:load_config_file) do |world|
+          events << [:load_config_file, world]
+          file_config_result
         end
 
         allow(Mutant::Bootstrap).to receive(:apply) do |world, config|
@@ -390,9 +397,8 @@ RSpec.describe Mutant::CLI do
       end
 
       context 'on invalid license' do
-        let(:cli_config)     { config                                      }
-        let(:expected_exit)  { true                                        }
-        let(:license_result) { MPrelude::Either::Left.new('license-error') }
+        let(:expected_exit)    { true                                        }
+        let(:license_result)   { MPrelude::Either::Left.new('license-error') }
 
         let(:expected_events) do
           [
@@ -403,14 +409,13 @@ RSpec.describe Mutant::CLI do
             [:stderr, :puts, "[Mutant-License-Error]: See https://github.com/mbj/mutant#licensing\n"],
             [:sleep, 40],
             [
-              :load_config,
-              world,
-              cli_config.inspect
+              :load_config_file,
+              world
             ],
             [
               :bootstrap,
               world,
-              cli_config.inspect
+              bootstrap_config.inspect
             ],
             [
               :runner,
@@ -434,14 +439,13 @@ RSpec.describe Mutant::CLI do
           [
             license_validation_event,
             [
-              :load_config,
-              world,
-              cli_config.inspect
+              :load_config_file,
+              world
             ],
             [
               :bootstrap,
               world,
-              cli_config.inspect
+              bootstrap_config.inspect
             ],
             [
               :runner,
@@ -451,8 +455,7 @@ RSpec.describe Mutant::CLI do
         end
 
         context 'on runner fail' do
-          let(:cli_config)    { config }
-          let(:expected_exit) { false  }
+          let(:expected_exit) { false }
 
           let(:runner_result) do
             MPrelude::Either::Left.new('runner failure')
@@ -475,9 +478,9 @@ RSpec.describe Mutant::CLI do
         context 'with valid match expression' do
           let(:arguments) { super() + ['Foo#bar'] }
 
-          let(:cli_config) do
-            config.with(
-              matcher: config.matcher.with(
+          let(:bootstrap_config) do
+            super().with(
+              matcher: file_config.matcher.with(
                 match_expressions: [parse_expression('Foo#bar')]
               )
             )
@@ -491,9 +494,9 @@ RSpec.describe Mutant::CLI do
             super() + ['--start-subject', 'Foo#bar', '--start-subject', 'Foo#baz']
           end
 
-          let(:cli_config) do
-            config.with(
-              matcher: config.matcher.with(
+          let(:bootstrap_config) do
+            super().with(
+              matcher: file_config.matcher.with(
                 start_expressions: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
               )
             )
@@ -507,9 +510,9 @@ RSpec.describe Mutant::CLI do
             super() + ['--ignore-subject', 'Foo#bar', '--ignore-subject', 'Foo#baz']
           end
 
-          let(:cli_config) do
-            config.with(
-              matcher: config.matcher.with(
+          let(:bootstrap_config) do
+            super().with(
+              matcher: file_config.matcher.with(
                 ignore_expressions: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
               )
             )
@@ -519,46 +522,51 @@ RSpec.describe Mutant::CLI do
         end
 
         context 'with --include option' do
-          let(:arguments)  { super() + %w[--include lob]        }
-          let(:cli_config) { config.with(includes: %w[lib lob]) }
-          let(:config)     { super().with(includes: %w[lib])    }
+          let(:arguments)        { super() + %w[--include lob --include lub] }
+          let(:bootstrap_config) { super().with(includes: %w[lib lob lub])   }
 
           include_examples 'CLI run'
         end
 
         context 'with --require option' do
-          let(:arguments)  { super() + %w[--require bar]        }
-          let(:cli_config) { config.with(requires: %w[foo bar]) }
-          let(:config)     { super().with(requires: %w[foo])    }
+          let(:arguments)        { super() + %w[--require bar]         }
+          let(:bootstrap_config) { super().with(requires: %w[foo bar]) }
 
           include_examples 'CLI run'
         end
 
         context 'with --jobs option' do
-          let(:arguments)  { super() + %w[--jobs 10] }
-          let(:cli_config) { config.with(jobs: 10)   }
+          let(:arguments)        { super() + %w[--jobs 10] }
+          let(:bootstrap_config) { super().with(jobs: 10)  }
+
+          include_examples 'CLI run'
+        end
+
+        context 'with --jobs option' do
+          let(:arguments)        { super() + %w[--jobs 10] }
+          let(:bootstrap_config) { super().with(jobs: 10)  }
 
           include_examples 'CLI run'
         end
 
         context 'with --zombie flag' do
-          let(:arguments)     { super() + %w[--zombie]    }
-          let(:cli_config)    { config.with(zombie: true) }
-          let(:expect_zombie) { true                      }
+          let(:arguments)        { super() + %w[--zombie]     }
+          let(:bootstrap_config) { super().with(zombie: true) }
+          let(:expect_zombie)    { true                       }
 
           include_examples 'CLI run'
         end
 
         context 'with --fail-fast option' do
-          let(:arguments)  { super() + %w[--fail-fast]    }
-          let(:cli_config) { config.with(fail_fast: true) }
+          let(:arguments)        { super() + %w[--fail-fast]     }
+          let(:bootstrap_config) { super().with(fail_fast: true) }
 
           include_examples 'CLI run'
         end
 
         context 'with --use option' do
-          let(:arguments)     { super() + ['--use', 'example-integration']      }
-          let(:cli_config)    { config.with(integration: 'example-integration') }
+          let(:arguments)        { super() + ['--use', 'example-integration']       }
+          let(:bootstrap_config) { super().with(integration: 'example-integration') }
 
           include_examples 'CLI run'
         end
@@ -566,9 +574,9 @@ RSpec.describe Mutant::CLI do
         context 'with --since option' do
           let(:arguments)     { super() + ['--since', 'reference'] }
 
-          let(:cli_config) do
-            config.with(
-              matcher: config.matcher.with(
+          let(:bootstrap_config) do
+            super().with(
+              matcher: file_config.matcher.with(
                 subject_filters: [
                   Mutant::Repository::SubjectFilter.new(
                     Mutant::Repository::Diff.new(

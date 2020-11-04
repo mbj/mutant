@@ -14,8 +14,8 @@ module Mutant
           # @return [undefined]
           def run
             info 'Matcher:         %s', object.matcher.inspect
-            info 'Integration:     %s', object.integration
-            info 'Jobs:            %d', object.jobs
+            info 'Integration:     %s', object.integration || 'null'
+            info 'Jobs:            %s', object.jobs || 'auto'
             info 'Includes:        %s', object.includes
             info 'Requires:        %s', object.requires
           end

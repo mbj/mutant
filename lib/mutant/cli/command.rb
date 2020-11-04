@@ -4,7 +4,7 @@ module Mutant
   module CLI
     # rubocop:disable Metrics/ClassLength
     class Command
-      include AbstractType, Anima.new(:world, :config, :main, :parent, :arguments)
+      include AbstractType, Anima.new(:world, :main, :parent, :arguments)
 
       include Equalizer.new(:parent, :arguments)
 

@@ -57,6 +57,23 @@ module Mutant
       mutant.yml
     ].freeze
 
+    # Merge with other config
+    #
+    # @param [Config] other
+    #
+    # @return [Config]
+    def merge(other)
+      other.with(
+        fail_fast:   fail_fast || other.fail_fast,
+        includes:    includes + other.includes,
+        jobs:        other.jobs || jobs,
+        integration: other.integration || integration,
+        matcher:     matcher.merge(other.matcher),
+        requires:    requires + other.requires,
+        zombie:      zombie || other.zombie
+      )
+    end
+
     private_constant(*constants(false))
 
     # Load config file
@@ -65,11 +82,12 @@ module Mutant
     # @param [Config] config
     #
     # @return [Either<String,Config>]
-    def self.load_config_file(world, config)
-      files = CANDIDATES.map(&world.pathname.method(:new)).select(&:readable?)
+    def self.load_config_file(world)
+      config = DEFAULT
+      files = CANDIDATES.map(&world.pathname.public_method(:new)).select(&:readable?)
 
       if files.one?
-        load_contents(files.first).fmap(&config.method(:with))
+        load_contents(files.first).fmap(&config.public_method(:with))
       elsif files.empty?
         Either::Right.new(config)
       else
@@ -84,5 +102,12 @@ module Mutant
         .lmap(&:compact_message)
     end
     private_class_method :load_contents
+
+    # The configuration from the environment
+    #
+    # @return [Config]
+    def self.env
+      DEFAULT.with(jobs: Etc.nprocessors)
+    end
   end # Config
 end # Mutant
