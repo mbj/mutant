@@ -163,6 +163,7 @@ require 'mutant/integration/null'
 require 'mutant/selector'
 require 'mutant/selector/expression'
 require 'mutant/selector/null'
+require 'mutant/world'
 require 'mutant/config'
 require 'mutant/cli'
 require 'mutant/cli/command'
@@ -232,9 +233,9 @@ module Mutant
       ]),
       fail_fast:         false,
       includes:          EMPTY_ARRAY,
-      integration:       'null',
+      integration:       nil,
       isolation:         Mutant::Isolation::Fork.new(WORLD),
-      jobs:              Etc.nprocessors,
+      jobs:              nil,
       matcher:           Matcher::Config::DEFAULT,
       reporter:          Reporter::CLI.build(WORLD.stdout),
       requires:          EMPTY_ARRAY,

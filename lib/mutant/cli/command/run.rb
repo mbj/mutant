@@ -28,18 +28,28 @@ module Mutant
         #
         # @return [Bool]
         def zombie?
-          config.zombie
+          @config.zombie
         end
 
       private
 
+        def initialize(attributes)
+          super(attributes)
+          @config = Config::DEFAULT
+        end
+
         def execute
           soft_fail(License.apply(world))
-            .bind { Config.load_config_file(world, config) }
-            .bind { |cli_config| Bootstrap.apply(world, cli_config) }
+            .bind { Config.load_config_file(world) }
+            .fmap(&method(:expand))
+            .bind { Bootstrap.apply(world, @config) }
             .bind(&Runner.public_method(:apply))
             .from_right { |error| world.stderr.puts(error); return false }
             .success?
+        end
+
+        def expand(file_config)
+          @config = Config.env.merge(file_config).merge(@config)
         end
 
         def soft_fail(result)
@@ -60,7 +70,7 @@ module Mutant
         end
 
         def parse_remaining_arguments(arguments)
-          traverse(config.expression_parser.public_method(:apply), arguments)
+          traverse(@config.expression_parser.public_method(:apply), arguments)
             .fmap do |match_expressions|
               matcher(match_expressions: match_expressions)
               self
@@ -78,19 +88,19 @@ module Mutant
         end
 
         def set(**attributes)
-          @config = config.with(attributes)
+          @config = @config.with(attributes)
         end
 
         def matcher(**attributes)
-          set(matcher: config.matcher.with(attributes))
+          set(matcher: @config.matcher.with(attributes))
         end
 
         def add(attribute, value)
-          set(attribute => config.public_send(attribute) + [value])
+          set(attribute => @config.public_send(attribute) + [value])
         end
 
         def add_matcher(attribute, value)
-          set(matcher: config.matcher.add(attribute, value))
+          set(matcher: @config.matcher.add(attribute, value))
         end
 
         def add_environment_options(parser)
@@ -119,10 +129,10 @@ module Mutant
           parser.separator('Matcher:')
 
           parser.on('--ignore-subject EXPRESSION', 'Ignore subjects that match EXPRESSION as prefix') do |pattern|
-            add_matcher(:ignore_expressions, config.expression_parser.apply(pattern).from_right)
+            add_matcher(:ignore_expressions, @config.expression_parser.apply(pattern).from_right)
           end
           parser.on('--start-subject EXPRESSION', 'Start mutation testing at a specific subject') do |pattern|
-            add_matcher(:start_expressions, config.expression_parser.apply(pattern).from_right)
+            add_matcher(:start_expressions, @config.expression_parser.apply(pattern).from_right)
           end
           parser.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
             add_matcher(

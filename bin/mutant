@@ -10,7 +10,6 @@ require 'mutant'
 
 command = Mutant::CLI.parse(
   arguments: ARGV,
-  config:    Mutant::Config::DEFAULT,
   world:     Mutant::WORLD
 )
 
@@ -40,7 +39,6 @@ status =
 
     Zombie::Mutant::CLI.parse(
       arguments: ARGV,
-      config:    Zombie::Mutant::Config::DEFAULT,
       world:     Zombie::Mutant::WORLD
     ).call
   else

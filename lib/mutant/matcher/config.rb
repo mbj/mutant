@@ -44,6 +44,19 @@ module Mutant
         with(attribute => public_send(attribute) + [value])
       end
 
+      # Merge with other config
+      #
+      # @param [Config] other
+      #
+      # @return [Config]
+      def merge(other)
+        self.class.new(
+          to_h
+            .map { |name, value| [name, value + other.public_send(name)] }
+            .to_h
+        )
+      end
+
     private
 
       def present_attributes
