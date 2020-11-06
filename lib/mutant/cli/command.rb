@@ -105,7 +105,7 @@ module Mutant
       def parse
         Either
           .wrap_error(OptionParser::InvalidOption) { parser.order(arguments) }
-          .lmap { |error| "#{full_name}: #{error}" }
+          .lmap(&method(:with_help))
           .bind(&method(:parse_remaining))
       end
 
@@ -159,9 +159,7 @@ module Mutant
         command_name, *arguments = arguments
 
         if command_name.nil?
-          Either::Left.new(
-            "Missing required subcommand!\n\n#{parser}"
-          )
+          Either::Left.new(with_help('Missing required subcommand!'))
         else
           find_command(command_name).bind do |command|
             command.parse(**to_h, parent: self, arguments: arguments)
@@ -187,8 +185,12 @@ module Mutant
         if subcommand
           Either::Right.new(subcommand)
         else
-          Either::Left.new("#{full_name}: Cannot find subcommand #{name.inspect}")
+          Either::Left.new(with_help("Cannot find subcommand #{name.inspect}"))
         end
+      end
+
+      def with_help(message)
+        "#{full_name}: #{message}\n\n#{parser}"
       end
     end # Command
     # rubocop:enable Metrics/ClassLength
