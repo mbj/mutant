@@ -1,3 +1,7 @@
+# v0.10.6 2020-11-06
+
+* Change to always display help on invalid CLI. [#1093](https://github.com/mbj/mutant/pull/1093)
+
 # v0.10.5 2020-11-04
 
 * Fix config inheritance between environment, config file and CLI options.

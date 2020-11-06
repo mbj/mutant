@@ -77,7 +77,7 @@ RSpec.describe Mutant::CLI do
 
     make do
       message = <<~'MESSAGE'
-        Missing required subcommand!
+        mutant: Missing required subcommand!
 
         usage: mutant <run|subscription> [options]
 
@@ -103,7 +103,23 @@ RSpec.describe Mutant::CLI do
     end
 
     make do
-      message = 'mutant: Cannot find subcommand "unknown-subcommand"'
+      message = <<~'MESSAGE'
+        mutant: Cannot find subcommand "unknown-subcommand"
+
+        usage: mutant <run|subscription> [options]
+
+        Summary: mutation testing engine main command
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+
+        Available subcommands:
+
+        run          - Run code analysis
+        subscription - Subscription subcommands
+      MESSAGE
 
       {
         arguments:       %w[unknown-subcommand],
@@ -114,7 +130,23 @@ RSpec.describe Mutant::CLI do
     end
 
     make do
-      message = 'mutant: invalid option: --unknown-option'
+      message = <<~'MESSAGE'
+        mutant: invalid option: --unknown-option
+
+        usage: mutant <run|subscription> [options]
+
+        Summary: mutation testing engine main command
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+
+        Available subcommands:
+
+        run          - Run code analysis
+        subscription - Subscription subcommands
+      MESSAGE
 
       {
         arguments:       %w[--unknown-option foo],
@@ -160,7 +192,7 @@ RSpec.describe Mutant::CLI do
 
     make do
       message = <<~'MESSAGE'
-        Missing required subcommand!
+        mutant subscription: Missing required subcommand!
 
         usage: mutant subscription <show|test> [options]
 
