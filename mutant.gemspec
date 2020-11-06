@@ -34,12 +34,12 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('mprelude',      '~> 0.1.0')
   gem.add_runtime_dependency('parser',        '~> 2.7.1')
   gem.add_runtime_dependency('procto',        '~> 0.0.2')
-  gem.add_runtime_dependency('unparser',      '~> 0.5.3')
+  gem.add_runtime_dependency('unparser',      '~> 0.5.4')
   gem.add_runtime_dependency('variable',      '~> 0.0.1')
 
   gem.add_development_dependency('parallel',   '~> 1.3')
-  gem.add_development_dependency('rspec',      '~> 3.9')
-  gem.add_development_dependency('rspec-core', '~> 3.9')
+  gem.add_development_dependency('rspec',      '~> 3.10')
+  gem.add_development_dependency('rspec-core', '~> 3.10')
   gem.add_development_dependency('rspec-its',  '~> 1.3.0')
-  gem.add_development_dependency('rubocop',    '~> 1.0')
+  gem.add_development_dependency('rubocop',    '~> 1.2')
 end
