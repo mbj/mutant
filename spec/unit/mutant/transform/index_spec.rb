@@ -24,9 +24,9 @@ RSpec.describe Mutant::Transform::Index do
     end
   end
 
-  describe '#apply' do
+  describe '#call' do
     def apply
-      subject.apply(input)
+      subject.call(input)
     end
 
     context 'on valid input' do

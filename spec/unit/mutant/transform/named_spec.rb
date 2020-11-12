@@ -16,9 +16,9 @@ RSpec.describe Mutant::Transform::Named do
     end
   end
 
-  describe '#apply' do
+  describe '#call' do
     def apply
-      subject.apply(input)
+      subject.call(input)
     end
 
     context 'on valid input' do
@@ -34,7 +34,7 @@ RSpec.describe Mutant::Transform::Named do
 
       let(:error) do
         Mutant::Transform::Error.new(
-          cause:     transform.apply(input).from_left,
+          cause:     transform.call(input).from_left,
           input:     input,
           message:   nil,
           transform: subject
