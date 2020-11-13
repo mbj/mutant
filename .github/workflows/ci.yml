@@ -13,7 +13,7 @@ jobs:
   ruby-spec:
     name: Unit Specs
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 5
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -47,7 +47,7 @@ jobs:
   ruby-integration-minitest:
     name: Integration Minitest
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 5
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -79,7 +79,7 @@ jobs:
   ruby-integration-generation:
     name: Integration Mutation Generation
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 5
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -95,7 +95,7 @@ jobs:
   ruby-rubocop:
     name: Rubocop
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 5
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:

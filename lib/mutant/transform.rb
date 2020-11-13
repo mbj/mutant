@@ -16,7 +16,7 @@ module Mutant
     # @param [Object] input
     #
     # @return [Either<Error, Object>]
-    abstract_method :apply
+    abstract_method :call
 
     # Deep error data structure
     class Error
@@ -61,8 +61,8 @@ module Mutant
       # Apply transformation to input
       #
       # @return [Either<Error, Object>]
-      def apply(input)
-        transformer.apply(input).lmap(&method(:wrap_error))
+      def call(input)
+        transformer.call(input).lmap(&method(:wrap_error))
       end
 
       # Named slug
@@ -126,8 +126,8 @@ module Mutant
       # @param [Object] input
       #
       # @return [Either<Error, Object>]
-      def apply(input)
-        transform.apply(input).lmap(&method(:wrap_error))
+      def call(input)
+        transform.call(input).lmap(&method(:wrap_error))
       end
 
       # Rendering slug
@@ -152,7 +152,7 @@ module Mutant
       # @param [Object] input
       #
       # @return [Either<Error, Object>]
-      def apply(input)
+      def call(input)
         if input.instance_of?(primitive)
           success(input)
         else
@@ -187,7 +187,7 @@ module Mutant
       # @param [Object] input
       #
       # @return [Either<Error, Object>]
-      def apply(input)
+      def call(input)
         if input.equal?(true) || input.equal?(false)
           success(input)
         else
@@ -215,9 +215,9 @@ module Mutant
       # @param [Object] input
       #
       # @return [Either<Error, Array<Object>>]
-      def apply(input)
+      def call(input)
         PRIMITIVE
-          .apply(input)
+          .call(input)
           .lmap(&method(:lift_error))
           .bind(&method(:run))
       end
@@ -229,7 +229,7 @@ module Mutant
         output = []
 
         input.each_with_index do |value, index|
-          output << transform.apply(value).lmap do |error|
+          output << transform.call(value).lmap do |error|
             return failure(
               error(
                 cause:   Index.wrap(error, index),
@@ -261,7 +261,7 @@ module Mutant
         # @param [Hash{String => Object}]
         #
         # @return [Hash{Symbol => Object}]
-        def apply(input)
+        def call(input)
           success(input.transform_keys(&:to_sym))
         end
       end # Symbolize
@@ -283,8 +283,8 @@ module Mutant
         # @param [Object]
         #
         # @return [Either<Error, Object>]
-        def apply(input)
-          transform.apply(input).lmap do |error|
+        def call(input)
+          transform.call(input).lmap do |error|
             error(cause: error, input: input)
           end
         end
@@ -295,9 +295,9 @@ module Mutant
       # @param [Object] input
       #
       # @return [Either<Error, Object>]
-      def apply(input)
+      def call(input)
         PRIMITIVE
-          .apply(input)
+          .call(input)
           .lmap(&method(:lift_error))
           .bind(&method(:reject_keys))
           .bind(&method(:transform))
@@ -342,7 +342,7 @@ module Mutant
       # rubocop:enable Metrics/MethodLength
 
       def coerce_key(key, input)
-        key.apply(input.fetch(key.value)).lmap do |error|
+        key.call(input.fetch(key.value)).lmap do |error|
           error(input: input, cause: error)
         end
       end
@@ -388,11 +388,11 @@ module Mutant
       # ignore :reek:NestedIterators
       #
       # @return [Either<Error, Object>]
-      def apply(input)
+      def call(input)
         current = input
 
         steps.each_with_index do |step, index|
-          current = step.apply(current).from_right do |error|
+          current = step.call(current).from_right do |error|
             return failure(error(cause: Index.wrap(error, index), input: input))
           end
         end
@@ -410,7 +410,7 @@ module Mutant
       # @param [Object]
       #
       # @return [Either<Error, Object>]
-      def apply(input)
+      def call(input)
         Either
           .wrap_error(error_class) { block.call(input) }
           .lmap { |exception| error(input: input, message: exception.to_s) }

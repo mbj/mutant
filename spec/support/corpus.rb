@@ -309,7 +309,7 @@ module MutantSpec
 
       ALL = Transform::Named
         .new(path, transform)
-        .apply(path)
+        .call(path)
         .lmap(&:compact_message)
         .lmap(&method(:fail))
         .from_right
