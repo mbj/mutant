@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Note: The minitest integration was sponsored by [Arkency](https://arkency.com/).
+# The minitest integration was sponsored by [Arkency](https://arkency.com/).
 # Without their support this integration would not exist.
 
 require 'minitest'
