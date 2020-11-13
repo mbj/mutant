@@ -46,12 +46,17 @@ module Mutant
             * Reduce locks
           MESSAGE
 
+          TIMEOUT_ERROR_MESSAGE =<<~'MESSAGE'
+            Mutation analysis ran into the configured timeout of %02.9<timeout>g seconds.
+          MESSAGE
+
           MAP = {
             Isolation::Fork::ChildError   => :visit_child_error,
             Isolation::Fork::ForkError    => :visit_fork_error,
             Isolation::Result::ErrorChain => :visit_chain,
             Isolation::Result::Exception  => :visit_exception,
-            Isolation::Result::Success    => :visit_success
+            Isolation::Result::Success    => :visit_success,
+            Isolation::Result::Timeout    => :visit_timeout
           }.freeze
 
           private_constant(*constants(false))
@@ -88,6 +93,10 @@ module Mutant
 
           def visit_fork_error
             puts(FORK_ERROR_MESSAGE)
+          end
+
+          def visit_timeout
+            puts(TIMEOUT_ERROR_MESSAGE % { timeout: object.timeout })
           end
 
           def visit_exception

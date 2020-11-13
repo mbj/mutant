@@ -271,6 +271,7 @@ RSpec.describe Mutant::CLI do
         Runner:
                 --fail-fast                  Fail fast
             -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
+            -t, --mutation-timeout NUMBER    Per mutation analysis timeout
 
 
         Integration:
@@ -579,6 +580,13 @@ RSpec.describe Mutant::CLI do
         context 'with --jobs option' do
           let(:arguments)        { super() + %w[--jobs 10] }
           let(:bootstrap_config) { super().with(jobs: 10)  }
+
+          include_examples 'CLI run'
+        end
+
+        context 'with --mutation-timeout option' do
+          let(:arguments)        { super() + %w[--mutation-timeout 10]  }
+          let(:bootstrap_config) { super().with(mutation_timeout: 10.0) }
 
           include_examples 'CLI run'
         end

@@ -133,7 +133,7 @@ module Mutant
   private
 
     def run_mutation_tests(mutation, tests)
-      config.isolation.call do
+      config.isolation.call(config.mutation_timeout) do
         result = mutation.insert(world.kernel)
 
         if result.equal?(Loader::Result::VoidValue.instance)

@@ -59,3 +59,9 @@ jobs: 8
 
 The number of jobs can be overridden by the `-j` or `--jobs` option in the CLI.
 See mutant's configuration file, [mutant.yml](/mutant.yml), for a complete example.
+
+#### `mutation_timeout`
+
+Specify the maximum time, in seconds, a mutation gets analysed.
+Past this time the mutation analysis gets terminated and the result is currently being
+reported as uncovered.

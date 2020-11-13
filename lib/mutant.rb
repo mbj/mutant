@@ -238,6 +238,7 @@ module Mutant
       isolation:         Mutant::Isolation::Fork.new(WORLD),
       jobs:              nil,
       matcher:           Matcher::Config::DEFAULT,
+      mutation_timeout:  nil,
       reporter:          Reporter::CLI.build(WORLD.stdout),
       requires:          EMPTY_ARRAY,
       zombie:            false

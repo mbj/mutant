@@ -14,6 +14,7 @@ module Mutant
       :isolation,
       :jobs,
       :matcher,
+      :mutation_timeout,
       :reporter,
       :requires,
       :zombie
@@ -24,6 +25,7 @@ module Mutant
     end
 
     boolean = Transform::Boolean.new
+    float   = Transform::Primitive.new(Float)
     integer = Transform::Primitive.new(Integer)
     string  = Transform::Primitive.new(String)
 
@@ -35,11 +37,12 @@ module Mutant
         Transform::Exception.new(YAML::SyntaxError, YAML.method(:safe_load)),
         Transform::Hash.new(
           optional: [
-            Transform::Hash::Key.new('fail_fast',   boolean),
-            Transform::Hash::Key.new('includes',    string_array),
-            Transform::Hash::Key.new('integration', string),
-            Transform::Hash::Key.new('jobs',        integer),
-            Transform::Hash::Key.new('requires',    string_array)
+            Transform::Hash::Key.new('fail_fast',        boolean),
+            Transform::Hash::Key.new('includes',         string_array),
+            Transform::Hash::Key.new('integration',      string),
+            Transform::Hash::Key.new('jobs',             integer),
+            Transform::Hash::Key.new('mutation_timeout', float),
+            Transform::Hash::Key.new('requires',         string_array)
           ],
           required: []
         ),
@@ -64,13 +67,14 @@ module Mutant
     # @return [Config]
     def merge(other)
       other.with(
-        fail_fast:   fail_fast || other.fail_fast,
-        includes:    includes + other.includes,
-        jobs:        other.jobs || jobs,
-        integration: other.integration || integration,
-        matcher:     matcher.merge(other.matcher),
-        requires:    requires + other.requires,
-        zombie:      zombie || other.zombie
+        fail_fast:        fail_fast || other.fail_fast,
+        includes:         includes + other.includes,
+        jobs:             other.jobs || jobs,
+        integration:      other.integration || integration,
+        mutation_timeout: other.mutation_timeout || mutation_timeout,
+        matcher:          matcher.merge(other.matcher),
+        requires:         requires + other.requires,
+        zombie:           zombie || other.zombie
       )
     end
 

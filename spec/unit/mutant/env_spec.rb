@@ -44,6 +44,7 @@ RSpec.describe Mutant::Env do
       expression_parser: instance_double(Mutant::Expression::Parser),
       integration:       integration_class,
       isolation:         isolation,
+      mutation_timeout:  1.0,
       reporter:          reporter
     )
   end
@@ -108,7 +109,7 @@ RSpec.describe Mutant::Env do
       it 'performs IO in expected sequence' do
         apply
 
-        expect(isolation).to have_received(:call).ordered
+        expect(isolation).to have_received(:call).ordered.with(config.mutation_timeout)
         expect(mutation).to have_received(:insert).ordered.with(kernel)
         expect(integration).to have_received(:call).ordered.with([test_a, test_b])
       end

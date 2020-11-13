@@ -91,6 +91,16 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       STR
     end
 
+    context 'on child timeout' do
+      let(:reportable) do
+        Mutant::Isolation::Fork::Result::Timeout.new(1.2)
+      end
+
+      it_reports <<~'STR'
+        Mutation analysis ran into the configured timeout of 1.2 seconds.
+      STR
+    end
+
     context 'on child isolation error' do
       let(:fork_error) do
         Mutant::Isolation::Fork::ForkError.new

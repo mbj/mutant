@@ -49,5 +49,19 @@ module Mutant
         Either::Left.new("Command #{command} failed!")
       end
     end
+
+    # Deadline
+    #
+    # @param [Float, nil] allowed_time
+    def deadline(allowed_time)
+      if allowed_time
+        Timer::Deadline.new(
+          allowed_time: allowed_time,
+          timer:        timer
+        )
+      else
+        Timer::Deadline::None.new
+      end
+    end
   end # World
 end # Mutant
