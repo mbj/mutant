@@ -219,6 +219,7 @@ module Mutant
     stderr:             $stderr,
     stdout:             $stdout,
     thread:             Thread,
+    timer:              Timer.new(Process),
     warnings:           Warnings.new(Warning)
   )
 

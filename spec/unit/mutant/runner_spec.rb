@@ -35,7 +35,15 @@ RSpec.describe Mutant::Runner do
         condition_variable: condition_variable,
         kernel:             kernel,
         mutex:              mutex,
-        thread:             thread
+        thread:             thread,
+        timer:              timer
+      )
+    end
+
+    let(:timer) do
+      instance_double(
+        Mutant::Timer,
+        now: 1.0
       )
     end
 

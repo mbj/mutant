@@ -8,13 +8,15 @@ RSpec.describe Mutant::CLI do
     let(:kernel)        { class_double(Kernel)                  }
     let(:stderr)        { instance_double(IO)                   }
     let(:stdout)        { instance_double(IO)                   }
+    let(:timer)         { instance_double(Mutant::Timer)        }
 
     let(:world) do
       instance_double(
         Mutant::World,
         kernel: kernel,
         stderr: stderr,
-        stdout: stdout
+        stdout: stdout,
+        timer:  timer
       )
     end
 

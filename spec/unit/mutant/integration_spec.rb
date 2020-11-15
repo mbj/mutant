@@ -1,19 +1,23 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Integration do
-  subject { class_under_test.new(Mutant::Config::DEFAULT) }
-
-  let(:class_under_test) do
-    Class.new(described_class)
+  let(:object) do
+    Class.new(described_class).new(
+      expression_parser: expression_parser,
+      timer:             timer
+    )
   end
+
+  let(:expression_parser) { instance_double(Mutant::Expression::Parser) }
+  let(:timer)             { instance_double(Mutant::Timer)              }
 
   describe '#setup' do
     def apply
-      subject.setup
+      object.setup
     end
 
     it 'returns self' do
-      expect(apply).to be(subject)
+      expect(apply).to be(object)
     end
   end
 
@@ -29,7 +33,8 @@ RSpec.describe Mutant::Integration do
     let(:config) do
       instance_double(
         Mutant::Config,
-        integration: integration_name
+        integration:       integration_name,
+        expression_parser: expression_parser
       )
     end
 
@@ -44,7 +49,8 @@ RSpec.describe Mutant::Integration do
     let(:world) do
       instance_double(
         Mutant::World,
-        kernel: kernel
+        kernel: kernel,
+        timer:  timer
       )
     end
 
@@ -103,7 +109,7 @@ RSpec.describe Mutant::Integration do
 
       expect(described_class::Null)
         .to have_received(:new)
-        .with(config)
+        .with(object.to_h)
         .ordered
 
       expect(integration)
@@ -120,8 +126,15 @@ RSpec.describe Mutant::Integration do
 end
 
 RSpec.describe Mutant::Integration::Null do
+  let(:object) do
+    described_class.new(
+      expression_parser: expression_parser,
+      timer:             timer
+    )
+  end
 
-  let(:object) { described_class.new(Mutant::Config::DEFAULT) }
+  let(:expression_parser) { instance_double(Mutant::Expression::Parser) }
+  let(:timer)             { instance_double(Mutant::Timer)              }
 
   describe '#all_tests' do
     subject { object.all_tests }

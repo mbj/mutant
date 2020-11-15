@@ -25,6 +25,7 @@ RSpec.describe Mutant::Env do
   let(:test_a)            { instance_double(Mutant::Test, :a)    }
   let(:test_b)            { instance_double(Mutant::Test, :b)    }
   let(:test_c)            { instance_double(Mutant::Test, :c)    }
+  let(:timer)             { instance_double(Mutant::Timer)       }
 
   let(:integration) do
     instance_double(Mutant::Integration, all_tests: [test_a, test_b, test_c])
@@ -40,16 +41,18 @@ RSpec.describe Mutant::Env do
   let(:config) do
     instance_double(
       Mutant::Config,
-      integration: integration_class,
-      isolation:   isolation,
-      reporter:    reporter
+      expression_parser: instance_double(Mutant::Expression::Parser),
+      integration:       integration_class,
+      isolation:         isolation,
+      reporter:          reporter
     )
   end
 
   let(:world) do
     instance_double(
       Mutant::World,
-      kernel: kernel
+      kernel: kernel,
+      timer:  timer
     )
   end
 
@@ -62,7 +65,7 @@ RSpec.describe Mutant::Env do
       .with(subject_b)
       .and_return([test_b, test_c])
 
-    allow(Mutant::Timer).to receive(:now).and_return(2.0, 3.0)
+    allow(timer).to receive(:now).and_return(2.0, 3.0)
   end
 
   describe '#kill' do
@@ -212,10 +215,15 @@ RSpec.describe Mutant::Env do
     end
 
     it 'returns empty env' do
+      integration = Mutant::Integration::Null.new(
+        expression_parser: config.expression_parser,
+        timer:             timer
+      )
+
       expect(apply).to eql(
         described_class.new(
           config:           config,
-          integration:      Mutant::Integration::Null.new(config),
+          integration:      integration,
           matchable_scopes: Mutant::EMPTY_ARRAY,
           mutations:        Mutant::EMPTY_ARRAY,
           parser:           Mutant::Parser.new,

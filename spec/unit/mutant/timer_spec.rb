@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Timer do
+  let(:object) { described_class.new(process) }
+
   let(:events) { [] }
 
   let(:times) { [1.0, 2.0] }
 
+  let(:process) { class_double(Process) }
+
   before do
-    allow(Process).to receive(:clock_gettime) do |argument|
+    allow(process).to receive(:clock_gettime) do |argument|
       expect(argument).to be(Process::CLOCK_MONOTONIC)
 
       events << :clock_gettime
@@ -15,26 +19,9 @@ RSpec.describe Mutant::Timer do
     end
   end
 
-  describe '.elapsed' do
-    def apply
-      described_class.elapsed { events << :yield }
-    end
-
-    it 'executes events in expected sequence' do
-      expect { apply }
-        .to change(events, :to_a)
-        .from([])
-        .to(%i[clock_gettime yield clock_gettime])
-    end
-
-    it 'returns elapsed time' do
-      expect(apply).to be(1.0)
-    end
-  end
-
   describe '.now' do
     def apply
-      described_class.now
+      object.now
     end
 
     it 'returns current monotonic time' do

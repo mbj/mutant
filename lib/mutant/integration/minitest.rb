@@ -88,7 +88,7 @@ module Mutant
       def call(tests)
         test_cases = tests.map(&all_tests_index.method(:fetch))
         output     = StringIO.new
-        start      = Timer.now
+        start      = timer.now
 
         reporter = ::Minitest::SummaryReporter.new(output)
 
@@ -104,7 +104,7 @@ module Mutant
           passed:  reporter.passed?,
           tests:   tests,
           output:  output.read,
-          runtime: Timer.now - start
+          runtime: timer.now - start
         )
       end
 
@@ -128,7 +128,7 @@ module Mutant
       def construct_test(test_case)
         Test.new(
           id:          test_case.identification,
-          expressions: test_case.expressions(config.expression_parser)
+          expressions: test_case.expressions(expression_parser)
         )
       end
 

@@ -10,6 +10,7 @@ RSpec.describe Mutant::Bootstrap do
   let(:object_space)         { class_double(ObjectSpace)              }
   let(:object_space_modules) { []                                     }
   let(:start_expressions)    { []                                     }
+  let(:timer)                { instance_double(Mutant::Timer)         }
   let(:warnings)             { instance_double(Mutant::Warnings)      }
 
   let(:config) do
@@ -46,7 +47,8 @@ RSpec.describe Mutant::Bootstrap do
       load_path:    load_path,
       object_space: object_space,
       pathname:     Pathname,
-      warnings:     warnings
+      warnings:     warnings,
+      timer:        timer
     )
   end
 

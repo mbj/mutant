@@ -20,6 +20,7 @@ module Mutant
       :stderr,
       :stdout,
       :thread,
+      :timer,
       :warnings
     )
 
