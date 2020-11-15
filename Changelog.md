@@ -1,3 +1,9 @@
+# v0.10.7 unreleased
+
+* Change CLI report format to print diff last.
+  This should be more user friendly on incremental / interactive
+  operation.
+
 # v0.10.6 2020-11-06
 
 * Change to always display help on invalid CLI. [#1093](https://github.com/mbj/mutant/pull/1093)

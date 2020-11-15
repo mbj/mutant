@@ -17,15 +17,16 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
 
       it_reports(<<~'REPORT')
         evil:subject-a:d27d2
-        @@ -1 +1 @@
-        -true
-        +false
         -----------------------
         Log messages (combined stderr and stdout):
         [killfork] log message
         Killfork exited nonzero. Its result (if any) was ignored.
         Process status:
         #<InstanceDouble(Process::Status) (anonymous)>
+        -----------------------
+        @@ -1 +1 @@
+        -true
+        +false
         -----------------------
       REPORT
     end
@@ -43,14 +44,15 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
             it_reports(
               [
                 [Unparser::Color::NONE,  "evil:subject-a:d27d2\n"],
-                [Unparser::Color::NONE,  "@@ -1 +1 @@\n"],
-                [Unparser::Color::RED,   "-true\n"],
-                [Unparser::Color::GREEN, "+false\n"],
                 [Unparser::Color::NONE,  "-----------------------\n"],
                 [Unparser::Color::NONE,  "- 1 @ runtime: 1.0\n"],
                 [Unparser::Color::NONE,  "  - test-a\n"],
                 [Unparser::Color::NONE,  "Test Output:\n"],
                 [Unparser::Color::NONE,  "mutation a test result output\n"],
+                [Unparser::Color::NONE,  "-----------------------\n"],
+                [Unparser::Color::NONE,  "@@ -1 +1 @@\n"],
+                [Unparser::Color::RED,   "-true\n"],
+                [Unparser::Color::GREEN, "+false\n"],
                 [Unparser::Color::NONE,  "-----------------------\n"]
               ].map { |color, text| color.format(text) }.join
             )
@@ -59,14 +61,15 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           context 'on non tty' do
             it_reports(<<~'STR')
               evil:subject-a:d27d2
-              @@ -1 +1 @@
-              -true
-              +false
               -----------------------
               - 1 @ runtime: 1.0
                 - test-a
               Test Output:
               mutation a test result output
+              -----------------------
+              @@ -1 +1 @@
+              -true
+              +false
               -----------------------
             STR
           end
@@ -81,6 +84,12 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
 
           it_reports(<<~REPORT)
             evil:subject-a:a5bc7
+            -----------------------
+            - 1 @ runtime: 1.0
+              - test-a
+            Test Output:
+            mutation a test result output
+            -----------------------
             --- Internal failure ---
             BUG: A generted mutation did not result in exactly one diff hunk!
             This is an invariant violation by the mutation generation engine.
@@ -93,11 +102,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
             super
             Mutated AST:
             s(:zsuper)
-            -----------------------
-            - 1 @ runtime: 1.0
-              - test-a
-            Test Output:
-            mutation a test result output
             -----------------------
           REPORT
         end
@@ -112,6 +116,12 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
 
         it_reports(<<~REPORT)
           neutral:subject-a:d5318
+          -----------------------
+          - 1 @ runtime: 1.0
+            - test-a
+          Test Output:
+          mutation a test result output
+          -----------------------
           --- Neutral failure ---
           Original code was inserted unmutated. And the test did NOT PASS.
           Your tests do not pass initially or you found a bug in mutant / unparser.
@@ -119,11 +129,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           s(:true)
           Unparsed Source:
           true
-          -----------------------
-          - 1 @ runtime: 1.0
-            - test-a
-          Test Output:
-          mutation a test result output
           -----------------------
         REPORT
       end
@@ -137,14 +142,15 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
 
         it_reports(<<~REPORT)
           noop:subject-a:d5318
-          ---- Noop failure -----
-          No code was inserted. And the test did NOT PASS.
-          This is typically a problem of your specs not passing unmutated.
           -----------------------
           - 1 @ runtime: 1.0
             - test-a
           Test Output:
           mutation a test result output
+          -----------------------
+          ---- Noop failure -----
+          No code was inserted. And the test did NOT PASS.
+          This is typically a problem of your specs not passing unmutated.
           -----------------------
         REPORT
       end

@@ -46,24 +46,24 @@ module Mutant
             This is typically a problem of your specs not passing unmutated.
           MESSAGE
 
-          FOOTER = '-----------------------'
+          SEPARATOR = '-----------------------'
 
           # Run report printer
           #
           # @return [undefined]
           def run
             puts(mutation.identification)
+            puts(SEPARATOR)
             print_details
-            puts(FOOTER)
+            puts(SEPARATOR)
           end
 
         private
 
           def print_details
-            __send__(MAP.fetch(mutation.class))
-
-            puts(FOOTER)
             visit_isolation_result
+            puts(SEPARATOR)
+            __send__(MAP.fetch(mutation.class))
           end
 
           def evil_details

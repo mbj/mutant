@@ -12,14 +12,15 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       subject-a
       - test-a
       evil:subject-a:d27d2
-      @@ -1 +1 @@
-      -true
-      +false
       -----------------------
       - 1 @ runtime: 1.0
         - test-a
       Test Output:
       mutation a test result output
+      -----------------------
+      @@ -1 +1 @@
+      -true
+      +false
       -----------------------
       Mutant environment:
       Matcher:         #<Mutant::Matcher::Config empty>
