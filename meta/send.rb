@@ -336,6 +336,15 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.send(:bar__mutant__)'
 end
 
+Mutant::Meta::Example.add :send do
+  source 'send'
+
+  singleton_mutations
+
+  mutation '__send__'
+  mutation 'public_send'
+end
+
 Mutant::Meta::Example.add :send do # rubocop:disable Metrics/BlockLength
   source 'foo.public_send(:bar, 1, two: true, **kwargs, &block)'
 
