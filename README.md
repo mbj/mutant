@@ -3,7 +3,7 @@ mutant
 
 ![Build Status](https://github.com/mbj/mutant/workflows/CI/badge.svg)
 [![Gem Version](https://img.shields.io/gem/v/mutant.svg)](https://rubygems.org/gems/mutant)
-[![Slack Status](https://mutation-testing-slack.herokuapp.com/badge.svg)](https://mutation-testing.slack.com/messages/mutant)
+[![Discord](https://img.shields.io/discord/767914934016802818.svg)](https://discord.gg/BSr62b4RkV)
 
 ## What is Mutant?
 
@@ -163,9 +163,9 @@ I'm wrong I'd be happy to improve mutant to the point I'm right again.
 
 Try the following:
 
+* [Discord Channel](https://discord.gg/BSr62b4RkV) reach for `@mbj`.
 * [Github Issues](https://github.com/mbj/mutant/issues)
 * [Release Announcement Mailing List](https://announce.mutant.dev/signup)
-* [Slack channel](mutation-testing.slack.com) request invite from [Markus Schirp](mailto:mbj@schirp-dso.com?subject=Mutation%20Testing%20Slack%20Channel%20Invite).
 
 ## Sponsoring
 
