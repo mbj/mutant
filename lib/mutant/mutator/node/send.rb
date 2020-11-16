@@ -99,7 +99,7 @@ module Mutant
 
           dynamic_selector, *actual_arguments = *arguments
 
-          return unless n_sym?(dynamic_selector)
+          return unless dynamic_selector && n_sym?(dynamic_selector)
 
           method_name = AST::Meta::Symbol.new(dynamic_selector).name
 
