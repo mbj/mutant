@@ -158,6 +158,7 @@ I'm wrong I'd be happy to improve mutant to the point I'm right again.
 * [Concurrency](/docs/concurrency.md)
 * [Rspec Integration](/docs/mutant-rspec.md)
 * [Minitest Integration](/docs/mutant-minitest.md)
+* [Configuration](/docs/configuration.md)
 
 ## Communication
 
