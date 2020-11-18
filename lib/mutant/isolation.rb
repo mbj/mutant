@@ -15,6 +15,7 @@ module Mutant
 
       abstract_method :error
       abstract_method :next
+      abstract_method :timeout
       abstract_method :value
 
       # Add error on top of current result
@@ -53,6 +54,11 @@ module Mutant
       class Exception < self
         include Concord::Public.new(:value)
       end # Error
+
+      # Unsuccessful result by timeout
+      class Timeout < self
+        include Concord::Public.new(:timeout)
+      end # Timeout
 
       # Result when there where many results
       class ErrorChain < Result

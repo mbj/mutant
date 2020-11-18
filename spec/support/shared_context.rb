@@ -65,7 +65,22 @@ module SharedContext
         selected_tests:        [test_a].to_set,
         selections:            selections,
         subjects:              subjects,
-        test_subject_ratio:    Rational(1)
+        test_subject_ratio:    Rational(1),
+        world:                 world
+      )
+    end
+
+    let(:world) do
+      instance_double(
+        Mutant::World,
+        timer: timer
+      )
+    end
+
+    let(:timer) do
+      instance_double(
+        Mutant::Timer,
+        now: 1.0
       )
     end
 

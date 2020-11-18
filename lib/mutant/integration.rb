@@ -4,7 +4,7 @@ module Mutant
 
   # Abstract base class mutant test framework integrations
   class Integration
-    include AbstractType, Adamantium::Flat, Concord.new(:config)
+    include AbstractType, Adamantium::Flat, Anima.new(:expression_parser, :timer)
 
     LOAD_MESSAGE = <<~'MESSAGE'
       Unable to load integration mutant-%<integration_name>s:
@@ -27,9 +27,12 @@ module Mutant
     #
     # @return [Either<String, Integration>]
     def self.setup(env)
-      attempt_require(env)
-        .bind { attempt_const_get(env) }
-        .fmap { |klass| klass.new(env.config).setup }
+      attempt_require(env).bind { attempt_const_get(env) }.fmap do |klass|
+        klass.new(
+          expression_parser: env.config.expression_parser,
+          timer:             env.world.timer
+        ).setup
+      end
     end
 
     # rubocop:disable Style/MultilineBlockChain
@@ -80,11 +83,5 @@ module Mutant
     #
     # @return [Enumerable<Test>]
     abstract_method :all_tests
-
-  private
-
-    def expression_parser
-      config.expression_parser
-    end
   end # Integration
 end # Mutant

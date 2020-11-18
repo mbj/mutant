@@ -59,13 +59,13 @@ module Mutant
       def call(tests)
         examples = tests.map(&all_tests_index.method(:fetch))
         filter_examples(&examples.method(:include?))
-        start = Timer.now
+        start = timer.now
         passed = @runner.run_specs(@world.ordered_example_groups).equal?(EXIT_SUCCESS)
         @output.rewind
         Result::Test.new(
           output:  @output.read,
           passed:  passed,
-          runtime: Timer.now - start,
+          runtime: timer.now - start,
           tests:   tests
         )
       end

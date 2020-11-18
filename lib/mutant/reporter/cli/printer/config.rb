@@ -12,13 +12,17 @@ module Mutant
           # @param [Mutant::Config] config
           #
           # @return [undefined]
+          #
+          # rubocop:disable Metrics/AbcSize
           def run
-            info 'Matcher:         %s', object.matcher.inspect
-            info 'Integration:     %s', object.integration || 'null'
-            info 'Jobs:            %s', object.jobs || 'auto'
-            info 'Includes:        %s', object.includes
-            info 'Requires:        %s', object.requires
+            info 'Matcher:         %s',    object.matcher.inspect
+            info 'Integration:     %s',    object.integration || 'null'
+            info 'Jobs:            %s',    object.jobs || 'auto'
+            info 'Includes:        %s',    object.includes
+            info 'Requires:        %s',    object.requires
+            info 'MutationTimeout: %0.9g', object.mutation_timeout if object.mutation_timeout
           end
+          # rubocop:enable Metrics/AbcSize
 
         end # Config
       end # Printer

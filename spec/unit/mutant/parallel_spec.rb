@@ -49,6 +49,11 @@ RSpec.describe Mutant::Parallel do
       instance_double(Variable::IVar, 'source')
     end
 
+    before do
+      allow(thread_a).to receive_messages('name=': nil)
+      allow(thread_b).to receive_messages('name=': nil)
+    end
+
     def ivar(value, **attributes)
       {
         receiver:  Variable::IVar,

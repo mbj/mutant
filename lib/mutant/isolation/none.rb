@@ -13,7 +13,7 @@ module Mutant
       # @return [Result]
       #
       # ignore :reek:UtilityFunction
-      def call
+      def call(_timeout)
         Result::Success.new(yield)
       rescue => exception
         Result::Exception.new(exception)

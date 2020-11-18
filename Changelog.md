@@ -1,5 +1,6 @@
 # v0.10.7 unreleased
 
+* Add support for external mutation timeouts. [#1105](https://github.com/mbj/mutant/pull/1105)
 * Fix crash on static send mutation. [#1108](https://github.com/mbj/mutant/pull/1108)
 * Change CLI report format to print diff last.
   This should be more user friendly on incremental / interactive

@@ -157,6 +157,14 @@ RSpec.describe Mutant::Config do
       include_examples 'overwrite value'
     end
 
+    context 'merging mutation timeout' do
+      let(:key)            { :mutation_timeout }
+      let(:original_value) { 1.0               }
+      let(:other_value)    { 2.0               }
+
+      include_examples 'maybe value'
+    end
+
     context 'merging zombie' do
       let(:key) { :zombie }
 

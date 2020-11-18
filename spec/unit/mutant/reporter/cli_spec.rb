@@ -22,10 +22,6 @@ RSpec.describe Mutant::Reporter::CLI do
     end
   end
 
-  before do
-    allow(Mutant::Timer).to receive_messages(now: Mutant::Timer.now)
-  end
-
   describe '.build' do
     subject { described_class.build(output) }
 

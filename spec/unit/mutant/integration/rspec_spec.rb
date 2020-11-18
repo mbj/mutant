@@ -3,10 +3,16 @@
 require 'mutant/integration/rspec'
 
 RSpec.describe Mutant::Integration::Rspec do
-  let(:object) { described_class.new(Mutant::Config::DEFAULT) }
+  let(:object) do
+    described_class.new(
+      expression_parser: Mutant::Config::DEFAULT.expression_parser,
+      timer:             timer
+    )
+  end
 
   let(:rspec_options) { instance_double(RSpec::Core::ConfigurationOptions) }
   let(:rspec_runner)  { instance_double(RSpec::Core::Runner)               }
+  let(:timer)         { instance_double(Mutant::Timer)                     }
 
   let(:example_a) do
     double(
@@ -87,7 +93,7 @@ RSpec.describe Mutant::Integration::Rspec do
     }
   end
 
-  let(:world) do
+  let(:rspec_world) do
     double(
       'world',
       example_groups:    example_groups,
@@ -125,8 +131,8 @@ RSpec.describe Mutant::Integration::Rspec do
       .with(rspec_options)
       .and_return(rspec_runner)
 
-    expect(RSpec).to receive_messages(world: world)
-    allow(Mutant::Timer).to receive_messages(now: Mutant::Timer.now)
+    expect(RSpec).to receive_messages(world: rspec_world)
+    allow(timer).to receive_messages(now: 1.0)
   end
 
   describe '#all_tests' do
@@ -162,7 +168,7 @@ RSpec.describe Mutant::Integration::Rspec do
     let(:tests) { [all_tests.fetch(0)] }
 
     before do
-      expect(world).to receive(:ordered_example_groups) do
+      expect(rspec_world).to receive(:ordered_example_groups) do
         filtered_examples.values.flatten
       end
       expect(rspec_runner).to receive(:run_specs).with([example_a]).and_return(exit_status)
