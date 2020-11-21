@@ -25,7 +25,6 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle install
     - run: bundle exec rspec spec/unit
   ruby-mutant:
     name: Mutation coverage
@@ -44,7 +43,6 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle install
     - run: ./mutant.sh --since HEAD~1 -- 'Mutant*'
   ruby-integration-minitest:
     name: Integration Minitest
@@ -61,7 +59,6 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle install
     - run: bundle exec rspec spec/integration -e minitest
   ruby-integration-rspec:
     name: Integration RSpec
@@ -78,7 +75,6 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle install
     - run: bundle exec rspec spec/integration -e rspec
   ruby-integration-generation:
     name: Integration Mutation Generation
@@ -95,7 +91,6 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle install
     - run: bundle exec rspec spec/integration -e generation
   ruby-rubocop:
     name: Rubocop
@@ -112,5 +107,4 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle install
     - run: bundle exec rubocop
