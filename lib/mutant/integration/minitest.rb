@@ -83,8 +83,6 @@ module Mutant
       # @return [Result::Test]
       #
       # rubocop:disable Metrics/MethodLength
-      #
-      # ignore :reek:TooManyStatements
       def call(tests)
         test_cases = tests.map(&all_tests_index.method(:fetch))
         output     = StringIO.new

@@ -12,8 +12,6 @@ module Mutant
         # @param [UnboundMethod] method
         #
         # @return [Matcher::Method::Instance]
-        #
-        # :reek:ManualDispatch
         def self.new(scope, target_method)
           name = target_method.name
           evaluator =

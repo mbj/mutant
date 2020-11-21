@@ -11,8 +11,6 @@ module Mutant
       # Call block in no isolation
       #
       # @return [Result]
-      #
-      # ignore :reek:UtilityFunction
       def call(_timeout)
         Result::Success.new(yield)
       rescue => exception

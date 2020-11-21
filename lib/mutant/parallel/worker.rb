@@ -17,8 +17,6 @@ module Mutant
       # Run worker payload
       #
       # @return [self]
-      #
-      # ignore :reek:TooManyStatements
       def call
         loop do
           job = next_job or break

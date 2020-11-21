@@ -74,7 +74,6 @@ module Mutant
         end
       end # Pipe
 
-      # ignore :reek:InstanceVariableAssumption
       class Parent
         include(
           Anima.new(*ATTRIBUTES),
@@ -229,8 +228,6 @@ module Mutant
       #
       # @return [Result]
       #   execution result
-      #
-      # ignore :reek:NestedIterators
       #
       # rubocop:disable Metrics/MethodLength
       def call(timeout, &block)

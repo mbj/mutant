@@ -322,8 +322,6 @@ module Mutant
         )
       end
 
-      # ignore :reek:NestedIterators
-      #
       # rubocop:disable Metrics/MethodLength
       def transform_keys(keys, input)
         success(
