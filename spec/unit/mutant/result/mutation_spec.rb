@@ -19,12 +19,24 @@ RSpec.describe Mutant::Result::Mutation do
   end
 
   let(:isolation_result) do
-    Mutant::Isolation::Result::Success.new(test_result)
+    Mutant::Isolation::Result.new(
+      exception:      nil,
+      log:            '',
+      process_status: nil,
+      timeout:        nil,
+      value:          test_result
+    )
   end
 
   shared_examples_for 'unsuccessful isolation' do
     let(:isolation_result) do
-      Mutant::Isolation::Result::Exception.new(RuntimeError.new('foo'))
+      Mutant::Isolation::Result.new(
+        exception:      RuntimeError.new,
+        log:            '',
+        process_status: nil,
+        timeout:        nil,
+        value:          test_result
+      )
     end
   end
 

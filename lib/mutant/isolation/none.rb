@@ -11,11 +11,26 @@ module Mutant
       # Call block in no isolation
       #
       # @return [Result]
+      #
+      # rubocop:disable Lint/SuppressedException
+      # rubocop:disable Metrics/MethodLength
+      # ^^ it actually isn not suppressed, it assigns an lvar
       def call(_timeout)
-        Result::Success.new(yield)
-      rescue => exception
-        Result::Exception.new(exception)
+        begin
+          value = yield
+        rescue => exception
+        end
+
+        Result.new(
+          exception:      exception,
+          log:            '',
+          process_status: nil,
+          timeout:        nil,
+          value:          value
+        )
       end
+      # rubocop:enable Lint/SuppressedException
+      # rubocop:enable Metrics/MethodLength
 
     end # None
   end # Isolation

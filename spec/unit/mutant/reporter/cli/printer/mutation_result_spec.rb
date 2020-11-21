@@ -6,31 +6,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
   let(:reportable) { mutation_a_result }
 
   describe '.call' do
-    context 'isolation problem' do
-      let(:status) do
-        instance_double(Process::Status)
-      end
-
-      let(:mutation_a_isolation_result) do
-        Mutant::Isolation::Fork::ChildError.new(status, 'log message')
-      end
-
-      it_reports(<<~'REPORT')
-        evil:subject-a:d27d2
-        -----------------------
-        Log messages (combined stderr and stdout):
-        [killfork] log message
-        Killfork exited nonzero. Its result (if any) was ignored.
-        Process status:
-        #<InstanceDouble(Process::Status) (anonymous)>
-        -----------------------
-        @@ -1 +1 @@
-        -true
-        +false
-        -----------------------
-      REPORT
-    end
-
     context 'unsucessful result' do
       with(:mutation_a_test_result) { { passed: true } }
 

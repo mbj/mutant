@@ -17,6 +17,7 @@ RSpec.describe Mutant::Env do
   let(:integration_class) { Mutant::Integration::Null            }
   let(:isolation)         { Mutant::Isolation::None.new          }
   let(:kernel)            { instance_double(Object, 'kernel')    }
+  let(:process_status)    { instance_double(Process::Status)     }
   let(:reporter)          { instance_double(Mutant::Reporter)    }
   let(:selector)          { instance_double(Mutant::Selector)    }
   let(:subject_a)         { instance_double(Mutant::Subject, :a) }
@@ -69,6 +70,16 @@ RSpec.describe Mutant::Env do
     allow(timer).to receive(:now).and_return(2.0, 3.0)
   end
 
+  def isolation_success(value)
+    Mutant::Isolation::Result.new(
+      log:            '',
+      exception:      nil,
+      process_status: process_status,
+      timeout:        nil,
+      value:          value
+    )
+  end
+
   describe '#kill' do
     def apply
       subject.kill(mutation)
@@ -76,7 +87,7 @@ RSpec.describe Mutant::Env do
 
     before do
       allow(isolation).to receive(:call) do |&block|
-        Mutant::Isolation::Result::Success.new(block.call)
+        isolation_success(block.call)
       end
 
       allow(mutation).to receive_messages(insert: loader_result)
@@ -95,12 +106,9 @@ RSpec.describe Mutant::Env do
     end
 
     context 'when loader is successful' do
-      let(:loader_result) { Mutant::Loader::Result::Success.instance }
-      let(:test_result)   { instance_double(Mutant::Result::Test)    }
-
-      let(:isolation_result) do
-        Mutant::Isolation::Result::Success.new(test_result)
-      end
+      let(:isolation_result) { isolation_success(test_result)           }
+      let(:loader_result)    { Mutant::Loader::Result::Success.instance }
+      let(:test_result)      { instance_double(Mutant::Result::Test)    }
 
       before do
         allow(integration).to receive_messages(call: test_result)
@@ -121,7 +129,7 @@ RSpec.describe Mutant::Env do
       let(:loader_result) { Mutant::Loader::Result::VoidValue.instance }
 
       let(:isolation_result) do
-        Mutant::Isolation::Result::Success.new(Mutant::Result::Test::VoidValue.instance)
+        isolation_success(Mutant::Result::Test::VoidValue.instance)
       end
 
       it 'performs IO in expected sequence' do
