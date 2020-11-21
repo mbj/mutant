@@ -24,6 +24,7 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
     - run: bundle install
     - run: bundle exec rspec spec/unit
   ruby-mutant:
@@ -42,6 +43,7 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
     - run: bundle install
     - run: ./mutant.sh --since HEAD~1 -- 'Mutant*'
   ruby-integration-minitest:
@@ -58,6 +60,7 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
     - run: bundle install
     - run: bundle exec rspec spec/integration -e minitest
   ruby-integration-rspec:
@@ -74,6 +77,7 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
     - run: bundle install
     - run: bundle exec rspec spec/integration -e rspec
   ruby-integration-generation:
@@ -90,6 +94,7 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
     - run: bundle install
     - run: bundle exec rspec spec/integration -e generation
   ruby-rubocop:
@@ -106,5 +111,6 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
     - run: bundle install
     - run: bundle exec rubocop
