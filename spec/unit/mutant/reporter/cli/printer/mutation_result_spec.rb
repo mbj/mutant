@@ -47,8 +47,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
                 [Unparser::Color::NONE,  "-----------------------\n"],
                 [Unparser::Color::NONE,  "- 1 @ runtime: 1.0\n"],
                 [Unparser::Color::NONE,  "  - test-a\n"],
-                [Unparser::Color::NONE,  "Test Output:\n"],
-                [Unparser::Color::NONE,  "mutation a test result output\n"],
                 [Unparser::Color::NONE,  "-----------------------\n"],
                 [Unparser::Color::NONE,  "@@ -1 +1 @@\n"],
                 [Unparser::Color::RED,   "-true\n"],
@@ -64,8 +62,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
               -----------------------
               - 1 @ runtime: 1.0
                 - test-a
-              Test Output:
-              mutation a test result output
               -----------------------
               @@ -1 +1 @@
               -true
@@ -87,8 +83,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
             -----------------------
             - 1 @ runtime: 1.0
               - test-a
-            Test Output:
-            mutation a test result output
             -----------------------
             --- Internal failure ---
             BUG: A generted mutation did not result in exactly one diff hunk!
@@ -119,8 +113,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           -----------------------
           - 1 @ runtime: 1.0
             - test-a
-          Test Output:
-          mutation a test result output
           -----------------------
           --- Neutral failure ---
           Original code was inserted unmutated. And the test did NOT PASS.
@@ -145,8 +137,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
           -----------------------
           - 1 @ runtime: 1.0
             - test-a
-          Test Output:
-          mutation a test result output
           -----------------------
           ---- Noop failure -----
           No code was inserted. And the test did NOT PASS.

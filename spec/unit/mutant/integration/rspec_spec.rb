@@ -145,9 +145,9 @@ RSpec.describe Mutant::Integration::Rspec do
     subject { object.setup }
 
     before do
-      expect(rspec_runner).to receive(:setup) do |error, output|
+      expect(rspec_runner).to receive(:setup) do |error, stdout|
         expect(error).to be($stderr)
-        output.write('foo')
+        expect(stdout).to be($stdout)
       end
     end
 
@@ -156,14 +156,6 @@ RSpec.describe Mutant::Integration::Rspec do
 
   describe '#call' do
     subject { object.call(tests) }
-
-    before do
-      expect(rspec_runner).to receive(:setup) do |_errors, output|
-        output.write('the-test-output')
-      end
-
-      object.setup
-    end
 
     let(:tests) { [all_tests.fetch(0)] }
 
@@ -180,7 +172,6 @@ RSpec.describe Mutant::Integration::Rspec do
       it 'should return failed result' do
         expect(subject).to eql(
           Mutant::Result::Test.new(
-            output:  'the-test-output',
             passed:  false,
             runtime: 0.0,
             tests:   tests
@@ -195,7 +186,6 @@ RSpec.describe Mutant::Integration::Rspec do
       it 'should return passed result' do
         expect(subject).to eql(
           Mutant::Result::Test.new(
-            output:  'the-test-output',
             passed:  true,
             runtime: 0.0,
             tests:   tests

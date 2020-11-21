@@ -15,8 +15,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       -----------------------
       - 1 @ runtime: 1.0
         - test-a
-      Test Output:
-      mutation a test result output
       -----------------------
       @@ -1 +1 @@
       -true

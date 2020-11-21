@@ -12,8 +12,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       it_reports <<~'STR'
         - 1 @ runtime: 1.0
           - test-a
-        Test Output:
-        mutation a test result output
       STR
     end
 

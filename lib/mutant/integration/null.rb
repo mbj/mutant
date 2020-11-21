@@ -18,7 +18,6 @@ module Mutant
       # @return [Result::Test]
       def call(tests)
         Result::Test.new(
-          output:  '',
           passed:  true,
           runtime: 0.0,
           tests:   tests

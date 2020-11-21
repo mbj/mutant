@@ -155,8 +155,7 @@ module SharedContext
       Mutant::Result::Test.new(
         tests:   [test_a],
         passed:  false,
-        runtime: 1.0,
-        output:  'mutation a test result output'
+        runtime: 1.0
       )
     end
 
@@ -164,8 +163,7 @@ module SharedContext
       Mutant::Result::Test.new(
         tests:   [test_a],
         passed:  false,
-        runtime: 1.0,
-        output:  'mutation b test result output'
+        runtime: 1.0
       )
     end
 
