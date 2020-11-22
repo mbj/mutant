@@ -90,6 +90,11 @@ coverage_criteria:
   # * `true` - mutant will consider timeouts as covering mutations.
   # * `false` mutant will ignore timeouts when determining mutation coverage.
   timeout: false
+  # Control the process status abort criteria, defaults to `false`:
+  # * `true` - mutant will consider unexpected process aborts (example segfaults)
+  #   as covering the mutation that caused this behavior.
+  # * `false` - mutant will ignore unexpected process aborts when determining coverage.
+  process_abort: false
   # Control the test result criteria, # defaults to `true`
   # * `true` mutant will consider failing tests covering mutations.
   # * `false` mutant will ignore test results when determining mutation coverage.

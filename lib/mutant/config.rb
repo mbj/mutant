@@ -38,11 +38,12 @@ module Mutant
     private_constant(*constants(false))
 
     class CoverageCriteria
-      include Anima.new(:timeout, :test_result)
+      include Anima.new(:process_abort, :test_result, :timeout)
 
       DEFAULT = new(
-        timeout:     false,
-        test_result: true
+        process_abort: false,
+        test_result:   true,
+        timeout:       false
       )
 
       TRANSFORM =
@@ -50,8 +51,9 @@ module Mutant
           [
             Transform::Hash.new(
               optional: [
-                Transform::Hash::Key.new('timeout',     Transform::BOOLEAN),
-                Transform::Hash::Key.new('test_result', Transform::BOOLEAN)
+                Transform::Hash::Key.new('process_abort', Transform::BOOLEAN),
+                Transform::Hash::Key.new('test_result',   Transform::BOOLEAN),
+                Transform::Hash::Key.new('timeout',       Transform::BOOLEAN)
               ],
               required: []
             ),
