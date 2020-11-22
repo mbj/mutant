@@ -11,7 +11,7 @@ The includes key takes a list of strings to add to ruby's `$LOAD_PATH`. This is 
 ```yml
 ---
 includes:
-  - lib
+- lib
 ```
 
 Additional includes can be added by providing the `-I` or `--include` option to the CLI.
@@ -23,7 +23,7 @@ The requires key takes a list of ruby files to be required. This is how mutant l
 ```yml
 ---
 requires:
-  - my_app
+- my_app
 ```
 
 Additional requires can be added by providing the `-r` or `--require` option to the CLI.
@@ -63,5 +63,38 @@ See mutant's configuration file, [mutant.yml](/mutant.yml), for a complete examp
 #### `mutation_timeout`
 
 Specify the maximum time, in seconds, a mutation gets analysed.
-Past this time the mutation analysis gets terminated and the result is currently being
-reported as uncovered.
+
+```yml
+---
+# Control the maximum time per mutation spend on analysis.
+# Unit is in fractional seconds.
+#
+# Default absent.
+#
+# Absent value: No limit on per mutation analysis time.
+# Present value: Limit per mutation analysis time to specified value in seconds.
+mutation_timeout: 1.0
+```
+
+Use `timeout` setting under `coverage_criteria` in the config file to control
+if timeouts are allowed to cover mutations.
+
+#### `coverage_criteria`
+
+A configuration file only setting to control which criteria apply to determine mutation coverage.
+
+```yml
+---
+coverage_criteria:
+  # Control the timeout criteria, defaults to `false`:
+  # * `true` - mutant will consider timeouts as covering mutations.
+  # * `false` mutant will ignore timeouts when determining mutation coverage.
+  timeout: false
+  # Control the test result criteria, # defaults to `true`
+  # * `true` mutant will consider failing tests covering mutations.
+  # * `false` mutant will ignore test results when determining mutation coverage.
+  # Hint: You probably do not want to touch the default.
+  test_result: true
+```
+
+At this point there is no CLI equivalent for these settings.

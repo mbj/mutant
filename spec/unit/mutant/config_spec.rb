@@ -141,6 +141,20 @@ RSpec.describe Mutant::Config do
       include_examples 'overwrite value'
     end
 
+    context 'merging coverage criteria' do
+      let(:key) { :coverage_criteria }
+
+      let(:original_value) do
+        instance_double(Mutant::Config::CoverageCriteria, 'config')
+      end
+
+      let(:other_value) do
+        instance_double(Mutant::Config::CoverageCriteria, 'other')
+      end
+
+      include_examples 'overwrite value'
+    end
+
     context 'merging isolation' do
       let(:key)            { :isolation                                   }
       let(:original_value) { instance_double(Mutant::Isolation, 'config') }

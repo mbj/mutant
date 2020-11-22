@@ -18,7 +18,7 @@ module Mutant
       # Test for successful result
       #
       # @return [Boolean]
-      def success?
+      def valid_value?
         timeout.nil? && exception.nil? && (process_status.nil? || process_status.success?)
       end
     end # Result

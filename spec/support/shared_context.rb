@@ -147,6 +147,34 @@ module SharedContext
       )
     end
 
+    let(:mutation_a_coverage_result) do
+      Mutant::Result::Coverage.new(
+        mutation_result: mutation_a_result,
+        criteria_result: mutation_a_criteria_result
+      )
+    end
+
+    let(:mutation_b_coverage_result) do
+      Mutant::Result::Coverage.new(
+        mutation_result: mutation_b_result,
+        criteria_result: mutation_b_criteria_result
+      )
+    end
+
+    let(:mutation_a_criteria_result) do
+      Mutant::Result::CoverageCriteria.new(
+        test_result: true,
+        timeout:     false
+      )
+    end
+
+    let(:mutation_b_criteria_result) do
+      Mutant::Result::CoverageCriteria.new(
+        test_result: true,
+        timeout:     false
+      )
+    end
+
     let(:mutation_a_isolation_result) do
       Mutant::Isolation::Result.new(
         exception:      nil,
@@ -187,7 +215,7 @@ module SharedContext
       Mutant::Result::Subject.new(
         subject:          subject_a,
         tests:            [test_a],
-        mutation_results: [mutation_a_result, mutation_b_result]
+        coverage_results: [mutation_a_coverage_result, mutation_b_coverage_result]
       )
     end
   end

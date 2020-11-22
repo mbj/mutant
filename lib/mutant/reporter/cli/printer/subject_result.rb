@@ -7,7 +7,7 @@ module Mutant
         # Subject result printer
         class SubjectResult < self
 
-          delegate :subject, :alive_mutation_results, :tests
+          delegate :subject, :uncovered_results, :tests
 
           # Run report printer
           #
@@ -17,7 +17,7 @@ module Mutant
             tests.each do |test|
               puts("- #{test.identification}")
             end
-            visit_collection(MutationResult, alive_mutation_results)
+            visit_collection(CoverageResult, uncovered_results)
           end
 
         end # SubjectResult

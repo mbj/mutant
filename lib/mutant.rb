@@ -179,6 +179,7 @@ require 'mutant/reporter/sequence'
 require 'mutant/reporter/cli'
 require 'mutant/reporter/cli/printer'
 require 'mutant/reporter/cli/printer/config'
+require 'mutant/reporter/cli/printer/coverage_result'
 require 'mutant/reporter/cli/printer/env'
 require 'mutant/reporter/cli/printer/env_progress'
 require 'mutant/reporter/cli/printer/env_result'
@@ -223,6 +224,7 @@ module Mutant
   # Reopen class to initialize constant to avoid dep circle
   class Config
     DEFAULT = new(
+      coverage_criteria: Config::CoverageCriteria::DEFAULT,
       expression_parser: Expression::Parser.new([
         Expression::Method,
         Expression::Methods,

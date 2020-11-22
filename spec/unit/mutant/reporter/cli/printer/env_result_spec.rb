@@ -3,7 +3,7 @@
 RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
   setup_shared_context
 
-  with(:mutation_a_test_result) { { passed: true } }
+  with(:mutation_a_criteria_result) { { test_result: false } }
 
   let(:reportable) { env_result }
 
@@ -31,6 +31,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       Results:         2
       Kills:           1
       Alive:           1
+      Timeouts:        0
       Runtime:         4.00s
       Killtime:        2.00s
       Overhead:        100.00%

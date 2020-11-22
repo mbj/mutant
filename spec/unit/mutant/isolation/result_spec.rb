@@ -11,7 +11,7 @@ RSpec.describe Mutant::Isolation::Result do
     )
   end
 
-  describe '#success?' do
+  describe '#valid_value?' do
     let(:exception)       { nil  }
     let(:timeout)         { nil  }
     let(:process_success) { true }
@@ -24,7 +24,7 @@ RSpec.describe Mutant::Isolation::Result do
     end
 
     def apply
-      object.success?
+      object.valid_value?
     end
 
     context 'no contraindications' do
