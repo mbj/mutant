@@ -1,3 +1,11 @@
+# v0.10.8 2020-11-22
+
+* Add support for process abort as coverage condition.
+
+  This allows mutation to be covered on abnormal process aborts, such as segfaults.
+
+  [#1120](https://github.com/mbj/mutant/pull/1120)
+
 # v0.10.7 2020-11-22
 
 * Add support for external mutation timeouts.
