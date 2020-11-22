@@ -36,16 +36,6 @@ module Mutant
             ```
           MESSAGE
 
-          FORK_ERROR_MESSAGE = <<~'MESSAGE'
-            Forking the child process to isolate the mutation in failed.
-            This meant that either the RubyVM or your OS was under too much
-            pressure to add another child process.
-
-            Possible solutions are:
-            * Reduce concurrency
-            * Reduce locks
-          MESSAGE
-
           TIMEOUT_ERROR_MESSAGE =<<~'MESSAGE'
             Mutation analysis ran into the configured timeout of %02.9<timeout>g seconds.
           MESSAGE
@@ -92,10 +82,6 @@ module Mutant
           end
           # rubocop:enable Style/GuardClause
 
-          def visit_fork_error
-            puts(FORK_ERROR_MESSAGE)
-          end
-
           def print_timeout
             timeout = object.timeout or return
             puts(TIMEOUT_ERROR_MESSAGE % { timeout: timeout })
@@ -110,13 +96,6 @@ module Mutant
                 exception.backtrace.join("\n")
               ]
             )
-          end
-
-          def visit_chain
-            printer = self.class
-
-            visit(printer, object.value)
-            visit(printer, object.next)
           end
         end # IsolationResult
       end # Printer
