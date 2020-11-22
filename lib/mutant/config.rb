@@ -24,25 +24,18 @@ module Mutant
       define_method(:"#{name}?") { public_send(name) }
     end
 
-    boolean = Transform::Boolean.new
-    float   = Transform::Primitive.new(Float)
-    integer = Transform::Primitive.new(Integer)
-    string  = Transform::Primitive.new(String)
-
-    string_array = Transform::Array.new(string)
-
     TRANSFORM = Transform::Sequence.new(
       [
         Transform::Exception.new(SystemCallError, :read.to_proc),
         Transform::Exception.new(YAML::SyntaxError, YAML.method(:safe_load)),
         Transform::Hash.new(
           optional: [
-            Transform::Hash::Key.new('fail_fast',        boolean),
-            Transform::Hash::Key.new('includes',         string_array),
-            Transform::Hash::Key.new('integration',      string),
-            Transform::Hash::Key.new('jobs',             integer),
-            Transform::Hash::Key.new('mutation_timeout', float),
-            Transform::Hash::Key.new('requires',         string_array)
+            Transform::Hash::Key.new('fail_fast',        Transform::BOOLEAN),
+            Transform::Hash::Key.new('includes',         Transform::STRING_ARRAY),
+            Transform::Hash::Key.new('integration',      Transform::STRING),
+            Transform::Hash::Key.new('jobs',             Transform::INTEGER),
+            Transform::Hash::Key.new('mutation_timeout', Transform::FLOAT),
+            Transform::Hash::Key.new('requires',         Transform::STRING_ARRAY)
           ],
           required: []
         ),

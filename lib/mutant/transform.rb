@@ -414,5 +414,11 @@ module Mutant
           .lmap { |exception| error(input: input, message: exception.to_s) }
       end
     end # Exception
+
+    BOOLEAN      = Transform::Boolean.new
+    FLOAT        = Transform::Primitive.new(Float)
+    INTEGER      = Transform::Primitive.new(Integer)
+    STRING       = Transform::Primitive.new(String)
+    STRING_ARRAY = Transform::Array.new(STRING)
   end # Transform
 end # Mutant
