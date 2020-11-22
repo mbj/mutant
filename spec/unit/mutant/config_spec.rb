@@ -29,7 +29,7 @@ RSpec.describe Mutant::Config do
       let(:original_value) { %w[bar] }
 
       it 'adds other and orignial' do
-        expect_value(original_value + other_value)
+        expect_value(other_value + original_value)
       end
     end
 
@@ -136,6 +136,20 @@ RSpec.describe Mutant::Config do
 
       let(:other_value) do
         instance_double(Mutant::Expression::Parser, 'other')
+      end
+
+      include_examples 'overwrite value'
+    end
+
+    context 'merging coverage criteria' do
+      let(:key) { :coverage_criteria }
+
+      let(:original_value) do
+        instance_double(Mutant::Config::CoverageCriteria, 'config')
+      end
+
+      let(:other_value) do
+        instance_double(Mutant::Config::CoverageCriteria, 'other')
       end
 
       include_examples 'overwrite value'

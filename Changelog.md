@@ -1,10 +1,20 @@
-# v0.10.7 unreleased
+# v0.10.7 2020-11-22
 
-* Add support for external mutation timeouts. [#1105](https://github.com/mbj/mutant/pull/1105)
+* Add support for external mutation timeouts.
+
+  New config file settings. `mutation_timeout` and `coverage_criteria`
+  to control timeouts and coverage conditions.
+
+  - [#1105](https://github.com/mbj/mutant/pull/1105)
+  - [#1118](https://github.com/mbj/mutant/pull/1118)
+
+* Improve CLI reporting to be less noisy:
+  - [#1117](https://github.com/mbj/mutant/pull/1117)
+  - [#1106](https://github.com/mbj/mutant/pull/1106)
+
 * Fix crash on static send mutation. [#1108](https://github.com/mbj/mutant/pull/1108)
-* Change CLI report format to print diff last.
-  This should be more user friendly on incremental / interactive
-  operation.
+
+* Add more verbose configuration [documentation](https://github.com/mbj/mutant/blob/master/docs/configuration.md).
 
 # v0.10.6 2020-11-06
 

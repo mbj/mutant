@@ -274,23 +274,19 @@ module MutantSpec
 
       Transform = Mutant::Transform
 
-      boolean      = Transform::Boolean.new
-      string       = Transform::Primitive.new(String)
-      string_array = Transform::Array.new(string)
-
       integration = Transform::Sequence.new(
         [
           Transform::Hash.new(
             optional: [],
             required: [
-              Transform::Hash::Key.new('exclude',             string_array),
-              Transform::Hash::Key.new('integration',         string),
-              Transform::Hash::Key.new('mutation_coverage',   boolean),
-              Transform::Hash::Key.new('mutation_generation', boolean),
-              Transform::Hash::Key.new('name',                string),
-              Transform::Hash::Key.new('namespace',           string),
-              Transform::Hash::Key.new('repo_ref',            string),
-              Transform::Hash::Key.new('repo_uri',            string)
+              Transform::Hash::Key.new('exclude',             Transform::STRING_ARRAY),
+              Transform::Hash::Key.new('integration',         Transform::STRING),
+              Transform::Hash::Key.new('mutation_coverage',   Transform::BOOLEAN),
+              Transform::Hash::Key.new('mutation_generation', Transform::BOOLEAN),
+              Transform::Hash::Key.new('name',                Transform::STRING),
+              Transform::Hash::Key.new('namespace',           Transform::STRING),
+              Transform::Hash::Key.new('repo_ref',            Transform::STRING),
+              Transform::Hash::Key.new('repo_uri',            Transform::STRING)
             ]
           ),
           Transform::Hash::Symbolize.new,

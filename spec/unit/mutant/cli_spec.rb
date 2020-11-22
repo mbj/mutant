@@ -382,15 +382,14 @@ RSpec.describe Mutant::CLI do
       let(:env_result)         { instance_double(Mutant::Result::Env, success?: true) }
       let(:expected_events)    { [license_validation_event]                           }
       let(:expected_exit)      { true                                                 }
-      let(:file_config)        { Mutant::Config::DEFAULT                              }
       let(:file_config_result) { MPrelude::Either::Right.new(file_config)             }
       let(:license_result)     { MPrelude::Either::Right.new(subscription)            }
       let(:runner_result)      { MPrelude::Either::Right.new(env_result)              }
 
       let(:file_config) do
         Mutant::Config::DEFAULT.with(
-          includes: %w[lib],
-          requires: %w[foo]
+          includes: %w[include-file],
+          requires: %w[require-file]
         )
       end
 
@@ -557,15 +556,34 @@ RSpec.describe Mutant::CLI do
         end
 
         context 'with --include option' do
-          let(:arguments)        { super() + %w[--include lob --include lub] }
-          let(:bootstrap_config) { super().with(includes: %w[lib lob lub])   }
+          let(:arguments) do
+            super() + %w[
+              --include include-cli-a
+              --include include-cli-b
+            ]
+          end
+
+          let(:bootstrap_config) do
+            super().with(
+              includes: %w[
+                include-file
+                include-cli-a
+                include-cli-b
+              ]
+            )
+          end
 
           include_examples 'CLI run'
         end
 
         context 'with --require option' do
-          let(:arguments)        { super() + %w[--require bar]         }
-          let(:bootstrap_config) { super().with(requires: %w[foo bar]) }
+          let(:arguments) { super() + %w[--require require-cli] }
+
+          let(:bootstrap_config) do
+            super().with(
+              requires: %w[require-file require-cli]
+            )
+          end
 
           include_examples 'CLI run'
         end

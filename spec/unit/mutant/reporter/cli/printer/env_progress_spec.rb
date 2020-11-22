@@ -7,7 +7,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
 
   describe '.call' do
     context 'without progress' do
-      with(:subject_a_result) { { mutation_results: [] } }
+      with(:subject_a_result) { { coverage_results: [] } }
 
       it_reports <<~'STR'
         Mutant environment:
@@ -24,6 +24,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Results:         0
         Kills:           0
         Alive:           0
+        Timeouts:        0
         Runtime:         4.00s
         Killtime:        0.00s
         Overhead:        Inf%
@@ -48,6 +49,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Results:         2
         Kills:           2
         Alive:           0
+        Timeouts:        0
         Runtime:         4.00s
         Killtime:        2.00s
         Overhead:        100.00%
@@ -57,7 +59,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
     end
 
     context 'on partial coverage' do
-      with(:mutation_a_test_result) { { passed: true } }
+      with(:mutation_a_criteria_result) { { test_result: false } }
 
       it_reports <<~'STR'
         Mutant environment:
@@ -74,6 +76,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Results:         2
         Kills:           1
         Alive:           1
+        Timeouts:        0
         Runtime:         4.00s
         Killtime:        2.00s
         Overhead:        100.00%

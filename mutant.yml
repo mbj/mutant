@@ -2,7 +2,6 @@
 includes:
 - lib
 integration: rspec
-mutation_timeout: 5.0
 requires:
 - mutant
 - mutant/meta

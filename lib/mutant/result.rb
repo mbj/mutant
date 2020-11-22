@@ -4,8 +4,8 @@ module Mutant
   # Namespace and mixin module for results
   module Result
 
-    # Coverage mixin
-    module Coverage
+    # CoverageMetric mixin
+    module CoverageMetric
       FULL_COVERAGE = Rational(1).freeze
       private_constant(*constants(false))
 
@@ -19,7 +19,7 @@ module Mutant
           Rational(amount_mutations_killed, amount_mutation_results)
         end
       end
-    end # Coverage
+    end # CoverageMetric
 
     # Class level mixin
     module ClassMethods
@@ -38,6 +38,13 @@ module Mutant
           public_send(collection).map(&name).reduce(0, :+)
         end
         memoize(name)
+      end
+
+      # Delegate a method to child
+      def delegate(name, target)
+        define_method(name) do
+          public_send(target).public_send(name)
+        end
       end
     end # ClassMethods
 
@@ -68,7 +75,7 @@ module Mutant
 
     # Env result object
     class Env
-      include Coverage, Result, Anima.new(
+      include CoverageMetric, Result, Anima.new(
         :env,
         :runtime,
         :subject_results
@@ -92,6 +99,7 @@ module Mutant
       sum :amount_mutation_results, :subject_results
       sum :amount_mutations_alive,  :subject_results
       sum :amount_mutations_killed, :subject_results
+      sum :amount_timeouts,         :subject_results
       sum :killtime,                :subject_results
 
       # Amount of mutations
@@ -137,35 +145,42 @@ module Mutant
 
     # Subject result
     class Subject
-      include Coverage, Result, Anima.new(
-        :mutation_results,
+      include CoverageMetric, Result, Anima.new(
+        :coverage_results,
         :subject,
         :tests
       )
 
-      sum :killtime, :mutation_results
-      sum :runtime,  :mutation_results
+      sum :killtime, :coverage_results
+      sum :runtime,  :coverage_results
 
       # Test if subject was processed successful
       #
       # @return [Boolean]
       def success?
-        alive_mutation_results.empty?
+        uncovered_results.empty?
       end
 
       # Alive mutations
       #
-      # @return [Array<Result::Mutation>]
-      def alive_mutation_results
-        mutation_results.reject(&:success?)
+      # @return [Array<Result::Coverage>]
+      def uncovered_results
+        coverage_results.reject(&:success?)
       end
-      memoize :alive_mutation_results
+      memoize :uncovered_results
 
       # Amount of mutations
       #
       # @return [Integer]
       def amount_mutation_results
-        mutation_results.length
+        coverage_results.length
+      end
+
+      # Amount of mutations
+      #
+      # @return [Integer]
+      def amount_timeouts
+        coverage_results.count(&:timeout?)
       end
 
       # Amount of mutations
@@ -179,24 +194,48 @@ module Mutant
       #
       # @return [Integer]
       def amount_mutations_killed
-        killed_mutation_results.length
+        covered_results.length
       end
 
       # Number of alive mutations
       #
       # @return [Integer]
       def amount_mutations_alive
-        alive_mutation_results.length
+        uncovered_results.length
       end
 
     private
 
-      def killed_mutation_results
-        mutation_results.select(&:success?)
+      def covered_results
+        coverage_results.select(&:success?)
       end
-      memoize :killed_mutation_results
+      memoize :covered_results
 
     end # Subject
+
+    # Coverage of a mutation against criteria
+    class Coverage
+      include Result, Anima.new(
+        :mutation_result,
+        :criteria_result
+      )
+
+      delegate :killtime, :mutation_result
+      delegate :runtime,  :mutation_result
+      delegate :success?, :criteria_result
+      delegate :timeout?, :mutation_result
+    end # Coverage
+
+    class CoverageCriteria
+      include Result, Anima.new(*Config::CoverageCriteria.anima.attribute_names)
+
+      # Test if one coverage criteria indicates success
+      #
+      # @return [Boolean]
+      def success?
+        test_result || timeout
+      end
+    end
 
     # Mutation result
     class Mutation
@@ -206,25 +245,39 @@ module Mutant
         :runtime
       )
 
+      # Create mutation criteria results
+      #
+      # @praam [Result::CoverageCriteria]
+      def criteria_result(coverage_criteria)
+        CoverageCriteria.new(
+          test_result: coverage_criteria.test_result && test_result_success?,
+          timeout:     coverage_criteria.timeout     && timeout?
+        )
+      end
+
       # Time the tests had been running
       #
       # @return [Float]
       def killtime
-        if isolation_result.success?
-          isolation_result.value.runtime
-        else
-          0.0
-        end
+        isolation_result.value&.runtime || 0.0
       end
+
+      # Test for timeout
+      #
+      # @return [Boolean]
+      def timeout?
+        !isolation_result.timeout.nil?
+      end
+
+    private
 
       # Test if mutation was handled successfully
       #
       # @return [Boolean]
-      def success?
-        isolation_result.success? &&
-          mutation.class.success?(isolation_result.value)
+      def test_result_success?
+        isolation_result.valid_value? && mutation.class.success?(isolation_result.value)
       end
-      memoize :success?
+      memoize :test_result_success?
 
     end # Mutation
   end # Result

@@ -7,6 +7,7 @@ module Mutant
   # to current environment is being represented by the Mutant::Env object.
   class Config
     include Adamantium::Flat, Anima.new(
+      :coverage_criteria,
       :expression_parser,
       :fail_fast,
       :includes,
@@ -24,32 +25,6 @@ module Mutant
       define_method(:"#{name}?") { public_send(name) }
     end
 
-    boolean = Transform::Boolean.new
-    float   = Transform::Primitive.new(Float)
-    integer = Transform::Primitive.new(Integer)
-    string  = Transform::Primitive.new(String)
-
-    string_array = Transform::Array.new(string)
-
-    TRANSFORM = Transform::Sequence.new(
-      [
-        Transform::Exception.new(SystemCallError, :read.to_proc),
-        Transform::Exception.new(YAML::SyntaxError, YAML.method(:safe_load)),
-        Transform::Hash.new(
-          optional: [
-            Transform::Hash::Key.new('fail_fast',        boolean),
-            Transform::Hash::Key.new('includes',         string_array),
-            Transform::Hash::Key.new('integration',      string),
-            Transform::Hash::Key.new('jobs',             integer),
-            Transform::Hash::Key.new('mutation_timeout', float),
-            Transform::Hash::Key.new('requires',         string_array)
-          ],
-          required: []
-        ),
-        Transform::Hash::Symbolize.new
-      ]
-    )
-
     MORE_THAN_ONE_CONFIG_FILE = <<~'MESSAGE'
       Found more than one candidate for use as implicit config file: %s
     MESSAGE
@@ -60,6 +35,32 @@ module Mutant
       mutant.yml
     ].freeze
 
+    private_constant(*constants(false))
+
+    class CoverageCriteria
+      include Anima.new(:timeout, :test_result)
+
+      DEFAULT = new(
+        timeout:     false,
+        test_result: true
+      )
+
+      TRANSFORM =
+        Transform::Sequence.new(
+          [
+            Transform::Hash.new(
+              optional: [
+                Transform::Hash::Key.new('timeout',     Transform::BOOLEAN),
+                Transform::Hash::Key.new('test_result', Transform::BOOLEAN)
+              ],
+              required: []
+            ),
+            Transform::Hash::Symbolize.new,
+            ->(value) { Either::Right.new(DEFAULT.with(**value)) }
+          ]
+        )
+    end # CoverageCriteria
+
     # Merge with other config
     #
     # @param [Config] other
@@ -68,17 +69,15 @@ module Mutant
     def merge(other)
       other.with(
         fail_fast:        fail_fast || other.fail_fast,
-        includes:         includes + other.includes,
+        includes:         other.includes + includes,
         jobs:             other.jobs || jobs,
         integration:      other.integration || integration,
         mutation_timeout: other.mutation_timeout || mutation_timeout,
         matcher:          matcher.merge(other.matcher),
-        requires:         requires + other.requires,
+        requires:         other.requires + requires,
         zombie:           zombie || other.zombie
       )
     end
-
-    private_constant(*constants(false))
 
     # Load config file
     #
@@ -113,5 +112,27 @@ module Mutant
     def self.env
       DEFAULT.with(jobs: Etc.nprocessors)
     end
+
+    TRANSFORM = Transform::Sequence.new(
+      [
+        Transform::Exception.new(SystemCallError, :read.to_proc),
+        Transform::Exception.new(YAML::SyntaxError, YAML.method(:safe_load)),
+        Transform::Hash.new(
+          optional: [
+            Transform::Hash::Key.new('coverage_criteria', CoverageCriteria::TRANSFORM),
+            Transform::Hash::Key.new('fail_fast',         Transform::BOOLEAN),
+            Transform::Hash::Key.new('includes',          Transform::STRING_ARRAY),
+            Transform::Hash::Key.new('integration',       Transform::STRING),
+            Transform::Hash::Key.new('jobs',              Transform::INTEGER),
+            Transform::Hash::Key.new('mutation_timeout',  Transform::FLOAT),
+            Transform::Hash::Key.new('requires',          Transform::STRING_ARRAY)
+          ],
+          required: []
+        ),
+        Transform::Hash::Symbolize.new
+      ]
+    )
+
+    private_constant(:TRANSFORM)
   end # Config
 end # Mutant

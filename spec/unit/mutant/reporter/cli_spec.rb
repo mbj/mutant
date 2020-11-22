@@ -95,6 +95,7 @@ RSpec.describe Mutant::Reporter::CLI do
       Results:         2
       Kills:           2
       Alive:           0
+      Timeouts:        0
       Runtime:         4.00s
       Killtime:        2.00s
       Overhead:        100.00%
@@ -126,7 +127,7 @@ RSpec.describe Mutant::Reporter::CLI do
       end
 
       context 'when mutation is NOT successful' do
-        with(:mutation_a_test_result) { { passed: true } }
+        with(:mutation_a_criteria_result) { { test_result: false } }
 
         it_reports "progress: 02/02 alive: 1 runtime: 4.00s killtime: 2.00s mutations/s: 0.50\n"
       end

@@ -35,7 +35,7 @@ module Mutant
 
         def initialize(attributes)
           super(attributes)
-          @config = Config::DEFAULT
+          @config = Config.env
         end
 
         def execute
@@ -49,7 +49,7 @@ module Mutant
         end
 
         def expand(file_config)
-          @config = Config.env.merge(file_config).merge(@config)
+          @config = @config.merge(file_config)
         end
 
         def soft_fail(result)

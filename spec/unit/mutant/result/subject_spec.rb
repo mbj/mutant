@@ -4,7 +4,7 @@ RSpec.describe Mutant::Result::Subject do
   let(:object) do
     described_class.new(
       subject:          mutation_subject,
-      mutation_results: mutation_results,
+      coverage_results: coverage_results,
       tests:            []
     )
   end
@@ -12,37 +12,53 @@ RSpec.describe Mutant::Result::Subject do
   let(:mutation_subject) do
     instance_double(
       Mutant::Subject,
-      mutations: mutation_results.map { instance_double(Mutant::Mutation) }
+      mutations: coverage_results.map { instance_double(Mutant::Mutation) }
     )
   end
 
   shared_context 'full coverage' do
-    let(:mutation_results) do
+    let(:coverage_results) do
       [
-        instance_double(Mutant::Result::Mutation, success?: true)
+        instance_double(
+          Mutant::Result::Coverage,
+          success?: true,
+          timeout?: false
+        )
       ]
     end
   end
 
   shared_context 'partial coverage' do
-    let(:mutation_results) do
+    let(:coverage_results) do
       [
-        instance_double(Mutant::Result::Mutation, success?: false),
-        instance_double(Mutant::Result::Mutation, success?: true)
+        instance_double(
+          Mutant::Result::Coverage,
+          success?: true,
+          timeout?: false
+        ),
+        instance_double(
+          Mutant::Result::Coverage,
+          success?: false,
+          timeout?: false
+        )
       ]
     end
   end
 
   shared_context 'no coverage' do
-    let(:mutation_results) do
+    let(:coverage_results) do
       [
-        instance_double(Mutant::Result::Mutation, success?: false)
+        instance_double(
+          Mutant::Result::Coverage,
+          success?: false,
+          timeout?: false
+        )
       ]
     end
   end
 
   shared_context 'no results' do
-    let(:mutation_results) { [] }
+    let(:coverage_results) { [] }
   end
 
   describe '#coverage' do
@@ -68,6 +84,22 @@ RSpec.describe Mutant::Result::Subject do
       'full coverage'    => 1,
       'partial coverage' => 2,
       'no coverage'      => 1,
+      'no results'       => 0
+    }.each do |name, expected|
+      context(name) do
+        include_context(name)
+        it { should be(expected) }
+      end
+    end
+  end
+
+  describe '#amount_timeouts' do
+    subject { object.amount_timeouts }
+
+    {
+      'full coverage'    => 0,
+      'partial coverage' => 0,
+      'no coverage'      => 0,
       'no results'       => 0
     }.each do |name, expected|
       context(name) do

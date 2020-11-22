@@ -42,7 +42,7 @@ module Mutant
 
         @subject_results[subject] = Result::Subject.new(
           subject:          subject,
-          mutation_results: previous_mutation_results(subject) + [mutation_result],
+          coverage_results: previous_coverage_results(subject).dup << coverage_result(mutation_result),
           tests:            env.selections.fetch(subject)
         )
 
@@ -51,9 +51,16 @@ module Mutant
 
     private
 
-      def previous_mutation_results(subject)
+      def coverage_result(mutation_result)
+        Result::Coverage.new(
+          mutation_result: mutation_result,
+          criteria_result: mutation_result.criteria_result(env.config.coverage_criteria)
+        )
+      end
+
+      def previous_coverage_results(subject)
         subject_result = @subject_results.fetch(subject) { return EMPTY_ARRAY }
-        subject_result.mutation_results
+        subject_result.coverage_results
       end
 
     end # Sink
