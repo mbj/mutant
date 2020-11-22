@@ -29,7 +29,7 @@ RSpec.describe Mutant::Config do
       let(:original_value) { %w[bar] }
 
       it 'adds other and orignial' do
-        expect_value(original_value + other_value)
+        expect_value(other_value + original_value)
       end
     end
 

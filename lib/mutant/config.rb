@@ -61,12 +61,12 @@ module Mutant
     def merge(other)
       other.with(
         fail_fast:        fail_fast || other.fail_fast,
-        includes:         includes + other.includes,
+        includes:         other.includes + includes,
         jobs:             other.jobs || jobs,
         integration:      other.integration || integration,
         mutation_timeout: other.mutation_timeout || mutation_timeout,
         matcher:          matcher.merge(other.matcher),
-        requires:         requires + other.requires,
+        requires:         other.requires + requires,
         zombie:           zombie || other.zombie
       )
     end
