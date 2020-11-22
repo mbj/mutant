@@ -21,9 +21,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
         - test-a
         evil:subject-a:d27d2
         -----------------------
-        - 1 @ runtime: 1.0
-          - test-a
-        -----------------------
         @@ -1 +1 @@
         -true
         +false

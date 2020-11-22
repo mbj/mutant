@@ -36,18 +36,8 @@ module Mutant
             ```
           MESSAGE
 
-          FORK_ERROR_MESSAGE = <<~'MESSAGE'
-            Forking the child process to isolate the mutation in failed.
-            This meant that either the RubyVM or your OS was under too much
-            pressure to add another child process.
-
-            Possible solutions are:
-            * Reduce concurrency
-            * Reduce locks
-          MESSAGE
-
           TIMEOUT_ERROR_MESSAGE =<<~'MESSAGE'
-            Mutation analysis ran into the configured timeout of %02.9<timeout>g seconds.
+            Mutation analysis ran into the configured timeout of %0.9<timeout>g seconds.
           MESSAGE
 
           private_constant(*constants(false))
@@ -57,18 +47,12 @@ module Mutant
           # @return [undefined]
           def run
             print_timeout
-            print_tests
             print_process_status
             print_log_messages
             print_exception
           end
 
         private
-
-          def print_tests
-            value = object.value or return
-            visit(TestResult, value)
-          end
 
           def print_log_messages
             log = object.log
@@ -82,18 +66,14 @@ module Mutant
             end
           end
 
-          # rubocop:disable Style/GuardClause
           def print_process_status
             process_status = object.process_status or return
 
-            unless process_status.success?
-              puts(PROCESS_ERROR_MESSAGE % object.process_status.inspect)
+            if process_status.success?
+              puts("Killfork: #{process_status.inspect}")
+            else
+              puts(PROCESS_ERROR_MESSAGE % process_status.inspect)
             end
-          end
-          # rubocop:enable Style/GuardClause
-
-          def visit_fork_error
-            puts(FORK_ERROR_MESSAGE)
           end
 
           def print_timeout
@@ -110,13 +90,6 @@ module Mutant
                 exception.backtrace.join("\n")
               ]
             )
-          end
-
-          def visit_chain
-            printer = self.class
-
-            visit(printer, object.value)
-            visit(printer, object.next)
           end
         end # IsolationResult
       end # Printer
