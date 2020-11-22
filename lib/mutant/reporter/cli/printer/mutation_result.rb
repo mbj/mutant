@@ -61,8 +61,7 @@ module Mutant
         private
 
           def print_details
-            visit_isolation_result
-            puts(SEPARATOR)
+            visit(IsolationResult, isolation_result)
             __send__(MAP.fetch(mutation.class))
           end
 
@@ -92,10 +91,6 @@ module Mutant
 
           def neutral_details
             info(NEUTRAL_MESSAGE, original_node.inspect, mutation.source)
-          end
-
-          def visit_isolation_result
-            visit(IsolationResult, isolation_result)
           end
 
           def original_node

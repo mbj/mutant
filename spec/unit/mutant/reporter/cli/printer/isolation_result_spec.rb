@@ -21,10 +21,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
 
   describe '.call' do
     context 'on successful isolation' do
-      it_reports <<~'STR'
-        - 1 @ runtime: 1.0
-          - test-a
-      STR
+      it_reports ''
     end
 
     context 'on exception isolation error' do
@@ -41,8 +38,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       end
 
       it_reports <<~'STR'
-        - 1 @ runtime: 1.0
-          - test-a
         Killing the mutation resulted in an integration error.
         This is the case when the tests selected for the current mutation
         did not produce a test result, but instead an exception was raised.
@@ -67,8 +62,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       let(:log) { 'log message' }
 
       it_reports <<~'STR'
-        - 1 @ runtime: 1.0
-          - test-a
         Log messages (combined stderr and stdout):
         [killfork] log message
       STR
@@ -80,8 +73,6 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       end
 
       it_reports <<~'STR'
-        - 1 @ runtime: 1.0
-          - test-a
         Killfork exited nonzero. Its result (if any) was ignored.
         Process status:
         #<InstanceDouble(Process::Status) "unsuccessful status">
@@ -90,26 +81,24 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
 
     context 'on successful process status' do
       let(:process_status) do
-        instance_double(Process::Status, 'unsuccessful status', success?: true)
+        instance_double(Process::Status, 'successful status', success?: true)
       end
 
       it_reports <<~'STR'
-        - 1 @ runtime: 1.0
-          - test-a
+        Killfork: #<InstanceDouble(Process::Status) "successful status">
       STR
     end
 
     context 'on timeout while process exits successful' do
       let(:process_status) do
-        instance_double(Process::Status, 'unsuccessful status', success?: true)
+        instance_double(Process::Status, 'successful status', success?: true)
       end
 
       let(:timeout) { 2.0 }
 
       it_reports <<~'STR'
-        Mutation analysis ran into the configured timeout of 02 seconds.
-        - 1 @ runtime: 1.0
-          - test-a
+        Mutation analysis ran into the configured timeout of 2 seconds.
+        Killfork: #<InstanceDouble(Process::Status) "successful status">
       STR
     end
 

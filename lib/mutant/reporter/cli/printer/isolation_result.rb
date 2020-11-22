@@ -37,7 +37,7 @@ module Mutant
           MESSAGE
 
           TIMEOUT_ERROR_MESSAGE =<<~'MESSAGE'
-            Mutation analysis ran into the configured timeout of %02.9<timeout>g seconds.
+            Mutation analysis ran into the configured timeout of %0.9<timeout>g seconds.
           MESSAGE
 
           private_constant(*constants(false))
@@ -47,18 +47,12 @@ module Mutant
           # @return [undefined]
           def run
             print_timeout
-            print_tests
             print_process_status
             print_log_messages
             print_exception
           end
 
         private
-
-          def print_tests
-            value = object.value or return
-            visit(TestResult, value)
-          end
 
           def print_log_messages
             log = object.log
@@ -72,15 +66,15 @@ module Mutant
             end
           end
 
-          # rubocop:disable Style/GuardClause
           def print_process_status
             process_status = object.process_status or return
 
-            unless process_status.success?
-              puts(PROCESS_ERROR_MESSAGE % object.process_status.inspect)
+            if process_status.success?
+              puts("Killfork: #{process_status.inspect}")
+            else
+              puts(PROCESS_ERROR_MESSAGE % process_status.inspect)
             end
           end
-          # rubocop:enable Style/GuardClause
 
           def print_timeout
             timeout = object.timeout or return
