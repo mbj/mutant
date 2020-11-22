@@ -11,8 +11,6 @@ module Mutant
       # @param [IO] output
       #
       # @return [Reporter::CLI]
-      #
-      # :reek:ManualDispatch
       def self.build(output)
         new(
           output,

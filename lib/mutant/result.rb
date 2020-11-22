@@ -114,7 +114,6 @@ module Mutant
     # Test result
     class Test
       include Result, Anima.new(
-        :output,
         :passed,
         :runtime,
         :tests
@@ -128,7 +127,6 @@ module Mutant
         # @return [undefined]
         def initialize
           super(
-            output:  '',
             passed:  false,
             runtime: 0.0,
             tests:   []

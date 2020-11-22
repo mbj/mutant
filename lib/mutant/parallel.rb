@@ -41,7 +41,6 @@ module Mutant
     end
     private_class_method :threads
 
-    # ignore :reek:LongParameterList
     def self.shared(klass, config, **attributes)
       klass.new(
         condition_variable: config.condition_variable,

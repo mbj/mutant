@@ -35,7 +35,6 @@ module Mutant
       # @return [undefined]
       def initialize(*)
         super
-        @output = StringIO.new
         @runner = RSpec::Core::Runner.new(RSpec::Core::ConfigurationOptions.new(CLI_OPTIONS))
         @world  = RSpec.world
       end
@@ -44,7 +43,7 @@ module Mutant
       #
       # @return [self]
       def setup
-        @runner.setup($stderr, @output)
+        @runner.setup($stderr, $stdout)
         self
       end
       memoize :setup
@@ -54,16 +53,12 @@ module Mutant
       # @param [Enumerable<Mutant::Test>] tests
       #
       # @return [Result::Test]
-      #
-      # rubocop:disable Metrics/MethodLength
       def call(tests)
         examples = tests.map(&all_tests_index.method(:fetch))
         filter_examples(&examples.method(:include?))
         start = timer.now
         passed = @runner.run_specs(@world.ordered_example_groups).equal?(EXIT_SUCCESS)
-        @output.rewind
         Result::Test.new(
-          output:  @output.read,
           passed:  passed,
           runtime: timer.now - start,
           tests:   tests

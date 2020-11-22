@@ -34,16 +34,6 @@ module Mutant
 
       ATTRIBUTES = %i[block deadline log_pipe result_pipe world].freeze
 
-      # Unsuccessful result as child exited nonzero
-      class ChildError < Result
-        include Concord::Public.new(:value, :log)
-      end # ChildError
-
-      # Unsuccessful result as fork failed
-      class ForkError < Result
-        include Equalizer.new
-      end # ForkError
-
       # Pipe abstraction
       class Pipe
         include Adamantium::Flat, Anima.new(:reader, :writer)
@@ -74,7 +64,6 @@ module Mutant
         end
       end # Pipe
 
-      # ignore :reek:InstanceVariableAssumption
       class Parent
         include(
           Anima.new(*ATTRIBUTES),
@@ -88,16 +77,27 @@ module Mutant
         #
         # @return [Result]
         def call
+          @exception     = nil
           @log_fragments = []
-
-          @pid = start_child or return ForkError.new
+          @timeout       = nil
+          @value         = nil
+          @pid           = start_child
 
           read_child_result
-
-          @result
+          result
         end
 
       private
+
+        def result
+          Result.new(
+            exception:      @exception,
+            log:            @log_fragments.join,
+            process_status: @process_status,
+            timeout:        @timeout,
+            value:          @value
+          )
+        end
 
         def start_child
           world.process.fork do
@@ -123,21 +123,19 @@ module Mutant
           read_targets(targets)
 
           if targets.empty?
-            read_result(result_fragments)
+            load_result(result_fragments)
             terminate_graceful
           else
-            add_result(Result::Timeout.new(deadline.allowed_time))
+            @timeout = deadline.allowed_time
             terminate_ungraceful
           end
         end
         # rubocop:enable Metrics/MethodLength
 
-        def read_result(result_fragments)
-          result = world.marshal.load(result_fragments.join)
+        def load_result(result_fragments)
+          @value = world.marshal.load(result_fragments.join)
         rescue ArgumentError => exception
-          add_result(Result::Exception.new(exception))
-        else
-          add_result(Result::Success.new(result, @log_fragments.join))
+          @exception = exception
         end
 
         # rubocop:disable Metrics/MethodLength
@@ -189,9 +187,7 @@ module Mutant
         end
 
         def handle_status(status)
-          unless status.success? # rubocop:disable Style/GuardClause
-            add_result(ChildError.new(status, @log_fragments.join))
-          end
+          @process_status = status
         end
 
         def peek_child
@@ -228,9 +224,6 @@ module Mutant
       # Call block in isolation
       #
       # @return [Result]
-      #   execution result
-      #
-      # ignore :reek:NestedIterators
       #
       # rubocop:disable Metrics/MethodLength
       def call(timeout, &block)

@@ -6,7 +6,7 @@ module Mutant
       class Printer
         # Reporter for mutation results
         class IsolationResult < self
-          CHILD_ERROR_MESSAGE = <<~'MESSAGE'
+          PROCESS_ERROR_MESSAGE = <<~'MESSAGE'
             Killfork exited nonzero. Its result (if any) was ignored.
             Process status:
             %s
@@ -50,29 +50,24 @@ module Mutant
             Mutation analysis ran into the configured timeout of %02.9<timeout>g seconds.
           MESSAGE
 
-          MAP = {
-            Isolation::Fork::ChildError   => :visit_child_error,
-            Isolation::Fork::ForkError    => :visit_fork_error,
-            Isolation::Result::ErrorChain => :visit_chain,
-            Isolation::Result::Exception  => :visit_exception,
-            Isolation::Result::Success    => :visit_success,
-            Isolation::Result::Timeout    => :visit_timeout
-          }.freeze
-
           private_constant(*constants(false))
 
           # Run report printer
           #
           # @return [undefined]
           def run
+            print_timeout
+            print_tests
+            print_process_status
             print_log_messages
-            __send__(MAP.fetch(object.class))
+            print_exception
           end
 
         private
 
-          def visit_success
-            visit(TestResult, object.value)
+          def print_tests
+            value = object.value or return
+            visit(TestResult, value)
           end
 
           def print_log_messages
@@ -87,20 +82,27 @@ module Mutant
             end
           end
 
-          def visit_child_error
-            puts(CHILD_ERROR_MESSAGE % object.value.inspect)
+          # rubocop:disable Style/GuardClause
+          def print_process_status
+            process_status = object.process_status or return
+
+            unless process_status.success?
+              puts(PROCESS_ERROR_MESSAGE % object.process_status.inspect)
+            end
           end
+          # rubocop:enable Style/GuardClause
 
           def visit_fork_error
             puts(FORK_ERROR_MESSAGE)
           end
 
-          def visit_timeout
-            puts(TIMEOUT_ERROR_MESSAGE % { timeout: object.timeout })
+          def print_timeout
+            timeout = object.timeout or return
+            puts(TIMEOUT_ERROR_MESSAGE % { timeout: timeout })
           end
 
-          def visit_exception
-            exception = object.value
+          def print_exception
+            exception = object.exception or return
 
             puts(
               EXCEPTION_ERROR_MESSAGE % [

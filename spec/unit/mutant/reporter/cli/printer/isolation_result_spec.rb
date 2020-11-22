@@ -3,17 +3,27 @@
 RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
   setup_shared_context
 
+  let(:exception)      { nil                    }
+  let(:log)            { ''                     }
+  let(:process_status) { nil                    }
+  let(:timeout)        { nil                    }
+  let(:value)          { mutation_a_test_result }
+
+  let(:reportable) do
+    Mutant::Isolation::Result.new(
+      exception:      exception,
+      log:            log,
+      process_status: process_status,
+      timeout:        timeout,
+      value:          value
+    )
+  end
+
   describe '.call' do
     context 'on successful isolation' do
-      let(:reportable) do
-        Mutant::Isolation::Result::Success.new(mutation_a_test_result)
-      end
-
       it_reports <<~'STR'
         - 1 @ runtime: 1.0
           - test-a
-        Test Output:
-        mutation a test result output
       STR
     end
 
@@ -30,11 +40,9 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
         end.new('foo')
       end
 
-      let(:reportable) do
-        Mutant::Isolation::Result::Exception.new(exception)
-      end
-
       it_reports <<~'STR'
+        - 1 @ runtime: 1.0
+          - test-a
         Killing the mutation resulted in an integration error.
         This is the case when the tests selected for the current mutation
         did not produce a test result, but instead an exception was raised.
@@ -55,87 +63,62 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       STR
     end
 
-    context 'on fork isolation error' do
-      let(:reportable) do
-        Mutant::Isolation::Fork::ForkError.new
-      end
+    context 'with present log messages' do
+      let(:log) { 'log message' }
 
       it_reports <<~'STR'
-        Forking the child process to isolate the mutation in failed.
-        This meant that either the RubyVM or your OS was under too much
-        pressure to add another child process.
-
-        Possible solutions are:
-        * Reduce concurrency
-        * Reduce locks
+        - 1 @ runtime: 1.0
+          - test-a
+        Log messages (combined stderr and stdout):
+        [killfork] log message
       STR
     end
 
-    context 'on child isolation error' do
-      let(:reportable) do
-        Mutant::Isolation::Fork::ChildError.new(
-          instance_double(
-            Process::Status,
-            'unsuccessful status'
-          ),
-          'log message'
-        )
+    context 'on unsucessful process status' do
+      let(:process_status) do
+        instance_double(Process::Status, 'unsuccessful status', success?: false)
       end
 
       it_reports <<~'STR'
-        Log messages (combined stderr and stdout):
-        [killfork] log message
+        - 1 @ runtime: 1.0
+          - test-a
         Killfork exited nonzero. Its result (if any) was ignored.
         Process status:
         #<InstanceDouble(Process::Status) "unsuccessful status">
       STR
     end
 
-    context 'on child timeout' do
-      let(:reportable) do
-        Mutant::Isolation::Fork::Result::Timeout.new(1.2)
+    context 'on successful process status' do
+      let(:process_status) do
+        instance_double(Process::Status, 'unsuccessful status', success?: true)
       end
+
+      it_reports <<~'STR'
+        - 1 @ runtime: 1.0
+          - test-a
+      STR
+    end
+
+    context 'on timeout while process exits successful' do
+      let(:process_status) do
+        instance_double(Process::Status, 'unsuccessful status', success?: true)
+      end
+
+      let(:timeout) { 2.0 }
+
+      it_reports <<~'STR'
+        Mutation analysis ran into the configured timeout of 02 seconds.
+        - 1 @ runtime: 1.0
+          - test-a
+      STR
+    end
+
+    context 'on timeout' do
+      let(:timeout) { 1.2 }
+      let(:value)   { nil }
 
       it_reports <<~'STR'
         Mutation analysis ran into the configured timeout of 1.2 seconds.
-      STR
-    end
-
-    context 'on child isolation error' do
-      let(:fork_error) do
-        Mutant::Isolation::Fork::ForkError.new
-      end
-
-      let(:child_error) do
-        Mutant::Isolation::Fork::ChildError.new(
-          instance_double(
-            Process::Status,
-            'unsuccessful status'
-          ),
-          'log message'
-        )
-      end
-
-      let(:reportable) do
-        Mutant::Isolation::Result::ErrorChain.new(
-          fork_error,
-          child_error
-        )
-      end
-
-      it_reports <<~'STR'
-        Forking the child process to isolate the mutation in failed.
-        This meant that either the RubyVM or your OS was under too much
-        pressure to add another child process.
-
-        Possible solutions are:
-        * Reduce concurrency
-        * Reduce locks
-        Log messages (combined stderr and stdout):
-        [killfork] log message
-        Killfork exited nonzero. Its result (if any) was ignored.
-        Process status:
-        #<InstanceDouble(Process::Status) "unsuccessful status">
       STR
     end
   end

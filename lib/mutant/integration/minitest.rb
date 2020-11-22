@@ -83,14 +83,11 @@ module Mutant
       # @return [Result::Test]
       #
       # rubocop:disable Metrics/MethodLength
-      #
-      # ignore :reek:TooManyStatements
       def call(tests)
         test_cases = tests.map(&all_tests_index.method(:fetch))
-        output     = StringIO.new
         start      = timer.now
 
-        reporter = ::Minitest::SummaryReporter.new(output)
+        reporter = ::Minitest::SummaryReporter.new($stdout)
 
         reporter.start
 
@@ -98,12 +95,9 @@ module Mutant
           break unless test.call(reporter)
         end
 
-        output.rewind
-
         Result::Test.new(
           passed:  reporter.passed?,
           tests:   tests,
-          output:  output.read,
           runtime: timer.now - start
         )
       end

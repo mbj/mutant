@@ -22,11 +22,11 @@ RSpec.describe Mutant::Isolation::Fork do
   let(:timeout)           { nil                                         }
 
   let(:child_status_success) do
-    instance_double(Process::Status, success?: true)
+    instance_double(Process::Status, :success, success?: true)
   end
 
   let(:child_status_error) do
-    instance_double(Process::Status, success?: false)
+    instance_double(Process::Status, :error, success?: false)
   end
 
   let(:world) { fake_world }
@@ -211,7 +211,15 @@ RSpec.describe Mutant::Isolation::Fork do
 
       it 'returns success result' do
         verify_events do
-          expect(apply).to eql(described_class::Result::Success.new(block_return, log_fragment))
+          expect(apply).to eql(
+            described_class::Result.new(
+              log:            log_fragment,
+              exception:      nil,
+              process_status: child_status_success,
+              timeout:        nil,
+              value:          block_return
+            )
+          )
         end
       end
     end
@@ -301,7 +309,13 @@ RSpec.describe Mutant::Isolation::Fork do
           it 'returns sucess result' do
             verify_events do
               expect(apply).to eql(
-                described_class::Result::Success.new(block_return, log_fragment)
+                described_class::Result.new(
+                  log:            log_fragment,
+                  exception:      nil,
+                  process_status: child_status_success,
+                  timeout:        nil,
+                  value:          block_return
+                )
               )
             end
           end
@@ -323,7 +337,15 @@ RSpec.describe Mutant::Isolation::Fork do
 
             it 'returns success' do
               verify_events do
-                expect(apply).to eql(described_class::Result::Success.new(block_return, log_fragment))
+                expect(apply).to eql(
+                  described_class::Result.new(
+                    log:            log_fragment,
+                    exception:      nil,
+                    process_status: child_status_success,
+                    timeout:        nil,
+                    value:          block_return
+                  )
+                )
               end
             end
           end
@@ -345,9 +367,12 @@ RSpec.describe Mutant::Isolation::Fork do
             it 'returns success' do
               verify_events do
                 expect(apply).to eql(
-                  described_class::Result::ErrorChain.new(
-                    described_class::ChildError.new(child_status_error, log_fragment),
-                    described_class::Result::Success.new(block_return, log_fragment)
+                  described_class::Result.new(
+                    log:            log_fragment,
+                    exception:      nil,
+                    process_status: child_status_error,
+                    timeout:        nil,
+                    value:          block_return
                   )
                 )
               end
@@ -385,9 +410,17 @@ RSpec.describe Mutant::Isolation::Fork do
           ]
         end
 
-        it 'returns success result' do
+        it 'returns result indicating timeout' do
           verify_events do
-            expect(apply).to eql(described_class::Result::Timeout.new(timeout))
+            expect(apply).to eql(
+              described_class::Result.new(
+                log:            '',
+                exception:      nil,
+                process_status: child_status_success,
+                timeout:        4.0,
+                value:          nil
+              )
+            )
           end
         end
       end
@@ -417,7 +450,15 @@ RSpec.describe Mutant::Isolation::Fork do
 
         it 'returns timeout result' do
           verify_events do
-            expect(apply).to eql(described_class::Result::Timeout.new(timeout))
+            expect(apply).to eql(
+              described_class::Result.new(
+                log:            '',
+                exception:      nil,
+                process_status: child_status_success,
+                timeout:        4.0,
+                value:          nil
+              )
+            )
           end
         end
       end
@@ -447,28 +488,15 @@ RSpec.describe Mutant::Isolation::Fork do
 
       it 'returns exception result' do
         verify_events do
-          expect(apply).to eql(described_class::Result::Exception.new(exception))
-        end
-      end
-    end
-
-    context 'when fork fails' do
-      let(:raw_expectations) do
-        [
-          *prefork_expectations,
-          {
-            receiver: world.process,
-            selector: :fork,
-            reaction: {
-              return: nil
-            }
-          }
-        ]
-      end
-
-      it 'returns fork failure result' do
-        verify_events do
-          expect(apply).to eql(described_class::ForkError.new)
+          expect(apply).to eql(
+            described_class::Result.new(
+              log:            log_fragment,
+              exception:      exception,
+              process_status: child_status_success,
+              timeout:        nil,
+              value:          nil
+            )
+          )
         end
       end
     end
@@ -491,20 +519,21 @@ RSpec.describe Mutant::Isolation::Fork do
 
         it 'returns success' do
           verify_events do
-            expect(apply).to eql(described_class::Result::Success.new(block_return, log_fragment))
+            expect(apply).to eql(
+              described_class::Result.new(
+                log:            log_fragment,
+                exception:      nil,
+                process_status: child_status_success,
+                timeout:        nil,
+                value:          block_return
+              )
+            )
           end
         end
       end
     end
 
     context 'when child exits nonzero' do
-      let(:expected_result) do
-        described_class::Result::ErrorChain.new(
-          described_class::ChildError.new(child_status_error, log_fragment),
-          described_class::Result::Success.new(block_return, log_fragment)
-        )
-      end
-
       let(:raw_expectations) do
         [
           *prefork_expectations,
@@ -519,7 +548,15 @@ RSpec.describe Mutant::Isolation::Fork do
 
       it 'returns expected error chain' do
         verify_events do
-          expect(apply).to eql(expected_result)
+          expect(apply).to eql(
+            described_class::Result.new(
+              log:            log_fragment,
+              exception:      nil,
+              process_status: child_status_error,
+              timeout:        nil,
+              value:          block_return
+            )
+          )
         end
       end
     end

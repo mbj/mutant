@@ -10,7 +10,6 @@ module Mutant
           delegate :tests, :runtime
 
           STATUS_FORMAT = '- %d @ runtime: %s'
-          OUTPUT_HEADER = 'Test Output:'
           TEST_FORMAT   = '  - %s'
 
           # Run test result reporter
@@ -21,8 +20,6 @@ module Mutant
             tests.each do |test|
               info(TEST_FORMAT, test.identification)
             end
-            puts(OUTPUT_HEADER)
-            puts(object.output)
           end
 
         end # TestResult

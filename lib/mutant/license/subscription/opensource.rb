@@ -67,7 +67,6 @@ module Mutant
           end
         end
 
-        # ignore :reek:UtilityFunction
         def parse_remotes(input)
           input.lines.map(&Repository.method(:parse_remote)).to_set
         end

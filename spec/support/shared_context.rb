@@ -148,15 +148,20 @@ module SharedContext
     end
 
     let(:mutation_a_isolation_result) do
-      Mutant::Isolation::Result::Success.new(mutation_a_test_result)
+      Mutant::Isolation::Result.new(
+        exception:      nil,
+        log:            '',
+        process_status: nil,
+        timeout:        nil,
+        value:          mutation_a_test_result
+      )
     end
 
     let(:mutation_a_test_result) do
       Mutant::Result::Test.new(
         tests:   [test_a],
         passed:  false,
-        runtime: 1.0,
-        output:  'mutation a test result output'
+        runtime: 1.0
       )
     end
 
@@ -164,13 +169,18 @@ module SharedContext
       Mutant::Result::Test.new(
         tests:   [test_a],
         passed:  false,
-        runtime: 1.0,
-        output:  'mutation b test result output'
+        runtime: 1.0
       )
     end
 
     let(:mutation_b_isolation_result) do
-      Mutant::Isolation::Result::Success.new(mutation_b_test_result)
+      Mutant::Isolation::Result.new(
+        exception:      nil,
+        log:            '',
+        process_status: nil,
+        timeout:        nil,
+        value:          mutation_b_test_result
+      )
     end
 
     let(:subject_a_result) do
