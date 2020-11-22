@@ -233,7 +233,7 @@ module Mutant
       #
       # @return [Boolean]
       def success?
-        test_result || timeout
+        process_abort || test_result || timeout
       end
     end
 
@@ -250,8 +250,9 @@ module Mutant
       # @praam [Result::CoverageCriteria]
       def criteria_result(coverage_criteria)
         CoverageCriteria.new(
-          test_result: coverage_criteria.test_result && test_result_success?,
-          timeout:     coverage_criteria.timeout     && timeout?
+          process_abort: coverage_criteria.process_abort && process_abort?,
+          test_result:   coverage_criteria.test_result   && test_result_success?,
+          timeout:       coverage_criteria.timeout       && timeout?
         )
       end
 
@@ -267,6 +268,15 @@ module Mutant
       # @return [Boolean]
       def timeout?
         !isolation_result.timeout.nil?
+      end
+
+      # Test for unexpected process abort
+      #
+      # @return [Boolean]
+      def process_abort?
+        process_status = isolation_result.process_status or return false
+
+        !timeout? && !process_status.exited?
       end
 
     private

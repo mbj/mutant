@@ -163,15 +163,17 @@ module SharedContext
 
     let(:mutation_a_criteria_result) do
       Mutant::Result::CoverageCriteria.new(
-        test_result: true,
-        timeout:     false
+        process_abort: false,
+        test_result:   true,
+        timeout:       false
       )
     end
 
     let(:mutation_b_criteria_result) do
       Mutant::Result::CoverageCriteria.new(
-        test_result: true,
-        timeout:     false
+        process_abort: false,
+        test_result:   true,
+        timeout:       false
       )
     end
 

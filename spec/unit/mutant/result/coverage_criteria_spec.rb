@@ -3,13 +3,15 @@
 RSpec.describe Mutant::Result::CoverageCriteria do
   let(:object) do
     described_class.new(
-      test_result: test_result,
-      timeout:     timeout
+      process_abort: process_abort,
+      test_result:   test_result,
+      timeout:       timeout
     )
   end
 
-  let(:timeout)     { false }
-  let(:test_result) { false }
+  let(:timeout)       { false }
+  let(:test_result)   { false }
+  let(:process_abort) { false }
 
   describe '#success?' do
     def apply
@@ -32,6 +34,14 @@ RSpec.describe Mutant::Result::CoverageCriteria do
 
     context 'on test result criteria set' do
       let(:test_result) { true }
+
+      it 'returns true' do
+        expect(apply).to be(true)
+      end
+    end
+
+    context 'on process_abort criteria set' do
+      let(:process_abort) { true }
 
       it 'returns true' do
         expect(apply).to be(true)

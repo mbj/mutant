@@ -9,7 +9,9 @@ RSpec.describe Mutant::Result::Mutation do
     )
   end
 
-  let(:mutation) { instance_double(Mutant::Mutation) }
+  let(:mutation)                { instance_double(Mutant::Mutation) }
+  let(:process_status_exited?)  { true                              }
+  let(:process_status_success?) { true                              }
 
   let(:test_result) do
     instance_double(
@@ -18,11 +20,19 @@ RSpec.describe Mutant::Result::Mutation do
     )
   end
 
+  let(:process_status) do
+    instance_double(
+      Process::Status,
+      exited?:  process_status_exited?,
+      success?: process_status_success?
+    )
+  end
+
   let(:isolation_result) do
     Mutant::Isolation::Result.new(
       exception:      nil,
       log:            '',
-      process_status: nil,
+      process_status: process_status,
       timeout:        nil,
       value:          test_result
     )
@@ -59,6 +69,60 @@ RSpec.describe Mutant::Result::Mutation do
 
     before do
       allow(mutation.class).to receive_messages(success?: true)
+    end
+
+    context 'when process aborts cover mutations' do
+      let(:coverage_criteria) { super().with(process_abort: true) }
+
+      context 'without process status' do
+        let(:isolation_result) { super().with(process_status: nil) }
+
+        it 'does not cover process_abort' do
+          expect(apply.process_abort).to be(false)
+        end
+      end
+
+      context 'and process status indicates abnormal exit' do
+        let(:process_status_exited?) { false }
+
+        context 'on isolation result with timeout' do
+          let(:isolation_result) { super().with(timeout: 1.0) }
+
+          it 'does not cover process_abort' do
+            expect(apply.process_abort).to be(false)
+          end
+        end
+
+        context 'on isolation result without timeout' do
+          it 'does not cover process_abort' do
+            expect(apply.process_abort).to be(true)
+          end
+        end
+      end
+
+      context 'and process status indicates normal exit' do
+        it 'does not cover process_abort' do
+          expect(apply.process_abort).to be(false)
+        end
+      end
+    end
+
+    context 'when process aborts do not cover mutations' do
+      let(:coverage_criteria) { super().with(process_abort: false) }
+
+      context 'and process status indicates abnormal exit' do
+        let(:process_status_exited?) { false }
+
+        it 'covers process_abort' do
+          expect(apply.process_abort).to be(false)
+        end
+      end
+
+      context 'and process status indicates normal exit' do
+        it 'covers process_abort' do
+          expect(apply.process_abort).to be(false)
+        end
+      end
     end
 
     context 'when timeouts cover mutations' do
