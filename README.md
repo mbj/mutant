@@ -2,7 +2,7 @@ mutant
 ======
 
 ![Build Status](https://github.com/mbj/mutant/workflows/CI/badge.svg)
-[![Gem Version](https://img.shields.io/gem/v/mutant.svg)](https://rubygems.org/gems/mutant)
+[![Gem Version](https://badge.fury.io/rb/mutant.svg)](https://badge.fury.io/rb/mutant)
 [![Discord](https://img.shields.io/discord/767914934016802818.svg)](https://discord.gg/BSr62b4RkV)
 
 ## What is Mutant?
