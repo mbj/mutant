@@ -4,4 +4,5 @@ includes:
 integration: rspec
 requires:
 - mutant
+- mutant/integration/rspec
 - mutant/meta

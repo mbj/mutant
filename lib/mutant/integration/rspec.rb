@@ -92,17 +92,22 @@ module Mutant
         }
 
         Test.new(
-          expressions: [parse_metadata(metadata)],
+          expressions: parse_metadata(metadata),
           id:          id
         )
       end
 
       def parse_metadata(metadata)
         if metadata.key?(:mutant_expression)
-          parse_expression(metadata.fetch(:mutant_expression))
+          expression = metadata.fetch(:mutant_expression)
+
+          expressions =
+            expression.instance_of?(Array) ? expression : [expression]
+
+          expressions.map(&method(:parse_expression))
         else
           match = EXPRESSION_CANDIDATE.match(metadata.fetch(:full_description))
-          parse_expression(match.captures.first) { ALL_EXPRESSION }
+          [parse_expression(match.captures.first) { ALL_EXPRESSION }]
         end
       end
 
