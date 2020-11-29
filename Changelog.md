@@ -1,6 +1,7 @@
-# Unreleased
+# v0.10.9 2020-11-29
 
-* Add support for specifying multiple subject expressions with the RSpec integration. [#1125](https://github.com/mbj/mutant/pull/1125)
+* Add support for specifying multiple subject expressions with the RSpec integration.
+  [#1125](https://github.com/mbj/mutant/pull/1125)
 
 # v0.10.8 2020-11-22
 
