@@ -66,13 +66,25 @@ RSpec.describe Mutant::Integration::Rspec do
     )
   end
 
+  let(:example_f) do
+    double(
+      'Example E',
+      metadata: {
+        location:          'example-f-location',
+        full_description:  'Example::F',
+        mutant_expression: %w[Foo Bar]
+      }
+    )
+  end
+
   let(:examples) do
     [
       example_a,
       example_b,
       example_c,
       example_d,
-      example_e
+      example_e,
+      example_f
     ]
   end
 
@@ -118,6 +130,10 @@ RSpec.describe Mutant::Integration::Rspec do
       Mutant::Test.new(
         id:          'rspec:3:example-e-location/Example::E',
         expressions: [parse_expression('Foo')]
+      ),
+      Mutant::Test.new(
+        id:          'rspec:4:example-f-location/Example::F',
+        expressions: [parse_expression('Foo'), parse_expression('Bar')]
       )
     ]
   end
