@@ -49,7 +49,7 @@ module Mutant
         end
 
         def expand(file_config)
-          @config = @config.merge(file_config)
+          @config = file_config.merge(@config)
         end
 
         def soft_fail(result)

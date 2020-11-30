@@ -388,8 +388,10 @@ RSpec.describe Mutant::CLI do
 
       let(:file_config) do
         Mutant::Config::DEFAULT.with(
-          includes: %w[include-file],
-          requires: %w[require-file]
+          integration:      'file-integration',
+          includes:         %w[include-file],
+          requires:         %w[require-file],
+          mutation_timeout: 5
         )
       end
 
@@ -625,8 +627,15 @@ RSpec.describe Mutant::CLI do
         end
 
         context 'with --use option' do
-          let(:arguments)        { super() + ['--use', 'example-integration']       }
-          let(:bootstrap_config) { super().with(integration: 'example-integration') }
+          let(:arguments)        { super() + ['--use', 'cli-integration']       }
+          let(:bootstrap_config) { super().with(integration: 'cli-integration') }
+
+          include_examples 'CLI run'
+        end
+
+        context 'without --use option' do
+          let(:arguments)        { super()                                       }
+          let(:bootstrap_config) { super().with(integration: 'file-integration') }
 
           include_examples 'CLI run'
         end

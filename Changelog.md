@@ -1,3 +1,7 @@
+# v0.10.10 unreleased
+
+* Fix CLI overwrites of config file.
+
 # v0.10.9 2020-11-29
 
 * Add support for specifying multiple subject expressions with the RSpec integration.
