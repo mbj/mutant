@@ -1,6 +1,7 @@
-# v0.10.10 unreleased
+# v0.10.10 2020-11-30
 
 * Fix CLI overwrites of config file.
+  [#1127](https://github.com/mbj/mutant/pull/1127).
 
 # v0.10.9 2020-11-29
 
