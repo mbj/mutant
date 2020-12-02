@@ -41,6 +41,7 @@ module Mutant
 end # Mutant
 
 require 'mutant/bootstrap'
+require 'mutant/bootstrap/rails'
 require 'mutant/version'
 require 'mutant/env'
 require 'mutant/util'
