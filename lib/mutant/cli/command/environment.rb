@@ -3,10 +3,9 @@
 module Mutant
   module CLI
     class Command
-      # rubocop:disable Metrics/ClassLength
-      class Run < self
-        NAME              = 'run'
-        SHORT_DESCRIPTION = 'Run code analysis'
+      class Environment < self
+        NAME              = 'environment'
+        SHORT_DESCRIPTION = 'Environment subcommands'
 
         OPTIONS =
           %i[
@@ -16,21 +15,6 @@ module Mutant
             add_matcher_options
           ].freeze
 
-        SLEEP = 40
-
-        UNLICENSED = <<~MESSAGE.lines.freeze
-          Soft fail, continuing in #{SLEEP} seconds
-          Next major version will enforce the license
-          See https://github.com/mbj/mutant#licensing
-        MESSAGE
-
-        # Test if command needs to be executed in zombie environment
-        #
-        # @return [Bool]
-        def zombie?
-          @config.zombie
-        end
-
       private
 
         def initialize(attributes)
@@ -38,35 +22,14 @@ module Mutant
           @config = Config.env
         end
 
-        def execute
-          soft_fail(License.apply(world))
-            .bind { Config.load_config_file(world) }
+        def bootstrap
+          Config.load_config_file(world)
             .fmap(&method(:expand))
             .bind { Bootstrap.apply(world, @config) }
-            .bind(&Runner.public_method(:apply))
-            .from_right { |error| world.stderr.puts(error); return false }
-            .success?
         end
 
         def expand(file_config)
           @config = file_config.merge(@config)
-        end
-
-        def soft_fail(result)
-          result.either(
-            lambda do |message|
-              stderr = world.stderr
-              stderr.puts(message)
-              UNLICENSED.each { |line| stderr.puts(unlicensed(line)) }
-              world.kernel.sleep(SLEEP)
-              Either::Right.new(nil)
-            end,
-            ->(_subscription) { Either::Right.new(nil) }
-          )
-        end
-
-        def unlicensed(message)
-          "[Mutant-License-Error]: #{message}"
         end
 
         def parse_remaining_arguments(arguments)
@@ -158,7 +121,6 @@ module Mutant
           end
         end
       end # Run
-      # rubocop:enable Metrics/ClassLength
     end # Command
   end # CLI
 end # Mutant

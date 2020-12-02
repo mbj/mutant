@@ -3,11 +3,15 @@
 module Mutant
   module CLI
     class Command
+      class Environment < self
+        SUBCOMMANDS = [Environment::Show].freeze
+      end # Environment
+
       class Root < self
-        SUBCOMMANDS       = [Run, Subscription].freeze
-        SHORT_DESCRIPTION = 'mutation testing engine main command'
         NAME              = 'mutant'
-      end
+        SHORT_DESCRIPTION = 'mutation testing engine main command'
+        SUBCOMMANDS       = [Environment::Run, Environment, Subscription].freeze
+      end # Root
     end # Command
   end # CLI
 end # Mutant

@@ -6,8 +6,8 @@ RSpec.describe Mutant::CLI do
     let(:events)        { []                                    }
     let(:expect_zombie) { false                                 }
     let(:kernel)        { class_double(Kernel)                  }
-    let(:stderr)        { instance_double(IO)                   }
-    let(:stdout)        { instance_double(IO)                   }
+    let(:stderr)        { instance_double(IO, :stderr)          }
+    let(:stdout)        { instance_double(IO, :stdout)          }
     let(:timer)         { instance_double(Mutant::Timer)        }
 
     let(:world) do
@@ -77,11 +77,9 @@ RSpec.describe Mutant::CLI do
       @tests << @test_klass.new(yield)
     end
 
-    make do
-      message = <<~'MESSAGE'
-        mutant: Missing required subcommand!
-
-        usage: mutant <run|subscription> [options]
+    def self.main_body
+      <<~'MESSAGE'.strip
+        usage: mutant <run|environment|subscription> [options]
 
         Summary: mutation testing engine main command
 
@@ -93,7 +91,16 @@ RSpec.describe Mutant::CLI do
         Available subcommands:
 
         run          - Run code analysis
+        environment  - Environment subcommands
         subscription - Subscription subcommands
+      MESSAGE
+    end
+
+    make do
+      message = <<~MESSAGE
+        mutant: Missing required subcommand!
+
+        #{main_body}
       MESSAGE
 
       {
@@ -105,22 +112,10 @@ RSpec.describe Mutant::CLI do
     end
 
     make do
-      message = <<~'MESSAGE'
+      message = <<~MESSAGE
         mutant: Cannot find subcommand "unknown-subcommand"
 
-        usage: mutant <run|subscription> [options]
-
-        Summary: mutation testing engine main command
-
-        Global Options:
-
-                --help                       Print help
-                --version                    Print mutants version
-
-        Available subcommands:
-
-        run          - Run code analysis
-        subscription - Subscription subcommands
+        #{main_body}
       MESSAGE
 
       {
@@ -132,22 +127,10 @@ RSpec.describe Mutant::CLI do
     end
 
     make do
-      message = <<~'MESSAGE'
+      message = <<~MESSAGE
         mutant: invalid option: --unknown-option
 
-        usage: mutant <run|subscription> [options]
-
-        Summary: mutation testing engine main command
-
-        Global Options:
-
-                --help                       Print help
-                --version                    Print mutants version
-
-        Available subcommands:
-
-        run          - Run code analysis
-        subscription - Subscription subcommands
+        #{main_body}
       MESSAGE
 
       {
@@ -159,21 +142,7 @@ RSpec.describe Mutant::CLI do
     end
 
     make do
-      message = <<~'MESSAGE'
-        usage: mutant <run|subscription> [options]
-
-        Summary: mutation testing engine main command
-
-        Global Options:
-
-                --help                       Print help
-                --version                    Print mutants version
-
-        Available subcommands:
-
-        run          - Run code analysis
-        subscription - Subscription subcommands
-      MESSAGE
+      message = "#{main_body}\n"
 
       {
         arguments:       %w[--help],
@@ -374,17 +343,24 @@ RSpec.describe Mutant::CLI do
       end
     end
 
-    context 'run' do
+    shared_context 'environment' do
       let(:arguments)          { %w[run]                                              }
       let(:bootstrap_config)   { env_config.merge(file_config)                        }
       let(:bootstrap_result)   { MPrelude::Either::Right.new(env)                     }
-      let(:env)                { Mutant::Env.empty(world, Mutant::Config::DEFAULT)    }
       let(:env_result)         { instance_double(Mutant::Result::Env, success?: true) }
       let(:expected_events)    { [license_validation_event]                           }
       let(:expected_exit)      { true                                                 }
       let(:file_config_result) { MPrelude::Either::Right.new(file_config)             }
       let(:license_result)     { MPrelude::Either::Right.new(subscription)            }
       let(:runner_result)      { MPrelude::Either::Right.new(env_result)              }
+
+      let(:env) do
+        config = Mutant::Config::DEFAULT.with(
+          reporter: Mutant::Reporter::CLI.build(stdout)
+        )
+
+        Mutant::Env.empty(world, config)
+      end
 
       let(:file_config) do
         Mutant::Config::DEFAULT.with(
@@ -430,7 +406,62 @@ RSpec.describe Mutant::CLI do
           events << [:sleep, time]
           time
         end
+
+        allow(stdout).to receive(:write) do |message|
+          events << [:write, message]
+          nil
+        end
       end
+    end
+
+    context 'environment show' do
+      include_context 'environment'
+
+      let(:arguments) { %w[environment show] }
+
+      let(:expected_message) do
+         <<~'MESSAGE'
+           Mutant environment:
+           Matcher:         #<Mutant::Matcher::Config empty>
+           Integration:     null
+           Jobs:            auto
+           Includes:        []
+           Requires:        []
+           Subjects:        0
+           Total-Tests:     0
+           Selected-Tests:  0
+           Tests/Subject:   0.00 avg
+           Mutations:       0
+         MESSAGE
+      end
+
+      context 'without additional arguments' do
+        let(:expected_exit) { true }
+
+        let(:expected_events) do
+          [
+            [
+              :load_config_file,
+              world
+            ],
+            [
+              :bootstrap,
+              world,
+              bootstrap_config.inspect
+            ],
+            [
+              :write,
+              expected_message
+            ]
+          ]
+        end
+
+        include_examples 'CLI run'
+      end
+    end
+
+    context 'run' do
+      include_context 'environment'
 
       context 'on invalid license' do
         let(:expected_exit)    { true                                        }
