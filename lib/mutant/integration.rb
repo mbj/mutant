@@ -19,6 +19,11 @@ module Mutant
       The integration is supposed to define %<constant_name>s!
     MESSAGE
 
+    INTEGRATION_MISSING = <<~'MESSAGE'
+      No test framework integration configured.
+      See https://github.com/mbj/mutant/blob/master/docs/configuration.md#integration
+    MESSAGE
+
     private_constant(*constants(false))
 
     # Setup integration
@@ -27,6 +32,10 @@ module Mutant
     #
     # @return [Either<String, Integration>]
     def self.setup(env)
+      unless env.config.integration
+        return Either::Left.new(INTEGRATION_MISSING)
+      end
+
       attempt_require(env).bind { attempt_const_get(env) }.fmap do |klass|
         klass.new(
           expression_parser: env.config.expression_parser,
