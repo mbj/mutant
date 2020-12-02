@@ -61,6 +61,17 @@ RSpec.describe Mutant::Integration do
       allow(integration).to receive_messages(setup: integration)
     end
 
+    context 'when integration is not configured' do
+      let(:integration_name) { nil }
+
+      it 'returns error' do
+        expect(apply).to eql(Mutant::Either::Left.new(<<~MESSAGE))
+          No test framework integration configured.
+          See https://github.com/mbj/mutant/blob/master/docs/configuration.md#integration
+        MESSAGE
+      end
+    end
+
     context 'when require fails' do
       let(:exception) { LoadError.new('some-load-error') }
 

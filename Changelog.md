@@ -1,3 +1,10 @@
+# v0.10.10 2020-12-02
+
+* Add `environment show` subcommand to display environment without coverage run.
+* Fix unspecified integration to have dedicated error message.
+
+  [#1130](https://github.com/mbj/mutant/pull/1130)
+
 # v0.10.10 2020-11-30
 
 * Fix CLI overwrites of config file.

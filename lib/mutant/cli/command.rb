@@ -66,7 +66,7 @@ module Mutant
       #
       # @return [Bool]
       def zombie?
-        instance_of?(Run)
+        false
       end
 
     private
