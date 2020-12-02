@@ -13,8 +13,6 @@ module Mutant
     #
     # @api private
     def self.apply(world)
-      return Either::Right.new(nil)
-
       load_mutant_license(world)
         .fmap { license_path(world) }
         .bind { |path| Subscription.load(world, world.json.load(path)) }
