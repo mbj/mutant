@@ -19,7 +19,7 @@ module Mutant
 
         def initialize(attributes)
           super(attributes)
-          @config = Config.env
+          @config = Config::DEFAULT
         end
 
         def bootstrap
@@ -29,7 +29,7 @@ module Mutant
         end
 
         def expand(file_config)
-          @config = file_config.merge(@config)
+          @config = Config.env.merge(file_config).merge(@config)
         end
 
         def parse_remaining_arguments(arguments)

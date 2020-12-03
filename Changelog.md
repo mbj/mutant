@@ -1,3 +1,7 @@
+# v0.10.11 2020-12-03
+
+* Fix absent jobs on CLI to not shadow file configuration.
+
 # v0.10.10 2020-12-02
 
 * Add `environment show` subcommand to display environment without coverage run.
