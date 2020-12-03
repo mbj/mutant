@@ -10,7 +10,6 @@ RSpec.describe Mutant::Result::Mutation do
   end
 
   let(:mutation)                { instance_double(Mutant::Mutation) }
-  let(:process_status_exited?)  { true                              }
   let(:process_status_success?) { true                              }
 
   let(:test_result) do
@@ -23,7 +22,6 @@ RSpec.describe Mutant::Result::Mutation do
   let(:process_status) do
     instance_double(
       Process::Status,
-      exited?:  process_status_exited?,
       success?: process_status_success?
     )
   end
@@ -83,7 +81,7 @@ RSpec.describe Mutant::Result::Mutation do
       end
 
       context 'and process status indicates abnormal exit' do
-        let(:process_status_exited?) { false }
+        let(:process_status_success?) { false }
 
         context 'on isolation result with timeout' do
           let(:isolation_result) { super().with(timeout: 1.0) }
@@ -111,7 +109,7 @@ RSpec.describe Mutant::Result::Mutation do
       let(:coverage_criteria) { super().with(process_abort: false) }
 
       context 'and process status indicates abnormal exit' do
-        let(:process_status_exited?) { false }
+        let(:process_status_success?) { false }
 
         it 'covers process_abort' do
           expect(apply.process_abort).to be(false)

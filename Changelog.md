@@ -1,3 +1,9 @@
+# v0.10.14 2020-12-03
+
+* Change process abort coverage criteria to also cover nonzero killfork exits.
+
+  [#1137](https://github.com/mbj/mutant/pull/1137)
+
 # v0.10.13 2020-12-03
 
 * Fix to properly propagate coverage criteria from config file.

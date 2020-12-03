@@ -92,7 +92,8 @@ coverage_criteria:
   timeout: false
   # Control the process status abort criteria, defaults to `false`:
   # * `true` - mutant will consider unexpected process aborts (example segfaults)
-  #   as covering the mutation that caused this behavior.
+  #   as covering the mutation that caused this behavior.  This includes bugs in the test
+  #   framework not producing a test result. Use with care.
   # * `false` - mutant will ignore unexpected process aborts when determining coverage.
   process_abort: false
   # Control the test result criteria, # defaults to `true`
