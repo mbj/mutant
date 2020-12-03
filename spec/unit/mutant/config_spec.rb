@@ -1,6 +1,40 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Config do
+  describe '#expand_defaults' do
+    let(:config) do
+      described_class::DEFAULT.with(
+        coverage_criteria: described_class::CoverageCriteria::EMPTY.with(
+          test_result: false
+        )
+      )
+    end
+
+    def apply
+      config.expand_defaults
+    end
+
+    context 'on empty jobs' do
+      it 'expands empty jobs' do
+        expect(apply.jobs).to eql(1)
+      end
+    end
+
+    context 'on present jobs' do
+      let(:config) { super().with(jobs: 2) }
+
+      it 'doesn not expand jobs' do
+        expect(apply.jobs).to eql(2)
+      end
+    end
+
+    it 'expands merges coverage criteria with defaults' do
+      expect(apply.coverage_criteria).to eql(
+        described_class::CoverageCriteria::DEFAULT.with(test_result: false)
+      )
+    end
+  end
+
   describe '#merge' do
     def apply
       original.merge(other)
@@ -30,6 +64,22 @@ RSpec.describe Mutant::Config do
 
       it 'adds other and orignial' do
         expect_value(original_value + other_value)
+      end
+    end
+
+    shared_examples 'descendant merge' do
+      before do
+        allow(original_value).to receive_messages(merge: result_value)
+      end
+
+      it 'returns descendant result value' do
+        expect(apply.public_send(key)).to be(result_value)
+      end
+
+      it 'merges descendants' do
+        apply
+
+        expect(original_value).to have_received(:merge).with(other_value)
       end
     end
 
@@ -141,20 +191,6 @@ RSpec.describe Mutant::Config do
       include_examples 'overwrite value'
     end
 
-    context 'merging coverage criteria' do
-      let(:key) { :coverage_criteria }
-
-      let(:original_value) do
-        instance_double(Mutant::Config::CoverageCriteria, 'config')
-      end
-
-      let(:other_value) do
-        instance_double(Mutant::Config::CoverageCriteria, 'other')
-      end
-
-      include_examples 'overwrite value'
-    end
-
     context 'merging isolation' do
       let(:key)            { :isolation                                   }
       let(:original_value) { instance_double(Mutant::Isolation, 'config') }
@@ -209,19 +245,25 @@ RSpec.describe Mutant::Config do
       let(:other_value)    { instance_double(Mutant::Matcher::Config, :other)    }
       let(:result_value)   { instance_double(Mutant::Matcher::Config, :result)   }
 
-      before do
-        allow(original_value).to receive_messages(merge: result_value)
+      include_examples 'descendant merge'
+    end
+
+    context 'merging coverage criteria' do
+      let(:key) { :coverage_criteria }
+
+      let(:original_value) do
+        instance_double(Mutant::Config::CoverageCriteria, 'config')
       end
 
-      it 'returns result value' do
-        expect(apply.public_send(:matcher)).to be(result_value)
+      let(:other_value) do
+        instance_double(Mutant::Config::CoverageCriteria, 'other')
       end
 
-      it 'merges matchers' do
-        apply
-
-        expect(original_value).to have_received(:merge).with(other_value)
+      let(:result_value) do
+        instance_double(Mutant::Config::CoverageCriteria, 'result')
       end
+
+      include_examples 'descendant merge'
     end
   end
 

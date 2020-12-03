@@ -29,7 +29,7 @@ module Mutant
         end
 
         def expand(file_config)
-          @config = Config.env.merge(file_config).merge(@config)
+          @config = Config.env.merge(file_config).merge(@config).expand_defaults
         end
 
         def parse_remaining_arguments(arguments)

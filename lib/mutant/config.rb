@@ -40,6 +40,12 @@ module Mutant
     class CoverageCriteria
       include Anima.new(:process_abort, :test_result, :timeout)
 
+      EMPTY = new(
+        process_abort: nil,
+        test_result:   nil,
+        timeout:       nil
+      )
+
       DEFAULT = new(
         process_abort: false,
         test_result:   true,
@@ -61,6 +67,22 @@ module Mutant
             ->(value) { Either::Right.new(DEFAULT.with(**value)) }
           ]
         )
+
+      def merge(other)
+        self.class.new(
+          process_abort: overwrite(other, :process_abort),
+          test_result:   overwrite(other, :test_result),
+          timeout:       overwrite(other, :timeout)
+        )
+      end
+
+    private
+
+      def overwrite(other, attribute_name)
+        other_value = other.public_send(attribute_name)
+
+        other_value.nil? ? public_send(attribute_name) : other_value
+      end
     end # CoverageCriteria
 
     # Merge with other config
@@ -68,18 +90,24 @@ module Mutant
     # @param [Config] other
     #
     # @return [Config]
+    #
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def merge(other)
       other.with(
-        fail_fast:        fail_fast || other.fail_fast,
-        includes:         includes + other.includes,
-        jobs:             other.jobs || jobs,
-        integration:      other.integration || integration,
-        mutation_timeout: other.mutation_timeout || mutation_timeout,
-        matcher:          matcher.merge(other.matcher),
-        requires:         requires + other.requires,
-        zombie:           zombie || other.zombie
+        coverage_criteria: coverage_criteria.merge(other.coverage_criteria),
+        fail_fast:         fail_fast || other.fail_fast,
+        includes:          includes + other.includes,
+        jobs:              other.jobs || jobs,
+        integration:       other.integration || integration,
+        mutation_timeout:  other.mutation_timeout || mutation_timeout,
+        matcher:           matcher.merge(other.matcher),
+        requires:          requires + other.requires,
+        zombie:            zombie || other.zombie
       )
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
 
     # Load config file
     #
@@ -98,6 +126,16 @@ module Mutant
       else
         Either::Left.new(MORE_THAN_ONE_CONFIG_FILE % files.join(', '))
       end
+    end
+
+    # Expand config with defaults
+    #
+    # @return [Config]
+    def expand_defaults
+      with(
+        coverage_criteria: CoverageCriteria::DEFAULT.merge(coverage_criteria),
+        jobs:              jobs || 1
+      )
     end
 
     def self.load_contents(path)
