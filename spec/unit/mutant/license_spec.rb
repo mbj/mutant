@@ -57,7 +57,7 @@ RSpec.describe Mutant::License do
 
       expect(gem_method)
         .to have_received(:call)
-        .with('mutant-license', '~> 0.1.0')
+        .with('mutant-license', '>= 0.1', '< 0.3')
         .ordered
 
       if load_json

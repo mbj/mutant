@@ -3,7 +3,7 @@
 module Mutant
   module License
     NAME    = 'mutant-license'
-    VERSION = '~> 0.1.0'
+    VERSION = ['>= 0.1', '< 0.3'].freeze
 
     # Load license
     #
@@ -20,7 +20,7 @@ module Mutant
 
     def self.load_mutant_license(world)
       Either
-        .wrap_error(LoadError) { world.gem_method.call(NAME, VERSION) }
+        .wrap_error(LoadError) { world.gem_method.call(NAME, *VERSION) }
         .lmap(&:message)
         .lmap(&method(:check_for_rubygems_mutant_license))
     end
