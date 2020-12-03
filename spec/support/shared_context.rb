@@ -110,9 +110,17 @@ module SharedContext
       )
     end
 
+    let(:subject_a_context) do
+      Mutant::Context.new(
+        Object,
+        'suvject-a.rb'
+      )
+    end
+
     let(:subject_a) do
       instance_double(
         Mutant::Subject,
+        context:        subject_a_context,
         node:           subject_a_node,
         source:         Unparser.unparse(subject_a_node),
         identification: 'subject-a'

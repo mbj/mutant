@@ -10,6 +10,7 @@ RSpec.describe Mutant::Subject::Method::Instance do
   end
 
   let(:call_block?) { true                              }
+  let(:node)        { Unparser.parse('def foo; end')    }
   let(:warnings)    { instance_double(Mutant::Warnings) }
 
   let(:context) do
@@ -17,10 +18,6 @@ RSpec.describe Mutant::Subject::Method::Instance do
       scope,
       instance_double(Pathname)
     )
-  end
-
-  let(:node) do
-    s(:def, :foo, s(:args))
   end
 
   let(:scope) do
@@ -100,24 +97,25 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     )
   end
 
-  let(:context) do
-    Mutant::Context.new(scope, double('Source Path'))
-  end
-
-  let(:warnings) { instance_double(Mutant::Warnings) }
-
-  let(:node) do
-    s(:def, :foo, s(:args))
-  end
+  let(:context)  { Mutant::Context.new(scope, double('Source Path')) }
+  let(:node)     { Unparser.parse('def foo; end')                    }
+  let(:warnings) { instance_double(Mutant::Warnings)                 }
 
   before do
     allow(warnings).to receive(:call).and_yield
+
+    allow(Object).to receive_messages(const_get: scope)
   end
 
   shared_context 'memoizable scope setup' do
     let(:scope) do
       Class.new do
         include Memoizable
+
+        def self.name
+          'MemoizableClass'
+        end
+
         def foo; end
         memoize :foo
       end
@@ -131,6 +129,11 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
 
       Class.new do
         include memoize_provider
+
+        def self.name
+          'AdamantiumClass'
+        end
+
         def foo; end
         memoize :foo, **memoize_options
       end
@@ -156,11 +159,13 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   describe '#mutations' do
     subject { object.mutations }
 
+    let(:options_node) { nil }
+
     let(:expected) do
       [
         Mutant::Mutation::Neutral.new(
           object,
-          s(:begin, s(:def, :foo, s(:args)), memoize_node)
+          s(:begin, s(:def, :foo, s(:args), nil), memoize_node)
         ),
         Mutant::Mutation::Evil.new(
           object,
@@ -169,10 +174,6 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
         Mutant::Mutation::Evil.new(
           object,
           s(:begin, s(:def, :foo, s(:args), s(:zsuper)), memoize_node)
-        ),
-        Mutant::Mutation::Evil.new(
-          object,
-          s(:begin, s(:def, :foo, s(:args), nil), memoize_node)
         )
       ]
     end
@@ -180,8 +181,6 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     let(:memoize_node) do
       s(:send, nil, :memoize, s(:sym, :foo), *options_node)
     end
-
-    let(:options_node) { nil }
 
     context 'when Memoizable is included in scope' do
       include_context 'memoizable scope setup'

@@ -4,11 +4,19 @@ RSpec.describe Mutant::Meta::Example do
   let(:object) do
     described_class.new(
       expected:        mutation_nodes,
-      file:            file,
+      location:        location,
       lvars:           [],
       node:            node,
       original_source: 'true',
       types:           [node.type]
+    )
+  end
+
+  let(:location) do
+    instance_double(
+      Thread::Backtrace::Location,
+      path: 'foo/bar.rb',
+      to_s: '<location>'
     )
   end
 
@@ -32,5 +40,17 @@ RSpec.describe Mutant::Meta::Example do
     subject { object.verification }
 
     it { should eql(Mutant::Meta::Example::Verification.new(object, mutations)) }
+  end
+
+  describe '#context' do
+    subject { object.context }
+
+    it { should eql(Mutant::Context.new(Object, location.path)) }
+  end
+
+  describe '#identification' do
+    subject { object.identification }
+
+    it { should eql('<location>') }
   end
 end

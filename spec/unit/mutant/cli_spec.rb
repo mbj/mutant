@@ -621,16 +621,24 @@ RSpec.describe Mutant::CLI do
           include_examples 'CLI run'
         end
 
-        context 'with --jobs option' do
+        context 'with --jobs option on absent file config' do
           let(:arguments)        { super() + %w[--jobs 10] }
           let(:bootstrap_config) { super().with(jobs: 10)  }
 
           include_examples 'CLI run'
         end
 
-        context 'with --jobs option' do
+        context 'with --jobs option on present file config' do
           let(:arguments)        { super() + %w[--jobs 10] }
           let(:bootstrap_config) { super().with(jobs: 10)  }
+          let(:file_config)      { super().with(jobs: 2)   }
+
+          include_examples 'CLI run'
+        end
+
+        context 'without --jobs option on present file config' do
+          let(:bootstrap_config) { super().with(jobs: 2) }
+          let(:file_config)      { super().with(jobs: 2) }
 
           include_examples 'CLI run'
         end

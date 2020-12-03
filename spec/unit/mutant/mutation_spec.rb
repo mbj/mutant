@@ -8,10 +8,13 @@ RSpec.describe Mutant::Mutation do
     end
   end
 
-  let(:context) { instance_double(Mutant::Context) }
+  let(:context)   { instance_double(Mutant::Context) }
+  let(:kernel)    { instance_double(Kernel)          }
+  let(:node)      { s(:nil)                          }
+  let(:root_node) { s(:int, 1)                       }
 
   let(:object) do
-    mutation_class.new(mutation_subject, Mutant::AST::Nodes::N_NIL)
+    mutation_class.new(mutation_subject, node)
   end
 
   let(:mutation_subject) do
@@ -23,6 +26,24 @@ RSpec.describe Mutant::Mutation do
     )
   end
 
+  before do
+    allow(context).to receive(:root)
+      .with(node)
+      .and_return(root_node)
+  end
+
+  describe '#subject' do
+    subject { object.subject }
+
+    it { should be(subject) }
+  end
+
+  describe '#node' do
+    subject { object.node }
+
+    it { should be(node) }
+  end
+
   describe '#insert' do
     subject { object }
 
@@ -30,16 +51,7 @@ RSpec.describe Mutant::Mutation do
       subject.insert(kernel)
     end
 
-    let(:expected_source) { '1'                                     }
-    let(:kernel)          { instance_double(Kernel)                 }
-    let(:loader_result)   { instance_double(Mutant::Loader::Result) }
-    let(:root_node)       { s(:int, 1)                              }
-
     before do
-      expect(context).to receive(:root)
-        .with(object.node)
-        .and_return(root_node)
-
       expect(mutation_subject).to receive(:prepare)
         .ordered
         .and_return(mutation_subject)
@@ -54,6 +66,9 @@ RSpec.describe Mutant::Mutation do
         )
         .and_return(loader_result)
     end
+
+    let(:expected_source) { '1'                                     }
+    let(:loader_result)   { instance_double(Mutant::Loader::Result) }
 
     it 'returns loader result' do
       expect(apply).to be(loader_result)
