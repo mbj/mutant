@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mutant (0.10.12)
+    mutant (0.10.13)
       abstract_type (~> 0.0.7)
       adamantium (~> 0.2.0)
       anima (~> 0.3.1)

@@ -345,7 +345,7 @@ RSpec.describe Mutant::CLI do
 
     shared_context 'environment' do
       let(:arguments)          { %w[run]                                              }
-      let(:bootstrap_config)   { env_config.merge(file_config)                        }
+      let(:bootstrap_config)   { env_config.merge(file_config).expand_defaults        }
       let(:bootstrap_result)   { MPrelude::Either::Right.new(env)                     }
       let(:env_result)         { instance_double(Mutant::Result::Env, success?: true) }
       let(:expected_events)    { [license_validation_event]                           }
@@ -679,8 +679,33 @@ RSpec.describe Mutant::CLI do
           include_examples 'CLI run'
         end
 
+        context 'coverage criterias' do
+          let(:env_config)       { Mutant::Config::DEFAULT }
+          let(:file_config)      { Mutant::Config::DEFAULT }
+
+          context 'without coverage criterias in env or file' do
+            let(:bootstrap_config) { Mutant::Config::DEFAULT.expand_defaults }
+
+            include_examples 'CLI run'
+          end
+
+          context 'with coverage criterias in file' do
+            let(:file_config) do
+              Mutant::Config::DEFAULT.with(
+                coverage_criteria: Mutant::Config::CoverageCriteria::DEFAULT.with(
+                  timeout: true
+                )
+              )
+            end
+
+            let(:bootstrap_config) { file_config.expand_defaults }
+
+            include_examples 'CLI run'
+          end
+        end
+
         context 'with --since option' do
-          let(:arguments)     { super() + ['--since', 'reference'] }
+          let(:arguments) { super() + ['--since', 'reference'] }
 
           let(:bootstrap_config) do
             super().with(

@@ -1,3 +1,9 @@
+# v0.10.13 2020-12-03
+
+* Fix to properly propagate coverage criteria from config file.
+
+  [#1135](https://github.com/mbj/mutant/pull/1134)
+
 # v0.10.12 2020-12-03
 
 * Fix absent jobs on CLI to not shadow file configuration.
