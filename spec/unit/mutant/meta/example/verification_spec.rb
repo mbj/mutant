@@ -4,10 +4,18 @@ RSpec.describe Mutant::Meta::Example::Verification do
   let(:object)          { described_class.new(example, mutations) }
   let(:original_source) { 'true'                                  }
 
+  let(:location) do
+    instance_double(
+      Thread::Backtrace::Location,
+      path: 'foo.rb',
+      to_s: '<location>'
+    )
+  end
+
   let(:example) do
     Mutant::Meta::Example.new(
       expected:        expected,
-      file:            'foo.rb',
+      location:        location,
       node:            s(:true),
       lvars:           [],
       original_source: original_source,
@@ -38,7 +46,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
 
     it 'returns empty error report' do
       expect(object.error_report).to eql(<<~'REPORT'.chomp)
-        foo.rb
+        <location>
         Original:
         (true)
         true
@@ -59,7 +67,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
   context 'when original source fails the unparser validation' do
     let(:expected_report) do
       <<~REPORT.chomp
-        foo.rb
+        <location>
         Original:
         (true)
         true
@@ -85,7 +93,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
 
     let(:expected_report) do
       <<~'REPORT'.chomp
-        foo.rb
+        <location>
         Original:
         (true)
         true
@@ -104,7 +112,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
 
     let(:expected_report) do
       <<~'REPORT'.chomp
-        foo.rb
+        <location>
         Original:
         (true)
         true
@@ -123,7 +131,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
 
     let(:expected_report) do
       <<~'REPORT'.chomp
-        foo.rb
+        <location>
         Original:
         (true)
         true
@@ -154,7 +162,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
 
     let(:expected_report) do
       <<~REPORT.chomp
-        foo.rb
+        <location>
         Original:
         (true)
         true

@@ -9,12 +9,12 @@ module Mutant
 
         # Run DSL on block
         #
-        # @param [Pathname] file
+        # @param [Thread::Backtrace::Location] location
         # @param [Set<Symbol>] types
         #
         # @return [Example]
-        def self.call(file, types, block)
-          instance = new(file, types)
+        def self.call(location, types, block)
+          instance = new(location, types)
           instance.instance_eval(&block)
           instance.example
         end
@@ -24,12 +24,12 @@ module Mutant
         # Initialize object
         #
         # @return [undefined]
-        def initialize(file, types)
-          @expected = []
-          @file     = file
-          @lvars    = []
-          @source   = nil
-          @types    = types
+        def initialize(location, types)
+          @expected    = []
+          @location    = location
+          @lvars       = []
+          @source      = nil
+          @types       = types
         end
 
         # Example captured by DSL
@@ -40,9 +40,10 @@ module Mutant
         #   in case example cannot be build
         def example
           fail 'source not defined' unless @source
+
           Example.new(
             expected:        @expected,
-            file:            @file,
+            location:        @location,
             lvars:           @lvars,
             node:            @node,
             original_source: @source,

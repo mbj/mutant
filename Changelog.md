@@ -1,6 +1,9 @@
 # v0.10.11 2020-12-03
 
 * Fix absent jobs on CLI to not shadow file configuration.
+* Performance improvements on caching more work in the master process.
+
+  [#1134](https://github.com/mbj/mutant/pull/1134)
 
 # v0.10.10 2020-12-02
 

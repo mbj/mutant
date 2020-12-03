@@ -17,8 +17,7 @@ module Mutant
       #
       # @return [undefined]
       def self.add(*types, &block)
-        file = caller.first.split(':in', 2).first
-        ALL << DSL.call(file, Set.new(types), block)
+        ALL << DSL.call(caller_locations(1).first, Set.new(types), block)
       end
 
       Pathname.glob(Pathname.new(__dir__).parent.parent.join('meta', '*.rb'))

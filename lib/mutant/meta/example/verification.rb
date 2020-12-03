@@ -28,7 +28,7 @@ module Mutant
       private
 
         def reports
-          reports = [example.file]
+          reports = [example.location]
           reports.concat(original)
           reports.concat(original_verification)
           reports.concat(make_report('Missing mutations:', missing))
@@ -94,7 +94,7 @@ module Mutant
 
         def missing
           (example.expected.map(&:node) - mutations.map(&:node)).map do |node|
-            Mutation::Evil.new(nil, node)
+            Mutation::Evil.new(example, node)
           end
         end
         memoize :missing
