@@ -121,7 +121,7 @@ module Mutant
 
     # Test result
     class Test
-      include Result, Anima.new(
+      include Anima.new(
         :passed,
         :runtime,
         :tests

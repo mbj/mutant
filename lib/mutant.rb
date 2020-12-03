@@ -2,6 +2,86 @@
 
 require 'abstract_type'
 require 'adamantium'
+
+require 'variable'
+module Memoizable
+  class Memory
+    def initialize
+      setup({})
+    end
+
+    def [](name)
+      fail
+    end
+
+    def []=(name, value)
+      @memory.with do |memory|
+        memory.fetch(name) { memory[name] = ivar(value) }
+      end
+
+      value
+    end
+
+    def fetch(name)
+      evaluate = false
+
+      ivar = @memory.with do |memory|
+        memory.fetch(name) do
+          evaluate = true
+          memory[name] = Variable::IVar.new(
+            condition_variable: ConditionVariable,
+            mutex:              Mutex
+          )
+        end
+      end
+
+      if evaluate
+        value = yield
+        ivar.put(value)
+        value
+      else
+        ivar.take
+      end
+    end
+
+    def key?(name)
+      fail
+    end
+
+    def marshal_dump
+      @memory.with do |memory|
+        memory.map do |name, ivar|
+          [name, ivar.take]
+        end
+      end
+    end
+
+    def marshal_load(memory)
+      setup(
+        memory.each_with_object({}) do |(name, value), hash|
+          hash[name] = ivar(value)
+        end
+      )
+    end
+
+  private
+
+    def setup(memory)
+      @memory = ivar(memory)
+
+      freeze
+    end
+
+    def ivar(value)
+      Variable::IVar.new(
+        condition_variable: ConditionVariable,
+        mutex:              Mutex,
+        value:              value
+      )
+    end
+  end
+end
+
 require 'anima'
 require 'concord'
 require 'diff/lcs'
