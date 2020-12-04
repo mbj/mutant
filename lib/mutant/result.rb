@@ -276,7 +276,7 @@ module Mutant
       def process_abort?
         process_status = isolation_result.process_status or return false
 
-        !timeout? && !process_status.exited?
+        !timeout? && !process_status.success?
       end
 
     private
