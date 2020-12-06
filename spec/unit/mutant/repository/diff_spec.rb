@@ -14,6 +14,12 @@ describe Mutant::Repository::Diff do
     let(:path)       { Pathname.new('/foo/bar.rb')      }
     let(:line_range) { 4..5                             }
 
+    let(:root_stdout) do
+      <<~STR
+        /foo
+      STR
+    end
+
     let(:world) do
       instance_double(
         Mutant::World,
@@ -32,6 +38,12 @@ describe Mutant::Repository::Diff do
 
     let(:raw_expectations) do
       [
+        {
+          receiver:  world,
+          selector:  :capture_stdout,
+          arguments: [%w[git rev-parse --show-toplevel]],
+          reaction:  { return: Mutant::Either::Right.new(root_stdout) }
+        },
         {
           receiver:  world,
           selector:  :capture_stdout,
@@ -115,6 +127,46 @@ describe Mutant::Repository::Diff do
         it 'returns false' do
           verify_events { expect(apply).to be(false) }
         end
+      end
+    end
+
+    context 'work dir is subdirectory of git root' do
+      let(:index_stdout) do
+        <<~STR
+          :000000 000000 0000000000000000000000000000000000000000 0000000000000000000000000000000000000000 M\tfoo/bar.rb
+          :000000 000000 0000000000000000000000000000000000000000 0000000000000000000000000000000000000000 M\tfoo/baz.rb
+        STR
+      end
+
+      let(:root_stdout) do
+        <<~STR
+          /
+        STR
+      end
+
+      let(:file_diff_expectations) do
+        [
+          {
+            receiver:  world,
+            selector:  :capture_stdout,
+            arguments: [%w[git diff --unified=0 to_rev -- /foo/bar.rb]],
+            reaction:  { return: Mutant::Either::Right.new(diff_stdout) }
+          }
+        ]
+      end
+
+      let(:diff_stdout) do
+        <<~'DIFF'
+          --- bar.rb
+          +++ bar.rb
+          @@ -4 +4 @@ header
+          -a
+          +b
+        DIFF
+      end
+
+      specify do
+        verify_events { expect(apply).to be(true) }
       end
     end
   end

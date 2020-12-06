@@ -31,15 +31,21 @@ module Mutant
 
       # rubocop:disable Metrics/MethodLength
       def touched_paths
-        pathname = world.pathname
-        work_dir = pathname.pwd
+        root_stdout =
+          world
+            .capture_stdout(%w[git rev-parse --show-toplevel])
+            .from_right
+            .lines
+            .first
+            .strip
+        root_dir = Pathname.new(root_stdout)
 
         world
           .capture_stdout(%W[git diff-index #{to}])
           .from_right
           .lines
           .map do |line|
-            path = parse_line(work_dir, line)
+            path = parse_line(root_dir, line)
             [path.path, path]
           end
           .to_h
