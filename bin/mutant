@@ -32,8 +32,10 @@ status =
         anima
         concord
         equalizer
+        mprelude
         mutant
         unparser
+        variable
       ]
     )
 
