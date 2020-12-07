@@ -8,11 +8,11 @@ describe Mutant::Repository::Diff do
 
     subject { described_class.new(world: world, to: 'to_rev') }
 
-    let(:pathname)   { class_double(Pathname, pwd: pwd) }
-    let(:kernel)     { class_double(Kernel)             }
-    let(:pwd)        { Pathname.new('/foo')             }
-    let(:path)       { Pathname.new('/foo/bar.rb')      }
-    let(:line_range) { 4..5                             }
+    let(:kernel)     { class_double(Kernel)        }
+    let(:line_range) { 4..5                        }
+    let(:path)       { Pathname.new('/foo/bar.rb') }
+    let(:pathname)   { class_double(Pathname)      }
+    let(:repo_root)  { Pathname.new('/foo')        }
 
     let(:world) do
       instance_double(
@@ -23,7 +23,7 @@ describe Mutant::Repository::Diff do
     end
 
     let(:allowed_paths) do
-      %w[bar.rb baz.rb].map do |path|
+      %w[/foo bar.rb baz.rb].map do |path|
         [path, Pathname.new(path)]
       end.to_h
     end
@@ -32,6 +32,12 @@ describe Mutant::Repository::Diff do
 
     let(:raw_expectations) do
       [
+        {
+          receiver:  world,
+          selector:  :capture_stdout,
+          arguments: [%w[git rev-parse --show-toplevel]],
+          reaction:  { return: Mutant::Either::Right.new("/foo\n") }
+        },
         {
           receiver:  world,
           selector:  :capture_stdout,

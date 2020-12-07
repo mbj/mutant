@@ -33,21 +33,11 @@ module Mutant
         end
 
         def parse_remaining_arguments(arguments)
-          traverse(@config.expression_parser.public_method(:apply), arguments)
+          Mutant.traverse(@config.expression_parser.public_method(:apply), arguments)
             .fmap do |match_expressions|
               matcher(match_expressions: match_expressions)
               self
             end
-        end
-
-        def traverse(action, values)
-          Either::Right.new(
-            values.map do |value|
-              action.call(value).from_right do |error|
-                return Either::Left.new(error)
-              end
-            end
-          )
         end
 
         def set(**attributes)
