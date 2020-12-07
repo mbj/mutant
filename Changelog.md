@@ -1,3 +1,10 @@
+# v0.10.15 2020-12-07
+
+* Add support for incremental mutation testing when the working directory
+  is not the git repository root.
+
+  [#1142](https://github.com/mbj/mutant/pull/1142)
+
 # v0.10.14 2020-12-03
 
 * Change process abort coverage criteria to also cover nonzero killfork exits.
