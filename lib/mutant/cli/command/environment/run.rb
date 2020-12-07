@@ -25,12 +25,10 @@ module Mutant
 
         private
 
-          def execute
+          def action
             soft_fail(License.apply(world))
               .bind { bootstrap }
               .bind(&Runner.public_method(:apply))
-              .from_right { |error| world.stderr.puts(error); return false }
-              .success?
           end
 
           def soft_fail(result)

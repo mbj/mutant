@@ -75,6 +75,18 @@ module Mutant
         self.class::SUBCOMMANDS
       end
 
+      def execute
+        action.either(
+          method(:fail_message),
+          ->(_) { true }
+        )
+      end
+
+      def fail_message(message)
+        world.stderr.puts(message)
+        false
+      end
+
       def parser
         OptionParser.new do |parser|
           parser.banner = "usage: #{banner}"
