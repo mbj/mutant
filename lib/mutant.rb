@@ -245,4 +245,17 @@ module Mutant
       zombie:            false
     )
   end # Config
+
+  # Traverse values against action
+  #
+  # Specialized to Either. Its *always* traverse.
+  def self.traverse(action, values)
+    Either::Right.new(
+      values.map do |value|
+        action.call(value).from_right do |error|
+          return Either::Left.new(error)
+        end
+      end
+    )
+  end
 end # Mutant
