@@ -28,12 +28,12 @@ status =
         .call(Kernel),
       root_require:     'mutant',
       includes:         %w[
-        mutant
-        unparser
         adamantium
-        equalizer
         anima
         concord
+        equalizer
+        mutant
+        unparser
       ]
     )
 
