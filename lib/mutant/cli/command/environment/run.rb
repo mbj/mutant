@@ -25,12 +25,19 @@ module Mutant
 
         private
 
-          def execute
+          def action
             soft_fail(License.apply(world))
               .bind { bootstrap }
               .bind(&Runner.public_method(:apply))
-              .from_right { |error| world.stderr.puts(error); return false }
-              .success?
+              .bind(&method(:from_result))
+          end
+
+          def from_result(result)
+            if result.success?
+              Either::Right.new(nil)
+            else
+              Either::Left.new('Uncovered mutations detected, exiting nonzero!')
+            end
           end
 
           def soft_fail(result)

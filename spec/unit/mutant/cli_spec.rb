@@ -542,6 +542,34 @@ RSpec.describe Mutant::CLI do
           include_examples 'CLI run'
         end
 
+        context 'on runner success with unsuccessful result' do
+          let(:expected_exit) { false }
+
+          let(:env_result) do
+            instance_double(
+              Mutant::Result::Env,
+              success?: false
+            )
+          end
+
+          let(:runner_result) do
+            MPrelude::Either::Right.new(env_result)
+          end
+
+          let(:expected_events) do
+            [
+              *super(),
+              [
+                :stderr,
+                :puts,
+                'Uncovered mutations detected, exiting nonzero!'
+              ]
+            ]
+          end
+
+          include_examples 'CLI run'
+        end
+
         context 'with valid match expression' do
           let(:arguments) { super() + ['Foo#bar'] }
 

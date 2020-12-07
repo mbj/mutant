@@ -11,12 +11,9 @@ module Mutant
 
         private
 
-          def execute
-            Config.load_config_file(world)
-              .fmap(&method(:expand))
-              .bind { Bootstrap.apply(world, @config) }
+          def action
+            bootstrap
               .fmap(&method(:report_env))
-              .right?
           end
 
           def report_env(env)
