@@ -7,15 +7,15 @@ RSpec.describe Mutant::Transform::Exception do
     Class.new(RuntimeError)
   end
 
-  describe '#apply' do
+  describe '#call' do
     def apply
-      subject.apply(input)
+      subject.call(input)
     end
 
     let(:input) { 2 }
 
     context 'block that does not raise' do
-      let(:block) { ->(input) { input*input } }
+      let(:block) { ->(input) { input*input } } # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
 
       it 'returns expected success value' do
         expect(apply).to eql(Mutant::Either::Right.new(4))

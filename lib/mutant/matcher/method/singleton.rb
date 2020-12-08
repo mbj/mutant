@@ -25,20 +25,10 @@ module Mutant
 
         private
 
-          # Test for node match
-          #
-          # @param [Parser::AST::Node] node
-          #
-          # @return [Boolean]
           def match?(node)
             n_defs?(node) && line?(node) && name?(node) && receiver?(node)
           end
 
-          # Test for line match
-          #
-          # @param [Parser::AST::Node] node
-          #
-          # @return [Boolean]
           def line?(node)
             node
               .location
@@ -46,20 +36,10 @@ module Mutant
               .equal?(source_line)
           end
 
-          # Test for name match
-          #
-          # @param [Parser::AST::Node] node
-          #
-          # @return [Boolean]
           def name?(node)
             node.children.fetch(NAME_INDEX).equal?(method_name)
           end
 
-          # Test for receiver match
-          #
-          # @param [Parser::AST::Node] node
-          #
-          # @return [Boolean]
           def receiver?(node)
             receiver = node.children.fetch(RECEIVER_INDEX)
             case receiver.type
@@ -73,11 +53,6 @@ module Mutant
             end
           end
 
-          # Test if receiver name matches context
-          #
-          # @param [Parser::AST::Node] node
-          #
-          # @return [Boolean]
           def receiver_name?(node)
             name = node.children.fetch(NAME_INDEX)
             name.to_s.eql?(context.unqualified_name)

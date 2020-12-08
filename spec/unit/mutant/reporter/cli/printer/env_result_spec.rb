@@ -3,7 +3,7 @@
 RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
   setup_shared_context
 
-  with(:mutation_a_test_result) { { passed: true } }
+  with(:mutation_a_criteria_result) { { test_result: false } }
 
   let(:reportable) { env_result }
 
@@ -12,14 +12,10 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       subject-a
       - test-a
       evil:subject-a:d27d2
-      @@ -1,2 +1,2 @@
+      -----------------------
+      @@ -1 +1 @@
       -true
       +false
-      -----------------------
-      - 1 @ runtime: 1.0
-        - test-a
-      Test Output:
-      mutation a test result output
       -----------------------
       Mutant environment:
       Matcher:         #<Mutant::Matcher::Config empty>
@@ -35,6 +31,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       Results:         2
       Kills:           1
       Alive:           1
+      Timeouts:        0
       Runtime:         4.00s
       Killtime:        2.00s
       Overhead:        100.00%

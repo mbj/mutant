@@ -12,18 +12,12 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           emit_argument_presence
           emit_argument_mutations
           emit_mlhs_expansion
         end
 
-        # Emit argument presence mutation
-        #
-        # @return [undefined]
         def emit_argument_presence
           emit_type
 
@@ -34,9 +28,6 @@ module Mutant
           end
         end
 
-        # Emit argument mutations
-        #
-        # @return [undefined]
         def emit_argument_mutations
           children.each_with_index do |child, index|
             Mutator.mutate(child).each do |mutant|
@@ -46,18 +37,10 @@ module Mutant
           end
         end
 
-        # Test if child mutation is allowed
-        #
-        # @param [Parser::AST::Node]
-        #
-        # @return [Boolean]
         def invalid_argument_replacement?(mutant, index)
           n_arg?(mutant) && children[0...index].any?(&method(:n_optarg?))
         end
 
-        # Emit mlhs expansions
-        #
-        # @return [undefined]
         def emit_mlhs_expansion
           mlhs_childs_with_index.each do |child, index|
             dup_children = children.dup
@@ -67,9 +50,6 @@ module Mutant
           end
         end
 
-        # Multiple left hand side childs
-        #
-        # @return [Enumerable<Parser::AST::Node, Integer>]
         def mlhs_childs_with_index
           children.each_with_index.select do |child,|
             n_mlhs?(child)

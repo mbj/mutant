@@ -53,7 +53,11 @@ module XSpec
 
       # block allows anything we can skip the check
       return if observed.equal?(-1)
-      fail 'Optargs currently not supported' if observed < -1
+
+      if observed.negative?
+        observed = observed.succ.abs
+      end
+
       block_arity_mismatch(observation, expected, observed) unless expected.equal?(observed)
     end
 

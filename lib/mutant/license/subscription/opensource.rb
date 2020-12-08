@@ -4,8 +4,6 @@ module Mutant
   module License
     class Subscription
       class Opensource < self
-        include Concord.new(:repositories)
-
         class Repository
           include Concord.new(:host, :path)
 
@@ -43,10 +41,13 @@ module Mutant
           private_class_method :parse_url
         end
 
-        private_constant(*constants(false))
-
         def self.from_json(value)
-          new(value.fetch('repositories').map(&Repository.method(:parse)))
+          new(
+            value
+              .fetch('repositories')
+              .map(&Repository.public_method(:parse))
+              .to_set
+          )
         end
 
         def apply(world)
@@ -59,14 +60,13 @@ module Mutant
       private
 
         def check_subscription(actual)
-          if (repositories.to_set & actual).any?
+          if (licensed & actual).any?
             success
           else
-            failure(repositories, actual)
+            failure(licensed, actual)
           end
         end
 
-        # ignore :reek:UtilityFunction
         def parse_remotes(input)
           input.lines.map(&Repository.method(:parse_remote)).to_set
         end

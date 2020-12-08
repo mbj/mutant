@@ -2,19 +2,22 @@
 
 RSpec.describe Mutant::Meta::Example::DSL do
   describe '.call' do
-    subject { described_class.call(file, types, block) }
+    subject { described_class.call(location, types, block) }
 
-    let(:file)     { 'foo.rb'             }
-    let(:node)     { s(:false)            }
-    let(:types)    { Set.new([node.type]) }
-    let(:expected) { []                   }
+    let(:expected) { []                                           }
+    let(:location) { instance_double(Thread::Backtrace::Location) }
+    let(:lvars)    { []                                           }
+    let(:node)     { s(:false)                                    }
+    let(:types)    { Set.new([node.type])                         }
 
     let(:expected_example) do
       Mutant::Meta::Example.new(
-        file:     file,
-        node:     node,
-        types:    types,
-        expected: expected
+        expected:        expected,
+        location:        location,
+        lvars:           lvars,
+        node:            node,
+        original_source: source,
+        types:           types
       )
     end
 
@@ -38,28 +41,37 @@ RSpec.describe Mutant::Meta::Example::DSL do
       end
     end
 
-    context 'source as node' do
-      expect_example do
-        source s(:false)
-      end
-    end
-
     context 'source as string' do
+      let(:source) { 'false' }
+
       expect_example do
         source 'false'
       end
     end
 
-    context 'on node that needs unparser preprocessing to be normalized' do
-      let(:node) { s(:send, s(:float, -1.0), :/, s(:float, 0.0)) }
+    context 'using #declare lvar' do
+      let(:lvars)  { %i[a]        }
+      let(:node)   { s(:lvar, :a) }
+      let(:source) { 'a'          }
 
       expect_example do
-        source '(-1.0) / 0.0'
+        declare_lvar :a
+
+        source 'a'
       end
     end
 
     context 'using #mutation' do
-      let(:expected) { [s(:nil)] }
+      let(:source) { 'false' }
+
+      let(:expected) do
+        [
+          Mutant::Meta::Example::Expected.new(
+            node:            s(:nil),
+            original_source: 'nil'
+          )
+        ]
+      end
 
       expect_example do
         source 'false'
@@ -69,7 +81,20 @@ RSpec.describe Mutant::Meta::Example::DSL do
     end
 
     context 'using #singleton_mutations' do
-      let(:expected) { [s(:nil), s(:self)] }
+      let(:source) { 'false' }
+
+      let(:expected) do
+        [
+          Mutant::Meta::Example::Expected.new(
+            node:            s(:nil),
+            original_source: 'nil'
+          ),
+          Mutant::Meta::Example::Expected.new(
+            node:            s(:self),
+            original_source: 'self'
+          )
+        ]
+      end
 
       expect_example do
         source 'false'
@@ -91,7 +116,7 @@ RSpec.describe Mutant::Meta::Example::DSL do
     end
 
     context 'uncoercable source' do
-      expect_error('Cannot coerce to node: nil') do
+      expect_error('Unsupported input: nil') do
         source nil
       end
     end

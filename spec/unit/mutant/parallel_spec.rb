@@ -30,28 +30,33 @@ RSpec.describe Mutant::Parallel do
     end
 
     let(:var_active_jobs) do
-      instance_double(Mutant::Variable::IVar, 'active jobs')
+      instance_double(Variable::IVar, 'active jobs')
     end
 
     let(:var_final) do
-      instance_double(Mutant::Variable::IVar, 'final')
+      instance_double(Variable::IVar, 'final')
     end
 
     let(:var_running) do
-      instance_double(Mutant::Variable::MVar, 'running')
+      instance_double(Variable::MVar, 'running')
     end
 
     let(:var_sink) do
-      instance_double(Mutant::Variable::IVar, 'sink')
+      instance_double(Variable::IVar, 'sink')
     end
 
     let(:var_source) do
-      instance_double(Mutant::Variable::IVar, 'source')
+      instance_double(Variable::IVar, 'source')
+    end
+
+    before do
+      allow(thread_a).to receive_messages('name=': nil)
+      allow(thread_b).to receive_messages('name=': nil)
     end
 
     def ivar(value, **attributes)
       {
-        receiver:  Mutant::Variable::IVar,
+        receiver:  Variable::IVar,
         selector:  :new,
         arguments: [
           condition_variable: condition_variable,
@@ -62,8 +67,8 @@ RSpec.describe Mutant::Parallel do
       }
     end
 
-    def mvar(*arguments)
-      ivar(*arguments).merge(receiver: Mutant::Variable::MVar)
+    def mvar(value, **arguments)
+      ivar(value, **arguments).merge(receiver: Variable::MVar)
     end
 
     let(:raw_expectations) do

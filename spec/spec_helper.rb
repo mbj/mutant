@@ -1,41 +1,39 @@
 # frozen_string_literal: true
 
-if ENV['COVERAGE'] == 'true'
-  require 'simplecov'
-
-  SimpleCov.start do
-    command_name 'spec:unit'
-
-    add_filter 'config'
-    add_filter 'spec'
-    add_filter 'vendor'
-    add_filter 'test_app'
-    add_filter 'lib/mutant.rb' # simplecov bug not seeing default block is executed
-
-    minimum_coverage 100
-  end
-end
-
-require 'tempfile'
-require 'concord'
-require 'anima'
 require 'adamantium'
-require 'devtools/spec_helper'
-require 'unparser/cli'
+require 'anima'
+require 'concord'
 require 'mutant'
 require 'mutant/meta'
+require 'rspec/its'
+require 'timeout'
+require 'tempfile'
+require 'tmpdir'
 
-$LOAD_PATH << File.join(TestApp.root, 'lib')
+require './spec/shared/framework_integration_behavior'
+require './spec/shared/method_matcher_behavior'
+require './spec/support/corpus'
+require './spec/support/file_system'
+require './spec/support/ice_nine_config'
+require './spec/support/ruby_vm'
+require './spec/support/shared_context'
+require './spec/support/xspec'
+
+$LOAD_PATH << File.expand_path('../test_app/lib', __dir__)
 
 require 'test_app'
 
 module Fixtures
-  TEST_CONFIG = Mutant::Config::DEFAULT
-    .with(reporter: Mutant::Reporter::Null.new)
+  test_config = Mutant::Config::DEFAULT
+    .with(
+      integration: 'null',
+      jobs:        1,
+      reporter:    Mutant::Reporter::Null.new
+    )
 
   TEST_ENV = Mutant::Bootstrap
-    .apply(Mutant::WORLD, TEST_CONFIG).from_right
-
+    .apply(Mutant::WORLD, test_config)
+    .from_right
 end # Fixtures
 
 module ParserHelper
@@ -44,7 +42,7 @@ module ParserHelper
   end
 
   def parse(string)
-    Unparser::Preprocessor.run(Unparser.parse(string))
+    Unparser.parse(string)
   end
 
   def parse_expression(string)
@@ -53,19 +51,64 @@ module ParserHelper
 end # ParserHelper
 
 module XSpecHelper
-  def verify_events
+  def verify_events(&block)
     expectations = raw_expectations
-      .map(&XSpec::MessageExpectation.method(:parse))
+      .map { |attributes| XSpec::MessageExpectation.parse(**attributes) }
 
-    XSpec::ExpectationVerifier.verify(self, expectations) do
-      yield
-    end
+    XSpec::ExpectationVerifier.verify(self, expectations, &block)
   end
 
   def undefined
     double('undefined')
   end
+
+  # rubocop:disable Metrics/MethodLength
+  def fake_world
+    Mutant::World.new(
+      condition_variable: class_double(ConditionVariable),
+      gem:                class_double(Gem),
+      gem_method:         instance_double(Proc),
+      io:                 class_double(IO),
+      json:               class_double(JSON),
+      kernel:             class_double(Kernel),
+      load_path:          instance_double(Array),
+      marshal:            class_double(Marshal),
+      mutex:              class_double(Mutex),
+      object_space:       class_double(ObjectSpace),
+      open3:              class_double(Open3),
+      pathname:           class_double(Pathname),
+      process:            class_double(Process),
+      stderr:             instance_double(IO),
+      stdout:             instance_double(IO),
+      thread:             class_double(Thread),
+      timer:              instance_double(Mutant::Timer),
+      warnings:           instance_double(Mutant::Warnings)
+    )
+  end
+  # rubocop:enable Metrics/MethodLength
 end # XSpecHelper
+
+RSpec.configuration.around(file_path: %r{spec/unit}) do |example|
+  Timeout.timeout(2, &example)
+end
+
+RSpec.shared_examples_for 'a command method' do
+  it 'returns self' do
+    should equal(object)
+  end
+end
+
+RSpec.shared_examples_for 'an idempotent method' do
+  it 'is idempotent' do
+    first = subject
+    fail 'RSpec not configured for threadsafety' unless RSpec.configuration.threadsafe?
+    mutex    = __memoized.instance_variable_get(:@mutex)
+    memoized = __memoized.instance_variable_get(:@memoized)
+
+    mutex.synchronize { memoized.delete(:subject) }
+    should equal(first)
+  end
+end
 
 RSpec.configure do |config|
   config.extend(SharedContext)

@@ -4,8 +4,6 @@ module Mutant
   module License
     class Subscription
       class Commercial < self
-        include Concord.new(:authors)
-
         class Author
           include Concord.new(:email)
 
@@ -14,16 +12,16 @@ module Mutant
         end
 
         def self.from_json(value)
-          new(value.fetch('authors').map(&Author.method(:new)).to_set)
+          new(value.fetch('authors').map(&Author.public_method(:new)).to_set)
         end
 
         def apply(world)
           candidates = candidates(world)
 
-          if (authors & candidates).any?
+          if (licensed & candidates).any?
             success
           else
-            failure(authors, candidates)
+            failure(licensed, candidates)
           end
         end
 
@@ -41,12 +39,11 @@ module Mutant
           capture(world, %w[git show --quiet --pretty=format:%ae])
         end
 
-        # ignore :reek:UtilityFunction
         def capture(world, command)
           world
             .capture_stdout(command)
             .fmap(&:chomp)
-            .fmap(&Author.method(:new))
+            .fmap(&Author.public_method(:new))
             .fmap { |value| Set.new([value]) }
             .from_right { Set.new }
         end

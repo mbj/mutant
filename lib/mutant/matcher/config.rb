@@ -7,6 +7,7 @@ module Mutant
       include Adamantium, Anima.new(
         :ignore_expressions,
         :match_expressions,
+        :start_expressions,
         :subject_filters
       )
 
@@ -18,6 +19,7 @@ module Mutant
       PRESENTATIONS       = IceNine.deep_freeze(
         ignore_expressions: :syntax,
         match_expressions:  :syntax,
+        start_expressions:  :syntax,
         subject_filters:    :inspect
       )
       private_constant(*constants(false))
@@ -42,18 +44,25 @@ module Mutant
         with(attribute => public_send(attribute) + [value])
       end
 
+      # Merge with other config
+      #
+      # @param [Config] other
+      #
+      # @return [Config]
+      def merge(other)
+        self.class.new(
+          to_h
+            .map { |name, value| [name, value + other.public_send(name)] }
+            .to_h
+        )
+      end
+
     private
 
-      # Present attributes
-      #
-      # @return [Array<Symbol>]
       def present_attributes
         to_h.reject { |_key, value| value.empty? }.keys
       end
 
-      # Formatted attributes
-      #
-      # @return [String]
       def inspect_attributes
         attributes = present_attributes
           .map(&method(:format_attribute))
@@ -62,11 +71,6 @@ module Mutant
         attributes.empty? ? EMPTY_ATTRIBUTES : attributes
       end
 
-      # Format attribute
-      #
-      # @param [Symbol] attribute_name
-      #
-      # @return [String]
       def format_attribute(attribute_name)
         ATTRIBUTE_FORMAT %
           [

@@ -16,7 +16,7 @@ module Mutant
     # @param [Object] input
     #
     # @return [Either<Error, Object>]
-    abstract_method :apply
+    abstract_method :call
 
     # Deep error data structure
     class Error
@@ -49,9 +49,6 @@ module Mutant
 
     private
 
-      # Path representation to error
-      #
-      # @return [String]
       def path
         trace.map { |error| error.transform.slug }.reject(&:empty?).join('/')
       end
@@ -64,8 +61,8 @@ module Mutant
       # Apply transformation to input
       #
       # @return [Either<Error, Object>]
-      def apply(input)
-        transformer.apply(input).lmap(&method(:wrap_error))
+      def call(input)
+        transformer.call(input).lmap(&method(:wrap_error))
       end
 
       # Named slug
@@ -78,23 +75,6 @@ module Mutant
 
   private
 
-    # Make error from curent context
-    #
-    # @param [Error, nil] cause
-    #   original error, if any
-    #
-    # @param [Object] input
-    #   input that ran into the error
-    #
-    # @param [String] message
-    #   human readable error message
-    #
-    # @param [Transform, nil]
-    #   transform that generated the error from input
-    #
-    # @return [Error]
-    #
-    # ignore :reek:LongParameterList
     def error(cause: nil, input:, message: nil)
       Error.new(
         cause:     cause,
@@ -104,42 +84,18 @@ module Mutant
       )
     end
 
-    # Lift error
-    #
-    # @param [Error]
-    #
-    # @return [Error]
     def lift_error(error)
       error.with(transform: self)
     end
 
-    # Wrap error
-    #
-    # @param [Error]
-    #
-    # @return [Error]
     def wrap_error(error)
       error(cause: error, input: error.input)
     end
 
-    # Create failure
-    #
-    # @param [Object] value
-    #
-    # @return [Either::Left]
-    #
-    # ignore :reek:UtilityFunction
     def failure(value)
       Either::Left.new(value)
     end
 
-    # Create success
-    #
-    # @param [Object] value
-    #
-    # @return [Either::Right]
-    #
-    # ignore :reek:UtilityFunction
     def success(value)
       Either::Right.new(value)
     end
@@ -170,8 +126,8 @@ module Mutant
       # @param [Object] input
       #
       # @return [Either<Error, Object>]
-      def apply(input)
-        transform.apply(input).lmap(&method(:wrap_error))
+      def call(input)
+        transform.call(input).lmap(&method(:wrap_error))
       end
 
       # Rendering slug
@@ -196,7 +152,7 @@ module Mutant
       # @param [Object] input
       #
       # @return [Either<Error, Object>]
-      def apply(input)
+      def call(input)
         if input.instance_of?(primitive)
           success(input)
         else
@@ -231,7 +187,7 @@ module Mutant
       # @param [Object] input
       #
       # @return [Either<Error, Object>]
-      def apply(input)
+      def call(input)
         if input.equal?(true) || input.equal?(false)
           success(input)
         else
@@ -259,29 +215,21 @@ module Mutant
       # @param [Object] input
       #
       # @return [Either<Error, Array<Object>>]
-      def apply(input)
+      def call(input)
         PRIMITIVE
-          .apply(input)
+          .call(input)
           .lmap(&method(:lift_error))
           .bind(&method(:run))
       end
 
     private
 
-      # Transform array
-      #
-      # @param [Array<Object>] input
-      #
-      # @return [Either<Error, Array<Object>]
-      #
-      # ignore :reek:NestedIterators
-      #
       # rubocop:disable Metrics/MethodLength
       def run(input)
         output = []
 
         input.each_with_index do |value, index|
-          output << transform.apply(value).lmap do |error|
+          output << transform.call(value).lmap do |error|
             return failure(
               error(
                 cause:   Index.wrap(error, index),
@@ -313,7 +261,7 @@ module Mutant
         # @param [Hash{String => Object}]
         #
         # @return [Hash{Symbol => Object}]
-        def apply(input)
+        def call(input)
           success(input.transform_keys(&:to_sym))
         end
       end # Symbolize
@@ -335,8 +283,8 @@ module Mutant
         # @param [Object]
         #
         # @return [Either<Error, Object>]
-        def apply(input)
-          transform.apply(input).lmap do |error|
+        def call(input)
+          transform.call(input).lmap do |error|
             error(cause: error, input: input)
           end
         end
@@ -347,9 +295,9 @@ module Mutant
       # @param [Object] input
       #
       # @return [Either<Error, Object>]
-      def apply(input)
+      def call(input)
         PRIMITIVE
-          .apply(input)
+          .call(input)
           .lmap(&method(:lift_error))
           .bind(&method(:reject_keys))
           .bind(&method(:transform))
@@ -357,31 +305,16 @@ module Mutant
 
     private
 
-      # Transform hash
-      #
-      # @param [Hash] input
-      #
-      # @return [Either<Error, Hash>]
       def transform(input)
         transform_required(input).bind do |required|
           transform_optional(input).fmap(&required.method(:merge))
         end
       end
 
-      # Transform required keys
-      #
-      # @param [Hash] input
-      #
-      # @return [Either<Error, Hash>]
       def transform_required(input)
         transform_keys(required, input)
       end
 
-      # Transform optional keys
-      #
-      # @param [Hash] input
-      #
-      # @return [Either<Error, Hash>]
       def transform_optional(input)
         transform_keys(
           optional.select { |key| input.key?(key.value) },
@@ -389,15 +322,6 @@ module Mutant
         )
       end
 
-      # Transform keys
-      #
-      # @param [Array<Transform::Hash::Key>] keys
-      # @param [Hash] input
-      #
-      # @return [Either<Error, Hash>]
-      #
-      # ignore :reek:NestedIterators
-      #
       # rubocop:disable Metrics/MethodLength
       def transform_keys(keys, input)
         success(
@@ -415,24 +339,12 @@ module Mutant
       end
       # rubocop:enable Metrics/MethodLength
 
-      # Coerce key value under key specific transformer
-      #
-      # @param [Hash::Key] key
-      # @param [Hash] input
-      #
-      # @return [Either<Error, Object>]
       def coerce_key(key, input)
-        key.apply(input.fetch(key.value)).lmap do |error|
+        key.call(input.fetch(key.value)).lmap do |error|
           error(input: input, cause: error)
         end
       end
 
-      # Reject unexpected keys
-      #
-      # @param [Hash]
-      #
-      # @return [Either<Error, Object>]
-      #
       # rubocop:disable Metrics/MethodLength
       def reject_keys(input)
         keys       = input.keys
@@ -452,17 +364,11 @@ module Mutant
       end
       # rubocop:enable Metrics/MethodLength
 
-      # Key values allowed to be present
-      #
-      # @return [Array<Object>]
       def allowed_keys
         required_keys + optional.map(&:value)
       end
       memoize :allowed_keys
 
-      # Key values required to be present
-      #
-      # @return [Array<Object>]
       def required_keys
         required.map(&:value)
       end
@@ -480,11 +386,11 @@ module Mutant
       # ignore :reek:NestedIterators
       #
       # @return [Either<Error, Object>]
-      def apply(input)
+      def call(input)
         current = input
 
         steps.each_with_index do |step, index|
-          current = step.apply(current).from_right do |error|
+          current = step.call(current).from_right do |error|
             return failure(error(cause: Index.wrap(error, index), input: input))
           end
         end
@@ -502,11 +408,17 @@ module Mutant
       # @param [Object]
       #
       # @return [Either<Error, Object>]
-      def apply(input)
+      def call(input)
         Either
           .wrap_error(error_class) { block.call(input) }
           .lmap { |exception| error(input: input, message: exception.to_s) }
       end
     end # Exception
+
+    BOOLEAN      = Transform::Boolean.new
+    FLOAT        = Transform::Primitive.new(Float)
+    INTEGER      = Transform::Primitive.new(Integer)
+    STRING       = Transform::Primitive.new(String)
+    STRING_ARRAY = Transform::Array.new(STRING)
   end # Transform
 end # Mutant

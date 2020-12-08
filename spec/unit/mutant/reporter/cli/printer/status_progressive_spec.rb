@@ -27,7 +27,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::StatusProgressive do
         with(:status) { { active_jobs: [job_b, job_a].to_set } }
 
         context 'on failure' do
-          with(:mutation_a_test_result) { { passed: true } }
+          with(:mutation_a_criteria_result) { { test_result: false } }
 
           it_reports(<<~REPORT)
             progress: 02/02 alive: 1 runtime: 4.00s killtime: 2.00s mutations/s: 0.50

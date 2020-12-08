@@ -3,7 +3,7 @@
 module Mutant
   # Module providing isolation
   class Isolation
-    # Absolutly no isolation
+    # Absolutely no isolation
     #
     # Only useful for debugging.
     class None < self
@@ -12,12 +12,25 @@ module Mutant
       #
       # @return [Result]
       #
-      # ignore :reek:UtilityFunction
-      def call
-        Result::Success.new(yield)
-      rescue => exception
-        Result::Exception.new(exception)
+      # rubocop:disable Lint/SuppressedException
+      # rubocop:disable Metrics/MethodLength
+      # ^^ it actually isn not suppressed, it assigns an lvar
+      def call(_timeout)
+        begin
+          value = yield
+        rescue => exception
+        end
+
+        Result.new(
+          exception:      exception,
+          log:            '',
+          process_status: nil,
+          timeout:        nil,
+          value:          value
+        )
       end
+      # rubocop:enable Lint/SuppressedException
+      # rubocop:enable Metrics/MethodLength
 
     end # None
   end # Isolation

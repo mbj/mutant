@@ -3,20 +3,19 @@
 module Mutant
   class Mutator
     class Node
+      # Mutator for dynamic literals
+      class DynamicLiteral < self
 
-      # Dstr mutator
-      class Dstr < Generic
-
-        handle(:dstr)
+        handle(:dstr, :dsym)
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
-          super()
           emit_singletons
+
+          children.each_index do |index|
+            mutate_child(index, &method(:n_begin?))
+          end
         end
 
       end # Dstr

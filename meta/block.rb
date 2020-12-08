@@ -108,7 +108,6 @@ Mutant::Meta::Example.add :block do
 
   singleton_mutations
   mutation 'foo { self << false }'
-  mutation 'foo { self << nil }'
   mutation 'foo { nil << true }'
   mutation 'foo { nil }'
   mutation 'foo { self }'
@@ -134,7 +133,6 @@ Mutant::Meta::Example.add :block do
   mutation 'foo { break if true }'
   mutation 'foo { next if !true }'
   mutation 'foo { next if false }'
-  mutation 'foo { next if nil }'
   mutation 'foo { next }'
 end
 
@@ -163,7 +161,6 @@ Mutant::Meta::Example.add :block do
   mutation 'foo { nil if true }'
   mutation 'foo { break if !true }'
   mutation 'foo { break if false }'
-  mutation 'foo { break if nil }'
   mutation 'foo { break }'
 end
 
@@ -187,6 +184,9 @@ Mutant::Meta::Example.add :block do
   mutation 'foo.baz { }'
   mutation 'foo(&:bar).baz'
   mutation 'self.baz {}'
+  mutation 'foo(&nil).baz {}'
+  mutation 'foo(&self).baz {}'
+  mutation 'foo(&:bar__mutant__).baz {}'
 end
 
 Mutant::Meta::Example.add :block do
@@ -199,4 +199,8 @@ Mutant::Meta::Example.add :block do
   mutation 'foo.baz { }'
   mutation 'self.baz { }'
   mutation 'foo(nil, &:bar).baz'
+
+  mutation 'foo(nil, &self).baz {}'
+  mutation 'foo(nil, &nil).baz {}'
+  mutation 'foo(nil, &:bar__mutant__).baz {}'
 end

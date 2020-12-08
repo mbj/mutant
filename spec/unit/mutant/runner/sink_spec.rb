@@ -18,10 +18,6 @@ describe Mutant::Runner::Sink do
 
   let(:object) { described_class.new(env) }
 
-  before do
-    allow(Mutant::Timer).to receive_messages(now: Mutant::Timer.now)
-  end
-
   describe '#result' do
     subject { object.result(mutation_a_result) }
 
@@ -58,7 +54,7 @@ describe Mutant::Runner::Sink do
     context 'one result' do
       include_context 'one result'
 
-      with(:subject_a_result) { { mutation_results: [mutation_a_result] } }
+      with(:subject_a_result) { { coverage_results: [mutation_a_coverage_result] } }
 
       let(:expected_status) do
         Mutant::Result::Env.new(

@@ -12,9 +12,6 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             emit_singletons
           end
@@ -27,26 +24,17 @@ module Mutant
 
             children :name
 
-            # Emit mutations
-            #
-            # @return [undefined]
+          private
+
             def dispatch
               emit_attribute_read
               super()
             end
 
-          private
-
-            # Emit instance variable as attribute send
-            #
-            # @return [undefined]
             def emit_attribute_read
               emit(s(:send, nil, attribute_name))
             end
 
-            # Variable name without leading '@'
-            #
-            # @return [Symbol]
             def attribute_name
               name.slice(NAME_RANGE).to_sym
             end

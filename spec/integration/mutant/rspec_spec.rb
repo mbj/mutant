@@ -2,7 +2,7 @@
 
 RSpec.describe 'rspec integration', mutant: false do
   let(:base_cmd) do
-    %w[bundle exec mutant -I lib --require test_app --use rspec]
+    %w[bundle exec mutant run -I lib --require test_app --use rspec]
   end
 
   %w[3.8].each do |version|

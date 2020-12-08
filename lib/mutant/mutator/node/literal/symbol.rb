@@ -15,9 +15,6 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             emit_singletons
             Util::Symbol.call(value).each(&method(:emit_type))

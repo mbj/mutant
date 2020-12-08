@@ -17,9 +17,6 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           name = Mutant::Util.one(argument.children)
 

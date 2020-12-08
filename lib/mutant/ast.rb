@@ -27,15 +27,6 @@ module Mutant
       path
     end
 
-    # Walk all ast nodes keeping track of path
-    #
-    # @param [Parser::AST::Node] root
-    # @param [Array<Parser::AST::Node>] stack
-    #
-    # @yield [Parser::AST::Node]
-    #   all nodes visited recursively including root
-    #
-    # @return [undefined]
     def self.walk(node, stack, &block)
       block.call(node, stack)
       node.children.grep(::Parser::AST::Node) do |child|

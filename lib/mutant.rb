@@ -21,6 +21,7 @@ require 'set'
 require 'singleton'
 require 'stringio'
 require 'unparser'
+require 'variable'
 require 'yaml'
 
 # This setting is done to make errors within the parallel
@@ -50,6 +51,7 @@ require 'mutant/ast/types'
 require 'mutant/ast/nodes'
 require 'mutant/ast/named_children'
 require 'mutant/ast/node_predicates'
+require 'mutant/ast/find_metaclass_containing'
 require 'mutant/ast/meta'
 require 'mutant/ast/meta/send'
 require 'mutant/ast/meta/const'
@@ -88,8 +90,7 @@ require 'mutant/mutator/node/arguments'
 require 'mutant/mutator/node/begin'
 require 'mutant/mutator/node/binary'
 require 'mutant/mutator/node/const'
-require 'mutant/mutator/node/dstr'
-require 'mutant/mutator/node/dsym'
+require 'mutant/mutator/node/dynamic_literal'
 require 'mutant/mutator/node/kwbegin'
 require 'mutant/mutator/node/named_value/access'
 require 'mutant/mutator/node/named_value/constant_assignment'
@@ -111,12 +112,14 @@ require 'mutant/mutator/node/send/conditional'
 require 'mutant/mutator/node/send/attribute_assignment'
 require 'mutant/mutator/node/when'
 require 'mutant/mutator/node/class'
+require 'mutant/mutator/node/sclass'
 require 'mutant/mutator/node/define'
 require 'mutant/mutator/node/mlhs'
 require 'mutant/mutator/node/nthref'
 require 'mutant/mutator/node/masgn'
 require 'mutant/mutator/node/return'
 require 'mutant/mutator/node/block'
+require 'mutant/mutator/node/block_pass'
 require 'mutant/mutator/node/if'
 require 'mutant/mutator/node/case'
 require 'mutant/mutator/node/splat'
@@ -133,11 +136,13 @@ require 'mutant/subject'
 require 'mutant/subject/method'
 require 'mutant/subject/method/instance'
 require 'mutant/subject/method/singleton'
+require 'mutant/subject/method/metaclass'
 require 'mutant/matcher'
 require 'mutant/matcher/config'
 require 'mutant/matcher/chain'
 require 'mutant/matcher/method'
 require 'mutant/matcher/method/singleton'
+require 'mutant/matcher/method/metaclass'
 require 'mutant/matcher/method/instance'
 require 'mutant/matcher/methods'
 require 'mutant/matcher/namespace'
@@ -158,10 +163,15 @@ require 'mutant/integration/null'
 require 'mutant/selector'
 require 'mutant/selector/expression'
 require 'mutant/selector/null'
+require 'mutant/world'
 require 'mutant/config'
 require 'mutant/cli'
-require 'mutant/color'
-require 'mutant/diff'
+require 'mutant/cli/command'
+require 'mutant/cli/command/subscription'
+require 'mutant/cli/command/environment'
+require 'mutant/cli/command/environment/run'
+require 'mutant/cli/command/environment/show'
+require 'mutant/cli/command/root'
 require 'mutant/runner'
 require 'mutant/runner/sink'
 require 'mutant/result'
@@ -171,21 +181,18 @@ require 'mutant/reporter/sequence'
 require 'mutant/reporter/cli'
 require 'mutant/reporter/cli/printer'
 require 'mutant/reporter/cli/printer/config'
+require 'mutant/reporter/cli/printer/coverage_result'
 require 'mutant/reporter/cli/printer/env'
 require 'mutant/reporter/cli/printer/env_progress'
 require 'mutant/reporter/cli/printer/env_result'
 require 'mutant/reporter/cli/printer/isolation_result'
-require 'mutant/reporter/cli/printer/mutation_progress_result'
 require 'mutant/reporter/cli/printer/mutation_result'
 require 'mutant/reporter/cli/printer/status_progressive'
-require 'mutant/reporter/cli/printer/subject_progress'
 require 'mutant/reporter/cli/printer/subject_result'
-require 'mutant/reporter/cli/printer/test_result'
 require 'mutant/reporter/cli/format'
 require 'mutant/repository'
 require 'mutant/repository/diff'
 require 'mutant/repository/diff/ranges'
-require 'mutant/variable'
 require 'mutant/warnings'
 require 'mutant/zombifier'
 require 'mutant/range'
@@ -209,15 +216,17 @@ module Mutant
     open3:              Open3,
     pathname:           Pathname,
     process:            Process,
-    stderr:             STDERR,
-    stdout:             STDOUT,
+    stderr:             $stderr,
+    stdout:             $stdout,
     thread:             Thread,
+    timer:              Timer.new(Process),
     warnings:           Warnings.new(Warning)
   )
 
   # Reopen class to initialize constant to avoid dep circle
   class Config
     DEFAULT = new(
+      coverage_criteria: Config::CoverageCriteria::EMPTY,
       expression_parser: Expression::Parser.new([
         Expression::Method,
         Expression::Methods,
@@ -226,13 +235,27 @@ module Mutant
       ]),
       fail_fast:         false,
       includes:          EMPTY_ARRAY,
-      integration:       'null',
+      integration:       nil,
       isolation:         Mutant::Isolation::Fork.new(WORLD),
-      jobs:              Etc.nprocessors,
+      jobs:              nil,
       matcher:           Matcher::Config::DEFAULT,
+      mutation_timeout:  nil,
       reporter:          Reporter::CLI.build(WORLD.stdout),
       requires:          EMPTY_ARRAY,
       zombie:            false
     )
   end # Config
+
+  # Traverse values against action
+  #
+  # Specialized to Either. Its *always* traverse.
+  def self.traverse(action, values)
+    Either::Right.new(
+      values.map do |value|
+        action.call(value).from_right do |error|
+          return Either::Left.new(error)
+        end
+      end
+    )
+  end
 end # Mutant

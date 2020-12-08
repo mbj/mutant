@@ -55,7 +55,6 @@ module Mutant
   # For that reason we do have to use the original method capture to dispatch
   # in disabled state.
   #
-  # ignore :reek:RepeatedConditional
   class Warnings
     # Error raised when warning capture is used recursively
     class RecursiveUseError < RuntimeError; end
@@ -92,9 +91,6 @@ module Mutant
 
   private
 
-    # Hook called when capturing a warning
-    #
-    # @return [undefined]
     def capture(*arguments)
       if @disabled
         @original.call(*arguments)
@@ -103,9 +99,6 @@ module Mutant
       end
     end
 
-    # Assert warnings capture does not call itself
-    #
-    # Its currently not supported nor intended to be supported.
     def assert_no_recursion
       fail RecursiveUseError unless @disabled
     end

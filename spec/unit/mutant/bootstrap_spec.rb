@@ -1,36 +1,36 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Bootstrap do
+  let(:env_with_scopes)      { env_initial                            }
   let(:integration)          { instance_double(Mutant::Integration)   }
-  let(:integration_name)     { instance_double(String)                }
   let(:integration_result)   { Mutant::Either::Right.new(integration) }
   let(:kernel)               { instance_double(Object, 'kernel')      }
   let(:load_path)            { %w[original]                           }
-  let(:matcher_config)       { Mutant::Matcher::Config::DEFAULT       }
+  let(:match_expressions)    { []                                     }
   let(:object_space)         { class_double(ObjectSpace)              }
   let(:object_space_modules) { []                                     }
+  let(:start_expressions)    { []                                     }
+  let(:timer)                { instance_double(Mutant::Timer)         }
   let(:warnings)             { instance_double(Mutant::Warnings)      }
-
-  let(:world) do
-    instance_double(
-      Mutant::World,
-      kernel:       kernel,
-      load_path:    load_path,
-      object_space: object_space,
-      pathname:     Pathname,
-      warnings:     warnings
-    )
-  end
 
   let(:config) do
     Mutant::Config::DEFAULT.with(
-      includes:    [],
       integration: integration,
       jobs:        1,
       matcher:     matcher_config,
-      reporter:    instance_double(Mutant::Reporter),
-      requires:    []
+      reporter:    instance_double(Mutant::Reporter)
     )
+  end
+
+  let(:matcher_config) do
+    Mutant::Matcher::Config::DEFAULT.with(
+      match_expressions: match_expressions,
+      start_expressions: start_expressions
+    )
+  end
+
+  let(:env_initial) do
+    Mutant::Env.empty(world, config)
   end
 
   let(:expected_env) do
@@ -40,11 +40,17 @@ RSpec.describe Mutant::Bootstrap do
     )
   end
 
-  let(:env_empty) do
-    Mutant::Env.empty(world, config)
+  let(:world) do
+    instance_double(
+      Mutant::World,
+      kernel:       kernel,
+      load_path:    load_path,
+      object_space: object_space,
+      pathname:     Pathname,
+      warnings:     warnings,
+      timer:        timer
+    )
   end
-
-  let(:env_with_scopes) { env_empty }
 
   shared_examples 'expected warning' do
     let(:warns) { [] }
@@ -188,12 +194,8 @@ RSpec.describe Mutant::Bootstrap do
       let(:object_space_modules) { [TestApp::Literal, TestApp::Empty]                               }
       let(:match_expressions)    { object_space_modules.map(&:name).map(&method(:parse_expression)) }
 
-      let(:matcher_config) do
-        super().with(match_expressions: match_expressions)
-      end
-
       let(:env_with_scopes) do
-        env_empty.with(
+        env_initial.with(
           matchable_scopes: [
             Mutant::Scope.new(TestApp::Empty,   match_expressions.last),
             Mutant::Scope.new(TestApp::Literal, match_expressions.first)
@@ -201,16 +203,52 @@ RSpec.describe Mutant::Bootstrap do
         )
       end
 
-      let(:expected_env) do
-        subjects = Mutant::Matcher::Scope.new(TestApp::Literal).call(env_empty)
+      let(:expected_subjects) do
+        Mutant::Matcher::Scope.new(TestApp::Literal).call(env_initial)
+      end
 
+      let(:expected_env) do
         super().with(
-          mutations: subjects.flat_map(&:mutations),
-          subjects:  subjects
+          mutations: expected_subjects.flat_map(&:mutations),
+          subjects:  expected_subjects
         )
       end
 
-      include_examples 'bootstrap call'
+      context 'without start subjects' do
+        include_examples 'bootstrap call'
+      end
+
+      context 'when matcher configures a start subject' do
+        context 'when the start subject fully excludes all subjects' do
+          let(:start_expressions) { [parse_expression('Foo*')] }
+          let(:expected_subjects) { []                         }
+
+          include_examples 'bootstrap call'
+        end
+
+        context 'when the start subject partially excludes subjects' do
+          let(:last_subject) do
+            config = Mutant::Config::DEFAULT.with(
+              integration: integration,
+              jobs:        1,
+              matcher:     Mutant::Matcher::Config::DEFAULT.with(match_expressions: match_expressions),
+              reporter:    instance_double(Mutant::Reporter)
+            )
+
+            Mutant::Matcher::Scope
+              .new(TestApp::Literal)
+              .call(Mutant::Env.empty(world, config)).last
+          end
+
+          let(:start_expressions) { [last_subject.expression] }
+
+          let(:expected_subjects) do
+            [last_subject]
+          end
+
+          include_examples 'bootstrap call'
+        end
+      end
     end
   end
 end

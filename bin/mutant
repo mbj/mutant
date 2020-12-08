@@ -8,8 +8,13 @@ end
 
 require 'mutant'
 
-namespace =
-  if ARGV.include?('--zombie')
+command = Mutant::CLI.parse(
+  arguments: ARGV,
+  world:     Mutant::WORLD
+)
+
+status =
+  if command.zombie?
     $stderr.puts('Running mutant zombified!')
     Mutant::Zombifier.call(
       namespace:        :Zombie,
@@ -23,23 +28,23 @@ namespace =
         .call(Kernel),
       root_require:     'mutant',
       includes:         %w[
-        mutant
-        unparser
         adamantium
-        equalizer
         anima
         concord
+        equalizer
+        mprelude
+        mutant
+        unparser
+        variable
       ]
     )
-    Zombie::Mutant
+
+    Zombie::Mutant::CLI.parse(
+      arguments: ARGV,
+      world:     Zombie::Mutant::WORLD
+    ).call
   else
-    Mutant
+    command.call
   end
 
-Kernel.exit(
-  namespace::CLI.run(
-    namespace::WORLD,
-    namespace::Config::DEFAULT,
-    ARGV
-  )
-)
+Kernel.exit(status)

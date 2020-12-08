@@ -65,7 +65,22 @@ module SharedContext
         selected_tests:        [test_a].to_set,
         selections:            selections,
         subjects:              subjects,
-        test_subject_ratio:    Rational(1)
+        test_subject_ratio:    Rational(1),
+        world:                 world
+      )
+    end
+
+    let(:world) do
+      instance_double(
+        Mutant::World,
+        timer: timer
+      )
+    end
+
+    let(:timer) do
+      instance_double(
+        Mutant::Timer,
+        now: 1.0
       )
     end
 
@@ -90,14 +105,21 @@ module SharedContext
 
     let(:config) do
       Mutant::Config::DEFAULT.with(
-        jobs:     1,
         reporter: Mutant::Reporter::Null.new
+      ).expand_defaults
+    end
+
+    let(:subject_a_context) do
+      Mutant::Context.new(
+        Object,
+        'suvject-a.rb'
       )
     end
 
     let(:subject_a) do
       instance_double(
         Mutant::Subject,
+        context:        subject_a_context,
         node:           subject_a_node,
         source:         Unparser.unparse(subject_a_node),
         identification: 'subject-a'
@@ -132,16 +154,51 @@ module SharedContext
       )
     end
 
+    let(:mutation_a_coverage_result) do
+      Mutant::Result::Coverage.new(
+        mutation_result: mutation_a_result,
+        criteria_result: mutation_a_criteria_result
+      )
+    end
+
+    let(:mutation_b_coverage_result) do
+      Mutant::Result::Coverage.new(
+        mutation_result: mutation_b_result,
+        criteria_result: mutation_b_criteria_result
+      )
+    end
+
+    let(:mutation_a_criteria_result) do
+      Mutant::Result::CoverageCriteria.new(
+        process_abort: false,
+        test_result:   true,
+        timeout:       false
+      )
+    end
+
+    let(:mutation_b_criteria_result) do
+      Mutant::Result::CoverageCriteria.new(
+        process_abort: false,
+        test_result:   true,
+        timeout:       false
+      )
+    end
+
     let(:mutation_a_isolation_result) do
-      Mutant::Isolation::Result::Success.new(mutation_a_test_result)
+      Mutant::Isolation::Result.new(
+        exception:      nil,
+        log:            '',
+        process_status: nil,
+        timeout:        nil,
+        value:          mutation_a_test_result
+      )
     end
 
     let(:mutation_a_test_result) do
       Mutant::Result::Test.new(
         tests:   [test_a],
         passed:  false,
-        runtime: 1.0,
-        output:  'mutation a test result output'
+        runtime: 1.0
       )
     end
 
@@ -149,20 +206,25 @@ module SharedContext
       Mutant::Result::Test.new(
         tests:   [test_a],
         passed:  false,
-        runtime: 1.0,
-        output:  'mutation b test result output'
+        runtime: 1.0
       )
     end
 
     let(:mutation_b_isolation_result) do
-      Mutant::Isolation::Result::Success.new(mutation_b_test_result)
+      Mutant::Isolation::Result.new(
+        exception:      nil,
+        log:            '',
+        process_status: nil,
+        timeout:        nil,
+        value:          mutation_b_test_result
+      )
     end
 
     let(:subject_a_result) do
       Mutant::Result::Subject.new(
         subject:          subject_a,
         tests:            [test_a],
-        mutation_results: [mutation_a_result, mutation_b_result]
+        coverage_results: [mutation_a_coverage_result, mutation_b_coverage_result]
       )
     end
   end

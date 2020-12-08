@@ -24,10 +24,15 @@ module Mutant
     # @param [Config] config
     #
     # @return [Env]
+    #
+    # rubocop:disable Metrics/MethodLength
     def self.empty(world, config)
       new(
         config:           config,
-        integration:      Integration::Null.new(config),
+        integration:      Integration::Null.new(
+          expression_parser: config.expression_parser,
+          timer:             world.timer
+        ),
         matchable_scopes: EMPTY_ARRAY,
         mutations:        EMPTY_ARRAY,
         parser:           Parser.new,
@@ -36,6 +41,7 @@ module Mutant
         world:            world
       )
     end
+    # rubocop:enable Metrics/MethodLength
 
     # Kill mutation
     #
@@ -43,14 +49,14 @@ module Mutant
     #
     # @return [Result::Mutation]
     def kill(mutation)
-      start = Timer.now
+      start = timer.now
 
       tests = selections.fetch(mutation.subject)
 
       Result::Mutation.new(
         isolation_result: run_mutation_tests(mutation, tests),
         mutation:         mutation,
-        runtime:          Timer.now - start
+        runtime:          timer.now - start
       )
     end
 
@@ -126,14 +132,8 @@ module Mutant
 
   private
 
-    # Kill mutation under isolation with integration
-    #
-    # @param [Mutation] mutation
-    # @param [Array<Test>] test
-    #
-    # @return [Result::Isolation]
     def run_mutation_tests(mutation, tests)
-      config.isolation.call do
+      config.isolation.call(config.mutation_timeout) do
         result = mutation.insert(world.kernel)
 
         if result.equal?(Loader::Result::VoidValue.instance)
@@ -142,6 +142,10 @@ module Mutant
           integration.call(tests)
         end
       end
+    end
+
+    def timer
+      world.timer
     end
 
   end # Env

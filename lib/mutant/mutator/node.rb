@@ -34,21 +34,9 @@ module Mutant
 
     private
 
-      # Node to mutate
-      #
-      # @return [Parser::AST::Node]
-      alias_method :node, :input
-
-      # Duplicate of original
-      #
-      # @return [Parser::AST::Node]
+      alias_method :node,     :input
       alias_method :dup_node, :dup_input
 
-      # Dispatch on child index
-      #
-      # @param [Integer] index
-      #
-      # @return [undefined]
       def mutate_child(index, &block)
         block ||= TAUTOLOGY
         Mutator.mutate(children.fetch(index), self).each do |mutation|
@@ -57,108 +45,55 @@ module Mutant
         end
       end
 
-      # Emit delete child mutation
-      #
-      # @param [Integer] index
-      #
-      # @return [undefined]
       def delete_child(index)
         dup_children = children.dup
         dup_children.delete_at(index)
         emit_type(*dup_children)
       end
 
-      # Emit updated child
-      #
-      # @param [Integer] index
-      # @param [Parser::AST::Node] node
-      #
-      # @return [undefined]
       def emit_child_update(index, node)
         new_children = children.dup
         new_children[index] = node
         emit_type(*new_children)
       end
 
-      # Emit a new AST node with same class as wrapped node
-      #
-      # @param [Array<Parser::AST::Node>] children
-      #
-      # @return [undefined]
       def emit_type(*children)
         emit(::Parser::AST::Node.new(node.type, children))
       end
 
-      # Emit propagation if node can stand alone
-      #
-      # @return [undefined]
       def emit_propagation(node)
         emit(node) unless AST::Types::NOT_STANDALONE.include?(node.type)
       end
 
-      # Emit singleton literals
-      #
-      # @return [undefined]
       def emit_singletons
         emit_nil
         emit_self
       end
 
-      # Emit a literal self
-      #
-      # @return [undefined]
       def emit_self
         emit(N_SELF)
       end
 
-      # Emit a literal nil
-      #
-      # @return [undefined]
       def emit_nil
-        emit(N_NIL) unless left_assignment?
+        emit(N_NIL) unless left_op_assignment?
       end
 
-      # Parent node
-      #
-      # @return [Parser::AST::Node] node
-      #   if parent with node is present
-      #
-      # @return [nil]
-      #   otherwise
       def parent_node
         parent&.node
       end
 
-      # Parent type
-      #
-      # @return [Symbol] type
-      #   if parent with type is present
-      #
-      # @return [nil]
-      #   otherwise
       def parent_type
         parent_node&.type
       end
 
-      # Test if the node is the left of an or_asgn or op_asgn
-      #
-      # @return [Boolean]
-      def left_assignment?
+      def left_op_assignment?
         AST::Types::OP_ASSIGN.include?(parent_type) && parent.node.children.first.equal?(node)
       end
 
-      # Children indices
-      #
-      # @param [Range] range
-      #
-      # @return [Enumerable<Integer>]
       def children_indices(range)
         range.begin.upto(children.length + range.end)
       end
 
-      # Emit single child mutation
-      #
-      # @return [undefined]
       def mutate_single_child
         children.each_with_index do |child, index|
           mutate_child(index)

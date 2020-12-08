@@ -23,9 +23,9 @@ RSpec.describe Mutant::Transform::Primitive do
     end
   end
 
-  describe '#apply' do
+  describe '#call' do
     def apply
-      subject.apply(input)
+      subject.call(input)
     end
 
     context 'on string input' do

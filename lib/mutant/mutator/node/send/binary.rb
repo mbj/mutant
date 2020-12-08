@@ -12,9 +12,6 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             emit(left)
             emit_left_mutations
@@ -24,9 +21,6 @@ module Mutant
             emit_not_equality_mutations
           end
 
-          # Emit mutations for `!=`
-          #
-          # @return [undefined]
           def emit_not_equality_mutations
             return unless operator.equal?(:'!=')
 
@@ -34,11 +28,6 @@ module Mutant
             emit_not_equality_mutation(:equal?)
           end
 
-          # Emit negated method sends with specified operator
-          #
-          # @param new_operator [Symbol] selector to be negated
-          #
-          # @return [undefined]
           def emit_not_equality_mutation(new_operator)
             emit(n_not(s(:send, left, new_operator, right)))
           end

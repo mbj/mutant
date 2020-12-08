@@ -103,7 +103,12 @@ module TestApp
       end
     end
   end
+
+  def self.root
+    File.expand_path('..', __dir__)
+  end
 end
 
+require 'test_app/metaclasses'
 require 'test_app/literal'
 $VERBOSE = original

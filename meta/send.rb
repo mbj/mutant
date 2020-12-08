@@ -5,7 +5,6 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'a == b'
-  mutation 'a >= b'
   mutation 'a.eql?(b)'
   mutation 'a.equal?(b)'
   mutation 'nil > b'
@@ -90,7 +89,6 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'a == b'
-  mutation 'a <= b'
   mutation 'a.eql?(b)'
   mutation 'a.equal?(b)'
   mutation 'nil < b'
@@ -310,6 +308,79 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
+  source '__send__(:foo)'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation '__send__'
+  mutation 'public_send(:foo)'
+  mutation ':foo'
+  mutation '__send__(nil)'
+  mutation '__send__(self)'
+  mutation '__send__(:foo__mutant__)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.send(:bar)'
+
+  singleton_mutations
+  mutation 'foo.bar'
+  mutation 'foo.send'
+  mutation 'foo.__send__(:bar)'
+  mutation 'foo.public_send(:bar)'
+  mutation 'foo'
+  mutation ':bar'
+  mutation 'self.send(:bar)'
+  mutation 'foo.send(nil)'
+  mutation 'foo.send(self)'
+  mutation 'foo.send(:bar__mutant__)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'send'
+
+  singleton_mutations
+
+  mutation '__send__'
+  mutation 'public_send'
+end
+
+Mutant::Meta::Example.add :send do # rubocop:disable Metrics/BlockLength
+  source 'foo.public_send(:bar, 1, two: true, **kwargs, &block)'
+
+  singleton_mutations
+  mutation 'foo.public_send(:bar, 1, { two: true, **kwargs }, &nil)'
+  mutation 'foo.public_send(:bar, 1, { two: true, **kwargs }, &self)'
+  mutation 'foo.bar(1, two: true, **kwargs, &block)'
+  mutation 'foo'
+  mutation 'self.public_send(:bar, 1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send'
+  mutation 'foo.public_send(nil, 1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(self, 1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar__mutant__, 1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, nil, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, self, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 0, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, -1, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 2, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, { two: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, nil, &block)'
+  mutation 'foo.public_send(:bar, 1, self, &block)'
+  mutation 'foo.public_send(:bar, 1, {}, &block)'
+  mutation 'foo.public_send(:bar, 1, { nil => true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, { self => true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, { two__mutant__: true, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, { two: false, **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, { **kwargs }, &block)'
+  mutation 'foo.public_send(:bar, 1, { two: true, **nil }, &block)'
+  mutation 'foo.public_send(:bar, 1, { two: true, **self }, &block)'
+  mutation 'foo.public_send(:bar, 1, { two: true }, &block)'
+  mutation 'foo.public_send(:bar, 1, &block)'
+  mutation 'foo.public_send(:bar, 1, two: true, **kwargs)'
+end
+
+Mutant::Meta::Example.add :send do
   source 'foo.send(bar)'
 
   singleton_mutations
@@ -362,6 +433,8 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'foo'
+  mutation 'foo(&nil)'
+  mutation 'foo(&self)'
 end
 
 Mutant::Meta::Example.add :send do
@@ -450,16 +523,16 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'foo'
   mutation '(left - right)'
-  mutation 'left / foo'
-  mutation 'right / foo'
+  mutation '(left) / foo'
+  mutation '(right) / foo'
   mutation '(left - right) / nil'
   mutation '(left - right) / self'
   mutation '(left - nil) / foo'
   mutation '(left - self) / foo'
   mutation '(nil - right) / foo'
   mutation '(self - right) / foo'
-  mutation 'nil / foo'
-  mutation 'self / foo'
+  mutation '(nil) / foo'
+  mutation '(self) / foo'
 end
 
 Mutant::Meta::Example.add :send do
@@ -488,9 +561,7 @@ end
     mutation 'true'
     mutation 'false'
     mutation "false #{operator} false"
-    mutation "nil   #{operator} false"
     mutation "true  #{operator} true"
-    mutation "true  #{operator} nil"
   end
 end
 
@@ -534,7 +605,7 @@ Mutant::Meta::Example.add :send do
   mutation '!self'
   mutation '!foo'
   mutation '!self&.!'
-  mutation '!(!foo)'
+  mutation '!!foo'
 end
 
 Mutant::Meta::Example.add :send do
@@ -601,4 +672,40 @@ Mutant::Meta::Example.add :send do
   mutation 'foo(bar)'
   mutation 'foo(self)'
   mutation 'foo(nil)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'Array(a)'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'Array()'
+  mutation 'Array(nil)'
+  mutation 'Array(self)'
+  mutation '[a]'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'Kernel.Array(a)'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'Kernel'
+  mutation 'self.Array(a)'
+  mutation 'Kernel.Array'
+  mutation 'Kernel.Array(nil)'
+  mutation 'Kernel.Array(self)'
+  mutation '[a]'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.Array(a)'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'self.Array(a)'
+  mutation 'foo'
+  mutation 'foo.Array'
+  mutation 'foo.Array(nil)'
+  mutation 'foo.Array(self)'
 end

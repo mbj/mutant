@@ -12,18 +12,12 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           emit_assignment(nil)
           emit_body_mutations if body
           mutate_captures
         end
 
-        # Mutate captures
-        #
-        # @return [undefined]
         def mutate_captures
           return unless captures
           Util::Array::Element.call(captures.children).each do |matchers|

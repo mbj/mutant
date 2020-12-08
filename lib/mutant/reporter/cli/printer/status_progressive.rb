@@ -35,18 +35,10 @@ module Mutant
 
         private
 
-          # Object being printed
-          #
-          # @return [Result::Env]
           def object
             super().payload
           end
 
-          # Mutations processed per second
-          #
-          # @return [Float]
-          #
-          # @api private
           def mutations_per_second
             amount_mutation_results / runtime
           end

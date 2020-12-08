@@ -79,18 +79,10 @@ module Mutant
 
   private
 
-    # Neutral mutation
-    #
-    # @return [Mutation::Neutral]
     def neutral_mutation
       Mutation::Neutral.new(self, wrap_node(node))
     end
 
-    # Wrap node into subject specific container
-    #
-    # @param [Parser::AST::Node] node
-    #
-    # @return [Parser::AST::Node]
     def wrap_node(node)
       node
     end

@@ -1,0 +1,130 @@
+name: CI
+
+on: push
+
+jobs:
+  base:
+    name: Base steps
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Whitespace
+      run: git diff --check -- HEAD~1
+  ruby-spec:
+    name: Unit Specs
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [ruby-2.5, ruby-2.6, ruby-2.7]
+        os: [macos-latest, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: bundle exec rspec spec/unit
+  ruby-mutant:
+    name: Mutation coverage
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [ruby-2.6, ruby-2.7]
+        os: [macos-latest, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: ./mutant.sh --since HEAD~1 -- 'Mutant*'
+  ruby-integration-misc:
+    name: Integration Misc
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [ruby-2.5, ruby-2.6, ruby-2.7]
+        os: [macos-latest, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: |
+        bundle exec rspec                                            \
+          spec/integration/mutant/null_spec.rb                       \
+          spec/integration/mutant/isolation/fork_spec.rb             \
+          spec/integration/mutant/test_mutator_handles_types_spec.rb
+  ruby-integration-minitest:
+    name: Integration Minitest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [ruby-2.5, ruby-2.6, ruby-2.7]
+        os: [macos-latest, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: bundle exec rspec spec/integration -e minitest
+  ruby-integration-rspec:
+    name: Integration RSpec
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [ruby-2.5, ruby-2.6, ruby-2.7]
+        os: [macos-latest, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: bundle exec rspec spec/integration -e rspec
+  ruby-integration-generation:
+    name: Integration Mutation Generation
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [ruby-2.5, ruby-2.6, ruby-2.7]
+        os: [macos-latest, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: bundle exec rspec spec/integration -e generation
+  ruby-rubocop:
+    name: Rubocop
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [ruby-2.7]
+        os: [macos-latest, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: bundle exec rubocop

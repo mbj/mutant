@@ -11,24 +11,15 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             emit_singletons
             emit_values
           end
 
-          # Values to mutate to
-          #
-          # @return [Array]
           def values
             [0, 1, -value, value + 1, value - 1]
           end
 
-          # Literal original value
-          #
-          # @return [Object]
           def value
             value, = children
             value

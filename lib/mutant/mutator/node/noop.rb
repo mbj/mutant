@@ -7,13 +7,10 @@ module Mutant
       # Mutation emitter to handle noop nodes
       class Noop < self
 
-        handle(:__ENCODING__, :block_pass, :cbase, :lambda)
+        handle(:__ENCODING__, :cbase, :lambda)
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           # noop
         end

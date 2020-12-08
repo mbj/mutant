@@ -16,11 +16,7 @@ module Mutant
 
           handle(*MAP.keys)
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
-            emit_nil
             emit(s(MAP.fetch(node.type)))
           end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Note: The minitest integration was sponsored by [Arkency](https://arkency.com/).
+# The minitest integration was sponsored by [Arkency](https://arkency.com/).
 # Without their support this integration would not exist.
 
 require 'minitest'
@@ -51,13 +51,16 @@ module Mutant
           reporter.passed?
         end
 
-        # Cover expression syntaxes
+        # Parse expressions
         #
-        # @return [String, nil]
-        def expression_syntax
-          klass.resolve_cover_expression
+        # @param [ExpressionParser] parser
+        #
+        # @return [Array<Expression>]
+        def expressions(parser)
+          klass.resolve_cover_expressions.map do |syntax|
+            parser.apply(syntax).from_right
+          end
         end
-
       end # TestCase
 
       private_constant(*constants(false))
@@ -80,14 +83,11 @@ module Mutant
       # @return [Result::Test]
       #
       # rubocop:disable Metrics/MethodLength
-      #
-      # ignore :reek:TooManyStatements
       def call(tests)
         test_cases = tests.map(&all_tests_index.method(:fetch))
-        output     = StringIO.new
-        start      = Timer.now
+        start      = timer.now
 
-        reporter = ::Minitest::SummaryReporter.new(output)
+        reporter = ::Minitest::SummaryReporter.new($stdout)
 
         reporter.start
 
@@ -95,13 +95,10 @@ module Mutant
           break unless test.call(reporter)
         end
 
-        output.rewind
-
         Result::Test.new(
           passed:  reporter.passed?,
           tests:   tests,
-          output:  output.read,
-          runtime: Timer.now - start
+          runtime: timer.now - start
         )
       end
 
@@ -115,9 +112,6 @@ module Mutant
 
     private
 
-      # The index of all tests to runnable test cases
-      #
-      # @return [Hash<Test,TestCase>]
       def all_tests_index
         all_test_cases.each_with_object({}) do |test_case, index|
           index[construct_test(test_case)] = test_case
@@ -125,23 +119,13 @@ module Mutant
       end
       memoize :all_tests_index
 
-      # Construct test from test case
-      #
-      # @param [TestCase]
-      #
-      # @return [Test]
       def construct_test(test_case)
         Test.new(
-          id:         test_case.identification,
-          expression: config.expression_parser.apply(test_case.expression_syntax).from_right
+          id:          test_case.identification,
+          expressions: test_case.expressions(expression_parser)
         )
       end
 
-      # All minitest test cases
-      #
-      # Intentional utility method.
-      #
-      # @return [Array<TestCase>]
       def all_test_cases
         ::Minitest::Runnable
           .runnables
@@ -149,26 +133,10 @@ module Mutant
           .flat_map(&method(:test_case))
       end
 
-      # Test if runnable qualifies for mutation testing
-      #
-      # @param [Class]
-      #
-      # @return [Bool]
-      #
-      # ignore :reek:UtilityFunction
       def allow_runnable?(klass)
-        !klass.equal?(::Minitest::Runnable) && klass.resolve_cover_expression
+        !klass.equal?(::Minitest::Runnable) && klass.resolve_cover_expressions
       end
 
-      # Turn a minitest runnable into its test cases
-      #
-      # Intentional utility method.
-      #
-      # @param [Object] runnable
-      #
-      # @return [Array<TestCase>]
-      #
-      # ignore :reek:UtilityFunction
       def test_case(runnable)
         runnable.runnable_methods.map { |method| TestCase.new(runnable, method) }
       end

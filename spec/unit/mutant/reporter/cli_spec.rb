@@ -22,10 +22,6 @@ RSpec.describe Mutant::Reporter::CLI do
     end
   end
 
-  before do
-    allow(Mutant::Timer).to receive_messages(now: Mutant::Timer.now)
-  end
-
   describe '.build' do
     subject { described_class.build(output) }
 
@@ -99,6 +95,7 @@ RSpec.describe Mutant::Reporter::CLI do
       Results:         2
       Kills:           2
       Alive:           0
+      Timeouts:        0
       Runtime:         4.00s
       Killtime:        2.00s
       Overhead:        100.00%
@@ -115,9 +112,11 @@ RSpec.describe Mutant::Reporter::CLI do
 
       let(:tty?) { true }
 
-      # rubocop:disable Metrics/LineLength
-      it_reports Mutant::Color::GREEN.format('progress: 00/02 alive: 0 runtime: 4.00s killtime: 0.00s mutations/s: 0.00') + "\n"
-      # rubocop:enable Metrics/LineLength
+      # rubocop:disable Layout/LineLength
+      # rubocop:disable Style/StringConcatenation
+      it_reports Unparser::Color::GREEN.format('progress: 00/02 alive: 0 runtime: 4.00s killtime: 0.00s mutations/s: 0.00') + "\n"
+      # rubocop:enable Style/StringConcatenation
+      # rubocop:enable Layout/LineLength
     end
 
     context 'with last mutation present' do
@@ -128,7 +127,7 @@ RSpec.describe Mutant::Reporter::CLI do
       end
 
       context 'when mutation is NOT successful' do
-        with(:mutation_a_test_result) { { passed: true } }
+        with(:mutation_a_criteria_result) { { test_result: false } }
 
         it_reports "progress: 02/02 alive: 1 runtime: 4.00s killtime: 2.00s mutations/s: 0.50\n"
       end

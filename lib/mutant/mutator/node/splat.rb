@@ -12,9 +12,6 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           emit_singletons
           emit_expression_mutations

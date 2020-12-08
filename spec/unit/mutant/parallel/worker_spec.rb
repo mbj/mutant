@@ -4,17 +4,11 @@ RSpec.describe Mutant::Parallel::Worker do
   describe '#call' do
     let(:active_jobs)  { instance_double(Set)                      }
     let(:payload_a)    { instance_double(Object)                   }
-    let(:payload_b)    { instance_double(Object)                   }
     let(:processor)    { instance_double(Proc)                     }
     let(:result_a)     { instance_double(Object)                   }
-    let(:result_b)     { instance_double(Object)                   }
     let(:running)      { 1                                         }
     let(:sink)         { instance_double(Mutant::Parallel::Sink)   }
     let(:source)       { instance_double(Mutant::Parallel::Source) }
-    let(:thread_a)     { instance_double(Thread, alive?: true)     }
-    let(:thread_b)     { instance_double(Thread, alive?: true)     }
-    let(:threads)      { [thread_a, thread_b]                      }
-    let(:timeout)      { instance_double(Float)                    }
 
     let(:job_a) do
       instance_double(
@@ -23,31 +17,24 @@ RSpec.describe Mutant::Parallel::Worker do
       )
     end
 
-    let(:job_b) do
-      instance_double(
-        Mutant::Parallel::Source::Job,
-        payload: payload_b
-      )
-    end
-
     let(:var_active_jobs) do
-      instance_double(Mutant::Variable::IVar, 'active jobs')
+      instance_double(Variable::IVar, 'active jobs')
     end
 
     let(:var_final) do
-      instance_double(Mutant::Variable::IVar, 'final')
+      instance_double(Variable::IVar, 'final')
     end
 
     let(:var_running) do
-      instance_double(Mutant::Variable::MVar, 'running')
+      instance_double(Variable::MVar, 'running')
     end
 
     let(:var_sink) do
-      instance_double(Mutant::Variable::IVar, 'sink')
+      instance_double(Variable::IVar, 'sink')
     end
 
     let(:var_source) do
-      instance_double(Mutant::Variable::IVar, 'source')
+      instance_double(Variable::IVar, 'source')
     end
 
     subject do

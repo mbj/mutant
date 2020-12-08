@@ -3,6 +3,7 @@ require 'mutant/minitest/coverage'
 
 class LiteralTest < Minitest::Test
   cover 'TestApp::Literal*'
+  cover 'TestApp::Literal#string'
 
   def test_command
     object = ::TestApp::Literal.new

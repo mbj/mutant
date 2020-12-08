@@ -41,12 +41,7 @@ RSpec.describe Mutant::Mutator::Node do
     end
 
     specify do
-      expect(apply).to eql(
-        [
-          s(:and, s(:nil), s(:true)),
-          s(:and, s(:true), s(:nil))
-        ].to_set
-      )
+      expect(apply).to eql([s(:and, s(:nil), s(:true))].to_set)
     end
   end
 end

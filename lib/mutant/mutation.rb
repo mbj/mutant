@@ -9,15 +9,7 @@ module Mutant
     CODE_DELIMITER = "\0"
     CODE_RANGE     = (0..4).freeze
 
-    # Identification string
-    #
-    # @return [String]
-    def identification
-      "#{self.class::SYMBOL}:#{subject.identification}:#{code}"
-    end
-    memoize :identification
-
-    # Mutation code
+    # Mutation identification code
     #
     # @return [String]
     def code
@@ -32,6 +24,14 @@ module Mutant
       Unparser.unparse(node)
     end
     memoize :source
+
+    # Identification string
+    #
+    # @return [String]
+    def identification
+      "#{self.class::SYMBOL}:#{subject.identification}:#{code}"
+    end
+    memoize :identification
 
     # The monkeypatch to insert the mutation
     #
@@ -74,13 +74,9 @@ module Mutant
 
   private
 
-    # SHA1 sum of source and subject identification
-    #
-    # @return [String]
     def sha1
       Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
     end
-    memoize :sha1
 
     # Evil mutation that should case mutations to fail tests
     class Evil < self

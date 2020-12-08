@@ -10,6 +10,7 @@ module Mutant
             :amount_mutation_results,
             :amount_mutations_alive,
             :amount_mutations_killed,
+            :amount_timeouts,
             :coverage,
             :env,
             :killtime,
@@ -21,6 +22,7 @@ module Mutant
             [:info,   'Results:         %s',      :amount_mutation_results],
             [:info,   'Kills:           %s',      :amount_mutations_killed],
             [:info,   'Alive:           %s',      :amount_mutations_alive ],
+            [:info,   'Timeouts:        %s',      :amount_timeouts        ],
             [:info,   'Runtime:         %0.2fs',  :runtime                ],
             [:info,   'Killtime:        %0.2fs',  :killtime               ],
             [:info,   'Overhead:        %0.2f%%', :overhead_percent       ],
@@ -40,29 +42,14 @@ module Mutant
 
         private
 
-          # Mutations processed per second
-          #
-          # @return [Float]
-          #
-          # @api private
           def mutations_per_second
             amount_mutation_results / runtime
           end
 
-          # Coverage in percent
-          #
-          # @return [Float]
-          #
-          # @api private
           def coverage_percent
             coverage * 100
           end
 
-          # Overhead in percent
-          #
-          # @return [Float]
-          #
-          # @api private
           def overhead_percent
             (overhead / killtime) * 100
           end

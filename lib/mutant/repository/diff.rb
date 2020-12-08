@@ -23,48 +23,55 @@ module Mutant
       #   when git command failed
       def touches?(path, line_range)
         touched_paths
+          .from_right { |message| fail Error, message }
           .fetch(path) { return false }
           .touches?(line_range)
       end
 
     private
 
-      # Touched paths
-      #
-      # @return [Hash{Pathname => Path}]
-      #
-      # rubocop:disable Metrics/MethodLength
-      def touched_paths
-        pathname = world.pathname
-        work_dir = pathname.pwd
-
+      def repository_root
         world
-          .capture_stdout(%W[git diff-index #{to}])
-          .from_right
-          .lines
-          .map do |line|
-            path = parse_line(work_dir, line)
-            [path.path, path]
-          end
-          .to_h
+          .capture_stdout(%w[git rev-parse --show-toplevel])
+          .fmap(&:chomp)
+          .fmap(&world.pathname.public_method(:new))
+      end
+
+      def touched_paths
+        repository_root.bind(&method(:diff_index))
       end
       memoize :touched_paths
 
-      # Parse path
-      #
-      # @param [Pathname] work_dir
-      # @param [String] line
-      #
-      # @return [Path]
-      def parse_line(work_dir, line)
-        match = FORMAT.match(line) or fail Error, "Invalid git diff-index line: #{line}"
-
-        Path.new(
-          path:  work_dir.join(match.captures.first),
-          to:    to,
-          world: world
-        )
+      def diff_index(root)
+        world
+          .capture_stdout(%W[git diff-index #{to}])
+          .fmap(&:lines)
+          .bind do |lines|
+            Mutant
+              .traverse(->(line) { parse_line(root, line) }, lines)
+              .fmap do |paths|
+                paths.map { |path| [path.path, path] }.to_h
+              end
+          end
       end
+
+      # rubocop:disable Metrics/MethodLength
+      def parse_line(root, line)
+        match = FORMAT.match(line)
+
+        if match
+          Either::Right.new(
+            Path.new(
+              path:  root.join(match.captures.first),
+              to:    to,
+              world: world
+            )
+          )
+        else
+          Either::Left.new("Invalid git diff-index line: #{line}")
+        end
+      end
+      # rubocop:enable Metrics/MethodLength
 
       # Path touched by a diff
       class Path
@@ -88,9 +95,6 @@ module Mutant
 
       private
 
-        # Ranges of hunks in the diff
-        #
-        # @return [Array<Range<Integer>>]
         def diff_ranges
           world
             .capture_stdout(%W[git diff --unified=0 #{to} -- #{path}])

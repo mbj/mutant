@@ -19,19 +19,16 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             emit_singletons
-            emit_inverse
             emit_lower_bound_mutations
+
+            return unless upper_bound
+
+            emit_inverse
             emit_upper_bound_mutations
           end
 
-          # Inverse node
-          #
-          # @return [Parser::AST::Node]
           def emit_inverse
             emit(s(MAP.fetch(node.type), *children))
           end

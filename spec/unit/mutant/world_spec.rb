@@ -60,4 +60,31 @@ RSpec.describe Mutant::World do
       end
     end
   end
+
+  describe '#deadline' do
+    def apply
+      subject.deadline(allowed_time)
+    end
+
+    context 'on nil' do
+      let(:allowed_time) { nil }
+
+      it 'returns infinite deadline' do
+        expect(apply).to eql(Mutant::Timer::Deadline::None.new)
+      end
+    end
+
+    context 'on float' do
+      let(:allowed_time) { 0.1 }
+
+      it 'returns infinite deadline' do
+        expect(apply).to eql(
+          Mutant::Timer::Deadline.new(
+            timer:        subject.timer,
+            allowed_time: allowed_time
+          )
+        )
+      end
+    end
+  end
 end

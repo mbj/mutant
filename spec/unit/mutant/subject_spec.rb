@@ -25,17 +25,23 @@ RSpec.describe Mutant::Subject do
   end
 
   let(:node) do
-    Unparser.parse(<<-RUBY)
+    Unparser.parse(<<-'RUBY')
       def foo
       end
     RUBY
   end
 
   let(:context) do
-    double(
-      'Context',
+    instance_double(
+      Mutant::Context,
       source_path: 'source_path'
     )
+  end
+
+  before do
+    allow(context).to receive(:root) do |node|
+      s(:module, s(:const, nil, :Root), node)
+    end
   end
 
   let(:warnings) { instance_double(Mutant::Warnings) }
@@ -76,11 +82,14 @@ RSpec.describe Mutant::Subject do
     subject { object.mutations }
 
     before do
-      expect(Mutant::Mutator).to receive(:mutate).with(node).and_return([mutation_a, mutation_b])
+      expect(Mutant::Mutator)
+        .to receive(:mutate)
+        .with(node)
+        .and_return([mutation_a, mutation_b])
     end
 
-    let(:mutation_a) { instance_double(Parser::AST::Node, :mutation_a) }
-    let(:mutation_b) { instance_double(Parser::AST::Node, :mutation_b) }
+    let(:mutation_a) { s(:true)  }
+    let(:mutation_b) { s(:false) }
 
     it 'generates neutral and evil mutations' do
       should eql([

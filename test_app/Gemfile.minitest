@@ -2,3 +2,5 @@ source 'https://rubygems.org'
 
 gem 'mutant',          path: '../'
 gem 'mutant-minitest', path: '../'
+
+eval_gemfile File.expand_path('../../Gemfile.shared', __FILE__)

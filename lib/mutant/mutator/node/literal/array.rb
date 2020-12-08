@@ -13,9 +13,6 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             emit_singletons
             emit_type
@@ -24,9 +21,6 @@ module Mutant
             emit(first) unless n_splat?(first)
           end
 
-          # Mutate body
-          #
-          # @return [undefined]
           def mutate_body
             children.each_index do |index|
               dup_children = children.dup

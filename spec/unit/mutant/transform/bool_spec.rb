@@ -3,11 +3,9 @@
 RSpec.describe Mutant::Transform::Boolean do
   subject { described_class.new }
 
-  let(:primitive) { String }
-
-  describe '#apply' do
+  describe '#call' do
     def apply
-      subject.apply(input)
+      subject.call(input)
     end
 
     context 'on true' do

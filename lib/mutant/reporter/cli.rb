@@ -11,8 +11,6 @@ module Mutant
       # @param [IO] output
       #
       # @return [Reporter::CLI]
-      #
-      # :reek:ManualDispatch
       def self.build(output)
         new(
           output,
@@ -69,11 +67,6 @@ module Mutant
 
     private
 
-      # Write output frame
-      #
-      # @param [String] frame
-      #
-      # @return [undefined]
       def write(frame)
         output.write(frame)
       end

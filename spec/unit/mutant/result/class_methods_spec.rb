@@ -15,12 +15,14 @@ RSpec.describe 'Mutant::Result::ClassMethods' do
       extend Mutant::Result.const_get(:ClassMethods)
 
       sum :length, :collection
+
+      delegate :to_set, :collection
     end
   end
 
-  describe '#sum' do
-    let(:object) { infected_class.new(collection) }
+  let(:object) { infected_class.new(collection) }
 
+  describe '#sum' do
     def apply
       object.length
     end
@@ -42,10 +44,18 @@ RSpec.describe 'Mutant::Result::ClassMethods' do
       it { should be(0) }
     end
 
-    context 'non-emtpy collection' do
+    context 'non-empty collection' do
       let(:collection) { [[1], [2, 3]] }
 
       it { should be(3) }
     end
+  end
+
+  describe '#delegate' do
+    let(:collection) { [1, 2] }
+
+    subject { object.to_set }
+
+    it { should eql(Set.new([1, 2])) }
   end
 end

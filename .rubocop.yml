@@ -4,4 +4,217 @@ AllCops:
     - 'test_app/**/*'
     - 'tmp/**/*'
     - 'vendor/**/*'
+  NewCops: enable
   TargetRubyVersion: 2.5
+
+# Avoid parameter lists longer than five parameters.
+Metrics/ParameterLists:
+  Max: 3
+  CountKeywordArgs: true
+
+# Avoid more than `Max` levels of nesting.
+Metrics/BlockNesting:
+  Max: 3
+
+# Align with the style guide.
+Style/CollectionMethods:
+  Enabled: true
+  PreferredMethods:
+    collect:  'map'
+    inject:   'reduce'
+    find:     'detect'
+    find_all: 'select'
+
+Layout/AccessModifierIndentation:
+  Enabled: false
+
+# Limit line length
+Layout/LineLength:
+  Max: 120
+
+# Disable documentation checking until a class needs to be documented once
+Style/Documentation:
+  Enabled: false
+
+# Permit
+#
+#     boolean_check? or fail
+#
+# Reject
+#
+#     if foo or bar
+#       ...
+#     end
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+# Do not favor modifier if/unless usage when you have a single-line body
+Style/IfUnlessModifier:
+  Enabled: false
+
+# Allow case equality operator (in limited use within the specs)
+Style/CaseEquality:
+  Enabled: false
+
+# Constants do not always have to use SCREAMING_SNAKE_CASE
+Naming/ConstantName:
+  Enabled: false
+
+# Not all trivial readers/writers can be defined with attr_* methods
+Style/TrivialAccessors:
+  Enabled: false
+
+# Allow empty lines around class body
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+# Allow empty lines around module body
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+# Allow empty lines around block body
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+# Allow multiple line operations to not require indentation
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+# Prefer String#% over Kernel#sprintf
+Style/FormatString:
+  EnforcedStyle: percent
+
+# Use square brackets for literal Array objects
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%':  '{}'
+    '%i': '[]'
+    '%q': ()
+    '%Q': ()
+    '%r': '{}'
+    '%s': ()
+    '%w': '[]'
+    '%W': '[]'
+    '%x': ()
+
+# Use %i[...] for arrays of symbols
+Style/SymbolArray:
+  Enabled: true
+
+# Prefer #kind_of? over #is_a?
+Style/ClassCheck:
+  EnforcedStyle: kind_of?
+
+# Do not prefer double quotes to be used when %q or %Q is more appropriate
+Style/RedundantPercentQ:
+  Enabled: false
+
+# Allow a maximum ABC score
+Metrics/AbcSize:
+  Max: 21.02
+
+Metrics/BlockLength:
+  Exclude:
+  - 'spec/**/*.rb'
+  - 'mutant.gemspec'
+
+# Buggy cop, returns false positive for our code base
+Lint/NonLocalExitFromIterator:
+  Enabled: false
+
+# To allow alignment of similar expressions we want to allow more than one
+# space around operators:
+#
+# let(:a) { bar    + something }
+# let(:b) { foobar + something }
+#
+Layout/SpaceAroundOperators:
+  Enabled: false
+
+# We use parallel assignments with great success
+Style/ParallelAssignment:
+  Enabled: false
+
+# Allow additional specs
+Layout/ExtraSpacing:
+  AllowForAlignment: true
+
+# Buggy
+Lint/FormatParameterMismatch:
+  Enabled: false
+
+# Different preference
+Style/SignalException:
+  EnforcedStyle: semantic
+
+# Do not use `alias`
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+
+# Do not waste my horizontal or vertical space
+Layout/FirstArrayElementIndentation:
+  Enabled: false
+
+# Prefer
+#
+#     some_receiver
+#       .foo
+#       .bar
+#       .baz
+#
+# Over
+#
+#     some_receiver.foo
+#                  .bar
+#                  .baz
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+# Prefer `public_send` and `__send__` over `send`
+Style/Send:
+  Enabled: true
+
+Layout/HashAlignment:
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+Lint/BooleanSymbol:
+  Enabled: false
+Lint/InterpolationCheck:
+  Enabled: false
+Lint/MissingCopEnableDirective:
+  Enabled: false
+Lint/UnifiedInteger:
+  Enabled: false
+Naming/FileName:
+  Enabled: false
+Style/AccessModifierDeclarations:
+  Enabled: false
+Style/CommentedKeyword:
+  Enabled: false
+Style/MixinGrouping:
+  Enabled: false
+Style/RaiseArgs:
+  Enabled: false
+Style/RescueStandardError:
+  Enabled: false
+Style/StderrPuts:
+  Enabled: false
+# Fine inside stabby lambdas
+Style/Semicolon:
+  Enabled: false
+# suggesting single letter variablesl bah
+Naming/RescuedExceptionsVariableName:
+  Enabled: false
+# false positive on private keywords
+Layout/IndentationWidth:
+  Enabled: false
+# I do them alphabetically
+Style/KeywordParametersOrder:
+  Enabled: false
+# Empty blocks are useful
+Lint/EmptyBlock:
+  Enabled: false

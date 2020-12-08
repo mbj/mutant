@@ -14,9 +14,6 @@ module Mutant
 
       private
 
-        # Emit mutations
-        #
-        # @return [undefined]
         def dispatch
           emit_singletons
           emit_receiver_mutations { |node| !n_nil?(node) }
@@ -26,20 +23,14 @@ module Mutant
           mutate_indices
         end
 
-        # Emit send forms
-        #
-        # @return [undefined]
         def emit_send_forms
-          return if left_assignment?
+          return if left_op_assignment?
 
           SEND_REPLACEMENTS.each do |selector|
             emit(s(:send, receiver, selector, *indices))
           end
         end
 
-        # Emit mutation `foo[n..-1]` -> `foo.drop(n)`
-        #
-        # @return [undefined]
         def emit_drop_mutation
           return unless indices.one? && n_irange?(Mutant::Util.one(indices))
 
@@ -50,20 +41,14 @@ module Mutant
           emit(s(:send, receiver, :drop, start))
         end
 
-        # Mutate indices
-        #
-        # @return [undefined]
         def mutate_indices
           children_indices(index_range).each do |index|
-            emit_propagation(children.fetch(index)) unless left_assignment?
+            emit_propagation(children.fetch(index)) unless left_op_assignment?
             delete_child(index)
             mutate_child(index)
           end
         end
 
-        # The index nodes
-        #
-        # @return [Enumerable<Parser::AST::Node>]
         def indices
           children[index_range]
         end
@@ -74,9 +59,6 @@ module Mutant
 
         private
 
-          # The range index children can be found
-          #
-          # @return [Range]
           def index_range
             NO_VALUE_RANGE
           end
@@ -92,31 +74,22 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             super()
 
-            return if left_assignment?
+            return if left_op_assignment?
 
             emit_index_read
             emit(children.last)
             mutate_child(children.length.pred)
           end
 
-          # Emit index read
-          #
-          # @return [undefined]
           def emit_index_read
             emit(s(:index, receiver, *children[index_range]))
           end
 
-          # Index indices
-          #
-          # @return [Range<Integer>]
           def index_range
-            if left_assignment?
+            if left_op_assignment?
               NO_VALUE_RANGE
             else
               REGULAR_RANGE

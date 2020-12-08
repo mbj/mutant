@@ -20,35 +20,28 @@ module Mutant
       #
       # @api public
       def cover(expression)
-        if defined?(@cover_expression)
-          fail "#{self} already declares to cover: #{@cover_expression.inspect}"
-        end
+        @cover_expressions = Set.new unless defined?(@cover_expressions)
 
-        @cover_expression = expression
+        @cover_expressions << expression
       end
 
       # Effective coverage expression
       #
-      # @return [String, nil]
+      # @return [Set<String>]
       #
       # @api private
-      def resolve_cover_expression
-        return @cover_expression if defined?(@cover_expression)
+      def resolve_cover_expressions
+        return @cover_expressions if defined?(@cover_expressions)
 
-        try_superclass_cover_expression
+        try_superclass_cover_expressions
       end
 
     private
 
-      # Attempt to resolve superclass cover expressio
-      #
-      # @return [String, nil]
-      #
-      # @api private
-      def try_superclass_cover_expression
+      def try_superclass_cover_expressions
         return if superclass.equal?(::Minitest::Runnable)
 
-        superclass.resolve_cover_expression
+        superclass.resolve_cover_expressions
       end
 
     end # Coverage

@@ -12,8 +12,6 @@ module Mutant
         # @param [UnboundMethod] method
         #
         # @return [Matcher::Method::Instance]
-        #
-        # :reek:ManualDispatch
         def self.new(scope, target_method)
           name = target_method.name
           evaluator =
@@ -33,11 +31,6 @@ module Mutant
 
         private
 
-          # Check if node is matched
-          #
-          # @param [Parser::AST::Node] node
-          #
-          # @return [Boolean]
           def match?(node)
             n_def?(node)                           &&
             node.location.line.equal?(source_line) &&
@@ -50,9 +43,6 @@ module Mutant
 
           private
 
-            # Source location
-            #
-            # @return [Array{String,Integer}]
             def source_location
               scope
                 .unmemoized_instance_method(method_name)

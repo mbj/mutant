@@ -18,25 +18,19 @@ module Mutant
           }
 
           MAP = IceNine.deep_freeze(
-            Hash[map.map { |type, prefix| [type, [prefix, /^#{::Regexp.escape(prefix)}/]] }]
+            map.transform_values { |prefix| [prefix, /^#{::Regexp.escape(prefix)}/] }
           )
 
           handle(*MAP.keys)
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch
             emit_singletons
             mutate_name
             emit_value_mutations if value # op asgn!
           end
 
-          # Emit name mutations
-          #
-          # @return [undefined]
           def mutate_name
             prefix, regexp = MAP.fetch(node.type)
             stripped = name.to_s.sub(regexp, EMPTY_STRING)

@@ -13,7 +13,8 @@ module Mutant
 
       MATCHERS = [
         Matcher::Methods::Singleton,
-        Matcher::Methods::Instance
+        Matcher::Methods::Instance,
+        Matcher::Methods::Metaclass
       ].freeze
 
       private_constant(*constants(false))
@@ -29,9 +30,6 @@ module Mutant
 
     private
 
-      # Effective matchers
-      #
-      # @return [Enumerable<Matcher>]
       def effective_matchers
         MATCHERS.map { |matcher| matcher.new(scope) }
       end

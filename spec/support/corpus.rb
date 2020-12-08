@@ -53,11 +53,11 @@ module MutantSpec
       def verify_mutation_coverage
         checkout
         Dir.chdir(repo_path) do
-          Bundler.with_clean_env do
+          Bundler.with_unbundled_env do
             install_mutant
             system(
               %W[
-                bundle exec mutant
+                bundle exec mutant run
                 --use #{integration}
                 --include lib
                 --require #{name}
@@ -88,7 +88,9 @@ module MutantSpec
       #   otherwise
       def verify_mutation_generation
         checkout
-        start = Mutant::Timer.now
+        timer = Mutant::Timer.new(Process)
+
+        start = timer.now
 
         options = {
           finish:       method(:finish),
@@ -99,7 +101,7 @@ module MutantSpec
         total = Parallel.map(effective_ruby_paths, options, &method(:check_generation))
           .inject(DEFAULT_MUTATION_COUNT, :+)
 
-        took = Mutant::Timer.now - start
+        took = timer.now - start
         puts MUTATION_GENERATION_MESSAGE % [total, took, total / took]
         self
       end
@@ -272,23 +274,19 @@ module MutantSpec
 
       Transform = Mutant::Transform
 
-      boolean      = Transform::Boolean.new
-      string       = Transform::Primitive.new(String)
-      string_array = Transform::Array.new(string)
-
       integration = Transform::Sequence.new(
         [
           Transform::Hash.new(
             optional: [],
             required: [
-              Transform::Hash::Key.new('exclude',             string_array),
-              Transform::Hash::Key.new('integration',         string),
-              Transform::Hash::Key.new('mutation_coverage',   boolean),
-              Transform::Hash::Key.new('mutation_generation', boolean),
-              Transform::Hash::Key.new('name',                string),
-              Transform::Hash::Key.new('namespace',           string),
-              Transform::Hash::Key.new('repo_ref',            string),
-              Transform::Hash::Key.new('repo_uri',            string)
+              Transform::Hash::Key.new('exclude',             Transform::STRING_ARRAY),
+              Transform::Hash::Key.new('integration',         Transform::STRING),
+              Transform::Hash::Key.new('mutation_coverage',   Transform::BOOLEAN),
+              Transform::Hash::Key.new('mutation_generation', Transform::BOOLEAN),
+              Transform::Hash::Key.new('name',                Transform::STRING),
+              Transform::Hash::Key.new('namespace',           Transform::STRING),
+              Transform::Hash::Key.new('repo_ref',            Transform::STRING),
+              Transform::Hash::Key.new('repo_uri',            Transform::STRING)
             ]
           ),
           Transform::Hash::Symbolize.new,
@@ -309,7 +307,7 @@ module MutantSpec
 
       ALL = Transform::Named
         .new(path, transform)
-        .apply(path)
+        .call(path)
         .lmap(&:compact_message)
         .lmap(&method(:fail))
         .from_right

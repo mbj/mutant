@@ -81,9 +81,6 @@ module Mutant
 
   private
 
-    # Nesting of names in scope
-    #
-    # @return [Array<String>]
     def name_nesting
       scope.name.split(NAMESPACE_DELIMITER)
     end

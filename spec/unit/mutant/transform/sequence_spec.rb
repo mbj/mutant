@@ -26,9 +26,9 @@ RSpec.describe Mutant::Transform::Sequence do
     Mutant::Transform::Hash::Symbolize.new
   end
 
-  describe '#apply' do
+  describe '#call' do
     def apply
-      subject.apply(input)
+      subject.call(input)
     end
 
     context 'on valid input' do

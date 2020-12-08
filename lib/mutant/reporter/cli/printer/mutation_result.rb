@@ -46,34 +46,27 @@ module Mutant
             This is typically a problem of your specs not passing unmutated.
           MESSAGE
 
-          FOOTER = '-----------------------'
+          SEPARATOR = '-----------------------'
 
           # Run report printer
           #
           # @return [undefined]
           def run
             puts(mutation.identification)
+            puts(SEPARATOR)
             print_details
-            puts(FOOTER)
+            puts(SEPARATOR)
           end
 
         private
 
-          # Print mutation details
-          #
-          # @return [undefined]
           def print_details
+            visit(IsolationResult, isolation_result)
             __send__(MAP.fetch(mutation.class))
-
-            puts(FOOTER)
-            visit_isolation_result
           end
 
-          # Evil mutation details
-          #
-          # @return [String]
           def evil_details
-            diff = Diff.build(mutation.original_source, mutation.source)
+            diff = Unparser::Diff.build(mutation.original_source, mutation.source)
             diff = color? ? diff.colorized_diff : diff.diff
             if diff
               output.write(diff)
@@ -82,9 +75,6 @@ module Mutant
             end
           end
 
-          # Print no diff message
-          #
-          # @return [undefined]
           def print_no_diff_message
             info(
               NO_DIFF_MESSAGE,
@@ -95,30 +85,14 @@ module Mutant
             )
           end
 
-          # Noop details
-          #
-          # @return [String]
           def noop_details
             info(NOOP_MESSAGE)
           end
 
-          # Neutral details
-          #
-          # @return [String]
           def neutral_details
             info(NEUTRAL_MESSAGE, original_node.inspect, mutation.source)
           end
 
-          # Visit failed test results
-          #
-          # @return [undefined]
-          def visit_isolation_result
-            visit(IsolationResult, isolation_result)
-          end
-
-          # Original node
-          #
-          # @return [Parser::AST::Node]
           def original_node
             mutation.subject.node
           end

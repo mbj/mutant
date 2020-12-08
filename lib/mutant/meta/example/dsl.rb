@@ -9,12 +9,12 @@ module Mutant
 
         # Run DSL on block
         #
-        # @param [Pathname] file
+        # @param [Thread::Backtrace::Location] location
         # @param [Set<Symbol>] types
         #
         # @return [Example]
-        def self.call(file, types, block)
-          instance = new(file, types)
+        def self.call(location, types, block)
+          instance = new(location, types)
           instance.instance_eval(&block)
           instance.example
         end
@@ -24,11 +24,12 @@ module Mutant
         # Initialize object
         #
         # @return [undefined]
-        def initialize(file, types)
-          @file     = file
-          @types    = types
-          @node     = nil
-          @expected = []
+        def initialize(location, types)
+          @expected    = []
+          @location    = location
+          @lvars       = []
+          @source      = nil
+          @types       = types
         end
 
         # Example captured by DSL
@@ -38,67 +39,63 @@ module Mutant
         # @raise [RuntimeError]
         #   in case example cannot be build
         def example
-          fail 'source not defined' unless @node
+          fail 'source not defined' unless @source
+
           Example.new(
-            file:     @file,
-            node:     @node,
-            types:    @types,
-            expected: @expected
+            expected:        @expected,
+            location:        @location,
+            lvars:           @lvars,
+            node:            @node,
+            original_source: @source,
+            types:           @types
           )
+        end
+
+        # Declare a local variable
+        #
+        # @param [Symbol]
+        def declare_lvar(name)
+          @lvars << name
         end
 
       private
 
-        # Set original source
-        #
-        # @param [String,Parser::AST::Node] input
-        #
-        # @return [undefined]
         def source(input)
-          fail 'source already defined' if @node
-          @node = node(input)
+          fail 'source already defined' if @source
+
+          @source = input
+          @node   = node(input)
         end
 
-        # Add expected mutation
-        #
-        # @param [String,Parser::AST::Node] input
-        #
-        # @return [undefined]
         def mutation(input)
-          node = node(input)
-          if @expected.include?(node)
+          expected = Expected.new(original_source: input, node: node(input))
+
+          if @expected.include?(expected)
             fail "Mutation for input: #{input.inspect} is already expected"
           end
-          @expected << node
+
+          @expected << expected
         end
 
-        # Add singleton mutations
-        #
-        # @return [undefined]
         def singleton_mutations
           mutation('nil')
           mutation('self')
         end
 
-        # Helper method to coerce input to node
-        #
-        # @param [String,Parser::AST::Node] input
-        #
-        # @return [Parser::AST::Node]
-        #
-        # @raise [RuntimeError]
-        #   in case input cannot be coerced
         def node(input)
           case input
           when String
-            Unparser::Preprocessor.run(Unparser.parse(input))
-          when ::Parser::AST::Node
-            input
+            parser.parse(Unparser.buffer(input))
           else
-            fail "Cannot coerce to node: #{input.inspect}"
+            fail "Unsupported input: #{input.inspect}"
           end
         end
 
+        def parser
+          Unparser.parser.tap do |parser|
+            @lvars.each(&parser.static_env.public_method(:declare))
+          end
+        end
       end # DSL
     end # Example
   end # Meta

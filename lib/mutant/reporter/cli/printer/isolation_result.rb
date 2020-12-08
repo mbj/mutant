@@ -6,7 +6,7 @@ module Mutant
       class Printer
         # Reporter for mutation results
         class IsolationResult < self
-          CHILD_ERROR_MESSAGE = <<~'MESSAGE'
+          PROCESS_ERROR_MESSAGE = <<~'MESSAGE'
             Killfork exited nonzero. Its result (if any) was ignored.
             Process status:
             %s
@@ -28,7 +28,7 @@ module Mutant
             * Bug in your test suite
             * Bug in your test suite under concurrency
 
-            The following exception was raised:
+            The following exception was raised while reading the killfork result:
 
             ```
             %s
@@ -36,23 +36,9 @@ module Mutant
             ```
           MESSAGE
 
-          FORK_ERROR_MESSAGE = <<~'MESSAGE'
-            Forking the child process to isolate the mutation in failed.
-            This meant that either the RubyVM or your OS was under too much
-            pressure to add another child process.
-
-            Possible solutions are:
-            * Reduce concurrency
-            * Reduce locks
+          TIMEOUT_ERROR_MESSAGE =<<~'MESSAGE'
+            Mutation analysis ran into the configured timeout of %0.9<timeout>g seconds.
           MESSAGE
-
-          MAP = {
-            Isolation::Fork::ChildError   => :visit_child_error,
-            Isolation::Fork::ForkError    => :visit_fork_error,
-            Isolation::Result::ErrorChain => :visit_chain,
-            Isolation::Result::Exception  => :visit_exception,
-            Isolation::Result::Success    => :visit_success
-          }.freeze
 
           private_constant(*constants(false))
 
@@ -60,47 +46,43 @@ module Mutant
           #
           # @return [undefined]
           def run
-            __send__(MAP.fetch(object.class))
+            print_timeout
+            print_process_status
             print_log_messages
+            print_exception
           end
 
         private
 
-          # Visit successful isolation result
-          #
-          # @return [undefined]
-          def visit_success
-            visit(TestResult, object.value)
-          end
-
-          # Print log messages
-          #
-          # @return [undefined]
           def print_log_messages
             log = object.log
 
-            puts(LOG_MESSAGES % log) unless log.empty?
+            return if log.empty?
+
+            puts('Log messages (combined stderr and stdout):')
+
+            log.each_line do |line|
+              puts('[killfork] %<line>s' % { line: line })
+            end
           end
 
-          # Visit child error isolation result
-          #
-          # @return [undefined]
-          def visit_child_error
-            puts(CHILD_ERROR_MESSAGE % object.value.inspect)
+          def print_process_status
+            process_status = object.process_status or return
+
+            if process_status.success?
+              puts("Killfork: #{process_status.inspect}")
+            else
+              puts(PROCESS_ERROR_MESSAGE % process_status.inspect)
+            end
           end
 
-          # Visit fork error isolation result
-          #
-          # @return [undefined]
-          def visit_fork_error
-            puts(FORK_ERROR_MESSAGE)
+          def print_timeout
+            timeout = object.timeout or return
+            puts(TIMEOUT_ERROR_MESSAGE % { timeout: timeout })
           end
 
-          # Visit exception isolation result
-          #
-          # @return [undefined]
-          def visit_exception
-            exception = object.value
+          def print_exception
+            exception = object.exception or return
 
             puts(
               EXCEPTION_ERROR_MESSAGE % [
@@ -108,16 +90,6 @@ module Mutant
                 exception.backtrace.join("\n")
               ]
             )
-          end
-
-          # Visit chain
-          #
-          # @return [undefined]
-          def visit_chain
-            printer = self.class
-
-            visit(printer, object.value)
-            visit(printer, object.next)
           end
         end # IsolationResult
       end # Printer

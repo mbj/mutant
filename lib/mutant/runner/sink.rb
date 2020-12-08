@@ -10,7 +10,7 @@ module Mutant
       # @return [undefined]
       def initialize(*)
         super
-        @start           = Timer.now
+        @start           = env.world.timer.now
         @subject_results = {}
       end
 
@@ -20,7 +20,7 @@ module Mutant
       def status
         Result::Env.new(
           env:             env,
-          runtime:         Timer.now - @start,
+          runtime:         env.world.timer.now - @start,
           subject_results: @subject_results.values
         )
       end
@@ -42,7 +42,7 @@ module Mutant
 
         @subject_results[subject] = Result::Subject.new(
           subject:          subject,
-          mutation_results: previous_mutation_results(subject) + [mutation_result],
+          coverage_results: previous_coverage_results(subject).dup << coverage_result(mutation_result),
           tests:            env.selections.fetch(subject)
         )
 
@@ -51,14 +51,16 @@ module Mutant
 
     private
 
-      # Return previous results
-      #
-      # @param [Subject]
-      #
-      # @return [Array<Result::Mutation>]
-      def previous_mutation_results(subject)
+      def coverage_result(mutation_result)
+        Result::Coverage.new(
+          mutation_result: mutation_result,
+          criteria_result: mutation_result.criteria_result(env.config.coverage_criteria)
+        )
+      end
+
+      def previous_coverage_results(subject)
         subject_result = @subject_results.fetch(subject) { return EMPTY_ARRAY }
-        subject_result.mutation_results
+        subject_result.coverage_results
       end
 
     end # Sink

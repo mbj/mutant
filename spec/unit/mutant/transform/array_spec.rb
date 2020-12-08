@@ -5,9 +5,9 @@ RSpec.describe Mutant::Transform::Array do
 
   let(:transform) { Mutant::Transform::Boolean.new }
 
-  describe '#apply' do
+  describe '#call' do
     def apply
-      subject.apply(input)
+      subject.call(input)
     end
 
     context 'on array input' do

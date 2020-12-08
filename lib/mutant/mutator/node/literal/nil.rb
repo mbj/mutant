@@ -11,9 +11,6 @@ module Mutant
 
         private
 
-          # Emit mutations
-          #
-          # @return [undefined]
           def dispatch; end
 
         end # Nil

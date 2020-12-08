@@ -14,26 +14,22 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
     end
 
     context 'on partial coverage' do
-      with(:mutation_a_test_result) { { passed: true } }
+      with(:mutation_a_criteria_result) { { test_result: false } }
 
       it_reports <<~'STR'
         subject-a
         - test-a
         evil:subject-a:d27d2
-        @@ -1,2 +1,2 @@
+        -----------------------
+        @@ -1 +1 @@
         -true
         +false
-        -----------------------
-        - 1 @ runtime: 1.0
-          - test-a
-        Test Output:
-        mutation a test result output
         -----------------------
       STR
     end
 
     context 'without results' do
-      with(:subject_a_result) { { mutation_results: [] } }
+      with(:subject_a_result) { { coverage_results: [] } }
 
       it_reports <<~'STR'
         subject-a
