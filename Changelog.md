@@ -1,4 +1,10 @@
-# v0.10.16 2020-12-09
+# v0.10.17 2020-12-09
+
+* Fix low frequency stuck isolation reads.
+
+  [#1147](https://github.com/mbj/mutant/pull/1147)
+
+# v0.10.16 2020-12-08
 
 * Minor performance improvements on small runs.
 
