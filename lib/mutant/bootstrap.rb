@@ -31,6 +31,9 @@ module Mutant
     #
     # rubocop:disable Metrics/MethodLength
     def self.apply(world, config)
+      # TOOD: Have this behind a conditional.
+      config = Rails.call(world, config)
+
       env = Env
         .empty(world, config)
         .tap(&method(:infect))
