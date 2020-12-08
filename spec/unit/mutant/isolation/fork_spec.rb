@@ -77,7 +77,7 @@ RSpec.describe Mutant::Isolation::Fork do
     {
       receiver:  io,
       selector:  :read_nonblock,
-      arguments: [read_bytes],
+      arguments: [read_bytes, { exception: false }],
       reaction:  { return: result }
     }
   end
@@ -195,7 +195,7 @@ RSpec.describe Mutant::Isolation::Fork do
       ]
     end
 
-    context 'happy paths without configured timeouts' do
+    context 'without configured timeouts' do
       let(:raw_expectations) do
         [
           *prefork_expectations,
@@ -208,17 +208,80 @@ RSpec.describe Mutant::Isolation::Fork do
         ]
       end
 
-      it 'returns success result' do
-        verify_events do
-          expect(apply).to eql(
-            described_class::Result.new(
-              log:            log_fragment,
-              exception:      nil,
-              process_status: child_status_success,
-              timeout:        nil,
-              value:          block_return
+      context 'read results in wait error' do
+        let(:read_fragments) do
+          [
+            select([log_reader, result_reader], [log_reader, result_reader]),
+            eof(log_reader, false),
+            read(log_reader, :wait_readable),
+            eof(result_reader, false),
+            read(result_reader, result_fragment),
+            select([log_reader, result_reader], [log_reader, result_reader]),
+            eof(log_reader, true),
+            eof(result_reader, true)
+          ]
+        end
+
+        it 'returns success result' do
+          verify_events do
+            expect(apply).to eql(
+              described_class::Result.new(
+                log:            '',
+                exception:      nil,
+                process_status: child_status_success,
+                timeout:        nil,
+                value:          block_return
+              )
             )
-          )
+          end
+        end
+      end
+
+      context 'multiple reads' do
+        let(:full_fragment) { '_' * read_bytes }
+
+        let(:read_fragments) do
+          [
+            select([log_reader, result_reader], [log_reader, result_reader]),
+            eof(log_reader, false),
+            read(log_reader, full_fragment),
+            read(log_reader, log_fragment),
+            eof(result_reader, false),
+            read(result_reader, result_fragment),
+            select([log_reader, result_reader], [log_reader, result_reader]),
+            eof(log_reader, true),
+            eof(result_reader, true)
+          ]
+        end
+
+        it 'returns success result' do
+          verify_events do
+            expect(apply).to eql(
+              described_class::Result.new(
+                log:            full_fragment + log_fragment,
+                exception:      nil,
+                process_status: child_status_success,
+                timeout:        nil,
+                value:          block_return
+              )
+            )
+          end
+        end
+      end
+
+      context 'happy path' do
+        it 'returns success result' do
+          verify_events do
+            expect(apply).to eql(
+              described_class::Result.new(
+                log:            log_fragment,
+                exception:      nil,
+                process_status: child_status_success,
+                timeout:        nil,
+                value:          block_return
+              )
+            )
+          end
         end
       end
     end

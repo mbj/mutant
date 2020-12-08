@@ -64,6 +64,7 @@ module Mutant
         end
       end # Pipe
 
+      # rubocop:disable Metrics/ClassLength
       class Parent
         include(
           Anima.new(*ATTRIBUTES),
@@ -149,16 +150,25 @@ module Mutant
 
             break unless ready
 
-            ready.each do |fd|
-              if fd.eof?
-                targets.delete(fd)
+            ready.each do |target|
+              if target.eof?
+                targets.delete(target)
               else
-                targets.fetch(fd) << fd.read_nonblock(READ_SIZE)
+                read_fragment(target, targets.fetch(target))
               end
             end
           end
         end
         # rubocop:enable Metrics/MethodLength
+
+        def read_fragment(target, fragments)
+          loop do
+            result = target.read_nonblock(READ_SIZE, exception: false)
+            break unless result.instance_of?(String)
+            fragments << result
+            break if result.bytesize < READ_SIZE
+          end
+        end
 
         # rubocop:disable Metrics/MethodLength
         def terminate_graceful
@@ -199,6 +209,7 @@ module Mutant
           @result = defined?(@result) ? @result.add_error(result) : result
         end
       end # Parent
+      # rubocop:enable Metrics/ClassLength
 
       class Child
         include(
