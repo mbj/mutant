@@ -21,7 +21,7 @@ Mutation output is grouped by selection groups. Each group contains three sectio
 
    **Format**:
 
-   ```text
+,   ```text
    - [INTEGRATION]:0:[SPEC LOCATION]:[SPEC DESCRIPTION]
    - [INTEGRATION]:1:[SPEC LOCATION]:[SPEC DESCRIPTION]
    ```
