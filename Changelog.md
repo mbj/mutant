@@ -1,3 +1,9 @@
+# v0.10.16 2020-12-09
+
+* Minor performance improvements on small runs.
+
+  [#1145](https://github.com/mbj/mutant/pull/1145)
+
 # v0.10.15 2020-12-07
 
 * Add support for incremental mutation testing when the working directory

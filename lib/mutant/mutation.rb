@@ -9,34 +9,37 @@ module Mutant
     CODE_DELIMITER = "\0"
     CODE_RANGE     = (0..4).freeze
 
-    def initialize(subject, node)
-      super(subject, node)
-
-      @source         = Unparser.unparse(node)
-      @code           = sha1[CODE_RANGE]
-      @identification = "#{self.class::SYMBOL}:#{subject.identification}:#{code}"
-      @monkeypatch    = Unparser.unparse(subject.context.root(node))
-    end
-
     # Mutation identification code
     #
     # @return [String]
-    attr_reader :code
+    def code
+      sha1[CODE_RANGE]
+    end
+    memoize :code
 
     # Normalized mutation source
     #
     # @return [String]
-    attr_reader :source
+    def source
+      Unparser.unparse(node)
+    end
+    memoize :source
 
     # Identification string
     #
     # @return [String]
-    attr_reader :identification
+    def identification
+      "#{self.class::SYMBOL}:#{subject.identification}:#{code}"
+    end
+    memoize :identification
 
     # The monkeypatch to insert the mutation
     #
     # @return [String]
-    attr_reader :monkeypatch
+    def monkeypatch
+      Unparser.unparse(subject.context.root(node))
+    end
+    memoize :monkeypatch
 
     # Normalized original source
     #
