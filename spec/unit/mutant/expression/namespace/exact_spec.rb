@@ -7,7 +7,15 @@ RSpec.describe Mutant::Expression::Namespace::Exact do
   describe '#matcher' do
     subject { object.matcher }
 
-    it { should eql(Mutant::Matcher::Scope.new(TestApp::Literal)) }
+    context 'when constant does not exist' do
+      let(:input) { 'TestApp::DoesNotExist' }
+
+      it { should eql(Mutant::Matcher::Null.new) }
+    end
+
+    context 'when constant exists' do
+      it { should eql(Mutant::Matcher::Scope.new(TestApp::Literal)) }
+    end
   end
 
   describe '#match_length' do
