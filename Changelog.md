@@ -14,6 +14,11 @@
 
   * Fix matching non existing constants.
 
+* [#1153](https://github.com/mbj/mutant/pulls/1153)
+
+  * Improve minitest integration to also render minitest failures in reports.
+    This is useful when reacting to noop errors.
+
 # v0.10.17 2020-12-09
 
 * Fix low frequency stuck isolation reads.

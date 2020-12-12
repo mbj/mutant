@@ -95,6 +95,8 @@ module Mutant
           break unless test.call(reporter)
         end
 
+        reporter.report
+
         Result::Test.new(
           passed:  reporter.passed?,
           tests:   tests,
