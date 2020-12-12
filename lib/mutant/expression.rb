@@ -55,9 +55,14 @@ module Mutant
     #   otherwise
     def self.try_parse(input)
       match = self::REGEXP.match(input)
-      return unless match
+      from_match(match) if match
+    end
+
+    def self.from_match(match)
       names = anima.attribute_names
       new(Hash[names.zip(names.map(&match.public_method(:[])))])
     end
+    private_class_method :from_match
+
   end # Expression
 end # Mutant

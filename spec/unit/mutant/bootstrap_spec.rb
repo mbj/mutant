@@ -191,8 +191,13 @@ RSpec.describe Mutant::Bootstrap do
     end
 
     context 'when scope matches expression' do
-      let(:object_space_modules) { [TestApp::Literal, TestApp::Empty]                               }
-      let(:match_expressions)    { object_space_modules.map(&:name).map(&method(:parse_expression)) }
+      let(:object_space_modules) do
+        [TestApp::Literal, TestApp::Empty]
+      end
+
+      let(:match_expressions) do
+        object_space_modules.map(&:name).map(&method(:parse_expression))
+      end
 
       let(:env_with_scopes) do
         env_initial.with(

@@ -5,6 +5,8 @@ module Mutant
 
     # Explicit method expression
     class Method < self
+      extend AST::Sexp
+
       include Anima.new(
         :method_name,
         :scope_name,
@@ -18,10 +20,7 @@ module Mutant
         '#' => [Matcher::Methods::Instance]
       )
 
-      METHOD_NAME_PATTERN = Regexp.union(
-        /(?<method_name>[A-Za-z_][A-Za-z\d_]*[!?=]?)/,
-        *AST::Types::OPERATOR_METHODS.map(&:to_s)
-      ).freeze
+      METHOD_NAME_PATTERN = /(?<method_name>.+)/.freeze
 
       private_constant(*constants(false))
 
@@ -46,6 +45,30 @@ module Mutant
 
         Matcher::Filter.new(methods_matcher, ->(subject) { subject.expression.eql?(self) })
       end
+
+      def self.try_parse(input)
+        match = REGEXP.match(input) or return
+
+        from_match(match) if valid_method_name?(match[:method_name])
+      end
+
+      # Test if string is a valid Ruby method name
+      #
+      # Note that this crazyness is indeed the "correct" solution.
+      #
+      # See: https://github.com/whitequark/parser/issues/213
+      #
+      # @param [String]
+      #
+      # @return [Boolean]
+      def self.valid_method_name?(name)
+        buffer = ::Parser::Source::Buffer.new(nil, source: "def #{name}; end")
+
+        ::Parser::CurrentRuby
+          .new
+          .parse(buffer).eql?(s(:def, name.to_sym, s(:args), nil))
+      end
+      private_class_method :valid_method_name?
 
     private
 

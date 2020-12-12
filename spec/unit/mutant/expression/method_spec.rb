@@ -59,4 +59,38 @@ RSpec.describe Mutant::Expression::Method do
       it { should eql(singleton_method) }
     end
   end
+
+  describe '.try_parse' do
+    def apply
+      described_class.try_parse(input)
+    end
+
+    %w[λ a foo bar _bar a? ! + - <=>].each do |valid|
+      context "with method name #{valid.inspect}" do
+        let(:input) { "SomeClass##{valid}" }
+
+        it 'returns expected instance' do
+          expect(apply)
+            .to eql(
+              described_class.new(
+                method_name:  valid,
+                scope_name:   'SomeClass',
+                scope_symbol: '#'
+              )
+            )
+        end
+      end
+    end
+
+    (%w[0 1 . foo()] + ['', ' ', "\n", "\0", "foo\nbar"]).each do |invalid|
+      context "with method name #{invalid.inspect}" do
+        let(:input) { "SomeClass##{invalid}" }
+
+        it 'returns nil' do
+          expect(apply).to be(nil)
+        end
+      end
+
+    end
+  end
 end
