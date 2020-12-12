@@ -67,7 +67,13 @@ module Mutant
         #
         # @return [Matcher]
         def matcher
-          Matcher::Scope.new(Object.const_get(scope_name))
+          scope = find_scope
+
+          if scope
+            Matcher::Scope.new(scope)
+          else
+            Matcher::Null.new
+          end
         end
 
         # Syntax for expression
@@ -75,6 +81,13 @@ module Mutant
         # @return [String]
         alias_method :syntax, :scope_name
         public :syntax
+
+      private
+
+        def find_scope
+          Object.const_get(scope_name)
+        rescue NameError # rubocop:disable Lint/SuppressedException
+        end
 
       end # Exact
     end # Namespace

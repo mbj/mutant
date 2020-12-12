@@ -10,6 +10,10 @@
     before would select way more tests even if a specific test for such an operator
     was available.
 
+* [#1152](https://github.com/mbj/mutant/pulls/1152)
+
+  * Fix matching non existing constants.
+
 # v0.10.17 2020-12-09
 
 * Fix low frequency stuck isolation reads.
