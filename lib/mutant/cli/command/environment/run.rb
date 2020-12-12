@@ -26,9 +26,9 @@ module Mutant
         private
 
           def action
-            soft_fail(License.apply(world))
+            soft_fail(License.call(world))
               .bind { bootstrap }
-              .bind(&Runner.public_method(:apply))
+              .bind(&Runner.public_method(:call))
               .bind(&method(:from_result))
           end
 

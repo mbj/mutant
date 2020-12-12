@@ -10,7 +10,7 @@ module Mutant
       private
 
         def license
-          License.apply(world)
+          License.call(world)
         end
 
         class Test < self

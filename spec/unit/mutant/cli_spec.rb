@@ -55,12 +55,12 @@ RSpec.describe Mutant::CLI do
 
     shared_context 'license validation' do
       let(:license_validation_event) do
-        [:license, :apply, world]
+        [:license, :call, world]
       end
 
       before do
-        allow(Mutant::License).to receive(:apply) do |world|
-          events << [:license, :apply, world]
+        allow(Mutant::License).to receive(:call) do |world|
+          events << [:license, :call, world]
           license_result
         end
       end
@@ -316,7 +316,7 @@ RSpec.describe Mutant::CLI do
       let(:arguments) { %w[subscription test] }
 
       let(:expected_events) do
-        [ [:license, :apply, world ] ]
+        [ [:license, :call, world ] ]
       end
 
       include_context 'license validation'
@@ -392,12 +392,12 @@ RSpec.describe Mutant::CLI do
           file_config_result
         end
 
-        allow(Mutant::Bootstrap).to receive(:apply) do |world, config|
+        allow(Mutant::Bootstrap).to receive(:call) do |world, config|
           events << [:bootstrap, world, config.inspect]
           bootstrap_result
         end
 
-        allow(Mutant::Runner).to receive(:apply) do |env|
+        allow(Mutant::Runner).to receive(:call) do |env|
           events << [:runner, env.inspect]
           runner_result
         end

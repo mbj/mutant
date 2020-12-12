@@ -75,7 +75,7 @@ RSpec.describe Mutant::Runner do
     end
 
     def apply
-      described_class.apply(env)
+      described_class.call(env)
     end
 
     let(:raw_expectations) do

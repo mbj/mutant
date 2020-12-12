@@ -92,9 +92,9 @@ RSpec.describe Mutant::Bootstrap do
     end
   end
 
-  describe '.apply' do
+  describe '.call' do
     def apply
-      described_class.apply(world, config)
+      described_class.call(world, config)
     end
 
     context 'when Module#name calls result in exceptions' do

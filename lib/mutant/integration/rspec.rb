@@ -112,7 +112,7 @@ module Mutant
       end
 
       def parse_expression(input, &default)
-        expression_parser.apply(input).from_right(&default)
+        expression_parser.call(input).from_right(&default)
       end
 
       def all_examples

@@ -12,7 +12,7 @@ module Mutant
     # @return [Either<String,Subscription>]
     #
     # @api private
-    def self.apply(world)
+    def self.call(world)
       load_mutant_license(world)
         .fmap { license_path(world) }
         .bind { |path| Subscription.load(world, world.json.load(path)) }

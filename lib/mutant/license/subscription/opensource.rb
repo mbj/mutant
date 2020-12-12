@@ -50,7 +50,7 @@ module Mutant
           )
         end
 
-        def apply(world)
+        def call(world)
           world
             .capture_stdout(%w[git remote --verbose])
             .fmap(&method(:parse_remotes))

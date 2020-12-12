@@ -6,7 +6,7 @@ module Mutant
     # Run against env
     #
     # @return [Either<String, Result>]
-    def self.apply(env)
+    def self.call(env)
       reporter(env).start(env)
 
       Either::Right.new(run_mutation_analysis(env))

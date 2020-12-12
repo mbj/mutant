@@ -58,7 +58,7 @@ module Mutant
         # @return [Array<Expression>]
         def expressions(parser)
           klass.resolve_cover_expressions.map do |syntax|
-            parser.apply(syntax).from_right
+            parser.call(syntax).from_right
           end
         end
       end # TestCase
