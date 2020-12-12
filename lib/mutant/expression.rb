@@ -57,7 +57,7 @@ module Mutant
       match = self::REGEXP.match(input)
       return unless match
       names = anima.attribute_names
-      new(Hash[names.zip(names.map(&match.method(:[])))])
+      new(Hash[names.zip(names.map(&match.public_method(:[])))])
     end
   end # Expression
 end # Mutant
