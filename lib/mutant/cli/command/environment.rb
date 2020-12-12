@@ -25,7 +25,7 @@ module Mutant
         def bootstrap
           Config.load_config_file(world)
             .fmap(&method(:expand))
-            .bind { Bootstrap.apply(world, @config) }
+            .bind { Bootstrap.call(world, @config) }
         end
 
         def expand(file_config)
@@ -33,7 +33,7 @@ module Mutant
         end
 
         def parse_remaining_arguments(arguments)
-          Mutant.traverse(@config.expression_parser.public_method(:apply), arguments)
+          Mutant.traverse(@config.expression_parser, arguments)
             .fmap do |match_expressions|
               matcher(match_expressions: match_expressions)
               self
@@ -82,10 +82,10 @@ module Mutant
           parser.separator('Matcher:')
 
           parser.on('--ignore-subject EXPRESSION', 'Ignore subjects that match EXPRESSION as prefix') do |pattern|
-            add_matcher(:ignore_expressions, @config.expression_parser.apply(pattern).from_right)
+            add_matcher(:ignore_expressions, @config.expression_parser.call(pattern).from_right)
           end
           parser.on('--start-subject EXPRESSION', 'Start mutation testing at a specific subject') do |pattern|
-            add_matcher(:start_expressions, @config.expression_parser.apply(pattern).from_right)
+            add_matcher(:start_expressions, @config.expression_parser.call(pattern).from_right)
           end
           parser.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
             add_matcher(

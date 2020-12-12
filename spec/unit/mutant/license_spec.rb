@@ -2,7 +2,7 @@
 
 RSpec.describe Mutant::License do
   def apply
-    described_class.apply(world)
+    described_class.call(world)
   end
 
   let(:gem)              { class_double(Gem, loaded_specs: loaded_specs)  }

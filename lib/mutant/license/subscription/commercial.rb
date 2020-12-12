@@ -15,7 +15,7 @@ module Mutant
           new(value.fetch('authors').map(&Author.public_method(:new)).to_set)
         end
 
-        def apply(world)
+        def call(world)
           candidates = candidates(world)
 
           if (licensed & candidates).any?

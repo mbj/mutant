@@ -1,3 +1,15 @@
+# v0.10.18 2020-12-09
+
+* [#1151](https://github.com/mbj/mutant/pulls/1151)
+
+  * Add support for unicode ruby method names.
+  * Fixes long standing bug on expression parsing of method operators.
+    This means that mutant is now selecting a more narrow / correct set of
+    tests for operators.
+    As a side effect measure coverage may drop. But for a good reason as mutant
+    before would select way more tests even if a specific test for such an operator
+    was available.
+
 # v0.10.17 2020-12-09
 
 * Fix low frequency stuck isolation reads.

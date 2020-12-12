@@ -6,10 +6,10 @@ RSpec.describe Mutant::Expression::Parser do
   end
 
   def apply
-    subject.apply(input)
+    subject.call(input)
   end
 
-  describe '#apply' do
+  describe '#call' do
     context 'on a valid expression' do
       let(:input) { 'Foo' }
 

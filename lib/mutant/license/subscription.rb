@@ -30,7 +30,7 @@ module Mutant
           'oss' => Opensource
         }.fetch(value.fetch('type'))
           .from_json(value.fetch('contents'))
-          .apply(world)
+          .call(world)
       end
 
       # Subscription self description

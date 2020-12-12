@@ -30,7 +30,7 @@ module Mutant
     # @return [Either<String, Env>]
     #
     # rubocop:disable Metrics/MethodLength
-    def self.apply(world, config)
+    def self.call(world, config)
       env = Env
         .empty(world, config)
         .tap(&method(:infect))
@@ -109,7 +109,7 @@ module Mutant
         return
       end
 
-      expression_parser.apply(name).from_right {}
+      expression_parser.call(name).from_right {}
     end
     private_class_method :expression
     # rubocop:enable Metrics/MethodLength

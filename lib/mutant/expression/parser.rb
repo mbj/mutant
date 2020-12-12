@@ -5,7 +5,7 @@ module Mutant
     class Parser
       include Concord.new(:types)
 
-      # Apply expression parsing
+      # Parse expression
       #
       # @param [String] input
       #
@@ -14,7 +14,7 @@ module Mutant
       #
       # @return [nil]
       #   otherwise
-      def apply(input)
+      def call(input)
         expressions = expressions(input)
         case expressions.length
         when 0
