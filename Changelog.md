@@ -1,6 +1,6 @@
 # v0.10.18 2020-12-13
 
-* [#1151](https://github.com/mbj/mutant/pulls/1151)
+* [#1151](https://github.com/mbj/mutant/pull/1151)
 
   * Add support for unicode ruby method names.
   * Fixes long standing bug on expression parsing of method operators.
@@ -10,16 +10,16 @@
     before would select way more tests even if a specific test for such an operator
     was available. Enforcing that this specific test actually covers the subject.
 
-* [#1152](https://github.com/mbj/mutant/pulls/1152)
+* [#1152](https://github.com/mbj/mutant/pull/1152)
 
   * Fix matching non existing constants.
 
-* [#1153](https://github.com/mbj/mutant/pulls/1153)
+* [#1153](https://github.com/mbj/mutant/pull/1153)
 
   * Improve minitest integration to also render minitest failures in reports.
     This is useful when reacting to noop errors.
 
-* [#1154](https://github.com/mbj/mutant/pulls/1154)
+* [#1154](https://github.com/mbj/mutant/pull/1154)
  
   * Add subcommand `environment subject list`. It allows to list 
     all matched subjects.
