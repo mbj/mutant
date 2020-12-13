@@ -1,4 +1,4 @@
-# v0.10.18 2020-12-09
+# v0.10.18 2020-12-13
 
 * [#1151](https://github.com/mbj/mutant/pulls/1151)
 
@@ -8,7 +8,7 @@
     tests for operators.
     As a side effect measure coverage may drop. But for a good reason as mutant
     before would select way more tests even if a specific test for such an operator
-    was available.
+    was available. Enforcing that this specific test actually covers the subject.
 
 * [#1152](https://github.com/mbj/mutant/pulls/1152)
 
