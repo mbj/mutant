@@ -17,6 +17,18 @@ module Mutant
           emit(N_TRUE)
 
           emit_expression_mutations { |node| !n_self?(node) }
+          emit_instance_variable_mutation
+        end
+
+        def emit_instance_variable_mutation
+          return unless n_ivar?(expression)
+
+          instance_variable_name = Mutant::Util.one(expression.children)
+
+          emit(
+            s(:send, nil, :instance_variable_defined?,
+              s(:sym, instance_variable_name))
+          )
         end
 
       end # Defined

@@ -1,3 +1,9 @@
+# Unreleased
+
+* [#1155](https://github.com/mbj/mutant/pull/1155)
+
+  Add `defined?(@a)` -> `instance_variable_defined?(:@a)` mutation. 
+
 # v0.10.18 2020-12-13
 
 * [#1151](https://github.com/mbj/mutant/pull/1151)
