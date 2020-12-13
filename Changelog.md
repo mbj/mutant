@@ -19,6 +19,11 @@
   * Improve minitest integration to also render minitest failures in reports.
     This is useful when reacting to noop errors.
 
+* [#1154](https://github.com/mbj/mutant/pulls/1154)
+ 
+  * Add subcommand `environment subject list`. It allows to list 
+    all matched subjects.
+
 # v0.10.17 2020-12-09
 
 * Fix low frequency stuck isolation reads.

@@ -359,7 +359,26 @@ RSpec.describe Mutant::CLI do
           reporter: Mutant::Reporter::CLI.build(stdout)
         )
 
-        Mutant::Env.empty(world, config)
+        Mutant::Env.empty(world, config).with(subjects: subjects)
+      end
+
+      let(:subject_a_expression) { parse_expression('Object#send') }
+
+      let(:subject_a) do
+        Mutant::Subject::Method::Instance.new(
+          context:  Mutant::Context.new(
+            Object,
+            'subject.rb'
+          ),
+          node:     s(:def, :send, s(:args), nil),
+          warnings: []
+        )
+      end
+
+      let(:subjects) do
+        [
+          subject_a
+        ]
       end
 
       let(:file_config) do
@@ -414,6 +433,41 @@ RSpec.describe Mutant::CLI do
       end
     end
 
+    context 'environment subject list' do
+      include_context 'environment'
+
+      let(:arguments) { %w[environment subject list] }
+
+      context 'without additional arguments' do
+        let(:expected_exit) { true }
+
+        let(:expected_events) do
+          [
+            [
+              :load_config_file,
+              world
+            ],
+            [
+              :bootstrap,
+              world,
+              bootstrap_config.inspect
+            ],
+            [
+              :stdout,
+              :puts,
+              'Subjects in environment: 1'
+            ],
+            [
+              :stdout,
+              :puts,
+              'Object#send'
+            ]
+          ]
+        end
+
+        include_examples 'CLI run'
+      end
+    end
     context 'environment show' do
       include_context 'environment'
 
@@ -427,7 +481,7 @@ RSpec.describe Mutant::CLI do
            Jobs:            auto
            Includes:        []
            Requires:        []
-           Subjects:        0
+           Subjects:        1
            Total-Tests:     0
            Selected-Tests:  0
            Tests/Subject:   0.00 avg
