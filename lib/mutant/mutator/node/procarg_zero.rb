@@ -4,12 +4,6 @@ module Mutant
   class Mutator
     class Node
       class ProcargZero < self
-        MAP = {
-          ::Parser::AST::Node => :emit_argument_node_mutations,
-          Symbol              => :emit_argument_symbol_mutations
-        }.freeze
-
-        private_constant(*constants(false))
 
         handle :procarg0
 
