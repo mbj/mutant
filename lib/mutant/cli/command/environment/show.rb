@@ -12,8 +12,7 @@ module Mutant
         private
 
           def action
-            bootstrap
-              .fmap(&method(:report_env))
+            bootstrap.fmap(&method(:report_env))
           end
 
           def report_env(env)

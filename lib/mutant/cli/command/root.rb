@@ -4,7 +4,7 @@ module Mutant
   module CLI
     class Command
       class Environment < self
-        SUBCOMMANDS = [Environment::Show].freeze
+        SUBCOMMANDS = [Environment::Subject, Environment::Show].freeze
       end # Environment
 
       class Root < self
