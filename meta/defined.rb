@@ -3,7 +3,12 @@
 Mutant::Meta::Example.add :defined? do
   source 'defined?(foo)'
 
-  singleton_mutations
-  mutation 'defined?(nil)'
-  mutation 'true'
+  mutation 'nil'
+end
+
+Mutant::Meta::Example.add :defined? do
+  source 'defined?(@foo)'
+
+  mutation 'instance_variable_defined?(:@foo)'
+  mutation 'nil'
 end

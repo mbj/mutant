@@ -1,3 +1,15 @@
+# Unreleased
+
+* [#1155](https://github.com/mbj/mutant/pull/1155)
+
+  * Add `defined?(@a)` -> `instance_variable_defined?(:@a)` mutation.
+  * Remove invalid mutations from `defined?` -> `true`.
+  * Remove mutations of `defined?()` arguments, the `defined?` method
+    is not fully evaluating the argument but instead partially evaluates the
+    AST, or inspects the AST.
+    Delegating to the value semantics based "generic" mutation engine does create
+    too many hard to cover mutations.
+
 # v0.10.18 2020-12-13
 
 * [#1151](https://github.com/mbj/mutant/pull/1151)
@@ -20,8 +32,8 @@
     This is useful when reacting to noop errors.
 
 * [#1154](https://github.com/mbj/mutant/pull/1154)
- 
-  * Add subcommand `environment subject list`. It allows to list 
+
+  * Add subcommand `environment subject list`. It allows to list
     all matched subjects.
 
 # v0.10.17 2020-12-09
