@@ -48,6 +48,42 @@ When `fail_fast` is enabled, mutant will stop as soon as it encounters an alive 
 fail_fast: true
 ```
 
+#### `matcher`
+
+Allows to set subject matchers in the configration file.
+
+```yaml:
+matcher:
+  # Subject expressions to find subjects for mutation testing.
+  # Multiple entries are allowed and matches from each expression
+  # are unioned.
+  #
+  # Subject expressions can also be specified on the command line. Example:
+  # `bundle exec mutant run YourSubject`
+  #
+  # Note that expressions from the command line replace the subjects
+  # configured in the config file!
+  subjects:
+  - Your::App::Namespace # select all subjects on a specific constant
+  - Your::App::Namespace* # select all subjects on a specific constant, recursively
+  - Your::App::Namespace#some_method # select a specific instance method
+  - Your::App::Namespace.some_method # select a specific class method
+  # Expressions of subjects to ignore during mutation testing.
+  # Multiple entries are allowed and matches from each expression
+  # are unioned.
+  #
+  # Subject ignores can also be specified on the command line, via `--ignore-subject`. Example:
+  # `bundle exec mutant run --ignore-subject YourSubject#some_method`
+  #
+  # Note that subject ignores from the command line are added to the subject ignores
+  # configured on the command line!
+  ignore:
+  - Your::App::Namespace::Dirty # ignore all subjects on a specific constant
+  - Your::App::Namespace::Dirty* # ignore all subjects on a specific constant, recursively
+  - Your::App::Namespace::Dirty#some_method # ignore a specific instance method
+  - Your::App::Namespace::Dirty#some_method # ignore a specific class method
+```
+
 #### `jobs`
 
 Specify how many processes mutant uses to kill mutations. Defaults to the number of processors on your system.

@@ -6,3 +6,13 @@ requires:
 - mutant
 - mutant/integration/rspec
 - mutant/meta
+matcher:
+  subjects:
+  - Mutant*
+  ignore:
+  - Mutant::Isolation::Fork::Parent#call
+  - Mutant::Mutator::Node::Argument#skip?
+  - Mutant::Mutator::Node::Literal::Regex#body
+  - Mutant::Mutator::Node::ProcargZero#dispatch
+  - Mutant::Mutator::Node::When#mutate_conditions
+  - Mutant::Zombifier#call

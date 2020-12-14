@@ -1,5 +1,10 @@
 # Unreleased
 
+* [#1176](https://github.com/mbj/mutant/pull/1176)
+
+  Allow [subject matcher configuration](https://github.com/mbj/mutant/tree/master/docs/configuration.md#matcher)
+  in the configuration file.
+
 * Reintroduce regexp mutation support [#1166](https://github.com/mbj/mutant/pull/1166)
 
 # v0.10.23 2020-12-30

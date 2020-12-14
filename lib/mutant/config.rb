@@ -37,54 +37,6 @@ module Mutant
 
     private_constant(*constants(false))
 
-    class CoverageCriteria
-      include Anima.new(:process_abort, :test_result, :timeout)
-
-      EMPTY = new(
-        process_abort: nil,
-        test_result:   nil,
-        timeout:       nil
-      )
-
-      DEFAULT = new(
-        process_abort: false,
-        test_result:   true,
-        timeout:       false
-      )
-
-      TRANSFORM =
-        Transform::Sequence.new(
-          [
-            Transform::Hash.new(
-              optional: [
-                Transform::Hash::Key.new('process_abort', Transform::BOOLEAN),
-                Transform::Hash::Key.new('test_result',   Transform::BOOLEAN),
-                Transform::Hash::Key.new('timeout',       Transform::BOOLEAN)
-              ],
-              required: []
-            ),
-            Transform::Hash::Symbolize.new,
-            ->(value) { Either::Right.new(DEFAULT.with(**value)) }
-          ]
-        )
-
-      def merge(other)
-        self.class.new(
-          process_abort: overwrite(other, :process_abort),
-          test_result:   overwrite(other, :test_result),
-          timeout:       overwrite(other, :timeout)
-        )
-      end
-
-    private
-
-      def overwrite(other, attribute_name)
-        other_value = other.public_send(attribute_name)
-
-        other_value.nil? ? public_send(attribute_name) : other_value
-      end
-    end # CoverageCriteria
-
     # Merge with other config
     #
     # @param [Config] other
@@ -116,13 +68,14 @@ module Mutant
     #
     # @return [Either<String,Config>]
     def self.load_config_file(world)
-      config = DEFAULT
-      files = CANDIDATES.map(&world.pathname.public_method(:new)).select(&:readable?)
+      files = CANDIDATES
+        .map(&world.pathname.public_method(:new))
+        .select(&:readable?)
 
       if files.one?
-        load_contents(files.first).fmap(&config.public_method(:with))
+        load_contents(files.first).fmap(&DEFAULT.public_method(:with))
       elsif files.empty?
-        Either::Right.new(config)
+        Either::Right.new(DEFAULT)
       else
         Either::Left.new(MORE_THAN_ONE_CONFIG_FILE % files.join(', '))
       end
@@ -159,13 +112,14 @@ module Mutant
         Transform::Exception.new(YAML::SyntaxError, YAML.method(:safe_load)),
         Transform::Hash.new(
           optional: [
-            Transform::Hash::Key.new('coverage_criteria', CoverageCriteria::TRANSFORM),
+            Transform::Hash::Key.new('coverage_criteria', ->(value) { CoverageCriteria::TRANSFORM.call(value) }),
             Transform::Hash::Key.new('fail_fast',         Transform::BOOLEAN),
             Transform::Hash::Key.new('includes',          Transform::STRING_ARRAY),
             Transform::Hash::Key.new('integration',       Transform::STRING),
             Transform::Hash::Key.new('jobs',              Transform::INTEGER),
             Transform::Hash::Key.new('mutation_timeout',  Transform::FLOAT),
-            Transform::Hash::Key.new('requires',          Transform::STRING_ARRAY)
+            Transform::Hash::Key.new('requires',          Transform::STRING_ARRAY),
+            Transform::Hash::Key.new('matcher',           Matcher::Config::LOADER)
           ],
           required: []
         ),

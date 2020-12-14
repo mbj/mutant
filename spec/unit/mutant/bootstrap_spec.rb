@@ -6,10 +6,10 @@ RSpec.describe Mutant::Bootstrap do
   let(:integration_result)   { Mutant::Either::Right.new(integration) }
   let(:kernel)               { instance_double(Object, 'kernel')      }
   let(:load_path)            { %w[original]                           }
-  let(:match_expressions)    { []                                     }
   let(:object_space)         { class_double(ObjectSpace)              }
   let(:object_space_modules) { []                                     }
   let(:start_expressions)    { []                                     }
+  let(:subject_expressions)  { []                                     }
   let(:timer)                { instance_double(Mutant::Timer)         }
   let(:warnings)             { instance_double(Mutant::Warnings)      }
 
@@ -24,7 +24,7 @@ RSpec.describe Mutant::Bootstrap do
 
   let(:matcher_config) do
     Mutant::Matcher::Config::DEFAULT.with(
-      match_expressions: match_expressions,
+      subjects:          subject_expressions,
       start_expressions: start_expressions
     )
   end
@@ -195,15 +195,15 @@ RSpec.describe Mutant::Bootstrap do
         [TestApp::Literal, TestApp::Empty]
       end
 
-      let(:match_expressions) do
+      let(:subject_expressions) do
         object_space_modules.map(&:name).map(&method(:parse_expression))
       end
 
       let(:env_with_scopes) do
         env_initial.with(
           matchable_scopes: [
-            Mutant::Scope.new(TestApp::Empty,   match_expressions.last),
-            Mutant::Scope.new(TestApp::Literal, match_expressions.first)
+            Mutant::Scope.new(TestApp::Empty,   subject_expressions.last),
+            Mutant::Scope.new(TestApp::Literal, subject_expressions.first)
           ]
         )
       end
@@ -236,7 +236,7 @@ RSpec.describe Mutant::Bootstrap do
             config = Mutant::Config::DEFAULT.with(
               integration: integration,
               jobs:        1,
-              matcher:     Mutant::Matcher::Config::DEFAULT.with(match_expressions: match_expressions),
+              matcher:     Mutant::Matcher::Config::DEFAULT.with(subjects: subject_expressions),
               reporter:    instance_double(Mutant::Reporter)
             )
 

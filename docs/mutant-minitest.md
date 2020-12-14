@@ -64,7 +64,7 @@ This prints a report like:
 
 ```sh
 Mutant environment:
-Matcher:         #<Mutant::Matcher::Config match_expressions: [AUOM*]>
+Matcher:         #<Mutant::Matcher::Config subjects: [AUOM*]>
 Integration:     Mutant::Integration::Minitest
 Jobs:            8
 Includes:        ["lib"]
