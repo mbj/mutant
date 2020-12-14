@@ -13,10 +13,7 @@ module Mutant
       private
 
         def dispatch
-          emit_singletons
-          emit(N_TRUE)
-
-          emit_expression_mutations { |node| !n_self?(node) }
+          emit(N_NIL)
           emit_instance_variable_mutation
         end
 

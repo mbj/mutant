@@ -2,7 +2,13 @@
 
 * [#1155](https://github.com/mbj/mutant/pull/1155)
 
-  Add `defined?(@a)` -> `instance_variable_defined?(:@a)` mutation. 
+  * Add `defined?(@a)` -> `instance_variable_defined?(:@a)` mutation.
+  * Remove invalid mutations from `defined?` -> `true`.
+  * Remove mutations of `defined?()` arguments, the `defined?` method
+    is not fully evaluating the argument but instead partially evaluates the
+    AST, or inspects the AST.
+    Delegating to the value semantics based "generic" mutation engine does create
+    too many hard to cover mutations.
 
 # v0.10.18 2020-12-13
 
