@@ -1,4 +1,11 @@
-# Unreleased
+# v0.10.19 2020-12-14
+
+* [#1158](https://github.com/mbj/mutant/pull/1158)
+
+  * Change to strict integration version bounds.
+  * Mutant is evolving the integration interface, and will keep doing so.
+  * Before this change integrations would declare they can work with many
+    future mutant releases, but this is actually not the case.
 
 * [#1155](https://github.com/mbj/mutant/pull/1155)
 
