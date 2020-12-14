@@ -29,7 +29,7 @@ Mutant cannot emit mutations for some subjects.
     end
     ```
 
-* inline-style singleton methods not defined on a constant or on `self`
+* singleton methods not defined on a constant or on `self`
 
     ```ruby
     class Foo
@@ -38,15 +38,9 @@ Mutant cannot emit mutations for some subjects.
 
       myself = self
       def myself.qux; end # cannot mutate
-    end
-    ```
 
-* multiline-style singleton methods not defined on `self`
-
-    ```ruby
-    class Foo
       class << self
-        def bar; end # ok
+        def corge; end # ok
       end
     end
 

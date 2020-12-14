@@ -128,3 +128,5 @@ these example groups *must* kill the mutation.
 ```sh
 RAILS_ENV=test bundle exec mutant run -r ./config/environment --use rspec User
 ```
+
+TODO something about using `mutant_expression` metadata here.
