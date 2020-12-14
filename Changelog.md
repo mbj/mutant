@@ -32,8 +32,8 @@
     This is useful when reacting to noop errors.
 
 * [#1154](https://github.com/mbj/mutant/pull/1154)
- 
-  * Add subcommand `environment subject list`. It allows to list 
+
+  * Add subcommand `environment subject list`. It allows to list
     all matched subjects.
 
 # v0.10.17 2020-12-09
