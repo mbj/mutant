@@ -8,8 +8,6 @@ module Mutant
 
         handle(:args)
 
-        PROCARG = %i[restarg mlhs].freeze
-
       private
 
         def dispatch
