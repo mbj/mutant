@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('lib/mutant/version', __dir__)
+require_relative 'lib/mutant/version'
 
 Gem::Specification.new do |gem|
   gem.name        = 'mutant-rspec'
@@ -18,6 +18,6 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.5'
 
-  gem.add_runtime_dependency('mutant', "~> #{gem.version}")
+  gem.add_runtime_dependency('mutant', "= #{gem.version}")
   gem.add_runtime_dependency('rspec-core', '>= 3.8.0', '< 4.0.0')
 end
