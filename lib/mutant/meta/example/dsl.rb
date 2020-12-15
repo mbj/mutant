@@ -37,7 +37,7 @@ module Mutant
         # @return [Example]
         #
         # @raise [RuntimeError]
-        #   in case example cannot be build
+        #   in case the example cannot be built
         def example
           fail 'source not defined' unless @source
 
@@ -80,6 +80,11 @@ module Mutant
         def singleton_mutations
           mutation('nil')
           mutation('self')
+        end
+
+        def regexp_mutations
+          mutation('//')
+          mutation('/nomatch\A/')
         end
 
         def node(input)

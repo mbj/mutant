@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+module Mutant
+  class Mutator
+    class Node
+      module Regexp
+        # Mutator for end of line anchor `$`
+        class EndOfLineAnchor < Node
+          handle(:regexp_eol_anchor)
+
+        private
+
+          def dispatch
+            emit(s(:regexp_eos_anchor))
+          end
+        end # EndOfLineAnchor
+      end # Regexp
+    end # Node
+  end # Mutator
+end # Mutant

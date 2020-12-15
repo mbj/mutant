@@ -2,6 +2,7 @@
 
 bundle exec mutant run                                                 \
   --zombie                                                             \
+  --ignore-subject Mutant::Mutator::Node::Literal::Regex#body          \
   --ignore-subject Mutant::CLI#add_debug_options                       \
   --ignore-subject Mutant::Expression::Namespace::Recursive#initialize \
   --ignore-subject Mutant::Isolation::Fork::Parent#call                \

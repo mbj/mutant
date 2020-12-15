@@ -103,6 +103,33 @@ RSpec.describe Mutant::Meta::Example::DSL do
       end
     end
 
+    context 'using #regexp_mutations' do
+      let(:source) { '/foo/' }
+
+      let(:node) do
+        s(:regexp, s(:str, 'foo'), s(:regopt))
+      end
+
+      let(:expected) do
+        [
+          Mutant::Meta::Example::Expected.new(
+            node:            s(:regexp, s(:regopt)),
+            original_source: '//'
+          ),
+          Mutant::Meta::Example::Expected.new(
+            node:            s(:regexp, s(:str, 'nomatch\\A'), s(:regopt)),
+            original_source: '/nomatch\\A/'
+          )
+        ]
+      end
+
+      expect_example do
+        source '/foo/'
+
+        regexp_mutations
+      end
+    end
+
     context 'no definition of source' do
       expect_error('source not defined') do
       end
