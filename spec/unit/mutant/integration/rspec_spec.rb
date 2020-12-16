@@ -189,8 +189,7 @@ RSpec.describe Mutant::Integration::Rspec do
         expect(subject).to eql(
           Mutant::Result::Test.new(
             passed:  false,
-            runtime: 0.0,
-            tests:   tests
+            runtime: 0.0
           )
         )
       end
@@ -203,8 +202,7 @@ RSpec.describe Mutant::Integration::Rspec do
         expect(subject).to eql(
           Mutant::Result::Test.new(
             passed:  true,
-            runtime: 0.0,
-            tests:   tests
+            runtime: 0.0
           )
         )
       end

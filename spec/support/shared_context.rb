@@ -196,7 +196,6 @@ module SharedContext
 
     let(:mutation_a_test_result) do
       Mutant::Result::Test.new(
-        tests:   [test_a],
         passed:  false,
         runtime: 1.0
       )
@@ -204,7 +203,6 @@ module SharedContext
 
     let(:mutation_b_test_result) do
       Mutant::Result::Test.new(
-        tests:   [test_a],
         passed:  false,
         runtime: 1.0
       )
