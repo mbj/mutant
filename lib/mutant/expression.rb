@@ -4,13 +4,17 @@ module Mutant
 
   # Abstract base class for match expression
   class Expression
-    include AbstractType, Adamantium::Flat
+    include AbstractType
 
     fragment             = /[A-Za-z][A-Za-z\d_]*/.freeze
     SCOPE_NAME_PATTERN   = /(?<scope_name>#{fragment}(?:#{SCOPE_OPERATOR}#{fragment})*)/.freeze
     SCOPE_SYMBOL_PATTERN = '(?<scope_symbol>[.#])'
 
     private_constant(*constants(false))
+
+    def self.new(*)
+      super.freeze
+    end
 
     # Syntax of expression
     #

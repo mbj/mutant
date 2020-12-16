@@ -14,6 +14,8 @@ RSpec.describe Mutant::Expression::Namespace::Recursive do
     subject { object.syntax }
 
     it { should eql(input) }
+
+    its(:frozen?) { should be(true) }
   end
 
   describe '#match_length' do

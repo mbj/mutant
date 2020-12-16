@@ -1,3 +1,12 @@
+# v0.10.20 2020-12-14
+
+  [#1159](https://github.com/mbj/mutant/pull/1159)
+  [#1160](https://github.com/mbj/mutant/pull/1160)
+
+  * Substantially improve performance on coverage attempts that involve many selected tests.
+  * Reduce (but not eliminate) performance degeneration on larger subject sets.
+  * This release for many average cases should get 2x the performance.
+
 # v0.10.19 2020-12-14
 
 * [#1158](https://github.com/mbj/mutant/pull/1158)

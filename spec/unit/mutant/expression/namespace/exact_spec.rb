@@ -18,6 +18,12 @@ RSpec.describe Mutant::Expression::Namespace::Exact do
     end
   end
 
+  describe '#syntax' do
+    subject { object.syntax }
+
+    it { should eql(input) }
+  end
+
   describe '#match_length' do
     subject { object.match_length(other) }
 

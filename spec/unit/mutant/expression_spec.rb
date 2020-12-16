@@ -19,6 +19,12 @@ RSpec.describe Mutant::Expression do
     end
   end
 
+  describe '#frozen?' do
+    subject { parse_expression('Foo').frozen? }
+
+    it { should be(true) }
+  end
+
   describe '.try_parse' do
     let(:object) do
       Class.new(described_class) do

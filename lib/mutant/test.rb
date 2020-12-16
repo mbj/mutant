@@ -3,7 +3,7 @@
 module Mutant
   # Abstract base class for test that might kill a mutation
   class Test
-    include Adamantium::Flat, Anima.new(
+    include Anima.new(
       :expressions,
       :id
     )
