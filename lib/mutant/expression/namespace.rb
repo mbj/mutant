@@ -16,6 +16,9 @@ module Mutant
         # @return [undefined]
         def initialize(*)
           super
+
+          @syntax = "#{scope_name}*"
+
           @recursion_pattern = Regexp.union(
             /\A#{scope_name}\z/,
             /\A#{scope_name}::/,
@@ -26,10 +29,7 @@ module Mutant
         # Syntax for expression
         #
         # @return [String]
-        def syntax
-          "#{scope_name}*"
-        end
-        memoize :syntax
+        attr_reader :syntax
 
         # Matcher for expression
         #
@@ -52,7 +52,6 @@ module Mutant
             0
           end
         end
-
       end # Recursive
 
       # Exact namespace expression
@@ -88,7 +87,6 @@ module Mutant
           Object.const_get(scope_name)
         rescue NameError # rubocop:disable Lint/SuppressedException
         end
-
       end # Exact
     end # Namespace
   end # Expression

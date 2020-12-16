@@ -51,12 +51,16 @@ RSpec.describe Mutant::Expression::Method do
       let(:input) { instance_method }
 
       it { should eql(instance_method) }
+
+      its(:frozen?) { should be(true) }
     end
 
     context 'on singleton method' do
       let(:input) { singleton_method }
 
       it { should eql(singleton_method) }
+
+      its(:frozen?) { should be(true) }
     end
   end
 

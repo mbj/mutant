@@ -121,7 +121,7 @@ module Mutant
 
     # Test result
     class Test
-      include Result, Anima.new(:passed, :runtime)
+      include Anima.new(:passed, :runtime)
 
       class VoidValue < self
         include Singleton

@@ -34,12 +34,16 @@ RSpec.describe Mutant::Expression::Methods do
       let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '#' } }
 
       it { should eql('TestApp::Literal#') }
+
+      its(:frozen?) { should be(true) }
     end
 
     context 'with a singleton method' do
       let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '.' } }
 
       it { should eql('TestApp::Literal.') }
+
+      its(:frozen?) { should be(true) }
     end
   end
 

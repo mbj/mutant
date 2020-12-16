@@ -26,13 +26,15 @@ module Mutant
 
       REGEXP = /\A#{SCOPE_NAME_PATTERN}#{SCOPE_SYMBOL_PATTERN}#{METHOD_NAME_PATTERN}\z/.freeze
 
+      def initialize(*)
+        super
+        @syntax = [scope_name, scope_symbol, method_name].join.freeze
+      end
+
       # Syntax of expression
       #
       # @return [String]
-      def syntax
-        [scope_name, scope_symbol, method_name].join
-      end
-      memoize :syntax
+      attr_reader :syntax
 
       # Matcher for expression
       #
