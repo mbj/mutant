@@ -99,7 +99,6 @@ module Mutant
 
         Result::Test.new(
           passed:  reporter.passed?,
-          tests:   tests,
           runtime: timer.now - start
         )
       end

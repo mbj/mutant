@@ -16,11 +16,10 @@ module Mutant
       # @param [Enumerable<Mutant::Test>] tests
       #
       # @return [Result::Test]
-      def call(tests)
+      def call(_tests)
         Result::Test.new(
           passed:  true,
-          runtime: 0.0,
-          tests:   tests
+          runtime: 0.0
         )
       end
 
