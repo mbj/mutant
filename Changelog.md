@@ -1,4 +1,4 @@
-# v0.10.20 2020-12-14
+# v0.10.20 2020-12-16
 
   [#1159](https://github.com/mbj/mutant/pull/1159)
   [#1160](https://github.com/mbj/mutant/pull/1160)
