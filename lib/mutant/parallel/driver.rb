@@ -8,7 +8,10 @@ module Mutant
         :threads,
         :var_active_jobs,
         :var_final,
-        :var_sink
+        :var_running,
+        :var_sink,
+        :var_source,
+        :workers
       )
 
       private(*anima.attribute_names)
@@ -29,7 +32,10 @@ module Mutant
 
       def finalize(status)
         status.tap do
-          threads.each(&:join) if status.done?
+          if status.done?
+            workers.each(&:join)
+            threads.each(&:join)
+          end
         end
       end
 
@@ -38,7 +44,7 @@ module Mutant
           var_sink.with do |sink|
             Status.new(
               active_jobs: active_jobs.dup.freeze,
-              done:        threads.all? { |thread| !thread.alive? },
+              done:        threads.all? { |worker| !worker.alive? },
               payload:     sink.status
             )
           end

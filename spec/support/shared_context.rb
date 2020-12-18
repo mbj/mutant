@@ -146,10 +146,26 @@ module SharedContext
       )
     end
 
+    let(:mutation_a_index_result) do
+      Mutant::Result::MutationIndex.new(
+        isolation_result: mutation_a_isolation_result,
+        mutation_index:   0,
+        runtime:          1.0
+      )
+    end
+
     let(:mutation_b_result) do
       Mutant::Result::Mutation.new(
         isolation_result: mutation_b_isolation_result,
         mutation:         mutation_b,
+        runtime:          1.0
+      )
+    end
+
+    let(:mutation_b_index_result) do
+      Mutant::Result::MutationIndex.new(
+        isolation_result: mutation_b_isolation_result,
+        mutation_index:   1,
         runtime:          1.0
       )
     end

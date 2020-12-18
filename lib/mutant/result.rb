@@ -232,6 +232,14 @@ module Mutant
       end
     end
 
+    class MutationIndex
+      include Anima.new(
+        :isolation_result,
+        :mutation_index,
+        :runtime
+      )
+    end # MutationIndex
+
     # Mutation result
     class Mutation
       include Result, Anima.new(

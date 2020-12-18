@@ -5,25 +5,25 @@ describe Mutant::Runner::Sink do
 
   shared_context 'one result' do
     before do
-      object.result(mutation_a_result)
+      object.result(mutation_a_index_result)
     end
   end
 
   shared_context 'two results' do
     before do
-      object.result(mutation_a_result)
-      object.result(mutation_b_result)
+      object.result(mutation_a_index_result)
+      object.result(mutation_b_index_result)
     end
   end
 
   let(:object) { described_class.new(env) }
 
   describe '#result' do
-    subject { object.result(mutation_a_result) }
+    subject { object.result(mutation_a_index_result) }
 
     it 'aggregates results in #status' do
       subject
-      object.result(mutation_b_result)
+      object.result(mutation_b_index_result)
       expect(object.status).to eql(
         Mutant::Result::Env.new(
           env:             env,

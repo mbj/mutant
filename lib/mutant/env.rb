@@ -43,19 +43,21 @@ module Mutant
     end
     # rubocop:enable Metrics/MethodLength
 
-    # Kill mutation
+    # Cover mutation with specific index
     #
-    # @param [Mutation] mutation
+    # @param [Integer] mutation_index
     #
-    # @return [Result::Mutation]
-    def kill(mutation)
+    # @return [Result::MutationIndex]
+    def cover_index(mutation_index)
+      mutation = mutations.fetch(mutation_index)
+
       start = timer.now
 
       tests = selections.fetch(mutation.subject)
 
-      Result::Mutation.new(
+      Result::MutationIndex.new(
         isolation_result: run_mutation_tests(mutation, tests),
-        mutation:         mutation,
+        mutation_index:   mutation_index,
         runtime:          timer.now - start
       )
     end
