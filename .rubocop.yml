@@ -102,15 +102,6 @@ Metrics/BlockLength:
 Lint/NonLocalExitFromIterator:
   Enabled: false
 
-# To allow alignment of similar expressions we want to allow more than one
-# space around operators:
-#
-# let(:a) { bar    + something }
-# let(:b) { foobar + something }
-#
-Layout/SpaceAroundOperators:
-  Enabled: false
-
 # We use parallel assignments with great success
 Style/ParallelAssignment:
   Enabled: false
