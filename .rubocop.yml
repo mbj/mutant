@@ -6,6 +6,8 @@ AllCops:
     - 'vendor/**/*'
   NewCops: enable
   TargetRubyVersion: 2.5
+  # This is output on every run of `rubocop` and feels fairly noisy.
+  SuggestExtensions: false
 
 # Avoid parameter lists longer than three parameters.
 Metrics/ParameterLists:
