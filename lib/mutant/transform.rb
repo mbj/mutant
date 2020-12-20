@@ -383,8 +383,6 @@ module Mutant
       #
       # @param [Object]
       #
-      # ignore :reek:NestedIterators
-      #
       # @return [Either<Error, Object>]
       def call(input)
         current = input
