@@ -14,6 +14,7 @@ module Mutant
         children :receiver, :selector
 
         SELECTOR_REPLACEMENTS = IceNine.deep_freeze(
+          all?:          %i[any?],
           reverse_map:   %i[map each],
           kind_of?:      %i[instance_of?],
           is_a?:         %i[instance_of?],
