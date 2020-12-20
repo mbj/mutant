@@ -7,7 +7,7 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 2.5
 
-# Avoid parameter lists longer than five parameters.
+# Avoid parameter lists longer than three parameters.
 Metrics/ParameterLists:
   Max: 3
   CountKeywordArgs: true
@@ -20,10 +20,7 @@ Metrics/BlockNesting:
 Style/CollectionMethods:
   Enabled: true
   PreferredMethods:
-    collect:  'map'
-    inject:   'reduce'
-    find:     'detect'
-    find_all: 'select'
+    find: 'detect'
 
 Layout/AccessModifierIndentation:
   Enabled: false
@@ -84,23 +81,6 @@ Layout/MultilineOperationIndentation:
 Style/FormatString:
   EnforcedStyle: percent
 
-# Use square brackets for literal Array objects
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    '%':  '{}'
-    '%i': '[]'
-    '%q': ()
-    '%Q': ()
-    '%r': '{}'
-    '%s': ()
-    '%w': '[]'
-    '%W': '[]'
-    '%x': ()
-
-# Use %i[...] for arrays of symbols
-Style/SymbolArray:
-  Enabled: true
-
 # Prefer #kind_of? over #is_a?
 Style/ClassCheck:
   EnforcedStyle: kind_of?
@@ -134,10 +114,6 @@ Layout/SpaceAroundOperators:
 # We use parallel assignments with great success
 Style/ParallelAssignment:
   Enabled: false
-
-# Allow additional specs
-Layout/ExtraSpacing:
-  AllowForAlignment: true
 
 # Buggy
 Lint/FormatParameterMismatch:
