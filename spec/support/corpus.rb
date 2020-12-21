@@ -99,7 +99,7 @@ module MutantSpec
         }
 
         total = Parallel.map(effective_ruby_paths, options, &method(:check_generation))
-          .inject(DEFAULT_MUTATION_COUNT, :+)
+          .reduce(DEFAULT_MUTATION_COUNT, :+)
 
         took = timer.now - start
         puts MUTATION_GENERATION_MESSAGE % [total, took, total / took]

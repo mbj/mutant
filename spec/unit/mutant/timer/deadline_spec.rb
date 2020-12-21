@@ -14,7 +14,7 @@ RSpec.describe Mutant::Timer::Deadline do
     now = 1.0
     allow(timer).to receive(:now) do
       current = now
-      now +=1
+      now += 1
       current
     end
   end

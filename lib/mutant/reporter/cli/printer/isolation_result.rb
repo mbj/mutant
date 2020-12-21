@@ -36,7 +36,7 @@ module Mutant
             ```
           MESSAGE
 
-          TIMEOUT_ERROR_MESSAGE =<<~'MESSAGE'
+          TIMEOUT_ERROR_MESSAGE = <<~'MESSAGE'
             Mutation analysis ran into the configured timeout of %0.9<timeout>g seconds.
           MESSAGE
 

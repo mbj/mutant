@@ -6,8 +6,10 @@ AllCops:
     - 'vendor/**/*'
   NewCops: enable
   TargetRubyVersion: 2.5
+  # This is output on every run of `rubocop` and feels fairly noisy.
+  SuggestExtensions: false
 
-# Avoid parameter lists longer than five parameters.
+# Avoid parameter lists longer than three parameters.
 Metrics/ParameterLists:
   Max: 3
   CountKeywordArgs: true
@@ -20,10 +22,7 @@ Metrics/BlockNesting:
 Style/CollectionMethods:
   Enabled: true
   PreferredMethods:
-    collect:  'map'
-    inject:   'reduce'
-    find:     'detect'
-    find_all: 'select'
+    find: 'detect'
 
 Layout/AccessModifierIndentation:
   Enabled: false
@@ -84,23 +83,6 @@ Layout/MultilineOperationIndentation:
 Style/FormatString:
   EnforcedStyle: percent
 
-# Use square brackets for literal Array objects
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    '%':  '{}'
-    '%i': '[]'
-    '%q': ()
-    '%Q': ()
-    '%r': '{}'
-    '%s': ()
-    '%w': '[]'
-    '%W': '[]'
-    '%x': ()
-
-# Use %i[...] for arrays of symbols
-Style/SymbolArray:
-  Enabled: true
-
 # Prefer #kind_of? over #is_a?
 Style/ClassCheck:
   EnforcedStyle: kind_of?
@@ -122,22 +104,9 @@ Metrics/BlockLength:
 Lint/NonLocalExitFromIterator:
   Enabled: false
 
-# To allow alignment of similar expressions we want to allow more than one
-# space around operators:
-#
-# let(:a) { bar    + something }
-# let(:b) { foobar + something }
-#
-Layout/SpaceAroundOperators:
-  Enabled: false
-
 # We use parallel assignments with great success
 Style/ParallelAssignment:
   Enabled: false
-
-# Allow additional specs
-Layout/ExtraSpacing:
-  AllowForAlignment: true
 
 # Buggy
 Lint/FormatParameterMismatch:
