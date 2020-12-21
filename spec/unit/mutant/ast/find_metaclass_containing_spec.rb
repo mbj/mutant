@@ -13,7 +13,12 @@ RSpec.describe Mutant::AST::FindMetaclassContaining do
     context 'when called without ast' do
       let(:ast) { nil }
 
-      it { expect { subject }.to raise_error }
+      it 'raises a NoMethodError' do
+        expect { subject }.to raise_error(
+          NoMethodError,
+          "undefined method `type' for nil:NilClass"
+        )
+      end
     end
 
     context 'when called without node' do
