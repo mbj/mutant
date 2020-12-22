@@ -18,7 +18,7 @@ module Mutant
 
       # Vale returned on MRI detecting void value expressions
       class VoidValue < self
-      end # voidValue
+      end # VoidValue
     end # Result
 
     # Call loader

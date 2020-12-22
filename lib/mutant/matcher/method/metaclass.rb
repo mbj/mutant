@@ -80,7 +80,7 @@ module Mutant
         end # Evaluator
 
         private_constant(*constants(false))
-      end # Singleton
+      end # Metaclass
     end # Method
   end # Matcher
 end # Mutant

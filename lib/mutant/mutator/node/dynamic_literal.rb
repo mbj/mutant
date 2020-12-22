@@ -18,7 +18,7 @@ module Mutant
           end
         end
 
-      end # Dstr
+      end # DynamicLiteral
     end # Node
   end # Mutator
 end # Mutant
