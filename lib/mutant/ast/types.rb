@@ -6,8 +6,6 @@ module Mutant
     module Types
       ASSIGNABLE_VARIABLES = Set.new(%i[ivasgn lvasgn cvasgn gvasgn]).freeze
 
-      INDEX_ASSIGN_OPERATOR = :[]=
-
       # Set of nodes that cannot be on the LHS of an assignment
       NOT_ASSIGNABLE         = Set.new(%i[int float str dstr class module self nil]).freeze
 
