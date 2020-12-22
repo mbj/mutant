@@ -1,15 +1,33 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Parallel::Worker do
-  describe '#call' do
-    let(:active_jobs)  { instance_double(Set)                      }
-    let(:payload_a)    { instance_double(Object)                   }
-    let(:processor)    { instance_double(Proc)                     }
-    let(:result_a)     { instance_double(Object)                   }
-    let(:running)      { 1                                         }
-    let(:sink)         { instance_double(Mutant::Parallel::Sink)   }
-    let(:source)       { instance_double(Mutant::Parallel::Source) }
+  let(:active_jobs)     { instance_double(Set)                          }
+  let(:connection)      { instance_double(Mutant::Pipe::Connection)     }
+  let(:index)           { 0                                             }
+  let(:payload_a)       { instance_double(Object)                       }
+  let(:pid)             { instance_double(Integer)                      }
+  let(:result_a)        { instance_double(Object)                       }
+  let(:running)         { 1                                             }
+  let(:sink)            { instance_double(Mutant::Parallel::Sink)       }
+  let(:source)          { instance_double(Mutant::Parallel::Source)     }
+  let(:var_active_jobs) { instance_double(Variable::IVar, :active_jobs) }
+  let(:var_final)       { instance_double(Variable::IVar, :final)       }
+  let(:var_running)     { instance_double(Variable::MVar, :running)     }
+  let(:var_sink)        { instance_double(Variable::IVar, :sink)        }
+  let(:var_source)      { instance_double(Variable::IVar, :source)      }
+  let(:world)           { fake_world                                    }
 
+  let(:shared) do
+    {
+      var_active_jobs: var_active_jobs,
+      var_final:       var_final,
+      var_running:     var_running,
+      var_sink:        var_sink,
+      var_source:      var_source
+    }
+  end
+
+  describe '#call' do
     let(:job_a) do
       instance_double(
         Mutant::Parallel::Source::Job,
@@ -17,34 +35,13 @@ RSpec.describe Mutant::Parallel::Worker do
       )
     end
 
-    let(:var_active_jobs) do
-      instance_double(Variable::IVar, 'active jobs')
-    end
-
-    let(:var_final) do
-      instance_double(Variable::IVar, 'final')
-    end
-
-    let(:var_running) do
-      instance_double(Variable::MVar, 'running')
-    end
-
-    let(:var_sink) do
-      instance_double(Variable::IVar, 'sink')
-    end
-
-    let(:var_source) do
-      instance_double(Variable::IVar, 'source')
-    end
-
     subject do
       described_class.new(
-        processor:       processor,
-        var_active_jobs: var_active_jobs,
-        var_final:       var_final,
-        var_running:     var_running,
-        var_sink:        var_sink,
-        var_source:      var_source
+        connection: connection,
+        index:      index,
+        pid:        pid,
+        process:    world.process,
+        **shared
       )
     end
 
@@ -94,7 +91,7 @@ RSpec.describe Mutant::Parallel::Worker do
 
     def process(payload, result)
       {
-        receiver:  processor,
+        receiver:  connection,
         selector:  :call,
         arguments: [payload],
         reaction:  { return: result }
@@ -188,6 +185,159 @@ RSpec.describe Mutant::Parallel::Worker do
       end
 
       include_examples 'worker execution'
+    end
+  end
+
+  describe '#join' do
+    let(:object) do
+      described_class.new(
+        connection: connection,
+        index:      index,
+        pid:        pid,
+        process:    world.process,
+        **shared
+      )
+    end
+
+    def apply
+      object.join
+    end
+
+    let(:raw_expectations) do
+      [
+        {
+          receiver:  world.process,
+          selector:  :kill,
+          arguments: ['TERM', pid]
+        },
+        {
+          receiver:  world.process,
+          selector:  :wait,
+          arguments: [pid]
+        }
+      ]
+    end
+
+    it 'terminates and waits for process' do
+      verify_events { expect(apply).to be(object) }
+    end
+  end
+
+  describe '.start' do
+    let(:block)              { ->(value) { value * 2 }                   }
+    let(:child_connection)   { instance_double(Mutant::Pipe::Connection) }
+    let(:parent_connection)  { instance_double(Mutant::Pipe::Connection) }
+    let(:forked_main_thread) { instance_double(Thread)                   }
+    let(:process_name)       { 'worker-process'                          }
+
+    def io(name)
+      instance_double(IO, name)
+    end
+
+    def pipe(name)
+      instance_double(
+        Mutant::Pipe,
+        name,
+        to_reader: io("#{name}_reader"),
+        to_writer: io("#{name}_writer")
+      )
+    end
+
+    let(:request_pipe)  { pipe(:request)  }
+    let(:response_pipe) { pipe(:response) }
+
+    # rubocop:disable Metrics/MethodLength
+    def apply
+      described_class.start(
+        block:           block,
+        index:           index,
+        process_name:    process_name,
+        var_active_jobs: var_active_jobs,
+        var_final:       var_final,
+        var_running:     var_running,
+        var_sink:        var_sink,
+        var_source:      var_source,
+        world:           world
+      )
+    end
+    # rubocop:enable Metrics/MethodLength
+
+    let(:raw_expectations) do
+      [
+        {
+          receiver:  Mutant::Pipe,
+          selector:  :from_io,
+          arguments: [world.io],
+          reaction:  { return: request_pipe }
+        },
+        {
+          receiver:  Mutant::Pipe,
+          selector:  :from_io,
+          arguments: [world.io],
+          reaction:  { return: response_pipe }
+        },
+        {
+          receiver: world.process,
+          selector: :fork,
+          reaction: { yields: [], return: pid }
+        },
+        {
+          receiver: world.thread,
+          selector: :current,
+          reaction: { return: forked_main_thread }
+        },
+        {
+          receiver:  forked_main_thread,
+          selector:  :name=,
+          arguments: ['worker-process']
+        },
+        {
+          receiver:  world.process,
+          selector:  :setproctitle,
+          arguments: ['worker-process']
+        },
+        {
+          receiver:  Mutant::Pipe::Connection,
+          selector:  :from_pipes,
+          arguments: [{ marshal: world.marshal, reader: request_pipe, writer: response_pipe }],
+          reaction:  { return: child_connection }
+        },
+        {
+          receiver: child_connection,
+          selector: :receive_value,
+          reaction: { return: 1 }
+        },
+        {
+          receiver:  child_connection,
+          selector:  :send_value,
+          arguments: [2]
+        },
+        {
+          receiver: child_connection,
+          selector: :receive_value,
+          reaction: { exception: StopIteration }
+        },
+        {
+          receiver:  Mutant::Pipe::Connection,
+          selector:  :from_pipes,
+          arguments: [{ marshal: world.marshal, reader: response_pipe, writer: request_pipe }],
+          reaction:  { return: parent_connection }
+        }
+      ]
+    end
+
+    let(:expected_worker) do
+      described_class.new(
+        connection: parent_connection,
+        index:      index,
+        pid:        pid,
+        process:    world.process,
+        **shared
+      )
+    end
+
+    it 'starts worker (process)' do
+      verify_events { expect(apply).to eql(expected_worker) }
     end
   end
 end

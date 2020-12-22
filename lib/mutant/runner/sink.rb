@@ -34,10 +34,12 @@ module Mutant
 
       # Handle mutation finish
       #
-      # @param [Result::Mutation] mutation_result
+      # @param [Result::MutationIndex] mutation_index_result
       #
       # @return [self]
-      def result(mutation_result)
+      def result(mutation_index_result)
+        mutation_result = mutation_result(mutation_index_result)
+
         subject = mutation_result.mutation.subject
 
         @subject_results[subject] = Result::Subject.new(
@@ -55,6 +57,14 @@ module Mutant
         Result::Coverage.new(
           mutation_result: mutation_result,
           criteria_result: mutation_result.criteria_result(env.config.coverage_criteria)
+        )
+      end
+
+      def mutation_result(mutation_index_result)
+        Result::Mutation.new(
+          isolation_result: mutation_index_result.isolation_result,
+          mutation:         env.mutations.fetch(mutation_index_result.mutation_index),
+          runtime:          mutation_index_result.runtime
         )
       end
 

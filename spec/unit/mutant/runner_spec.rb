@@ -2,21 +2,18 @@
 
 RSpec.describe Mutant::Runner do
   describe '.call' do
-    let(:condition_variable) { class_double(ConditionVariable)                 }
-    let(:delay)              { instance_double(Float)                          }
-    let(:driver)             { instance_double(Mutant::Parallel::Driver)       }
-    let(:env_result)         { instance_double(Mutant::Result::Env)            }
-    let(:kernel)             { class_double(Kernel)                            }
-    let(:mutex)              { class_double(Mutex)                             }
-    let(:processor)          { instance_double(Method)                         }
-    let(:reporter)           { instance_double(Mutant::Reporter, delay: delay) }
-    let(:thread)             { class_double(Thread)                            }
+    let(:block)      { instance_double(Proc)                           }
+    let(:delay)      { instance_double(Float)                          }
+    let(:driver)     { instance_double(Mutant::Parallel::Driver)       }
+    let(:env_result) { instance_double(Mutant::Result::Env)            }
+    let(:reporter)   { instance_double(Mutant::Reporter, delay: delay) }
+    let(:world)      { fake_world                                      }
 
     let(:env) do
       instance_double(
         Mutant::Env,
         config:    config,
-        mutations: [],
+        mutations: [instance_double(Mutant::Mutation)],
         world:     world
       )
     end
@@ -26,24 +23,6 @@ RSpec.describe Mutant::Runner do
         Mutant::Config,
         jobs:     1,
         reporter: reporter
-      )
-    end
-
-    let(:world) do
-      instance_double(
-        Mutant::World,
-        condition_variable: condition_variable,
-        kernel:             kernel,
-        mutex:              mutex,
-        thread:             thread,
-        timer:              timer
-      )
-    end
-
-    let(:timer) do
-      instance_double(
-        Mutant::Timer,
-        now: 1.0
       )
     end
 
@@ -64,14 +43,17 @@ RSpec.describe Mutant::Runner do
 
     let(:parallel_config) do
       Mutant::Parallel::Config.new(
-        condition_variable: condition_variable,
-        jobs:               1,
-        mutex:              mutex,
-        processor:          processor,
-        sink:               Mutant::Runner::Sink.new(env),
-        source:             Mutant::Parallel::Source::Array.new(env.mutations),
-        thread:             thread
+        block:        block,
+        jobs:         1,
+        process_name: 'mutant-worker-process',
+        sink:         Mutant::Runner::Sink.new(env),
+        source:       Mutant::Parallel::Source::Array.new(env.mutations.each_index.to_a),
+        thread_name:  'mutant-worker-thread'
       )
+    end
+
+    before do
+      allow(world.timer).to receive_messages(now: 1.0)
     end
 
     def apply
@@ -88,13 +70,13 @@ RSpec.describe Mutant::Runner do
         {
           receiver:  env,
           selector:  :method,
-          arguments: [:kill],
-          reaction:  { return: processor }
+          arguments: [:cover_index],
+          reaction:  { return: block }
         },
         {
           receiver:  Mutant::Parallel,
           selector:  :async,
-          arguments: [parallel_config],
+          arguments: [world, parallel_config],
           reaction:  { return: driver }
         },
         {

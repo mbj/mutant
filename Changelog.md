@@ -1,3 +1,15 @@
+# Unreleased
+
+* [#1069](https://github.com/mbj/mutant/pull/1096)
+
+  * Add GIL scaling and memory optimization via intermediary sub-processes.
+    This architecture improves mutant performance slightly on the average (incremental)
+    case but has a significant increase for longer coverage runs.
+    Mostly this process model reduces the friction from forking from an ever
+    growing main process.
+    Also it reduces the chance of GC amplification, while enabling future
+    optimizations in the area.
+
 # v0.10.20 2020-12-16
 
   [#1159](https://github.com/mbj/mutant/pull/1159)

@@ -4,7 +4,10 @@ module Mutant
   module Parallel
     class Worker
       include Adamantium::Flat, Anima.new(
-        :processor,
+        :connection,
+        :index,
+        :pid,
+        :process,
         :var_active_jobs,
         :var_final,
         :var_running,
@@ -13,6 +16,45 @@ module Mutant
       )
 
       private(*anima.attribute_names)
+
+      public :index
+
+      # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/ParameterLists
+      def self.start(world:, block:, process_name:, **attributes)
+        io      = world.io
+        process = world.process
+
+        request  = Pipe.from_io(io)
+        response = Pipe.from_io(io)
+
+        pid = process.fork do
+          world.thread.current.name = process_name
+          world.process.setproctitle(process_name)
+
+          Child.new(
+            block:      block,
+            connection: Pipe::Connection.from_pipes(
+              marshal: world.marshal,
+              reader:  request,
+              writer:  response
+            )
+          ).call
+        end
+
+        new(
+          pid:        pid,
+          process:    process,
+          connection: Pipe::Connection.from_pipes(
+            marshal: world.marshal,
+            reader:  response,
+            writer:  request
+          ),
+          **attributes
+        )
+      end
+      # rubocop:enable Metrics/MethodLength
+      # rubocop:enable Metrics/ParameterLists
 
       # Run worker payload
       #
@@ -23,7 +65,7 @@ module Mutant
 
           job_start(job)
 
-          result = processor.call(job.payload)
+          result = connection.call(job.payload)
 
           job_done(job)
 
@@ -32,6 +74,12 @@ module Mutant
 
         finalize
 
+        self
+      end
+
+      def join
+        process.kill('TERM', pid)
+        process.wait(pid)
         self
       end
 
@@ -66,6 +114,16 @@ module Mutant
         var_final.put(nil) if var_running.modify(&:pred).zero?
       end
 
+      class Child
+        include Anima.new(:block, :connection)
+
+        def call
+          loop do
+            connection.send_value(block.call(connection.receive_value))
+          end
+        end
+      end
+      private_constant :Child
     end # Worker
   end # Parallel
 end # Mutant

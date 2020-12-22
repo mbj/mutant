@@ -6,45 +6,61 @@ module Mutant
 
     # Run async computation returning driver
     #
+    # @param [World] world
     # @param [Config] config
     #
     # @return [Driver]
-    def self.async(config)
-      shared = {
-        var_active_jobs: shared(Variable::IVar, config, value: Set.new),
-        var_final:       shared(Variable::IVar, config),
-        var_sink:        shared(Variable::IVar, config, value: config.sink)
-      }
+    def self.async(world, config)
+      shared  = shared_state(world, config)
+      workers = workers(world, config, shared)
 
       Driver.new(
-        threads: threads(config, worker(config, **shared)),
+        workers: workers,
+        threads: threads(world, config, workers),
         **shared
       )
     end
 
-    # The worker
-    #
-    # @param [Config] config
-    #
-    # @return [Worker]
-    def self.worker(config, **shared)
-      Worker.new(
-        processor:   config.processor,
-        var_running: shared(Variable::MVar, config, value: config.jobs),
-        var_source:  shared(Variable::IVar, config, value: config.source),
-        **shared
-      )
+    def self.workers(world, config, shared)
+      Array.new(config.jobs) do |index|
+        Worker.start(
+          block:        config.block,
+          index:        index,
+          process_name: "#{config.process_name}-#{index}",
+          world:        world,
+          **shared
+        )
+      end
     end
+    private_class_method :workers
 
-    def self.threads(config, worker)
-      Array.new(config.jobs) { config.thread.new(&worker.method(:call)) }
+    def self.shared_state(world, config)
+      {
+        var_active_jobs: shared(Variable::IVar, world, value: Set.new),
+        var_final:       shared(Variable::IVar, world),
+        var_running:     shared(Variable::MVar, world, value: config.jobs),
+        var_sink:        shared(Variable::IVar, world, value: config.sink),
+        var_source:      shared(Variable::IVar, world, value: config.source)
+      }
+    end
+    private_class_method :shared_state
+
+    def self.threads(world, config, workers)
+      thread = world.thread
+
+      workers.map do |worker|
+        thread.new do
+          thread.current.name = "#{config.thread_name}-#{worker.index}"
+          worker.call
+        end
+      end
     end
     private_class_method :threads
 
-    def self.shared(klass, config, **attributes)
+    def self.shared(klass, world, **attributes)
       klass.new(
-        condition_variable: config.condition_variable,
-        mutex:              config.mutex,
+        condition_variable: world.condition_variable,
+        mutex:              world.mutex,
         **attributes
       )
     end
@@ -75,13 +91,12 @@ module Mutant
     # Parallel run configuration
     class Config
       include Adamantium::Flat, Anima.new(
-        :condition_variable,
+        :block,
         :jobs,
-        :mutex,
-        :processor,
+        :process_name,
         :sink,
         :source,
-        :thread
+        :thread_name
       )
     end # Config
 

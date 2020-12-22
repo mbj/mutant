@@ -6,7 +6,7 @@ RSpec.describe Mutant::Env do
       config:           config,
       integration:      integration,
       matchable_scopes: [],
-      mutations:        [],
+      mutations:        [mutation],
       selector:         selector,
       subjects:         subjects,
       parser:           Mutant::Parser.new,
@@ -80,9 +80,11 @@ RSpec.describe Mutant::Env do
     )
   end
 
-  describe '#kill' do
+  describe '#cover_index' do
+    let(:mutation_index) { 0 }
+
     def apply
-      subject.kill(mutation)
+      subject.cover_index(mutation_index)
     end
 
     before do
@@ -96,9 +98,9 @@ RSpec.describe Mutant::Env do
     shared_examples 'mutation kill' do
       it 'returns expected result' do
         expect(apply).to eql(
-          Mutant::Result::Mutation.new(
+          Mutant::Result::MutationIndex.new(
             isolation_result: isolation_result,
-            mutation:         mutation,
+            mutation_index:   mutation_index,
             runtime:          1.0
           )
         )
@@ -184,7 +186,7 @@ RSpec.describe Mutant::Env do
     end
 
     it 'returns expected value' do
-      expect(apply).to be(0)
+      expect(apply).to be(1)
     end
   end
 
