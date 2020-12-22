@@ -12,8 +12,7 @@ module MutantSpec
   #
   # rubocop:disable Metrics/MethodLength
   module Corpus
-    TMP                 = ROOT.join('tmp').freeze
-    EXCLUDE_GLOB_FORMAT = '{%s}'
+    TMP = ROOT.join('tmp').freeze
 
     # Not in the docs. Number from chatting with their support.
     # 2 processors allocated per container, 4 processes works well.
