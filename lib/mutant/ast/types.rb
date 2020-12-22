@@ -48,10 +48,6 @@ module Mutant
         METHOD_OPERATORS - (INDEX_OPERATORS + UNARY_METHOD_OPERATORS)
       )
 
-      OPERATOR_METHODS = Set.new(
-        METHOD_OPERATORS + INDEX_OPERATORS + UNARY_METHOD_OPERATORS
-      ).freeze
-
       # Nodes that are NOT handled by mutant.
       #
       # not - 1.8 only, mutant does not support 1.8
