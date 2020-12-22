@@ -230,7 +230,7 @@ module Mutant
 
       end # Child
 
-      private_constant(*(constants(false) - %i[ChildError ForkError]))
+      private_constant(*constants(false))
 
       # Call block in isolation
       #
