@@ -13,7 +13,6 @@ module Mutant
 
         public :receiver, :selector
 
-        INDEX_ASSIGNMENT_SELECTOR            = :[]=
         ATTRIBUTE_ASSIGNMENT_SELECTOR_SUFFIX = '='
 
         # Arguments of mutated node

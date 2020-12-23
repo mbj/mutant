@@ -6,11 +6,6 @@ module Mutant
     module Types
       ASSIGNABLE_VARIABLES = Set.new(%i[ivasgn lvasgn cvasgn gvasgn]).freeze
 
-      INDEX_ASSIGN_OPERATOR = :[]=
-
-      # Set of nodes that cannot be on the LHS of an assignment
-      NOT_ASSIGNABLE         = Set.new(%i[int float str dstr class module self nil]).freeze
-
       # Set of op-assign types
       OP_ASSIGN              = Set.new(%i[or_asgn and_asgn op_asgn]).freeze
       # Set of node types that are not valid when emitted standalone
@@ -52,10 +47,6 @@ module Mutant
       BINARY_METHOD_OPERATORS = Set.new(
         METHOD_OPERATORS - (INDEX_OPERATORS + UNARY_METHOD_OPERATORS)
       )
-
-      OPERATOR_METHODS = Set.new(
-        METHOD_OPERATORS + INDEX_OPERATORS + UNARY_METHOD_OPERATORS
-      ).freeze
 
       # Nodes that are NOT handled by mutant.
       #

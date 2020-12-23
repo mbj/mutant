@@ -23,7 +23,6 @@ module Mutant
 
       ALL_EXPRESSION       = Expression::Namespace::Recursive.new(scope_name: nil)
       EXPRESSION_CANDIDATE = /\A([^ ]+)(?: )?/.freeze
-      LOCATION_DELIMITER   = ':'
       EXIT_SUCCESS         = 0
       CLI_OPTIONS          = IceNine.deep_freeze(%w[spec --fail-fast])
       TEST_ID_FORMAT       = 'rspec:%<index>d:%<location>s/%<description>s'

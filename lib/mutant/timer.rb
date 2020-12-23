@@ -54,8 +54,6 @@ module Mutant
       class None < self
         include Concord.new
 
-        STATUS = Status.new(nil)
-
         # The time left
         #
         # @return [Float, nil]

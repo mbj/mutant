@@ -12,11 +12,6 @@ module Mutant
             %s
           MESSAGE
 
-          LOG_MESSAGES = <<~'MESSAGE'
-            Log messages (combined stderr and stdout):
-            %s
-          MESSAGE
-
           EXCEPTION_ERROR_MESSAGE = <<~'MESSAGE'
             Killing the mutation resulted in an integration error.
             This is the case when the tests selected for the current mutation

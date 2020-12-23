@@ -25,8 +25,6 @@ module Mutant
       TEST_FILE_PATTERN     = './test/**/{test_*,*_test}.rb'
       IDENTIFICATION_FORMAT = 'minitest:%s#%s'
 
-      private_constant(*constants(false))
-
       # Compose a runnable with test method
       #
       # This looks actually like a missing object on minitest implementation.

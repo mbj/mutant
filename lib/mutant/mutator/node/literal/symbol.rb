@@ -11,8 +11,6 @@ module Mutant
 
           children :value
 
-          PREFIX = '__mutant__'
-
         private
 
           def dispatch
