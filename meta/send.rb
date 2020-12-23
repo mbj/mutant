@@ -100,6 +100,20 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
+  source 'all?'
+
+  singleton_mutations
+  mutation 'any?'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'any?'
+
+  singleton_mutations
+  mutation 'all?'
+end
+
+Mutant::Meta::Example.add :send do
   source 'reverse_each'
 
   singleton_mutations

@@ -1,5 +1,9 @@
 # Unreleased
 
+* [#1174](https://github.com/mbj/mutant/pull/1174)
+
+  * Add mutation from `#any?` to `#all?` and vice versa.
+
 * [#1069](https://github.com/mbj/mutant/pull/1096)
 
   * Add GIL scaling and memory optimization via intermediary sub-processes.
