@@ -14,7 +14,7 @@ PATH
       mprelude (~> 0.1.0)
       parser (~> 2.7.1)
       procto (~> 0.0.2)
-      unparser (~> 0.5.4)
+      unparser (~> 0.5.5)
       variable (~> 0.0.1)
 
 GEM
@@ -51,7 +51,7 @@ GEM
       ast (~> 2.4.1)
     procto (0.0.3)
     rainbow (3.0.0)
-    regexp_parser (2.0.0)
+    regexp_parser (2.0.1)
     rexml (3.2.4)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
@@ -83,7 +83,7 @@ GEM
     ruby-progressbar (1.10.1)
     thread_safe (0.3.6)
     unicode-display_width (1.7.0)
-    unparser (0.5.4)
+    unparser (0.5.5)
       abstract_type (~> 0.0.7)
       adamantium (~> 0.2.0)
       anima (~> 0.3.1)
@@ -106,7 +106,7 @@ DEPENDENCIES
   rspec (~> 3.10)
   rspec-core (~> 3.10)
   rspec-its (~> 1.3.0)
-  rubocop (~> 1.2)
+  rubocop (~> 1.6)
 
 BUNDLED WITH
    2.1.4
