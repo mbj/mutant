@@ -21,7 +21,7 @@ module Mutant
         end
 
         def mutate_body
-          emit_body(nil)
+          emit_body(nil) unless unconditional_loop?
           emit_body(N_RAISE)
 
           return unless body
@@ -29,6 +29,10 @@ module Mutant
           emit_body_mutations
 
           mutate_body_receiver
+        end
+
+        def unconditional_loop?
+          send.eql?(s(:send, nil, :loop))
         end
 
         def body_has_control?
