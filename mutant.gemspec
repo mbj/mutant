@@ -34,7 +34,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('mprelude',      '~> 0.1.0')
   gem.add_runtime_dependency('parser',        '~> 2.7.1')
   gem.add_runtime_dependency('procto',        '~> 0.0.2')
-  gem.add_runtime_dependency('unparser',      '~> 0.5.4')
+  gem.add_runtime_dependency('unparser',      '~> 0.5.5')
   gem.add_runtime_dependency('variable',      '~> 0.0.1')
 
   gem.add_development_dependency('parallel',   '~> 1.3')
