@@ -45,11 +45,11 @@ RSpec.describe Mutant::Config do
     end
 
     let(:original) do
-      Mutant::Config::DEFAULT.with(**{ key => original_value })
+      Mutant::Config::DEFAULT.with(key => original_value)
     end
 
     let(:other) do
-      Mutant::Config::DEFAULT.with(**{ key => other_value })
+      Mutant::Config::DEFAULT.with(key => other_value)
     end
 
     shared_examples 'overwrite value' do

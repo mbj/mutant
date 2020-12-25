@@ -14,8 +14,8 @@ module Mutant
     class Deadline
       include Anima.new(:timer, :allowed_time)
 
-      def initialize(**arguments)
-        super(**arguments)
+      def initialize(*arguments)
+        super(*arguments)
         @start_at = timer.now
       end
 

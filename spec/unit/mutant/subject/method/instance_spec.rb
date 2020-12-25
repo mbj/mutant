@@ -199,7 +199,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
           let(:memoize_provider) { memoize_provider }
 
           let(:options_node) do
-            [s(:hash, s(:pair, s(:sym, :freezer), s(:sym, freezer_option)))]
+            [s(:kwargs, s(:pair, s(:sym, :freezer), s(:sym, freezer_option)))]
           end
 
           context 'when no memoize options are given' do
