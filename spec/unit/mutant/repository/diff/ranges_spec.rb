@@ -13,7 +13,6 @@ describe Mutant::Repository::Diff::Ranges do
         Tempfile.open('new') do |new_file|
           new_file.write(new)
           new_file.flush
-          # rubocop:disable Lint/RedundantSplatExpansion
           stdout, status = Open3.capture2(
             *%W[
               git
@@ -25,7 +24,6 @@ describe Mutant::Repository::Diff::Ranges do
               #{new_file.path}
             ]
           )
-          # rubocop:enable Lint/RedundantSplatExpansion
 
           fail unless [0, 256].include?(status.to_i)
 
