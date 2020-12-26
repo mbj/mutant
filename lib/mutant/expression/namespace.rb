@@ -17,7 +17,7 @@ module Mutant
         def initialize(*)
           super
 
-          @syntax = "#{scope_name}*"
+          @syntax = "#{scope_name}*".freeze # rubocop:disable Style/RedundantFreeze
 
           @recursion_pattern = Regexp.union(
             /\A#{scope_name}\z/,

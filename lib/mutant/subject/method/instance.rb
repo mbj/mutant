@@ -52,7 +52,7 @@ module Mutant
             # rubocop:disable Style/GuardClause
             if FREEZER_OPTION_VALUES.key?(freezer)
               [
-                s(:hash,
+                s(:kwargs,
                   s(:pair,
                     s(:sym, :freezer),
                     s(:sym, FREEZER_OPTION_VALUES.fetch(freezer))))
