@@ -1,3 +1,11 @@
+# v0.10.23 2020-12-30
+
+* [#1179](https://github.com/mbj/mutant/pull/1181)
+
+  * Remove unuseful kwarg mutations.
+  * Remove argument promotion on kwarg mutations. These yield AST that
+    when unparsed have invalid syntax.
+
 # v0.10.22 2020-12-26
 
 * [#1178](https://github.com/mbj/mutant/pull/1178)

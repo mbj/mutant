@@ -379,8 +379,6 @@ Mutant::Meta::Example.add :send do # rubocop:disable Metrics/BlockLength
   mutation 'foo.public_send(:bar, -1, two: true, **kwargs, &block)'
   mutation 'foo.public_send(:bar, 2, two: true, **kwargs, &block)'
   mutation 'foo.public_send(:bar, two: true, **kwargs, &block)'
-  mutation 'foo.public_send(:bar, 1, nil => true, **kwargs, &block)'
-  mutation 'foo.public_send(:bar, 1, self => true, **kwargs, &block)'
   mutation 'foo.public_send(:bar, 1, two__mutant__: true, **kwargs, &block)'
   mutation 'foo.public_send(:bar, 1, two: false, **kwargs, &block)'
   mutation 'foo.public_send(:bar, 1, **kwargs, &block)'
@@ -719,4 +717,13 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.Array'
   mutation 'foo.Array(nil)'
   mutation 'foo.Array(self)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo(a: nil)'
+
+  singleton_mutations
+
+  mutation 'foo'
+  mutation 'foo(a__mutant__: nil)'
 end
