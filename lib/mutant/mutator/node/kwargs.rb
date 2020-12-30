@@ -28,7 +28,7 @@ module Mutant
         def emit_argument_mutations
           children.each_with_index do |child, index|
             Mutator.mutate(child).each do |mutant|
-              if forbid_argument?(mutant)
+              unless forbid_argument?(mutant)
                 emit_child_update(index, mutant)
               end
             end
@@ -36,7 +36,7 @@ module Mutant
         end
 
         def forbid_argument?(node)
-          !(n_pair?(node) && DISALLOW.include?(node.children.first.type))
+          n_pair?(node) && DISALLOW.include?(node.children.first.type)
         end
       end # Kwargs
     end # Node
