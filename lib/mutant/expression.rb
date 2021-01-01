@@ -4,8 +4,6 @@ module Mutant
 
   # Abstract base class for match expression
   class Expression
-    include AbstractType
-
     fragment             = /[A-Za-z][A-Za-z\d_]*/.freeze
     SCOPE_NAME_PATTERN   = /(?<scope_name>#{fragment}(?:#{SCOPE_OPERATOR}#{fragment})*)/.freeze
     SCOPE_SYMBOL_PATTERN = '(?<scope_symbol>[.#])'
@@ -15,16 +13,6 @@ module Mutant
     def self.new(*)
       super.freeze
     end
-
-    # Syntax of expression
-    #
-    # @return [Matcher]
-    abstract_method :matcher
-
-    # Syntax of expression
-    #
-    # @return [String]
-    abstract_method :syntax
 
     # Match length with other expression
     #
