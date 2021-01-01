@@ -623,18 +623,66 @@ RSpec.describe Mutant::CLI do
           include_examples 'CLI run'
         end
 
-        context 'with valid match expression' do
-          let(:arguments) { super() + ['Foo#bar'] }
+        context 'with valid subject expression' do
+          let(:arguments) { super() + ['CLISubject'] }
 
           let(:bootstrap_config) do
             super().with(
               matcher: file_config.matcher.with(
-                subjects: [parse_expression('Foo#bar')]
+                subjects: expected_bootstrap_subjects
               )
             )
           end
 
-          include_examples 'CLI run'
+          context 'when file config has subject expressions' do
+            let(:expected_bootstrap_subjects) { [parse_expression('CLISubject')] }
+
+            let(:file_config) do
+              super().with(
+                matcher: super().matcher.with(
+                  subjects: [parse_expression('FileSubject')]
+                )
+              )
+            end
+
+            include_examples 'CLI run'
+          end
+
+          context 'when file config has no subject expressions' do
+            let(:expected_bootstrap_subjects) { [parse_expression('CLISubject')] }
+
+            include_examples 'CLI run'
+          end
+        end
+
+        context 'without subject expressions' do
+          let(:bootstrap_config) do
+            super().with(
+              matcher: file_config.matcher.with(
+                subjects: expected_bootstrap_subjects
+              )
+            )
+          end
+
+          context 'when file config has subject expressions' do
+            let(:expected_bootstrap_subjects) { [parse_expression('FileSubject')] }
+
+            let(:file_config) do
+              super().with(
+                matcher: super().matcher.with(
+                  subjects: [parse_expression('FileSubject')]
+                )
+              )
+            end
+
+            include_examples 'CLI run'
+          end
+
+          context 'when file config has no subject expressions' do
+            let(:expected_bootstrap_subjects) { [] }
+
+            include_examples 'CLI run'
+          end
         end
 
         context 'with valid start-subject expression' do

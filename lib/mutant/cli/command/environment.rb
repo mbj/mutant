@@ -29,6 +29,12 @@ module Mutant
         end
 
         def expand(file_config)
+          if @config.matcher.subjects.any?
+            file_config = file_config.with(
+              matcher: file_config.matcher.with(subjects: [])
+            )
+          end
+
           @config = Config.env.merge(file_config).merge(@config).expand_defaults
         end
 
