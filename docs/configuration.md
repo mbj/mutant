@@ -52,7 +52,7 @@ fail_fast: true
 
 Allows to set subject matchers in the configration file.
 
-```yaml:
+```yml
 matcher:
   # Subject expressions to find subjects for mutation testing.
   # Multiple entries are allowed and matches from each expression

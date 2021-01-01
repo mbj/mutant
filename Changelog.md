@@ -1,8 +1,9 @@
 # v0.10.24 2021-01-01
 
 * [#1176](https://github.com/mbj/mutant/pull/1176)
+  [#1185](https://github.com/mbj/mutant/pull/1185)
 
-  Allow [subject matcher configuration](https://github.com/mbj/mutant/tree/master/docs/configuration.md#matcher)
+  Allow [subject matcher configuration](https://github.com/mbj/mutant/blob/master/docs/configuration.md#matcher)
   in the configuration file.
 
 * [#1166](https://github.com/mbj/mutant/pull/1166)
