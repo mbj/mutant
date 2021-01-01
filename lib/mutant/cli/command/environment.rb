@@ -34,8 +34,8 @@ module Mutant
 
         def parse_remaining_arguments(arguments)
           Mutant.traverse(@config.expression_parser, arguments)
-            .fmap do |match_expressions|
-              matcher(match_expressions: match_expressions)
+            .fmap do |expressions|
+              matcher(subjects: expressions)
               self
             end
         end
@@ -82,7 +82,7 @@ module Mutant
           parser.separator('Matcher:')
 
           parser.on('--ignore-subject EXPRESSION', 'Ignore subjects that match EXPRESSION as prefix') do |pattern|
-            add_matcher(:ignore_expressions, @config.expression_parser.call(pattern).from_right)
+            add_matcher(:ignore, @config.expression_parser.call(pattern).from_right)
           end
           parser.on('--start-subject EXPRESSION', 'Start mutation testing at a specific subject') do |pattern|
             add_matcher(:start_expressions, @config.expression_parser.call(pattern).from_right)

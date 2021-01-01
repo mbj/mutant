@@ -630,7 +630,7 @@ RSpec.describe Mutant::CLI do
           let(:bootstrap_config) do
             super().with(
               matcher: file_config.matcher.with(
-                match_expressions: [parse_expression('Foo#bar')]
+                subjects: [parse_expression('Foo#bar')]
               )
             )
           end
@@ -662,7 +662,7 @@ RSpec.describe Mutant::CLI do
           let(:bootstrap_config) do
             super().with(
               matcher: file_config.matcher.with(
-                ignore_expressions: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
+                ignore: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
               )
             )
           end

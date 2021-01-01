@@ -5,8 +5,8 @@ module Mutant
     # Subject matcher configuration
     class Config
       include Adamantium, Anima.new(
-        :ignore_expressions,
-        :match_expressions,
+        :ignore,
+        :subjects,
         :start_expressions,
         :subject_filters
       )
@@ -17,14 +17,33 @@ module Mutant
       ENUM_DELIMITER      = ','
       EMPTY_ATTRIBUTES    = 'empty'
       PRESENTATIONS       = IceNine.deep_freeze(
-        ignore_expressions: :syntax,
-        match_expressions:  :syntax,
-        start_expressions:  :syntax,
-        subject_filters:    :inspect
+        ignore:            :syntax,
+        start_expressions: :syntax,
+        subject_filters:   :inspect,
+        subjects:          :syntax
       )
       private_constant(*constants(false))
 
       DEFAULT = new(Hash[anima.attribute_names.map { |name| [name, []] }])
+
+      expression = ->(input) { Mutant::Config::DEFAULT.expression_parser.call(input) }
+
+      expression_array = Transform::Array.new(expression)
+
+      LOADER =
+        Transform::Sequence.new(
+          [
+            Transform::Hash.new(
+              optional: [
+                Transform::Hash::Key.new('subjects', expression_array),
+                Transform::Hash::Key.new('ignore', expression_array)
+              ],
+              required: []
+            ),
+            Transform::Hash::Symbolize.new,
+            ->(attributes) { Either::Right.new(DEFAULT.with(attributes)) }
+          ]
+        )
 
       # Inspection string
       #

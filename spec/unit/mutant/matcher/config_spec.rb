@@ -11,29 +11,29 @@ RSpec.describe Mutant::Matcher::Config do
 
     let(:original) do
       described_class.new(
-        ignore_expressions: [parse_expression('Ignore#a')],
-        match_expressions:  [parse_expression('Match#a')],
-        start_expressions:  [parse_expression('Start#a')],
-        subject_filters:    [proc_a]
+        ignore:            [parse_expression('Ignore#a')],
+        start_expressions: [parse_expression('Start#a')],
+        subject_filters:   [proc_a],
+        subjects:          [parse_expression('Match#a')]
       )
     end
 
     let(:other) do
       described_class.new(
-        ignore_expressions: [parse_expression('Ignore#b')],
-        match_expressions:  [parse_expression('Match#b')],
-        start_expressions:  [parse_expression('Start#b')],
-        subject_filters:    [proc_b]
+        ignore:            [parse_expression('Ignore#b')],
+        start_expressions: [parse_expression('Start#b')],
+        subject_filters:   [proc_b],
+        subjects:          [parse_expression('Match#b')]
       )
     end
 
     it 'merges all config keys' do
       expect(apply).to eql(
         described_class.new(
-          ignore_expressions: [parse_expression('Ignore#a'), parse_expression('Ignore#b')],
-          match_expressions:  [parse_expression('Match#a'), parse_expression('Match#b')],
-          start_expressions:  [parse_expression('Start#a'), parse_expression('Start#b')],
-          subject_filters:    [proc_a, proc_b]
+          ignore:            [parse_expression('Ignore#a'), parse_expression('Ignore#b')],
+          start_expressions: [parse_expression('Start#a'), parse_expression('Start#b')],
+          subject_filters:   [proc_a, proc_b],
+          subjects:          [parse_expression('Match#a'), parse_expression('Match#b')]
         )
       )
     end
@@ -49,28 +49,28 @@ RSpec.describe Mutant::Matcher::Config do
     end
 
     context 'with one expression' do
-      let(:object) { described_class::DEFAULT.add(:match_expressions, parse_expression('Foo')) }
-      it { should eql('#<Mutant::Matcher::Config match_expressions: [Foo]>') }
+      let(:object) { described_class::DEFAULT.add(:subjects, parse_expression('Foo')) }
+      it { should eql('#<Mutant::Matcher::Config subjects: [Foo]>') }
     end
 
     context 'with many expressions' do
       let(:object) do
         described_class::DEFAULT
-          .add(:match_expressions, parse_expression('Foo'))
-          .add(:match_expressions, parse_expression('Bar'))
+          .add(:subjects, parse_expression('Foo'))
+          .add(:subjects, parse_expression('Bar'))
       end
 
-      it { should eql('#<Mutant::Matcher::Config match_expressions: [Foo,Bar]>') }
+      it { should eql('#<Mutant::Matcher::Config subjects: [Foo,Bar]>') }
     end
 
     context 'with match and ignore expression' do
       let(:object) do
         described_class::DEFAULT
-          .add(:match_expressions,  parse_expression('Foo'))
-          .add(:ignore_expressions, parse_expression('Bar'))
+          .add(:subjects, parse_expression('Foo'))
+          .add(:ignore,   parse_expression('Bar'))
       end
 
-      it { should eql('#<Mutant::Matcher::Config ignore_expressions: [Bar] match_expressions: [Foo]>') }
+      it { should eql('#<Mutant::Matcher::Config ignore: [Bar] subjects: [Foo]>') }
     end
 
     context 'with subject filter' do

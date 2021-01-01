@@ -9,8 +9,8 @@ RSpec.describe Mutant::Matcher do
     let(:anon_matcher)       { instance_double(Mutant::Matcher)    }
     let(:env)                { instance_double(Mutant::Env)        }
     let(:ignore_expressions) { []                                  }
-    let(:match_expression_a) { expression('Foo::Bar#a', matcher_a) }
-    let(:match_expression_b) { expression('Foo::Bar#b', matcher_b) }
+    let(:expression_a)       { expression('Foo::Bar#a', matcher_a) }
+    let(:expression_b)       { expression('Foo::Bar#b', matcher_b) }
     let(:subject_filters)    { []                                  }
 
     let(:matcher_a) do
@@ -37,10 +37,10 @@ RSpec.describe Mutant::Matcher do
 
     let(:config) do
       Mutant::Matcher::Config.new(
-        ignore_expressions: ignore_expressions,
-        match_expressions:  [match_expression_a, match_expression_b],
-        start_expressions:  [],
-        subject_filters:    subject_filters
+        ignore:            ignore_expressions,
+        subjects:          [expression_a, expression_b],
+        start_expressions: [],
+        subject_filters:   subject_filters
       )
     end
 

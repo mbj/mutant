@@ -43,7 +43,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: ./mutant.sh --since HEAD~1 -- 'Mutant*'
+    - run: bundle exec mutant run --zombie --since HEAD~1
   ruby-integration-misc:
     name: Integration Misc
     runs-on: ${{ matrix.os }}

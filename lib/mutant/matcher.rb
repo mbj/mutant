@@ -20,7 +20,7 @@ module Mutant
     # @return [Matcher]
     def self.from_config(config)
       Filter.new(
-        Chain.new(config.match_expressions.map(&:matcher)),
+        Chain.new(config.subjects.map(&:matcher)),
         method(:allowed_subject?).curry.call(config)
       )
     end
@@ -42,7 +42,7 @@ module Mutant
     #
     # @return [Boolean]
     def self.ignore_subject?(config, subject)
-      config.ignore_expressions.any? do |expression|
+      config.ignore.any? do |expression|
         expression.prefix?(subject.expression)
       end
     end

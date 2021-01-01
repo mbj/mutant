@@ -38,7 +38,7 @@ This prints a report like:
 
 ```sh
 Mutant environment:
-Matcher:         #<Mutant::Matcher::Config match_expressions: [AUOM*]>
+Matcher:         #<Mutant::Matcher::Config subjects: [AUOM*]>
 Integration:     Mutant::Integration::Rspec
 Jobs:            8
 Includes:        ["lib"]
@@ -89,7 +89,7 @@ evil:AUOM::Unit.new:/home/mrh-dev/example/auom/lib/auom/unit.rb:172:45e17
  end
 -----------------------
 Mutant configuration:
-Matcher:         #<Mutant::Matcher::Config match_expressions: [AUOM*]>
+Matcher:         #<Mutant::Matcher::Config subjects: [AUOM*]>
 Integration:     Mutant::Integration::Rspec
 Jobs:            8
 Includes:        ["lib"]
