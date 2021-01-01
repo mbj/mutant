@@ -18,9 +18,8 @@ RSpec.describe Mutant::Subject do
 
   let(:object) do
     class_under_test.new(
-      context:  context,
-      node:     node,
-      warnings: warnings
+      context: context,
+      node:    node
     )
   end
 
@@ -43,8 +42,6 @@ RSpec.describe Mutant::Subject do
       s(:module, s(:const, nil, :Root), node)
     end
   end
-
-  let(:warnings) { instance_double(Mutant::Warnings) }
 
   describe '#identification' do
     subject { object.identification }

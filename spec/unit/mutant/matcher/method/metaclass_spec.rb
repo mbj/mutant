@@ -12,13 +12,11 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
   let(:method_arity) { 0                                  }
   let(:base)         { TestApp::MetaclassMethodTests      }
   let(:source_path)  { MutantSpec::ROOT.join(source_path) }
-  let(:warnings)     { instance_double(Mutant::Warnings)  }
 
   let(:world) do
     instance_double(
       Mutant::World,
-      pathname: Pathname,
-      warnings: warnings
+      pathname: Pathname
     )
   end
 

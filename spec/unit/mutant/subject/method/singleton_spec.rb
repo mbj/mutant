@@ -3,14 +3,12 @@
 RSpec.describe Mutant::Subject::Method::Singleton do
   let(:object) do
     described_class.new(
-      context:  context,
-      node:     node,
-      warnings: warnings
+      context: context,
+      node:    node
     )
   end
 
-  let(:node)     { s(:defs, s(:self), :foo, s(:args)) }
-  let(:warnings) { instance_double(Mutant::Warnings)  }
+  let(:node) { s(:defs, s(:self), :foo, s(:args)) }
 
   let(:context) do
     Mutant::Context.new(scope, instance_double(Pathname))

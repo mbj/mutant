@@ -10,13 +10,11 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   let(:object)        { described_class.new(scope, method)                }
   let(:source_path)   { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
   let(:type)          { :def                                              }
-  let(:warnings)      { instance_double(Mutant::Warnings)                 }
 
   let(:world) do
     instance_double(
       Mutant::World,
-      pathname: Pathname,
-      warnings: warnings
+      pathname: Pathname
     )
   end
 
@@ -119,9 +117,8 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
       expect(subject).to eql(
         [
           Mutant::Subject::Method::Instance.new(
-            context:  context,
-            node:     s(:def, :bar, s(:args), nil),
-            warnings: warnings
+            context: context,
+            node:    s(:def, :bar, s(:args), nil)
           )
         ]
       )

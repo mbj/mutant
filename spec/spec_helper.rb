@@ -81,8 +81,7 @@ module XSpecHelper
       stderr:             instance_double(IO),
       stdout:             instance_double(IO),
       thread:             class_double(Thread),
-      timer:              instance_double(Mutant::Timer),
-      warnings:           instance_double(Mutant::Warnings)
+      timer:              instance_double(Mutant::Timer)
     )
   end
   # rubocop:enable Metrics/MethodLength

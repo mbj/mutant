@@ -3,15 +3,13 @@
 RSpec.describe Mutant::Subject::Method::Instance do
   let(:object) do
     described_class.new(
-      context:  context,
-      node:     node,
-      warnings: warnings
+      context: context,
+      node:    node
     )
   end
 
   let(:call_block?) { true                              }
   let(:node)        { Unparser.parse('def foo; end')    }
-  let(:warnings)    { instance_double(Mutant::Warnings) }
 
   let(:context) do
     Mutant::Context.new(
@@ -33,12 +31,6 @@ RSpec.describe Mutant::Subject::Method::Instance do
       def self.name
         'Test'
       end
-    end
-  end
-
-  before do
-    allow(warnings).to receive(:call) do |&block|
-      block.call if call_block?
     end
   end
 
@@ -68,16 +60,6 @@ RSpec.describe Mutant::Subject::Method::Instance do
         .to(false)
     end
 
-    context 'within warning capture' do
-      let(:call_block?) { false }
-
-      it 'undefines method on scope' do
-        expect { subject }
-          .to_not change { scope.instance_methods.include?(:foo) }
-          .from(true)
-      end
-    end
-
     it_should_behave_like 'a command method'
   end
 
@@ -91,19 +73,15 @@ end
 RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   let(:object) do
     described_class.new(
-      context:  context,
-      node:     node,
-      warnings: warnings
+      context: context,
+      node:    node
     )
   end
 
   let(:context)  { Mutant::Context.new(scope, double('Source Path')) }
   let(:node)     { Unparser.parse('def foo; end')                    }
-  let(:warnings) { instance_double(Mutant::Warnings)                 }
 
   before do
-    allow(warnings).to receive(:call).and_yield
-
     allow(Object).to receive_messages(const_get: scope)
   end
 

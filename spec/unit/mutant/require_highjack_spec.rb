@@ -27,10 +27,6 @@ RSpec.describe Mutant::RequireHighjack do
       described_class.call(target_module, highjacked_calls.method(:<<))
     end
 
-    it 'prevents warnings' do
-      expect(Mutant::WORLD.warnings.call(&method(:apply))).to eql([])
-    end
-
     it 'returns the original implementation from singleton' do
       expect { apply.call(logical_name) }
         .to change { require_calls }

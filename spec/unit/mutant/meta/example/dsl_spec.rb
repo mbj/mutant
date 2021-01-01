@@ -24,13 +24,7 @@ RSpec.describe Mutant::Meta::Example::DSL do
     def self.expect_example(&block)
       let(:block) { block }
 
-      specify do
-        # Kill mutations to warnings
-        warnings = Mutant::WORLD.warnings.call do
-          should eql(expected_example)
-        end
-        expect(warnings).to eql([])
-      end
+      specify { should eql(expected_example) }
     end
 
     def self.expect_error(message, &block)
