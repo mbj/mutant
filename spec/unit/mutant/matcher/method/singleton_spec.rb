@@ -10,13 +10,11 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   let(:method_arity) { 0                                                 }
   let(:base)         { TestApp::SingletonMethodTests                     }
   let(:source_path)  { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
-  let(:warnings)     { instance_double(Mutant::Warnings)                 }
 
   let(:world) do
     instance_double(
       Mutant::World,
-      pathname: Pathname,
-      warnings: warnings
+      pathname: Pathname
     )
   end
 

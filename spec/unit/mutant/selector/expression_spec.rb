@@ -9,7 +9,6 @@ RSpec.describe Mutant::Selector::Expression do
     let(:test_a)   { mk_test('SubjectA')                }
     let(:test_b)   { mk_test('SubjectB')                }
     let(:test_c)   { mk_test('SubjectC')                }
-    let(:warnings) { instance_double(Mutant::Warnings)  }
 
     let(:integration) do
       instance_double(
@@ -20,9 +19,8 @@ RSpec.describe Mutant::Selector::Expression do
 
     let(:mutation_subject) do
       subject_class.new(
-        context:  context,
-        node:     node,
-        warnings: warnings
+        context: context,
+        node:    node
       )
     end
 

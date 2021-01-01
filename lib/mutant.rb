@@ -214,7 +214,6 @@ require 'mutant/reporter/cli/format'
 require 'mutant/repository'
 require 'mutant/repository/diff'
 require 'mutant/repository/diff/ranges'
-require 'mutant/warnings'
 require 'mutant/zombifier'
 require 'mutant/range'
 require 'mutant/license'
@@ -240,8 +239,7 @@ module Mutant
     stderr:             $stderr,
     stdout:             $stdout,
     thread:             Thread,
-    timer:              Timer.new(Process),
-    warnings:           Warnings.new(Warning)
+    timer:              Timer.new(Process)
   )
 
   # Reopen class to initialize constant to avoid dep circle

@@ -87,9 +87,8 @@ module Mutant
           node = matched_node_path.last || return
 
           self.class::SUBJECT_CLASS.new(
-            context:  context,
-            node:     node,
-            warnings: env.world.warnings
+            context: context,
+            node:    node
           )
         end
         memoize :subject

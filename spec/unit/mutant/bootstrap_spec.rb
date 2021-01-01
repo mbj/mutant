@@ -11,7 +11,6 @@ RSpec.describe Mutant::Bootstrap do
   let(:start_expressions)    { []                                     }
   let(:subject_expressions)  { []                                     }
   let(:timer)                { instance_double(Mutant::Timer)         }
-  let(:warnings)             { instance_double(Mutant::Warnings)      }
 
   let(:config) do
     Mutant::Config::DEFAULT.with(
@@ -47,7 +46,6 @@ RSpec.describe Mutant::Bootstrap do
       load_path:    load_path,
       object_space: object_space,
       pathname:     Pathname,
-      warnings:     warnings,
       timer:        timer
     )
   end
