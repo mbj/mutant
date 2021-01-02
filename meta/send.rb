@@ -738,3 +738,76 @@ Mutant::Meta::Example.add :send do
   mutation 'a === self'
   mutation 'a.is_a?(b)'
 end
+
+Mutant::Meta::Example.add :send do
+  source 'a.match?(/\Afoo/)'
+
+  singleton_mutations
+
+  mutation 'a'
+  mutation 'a.match?'
+  mutation '/\Afoo/'
+  mutation 'self.match?(/\Afoo/)'
+  mutation 'a.match?(//)'
+  mutation 'a.match?(/nomatch\A/)'
+  mutation "a.start_with?('foo')"
+  mutation 'false'
+  mutation 'true'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'match(/\A\d/)'
+
+  singleton_mutations
+
+  mutation 'match'
+  mutation '/\A\d/'
+  mutation 'match?(/\A\d/)'
+  mutation 'match(/\A\D/)'
+  mutation 'match(//)'
+  mutation 'match(/nomatch\A/)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'a =~ /\Afoo/'
+
+  singleton_mutations
+
+  mutation 'a'
+  mutation 'nil =~ /\Afoo/'
+  mutation 'self =~ /\Afoo/'
+  mutation '/\Afoo/'
+  mutation 'a =~ //'
+  mutation 'a =~ /nomatch\A/'
+  mutation 'a.match?(/\Afoo/)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'match?(/\Afoo/, 1)'
+
+  singleton_mutations
+
+  mutation 'match?(/\Afoo/)'
+  mutation 'match?(1)'
+  mutation 'match?(/\Afoo/, nil)'
+  mutation 'match?(/\Afoo/, self)'
+  mutation 'match?(/\Afoo/, -1)'
+  mutation 'match?(/\Afoo/, 0)'
+  mutation 'match?(/\Afoo/, 2)'
+  mutation 'match?'
+  mutation 'match?(//, 1)'
+  mutation 'match?(/nomatch\A/, 1)'
+  mutation 'false'
+  mutation 'true'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo(/\Abar/)'
+
+  singleton_mutations
+
+  mutation 'foo'
+  mutation '/\Abar/'
+  mutation 'foo(//)'
+  mutation 'foo(/nomatch\A/)'
+end

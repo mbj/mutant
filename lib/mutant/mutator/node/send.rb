@@ -32,8 +32,8 @@ module Mutant
           is_a?:         %i[instance_of?],
           kind_of?:      %i[instance_of?],
           map:           %i[each],
-          method:        %i[public_method],
           match:         %i[match?],
+          method:        %i[public_method],
           reverse_each:  %i[each],
           reverse_map:   %i[map each],
           reverse_merge: %i[merge],
@@ -50,6 +50,8 @@ module Mutant
             parse: %i[jd civil strptime iso8601 rfc3339 xmlschema rfc2822 rfc822 httpdate jisx0301]
           }
         )
+
+        REGEXP_MATCH_METHODS = %i[=~ match match?].freeze
 
       private
 
@@ -84,6 +86,7 @@ module Mutant
         end
 
         def emit_selector_specific_mutations
+          emit_start_with_mutation
           emit_predicate_mutations
           emit_array_mutation
           emit_static_send
@@ -92,6 +95,25 @@ module Mutant
           emit_dig_mutation
           emit_double_negation_mutation
           emit_lambda_mutation
+        end
+
+        def emit_start_with_mutation
+          return unless REGEXP_MATCH_METHODS.include?(selector)
+          return unless arguments.one?
+
+          argument = Mutant::Util.one(arguments)
+
+          return unless argument.type.equal?(:regexp) && (
+            regexp_ast = AST::Regexp.expand_regexp_ast(argument)
+          )
+
+          regexp_children = regexp_ast.children
+
+          return unless regexp_children.map(&:type).eql?(%i[regexp_bos_anchor regexp_literal_literal])
+
+          literal = Mutant::Util.one(regexp_children.last.children)
+
+          emit(s(:send, receiver, :start_with?, s(:str, literal)))
         end
 
         def emit_predicate_mutations
