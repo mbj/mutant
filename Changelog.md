@@ -1,5 +1,11 @@
 # Unreleased
 
+* [#1192](https://github.com/mbj/mutant/pull/1192)
+
+  * Add mutations from predicate-like methods (methods ending in ?) to `true`/`false`
+      * `a.b?` -> `false`
+      * `a.b?` -> `true`
+
 * [#1186](https://github.com/mbj/mutant/pull/1186)
 
   Add additional `*` -> `+` regexp quantifier mutations:

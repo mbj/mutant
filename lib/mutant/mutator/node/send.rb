@@ -84,6 +84,7 @@ module Mutant
         end
 
         def emit_selector_specific_mutations
+          emit_predicate_mutations
           emit_array_mutation
           emit_static_send
           emit_const_get_mutation
@@ -91,6 +92,13 @@ module Mutant
           emit_dig_mutation
           emit_double_negation_mutation
           emit_lambda_mutation
+        end
+
+        def emit_predicate_mutations
+          return unless selector.match?(/\?\z/) && !selector.equal?(:defined?)
+
+          emit(s(:true))
+          emit(s(:false))
         end
 
         def emit_array_mutation
