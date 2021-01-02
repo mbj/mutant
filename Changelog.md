@@ -1,5 +1,10 @@
 # Unreleased
 
+* [#1186](https://github.com/mbj/mutant/pull/1186)
+
+  Add additional `*` -> `+` regexp quantifier mutations:
+  - `/a*?/` -> `/a+?/`
+  - `/a*+/` -> `/a++/`
 
 * [#1188](https://github.com/mbj/mutant/pull/1188)
 
