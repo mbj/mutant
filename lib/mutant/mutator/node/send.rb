@@ -17,6 +17,7 @@ module Mutant
           :< =>          %i[== eql? equal?],
           :<= =>         %i[< == eql? equal?],
           :== =>         %i[eql? equal?],
+          :=== =>        %i[is_a?],
           :=~ =>         %i[match?],
           :> =>          %i[== eql? equal?],
           :>= =>         %i[> == eql? equal?],

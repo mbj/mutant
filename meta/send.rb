@@ -562,7 +562,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo(n..-2)'
 end
 
-(Mutant::AST::Types::BINARY_METHOD_OPERATORS - %i[=~ <= >= < > == != eql?]).each do |operator|
+(Mutant::AST::Types::BINARY_METHOD_OPERATORS - %i[=~ <= >= < > == === != eql?]).each do |operator|
   Mutant::Meta::Example.add :send do
     source "true #{operator} false"
 
@@ -728,4 +728,18 @@ Mutant::Meta::Example.add :send do
 
   mutation 'foo'
   mutation 'foo(a__mutant__: nil)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'a === b'
+
+  singleton_mutations
+
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil === b'
+  mutation 'self === b'
+  mutation 'a === nil'
+  mutation 'a === self'
+  mutation 'a.is_a?(b)'
 end

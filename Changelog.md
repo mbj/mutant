@@ -1,5 +1,10 @@
 # Unreleased
 
+
+* [#1188](https://github.com/mbj/mutant/pull/1188)
+
+  Add `a === b` -> `a.is_a?(b)` mutation
+
 * [#1189](https://github.com/mbj/mutant/pull/1189)
 
   * Add mutation from `=~` -> `#match?`
