@@ -1,3 +1,10 @@
+# Unreleased
+
+* [#1189](https://github.com/mbj/mutant/pull/1189)
+
+  * Add mutation from `=~` -> `#match?`
+  * Add mutation from `#match` -> `#match?`
+
 # v0.10.24 2021-01-01
 
 * [#1176](https://github.com/mbj/mutant/pull/1176)
