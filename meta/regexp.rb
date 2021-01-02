@@ -75,26 +75,6 @@ Mutant::Meta::Example.add :regexp do
   mutation '/(?(1)(foo)(?:bar))/'
 end
 
-# MRI accepts this regex but `regexp_parser` does not.
-# See: https://github.com/ammar/regexp_parser/issues/75
-Mutant::Meta::Example.add :regexp do
-  source '/\xA/'
-
-  singleton_mutations
-  mutation '//'
-  mutation '/nomatch\A/'
-end
-
-# MRI accepts this regex but `regexp_parser` does not.
-# See: https://github.com/ammar/regexp_parser/issues/76
-Mutant::Meta::Example.add :regexp do
-  source '/(?<æ>.)/'
-
-  singleton_mutations
-  mutation '//'
-  mutation '/nomatch\A/'
-end
-
 Pathname
   .glob(Pathname.new(__dir__).join('regexp', '*.rb'))
   .sort
