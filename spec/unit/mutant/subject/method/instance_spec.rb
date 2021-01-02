@@ -81,10 +81,6 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   let(:context)  { Mutant::Context.new(scope, double('Source Path')) }
   let(:node)     { Unparser.parse('def foo; end')                    }
 
-  before do
-    allow(Object).to receive_messages(const_get: scope)
-  end
-
   shared_context 'memoizable scope setup' do
     let(:scope) do
       Class.new do
