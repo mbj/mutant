@@ -655,6 +655,7 @@ Mutant::Meta::Example.add :send do
   mutation 'self =~ //'
   mutation '//'
   mutation 'a =~ /nomatch\A/'
+  mutation 'a.match?(//)'
 end
 
 Mutant::Meta::Example.add :send do
@@ -667,6 +668,7 @@ Mutant::Meta::Example.add :send do
   mutation '//.match(self)'
   mutation '//'
   mutation '/nomatch\A/.match(a)'
+  mutation '//.match?(a)'
 end
 
 Mutant::Meta::Example.add :send do
