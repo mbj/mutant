@@ -30,6 +30,14 @@ RSpec.describe Mutant::Meta::Example do
     end
   end
 
+  it 'does not define any repeated examples' do
+    source_counts = described_class::ALL.each_with_object(Hash.new(0)) do |example, counts|
+      counts["#{example.location.path}:#{example.original_source}"] += 1
+    end
+
+    expect(source_counts.select { |_source, count| count > 1 }.keys).to eql([])
+  end
+
   describe '#original_source_generated' do
     subject { object.original_source_generated }
 
