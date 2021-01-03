@@ -73,6 +73,31 @@ module Mutant
       end
     end # Named
 
+    class Block < self
+      include Anima.new(:block, :name)
+
+      def self.capture(name, &block)
+        new(block: block, name: name)
+      end
+
+      def call(input)
+        block
+          .call(input)
+          .lmap do |message|
+            Error.new(
+              cause:     nil,
+              input:     input,
+              message:   message,
+              transform: self
+            )
+          end
+      end
+
+      def slug
+        name
+      end
+    end
+
   private
 
     def error(cause: nil, input:, message: nil)
