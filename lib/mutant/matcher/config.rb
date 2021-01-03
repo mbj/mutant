@@ -26,7 +26,9 @@ module Mutant
 
       DEFAULT = new(Hash[anima.attribute_names.map { |name| [name, []] }])
 
-      expression = ->(input) { Mutant::Config::DEFAULT.expression_parser.call(input) }
+      expression = Transform::Block.capture(:expression) do |input|
+        Mutant::Config::DEFAULT.expression_parser.call(input)
+      end
 
       expression_array = Transform::Array.new(expression)
 

@@ -36,6 +36,16 @@ module Fixtures
     .from_right
 end # Fixtures
 
+module PreludeHelper
+  def right(value)
+    MPrelude::Either::Right.new(value)
+  end
+
+  def left(value)
+    MPrelude::Either::Left.new(value)
+  end
+end
+
 module ParserHelper
   def generate(node)
     Unparser.unparse(node)
@@ -114,4 +124,5 @@ RSpec.configure do |config|
   config.include(ParserHelper)
   config.include(Mutant::AST::Sexp)
   config.include(XSpecHelper)
+  config.include(PreludeHelper)
 end
