@@ -33,7 +33,7 @@ module Mutant
               __send__(report, format, __send__(value))
             end
           end
-        end # EnvProgress
+        end # Env
       end # Printer
     end # CLI
   end # Reporter

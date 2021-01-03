@@ -14,7 +14,7 @@ module Mutant
         def dispatch
           emit_body_mutations if body
         end
-      end # Class
+      end # Sclass
     end # Node
   end # Mutator
 end # Mutant
