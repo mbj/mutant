@@ -1,8 +1,10 @@
-# v0.10.25 2021-01-02-03
+# Unreleased
 
 * [#1194](https://github.com/mbj/mutant/pull/1194)
 
   * Add mutation from named capturing group to non-capturing group:  `/(?<foo>bar)/` -> `/(?:bar)`.
+
+# v0.10.25 2021-01-02-03
 
 * [#1198](https://github.com/mbj/mutant/pull/1198)
 
