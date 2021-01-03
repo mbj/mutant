@@ -104,6 +104,8 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'any?'
+  mutation 'false'
+  mutation 'true'
 end
 
 Mutant::Meta::Example.add :send do
@@ -111,6 +113,8 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'all?'
+  mutation 'false'
+  mutation 'true'
 end
 
 Mutant::Meta::Example.add :send do
@@ -211,6 +215,8 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.is_a?(self)'
   mutation 'self.is_a?(bar)'
   mutation 'foo.instance_of?(bar)'
+  mutation 'false'
+  mutation 'true'
 end
 
 Mutant::Meta::Example.add :send do
@@ -224,6 +230,8 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.is_a?(self)'
   mutation 'self.is_a?(bar)'
   mutation 'foo.instance_of?(bar)'
+  mutation 'false'
+  mutation 'true'
 end
 
 Mutant::Meta::Example.add :send do
@@ -237,6 +245,8 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.kind_of?(self)'
   mutation 'self.kind_of?(bar)'
   mutation 'foo.instance_of?(bar)'
+  mutation 'false'
+  mutation 'true'
 end
 
 Mutant::Meta::Example.add :send do
