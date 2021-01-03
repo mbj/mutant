@@ -1,4 +1,9 @@
-# Unreleased
+# v0.10.25 2021-01-02-03
+
+* [#1198](https://github.com/mbj/mutant/pull/1198)
+
+  * Fix configured match expression loading to properly display error
+    messages on invalid expression syntax.
 
 * [#1192](https://github.com/mbj/mutant/pull/1192)
 
