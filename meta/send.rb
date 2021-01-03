@@ -811,3 +811,18 @@ Mutant::Meta::Example.add :send do
   mutation 'foo(//)'
   mutation 'foo(/nomatch\A/)'
 end
+
+Mutant::Meta::Example.add :send do
+  source 'a.match(/foo\z/)'
+
+  singleton_mutations
+
+  mutation 'a.match?(/foo\z/)'
+  mutation 'a.match'
+  mutation 'a'
+  mutation '/foo\z/'
+  mutation 'a.match(//)'
+  mutation 'a.match(/nomatch\A/)'
+  mutation 'self.match(/foo\z/)'
+  mutation "a.end_with?('foo')"
+end

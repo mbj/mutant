@@ -51,7 +51,9 @@ module Mutant
           }
         )
 
-        REGEXP_MATCH_METHODS = %i[=~ match match?].freeze
+        REGEXP_MATCH_METHODS    = %i[=~ match match?].freeze
+        REGEXP_START_WITH_NODES = %i[regexp_bos_anchor regexp_literal_literal].freeze
+        REGEXP_END_WITH_NODES   = %i[regexp_literal_literal regexp_eos_anchor].freeze
 
       private
 
@@ -86,7 +88,7 @@ module Mutant
         end
 
         def emit_selector_specific_mutations
-          emit_start_with_mutation
+          emit_start_end_with_mutations
           emit_predicate_mutations
           emit_array_mutation
           emit_static_send
@@ -97,9 +99,8 @@ module Mutant
           emit_lambda_mutation
         end
 
-        def emit_start_with_mutation
-          return unless REGEXP_MATCH_METHODS.include?(selector)
-          return unless arguments.one?
+        def emit_start_end_with_mutations # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+          return unless REGEXP_MATCH_METHODS.include?(selector) && arguments.one?
 
           argument = Mutant::Util.one(arguments)
 
@@ -109,11 +110,22 @@ module Mutant
 
           regexp_children = regexp_ast.children
 
-          return unless regexp_children.map(&:type).eql?(%i[regexp_bos_anchor regexp_literal_literal])
+          case regexp_children.map(&:type)
+          when REGEXP_START_WITH_NODES
+            emit_start_with(regexp_children)
+          when REGEXP_END_WITH_NODES
+            emit_end_with(regexp_children)
+          end
+        end
 
-          literal = Mutant::Util.one(regexp_children.last.children)
+        def emit_start_with(regexp_nodes)
+          literal = Mutant::Util.one(regexp_nodes.last.children)
+          emit_type(receiver, :start_with?, s(:str, literal))
+        end
 
-          emit(s(:send, receiver, :start_with?, s(:str, literal)))
+        def emit_end_with(regexp_nodes)
+          literal = Mutant::Util.one(regexp_nodes.first.children)
+          emit_type(receiver, :end_with?, s(:str, literal))
         end
 
         def emit_predicate_mutations
