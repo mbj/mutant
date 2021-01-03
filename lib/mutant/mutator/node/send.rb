@@ -87,6 +87,7 @@ module Mutant
         end
 
         def emit_selector_specific_mutations
+          emit_reduce_to_sum_mutation
           emit_start_end_with_mutations
           emit_predicate_mutations
           emit_array_mutation
@@ -96,6 +97,21 @@ module Mutant
           emit_dig_mutation
           emit_double_negation_mutation
           emit_lambda_mutation
+        end
+
+        def emit_reduce_to_sum_mutation
+          return unless selector.equal?(:reduce)
+
+          reducer = arguments.last
+
+          return unless reducer.eql?(s(:sym, :+)) || reducer.eql?(s(:block_pass, s(:sym, :+)))
+
+          if arguments.length > 1
+            initial_value = arguments.first
+            emit_type(receiver, :sum, initial_value)
+          else
+            emit_type(receiver, :sum)
+          end
         end
 
         def emit_start_end_with_mutations # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
