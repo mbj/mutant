@@ -80,16 +80,6 @@ Mutant::Meta::Example.add :block do
 end
 
 Mutant::Meta::Example.add :block do
-  source 'foo { |a| }'
-
-  singleton_mutations
-  mutation 'foo { || }'
-  mutation 'foo { |a| raise }'
-  mutation 'foo { |_a| }'
-  mutation 'foo'
-end
-
-Mutant::Meta::Example.add :block do
   source 'foo { bar(nil) }'
 
   singleton_mutations

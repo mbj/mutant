@@ -220,21 +220,6 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
-  source 'foo.is_a?(bar)'
-
-  singleton_mutations
-  mutation 'foo'
-  mutation 'bar'
-  mutation 'foo.is_a?'
-  mutation 'foo.is_a?(nil)'
-  mutation 'foo.is_a?(self)'
-  mutation 'self.is_a?(bar)'
-  mutation 'foo.instance_of?(bar)'
-  mutation 'false'
-  mutation 'true'
-end
-
-Mutant::Meta::Example.add :send do
   source 'foo.kind_of?(bar)'
 
   singleton_mutations
