@@ -1,5 +1,9 @@
 # v0.10.25 2021-01-02-03
 
+* [#1194](https://github.com/mbj/mutant/pull/1194)
+
+  * Add mutation from named capturing group to non-capturing group:  `/(?<foo>bar)/` -> `/(?:bar)`.
+
 * [#1198](https://github.com/mbj/mutant/pull/1198)
 
   * Fix configured match expression loading to properly display error
