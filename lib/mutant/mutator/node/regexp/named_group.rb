@@ -15,8 +15,22 @@ module Mutant
           def dispatch
             return unless group
 
-            emit(s(:regexp_passive_group, group))
             emit_group_mutations
+
+            # Allows unused captures to be kept and named if they are explicitly prefixed with an
+            # underscore, like we allow with unused local variables.
+            return if name_underscored?
+
+            emit(s(:regexp_passive_group, group))
+            emit_name_underscore_mutation
+          end
+
+          def emit_name_underscore_mutation
+            emit_type("_#{name}", group)
+          end
+
+          def name_underscored?
+            name.start_with?('_')
           end
         end # EndOfLineAnchor
       end # Regexp

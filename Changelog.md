@@ -1,5 +1,8 @@
 # Unreleased
 
+* [#1200](https://github.com/mbj/mutant/pull/1200)
+  * Add unused group name mutation:  `/(?<foo>bar)/` -> `/(?<_foo>bar)/`.
+
 * [#1205](https://github.com/mbj/mutant/pull/1205)
 
   * Add `mutant environment test list` subcommand.
