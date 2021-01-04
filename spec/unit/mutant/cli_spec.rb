@@ -344,25 +344,33 @@ RSpec.describe Mutant::CLI do
     end
 
     shared_context 'environment' do
-      let(:arguments)          { %w[run]                                              }
-      let(:bootstrap_config)   { env_config.merge(file_config).expand_defaults        }
-      let(:bootstrap_result)   { MPrelude::Either::Right.new(env)                     }
-      let(:env_result)         { instance_double(Mutant::Result::Env, success?: true) }
-      let(:expected_events)    { [license_validation_event]                           }
-      let(:expected_exit)      { true                                                 }
-      let(:file_config_result) { MPrelude::Either::Right.new(file_config)             }
-      let(:license_result)     { MPrelude::Either::Right.new(subscription)            }
-      let(:runner_result)      { MPrelude::Either::Right.new(env_result)              }
+      let(:arguments)            { %w[run]                                              }
+      let(:bootstrap_config)     { env_config.merge(file_config).expand_defaults        }
+      let(:bootstrap_result)     { MPrelude::Either::Right.new(env)                     }
+      let(:env_result)           { instance_double(Mutant::Result::Env, success?: true) }
+      let(:expected_events)      { [license_validation_event]                           }
+      let(:expected_exit)        { true                                                 }
+      let(:file_config_result)   { MPrelude::Either::Right.new(file_config)             }
+      let(:license_result)       { MPrelude::Either::Right.new(subscription)            }
+      let(:runner_result)        { MPrelude::Either::Right.new(env_result)              }
+      let(:subject_a_expression) { parse_expression('Object#send')                      }
+      let(:subjects)             { [subject_a]                                          }
+      let(:tests)                { [test_a, test_b]                                     }
+
+      let(:test_a) { instance_double(Mutant::Test, identification: 'test-a') }
+      let(:test_b) { instance_double(Mutant::Test, identification: 'test-b') }
 
       let(:env) do
         config = Mutant::Config::DEFAULT.with(
           reporter: Mutant::Reporter::CLI.build(stdout)
         )
 
-        Mutant::Env.empty(world, config).with(subjects: subjects)
+        Mutant::Env.empty(world, config)
+          .with(
+            integration: instance_double(Mutant::Integration, all_tests: tests),
+            subjects:    subjects
+          )
       end
-
-      let(:subject_a_expression) { parse_expression('Object#send') }
 
       let(:subject_a) do
         Mutant::Subject::Method::Instance.new(
@@ -372,12 +380,6 @@ RSpec.describe Mutant::CLI do
           ),
           node:    s(:def, :send, s(:args), nil)
         )
-      end
-
-      let(:subjects) do
-        [
-          subject_a
-        ]
       end
 
       let(:file_config) do
@@ -432,6 +434,47 @@ RSpec.describe Mutant::CLI do
       end
     end
 
+    context 'environment test list' do
+      include_context 'environment'
+
+      let(:arguments) { %w[environment test list] }
+
+      context 'without additional arguments' do
+        let(:expected_exit) { true }
+
+        let(:expected_events) do
+          [
+            [
+              :load_config_file,
+              world
+            ],
+            [
+              :bootstrap,
+              world,
+              bootstrap_config.inspect
+            ],
+            [
+              :stdout,
+              :puts,
+              'Tests in environment: 2'
+            ],
+            [
+              :stdout,
+              :puts,
+              'test-a'
+            ],
+            [
+              :stdout,
+              :puts,
+              'test-b'
+            ]
+          ]
+        end
+
+        include_examples 'CLI run'
+      end
+    end
+
     context 'environment subject list' do
       include_context 'environment'
 
@@ -467,6 +510,7 @@ RSpec.describe Mutant::CLI do
         include_examples 'CLI run'
       end
     end
+
     context 'environment show' do
       include_context 'environment'
 
@@ -481,7 +525,7 @@ RSpec.describe Mutant::CLI do
            Includes:        []
            Requires:        []
            Subjects:        1
-           Total-Tests:     0
+           Total-Tests:     2
            Selected-Tests:  0
            Tests/Subject:   0.00 avg
            Mutations:       0

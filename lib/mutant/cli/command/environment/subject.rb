@@ -25,10 +25,6 @@ module Mutant
                 print(subject.expression.syntax)
               end
             end
-
-            def print(message)
-              world.stdout.puts(message)
-            end
           end
 
           SUBCOMMANDS = [List].freeze

@@ -1,6 +1,12 @@
 # Unreleased
 
+* [#1205](https://github.com/mbj/mutant/pull/1205)
+
+  * Add `mutant environment test list` subcommand.
+    Useful to verify which tests mutant detects as candiates for test selection.
+
 * [#1204](https://github.com/mbj/mutant/pull/1204)
+
   * Allow constants to be passed to minitst integrations `cover` declaration.
     `cover SomeClass` is equivalent to `cover 'SomeClass*'`.
 
