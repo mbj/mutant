@@ -16,7 +16,6 @@ RSpec.describe Mutant::Env do
 
   let(:integration_class) { Mutant::Integration::Null            }
   let(:isolation)         { Mutant::Isolation::None.new          }
-  let(:kernel)            { instance_double(Object, 'kernel')    }
   let(:process_status)    { instance_double(Process::Status)     }
   let(:reporter)          { instance_double(Mutant::Reporter)    }
   let(:selector)          { instance_double(Mutant::Selector)    }
@@ -26,7 +25,7 @@ RSpec.describe Mutant::Env do
   let(:test_a)            { instance_double(Mutant::Test, :a)    }
   let(:test_b)            { instance_double(Mutant::Test, :b)    }
   let(:test_c)            { instance_double(Mutant::Test, :c)    }
-  let(:timer)             { instance_double(Mutant::Timer)       }
+  let(:world)             { fake_world                           }
 
   let(:integration) do
     instance_double(Mutant::Integration, all_tests: [test_a, test_b, test_c])
@@ -50,14 +49,6 @@ RSpec.describe Mutant::Env do
     )
   end
 
-  let(:world) do
-    instance_double(
-      Mutant::World,
-      kernel: kernel,
-      timer:  timer
-    )
-  end
-
   before do
     allow(selector).to receive(:call)
       .with(subject_a)
@@ -67,7 +58,7 @@ RSpec.describe Mutant::Env do
       .with(subject_b)
       .and_return([test_b, test_c])
 
-    allow(timer).to receive(:now).and_return(2.0, 3.0)
+    allow(world.timer).to receive(:now).and_return(2.0, 3.0)
   end
 
   def isolation_success(value)
@@ -120,7 +111,7 @@ RSpec.describe Mutant::Env do
         apply
 
         expect(isolation).to have_received(:call).ordered.with(config.mutation_timeout)
-        expect(mutation).to have_received(:insert).ordered.with(kernel)
+        expect(mutation).to have_received(:insert).ordered.with(world.kernel)
         expect(integration).to have_received(:call).ordered.with([test_a, test_b])
       end
 
@@ -138,7 +129,7 @@ RSpec.describe Mutant::Env do
         apply
 
         expect(isolation).to have_received(:call).ordered
-        expect(mutation).to have_received(:insert).ordered.with(kernel)
+        expect(mutation).to have_received(:insert).ordered.with(world.kernel)
       end
 
       include_examples 'mutation kill'
@@ -228,7 +219,7 @@ RSpec.describe Mutant::Env do
     it 'returns empty env' do
       integration = Mutant::Integration::Null.new(
         expression_parser: config.expression_parser,
-        timer:             timer
+        world:             world
       )
 
       expect(apply).to eql(

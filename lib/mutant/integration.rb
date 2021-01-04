@@ -4,7 +4,7 @@ module Mutant
 
   # Abstract base class mutant test framework integrations
   class Integration
-    include AbstractType, Adamantium::Flat, Anima.new(:expression_parser, :timer)
+    include AbstractType, Adamantium::Flat, Anima.new(:expression_parser, :world)
 
     LOAD_MESSAGE = <<~'MESSAGE'
       Unable to load integration mutant-%<integration_name>s:
@@ -39,7 +39,7 @@ module Mutant
       attempt_require(env).bind { attempt_const_get(env) }.fmap do |klass|
         klass.new(
           expression_parser: env.config.expression_parser,
-          timer:             env.world.timer
+          world:             env.world
         ).setup
       end
     end
@@ -92,5 +92,11 @@ module Mutant
     #
     # @return [Enumerable<Test>]
     abstract_method :all_tests
+
+  private
+
+    def timer
+      world.timer
+    end
   end # Integration
 end # Mutant

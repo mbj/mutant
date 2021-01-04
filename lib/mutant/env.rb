@@ -31,7 +31,7 @@ module Mutant
         config:           config,
         integration:      Integration::Null.new(
           expression_parser: config.expression_parser,
-          timer:             world.timer
+          world:             world
         ),
         matchable_scopes: EMPTY_ARRAY,
         mutations:        EMPTY_ARRAY,
