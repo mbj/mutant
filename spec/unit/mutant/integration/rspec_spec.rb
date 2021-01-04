@@ -6,13 +6,13 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:object) do
     described_class.new(
       expression_parser: Mutant::Config::DEFAULT.expression_parser,
-      timer:             timer
+      world:             world
     )
   end
 
   let(:rspec_options) { instance_double(RSpec::Core::ConfigurationOptions) }
   let(:rspec_runner)  { instance_double(RSpec::Core::Runner)               }
-  let(:timer)         { instance_double(Mutant::Timer)                     }
+  let(:world)         { fake_world                                         }
 
   let(:example_a) do
     double(
@@ -107,7 +107,7 @@ RSpec.describe Mutant::Integration::Rspec do
 
   let(:rspec_world) do
     double(
-      'world',
+      'rspec-world',
       example_groups:    example_groups,
       filtered_examples: filtered_examples
     )
@@ -148,7 +148,8 @@ RSpec.describe Mutant::Integration::Rspec do
       .and_return(rspec_runner)
 
     expect(RSpec).to receive_messages(world: rspec_world)
-    allow(timer).to receive_messages(now: 1.0)
+
+    allow(world.timer).to receive_messages(now: 1.0)
   end
 
   describe '#all_tests' do

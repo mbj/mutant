@@ -34,8 +34,8 @@ module Mutant
       # @return [undefined]
       def initialize(*)
         super
-        @runner = RSpec::Core::Runner.new(RSpec::Core::ConfigurationOptions.new(CLI_OPTIONS))
-        @world  = RSpec.world
+        @runner      = RSpec::Core::Runner.new(RSpec::Core::ConfigurationOptions.new(CLI_OPTIONS))
+        @rspec_world = RSpec.world
       end
 
       # Setup rspec integration
@@ -56,7 +56,7 @@ module Mutant
         examples = tests.map(&all_tests_index)
         filter_examples(&examples.public_method(:include?))
         start = timer.now
-        passed = @runner.run_specs(@world.ordered_example_groups).equal?(EXIT_SUCCESS)
+        passed = @runner.run_specs(@rspec_world.ordered_example_groups).equal?(EXIT_SUCCESS)
         Result::Test.new(
           passed:  passed,
           runtime: timer.now - start
@@ -114,13 +114,13 @@ module Mutant
       end
 
       def all_examples
-        @world.example_groups.flat_map(&:descendants).flat_map(&:examples).select do |example|
+        @rspec_world.example_groups.flat_map(&:descendants).flat_map(&:examples).select do |example|
           example.metadata.fetch(:mutant, true)
         end
       end
 
       def filter_examples(&predicate)
-        @world.filtered_examples.each_value do |examples|
+        @rspec_world.filtered_examples.each_value do |examples|
           examples.keep_if(&predicate)
         end
       end

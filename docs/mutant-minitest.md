@@ -35,7 +35,8 @@ To add mutant to your minitest code base you need to:
 
    ```ruby
    class YourLibrarySomeClassTest < YourTestBaseClass
-     cover 'YourLibrary::SomeClass*' # tells mutant which subjects this tests should cover
+     cover YourLibrary::SomeClass # tells mutant which subjects this tests should cover
+     cover 'YourLibrary::SomeClass#some_method' # alternative for more fine grained control.
      # ...
    ```
 

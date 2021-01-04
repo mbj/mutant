@@ -55,8 +55,19 @@ module Mutant
         #
         # @return [Array<Expression>]
         def expressions(parser)
-          klass.resolve_cover_expressions.map do |syntax|
-            parser.call(syntax).from_right
+          klass.resolve_cover_expressions.to_a.map do |value|
+            parser.call(expand_constant(value)).from_right
+          end
+        end
+
+      private
+
+        def expand_constant(value)
+          case value
+          when Class, Module
+            "#{value.name}*"
+          else
+            value
           end
         end
       end # TestCase
@@ -69,7 +80,7 @@ module Mutant
       def setup
         Pathname.glob(TEST_FILE_PATTERN)
           .map(&:to_s)
-          .each(&method(:require))
+          .each(&world.kernel.method(:require))
 
         self
       end
@@ -133,7 +144,7 @@ module Mutant
       end
 
       def allow_runnable?(klass)
-        !klass.equal?(::Minitest::Runnable) && klass.resolve_cover_expressions
+        !klass.equal?(::Minitest::Runnable)
       end
 
       def test_case(runnable)

@@ -4,12 +4,12 @@ RSpec.describe Mutant::Integration do
   let(:object) do
     Class.new(described_class).new(
       expression_parser: expression_parser,
-      timer:             timer
+      world:             world
     )
   end
 
   let(:expression_parser) { instance_double(Mutant::Expression::Parser) }
-  let(:timer)             { instance_double(Mutant::Timer)              }
+  let(:world)             { fake_world                                  }
 
   describe '#setup' do
     def apply
@@ -26,7 +26,6 @@ RSpec.describe Mutant::Integration do
       described_class.setup(env)
     end
 
-    let(:kernel)           { class_double(Kernel)                       }
     let(:integration)      { instance_double(Mutant::Integration::Null) }
     let(:integration_name) { 'null'                                     }
 
@@ -46,16 +45,8 @@ RSpec.describe Mutant::Integration do
       )
     end
 
-    let(:world) do
-      instance_double(
-        Mutant::World,
-        kernel: kernel,
-        timer:  timer
-      )
-    end
-
     before do
-      allow(kernel).to receive_messages(require: undefined)
+      allow(world.kernel).to receive_messages(require: undefined)
       allow(described_class).to receive_messages(const_get: described_class::Null)
       allow(described_class::Null).to receive_messages(new: integration)
       allow(integration).to receive_messages(setup: integration)
@@ -76,7 +67,7 @@ RSpec.describe Mutant::Integration do
       let(:exception) { LoadError.new('some-load-error') }
 
       before do
-        allow(kernel).to receive(:require).and_raise(exception)
+        allow(world.kernel).to receive(:require).and_raise(exception)
       end
 
       it 'returns error' do
@@ -108,7 +99,7 @@ RSpec.describe Mutant::Integration do
     it 'performs actions in expected sequence' do
       apply
 
-      expect(kernel)
+      expect(world.kernel)
         .to have_received(:require)
         .with('mutant/integration/null')
         .ordered
@@ -140,12 +131,12 @@ RSpec.describe Mutant::Integration::Null do
   let(:object) do
     described_class.new(
       expression_parser: expression_parser,
-      timer:             timer
+      world:             world
     )
   end
 
   let(:expression_parser) { instance_double(Mutant::Expression::Parser) }
-  let(:timer)             { instance_double(Mutant::Timer)              }
+  let(:world)             { fake_world                                  }
 
   describe '#all_tests' do
     subject { object.all_tests }

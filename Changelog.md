@@ -1,5 +1,9 @@
 # Unreleased
 
+* [#1204](https://github.com/mbj/mutant/pull/1204)
+  * Allow constants to be passed to minitst integrations `cover` declaration.
+    `cover SomeClass` is equivalent to `cover 'SomeClass*'`.
+
 * [#1194](https://github.com/mbj/mutant/pull/1194)
 
   * Add mutation from named capturing group to non-capturing group:  `/(?<foo>bar)/` -> `/(?:bar)`.
