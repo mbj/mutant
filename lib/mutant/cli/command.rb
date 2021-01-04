@@ -204,6 +204,10 @@ module Mutant
       def with_help(message)
         "#{full_name}: #{message}\n\n#{parser}"
       end
+
+      def print(message)
+        world.stdout.puts(message)
+      end
     end # Command
     # rubocop:enable Metrics/ClassLength
   end # CLI
