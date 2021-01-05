@@ -15,4 +15,14 @@ Mutant::Meta::Example.add :regexp_named_group do
 
   mutation '/(?:\w)/'
   mutation '/(?<foo>\W)/'
+  mutation '/(?<_foo>\w)/'
+end
+
+Mutant::Meta::Example.add :regexp_named_group do
+  source '/(?<_foo>\w)/'
+
+  singleton_mutations
+  regexp_mutations
+
+  mutation '/(?<_foo>\W)/'
 end
