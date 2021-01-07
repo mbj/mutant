@@ -32,6 +32,23 @@ module Mutant
       def self.to_expression(node)
         Transformer.lookup(node.type).to_expression(node)
       end
+
+      # Convert's a `parser` `regexp` node into more fine-grained AST nodes.
+      #
+      # @param node [Parser::AST::Node]
+      #
+      # @return [Parser::AST::Node]
+      def self.expand_regexp_ast(node)
+        *body, _opts = node.children
+
+        # NOTE: We only mutate parts of regexp body if the body is composed of
+        # only strings. Regular expressions with interpolation are skipped
+        return unless body.all? { |child| child.type.equal?(:str) }
+
+        body_expression = parse(body.map(&:children).join)
+
+        to_ast(body_expression)
+      end
     end # Regexp
   end # AST
 end # Mutant

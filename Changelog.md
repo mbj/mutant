@@ -1,5 +1,16 @@
 # Unreleased
 
+* [#1201](https://github.com/mbj/mutant/pull/1201)
+
+  * Add `/\Astatic/` -> `#start_with?` mutations:
+    * `a.match(/\Atext/)` -> `b.start_with?('text')`
+    * `a.match?(/\Atext/)` -> `b.start_with?('text')`
+    * `a =~ /\Atext/` -> `b.start_with?('text')`
+  * Add `/static\z/` -> `#end_with?` mutations:
+    * `a.match(/text\z/)` -> `b.end_with?('text')`
+    * `a.match?(/text\z/)` -> `b.end_with?('text')`
+    * `a =~ /text\z/` -> `b.end_with?('text')`
+
 * [#1200](https://github.com/mbj/mutant/pull/1200)
   * Add unused group name mutation:  `/(?<foo>bar)/` -> `/(?<_foo>bar)/`.
 
