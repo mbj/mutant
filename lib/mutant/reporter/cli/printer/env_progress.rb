@@ -18,7 +18,7 @@ module Mutant
             :runtime
           )
 
-          FORMATS = IceNine.deep_freeze([
+          FORMATS = [
             [:info,   'Results:         %s',      :amount_mutation_results],
             [:info,   'Kills:           %s',      :amount_mutations_killed],
             [:info,   'Alive:           %s',      :amount_mutations_alive ],
@@ -28,7 +28,7 @@ module Mutant
             [:info,   'Overhead:        %0.2f%%', :overhead_percent       ],
             [:info,   'Mutations/s:     %0.2f',   :mutations_per_second   ],
             [:status, 'Coverage:        %0.2f%%', :coverage_percent       ]
-          ])
+          ].each(&:freeze)
 
           # Run printer
           #

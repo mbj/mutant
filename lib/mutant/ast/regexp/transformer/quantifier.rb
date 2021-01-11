@@ -30,7 +30,7 @@ module Mutant
 
             Quantifier = Class.new.include(Concord::Public.new(:type, :suffix, :mode))
 
-            QUANTIFIER_MAP = IceNine.deep_freeze({
+            QUANTIFIER_MAP = {
               regexp_greedy_zero_or_more:     [:zero_or_more, '*',  :greedy],
               regexp_greedy_one_or_more:      [:one_or_more,  '+',  :greedy],
               regexp_greedy_zero_or_one:      [:zero_or_one,  '?',  :greedy],
@@ -42,7 +42,9 @@ module Mutant
               regexp_greedy_interval:         [:interval,     '',   :greedy],
               regexp_reluctant_interval:      [:interval,     '?',  :reluctant],
               regexp_possessive_interval:     [:interval,     '+',  :possessive]
-            }.transform_values { |arguments| Quantifier.new(*arguments) }.to_h)
+            }.transform_values { |arguments| Quantifier.new(*arguments) }
+              .to_h
+              .freeze
 
           private
 

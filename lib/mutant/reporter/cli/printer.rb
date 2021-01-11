@@ -5,12 +5,18 @@ module Mutant
     class CLI
       # CLI runner status printer base class
       class Printer
-        include AbstractType,
-                Adamantium::Flat,
-                Concord.new(:output, :object),
-                Procto.call(:run)
+        include(
+          AbstractType,
+          Adamantium,
+          Concord.new(:output, :object),
+          Procto
+        )
 
         private_class_method :new
+
+        def call
+          run
+        end
 
         # Create delegators to object
         #

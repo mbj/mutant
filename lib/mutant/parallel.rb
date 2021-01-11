@@ -90,7 +90,7 @@ module Mutant
 
     # Parallel run configuration
     class Config
-      include Adamantium::Flat, Anima.new(
+      include Adamantium, Anima.new(
         :block,
         :jobs,
         :process_name,
@@ -102,7 +102,7 @@ module Mutant
 
     # Parallel execution status
     class Status
-      include Adamantium::Flat, Anima.new(
+      include Adamantium, Anima.new(
         :active_jobs,
         :done,
         :payload

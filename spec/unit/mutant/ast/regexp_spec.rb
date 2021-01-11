@@ -4,7 +4,7 @@ module RegexpSpec
   class Expression < SimpleDelegator
     NO_EXPRESSIONS = Object.new.freeze
 
-    include Equalizer.new(:type, :token, :text, :quantifier, :expressions)
+    include Unparser::Equalizer.new(:type, :token, :text, :quantifier, :expressions)
 
     def quantifier
       return Quantifier::NONE unless quantified?
@@ -21,7 +21,7 @@ module RegexpSpec
     class Quantifier < SimpleDelegator
       NONE = Object.new.freeze
 
-      include Equalizer.new(:token, :text, :mode, :min, :max)
+      include Unparser::Equalizer.new(:token, :text, :mode, :min, :max)
     end # Quantifier
   end # Expression
 

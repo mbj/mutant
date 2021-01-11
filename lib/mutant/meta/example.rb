@@ -3,7 +3,7 @@
 module Mutant
   module Meta
     class Example
-      include Adamantium::Flat
+      include Adamantium
 
       include Anima.new(
         :expected,

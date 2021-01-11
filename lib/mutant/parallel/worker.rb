@@ -3,7 +3,7 @@
 module Mutant
   module Parallel
     class Worker
-      include Adamantium::Flat, Anima.new(
+      include Adamantium, Anima.new(
         :connection,
         :index,
         :pid,

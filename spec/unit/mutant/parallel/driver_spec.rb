@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Parallel::Driver do
-  let(:active_jobs)     { []                                            }
-  let(:sink_status)     { instance_double(Object)                       }
-  let(:thread_a)        { instance_double(Thread, alive?: true)         }
-  let(:thread_b)        { instance_double(Thread, alive?: true)         }
-  let(:threads)         { [thread_a, thread_b]                          }
-  let(:timeout)         { instance_double(Float)                        }
-  let(:var_active_jobs) { instance_double(Variable::IVar, :active_jobs) }
-  let(:var_final)       { instance_double(Variable::IVar, :final)       }
-  let(:var_running)     { instance_double(Variable::MVar, :running)     }
-  let(:var_sink)        { instance_double(Variable::IVar, :sink)        }
-  let(:var_source)      { instance_double(Variable::IVar, :source)      }
-  let(:workers)         { [worker_a, worker_b]                          }
-  let(:worker_a)        { instance_double(Mutant::Parallel::Worker, :a) }
-  let(:worker_b)        { instance_double(Mutant::Parallel::Worker, :b) }
+  let(:active_jobs)     { []                                                    }
+  let(:sink_status)     { instance_double(Object)                               }
+  let(:thread_a)        { instance_double(Thread, alive?: true)                 }
+  let(:thread_b)        { instance_double(Thread, alive?: true)                 }
+  let(:threads)         { [thread_a, thread_b]                                  }
+  let(:timeout)         { instance_double(Float)                                }
+  let(:var_active_jobs) { instance_double(Mutant::Variable::IVar, :active_jobs) }
+  let(:var_final)       { instance_double(Mutant::Variable::IVar, :final)       }
+  let(:var_running)     { instance_double(Mutant::Variable::MVar, :running)     }
+  let(:var_sink)        { instance_double(Mutant::Variable::IVar, :sink)        }
+  let(:var_source)      { instance_double(Mutant::Variable::IVar, :source)      }
+  let(:workers)         { [worker_a, worker_b]                                  }
+  let(:worker_a)        { instance_double(Mutant::Parallel::Worker, :a)         }
+  let(:worker_b)        { instance_double(Mutant::Parallel::Worker, :b)         }
 
   let(:sink) do
     instance_double(
@@ -63,7 +63,7 @@ RSpec.describe Mutant::Parallel::Driver do
           receiver:  var_final,
           selector:  :take_timeout,
           arguments: [timeout],
-          reaction:  { return: Variable.const_get(:Result)::Timeout.new }
+          reaction:  { return: Mutant::Variable.const_get(:Result)::Timeout.new }
         },
         {
           receiver: var_active_jobs,

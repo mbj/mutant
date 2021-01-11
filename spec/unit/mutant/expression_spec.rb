@@ -28,7 +28,7 @@ RSpec.describe Mutant::Expression do
   describe '.try_parse' do
     let(:object) do
       Class.new(described_class) do
-        include Anima.new(:foo)
+        include Unparser::Anima.new(:foo)
 
         const_set(:REGEXP, /(?<foo>foo)/)
       end

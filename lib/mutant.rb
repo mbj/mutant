@@ -1,16 +1,9 @@
 # frozen_string_literal: true
 
-require 'abstract_type'
-require 'adamantium'
-require 'anima'
-require 'concord'
 require 'diff/lcs'
 require 'diff/lcs/hunk'
 require 'digest/sha1'
-require 'equalizer'
 require 'etc'
-require 'ice_nine'
-require 'mprelude'
 require 'json'
 require 'open3'
 require 'optparse'
@@ -22,7 +15,6 @@ require 'set'
 require 'singleton'
 require 'stringio'
 require 'unparser'
-require 'variable'
 require 'yaml'
 
 # This setting is done to make errors within the parallel
@@ -33,7 +25,12 @@ Thread.abort_on_exception = true
 #
 # @api private
 module Mutant
-  Either = MPrelude::Either
+  AbstractType = Unparser::AbstractType
+  Adamantium   = Unparser::Adamantium
+  Anima        = Unparser::Anima
+  Concord      = Unparser::Concord
+  Either       = Unparser::Either
+  Equalizer    = Unparser::Equalizer
 
   EMPTY_STRING   = ''
   EMPTY_ARRAY    = [].freeze
@@ -41,7 +38,9 @@ module Mutant
   SCOPE_OPERATOR = '::'
 end # Mutant
 
+require 'mutant/procto'
 require 'mutant/transform'
+require 'mutant/variable'
 require 'mutant/bootstrap'
 require 'mutant/version'
 require 'mutant/env'

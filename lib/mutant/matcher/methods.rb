@@ -6,11 +6,11 @@ module Mutant
     class Methods < self
       include AbstractType, Concord.new(:scope)
 
-      CANDIDATE_NAMES = IceNine.deep_freeze(%i[
+      CANDIDATE_NAMES = %i[
         public_instance_methods
         private_instance_methods
         protected_instance_methods
-      ])
+      ].freeze
 
       private_constant(*constants(false))
 
@@ -62,7 +62,6 @@ module Mutant
         def candidate_scope
           scope.singleton_class
         end
-        memoize :candidate_scope, freezer: :noop
 
       end # Singleton
 
@@ -79,7 +78,6 @@ module Mutant
         def candidate_scope
           scope.singleton_class
         end
-        memoize :candidate_scope, freezer: :noop
       end # Metaclass
 
       # Matcher for instance methods

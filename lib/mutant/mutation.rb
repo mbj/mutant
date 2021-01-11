@@ -3,7 +3,7 @@
 module Mutant
   # Represent a mutated node with its subject
   class Mutation
-    include AbstractType, Adamantium::Flat
+    include AbstractType, Adamantium
     include Concord::Public.new(:subject, :node)
 
     CODE_DELIMITER = "\0"

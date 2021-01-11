@@ -30,10 +30,10 @@ module Mutant
         # Mutator for optional arguments
         class Optional < self
 
-          TYPE_MAP = IceNine.deep_freeze(
+          TYPE_MAP = {
             optarg:   :arg,
             kwoptarg: :kwarg
-          )
+          }.freeze
 
           handle(:optarg, :kwoptarg)
 

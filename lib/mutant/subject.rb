@@ -3,7 +3,7 @@
 module Mutant
   # Subject of a mutation
   class Subject
-    include AbstractType, Adamantium::Flat, Enumerable
+    include AbstractType, Adamantium, Enumerable
     include Anima.new(:context, :node)
 
     # Mutations for this subject

@@ -6,7 +6,7 @@ module Mutant
   # Does not reference any "external" volatile state. The configuration applied
   # to current environment is being represented by the Mutant::Env object.
   class Config
-    include Adamantium::Flat, Anima.new(
+    include Adamantium, Anima.new(
       :coverage_criteria,
       :expression_parser,
       :fail_fast,

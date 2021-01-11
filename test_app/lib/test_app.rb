@@ -1,11 +1,11 @@
-require 'adamantium'
-
 original = $VERBOSE
 # Silence intentional violations made to exercise the method matcher edge cases.
 # This is NOT representative for could you should write!
 $VERBOSE = false
 # Namespace for test application
 module TestApp
+  Adamantium = Mutant::Adamantium
+
   module InstanceMethodTests
     module WithMemoizer
       include Adamantium

@@ -28,7 +28,7 @@ module Mutant
     # * Child process freezing after closing the pipes needs to be
     #   detected by parent process.
     class Fork < self
-      include(Adamantium::Flat, Concord.new(:world))
+      include(Adamantium, Concord.new(:world))
 
       READ_SIZE = 4096
 
@@ -36,7 +36,7 @@ module Mutant
 
       # Pipe abstraction
       class Pipe
-        include Adamantium::Flat, Anima.new(:reader, :writer)
+        include Adamantium, Anima.new(:reader, :writer)
 
         # Run block with pipe in binmode
         #
@@ -66,10 +66,7 @@ module Mutant
 
       # rubocop:disable Metrics/ClassLength
       class Parent
-        include(
-          Anima.new(*ATTRIBUTES),
-          Procto.call
-        )
+        include(Anima.new(*ATTRIBUTES), Procto)
 
         # Prevent mutation from `process.fork` to `fork` to call Kernel#fork
         undef_method :fork
@@ -212,11 +209,7 @@ module Mutant
       # rubocop:enable Metrics/ClassLength
 
       class Child
-        include(
-          Adamantium::Flat,
-          Anima.new(*ATTRIBUTES),
-          Procto.call
-        )
+        include(Adamantium, Anima.new(*ATTRIBUTES), Procto)
 
         # Handle child process
         #

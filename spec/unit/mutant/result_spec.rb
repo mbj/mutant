@@ -3,7 +3,7 @@
 RSpec.describe Mutant::Result do
   let(:object) do
     Class.new do
-      include Mutant::Result, Concord.new(:runtime, :killtime)
+      include Mutant::Result, Unparser::Concord.new(:runtime, :killtime)
 
       def collection
         [[1]]

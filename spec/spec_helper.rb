@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'adamantium'
-require 'anima'
-require 'concord'
 require 'mutant'
 require 'mutant/meta'
 require 'rspec/its'
@@ -10,11 +7,19 @@ require 'timeout'
 require 'tempfile'
 require 'tmpdir'
 
+module MutantSpec
+  AbstractType = Mutant::AbstractType
+  Adamantium   = Mutant::Adamantium
+  Anima        = Mutant::Anima
+  Concord      = Mutant::Concord
+  Either       = Mutant::Either
+  Equalizer    = Mutant::Equalizer
+end
+
 require './spec/shared/framework_integration_behavior'
 require './spec/shared/method_matcher_behavior'
 require './spec/support/corpus'
 require './spec/support/file_system'
-require './spec/support/ice_nine_config'
 require './spec/support/ruby_vm'
 require './spec/support/shared_context'
 require './spec/support/xspec'
@@ -38,11 +43,11 @@ end # Fixtures
 
 module PreludeHelper
   def right(value)
-    MPrelude::Either::Right.new(value)
+    Mutant::Either::Right.new(value)
   end
 
   def left(value)
-    MPrelude::Either::Left.new(value)
+    Mutant::Either::Left.new(value)
   end
 end
 

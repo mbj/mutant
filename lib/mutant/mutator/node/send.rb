@@ -13,7 +13,7 @@ module Mutant
 
         children :receiver, :selector
 
-        SELECTOR_REPLACEMENTS = IceNine.deep_freeze(
+        SELECTOR_REPLACEMENTS = {
           :< =>          %i[== eql? equal?],
           :<= =>         %i[< == eql? equal?],
           :== =>         %i[eql? equal?],
@@ -43,13 +43,13 @@ module Mutant
           to_i:          %i[to_int],
           to_s:          %i[to_str],
           values_at:     %i[fetch_values]
-        )
+        }.freeze.tap { |hash| hash.values(&:freeze) }
 
-        RECEIVER_SELECTOR_REPLACEMENTS = IceNine.deep_freeze(
+        RECEIVER_SELECTOR_REPLACEMENTS = {
           Date: {
             parse: %i[jd civil strptime iso8601 rfc3339 xmlschema rfc2822 rfc822 httpdate jisx0301]
-          }
-        )
+          }.freeze
+        }.freeze
 
         REGEXP_MATCH_METHODS    = %i[=~ match match?].freeze
         REGEXP_START_WITH_NODES = %i[regexp_bos_anchor regexp_literal_literal].freeze
