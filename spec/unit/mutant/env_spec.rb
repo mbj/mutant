@@ -4,6 +4,7 @@ RSpec.describe Mutant::Env do
   subject do
     described_class.new(
       config:           config,
+      hooks:            hooks,
       integration:      integration,
       matchable_scopes: [],
       mutations:        [mutation],
@@ -14,6 +15,7 @@ RSpec.describe Mutant::Env do
     )
   end
 
+  let(:hooks)             { instance_double(Mutant::Hooks)       }
   let(:integration_class) { Mutant::Integration::Null            }
   let(:isolation)         { Mutant::Isolation::None.new          }
   let(:process_status)    { instance_double(Process::Status)     }
@@ -84,6 +86,8 @@ RSpec.describe Mutant::Env do
       end
 
       allow(mutation).to receive_messages(insert: loader_result)
+
+      allow(hooks).to receive_messages(run: undefined)
     end
 
     shared_examples 'mutation kill' do
@@ -111,7 +115,9 @@ RSpec.describe Mutant::Env do
         apply
 
         expect(isolation).to have_received(:call).ordered.with(config.mutation_timeout)
+        expect(hooks).to have_received(:run).ordered.with(:mutation_insert_pre, mutation)
         expect(mutation).to have_received(:insert).ordered.with(world.kernel)
+        expect(hooks).to have_received(:run).ordered.with(:mutation_insert_post, mutation)
         expect(integration).to have_received(:call).ordered.with([test_a, test_b])
       end
 
@@ -225,6 +231,7 @@ RSpec.describe Mutant::Env do
       expect(apply).to eql(
         described_class.new(
           config:           config,
+          hooks:            Mutant::Hooks.empty,
           integration:      integration,
           matchable_scopes: Mutant::EMPTY_ARRAY,
           mutations:        Mutant::EMPTY_ARRAY,

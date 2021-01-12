@@ -2,10 +2,11 @@
 
 RSpec.describe Mutant::Bootstrap do
   let(:env_with_scopes)      { env_initial                            }
+  let(:hooks)                { instance_double(Mutant::Hooks)         }
   let(:integration)          { instance_double(Mutant::Integration)   }
   let(:integration_result)   { Mutant::Either::Right.new(integration) }
   let(:kernel)               { fake_kernel.new                        }
-  let(:load_path)            { %w[original]                           }
+  let(:load_path)            { instance_double(Array, :load_path)     }
   let(:match_warnings)       { []                                     }
   let(:object_space)         { class_double(ObjectSpace)              }
   let(:object_space_modules) { []                                     }
@@ -38,7 +39,7 @@ RSpec.describe Mutant::Bootstrap do
   end
 
   let(:env_initial) do
-    Mutant::Env.empty(world, config)
+    Mutant::Env.empty(world, config).with(hooks: hooks)
   end
 
   let(:expected_env) do
@@ -70,6 +71,17 @@ RSpec.describe Mutant::Bootstrap do
   let(:raw_expectations) do
     [
       {
+        receiver:  Mutant::Hooks,
+        selector:  :load_config,
+        arguments: [config],
+        reaction:  { return: hooks }
+      },
+      {
+        receiver:  hooks,
+        selector:  :run,
+        arguments: [:env_infection_pre, env_initial]
+      },
+      {
         receiver:  load_path,
         selector:  :<<,
         arguments: %w[include-a]
@@ -88,6 +100,11 @@ RSpec.describe Mutant::Bootstrap do
         receiver:  kernel,
         selector:  :require,
         arguments: %w[require-b]
+      },
+      {
+        receiver:  hooks,
+        selector:  :run,
+        arguments: [:env_infection_post, env_initial]
       },
       {
         receiver:  object_space,

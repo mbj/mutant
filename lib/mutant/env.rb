@@ -5,6 +5,7 @@ module Mutant
   class Env
     include Adamantium, Anima.new(
       :config,
+      :hooks,
       :integration,
       :matchable_scopes,
       :mutations,
@@ -29,6 +30,7 @@ module Mutant
     def self.empty(world, config)
       new(
         config:           config,
+        hooks:            Hooks.empty,
         integration:      Integration::Null.new(
           expression_parser: config.expression_parser,
           world:             world
@@ -136,7 +138,9 @@ module Mutant
 
     def run_mutation_tests(mutation, tests)
       config.isolation.call(config.mutation_timeout) do
+        hooks.run(:mutation_insert_pre, mutation)
         result = mutation.insert(world.kernel)
+        hooks.run(:mutation_insert_post, mutation)
 
         if result.equal?(Loader::Result::VoidValue.instance)
           Result::Test::VoidValue.instance

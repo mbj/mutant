@@ -10,6 +10,7 @@ module Mutant
       :coverage_criteria,
       :expression_parser,
       :fail_fast,
+      :hooks,
       :includes,
       :integration,
       :isolation,
@@ -49,6 +50,7 @@ module Mutant
       other.with(
         coverage_criteria: coverage_criteria.merge(other.coverage_criteria),
         fail_fast:         fail_fast || other.fail_fast,
+        hooks:             hooks + other.hooks,
         includes:          includes + other.includes,
         integration:       other.integration || integration,
         jobs:              other.jobs || jobs,
@@ -106,6 +108,15 @@ module Mutant
       DEFAULT.with(jobs: Etc.nprocessors)
     end
 
+    PATHNAME_ARRAY = Transform::Array.new(
+      Transform::Sequence.new(
+        [
+          Transform::STRING,
+          Transform::Exception.new(ArgumentError, Pathname.public_method(:new))
+        ]
+      )
+    )
+
     TRANSFORM = Transform::Sequence.new(
       [
         Transform::Exception.new(SystemCallError, :read.to_proc),
@@ -114,6 +125,7 @@ module Mutant
           optional: [
             Transform::Hash::Key.new('coverage_criteria', ->(value) { CoverageCriteria::TRANSFORM.call(value) }),
             Transform::Hash::Key.new('fail_fast',         Transform::BOOLEAN),
+            Transform::Hash::Key.new('hooks',             PATHNAME_ARRAY),
             Transform::Hash::Key.new('includes',          Transform::STRING_ARRAY),
             Transform::Hash::Key.new('integration',       Transform::STRING),
             Transform::Hash::Key.new('jobs',              Transform::INTEGER),
