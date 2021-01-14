@@ -6,5 +6,4 @@ Mutant::Meta::Example.add :lvar do
   source 'a'
 
   mutation 'nil'
-  mutation 'self'
 end

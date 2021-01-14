@@ -12,7 +12,6 @@ Mutant::Meta::Example.add :def do
 
   mutation 'def foo; raise; end'
   mutation 'def foo; nil; rescue; end'
-  mutation 'def foo; self; rescue; end'
   mutation 'def foo; end'
   mutation 'def foo; super; end'
 
@@ -25,11 +24,8 @@ Mutant::Meta::Example.add :def do
 
   # Mutate all bodies
   mutation 'def a; nil;  rescue; bar; else; baz; end'
-  mutation 'def a; self; rescue; bar; else; baz; end'
   mutation 'def a; foo; rescue; nil;  else; baz; end'
-  mutation 'def a; foo; rescue; self; else; baz; end'
   mutation 'def a; foo; rescue; bar; else; nil; end'
-  mutation 'def a; foo; rescue; bar; else; self; end'
 
   # Promote and concat rescue resbody bodies
   mutation 'def a; foo; bar; end'
@@ -128,10 +124,8 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(_a = 0, b = 0); end'
   mutation 'def foo(a = 0, b = 1); end'
   mutation 'def foo(a = 0, b = -1); end'
-  mutation 'def foo(a = 0, b = self); end'
   mutation 'def foo(a = 0, b = nil); end'
   mutation 'def foo(a = -1, b = 0); end'
-  mutation 'def foo(a = self, b = 0); end'
   mutation 'def foo(a = nil, b = 0); end'
   mutation 'def foo(a = 1, b = 0); end'
   mutation 'def foo(a = 0); end'

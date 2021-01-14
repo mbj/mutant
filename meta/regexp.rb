@@ -16,7 +16,6 @@ Mutant::Meta::Example.add :regexp do
   mutation '/#{foo}n/'
   mutation '/#{self.bar}n/'
   mutation '/#{nil}n/'
-  mutation '/#{self}n/'
 end
 
 Mutant::Meta::Example.add :regexp do
@@ -25,7 +24,6 @@ Mutant::Meta::Example.add :regexp do
   singleton_mutations
   regexp_mutations
 
-  mutation '/#{self}/'
   mutation '/#{nil}/'
 end
 
@@ -36,7 +34,6 @@ Mutant::Meta::Example.add :regexp do
   regexp_mutations
 
   mutation '/#{nil}#{nil}/'
-  mutation '/#{self}#{nil}/'
 end
 
 Mutant::Meta::Example.add :regexp do

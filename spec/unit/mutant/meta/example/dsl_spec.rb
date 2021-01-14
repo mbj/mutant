@@ -82,10 +82,6 @@ RSpec.describe Mutant::Meta::Example::DSL do
           Mutant::Meta::Example::Expected.new(
             node:            s(:nil),
             original_source: 'nil'
-          ),
-          Mutant::Meta::Example::Expected.new(
-            node:            s(:self),
-            original_source: 'self'
           )
         ]
       end

@@ -14,5 +14,4 @@ Mutant::Meta::Example.add :regexp_bos_anchor do
   regexp_mutations
 
   mutation '/^#{nil}/'
-  mutation '/^#{self}/'
 end

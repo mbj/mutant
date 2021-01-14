@@ -6,7 +6,6 @@ Mutant::Meta::Example.add :or_asgn do
   singleton_mutations
   mutation 'a__mutant__ ||= 1'
   mutation 'a ||= nil'
-  mutation 'a ||= self'
   mutation 'a ||= 0'
   mutation 'a ||= -1'
   mutation 'a ||= 2'
@@ -17,7 +16,6 @@ Mutant::Meta::Example.add :or_asgn do
 
   singleton_mutations
   mutation '@a ||= nil'
-  mutation '@a ||= self'
   mutation '@a ||= 0'
   mutation '@a ||= -1'
   mutation '@a ||= 2'
@@ -43,7 +41,6 @@ Mutant::Meta::Example.add :or_asgn do
 
   singleton_mutations
   mutation 'foo[:bar] ||= nil'
-  mutation 'foo[:bar] ||= self'
   mutation 'foo[:bar] ||= 0'
   mutation 'foo[:bar] ||= -1'
   mutation 'foo[:bar] ||= 2'

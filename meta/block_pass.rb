@@ -6,7 +6,6 @@ Mutant::Meta::Example.add :block_pass do
   singleton_mutations
   mutation 'foo'
   mutation 'foo(&nil)'
-  mutation 'foo(&self)'
 end
 
 Mutant::Meta::Example.add :block_pass do
@@ -15,10 +14,8 @@ Mutant::Meta::Example.add :block_pass do
   singleton_mutations
   mutation 'foo'
   mutation 'foo(&nil)'
-  mutation 'foo(&self)'
   mutation 'foo(&method)'
   mutation 'foo(&method(nil))'
-  mutation 'foo(&method(self))'
   mutation 'foo(&method(:bar__mutant__))'
   mutation 'foo(&public_method(:bar))'
   mutation 'foo(&:bar)'
@@ -30,7 +27,6 @@ Mutant::Meta::Example.add :block_pass do
   singleton_mutations
   mutation 'foo'
   mutation 'foo(&nil)'
-  mutation 'foo(&self)'
   mutation 'foo(&:to_str)'
   mutation 'foo(&:to_s__mutant__)'
 end
@@ -41,6 +37,5 @@ Mutant::Meta::Example.add :block_pass do
   singleton_mutations
   mutation 'foo'
   mutation 'foo(&nil)'
-  mutation 'foo(&self)'
   mutation 'foo(&:bar__mutant__)'
 end

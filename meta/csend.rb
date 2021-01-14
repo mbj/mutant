@@ -19,7 +19,6 @@ Mutant::Meta::Example.add :csend do
   mutation 'a&.public_send'
   mutation 'a&.public_send(:b__mutant__)'
   mutation 'a&.public_send(nil)'
-  mutation 'a&.public_send(self)'
   mutation 'self&.public_send(:b)'
   mutation 'a&.b'
 end

@@ -10,10 +10,8 @@ Mutant::Meta::Example.add :indexasgn do
   mutation 'foo.at(bar)'
   mutation 'foo.fetch(bar)'
   mutation 'foo.key?(bar)'
-  mutation 'foo[bar] = self'
   mutation 'foo[bar] = nil'
   mutation 'foo[nil] = baz'
-  mutation 'foo[self] = baz'
   mutation 'foo[] = baz'
   mutation 'baz'
   mutation 'bar'
@@ -25,7 +23,5 @@ Mutant::Meta::Example.add :indexasgn, :op_asgn do
   singleton_mutations
   mutation 'self[] += bar'
   mutation 'self[nil] += bar'
-  mutation 'self[self] += bar'
   mutation 'self[foo] += nil'
-  mutation 'self[foo] += self'
 end

@@ -1,3 +1,8 @@
+# Unreleased
+
+* [#1210](https://github.com/mbj/mutant/pull/1210)
+  * Remove generic mutation to `self`
+
 # v0.10.26 2021-01-16
 
 * [#1201](https://github.com/mbj/mutant/pull/1201)

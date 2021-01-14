@@ -18,5 +18,4 @@ Mutant::Meta::Example.add :ivasgn do
   mutation '@a &&= 0'
   mutation '@a &&= -1'
   mutation '@a &&= 2'
-  mutation '@a &&= self'
 end

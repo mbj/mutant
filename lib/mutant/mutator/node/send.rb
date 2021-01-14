@@ -232,9 +232,16 @@ module Mutant
         def mutate_receiver
           return unless receiver
           emit_implicit_self
+          emit_explicit_self
           emit_receiver_mutations do |node|
             !n_nil?(node)
           end
+        end
+
+        def emit_explicit_self
+          return if UNARY_METHOD_OPERATORS.include?(selector)
+
+          emit_receiver(N_SELF) unless n_nil?(receiver)
         end
 
         def emit_implicit_self
