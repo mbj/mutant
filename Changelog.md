@@ -1,4 +1,4 @@
-# v0.10.26 2021-01-26
+# v0.10.26 2021-01-16
 
 * [#1201](https://github.com/mbj/mutant/pull/1201)
 
@@ -21,7 +21,7 @@
 
 * [#1204](https://github.com/mbj/mutant/pull/1204)
 
-  * Allow constants to be passed to minitst integrations `cover` declaration.
+  * Allow constants to be passed to minitest integrations `cover` declaration.
     `cover SomeClass` is equivalent to `cover 'SomeClass*'`.
 
 * [#1194](https://github.com/mbj/mutant/pull/1194)
