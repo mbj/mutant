@@ -165,7 +165,7 @@ module MutantSpec
         original_source = Unparser.unparse(original)
         mutation_source = Unparser.unparse(mutation)
 
-        Mutant::Diff.build(original_source, mutation_source) and return
+        Unparser::Diff.build(original_source, mutation_source) and return
 
         fail Mutant::Reporter::CLI::NO_DIFF_MESSAGE % [
           original_source,
