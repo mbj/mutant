@@ -103,7 +103,7 @@ module XSpecHelper
 end # XSpecHelper
 
 RSpec.configuration.around(file_path: %r{spec/unit}) do |example|
-  Timeout.timeout(2, &example)
+  Timeout.timeout(3, &example)
 end
 
 RSpec.shared_examples_for 'a command method' do
