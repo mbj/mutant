@@ -17,6 +17,7 @@ module Mutant
         def dispatch
           emit_singletons
           emit_receiver_mutations { |node| !n_nil?(node) }
+          emit_type(N_SELF, *children.drop(1))
           emit(receiver)
           emit_send_forms
           emit_drop_mutation

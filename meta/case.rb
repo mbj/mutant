@@ -50,16 +50,6 @@ Mutant::Meta::Example.add :case do
   RUBY
 
   mutation <<-RUBY
-    case self
-    when A
-    when B, C
-      C
-    else
-      D
-    end
-  RUBY
-
-  mutation <<-RUBY
     case condition
     when A
       raise
@@ -73,16 +63,6 @@ Mutant::Meta::Example.add :case do
   mutation <<-RUBY
     case condition
     when nil
-    when B, C
-      C
-    else
-      D
-    end
-  RUBY
-
-  mutation <<-RUBY
-    case condition
-    when self
     when B, C
       C
     else
@@ -112,16 +92,6 @@ Mutant::Meta::Example.add :case do
   mutation <<-RUBY
     case condition
     when A
-    when B, C
-      self
-    else
-      D
-    end
-  RUBY
-
-  mutation <<-RUBY
-    case condition
-    when A
     when C
       C
     else
@@ -133,16 +103,6 @@ Mutant::Meta::Example.add :case do
     case condition
     when A
     when nil, C
-      C
-    else
-      D
-    end
-  RUBY
-
-  mutation <<-RUBY
-    case condition
-    when A
-    when self, C
       C
     else
       D
@@ -172,16 +132,6 @@ Mutant::Meta::Example.add :case do
   mutation <<-RUBY
     case condition
     when A
-    when B, self
-      C
-    else
-      D
-    end
-  RUBY
-
-  mutation <<-RUBY
-    case condition
-    when A
     else
       D
     end
@@ -194,16 +144,6 @@ Mutant::Meta::Example.add :case do
       C
     else
       nil
-    end
-  RUBY
-
-  mutation <<-RUBY
-    case condition
-    when A
-    when B, C
-      C
-    else
-      self
     end
   RUBY
 

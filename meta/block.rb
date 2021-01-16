@@ -9,9 +9,7 @@ Mutant::Meta::Example.add :block do
   mutation 'foo {}'
   mutation 'foo { raise }'
   mutation 'foo { a; nil }'
-  mutation 'foo { a; self }'
   mutation 'foo { nil; b }'
-  mutation 'foo { self; b }'
   mutation 'foo'
   mutation 'a; b'
 end
@@ -51,8 +49,6 @@ Mutant::Meta::Example.add :block do
   singleton_mutations
   mutation 'foo(a, nil) {}'
   mutation 'foo(nil, b) {}'
-  mutation 'foo(self, b) {}'
-  mutation 'foo(a, self) {}'
   mutation 'foo(a, b)'
   mutation 'foo(a, b) { raise }'
   mutation 'foo(a) {}'
@@ -87,7 +83,6 @@ Mutant::Meta::Example.add :block do
   mutation 'foo { bar }'
   mutation 'foo { nil }'
   mutation 'foo {}'
-  mutation 'foo { self }'
   mutation 'foo { raise }'
   mutation 'foo.bar(nil)'
   mutation 'bar(nil)'
@@ -115,10 +110,8 @@ Mutant::Meta::Example.add :block do
   singleton_mutations
   mutation 'foo'
   mutation 'foo { }'
-  mutation 'foo { self }'
   mutation 'foo { nil }'
   mutation 'foo { raise }'
-  mutation 'foo { self if true }'
   mutation 'foo { nil if true }'
   mutation 'foo { break if true }'
   mutation 'foo { next if !true }'
@@ -132,7 +125,6 @@ Mutant::Meta::Example.add :block do
   singleton_mutations
   mutation 'foo { nil }'
   mutation 'foo { raise }'
-  mutation 'foo { self }'
   mutation 'foo { break }'
   mutation 'foo { }'
   mutation 'foo'
@@ -144,10 +136,8 @@ Mutant::Meta::Example.add :block do
   singleton_mutations
   mutation 'foo'
   mutation 'foo { }'
-  mutation 'foo { self }'
   mutation 'foo { nil }'
   mutation 'foo { raise }'
-  mutation 'foo { self if true }'
   mutation 'foo { nil if true }'
   mutation 'foo { break if !true }'
   mutation 'foo { break if false }'
@@ -160,7 +150,6 @@ Mutant::Meta::Example.add :block do
   singleton_mutations
   mutation 'foo { nil }'
   mutation 'foo { raise }'
-  mutation 'foo { self }'
   mutation 'foo { }'
   mutation 'foo'
 end
@@ -175,7 +164,6 @@ Mutant::Meta::Example.add :block do
   mutation 'foo(&:bar).baz'
   mutation 'self.baz {}'
   mutation 'foo(&nil).baz {}'
-  mutation 'foo(&self).baz {}'
   mutation 'foo(&:bar__mutant__).baz {}'
 end
 
@@ -190,7 +178,6 @@ Mutant::Meta::Example.add :block do
   mutation 'self.baz { }'
   mutation 'foo(nil, &:bar).baz'
 
-  mutation 'foo(nil, &self).baz {}'
   mutation 'foo(nil, &nil).baz {}'
   mutation 'foo(nil, &:bar__mutant__).baz {}'
 end

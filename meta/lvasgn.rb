@@ -14,11 +14,8 @@ Mutant::Meta::Example.add :array, :lvasgn do
   singleton_mutations
   mutation 'a__mutant__ = *b'
   mutation 'a = nil'
-  mutation 'a = self'
   mutation 'a = []'
   mutation 'a = [nil]'
-  mutation 'a = [self]'
-  mutation 'a = [*self]'
   mutation 'a = [*nil]'
   mutation 'a = [b]'
 end

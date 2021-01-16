@@ -12,5 +12,4 @@ Mutant::Meta::Example.add :return do
   singleton_mutations
   mutation 'foo'
   mutation 'return nil'
-  mutation 'return self'
 end

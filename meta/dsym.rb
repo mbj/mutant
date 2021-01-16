@@ -6,5 +6,4 @@ Mutant::Meta::Example.add :dsym do
   singleton_mutations
 
   mutation ':"foo#{nil}baz"'
-  mutation ':"foo#{self}baz"'
 end

@@ -67,11 +67,6 @@ module Mutant
 
       def emit_singletons
         emit_nil
-        emit_self
-      end
-
-      def emit_self
-        emit(N_SELF)
       end
 
       def emit_nil

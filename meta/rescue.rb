@@ -5,8 +5,6 @@ Mutant::Meta::Example.add :rescue do
 
   singleton_mutations
   mutation 'begin; rescue ExceptionA, ExceptionB; true; end'
-  mutation 'begin; rescue self, ExceptionB => error; true; end'
-  mutation 'begin; rescue ExceptionA, self => error; true; end'
   mutation 'begin; rescue ExceptionA, ExceptionB => error; false; end'
   mutation 'begin; true; end'
 
@@ -18,7 +16,6 @@ Mutant::Meta::Example.add :rescue do
   singleton_mutations
   mutation 'begin; rescue SomeException; true; end'
   mutation 'begin; rescue SomeException => error; false; end'
-  mutation 'begin; rescue self => error; true; end'
   mutation 'begin; true; end'
 end
 
@@ -51,11 +48,8 @@ Mutant::Meta::Example.add :rescue do
 
   # Mutate all bodies
   mutation 'def a; nil;  rescue; bar; else; baz; end'
-  mutation 'def a; self; rescue; bar; else; baz; end'
   mutation 'def a; foo; rescue; nil;  else; baz; end'
-  mutation 'def a; foo; rescue; self; else; baz; end'
   mutation 'def a; foo; rescue; bar; else; nil; end'
-  mutation 'def a; foo; rescue; bar; else; self; end'
 
   # Promote and concat rescue resbody bodies
   mutation 'def a; foo; bar; end'

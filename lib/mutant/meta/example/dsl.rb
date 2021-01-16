@@ -79,7 +79,6 @@ module Mutant
 
         def singleton_mutations
           mutation('nil')
-          mutation('self')
         end
 
         def regexp_mutations

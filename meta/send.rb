@@ -8,9 +8,7 @@ Mutant::Meta::Example.add :send do
   mutation 'a.eql?(b)'
   mutation 'a.equal?(b)'
   mutation 'nil > b'
-  mutation 'self > b'
   mutation 'a > nil'
-  mutation 'a > self'
   mutation 'a'
   mutation 'b'
 end
@@ -24,7 +22,6 @@ Mutant::Meta::Example.add :send do
   mutation 'A'
   mutation ':B'
   mutation 'A.const_get(nil)'
-  mutation 'A.const_get(self)'
   mutation 'A.const_get(:B__mutant__)'
   mutation 'self.const_get(:B)'
 end
@@ -37,7 +34,6 @@ Mutant::Meta::Example.add :send do
   mutation 'A'
   mutation 'bar'
   mutation 'A.const_get(nil)'
-  mutation 'A.const_get(self)'
   mutation 'self.const_get(bar)'
 end
 
@@ -49,7 +45,6 @@ Mutant::Meta::Example.add :send do
   mutation 'method'
   mutation 'bar'
   mutation 'method(nil)'
-  mutation 'method(self)'
 end
 
 Mutant::Meta::Example.add :send do
@@ -61,9 +56,7 @@ Mutant::Meta::Example.add :send do
   mutation 'a.eql?(b)'
   mutation 'a.equal?(b)'
   mutation 'nil >= b'
-  mutation 'self >= b'
   mutation 'a >= nil'
-  mutation 'a >= self'
   mutation 'a'
   mutation 'b'
 end
@@ -77,9 +70,7 @@ Mutant::Meta::Example.add :send do
   mutation 'a.eql?(b)'
   mutation 'a.equal?(b)'
   mutation 'nil <= b'
-  mutation 'self <= b'
   mutation 'a <= nil'
-  mutation 'a <= self'
   mutation 'a'
   mutation 'b'
 end
@@ -92,9 +83,7 @@ Mutant::Meta::Example.add :send do
   mutation 'a.eql?(b)'
   mutation 'a.equal?(b)'
   mutation 'nil < b'
-  mutation 'self < b'
   mutation 'a < nil'
-  mutation 'a < self'
   mutation 'a'
   mutation 'b'
 end
@@ -197,9 +186,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'bar'
   mutation 'nil == bar'
-  mutation 'self == bar'
   mutation 'foo == nil'
-  mutation 'foo == self'
   mutation 'foo.eql?(bar)'
   mutation 'foo.equal?(bar)'
 end
@@ -212,7 +199,6 @@ Mutant::Meta::Example.add :send do
   mutation 'bar'
   mutation 'foo.is_a?'
   mutation 'foo.is_a?(nil)'
-  mutation 'foo.is_a?(self)'
   mutation 'self.is_a?(bar)'
   mutation 'foo.instance_of?(bar)'
   mutation 'false'
@@ -227,7 +213,6 @@ Mutant::Meta::Example.add :send do
   mutation 'bar'
   mutation 'foo.kind_of?'
   mutation 'foo.kind_of?(nil)'
-  mutation 'foo.kind_of?(self)'
   mutation 'self.kind_of?(bar)'
   mutation 'foo.instance_of?(bar)'
   mutation 'false'
@@ -244,9 +229,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.gsub'
   mutation 'foo.sub(a, b)'
   mutation 'foo.gsub(a, nil)'
-  mutation 'foo.gsub(a, self)'
   mutation 'foo.gsub(nil, b)'
-  mutation 'foo.gsub(self, b)'
   mutation 'self.gsub(a, b)'
 end
 
@@ -260,9 +243,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.values_at(a)'
   mutation 'foo.values_at(b)'
   mutation 'foo.values_at(nil, b)'
-  mutation 'foo.values_at(self, b)'
   mutation 'foo.values_at(a, nil)'
-  mutation 'foo.values_at(a, self)'
   mutation 'foo.values_at'
 end
 
@@ -276,9 +257,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.dig(a)'
   mutation 'foo.dig(b)'
   mutation 'foo.dig(nil, b)'
-  mutation 'foo.dig(self, b)'
   mutation 'foo.dig(a, nil)'
-  mutation 'foo.dig(a, self)'
   mutation 'foo.dig'
 end
 
@@ -290,7 +269,6 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'self.dig(a)'
   mutation 'foo.dig(nil)'
-  mutation 'foo.dig(self)'
   mutation 'foo.dig'
   mutation 'a'
 end
@@ -313,7 +291,6 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'self.__send__(bar)'
   mutation 'foo.__send__(nil)'
-  mutation 'foo.__send__(self)'
 end
 
 Mutant::Meta::Example.add :send do
@@ -325,7 +302,6 @@ Mutant::Meta::Example.add :send do
   mutation 'public_send(:foo)'
   mutation ':foo'
   mutation '__send__(nil)'
-  mutation '__send__(self)'
   mutation '__send__(:foo__mutant__)'
 end
 
@@ -341,7 +317,6 @@ Mutant::Meta::Example.add :send do
   mutation ':bar'
   mutation 'self.send(:bar)'
   mutation 'foo.send(nil)'
-  mutation 'foo.send(self)'
   mutation 'foo.send(:bar__mutant__)'
 end
 
@@ -354,22 +329,19 @@ Mutant::Meta::Example.add :send do
   mutation 'public_send'
 end
 
-Mutant::Meta::Example.add :send do # rubocop:disable Metrics/BlockLength
+Mutant::Meta::Example.add :send do
   source 'foo.public_send(:bar, 1, two: true, **kwargs, &block)'
 
   singleton_mutations
   mutation 'foo.public_send(:bar, 1, two: true, **kwargs, &nil)'
-  mutation 'foo.public_send(:bar, 1, two: true, **kwargs, &self)'
   mutation 'foo.bar(1, two: true, **kwargs, &block)'
   mutation 'foo'
   mutation 'self.public_send(:bar, 1, two: true, **kwargs, &block)'
   mutation 'foo.public_send'
   mutation 'foo.public_send(nil, 1, two: true, **kwargs, &block)'
-  mutation 'foo.public_send(self, 1, two: true, **kwargs, &block)'
   mutation 'foo.public_send(:bar__mutant__, 1, two: true, **kwargs, &block)'
   mutation 'foo.public_send(1, two: true, **kwargs, &block)'
   mutation 'foo.public_send(:bar, nil, two: true, **kwargs, &block)'
-  mutation 'foo.public_send(:bar, self, two: true, **kwargs, &block)'
   mutation 'foo.public_send(:bar, 0, two: true, **kwargs, &block)'
   mutation 'foo.public_send(:bar, -1, two: true, **kwargs, &block)'
   mutation 'foo.public_send(:bar, 2, two: true, **kwargs, &block)'
@@ -378,7 +350,6 @@ Mutant::Meta::Example.add :send do # rubocop:disable Metrics/BlockLength
   mutation 'foo.public_send(:bar, 1, two: false, **kwargs, &block)'
   mutation 'foo.public_send(:bar, 1, **kwargs, &block)'
   mutation 'foo.public_send(:bar, 1, two: true, **nil, &block)'
-  mutation 'foo.public_send(:bar, 1, two: true, **self, &block)'
   mutation 'foo.public_send(:bar, 1, two: true, &block)'
   mutation 'foo.public_send(:bar, 1, &block)'
   mutation 'foo.public_send(:bar, 1, two: true, **kwargs)'
@@ -395,15 +366,14 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'self.send(bar)'
   mutation 'foo.send(nil)'
-  mutation 'foo.send(self)'
 end
 
 Mutant::Meta::Example.add :send do
   source 'self.booz = baz'
 
   singleton_mutations
+  mutation 'self'
   mutation 'self.booz = nil'
-  mutation 'self.booz = self'
   mutation 'self.booz'
   mutation 'baz'
 end
@@ -414,7 +384,6 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'foo'
   mutation 'foo.booz = nil'
-  mutation 'foo.booz = self'
   mutation 'self.booz = baz'
   mutation 'foo.booz'
   mutation 'baz'
@@ -427,9 +396,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'foo(nil)'
   mutation 'foo(bar)'
-  mutation 'foo(self)'
   mutation 'foo(*nil)'
-  mutation 'foo(*self)'
 end
 
 Mutant::Meta::Example.add :send do
@@ -438,7 +405,6 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'foo'
   mutation 'foo(&nil)'
-  mutation 'foo(&self)'
 end
 
 Mutant::Meta::Example.add :send do
@@ -451,6 +417,7 @@ Mutant::Meta::Example.add :send do
   source 'self.foo'
 
   singleton_mutations
+  mutation 'self'
   mutation 'foo'
 end
 
@@ -459,6 +426,7 @@ Unparser::Constants::KEYWORDS.each do |keyword|
     source "self.#{keyword}"
 
     singleton_mutations
+    mutation 'self'
   end
 end
 
@@ -489,6 +457,7 @@ Mutant::Meta::Example.add :send do
   source 'self.foo(nil)'
 
   singleton_mutations
+  mutation 'self'
   mutation 'self.foo'
   mutation 'foo(nil)'
 end
@@ -497,6 +466,7 @@ Mutant::Meta::Example.add :send do
   source 'self.fetch(nil)'
 
   singleton_mutations
+  mutation 'self'
   mutation 'self.fetch'
   mutation 'fetch(nil)'
   mutation 'self.key?(nil)'
@@ -530,13 +500,9 @@ Mutant::Meta::Example.add :send do
   mutation '(left) / foo'
   mutation '(right) / foo'
   mutation '(left - right) / nil'
-  mutation '(left - right) / self'
   mutation '(left - nil) / foo'
-  mutation '(left - self) / foo'
   mutation '(nil - right) / foo'
-  mutation '(self - right) / foo'
   mutation '(nil) / foo'
-  mutation '(self) / foo'
 end
 
 Mutant::Meta::Example.add :send do
@@ -546,12 +512,9 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'n..-1'
   mutation 'foo(nil)'
-  mutation 'foo(self)'
   mutation 'foo(n...-1)'
   mutation 'foo(nil..-1)'
-  mutation 'foo(self..-1)'
   mutation 'foo(n..nil)'
-  mutation 'foo(n..self)'
   mutation 'foo(n..0)'
   mutation 'foo(n..1)'
   mutation 'foo(n..-2)'
@@ -574,11 +537,9 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'nil != b'
-  mutation 'self != b'
   mutation 'a'
   mutation 'b'
   mutation 'a != nil'
-  mutation 'a != self'
   mutation '!a.eql?(b)'
   mutation '!a.equal?(b)'
 end
@@ -588,8 +549,6 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation '!foo'
-  mutation '!self'
-  mutation '!!self'
   mutation 'foo'
 end
 
@@ -598,7 +557,6 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'foo'
-  mutation '!self'
 end
 
 Mutant::Meta::Example.add :send do
@@ -606,9 +564,7 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'foo&.!'
-  mutation '!self'
   mutation '!foo'
-  mutation '!self&.!'
   mutation '!!foo'
 end
 
@@ -647,7 +603,6 @@ Mutant::Meta::Example.add :send do
   singleton_mutations
   mutation 'a'
   mutation 'nil =~ //'
-  mutation 'self =~ //'
   mutation '//'
   mutation 'a =~ /nomatch\A/'
   mutation 'a.match?(//)'
@@ -658,9 +613,9 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'a'
+  mutation 'self.match(a)'
   mutation '//.match'
   mutation '//.match(nil)'
-  mutation '//.match(self)'
   mutation '//'
   mutation '/nomatch\A/.match(a)'
   mutation '//.match?(a)'
@@ -676,7 +631,6 @@ Mutant::Meta::Example.add :send do
   mutation 'foo(bar { raise })'
   mutation 'foo(bar {})'
   mutation 'foo(bar)'
-  mutation 'foo(self)'
   mutation 'foo(nil)'
 end
 
@@ -687,7 +641,6 @@ Mutant::Meta::Example.add :send do
   mutation 'a'
   mutation 'Array()'
   mutation 'Array(nil)'
-  mutation 'Array(self)'
   mutation '[a]'
 end
 
@@ -700,7 +653,6 @@ Mutant::Meta::Example.add :send do
   mutation 'self.Array(a)'
   mutation 'Kernel.Array'
   mutation 'Kernel.Array(nil)'
-  mutation 'Kernel.Array(self)'
   mutation '[a]'
 end
 
@@ -713,7 +665,6 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'foo.Array'
   mutation 'foo.Array(nil)'
-  mutation 'foo.Array(self)'
 end
 
 Mutant::Meta::Example.add :send do
@@ -733,9 +684,7 @@ Mutant::Meta::Example.add :send do
   mutation 'a'
   mutation 'b'
   mutation 'nil === b'
-  mutation 'self === b'
   mutation 'a === nil'
-  mutation 'a === self'
   mutation 'a.is_a?(b)'
 end
 
@@ -775,7 +724,6 @@ Mutant::Meta::Example.add :send do
 
   mutation 'a'
   mutation 'nil =~ /\Afoo/'
-  mutation 'self =~ /\Afoo/'
   mutation '/\Afoo/'
   mutation 'a =~ //'
   mutation 'a =~ /nomatch\A/'
@@ -790,7 +738,6 @@ Mutant::Meta::Example.add :send do
   mutation 'match?(/\Afoo/)'
   mutation 'match?(1)'
   mutation 'match?(/\Afoo/, nil)'
-  mutation 'match?(/\Afoo/, self)'
   mutation 'match?(/\Afoo/, -1)'
   mutation 'match?(/\Afoo/, 0)'
   mutation 'match?(/\Afoo/, 2)'
@@ -825,4 +772,10 @@ Mutant::Meta::Example.add :send do
   mutation 'a.match(/nomatch\A/)'
   mutation 'self.match(/foo\z/)'
   mutation "a.end_with?('foo')"
+end
+
+Mutant::Meta::Example.add :send do
+  source 'nil.to_f'
+
+  mutation 'nil'
 end

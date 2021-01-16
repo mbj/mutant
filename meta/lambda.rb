@@ -14,7 +14,6 @@ Mutant::Meta::Example.add :block, :lambda do
   singleton_mutations
 
   mutation '->() { }'
-  mutation '->() { self }'
   mutation '->() { nil }'
   mutation '->() { raise }'
   mutation '->() { self.bar }'

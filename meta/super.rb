@@ -21,7 +21,5 @@ Mutant::Meta::Example.add :super do
   mutation 'super(foo)'
   mutation 'super(bar)'
   mutation 'super(foo, nil)'
-  mutation 'super(foo, self)'
   mutation 'super(nil, bar)'
-  mutation 'super(self, bar)'
 end
