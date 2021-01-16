@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'anima'
 require 'mutant'
 require 'parallel'
 

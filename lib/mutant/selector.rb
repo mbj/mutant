@@ -3,7 +3,7 @@
 module Mutant
   # Abstract base class for test selectors
   class Selector
-    include AbstractType, Adamantium::Flat
+    include AbstractType, Adamantium
 
     # Tests for subject
     #

@@ -3,7 +3,7 @@
 module Mutant
   # Pipe abstraction
   class Pipe
-    include Adamantium::Flat, Anima.new(:reader, :writer)
+    include Adamantium, Anima.new(:reader, :writer)
 
     # Run block with pipe in binmode
     #

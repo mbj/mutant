@@ -15,7 +15,7 @@ module Mutant
             regexp_xgrapheme_type:       :regexp_linebreak_type
           }
 
-          MAP = IceNine.deep_freeze(map.merge(map.invert))
+          MAP = map.merge(map.invert)
 
           handle(*MAP.keys)
 

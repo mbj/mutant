@@ -9,12 +9,12 @@ RSpec.describe Mutant do
     let(:values) { [1, 2, 3] }
 
     context 'all evalauting to right' do
-      let(:action) { ->(value) { MPrelude::Either::Right.new(value.to_s) } }
-      let(:values) { [1, 2, 3]                                             }
+      let(:action) { ->(value) { right(value.to_s) } }
+      let(:values) { [1, 2, 3] }
 
       it 'returns values' do
         expect(apply)
-          .to eql(MPrelude::Either::Right.new(values.map(&:to_s)))
+          .to eql(right(values.map(&:to_s)))
       end
     end
 
@@ -23,15 +23,15 @@ RSpec.describe Mutant do
       let(:action) do
         lambda do |value|
           if value.equal?(2)
-            MPrelude::Either::Left.new(2)
+            left(2)
           else
-            MPrelude::Either::Right.new(value)
+            right(value)
           end
         end
       end
 
       it 'returns first left value' do
-        expect(apply).to eql(MPrelude::Either::Left.new(2))
+        expect(apply).to eql(left(2))
       end
     end
   end

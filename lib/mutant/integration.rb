@@ -4,7 +4,7 @@ module Mutant
 
   # Abstract base class mutant test framework integrations
   class Integration
-    include AbstractType, Adamantium::Flat, Anima.new(:expression_parser, :world)
+    include AbstractType, Adamantium, Anima.new(:expression_parser, :world)
 
     LOAD_MESSAGE = <<~'MESSAGE'
       Unable to load integration mutant-%<integration_name>s:

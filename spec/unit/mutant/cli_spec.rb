@@ -70,7 +70,7 @@ RSpec.describe Mutant::CLI do
 
     @test_klass =
       Class.new do
-        include Anima.new(:arguments, :expected_exit, :expected_events, :expected_zombie)
+        include Unparser::Anima.new(:arguments, :expected_exit, :expected_events, :expected_zombie)
       end
 
     def self.make
@@ -277,8 +277,8 @@ RSpec.describe Mutant::CLI do
       include_context 'license validation'
 
       context 'on valid license' do
-        let(:expected_exit)  { true                                      }
-        let(:license_result) { MPrelude::Either::Right.new(subscription) }
+        let(:expected_exit)  { true                }
+        let(:license_result) { right(subscription) }
 
         let(:expected_events) do
           [
@@ -298,8 +298,8 @@ RSpec.describe Mutant::CLI do
       end
 
       context 'on invalid license' do
-        let(:expected_exit)  { false                                       }
-        let(:license_result) { MPrelude::Either::Left.new('error-message') }
+        let(:expected_exit)  { false                 }
+        let(:license_result) { left('error-message') }
 
         let(:expected_events) do
           [
@@ -322,8 +322,8 @@ RSpec.describe Mutant::CLI do
       include_context 'license validation'
 
       context 'on valid license' do
-        let(:expected_exit)  { true                                      }
-        let(:license_result) { MPrelude::Either::Right.new(subscription) }
+        let(:expected_exit)  { true                }
+        let(:license_result) { right(subscription) }
 
         let(:subscription) do
           instance_double(
@@ -336,8 +336,8 @@ RSpec.describe Mutant::CLI do
       end
 
       context 'on invalid license' do
-        let(:expected_exit)   { false                                       }
-        let(:license_result)  { MPrelude::Either::Left.new('error-message') }
+        let(:expected_exit)   { false                 }
+        let(:license_result)  { left('error-message') }
 
         include_examples 'CLI run'
       end
@@ -346,13 +346,13 @@ RSpec.describe Mutant::CLI do
     shared_context 'environment' do
       let(:arguments)            { %w[run]                                              }
       let(:bootstrap_config)     { env_config.merge(file_config).expand_defaults        }
-      let(:bootstrap_result)     { MPrelude::Either::Right.new(env)                     }
+      let(:bootstrap_result)     { right(env)                                           }
       let(:env_result)           { instance_double(Mutant::Result::Env, success?: true) }
       let(:expected_events)      { [license_validation_event]                           }
       let(:expected_exit)        { true                                                 }
-      let(:file_config_result)   { MPrelude::Either::Right.new(file_config)             }
-      let(:license_result)       { MPrelude::Either::Right.new(subscription)            }
-      let(:runner_result)        { MPrelude::Either::Right.new(env_result)              }
+      let(:file_config_result)   { right(file_config)                                   }
+      let(:license_result)       { right(subscription)                                  }
+      let(:runner_result)        { right(env_result)                                    }
       let(:subject_a_expression) { parse_expression('Object#send')                      }
       let(:subjects)             { [subject_a]                                          }
       let(:tests)                { [test_a, test_b]                                     }
@@ -561,8 +561,8 @@ RSpec.describe Mutant::CLI do
       include_context 'environment'
 
       context 'on invalid license' do
-        let(:expected_exit)    { true                                        }
-        let(:license_result)   { MPrelude::Either::Left.new('license-error') }
+        let(:expected_exit)    { true                  }
+        let(:license_result)   { left('license-error') }
 
         let(:expected_events) do
           [
@@ -619,11 +619,8 @@ RSpec.describe Mutant::CLI do
         end
 
         context 'on runner fail' do
-          let(:expected_exit) { false }
-
-          let(:runner_result) do
-            MPrelude::Either::Left.new('runner failure')
-          end
+          let(:expected_exit) { false                  }
+          let(:runner_result) { left('runner failure') }
 
           let(:expected_events) do
             [
@@ -640,17 +637,14 @@ RSpec.describe Mutant::CLI do
         end
 
         context 'on runner success with unsuccessful result' do
-          let(:expected_exit) { false }
+          let(:expected_exit) { false             }
+          let(:runner_result) { right(env_result) }
 
           let(:env_result) do
             instance_double(
               Mutant::Result::Env,
               success?: false
             )
-          end
-
-          let(:runner_result) do
-            MPrelude::Either::Right.new(env_result)
           end
 
           let(:expected_events) do

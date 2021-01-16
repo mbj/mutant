@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Parallel::Worker do
-  let(:active_jobs)     { instance_double(Set)                          }
-  let(:connection)      { instance_double(Mutant::Pipe::Connection)     }
-  let(:index)           { 0                                             }
-  let(:payload_a)       { instance_double(Object)                       }
-  let(:pid)             { instance_double(Integer)                      }
-  let(:result_a)        { instance_double(Object)                       }
-  let(:running)         { 1                                             }
-  let(:sink)            { instance_double(Mutant::Parallel::Sink)       }
-  let(:source)          { instance_double(Mutant::Parallel::Source)     }
-  let(:var_active_jobs) { instance_double(Variable::IVar, :active_jobs) }
-  let(:var_final)       { instance_double(Variable::IVar, :final)       }
-  let(:var_running)     { instance_double(Variable::MVar, :running)     }
-  let(:var_sink)        { instance_double(Variable::IVar, :sink)        }
-  let(:var_source)      { instance_double(Variable::IVar, :source)      }
-  let(:world)           { fake_world                                    }
+  let(:active_jobs)     { instance_double(Set)                                  }
+  let(:connection)      { instance_double(Mutant::Pipe::Connection)             }
+  let(:index)           { 0                                                     }
+  let(:payload_a)       { instance_double(Object)                               }
+  let(:pid)             { instance_double(Integer)                              }
+  let(:result_a)        { instance_double(Object)                               }
+  let(:running)         { 1                                                     }
+  let(:sink)            { instance_double(Mutant::Parallel::Sink)               }
+  let(:source)          { instance_double(Mutant::Parallel::Source)             }
+  let(:var_active_jobs) { instance_double(Mutant::Variable::IVar, :active_jobs) }
+  let(:var_final)       { instance_double(Mutant::Variable::IVar, :final)       }
+  let(:var_running)     { instance_double(Mutant::Variable::MVar, :running)     }
+  let(:var_sink)        { instance_double(Mutant::Variable::IVar, :sink)        }
+  let(:var_source)      { instance_double(Mutant::Variable::IVar, :source)      }
+  let(:world)           { fake_world                                            }
 
   let(:shared) do
     {

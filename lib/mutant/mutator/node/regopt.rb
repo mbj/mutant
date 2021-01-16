@@ -7,7 +7,7 @@ module Mutant
       # Regular expression options mutation
       class Regopt < self
 
-        MUTATED_FLAGS = IceNine.deep_freeze(%i[i])
+        MUTATED_FLAGS = %i[i].freeze
 
         handle(:regopt)
 

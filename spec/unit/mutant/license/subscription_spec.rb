@@ -66,19 +66,19 @@ RSpec.describe Mutant::License::Subscription do
 
     def self.it_is_successful
       it 'allows usage' do
-        expect(apply).to eql(MPrelude::Either::Right.new(subscription))
+        expect(apply).to eql(right(subscription))
       end
     end
 
     def self.it_fails_with_message(expected)
       it 'returns expected message' do
-        expect(apply).to eql(MPrelude::Either::Left.new(expected))
+        expect(apply).to eql(left(expected))
       end
     end
 
     describe 'on opensource license' do
-      let(:git_remote_result) { Mutant::Either::Right.new(git_remote) }
-      let(:repository)        { 'github.com/mbj/mutant'               }
+      let(:git_remote_result) { right(git_remote)       }
+      let(:repository)        { 'github.com/mbj/mutant' }
 
       let(:git_remote) do
         <<~REMOTE

@@ -15,13 +15,13 @@ module Mutant
             :test_subject_ratio
           )
 
-          FORMATS = IceNine.deep_freeze([
+          FORMATS = [
             [:info,   'Subjects:        %s',        :amount_subjects      ],
             [:info,   'Total-Tests:     %s',        :amount_total_tests   ],
             [:info,   'Selected-Tests:  %s',        :amount_selected_tests],
             [:info,   'Tests/Subject:   %0.2f avg', :test_subject_ratio   ],
             [:info,   'Mutations:       %s',        :amount_mutations     ]
-          ])
+          ].each(&:freeze)
 
           # Run printer
           #

@@ -3,7 +3,7 @@
 module Mutant
   # An AST Parser
   class Parser
-    include Adamantium::Mutable, Equalizer.new
+    include Adamantium, Equalizer.new
 
     # Initialize object
     #

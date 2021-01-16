@@ -12,10 +12,11 @@ module Mutant
 
       private(*anima.attribute_names)
 
-      MATCHERS = IceNine.deep_freeze(
-        '.' => [Matcher::Methods::Singleton, Matcher::Methods::Metaclass],
-        '#' => [Matcher::Methods::Instance]
-      )
+      MATCHERS = {
+        '.' => [Matcher::Methods::Singleton, Matcher::Methods::Metaclass].freeze,
+        '#' => [Matcher::Methods::Instance].freeze
+      }.freeze
+
       private_constant(*constants(false))
 
       REGEXP = /\A#{SCOPE_NAME_PATTERN}#{SCOPE_SYMBOL_PATTERN}\z/.freeze

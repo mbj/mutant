@@ -84,7 +84,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   shared_context 'memoizable scope setup' do
     let(:scope) do
       Class.new do
-        include Memoizable
+        include Unparser::Adamantium
 
         def self.name
           'MemoizableClass'
@@ -98,18 +98,15 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
 
   shared_context 'adamantium scope setup' do
     let(:scope) do
-      memoize_options  = self.memoize_options
-      memoize_provider = self.memoize_provider
-
       Class.new do
-        include memoize_provider
+        include Unparser::Adamantium
 
         def self.name
           'AdamantiumClass'
         end
 
         def foo; end
-        memoize :foo, **memoize_options
+        memoize :foo
       end
     end
   end
@@ -133,8 +130,6 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   describe '#mutations' do
     subject { object.mutations }
 
-    let(:options_node) { nil }
-
     let(:expected) do
       [
         Mutant::Mutation::Neutral.new(
@@ -153,49 +148,13 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     end
 
     let(:memoize_node) do
-      s(:send, nil, :memoize, s(:sym, :foo), *options_node)
+      s(:send, nil, :memoize, s(:sym, :foo))
     end
 
     context 'when Memoizable is included in scope' do
       include_context 'memoizable scope setup'
 
       it { should eql(expected) }
-    end
-
-    context 'when Adamantium is included in scope' do
-      include_context 'adamantium scope setup'
-
-      {
-        Adamantium       => :deep,
-        Adamantium::Flat => :flat
-      }.each do |memoize_provider, default_freezer_option|
-        context "as include #{memoize_provider}" do
-          let(:memoize_provider) { memoize_provider }
-
-          let(:options_node) do
-            [s(:kwargs, s(:pair, s(:sym, :freezer), s(:sym, freezer_option)))]
-          end
-
-          context 'when no memoize options are given' do
-            let(:memoize_options) { Mutant::EMPTY_HASH     }
-            let(:freezer_option)  { default_freezer_option }
-
-            it { should eql(expected) }
-          end
-
-          context 'when memoize options are given' do
-            let(:memoize_options) { { freezer: freezer_option } }
-
-            %i[deep flat noop].each do |option|
-              context "as #{option.inspect}" do
-                let(:freezer_option) { option }
-
-                it { should eql(expected) }
-              end
-            end
-          end
-        end
-      end
     end
   end
 
@@ -208,41 +167,6 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
       let(:source) { "def foo\nend\nmemoize(:foo)\n" }
 
       it { should eql(source) }
-    end
-
-    context 'when Adamantium is included in scope' do
-      include_context 'adamantium scope setup'
-
-      let(:source) do
-        "def foo\nend\nmemoize(:foo, freezer: #{freezer_option.inspect})\n"
-      end
-
-      {
-        Adamantium       => :deep,
-        Adamantium::Flat => :flat
-      }.each do |memoize_provider, default_freezer_option|
-        context "as include #{memoize_provider}" do
-          let(:memoize_provider) { memoize_provider }
-
-          context 'when no memoize options are given' do
-            let(:memoize_options) { Mutant::EMPTY_HASH     }
-            let(:freezer_option)  { default_freezer_option }
-
-            it { should eql(source) }
-          end
-
-          context 'when memoize options are given' do
-            %i[deep flat noop].each do |freezer_option|
-              context "as #{freezer_option.inspect}" do
-                let(:memoize_options) { { freezer: freezer_option } }
-                let(:freezer_option)  { freezer_option              }
-
-                it { should eql(source) }
-              end
-            end
-          end
-        end
-      end
     end
   end
 end

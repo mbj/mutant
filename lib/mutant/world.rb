@@ -3,7 +3,7 @@
 module Mutant
   # The outer world IO objects mutant does interact with
   class World
-    include Adamantium::Flat, Anima.new(
+    include Adamantium, Anima.new(
       :condition_variable,
       :gem,
       :gem_method,

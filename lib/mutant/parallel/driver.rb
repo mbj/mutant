@@ -4,7 +4,7 @@ module Mutant
   module Parallel
     # Driver for parallelized execution
     class Driver
-      include Adamantium::Flat, Anima.new(
+      include Adamantium, Anima.new(
         :threads,
         :var_active_jobs,
         :var_final,

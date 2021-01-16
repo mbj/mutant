@@ -5,7 +5,7 @@ module Mutant
     class Example
       # Example verification
       class Verification
-        include Adamantium::Flat, Concord.new(:example, :mutations)
+        include Adamantium, Concord.new(:example, :mutations)
 
         # Test if mutation was verified successfully
         #

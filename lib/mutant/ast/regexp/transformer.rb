@@ -49,7 +49,7 @@ module Mutant
         class ExpressionToAST
           PREFIX = :regexp
 
-          include Concord.new(:expression), Procto.call, AST::Sexp, AbstractType, Adamantium
+          include Concord.new(:expression), Procto, AST::Sexp, AbstractType, Adamantium
 
         private
 
@@ -74,7 +74,7 @@ module Mutant
 
         # Abstract node transformer
         class ASTToExpression
-          include Concord.new(:node), Procto.call, AbstractType, Adamantium
+          include Concord.new(:node), Procto, AbstractType, Adamantium
 
           # Call generic transform method and freeze result
           #

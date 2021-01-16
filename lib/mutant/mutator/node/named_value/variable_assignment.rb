@@ -17,9 +17,9 @@ module Mutant
             lvasgn: EMPTY_STRING
           }
 
-          MAP = IceNine.deep_freeze(
-            map.transform_values { |prefix| [prefix, /^#{::Regexp.escape(prefix)}/] }
-          )
+          MAP = map
+            .transform_values { |prefix| [prefix, /^#{::Regexp.escape(prefix)}/] }
+            .freeze
 
           handle(*MAP.keys)
 

@@ -13,7 +13,11 @@ RSpec.describe Mutant::AST::Meta::Send do
   let(:binary_method_operator) { parse('foo == bar')    }
 
   exception = Class.new do
-    include Adamantium, Anima.new(:name, :attribute_assignment, :binary_method_operator)
+    include Mutant::Adamantium, Unparser::Anima.new(
+      :name,
+      :attribute_assignment,
+      :binary_method_operator
+    )
 
     define_singleton_method(:all) do
       [

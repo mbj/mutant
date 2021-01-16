@@ -6,7 +6,12 @@ module Mutant
 
     REGISTRY = Registry.new
 
-    include Adamantium::Flat, Concord.new(:input, :parent), AbstractType, Procto.call(:output)
+    include(
+      Adamantium,
+      Concord.new(:input, :parent),
+      AbstractType,
+      Procto
+    )
 
     # Lookup and invoke dedicated AST mutator
     #
@@ -29,6 +34,8 @@ module Mutant
     #
     # @return [Set<Parser::AST::Node>]
     attr_reader :output
+
+    alias_method :call, :output
 
   private
 

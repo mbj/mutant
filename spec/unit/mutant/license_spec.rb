@@ -5,23 +5,20 @@ RSpec.describe Mutant::License do
     described_class.call(world)
   end
 
-  let(:gem)              { class_double(Gem, loaded_specs: loaded_specs)  }
-  let(:gem_method)       { instance_double(Method)                        }
-  let(:gem_path)         { '/path/to/mutant-license'                      }
-  let(:gem_pathname)     { instance_double(Pathname)                      }
-  let(:json)             { class_double(JSON)                             }
-  let(:kernel)           { class_double(Kernel)                           }
-  let(:license_json)     { instance_double(Object)                        }
-  let(:license_pathname) { instance_double(Pathname)                      }
-  let(:load_json)        { true                                           }
-  let(:loaded_specs)     { { 'mutant-license' => spec }                   }
-  let(:pathname)         { class_double(Pathname)                         }
-  let(:stderr)           { instance_double(IO)                            }
-  let(:subscription)     { instance_double(Mutant::License::Subscription) }
-
-  let(:subscription_result) do
-    MPrelude::Either::Right.new(subscription)
-  end
+  let(:gem)                 { class_double(Gem, loaded_specs: loaded_specs)  }
+  let(:gem_method)          { instance_double(Method)                        }
+  let(:gem_path)            { '/path/to/mutant-license'                      }
+  let(:gem_pathname)        { instance_double(Pathname)                      }
+  let(:json)                { class_double(JSON)                             }
+  let(:kernel)              { class_double(Kernel)                           }
+  let(:license_json)        { instance_double(Object)                        }
+  let(:license_pathname)    { instance_double(Pathname)                      }
+  let(:load_json)           { true                                           }
+  let(:loaded_specs)        { { 'mutant-license' => spec }                   }
+  let(:pathname)            { class_double(Pathname)                         }
+  let(:stderr)              { instance_double(IO)                            }
+  let(:subscription)        { instance_double(Mutant::License::Subscription) }
+  let(:subscription_result) { right(subscription)                            }
 
   let(:spec) do
     instance_double(
@@ -93,9 +90,7 @@ RSpec.describe Mutant::License do
   end
 
   def self.it_fails_with_message(message)
-    let(:expected_result) do
-      MPrelude::Either::Left.new(message)
-    end
+    let(:expected_result) { left(message) }
 
     include_examples 'license load'
   end
@@ -103,7 +98,7 @@ RSpec.describe Mutant::License do
   context 'on successful license load' do
     include_examples 'license load'
 
-    let(:expected_result) { MPrelude::Either::Right.new(subscription) }
+    let(:expected_result) { right(subscription) }
   end
 
   context 'when mutant-license gem cannot be loaded' do

@@ -13,9 +13,8 @@ module Mutant
         #
         # @return [Matcher::Method::Instance]
         def self.new(scope, target_method)
-          name = target_method.name
           evaluator =
-            if scope.respond_to?(:memoized?) && scope.memoized?(name)
+            if memoized_method?(scope, target_method.name)
               Evaluator::Memoized
             else
               Evaluator
@@ -23,6 +22,11 @@ module Mutant
 
           super(scope, target_method, evaluator)
         end
+
+        def self.memoized_method?(scope, method_name)
+          scope < Adamantium && scope.memoized?(method_name)
+        end
+        private_class_method :memoized_method?
 
         # Instance method specific evaluator
         class Evaluator < Evaluator

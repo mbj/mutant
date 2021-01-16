@@ -20,7 +20,7 @@ module MutantSpec
         :return_value
       )
 
-      DEFAULTS = IceNine.deep_freeze(trigger_requires: [])
+      DEFAULTS = { trigger_requires: [].freeze }.freeze
 
       def initialize(attributes)
         super(DEFAULTS.merge(attributes))

@@ -15,7 +15,7 @@ RSpec.describe Mutant::AST::Regexp::Transformer::LookupTable do
     fake_table = table
 
     Class.new do
-      include Concord.new(:node), Mutant::AST::Regexp::Transformer::LookupTable
+      include Unparser::Concord.new(:node), Mutant::AST::Regexp::Transformer::LookupTable
 
       const_set(:TABLE, fake_table)
 

@@ -6,11 +6,11 @@ module Mutant
       module Regexp
         # Mutator for zero-or-more quantifier, `*`
         class ZeroOrMore < Node
-          MAP = IceNine.deep_freeze(
+          MAP = {
             regexp_greedy_zero_or_more:     :regexp_greedy_one_or_more,
             regexp_reluctant_zero_or_more:  :regexp_reluctant_one_or_more,
             regexp_possessive_zero_or_more: :regexp_possessive_one_or_more
-          )
+          }.freeze
 
           handle(*MAP.keys)
 

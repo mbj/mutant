@@ -8,7 +8,7 @@ module Mutant
   #
   # env = config interpreted against the world
   module Bootstrap
-    include Adamantium::Flat, Anima.new(:config, :parser, :world)
+    include Adamantium, Anima.new(:config, :parser, :world)
 
     SEMANTICS_MESSAGE_FORMAT =
       "%<message>s. Fix your lib to follow normal ruby semantics!\n" \

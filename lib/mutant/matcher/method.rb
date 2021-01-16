@@ -5,7 +5,7 @@ module Mutant
     # Abstract base class for method matchers
     class Method < self
       include AbstractType,
-              Adamantium::Flat,
+              Adamantium,
               Concord::Public.new(:scope, :target_method, :evaluator)
 
       # Source locations we cannot acces
@@ -32,11 +32,13 @@ module Mutant
       # logic would be implemented directly on the Matcher::Method
       # instance
       class Evaluator
-        include AbstractType,
-                Adamantium,
-                Concord.new(:scope, :target_method, :env),
-                Procto.call,
-                AST::NodePredicates
+        include(
+          AbstractType,
+          Adamantium,
+          Concord.new(:scope, :target_method, :env),
+          Procto,
+          AST::NodePredicates
+        )
 
         # Matched subjects
         #

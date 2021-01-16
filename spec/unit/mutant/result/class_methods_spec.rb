@@ -11,7 +11,7 @@
 RSpec.describe 'Mutant::Result::ClassMethods' do
   let(:infected_class) do
     Class.new do
-      include Adamantium::Flat, Concord::Public.new(:collection)
+      include Mutant::Adamantium, Mutant::Concord::Public.new(:collection)
       extend Mutant::Result.const_get(:ClassMethods)
 
       sum :length, :collection

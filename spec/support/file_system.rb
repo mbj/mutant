@@ -2,11 +2,11 @@
 
 module MutantSpec
   class FileState
-    DEFAULTS = IceNine.deep_freeze(
+    DEFAULTS = {
       file:     false,
       contents: nil,
-      requires: []
-    )
+      requires: [].freeze
+    }.freeze
 
     include Adamantium, Anima.new(*DEFAULTS.keys)
 

@@ -23,7 +23,7 @@ RSpec.describe Mutant::Matcher do
 
     let(:expression_class) do
       Class.new(Mutant::Expression) do
-        include Concord.new(:child, :matcher)
+        include Unparser::Concord.new(:child, :matcher)
 
         %w[syntax prefix?].each do |name|
           define_method(name) do |*arguments, &block|

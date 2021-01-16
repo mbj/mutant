@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 module XSpec
+  Anima   = Unparser::Anima
+  Concord = Unparser::Concord
+
   class MessageReaction
     include Concord.new(:event_list)
 
-    TERMINATE_EVENTS = IceNine.deep_freeze(%i[return exception].to_set)
-    VALID_EVENTS     = IceNine.deep_freeze(%i[return execute exception yields].to_set)
+    TERMINATE_EVENTS = %i[return exception].to_set.freeze
+    VALID_EVENTS     = %i[return execute exception yields].to_set.freeze
 
     private_constant(*constants(false))
 
@@ -95,15 +98,16 @@ module XSpec
   end # MessageReaction
 
   class MessageExpectation
-    include Anima.new(:receiver, :selector, :arguments, :reaction)
+    include Anima.new(:receiver, :selector, :arguments, :reaction, :pre_action)
 
     # rubocop:disable Metrics/ParameterLists
-    def self.parse(receiver:, selector:, arguments: [], reaction: nil)
+    def self.parse(receiver:, selector:, arguments: [], reaction: nil, pre_action: nil)
       new(
-        receiver:  receiver,
-        selector:  selector,
-        arguments: arguments,
-        reaction:  MessageReaction.parse(reaction || { return: nil })
+        receiver:   receiver,
+        selector:   selector,
+        arguments:  arguments,
+        pre_action: pre_action,
+        reaction:   MessageReaction.parse(reaction || { return: nil })
       )
     end
 
@@ -114,11 +118,12 @@ module XSpec
     class Verifier
       include Concord.new(:expectation, :observation)
 
-      VERIFIED_ATTRIBUTES = IceNine.deep_freeze(%i[receiver selector arguments])
+      VERIFIED_ATTRIBUTES = %i[receiver selector arguments].freeze
 
       def call
         VERIFIED_ATTRIBUTES.each(&method(:assert_expected_attribute))
 
+        expectation.pre_action&.call
         expectation.reaction.call(observation)
       end
 
@@ -129,14 +134,13 @@ module XSpec
       end
 
       def error(message)
-        fail "#{message},\n observation:\n #{observation.inspect}\n expectation:\n #{expectation.inspect}"
+        fail <<~MESSAGE
+          "#{message},
+          observation:
+          #{observation.inspect}
+          expectation: #{expectation.inspect}"
+        MESSAGE
       end
-
-      def trigger_exception
-        exception = expectation.exception
-        fail exception if exception
-      end
-
     end # Verifier
   end # MessageExpectation
 

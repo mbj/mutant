@@ -6,18 +6,18 @@ RSpec.describe Mutant::Parallel do
       described_class.async(world, config)
     end
 
-    let(:block)           { instance_double(Proc)                         }
-    let(:jobs)            { 2                                             }
-    let(:sink)            { instance_double(described_class::Sink)        }
-    let(:source)          { instance_double(described_class::Source)      }
-    let(:thread_a)        { instance_double(Thread)                       }
-    let(:thread_b)        { instance_double(Thread)                       }
-    let(:var_active_jobs) { instance_double(Variable::IVar, :active_jobs) }
-    let(:var_final)       { instance_double(Variable::IVar, :final)       }
-    let(:var_running)     { instance_double(Variable::MVar, :running)     }
-    let(:var_sink)        { instance_double(Variable::IVar, :sink)        }
-    let(:var_source)      { instance_double(Variable::IVar, :source)      }
-    let(:world)           { fake_world                                    }
+    let(:block)           { instance_double(Proc)                                 }
+    let(:jobs)            { 2                                                     }
+    let(:sink)            { instance_double(described_class::Sink)                }
+    let(:source)          { instance_double(described_class::Source)              }
+    let(:thread_a)        { instance_double(Thread)                               }
+    let(:thread_b)        { instance_double(Thread)                               }
+    let(:var_active_jobs) { instance_double(Mutant::Variable::IVar, :active_jobs) }
+    let(:var_final)       { instance_double(Mutant::Variable::IVar, :final)       }
+    let(:var_running)     { instance_double(Mutant::Variable::MVar, :running)     }
+    let(:var_sink)        { instance_double(Mutant::Variable::IVar, :sink)        }
+    let(:var_source)      { instance_double(Mutant::Variable::IVar, :source)      }
+    let(:world)           { fake_world                                            }
 
     let(:worker_a) do
       instance_double(described_class::Worker, :a, index: 0)
@@ -40,7 +40,7 @@ RSpec.describe Mutant::Parallel do
 
     def ivar(value, **attributes)
       {
-        receiver:  Variable::IVar,
+        receiver:  Mutant::Variable::IVar,
         selector:  :new,
         arguments: [
           condition_variable: world.condition_variable,
@@ -52,7 +52,7 @@ RSpec.describe Mutant::Parallel do
     end
 
     def mvar(value, **arguments)
-      ivar(value, **arguments).merge(receiver: Variable::MVar)
+      ivar(value, **arguments).merge(receiver: Mutant::Variable::MVar)
     end
 
     # rubocop:disable Metrics/MethodLength

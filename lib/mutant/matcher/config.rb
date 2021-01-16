@@ -16,12 +16,13 @@ module Mutant
       ATTRIBUTE_FORMAT    = '%s: [%s]'
       ENUM_DELIMITER      = ','
       EMPTY_ATTRIBUTES    = 'empty'
-      PRESENTATIONS       = IceNine.deep_freeze(
+      PRESENTATIONS       = {
         ignore:            :syntax,
         start_expressions: :syntax,
         subject_filters:   :inspect,
         subjects:          :syntax
-      )
+      }.freeze
+
       private_constant(*constants(false))
 
       DEFAULT = new(Hash[anima.attribute_names.map { |name| [name, []] }])
