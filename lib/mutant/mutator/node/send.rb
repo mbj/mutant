@@ -25,7 +25,6 @@ module Mutant
           all?:          %i[any?],
           any?:          %i[all?],
           at:            %i[fetch key?],
-          eql?:          %i[equal?],
           fetch:         %i[key?],
           flat_map:      %i[map],
           gsub:          %i[sub],

@@ -1,5 +1,9 @@
 # Unreleased
 
+* [#1207](https://github.com/mbj/mutant/pull/1207)
+
+  * Remove `#eql?` -> `#equal?` mutation
+
 * [#1210](https://github.com/mbj/mutant/pull/1210)
   * Remove generic mutation to `self`
 
