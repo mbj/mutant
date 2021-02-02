@@ -28,6 +28,7 @@ module Mutant
             ```
             %s
             %s
+            %s
             ```
           MESSAGE
 
@@ -81,7 +82,8 @@ module Mutant
 
             puts(
               EXCEPTION_ERROR_MESSAGE % [
-                exception.inspect,
+                exception.original_class,
+                exception.message,
                 exception.backtrace.join("\n")
               ]
             )

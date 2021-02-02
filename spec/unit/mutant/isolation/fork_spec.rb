@@ -500,7 +500,11 @@ RSpec.describe Mutant::Isolation::Fork do
           expect(apply).to eql(
             described_class::Result.new(
               log:            log_fragment,
-              exception:      exception,
+              exception:      Mutant::Isolation::Exception.new(
+                backtrace:      exception.backtrace,
+                message:        exception.message,
+                original_class: exception.class
+              ),
               process_status: child_status_success,
               timeout:        nil,
               value:          nil
