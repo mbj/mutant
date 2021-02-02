@@ -133,7 +133,11 @@ module Mutant
         def load_result(result_fragments)
           @value = world.marshal.load(result_fragments.join)
         rescue ArgumentError => exception
-          @exception = exception
+          @exception = Exception.new(
+            backtrace:      exception.backtrace,
+            message:        exception.message,
+            original_class: exception.class
+          )
         end
 
         # rubocop:disable Metrics/MethodLength

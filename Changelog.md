@@ -1,10 +1,22 @@
-# Unreleased
+# v0.10.27 2021-02-02
+
+* [#1216](https://github.com/mbj/mutant/pull/1216)
+
+  Fix exception serialization form rails infected code bases.
+  This case can happen when the killfork terminates abnormal,
+  and the resulting exception in the worker has to be propagated to
+  the main process for reporting.
+  On "normal" Ruby the exceptions are dump/loadable but rails and
+  its core extensions break this invariant. Hence mutant now
+  captures the essence of the exception in an attribute copy for
+  propagation.
 
 * [#1207](https://github.com/mbj/mutant/pull/1207)
 
   * Remove `#eql?` -> `#equal?` mutation
 
 * [#1210](https://github.com/mbj/mutant/pull/1210)
+
   * Remove generic mutation to `self`
 
 # v0.10.26 2021-01-16

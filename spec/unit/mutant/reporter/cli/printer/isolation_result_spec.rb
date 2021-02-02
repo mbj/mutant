@@ -26,15 +26,11 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
 
     context 'on exception isolation error' do
       let(:exception) do
-        Class.new(RuntimeError) do
-          def inspect
-            '<TestException>'
-          end
-
-          def backtrace
-            %w[first last]
-          end
-        end.new('foo')
+        Mutant::Isolation::Exception.new(
+          backtrace:      %w[first last],
+          message:        'Some Exception Message',
+          original_class: ArgumentError
+        )
       end
 
       it_reports <<~'STR'
@@ -51,7 +47,8 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
         The following exception was raised while reading the killfork result:
 
         ```
-        <TestException>
+        ArgumentError
+        Some Exception Message
         first
         last
         ```
