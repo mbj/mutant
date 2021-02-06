@@ -9,9 +9,6 @@ Mutant::Meta::Example.add :int do
   mutation '0'
   mutation '1'
 
-  # negative
-  mutation '-10'
-
   # scalar boundary
   mutation '9'
   mutation '11'

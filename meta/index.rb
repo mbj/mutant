@@ -25,7 +25,6 @@ Mutant::Meta::Example.add :index do
   mutation 'self[1]'
   mutation 'foo[0]'
   mutation 'foo[2]'
-  mutation 'foo[-1]'
   mutation 'foo[nil]'
 end
 
@@ -43,7 +42,6 @@ Mutant::Meta::Example.add :index do
   mutation 'foo[nil]'
   mutation 'foo[n..nil]'
   mutation 'foo[n..-1]'
-  mutation 'foo[n..2]'
   mutation 'foo[n..0]'
   mutation 'foo[n..1]'
   mutation 'foo[n..-3]'

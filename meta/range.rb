@@ -5,7 +5,6 @@ Mutant::Meta::Example.add :irange do
 
   singleton_mutations
   mutation '1...100'
-  mutation '-1..100'
   mutation '0..100'
   mutation '2..100'
   mutation 'nil..100'
@@ -14,7 +13,6 @@ Mutant::Meta::Example.add :irange do
   mutation '1..1'
   mutation '1..99'
   mutation '1..101'
-  mutation '1..-100'
 end
 
 Mutant::Meta::Example.add :erange do
@@ -22,7 +20,6 @@ Mutant::Meta::Example.add :erange do
 
   singleton_mutations
   mutation '1..100'
-  mutation '-1...100'
   mutation '0...100'
   mutation '2...100'
   mutation 'nil...100'
@@ -31,7 +28,6 @@ Mutant::Meta::Example.add :erange do
   mutation '1...1'
   mutation '1...99'
   mutation '1...101'
-  mutation '1...-100'
 end
 
 unless RUBY_VERSION.start_with?('2.5')
@@ -39,7 +35,6 @@ unless RUBY_VERSION.start_with?('2.5')
     source '1...'
 
     singleton_mutations
-    mutation '-1...'
     mutation '0...'
     mutation '2...'
     mutation 'nil...'
@@ -49,7 +44,6 @@ unless RUBY_VERSION.start_with?('2.5')
     source '1..'
 
     singleton_mutations
-    mutation '-1..'
     mutation '0..'
     mutation '2..'
     mutation 'nil..'

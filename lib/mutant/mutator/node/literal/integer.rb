@@ -9,6 +9,8 @@ module Mutant
 
           handle(:int)
 
+          children :value
+
         private
 
           def dispatch
@@ -17,12 +19,7 @@ module Mutant
           end
 
           def values
-            [0, 1, -value, value + 1, value - 1]
-          end
-
-          def value
-            value, = children
-            value
+            [0, 1, value + 1, value - 1]
           end
 
         end # Integer
