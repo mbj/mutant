@@ -1,3 +1,9 @@
+# Unreleased
+
+* [#1218](https://github.com/mbj/mutant/pull/1218)
+
+  * Remove integer literal negation mutations (`1` -> `-1`).
+
 # v0.10.27 2021-02-02
 
 * [#1216](https://github.com/mbj/mutant/pull/1216)

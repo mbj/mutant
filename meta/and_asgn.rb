@@ -8,6 +8,5 @@ Mutant::Meta::Example.add :and_asgn do
   mutation 'a__mutant__ &&= 1'
   mutation 'a &&= nil'
   mutation 'a &&= 0'
-  mutation 'a &&= -1'
   mutation 'a &&= 2'
 end
