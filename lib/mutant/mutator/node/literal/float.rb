@@ -28,9 +28,7 @@ module Mutant
           end
 
           def values
-            original = children.first
-
-            [0.0, 1.0, -original]
+            [0.0, 1.0]
           end
 
         end # Float

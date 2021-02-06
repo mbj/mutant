@@ -1,5 +1,9 @@
 # Unreleased
 
+* [#1219](https://github.com/mbj/mutant/pull/1218)
+
+  * Remove float literal negation mutations (`1.0` -> `-1.0`).
+
 * [#1218](https://github.com/mbj/mutant/pull/1218)
 
   * Remove integer literal negation mutations (`1` -> `-1`).
