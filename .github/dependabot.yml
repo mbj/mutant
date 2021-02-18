@@ -1,0 +1,7 @@
+version: 2
+updates:
+  - package-ecosystem: bundler
+    vendor: true
+    directory: /
+    schedule:
+      interval: daily
