@@ -8,6 +8,10 @@
 
   * Remove integer literal negation mutations (`1` -> `-1`).
 
+* [#1220](https://github.com/mbj/mutant/pull/1220)
+
+  * Ignore methods defined in non `.rb` files during matching.
+
 # v0.10.27 2021-02-02
 
 * [#1216](https://github.com/mbj/mutant/pull/1216)
