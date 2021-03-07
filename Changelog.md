@@ -35,6 +35,12 @@
 
 # v0.10.26 2021-01-16
 
+* [#1202](https://github.com/mbj/mutant/pull/1202)
+
+  * Add `#reduce` -> `#sum` mutations
+    * `a.reduce(:+)`     -> `a.sum`
+    * `a.reduce(0, &:+)` -> `a.sum(0)`
+
 * [#1201](https://github.com/mbj/mutant/pull/1201)
 
   * Add `/\Astatic/` -> `#start_with?` mutations:
