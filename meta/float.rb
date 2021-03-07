@@ -11,9 +11,6 @@ Mutant::Meta::Example.add :float do
   mutation '0.0 / 0.0'
   mutation '1.0 / 0.0'
   mutation '-1.0 / 0.0'
-
-  # negative
-  mutation '-10.0'
 end
 
 Mutant::Meta::Example.add :float do
