@@ -35,9 +35,35 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     node.children.fetch(1)
   end
 
+  context 'when method is defined inside file that does not end with .rb' do
+    let(:scope)           { base::WithMemoizer               }
+    let(:source_location) { [file, instance_double(Integer)] }
+    let(:file)            { 'example.erb'                    }
+
+    let(:method) do
+      instance_double(
+        Method,
+        name:            :some_method,
+        source_location: source_location
+      )
+    end
+
+    let(:expected_warnings) do
+      [
+        "#{method} does not have a valid source location, unable to emit subject"
+      ]
+    end
+
+    include_examples 'skipped candidate'
+
+    it 'returns expected subjects' do
+      expect(subject).to eql([])
+    end
+  end
+
   context 'when method is defined inside eval' do
-    let(:scope)  { base::WithMemoizer                                 }
-    let(:method) { scope.instance_method(:boz)                        }
+    let(:scope)  { base::WithMemoizer           }
+    let(:method) { scope.instance_method(:boz)  }
 
     let(:expected_warnings) do
       [

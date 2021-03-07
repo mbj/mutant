@@ -8,9 +8,6 @@ module Mutant
               Adamantium,
               Concord::Public.new(:scope, :target_method, :evaluator)
 
-      # Source locations we cannot acces
-      BLACKLIST = %w[(eval) <internal:prelude>].to_set.freeze
-
       SOURCE_LOCATION_WARNING_FORMAT =
         '%s does not have a valid source location, unable to emit subject'
 
@@ -53,7 +50,10 @@ module Mutant
 
         def skip?
           location = source_location
-          if location.nil? || BLACKLIST.include?(location.first)
+
+          file = location&.first
+
+          if location.nil? || !file.end_with?('.rb')
             env.warn(SOURCE_LOCATION_WARNING_FORMAT % target_method)
           elsif matched_node_path.any?(&method(:n_block?))
             env.warn(CLOSURE_WARNING_FORMAT % target_method)
