@@ -60,7 +60,7 @@ Supported indicates if a specific Ruby version / Implementation is actively supp
 | -------------- | -------------- | -------            | ------------------ | ------------------ | ------------------ |
 | cRUBY/MRI      | 2.5            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | cRUBY/MRI      | 2.6            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| cRUBY/MRI      | 2.7            | :heavy_check_mark: | :heavy_check_mark: | :soon:             | :heavy_check_mark: |
+| cRUBY/MRI      | 2.7            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | cRUBY/MRI      | 3.0            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | jruby          | TBD            | :email:            | :email:            | :email:            | :email:            |
 | mruby          | TBD            | :email:            | :email:            | :email:            | :email:            |

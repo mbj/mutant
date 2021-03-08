@@ -1,3 +1,9 @@
+# v0.10.29 2021-03-08
+
+* [#1221](https://github.com/mbj/mutant/pull/1221)
+
+  * Add beginless range mutations
+
 # v0.10.28 2021-03-07
 
 * [#1219](https://github.com/mbj/mutant/pull/1218)
