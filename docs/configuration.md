@@ -76,7 +76,7 @@ matcher:
   # `bundle exec mutant run --ignore-subject YourSubject#some_method`
   #
   # Note that subject ignores from the command line are added to the subject ignores
-  # configured on the command line!
+  # configured on the config file!
   ignore:
   - Your::App::Namespace::Dirty # ignore all subjects on a specific constant
   - Your::App::Namespace::Dirty* # ignore all subjects on a specific constant, recursively
