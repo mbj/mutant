@@ -49,7 +49,7 @@ describe Mutant::Repository::Diff do
     end
 
     before do
-      allow(pathname).to receive(:new, &allowed_paths.method(:fetch))
+      allow(pathname).to receive(:new, &allowed_paths.public_method(:fetch))
     end
 
     context 'when file is not touched in the diff' do

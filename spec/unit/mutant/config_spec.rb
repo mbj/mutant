@@ -294,7 +294,7 @@ RSpec.describe Mutant::Config do
     let(:pathname) do
       paths = paths()
       Class.new do
-        define_singleton_method(:new, &paths.method(:fetch))
+        define_singleton_method(:new, &paths.public_method(:fetch))
       end
     end
 
@@ -319,7 +319,7 @@ RSpec.describe Mutant::Config do
     end
 
     before do
-      allow(Pathname).to receive(:new, &paths.method(:fetch))
+      allow(Pathname).to receive(:new, &paths.public_method(:fetch))
     end
 
     context 'when no path is readable' do

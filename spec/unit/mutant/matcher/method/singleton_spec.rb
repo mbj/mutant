@@ -4,7 +4,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   subject { object.call(env) }
 
   let(:object)       { described_class.new(scope, method)                }
-  let(:method)       { scope.method(method_name)                         }
+  let(:method)       { scope.public_method(method_name)                  }
   let(:type)         { :defs                                             }
   let(:method_name)  { :foo                                              }
   let(:method_arity) { 0                                                 }

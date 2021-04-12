@@ -41,7 +41,7 @@ module Mutant
 
       def candidate_names
         CANDIDATE_NAMES
-          .map(&candidate_scope.method(:public_send))
+          .map(&candidate_scope.public_method(:public_send))
           .reduce(:+)
           .sort
       end

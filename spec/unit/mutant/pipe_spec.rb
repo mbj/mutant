@@ -34,7 +34,7 @@ RSpec.describe Mutant::Pipe do
     let(:yields) { [] }
 
     def apply
-      described_class.with(io, &yields.method(:<<))
+      described_class.with(io, &yields.public_method(:<<))
     end
 
     let(:raw_expectations) do

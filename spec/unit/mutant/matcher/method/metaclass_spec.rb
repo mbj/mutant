@@ -6,7 +6,7 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
   subject { object.call(env) }
 
   let(:object)       { described_class.new(scope, method) }
-  let(:method)       { scope.method(method_name)          }
+  let(:method)       { scope.public_method(method_name)   }
   let(:type)         { :def                               }
   let(:method_name)  { :foo                               }
   let(:method_arity) { 0                                  }
@@ -98,8 +98,8 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
   # tests that the evaluator correctly returns nil when the metaclass doesn't
   # directly contain the method
   context 'when defined inside a class in a metaclass' do
-    let(:scope)       { base::NotActuallyInAMetaclass               }
-    let(:method)      { scope.metaclass::SomeClass.new.method(:foo) }
+    let(:scope)       { base::NotActuallyInAMetaclass                      }
+    let(:method)      { scope.metaclass::SomeClass.new.public_method(:foo) }
 
     it { is_expected.to be_empty }
   end

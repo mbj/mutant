@@ -80,7 +80,7 @@ RSpec.describe Mutant::Matcher do
 
     context 'with subject filter' do
       let(:subject_filters) do
-        [subject_a.method(:eql?)]
+        [subject_a.public_method(:eql?)]
       end
 
       it 'returns expected subjects' do
@@ -92,7 +92,7 @@ RSpec.describe Mutant::Matcher do
       let(:ignore_expressions) { [subject_b.expression] }
 
       let(:subject_filters) do
-        [subject_b.method(:eql?)]
+        [subject_b.public_method(:eql?)]
       end
 
       it 'returns expected subjects' do
