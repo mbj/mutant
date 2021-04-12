@@ -26,7 +26,7 @@ RSpec.describe Mutant::AST::Meta::Send do
         [:attribute_assignment,   true,  false],
         [:binary_method_operator, false, true]
       ].map do |values|
-        new(Hash[anima.attribute_names.zip(values)])
+        new(anima.attribute_names.zip(values).to_h)
       end
     end
   end
