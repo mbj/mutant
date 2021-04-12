@@ -52,7 +52,7 @@ module Mutant
 
     def self.from_match(match)
       names = anima.attribute_names
-      new(Hash[names.zip(names.map(&match.public_method(:[])))])
+      new(names.zip(names.map(&match.public_method(:[]))).to_h)
     end
     private_class_method :from_match
 
