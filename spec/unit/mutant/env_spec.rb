@@ -7,9 +7,9 @@ RSpec.describe Mutant::Env do
       integration:      integration,
       matchable_scopes: [],
       mutations:        [mutation],
+      parser:           Mutant::Parser.new,
       selector:         selector,
       subjects:         subjects,
-      parser:           Mutant::Parser.new,
       world:            world
     )
   end

@@ -50,10 +50,10 @@ module Mutant
         coverage_criteria: coverage_criteria.merge(other.coverage_criteria),
         fail_fast:         fail_fast || other.fail_fast,
         includes:          includes + other.includes,
-        jobs:              other.jobs || jobs,
         integration:       other.integration || integration,
-        mutation_timeout:  other.mutation_timeout || mutation_timeout,
+        jobs:              other.jobs || jobs,
         matcher:           matcher.merge(other.matcher),
+        mutation_timeout:  other.mutation_timeout || mutation_timeout,
         requires:          requires + other.requires,
         zombie:            zombie || other.zombie
       )
@@ -117,9 +117,9 @@ module Mutant
             Transform::Hash::Key.new('includes',          Transform::STRING_ARRAY),
             Transform::Hash::Key.new('integration',       Transform::STRING),
             Transform::Hash::Key.new('jobs',              Transform::INTEGER),
+            Transform::Hash::Key.new('matcher',           Matcher::Config::LOADER),
             Transform::Hash::Key.new('mutation_timeout',  Transform::FLOAT),
-            Transform::Hash::Key.new('requires',          Transform::STRING_ARRAY),
-            Transform::Hash::Key.new('matcher',           Matcher::Config::LOADER)
+            Transform::Hash::Key.new('requires',          Transform::STRING_ARRAY)
           ],
           required: []
         ),
