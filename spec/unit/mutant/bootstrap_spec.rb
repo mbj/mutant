@@ -6,6 +6,7 @@ RSpec.describe Mutant::Bootstrap do
   let(:integration_result)   { Mutant::Either::Right.new(integration) }
   let(:kernel)               { fake_kernel.new                        }
   let(:load_path)            { %w[original]                           }
+  let(:match_warnings)       { []                                     }
   let(:object_space)         { class_double(ObjectSpace)              }
   let(:object_space_modules) { []                                     }
   let(:start_expressions)    { []                                     }
@@ -14,16 +15,18 @@ RSpec.describe Mutant::Bootstrap do
 
   let(:fake_kernel) do
     Class.new do
-      def require; end
+      def require(_); end
     end
   end
 
   let(:config) do
     Mutant::Config::DEFAULT.with(
+      includes:    %w[include-a include-b],
       integration: integration,
       jobs:        1,
       matcher:     matcher_config,
-      reporter:    instance_double(Mutant::Reporter)
+      reporter:    instance_double(Mutant::Reporter),
+      requires:    %w[require-a require-b]
     )
   end
 
@@ -56,43 +59,63 @@ RSpec.describe Mutant::Bootstrap do
     )
   end
 
-  shared_examples 'expected warning' do
-    let(:warns) { [] }
-
-    before do
-      allow(config.reporter).to receive(:warn, &warns.public_method(:<<))
-    end
-
-    it 'warns with expected warning' do
-      expect { apply }.to change(warns, :to_a).from([]).to([expected_warning])
-    end
-  end
-
   shared_examples_for 'bootstrap call' do
-    it 'returns expected env' do
-      expect(apply).to eql(Mutant::Either::Right.new(expected_env))
-    end
-
     it 'performs IO in expected sequence' do
-      apply
-
-      expect(object_space)
-        .to have_received(:each_object)
-        .ordered
-
-      expect(Mutant::Integration)
-        .to have_received(:setup)
-        .with(env_with_scopes)
-        .ordered
+      verify_events do
+        expect(apply).to eql(Mutant::Either::Right.new(expected_env))
+      end
     end
   end
 
-  before do
-    allow(Mutant::Integration).to receive_messages(setup: integration_result)
+  let(:raw_expectations) do
+    [
+      {
+        receiver:  load_path,
+        selector:  :<<,
+        arguments: %w[include-a]
+      },
+      {
+        receiver:  load_path,
+        selector:  :<<,
+        arguments: %w[include-b]
+      },
+      {
+        receiver:  kernel,
+        selector:  :require,
+        arguments: %w[require-a]
+      },
+      {
+        receiver:  kernel,
+        selector:  :require,
+        arguments: %w[require-b]
+      },
+      {
+        receiver:  object_space,
+        selector:  :each_object,
+        arguments: [Module],
+        reaction:  { return: object_space_modules.each }
+      },
+      *match_warnings,
+      {
+        receiver:  Mutant::Integration,
+        selector:  :setup,
+        arguments: [env_with_scopes],
+        reaction:  { return: integration_result }
 
-    allow(object_space).to receive(:each_object) do |argument|
-      expect(argument).to be(Module)
-      object_space_modules.each
+      }
+    ]
+  end
+
+  def self.expect_warnings
+    let(:match_warnings) do
+      [
+        {
+          receiver:  config.reporter,
+          selector:  :warn,
+          arguments: [expected_warning],
+          reaction:  { return: config.reporter }
+        }
+      ]
     end
   end
 
@@ -102,6 +125,8 @@ RSpec.describe Mutant::Bootstrap do
     end
 
     context 'when Module#name calls result in exceptions' do
+      expect_warnings
+
       let(:object_space_modules) { [invalid_class] }
 
       let(:expected_warning) do
@@ -119,7 +144,6 @@ RSpec.describe Mutant::Bootstrap do
         end
       end
 
-      include_examples 'expected warning'
       include_examples 'bootstrap call'
     end
 
@@ -130,35 +154,9 @@ RSpec.describe Mutant::Bootstrap do
       include_examples 'bootstrap call'
     end
 
-    context 'when requires are configured' do
-      let(:config)   { super().with(requires: %w[foo bar]) }
-      let(:requires) { []                                  }
-
-      before do
-        allow(kernel).to receive(:require, &requires.public_method(:<<))
-      end
-
-      it 'executes requires' do
-        expect { apply }.to change(requires, :to_a).from([]).to(%w[foo bar])
-      end
-
-      include_examples 'bootstrap call'
-    end
-
-    context 'when includes are configured' do
-      let(:config) { super().with(includes: %w[foo bar]) }
-
-      it 'appends to load path' do
-        expect { apply }
-          .to change(load_path, :to_a)
-          .from(load_path.dup)
-          .to(%w[original foo bar])
-      end
-
-      include_examples 'bootstrap call'
-    end
-
     context 'when Module#name does not return a String or nil' do
+      expect_warnings
+
       let(:object_space_modules) { [invalid_class] }
 
       let(:invalid_class) do
@@ -175,7 +173,6 @@ RSpec.describe Mutant::Bootstrap do
         "returned Object. #{Mutant::Env::SEMANTICS_MESSAGE}"
       end
 
-      include_examples 'expected warning'
       include_examples 'bootstrap call'
     end
 
