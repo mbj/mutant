@@ -233,6 +233,12 @@ RSpec.describe Mutant::Config do
       include_examples 'array concat'
     end
 
+    context 'merging hooks' do
+      let(:key) { :hooks }
+
+      include_examples 'array concat'
+    end
+
     context 'merging requires' do
       let(:key) { :requires }
 

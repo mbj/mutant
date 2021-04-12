@@ -31,8 +31,7 @@ module Mutant
     #
     # rubocop:disable Metrics/MethodLength
     def self.call(world, config)
-      env = Env
-        .empty(world, config)
+      env = load_hooks(Env.empty(world, config))
         .tap(&method(:infect))
         .with(matchable_scopes: matchable_scopes(world, config))
 
@@ -49,6 +48,11 @@ module Mutant
     end
     # rubocop:enable Metrics/MethodLength
 
+    def self.load_hooks(env)
+      env.with(hooks: Hooks.load_config(env.config))
+    end
+    private_class_method :load_hooks
+
     def self.start_subject(env, subjects)
       start_expressions = env.config.matcher.start_expressions
 
@@ -63,10 +67,14 @@ module Mutant
     private_class_method :start_subject
 
     def self.infect(env)
-      config, world = env.config, env.world
+      config, hooks, world = env.config, env.hooks, env.world
+
+      hooks.run(:env_infection_pre, env)
 
       config.includes.each(&world.load_path.public_method(:<<))
       config.requires.each(&world.kernel.public_method(:require))
+
+      hooks.run(:env_infection_post, env)
     end
     private_class_method :infect
 
