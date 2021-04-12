@@ -4,13 +4,19 @@ RSpec.describe Mutant::Bootstrap do
   let(:env_with_scopes)      { env_initial                            }
   let(:integration)          { instance_double(Mutant::Integration)   }
   let(:integration_result)   { Mutant::Either::Right.new(integration) }
-  let(:kernel)               { instance_double(Object, 'kernel')      }
+  let(:kernel)               { fake_kernel.new                        }
   let(:load_path)            { %w[original]                           }
   let(:object_space)         { class_double(ObjectSpace)              }
   let(:object_space_modules) { []                                     }
   let(:start_expressions)    { []                                     }
   let(:subject_expressions)  { []                                     }
   let(:timer)                { instance_double(Mutant::Timer)         }
+
+  let(:fake_kernel) do
+    Class.new do
+      def require; end
+    end
+  end
 
   let(:config) do
     Mutant::Config::DEFAULT.with(
@@ -54,7 +60,7 @@ RSpec.describe Mutant::Bootstrap do
     let(:warns) { [] }
 
     before do
-      allow(config.reporter).to receive(:warn, &warns.method(:<<))
+      allow(config.reporter).to receive(:warn, &warns.public_method(:<<))
     end
 
     it 'warns with expected warning' do
@@ -129,7 +135,7 @@ RSpec.describe Mutant::Bootstrap do
       let(:requires) { []                                  }
 
       before do
-        allow(kernel).to receive(:require, &requires.method(:<<))
+        allow(kernel).to receive(:require, &requires.public_method(:<<))
       end
 
       it 'executes requires' do

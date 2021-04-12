@@ -98,7 +98,7 @@ module Mutant
         def diff_ranges
           world
             .capture_stdout(%W[git diff --unified=0 #{to} -- #{path}])
-            .fmap(&Ranges.method(:parse))
+            .fmap(&Ranges.public_method(:parse))
             .from_right
         end
         memoize :diff_ranges

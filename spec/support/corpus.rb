@@ -288,7 +288,7 @@ module MutantSpec
             ]
           ),
           Transform::Hash::Symbolize.new,
-          Transform::Exception.new(RuntimeError, Project.method(:new))
+          Transform::Exception.new(RuntimeError, Project.public_method(:new))
         ]
       )
 
@@ -296,7 +296,7 @@ module MutantSpec
         Transform::Sequence.new(
           [
             Transform::Exception.new(SystemCallError, :read.to_proc),
-            Transform::Exception.new(YAML::SyntaxError, YAML.method(:safe_load)),
+            Transform::Exception.new(YAML::SyntaxError, YAML.public_method(:safe_load)),
             Transform::Array.new(integration)
           ]
         )

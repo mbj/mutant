@@ -55,7 +55,7 @@ RSpec.describe Mutant::License::Subscription do
     let(:world) { instance_double(Mutant::World) }
 
     before do
-      allow(world).to receive(:capture_stdout, &commands.method(:fetch))
+      allow(world).to receive(:capture_stdout, &commands.public_method(:fetch))
     end
 
     def self.it_fails(expected)
@@ -220,7 +220,7 @@ RSpec.describe Mutant::License::Subscription do
       let(:subscription) do
         Mutant::License::Subscription::Commercial.new(
           licensed_authors
-            .map(&Mutant::License::Subscription::Commercial::Author.method(:new))
+            .map(&Mutant::License::Subscription::Commercial::Author.public_method(:new))
             .to_set
         )
       end

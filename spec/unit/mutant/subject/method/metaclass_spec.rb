@@ -47,7 +47,7 @@ RSpec.describe Mutant::Subject::Method::Metaclass do
     subject { object.prepare }
 
     it 'undefines method on scope' do
-      expect { subject }.to change { scope.methods.include?(:foo) }.from(true).to(false)
+      expect { subject }.to change { scope.public_methods.include?(:foo) }.from(true).to(false)
     end
 
     it_should_behave_like 'a command method'

@@ -6,7 +6,7 @@ RSpec.describe Mutant::Zombifier do
 
   let(:require_highjack) do
     lambda do |block|
-      original = ruby_vm.method(:require)
+      original = ruby_vm.public_method(:require)
       allow(ruby_vm).to receive(:require) do |argument|
         return_value = ruby_vm.expected_events.first.return_value
         expect(block.call(argument)).to be(return_value)
@@ -86,7 +86,7 @@ RSpec.describe Mutant::Zombifier do
 
   let(:file_system) do
     MutantSpec::FileSystem.new(
-      file_entries.transform_values(&MutantSpec::FileState.method(:new))
+      file_entries.transform_values(&MutantSpec::FileState.public_method(:new))
     )
   end
 
@@ -96,7 +96,7 @@ RSpec.describe Mutant::Zombifier do
     end
 
     before do
-      allow(pathname).to receive(:new, &file_system.method(:path))
+      allow(pathname).to receive(:new, &file_system.public_method(:path))
     end
 
     it 'returns self' do

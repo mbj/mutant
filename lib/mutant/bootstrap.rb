@@ -65,8 +65,8 @@ module Mutant
     def self.infect(env)
       config, world = env.config, env.world
 
-      config.includes.each(&world.load_path.method(:<<))
-      config.requires.each(&world.kernel.method(:require))
+      config.includes.each(&world.load_path.public_method(:<<))
+      config.requires.each(&world.kernel.public_method(:require))
     end
     private_class_method :infect
 
