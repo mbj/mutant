@@ -186,6 +186,7 @@ require 'mutant/selector'
 require 'mutant/selector/expression'
 require 'mutant/selector/null'
 require 'mutant/world'
+require 'mutant/hooks'
 require 'mutant/config'
 require 'mutant/config/coverage_criteria'
 require 'mutant/cli'
@@ -257,6 +258,7 @@ module Mutant
         Expression::Namespace::Recursive
       ]),
       fail_fast:         false,
+      hooks:             EMPTY_ARRAY,
       includes:          EMPTY_ARRAY,
       integration:       nil,
       isolation:         Mutant::Isolation::Fork.new(WORLD),

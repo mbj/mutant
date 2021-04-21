@@ -332,7 +332,7 @@ module Mutant
 
       def transform(input)
         transform_required(input).bind do |required|
-          transform_optional(input).fmap(&required.method(:merge))
+          transform_optional(input).fmap(&required.public_method(:merge))
         end
       end
 

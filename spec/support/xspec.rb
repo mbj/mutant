@@ -90,7 +90,7 @@ module XSpec
     private_class_method :assert_not_empty
 
     def self.assert_total(event_list)
-      return unless event_list[0..-2].map(&:first).any?(&TERMINATE_EVENTS.method(:include?))
+      return unless event_list[0..-2].map(&:first).any?(&TERMINATE_EVENTS.public_method(:include?))
 
       fail "Reaction not total: #{event_list}"
     end

@@ -7,8 +7,8 @@ RSpec.describe Mutant::RequireHighjack do
   let(:target_module) do
     acc = require_calls
     Module.new do
-      define_method(:require, &acc.method(:<<))
-      define_singleton_method(:require, &acc.method(:<<))
+      define_method(:require, &acc.public_method(:<<))
+      define_singleton_method(:require, &acc.public_method(:<<))
     end
   end
 
@@ -24,7 +24,7 @@ RSpec.describe Mutant::RequireHighjack do
     let(:logical_name) { instance_double(String) }
 
     def apply
-      described_class.call(target_module, highjacked_calls.method(:<<))
+      described_class.call(target_module, highjacked_calls.public_method(:<<))
     end
 
     it 'returns the original implementation from singleton' do

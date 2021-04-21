@@ -22,7 +22,7 @@ status =
       kernel:           Kernel,
       pathname:         Pathname,
       require_highjack: Mutant::RequireHighjack
-        .method(:call)
+        .public_method(:call)
         .to_proc
         .curry
         .call(Kernel),

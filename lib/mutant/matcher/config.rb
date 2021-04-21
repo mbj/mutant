@@ -25,7 +25,7 @@ module Mutant
 
       private_constant(*constants(false))
 
-      DEFAULT = new(Hash[anima.attribute_names.map { |name| [name, []] }])
+      DEFAULT = new(anima.attribute_names.map { |name| [name, []] }.to_h)
 
       expression = Transform::Block.capture(:expression) do |input|
         Mutant::Config::DEFAULT.expression_parser.call(input)

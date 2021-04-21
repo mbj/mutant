@@ -31,7 +31,7 @@ module MutantSpec
           fail "Unexpected event observation:\n#{observation.inspect}\nexpected:\n#{inspect}"
         end
 
-        trigger_requires.each(&vm.method(:require))
+        trigger_requires.each(&vm.public_method(:require))
 
         self
       end

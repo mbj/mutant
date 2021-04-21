@@ -80,7 +80,7 @@ module Mutant
       def setup
         Pathname.glob(TEST_FILE_PATTERN)
           .map(&:to_s)
-          .each(&world.kernel.method(:require))
+          .each(&world.kernel.public_method(:require))
 
         self
       end
@@ -93,7 +93,7 @@ module Mutant
       #
       # rubocop:disable Metrics/MethodLength
       def call(tests)
-        test_cases = tests.map(&all_tests_index.method(:fetch))
+        test_cases = tests.map(&all_tests_index.public_method(:fetch))
         start      = timer.now
 
         reporter = ::Minitest::SummaryReporter.new($stdout)
