@@ -96,4 +96,29 @@ RSpec.describe Mutant::Pipe do
       end
     end
   end
+
+  describe '#reset_binmode' do
+    def apply
+      subject.reset_binmode
+    end
+
+    let(:raw_expectations) do
+      [
+        {
+          receiver: reader,
+          selector: :binmode
+        },
+        {
+          receiver: writer,
+          selector: :binmode
+        }
+      ]
+    end
+
+    it 'returns writer after closing reader' do
+      verify_events do
+        expect(apply).to be(subject)
+      end
+    end
+  end
 end

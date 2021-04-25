@@ -35,6 +35,18 @@ module Mutant
       reader
     end
 
+    # Set binmode (again)
+    #
+    # Ruby has a bug where the binmode setting may be lost duringa fork.
+    # This API allows to set the binmode again.
+    #
+    # @return [self]
+    def reset_binmode
+      reader.binmode
+      writer.binmode
+      self
+    end
+
     class Connection
       include Anima.new(:marshal, :reader, :writer)
 

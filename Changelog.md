@@ -1,3 +1,10 @@
+# v0.10.30 2021-04-25
+
+* [#1229](https://github.com/mbj/mutant/pull/1229)
+  Add workaround to a Ruby bug that looses the binmode setting on forks.
+
+  [Fix #1228]
+
 # v0.10.29 2021-03-08
 
 * [#1221](https://github.com/mbj/mutant/pull/1221)
