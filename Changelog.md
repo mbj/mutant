@@ -1,3 +1,11 @@
+# v0.10.31 2021-05-03
+
+* [#1234](https://github.com/mbj/mutant/pull/1234)
+  Add mapping for latin regexp properties to fix crash on mutating
+  `p{Latin}` regexp nodes.
+
+  [Fix #1231]
+
 # v0.10.30 2021-04-25
 
 * [#1229](https://github.com/mbj/mutant/pull/1229)
