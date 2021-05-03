@@ -11,7 +11,9 @@ module Mutant
       class Transformer
         include AbstractType
 
-        REGISTRY = Registry.new
+        REGISTRY = Registry.new(
+          ->(type) { fail "No regexp transformer registered for: #{type}" }
+        )
 
         # Lookup transformer class for regular expression node type
         #
