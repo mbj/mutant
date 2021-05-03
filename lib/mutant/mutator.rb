@@ -4,7 +4,7 @@ module Mutant
   # Generator for mutations
   class Mutator
 
-    REGISTRY = Registry.new
+    REGISTRY = Registry.new(->(_) { Node::Generic })
 
     include(
       Adamantium,

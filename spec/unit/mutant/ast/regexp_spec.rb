@@ -657,6 +657,11 @@ RegexpSpec.expect_mapping(/\p{Hiragana}/, :regexp_hiragana_property) do
     s(:regexp_hiragana_property))
 end
 
+RegexpSpec.expect_mapping(/\p{Latin}/, :regexp_latin_property) do
+  s(:regexp_root_expression,
+    s(:regexp_latin_property))
+end
+
 RegexpSpec.expect_mapping(/\p{Katakana}/, :regexp_katakana_property) do
   s(:regexp_root_expression,
     s(:regexp_katakana_property))

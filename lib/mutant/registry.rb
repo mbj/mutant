@@ -3,13 +3,13 @@
 module Mutant
   # Registry for mapping AST types to classes
   class Registry
-    include Concord.new(:contents)
+    include Concord.new(:contents, :default)
 
     # Initialize object
     #
     # @return [undefined]
-    def initialize
-      super({})
+    def initialize(default)
+      super({}, default)
     end
 
     # Raised when the type is an invalid type
@@ -34,7 +34,7 @@ module Mutant
     #
     # @return [Class<Mutator>]
     def lookup(type)
-      contents.fetch(type, Mutator::Node::Generic)
+      contents.fetch(type, &default)
     end
 
   end # Registry
