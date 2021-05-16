@@ -282,16 +282,6 @@ RSpec.describe Mutant::Parallel::Worker do
           reaction: { yields: [], return: pid }
         },
         {
-          receiver: request_pipe,
-          selector: :reset_binmode,
-          reaction: { return: request_pipe }
-        },
-        {
-          receiver: response_pipe,
-          selector: :reset_binmode,
-          reaction: { return: response_pipe }
-        },
-        {
           receiver: world.thread,
           selector: :current,
           reaction: { return: forked_main_thread }

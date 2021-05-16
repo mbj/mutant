@@ -35,18 +35,6 @@ module Mutant
       reader
     end
 
-    # Set binmode (again)
-    #
-    # Ruby has a bug where the binmode setting may be lost duringa fork.
-    # This API allows to set the binmode again.
-    #
-    # @return [self]
-    def reset_binmode
-      reader.binmode
-      writer.binmode
-      self
-    end
-
     class Connection
       include Anima.new(:marshal, :reader, :writer)
 
@@ -69,6 +57,7 @@ module Mutant
 
           fail Error, 'message to big' if bytesize > MAX_BYTES
 
+          io.binmode
           io.write([bytesize].pack(HEADER_FORMAT))
           io.write(body)
         end
@@ -76,6 +65,7 @@ module Mutant
       private
 
         def read(bytes)
+          io.binmode
           io.read(bytes) or fail Error, 'Unexpected EOF'
         end
       end

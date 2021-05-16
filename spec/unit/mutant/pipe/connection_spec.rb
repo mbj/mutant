@@ -32,12 +32,18 @@ RSpec.describe Mutant::Pipe::Connection do
   end
 
   let(:read_header) do
-    {
-      receiver:  pipe_a.to_reader,
-      selector:  :read,
-      arguments: [4],
-      reaction:  { return: [response_bytes.bytesize].pack('N') }
-    }
+    [
+      {
+        receiver: pipe_a.to_reader,
+        selector: :binmode
+      },
+      {
+        receiver:  pipe_a.to_reader,
+        selector:  :read,
+        arguments: [4],
+        reaction:  { return: [response_bytes.bytesize].pack('N') }
+      }
+    ]
   end
 
   let(:send_request) do
@@ -47,6 +53,10 @@ RSpec.describe Mutant::Pipe::Connection do
         selector:  :dump,
         arguments: [request],
         reaction:  { return: request_bytes }
+      },
+      {
+        receiver: pipe_b.to_writer,
+        selector: :binmode
       },
       {
         receiver:  pipe_b.to_writer,
@@ -63,7 +73,11 @@ RSpec.describe Mutant::Pipe::Connection do
 
   let(:receive_response) do
     [
-      read_header,
+      *read_header,
+      {
+        receiver: pipe_a.to_reader,
+        selector: :binmode
+      },
       {
         receiver:  pipe_a.to_reader,
         selector:  :read,
@@ -132,6 +146,10 @@ RSpec.describe Mutant::Pipe::Connection do
         let(:raw_expectations) do
           [
             {
+              receiver: pipe_a.to_reader,
+              selector: :binmode
+            },
+            {
               receiver:  pipe_a.to_reader,
               selector:  :read,
               arguments: [4],
@@ -150,7 +168,11 @@ RSpec.describe Mutant::Pipe::Connection do
       context 'in body' do
         let(:raw_expectations) do
           [
-            read_header,
+            *read_header,
+            {
+              receiver: pipe_a.to_reader,
+              selector: :binmode
+            },
             {
               receiver:  pipe_a.to_reader,
               selector:  :read,

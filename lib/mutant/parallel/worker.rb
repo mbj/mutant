@@ -29,9 +29,6 @@ module Mutant
         response = Pipe.from_io(io)
 
         pid = process.fork do
-          request.reset_binmode
-          response.reset_binmode
-
           world.thread.current.name = process_name
           world.process.setproctitle(process_name)
 
