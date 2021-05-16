@@ -1,3 +1,10 @@
+# v0.10.32 2021-05-16
+
+* [#1235](https://github.com/mbj/mutant/pull/1235)
+  Add more ugly workaround on Ruby loosing binmode settings.
+
+  [Fix #1228]
+
 # v0.10.31 2021-05-03
 
 * [#1234](https://github.com/mbj/mutant/pull/1234)
