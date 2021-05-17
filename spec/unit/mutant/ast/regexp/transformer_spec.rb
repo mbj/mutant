@@ -2,7 +2,10 @@
 
 RSpec.describe Mutant::AST::Regexp::Transformer do
   before do
-    stub_const("#{described_class}::REGISTRY", Mutant::Registry.new)
+    stub_const(
+      "#{described_class}::REGISTRY",
+      Mutant::Registry.new(->(_) { fail })
+    )
   end
 
   it 'registers types to a given class' do

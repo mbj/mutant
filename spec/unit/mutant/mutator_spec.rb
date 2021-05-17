@@ -4,7 +4,7 @@ RSpec.describe Mutant::Mutator do
   describe '.handle' do
     subject do
       Class.new(described_class) do
-        const_set(:REGISTRY, Mutant::Registry.new)
+        const_set(:REGISTRY, Mutant::Registry.new(->(_) { fail }))
 
         handle :send
 

@@ -2,7 +2,9 @@
 
 RSpec.describe Mutant::Registry do
   let(:mutator) { class_double(Mutant::Mutator) }
-  let(:object)  { described_class.new           }
+  let(:object)  { described_class.new(default)  }
+
+  let(:default) { ->(type) { "Default for: #{type.inspect}" } }
 
   describe '#lookup' do
     subject { object.lookup(type) }
@@ -24,7 +26,7 @@ RSpec.describe Mutant::Registry do
       let(:type) { :unknown }
 
       it 'returns genericm mutator' do
-        expect(subject).to be(Mutant::Mutator::Node::Generic)
+        expect(subject).to eql('Default for: :unknown')
       end
     end
   end

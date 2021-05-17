@@ -57,6 +57,7 @@ module Mutant
 
           fail Error, 'message to big' if bytesize > MAX_BYTES
 
+          io.binmode
           io.write([bytesize].pack(HEADER_FORMAT))
           io.write(body)
         end
@@ -64,6 +65,7 @@ module Mutant
       private
 
         def read(bytes)
+          io.binmode
           io.read(bytes) or fail Error, 'Unexpected EOF'
         end
       end

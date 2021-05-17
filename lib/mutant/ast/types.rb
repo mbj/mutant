@@ -107,6 +107,7 @@ module Mutant
         regexp_interval_close_escape
         regexp_interval_open_escape
         regexp_katakana_property
+        regexp_latin_property
         regexp_letter_property
         regexp_linebreak_type
         regexp_literal_escape

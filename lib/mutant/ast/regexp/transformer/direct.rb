@@ -74,6 +74,7 @@ module Mutant
               [:regexp_katakana_property,        [:property,      :katakana,         '\p{Katakana}'], ::Regexp::Expression::UnicodeProperty::Script],
               [:regexp_letter_property,          [:property,      :letter,           '\p{L}'],        ::Regexp::Expression::UnicodeProperty::Letter::Any],
               [:regexp_linebreak_type,           [:type,          :linebreak,        '\R'],           ::Regexp::Expression::CharacterType::Linebreak],
+              [:regexp_latin_property,           [:property,      :latin,            '\p{Latin}'],    ::Regexp::Expression::UnicodeProperty::Script],
               [:regexp_lower_posixclass,         [:posixclass,    :lower,            '[:lower:]'],    ::Regexp::Expression::PosixClass],
               [:regexp_mark_keep,                [:keep,          :mark,             '\K'],           ::Regexp::Expression::Keep::Mark],
               [:regexp_match_start_anchor,       [:anchor,        :match_start,      '\\G'],          ::Regexp::Expression::Anchor::MatchStart],

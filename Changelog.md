@@ -1,3 +1,25 @@
+# v0.10.32 2021-05-16
+
+* [#1235](https://github.com/mbj/mutant/pull/1235)
+  Add more ugly workaround on Ruby loosing binmode settings.
+
+  [Fix #1228]
+
+# v0.10.31 2021-05-03
+
+* [#1234](https://github.com/mbj/mutant/pull/1234)
+  Add mapping for latin regexp properties to fix crash on mutating
+  `p{Latin}` regexp nodes.
+
+  [Fix #1231]
+
+# v0.10.30 2021-04-25
+
+* [#1229](https://github.com/mbj/mutant/pull/1229)
+  Add workaround to a Ruby bug that looses the binmode setting on forks.
+
+  [Fix #1228]
+
 # v0.10.29 2021-03-08
 
 * [#1221](https://github.com/mbj/mutant/pull/1221)
