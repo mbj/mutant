@@ -81,7 +81,7 @@ matcher:
   - Your::App::Namespace::Dirty # ignore all subjects on a specific constant
   - Your::App::Namespace::Dirty* # ignore all subjects on a specific constant, recursively
   - Your::App::Namespace::Dirty#some_method # ignore a specific instance method
-  - Your::App::Namespace::Dirty#some_method # ignore a specific class method
+  - Your::App::Namespace::Dirty.some_method # ignore a specific class method
 ```
 
 #### `jobs`
