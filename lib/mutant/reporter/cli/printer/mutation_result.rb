@@ -66,23 +66,7 @@ module Mutant
           end
 
           def evil_details
-            diff = Unparser::Diff.build(mutation.original_source, mutation.source)
-            diff = color? ? diff.colorized_diff : diff.diff
-            if diff
-              output.write(diff)
-            else
-              print_no_diff_message
-            end
-          end
-
-          def print_no_diff_message
-            info(
-              NO_DIFF_MESSAGE,
-              mutation.original_source,
-              original_node.inspect,
-              mutation.source,
-              mutation.node.inspect
-            )
+            visit(Mutation, mutation)
           end
 
           def noop_details
@@ -90,11 +74,7 @@ module Mutant
           end
 
           def neutral_details
-            info(NEUTRAL_MESSAGE, original_node.inspect, mutation.source)
-          end
-
-          def original_node
-            mutation.subject.node
+            info(NEUTRAL_MESSAGE, mutation.node.inspect, mutation.source)
           end
 
         end # MutationResult

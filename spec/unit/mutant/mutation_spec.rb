@@ -144,6 +144,18 @@ RSpec.describe Mutant::Mutation do
     end
   end
 
+  describe '#diff' do
+    def apply
+      object.diff
+    end
+
+    it 'returns expected diff' do
+      expect(apply).to eql(
+        Unparser::Diff.new(%w[original], %w[nil])
+      )
+    end
+  end
+
   describe '#identification' do
 
     subject { object.identification }

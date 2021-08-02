@@ -2,13 +2,13 @@
 
 RSpec.describe Mutant::CLI do
   describe '.parse' do
-    let(:env_config)    { Mutant::Config::DEFAULT.with(jobs: 4) }
-    let(:events)        { []                                    }
-    let(:expect_zombie) { false                                 }
-    let(:kernel)        { class_double(Kernel)                  }
-    let(:stderr)        { instance_double(IO, :stderr)          }
-    let(:stdout)        { instance_double(IO, :stdout)          }
-    let(:timer)         { instance_double(Mutant::Timer)        }
+    let(:env_config)    { Mutant::Config::DEFAULT.with(jobs: 4)     }
+    let(:events)        { []                                        }
+    let(:expect_zombie) { false                                     }
+    let(:kernel)        { class_double(Kernel)                      }
+    let(:stderr)        { instance_double(IO, :stderr, tty?: false) }
+    let(:stdout)        { instance_double(IO, :stdout, tty?: false) }
+    let(:timer)         { instance_double(Mutant::Timer)            }
 
     let(:world) do
       instance_double(
@@ -31,8 +31,14 @@ RSpec.describe Mutant::CLI do
       allow(stderr)
         .to receive(:puts) { |message| events << [:stderr, :puts, message] }
 
+      allow(stderr)
+        .to receive(:write) { |message| events << [:stderr, :write, message] }
+
       allow(stdout)
         .to receive(:puts) { |message| events << [:stdout, :puts, message] }
+
+      allow(stdout)
+        .to receive(:write) { |message| events << [:stdout, :write, message] }
 
       allow(Mutant::Config).to receive_messages(env: env_config)
     end
@@ -79,7 +85,7 @@ RSpec.describe Mutant::CLI do
 
     def self.main_body
       <<~'MESSAGE'.strip
-        usage: mutant <run|environment|subscription> [options]
+        usage: mutant <run|environment|subscription|util> [options]
 
         Summary: mutation testing engine main command
 
@@ -93,6 +99,7 @@ RSpec.describe Mutant::CLI do
         run          - Run code analysis
         environment  - Environment subcommands
         subscription - Subscription subcommands
+        util         - Utility subcommands
       MESSAGE
     end
 
@@ -257,6 +264,110 @@ RSpec.describe Mutant::CLI do
         arguments:       %w[run --help],
         expected_events: [[:stdout, :puts, message]],
         expected_exit:   true,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      message = <<~'MESSAGE'
+        usage: mutant util <mutation> [options]
+
+        Summary: Utility subcommands
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+
+        Available subcommands:
+
+        mutation - Print mutations of a code snippet
+      MESSAGE
+
+      {
+        arguments:       %w[util --help],
+        expected_events: [[:stdout, :puts, message]],
+        expected_exit:   true,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      message = <<~'MESSAGE'
+        usage: mutant util mutation [options]
+
+        Summary: Print mutations of a code snippet
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+
+
+            -e, --evaluate SOURCE
+      MESSAGE
+
+      {
+        arguments:       %w[util mutation --help],
+        expected_events: [[:stdout, :puts, message]],
+        expected_exit:   true,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      message = <<~'MESSAGE'
+        @@ -1 +1 @@
+        -true
+        +false
+      MESSAGE
+
+      {
+        arguments:       %w[util mutation -e true],
+        expected_events: [
+          [:stdout, :puts, '<cli-source>'],
+          [:stdout, :write, message]
+        ],
+        expected_exit:   true,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      message = <<~'MESSAGE'
+        @@ -1 +1 @@
+        -true
+        +false
+      MESSAGE
+
+      {
+        arguments:       %w[util mutation test_app/simple.rb],
+        expected_events: [
+          [:stdout, :puts, 'file:test_app/simple.rb'],
+          [:stdout, :write, message]
+        ],
+        expected_exit:   true,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      {
+        arguments:       %w[util mutation] + ["\0"],
+        expected_events: [
+          [:stderr, :puts, 'pathname contains null byte']
+        ],
+        expected_exit:   false,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      {
+        arguments:       %w[util mutation does-not-exist.rb],
+        expected_events: [[:stderr, :puts,
+                           'Cannot read file: No such file or directory @ rb_sysopen - does-not-exist.rb']],
+        expected_exit:   false,
         expected_zombie: false
       }
     end

@@ -1,3 +1,10 @@
+# v0.10.33 2021-08-25
+
+* [#1249](https://github.com/mbj/mutant/pull/1249/files)
+  Add `mutant util mutation` subcommand to allow inspect mutations of
+  a code snippet outside a booted environment.
+  This eases debugging, learning and mutant developers life.
+
 # v0.10.32 2021-05-16
 
 * [#1235](https://github.com/mbj/mutant/pull/1235)

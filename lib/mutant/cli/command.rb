@@ -69,6 +69,8 @@ module Mutant
         false
       end
 
+      abstract_method :action
+
     private
 
       def subcommands

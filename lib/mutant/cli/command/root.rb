@@ -10,7 +10,7 @@ module Mutant
       class Root < self
         NAME              = 'mutant'
         SHORT_DESCRIPTION = 'mutation testing engine main command'
-        SUBCOMMANDS       = [Environment::Run, Environment, Subscription].freeze
+        SUBCOMMANDS       = [Environment::Run, Environment, Subscription, Util].freeze
       end # Root
     end # Command
   end # CLI
