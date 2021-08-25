@@ -2,5 +2,5 @@
 
 module Mutant
   # Current mutant version
-  VERSION = '0.10.32'
+  VERSION = '0.10.33'
 end # Mutant
