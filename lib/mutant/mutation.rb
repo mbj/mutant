@@ -72,6 +72,15 @@ module Mutant
       )
     end
 
+    # Rendered mutation diff
+    #
+    # @return [String, nil]
+    #   the diff, if present
+    def diff
+      Unparser::Diff.build(original_source, source)
+    end
+    memoize :diff
+
   private
 
     def sha1
@@ -80,7 +89,6 @@ module Mutant
 
     # Evil mutation that should case mutations to fail tests
     class Evil < self
-
       SYMBOL            = 'evil'
       TEST_PASS_SUCCESS = false
 
