@@ -6,6 +6,9 @@
 * [#1253](https://github.com/mbj/mutant/pull/1253)
   Remove support for Ruby-2.5, which is EOL.
 
+* [#1255](https://github.com/mbj/mutant/pull/1255)
+  Remove invalid mutations to invalid syntax
+
 # v0.10.33 2021-08-25
 
 * [#1249](https://github.com/mbj/mutant/pull/1249/files)
