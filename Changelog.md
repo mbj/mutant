@@ -9,6 +9,9 @@
 * [#1255](https://github.com/mbj/mutant/pull/1255)
   Remove invalid mutations to invalid syntax
 
+* [#1257](https://github.com/mbj/mutant/pull/1257)
+  Fix crash on numblock mutations.
+
 # v0.10.33 2021-08-25
 
 * [#1249](https://github.com/mbj/mutant/pull/1249/files)
