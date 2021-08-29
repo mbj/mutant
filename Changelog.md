@@ -1,7 +1,10 @@
 # v0.10.33 unreleased
 
 * [#1252](https://github.com/mbj/mutant/pull/1252)
-  Remove not universally useful binaryl left negation operator.
+  Remove not universally useful binary left negation operator.
+
+* [#1253](https://github.com/mbj/mutant/pull/1253)
+  Remove support for Ruby-2.5, which is EOL.
 
 # v0.10.33 2021-08-25
 

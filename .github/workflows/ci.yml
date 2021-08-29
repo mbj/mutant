@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-2.5, ruby-2.6, ruby-2.7, ruby-3.0]
+        ruby: [ruby-2.6, ruby-2.7, ruby-3.0]
         os: [macos-latest, ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
@@ -51,7 +51,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-2.5, ruby-2.6, ruby-2.7, ruby-3.0]
+        ruby: [ruby-2.6, ruby-2.7, ruby-3.0]
         os: [macos-latest, ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
@@ -71,7 +71,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-2.5, ruby-2.6, ruby-2.7, ruby-3.0]
+        ruby: [ruby-2.6, ruby-2.7, ruby-3.0]
         os: [macos-latest, ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
@@ -87,7 +87,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-2.5, ruby-2.6, ruby-2.7, ruby-3.0]
+        ruby: [ruby-2.6, ruby-2.7, ruby-3.0]
         os: [macos-latest, ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
@@ -103,7 +103,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-2.5, ruby-2.6, ruby-2.7, ruby-3.0]
+        ruby: [ruby-2.6, ruby-2.7, ruby-3.0]
         os: [macos-latest, ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
