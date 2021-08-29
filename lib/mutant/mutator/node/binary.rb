@@ -21,7 +21,11 @@ module Mutant
           emit_singletons
           emit_promotions
           emit_operator_mutations
-          emit_left_mutations
+
+          emit_left_mutations do |mutation|
+            !(n_irange?(mutation) || n_erange?(mutation)) || !mutation.children.fetch(1).nil?
+          end
+
           emit_right_mutations
         end
 
