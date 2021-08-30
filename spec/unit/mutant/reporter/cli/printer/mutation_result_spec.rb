@@ -64,7 +64,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
             -----------------------
             Killfork: #<InstanceDouble(Process::Status) (anonymous)>
             --- Internal failure ---
-            BUG: A generted mutation did not result in exactly one diff hunk!
+            BUG: A generated mutation did not result in exactly one diff hunk!
             This is an invariant violation by the mutation generation engine.
             Please report a reproduction to https://github.com/mbj/mutant
             Original unparsed source:
