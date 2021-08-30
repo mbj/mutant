@@ -679,10 +679,10 @@ RSpec.describe Mutant::CLI do
           [
             license_validation_event,
             [:stderr, :puts, 'license-error'],
-            [:stderr, :puts, "[Mutant-License-Error]: Soft fail, continuing in 40 seconds\n"],
+            [:stderr, :puts, "[Mutant-License-Error]: Soft fail, continuing in 60 seconds\n"],
             [:stderr, :puts, "[Mutant-License-Error]: Next major version will enforce the license\n"],
             [:stderr, :puts, "[Mutant-License-Error]: See https://github.com/mbj/mutant#licensing\n"],
-            [:sleep, 40],
+            [:sleep, 60],
             [
               :load_config_file,
               world

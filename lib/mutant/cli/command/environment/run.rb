@@ -7,7 +7,7 @@ module Mutant
         class Run < self
           NAME              = 'run'
           SHORT_DESCRIPTION = 'Run code analysis'
-          SLEEP             = 40
+          SLEEP             = 60
           SUBCOMMANDS       = EMPTY_ARRAY
 
           UNLICENSED = <<~MESSAGE.lines.freeze
