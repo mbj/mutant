@@ -679,10 +679,10 @@ RSpec.describe Mutant::CLI do
           [
             license_validation_event,
             [:stderr, :puts, 'license-error'],
-            [:stderr, :puts, "[Mutant-License-Error]: Soft fail, continuing in 40 seconds\n"],
+            [:stderr, :puts, "[Mutant-License-Error]: Soft fail, continuing in 60 seconds\n"],
             [:stderr, :puts, "[Mutant-License-Error]: Next major version will enforce the license\n"],
             [:stderr, :puts, "[Mutant-License-Error]: See https://github.com/mbj/mutant#licensing\n"],
-            [:sleep, 40],
+            [:sleep, 60],
             [
               :load_config_file,
               world
@@ -748,28 +748,49 @@ RSpec.describe Mutant::CLI do
         end
 
         context 'on runner success with unsuccessful result' do
-          let(:expected_exit) { false             }
-          let(:runner_result) { right(env_result) }
+          context 'on alive mutations' do
+            let(:expected_exit) { false             }
+            let(:runner_result) { right(env_result) }
 
-          let(:env_result) do
-            instance_double(
-              Mutant::Result::Env,
-              success?: false
-            )
-          end
+            let(:env_result) do
+              instance_double(
+                Mutant::Result::Env,
+                success?: false
+              )
+            end
 
-          let(:expected_events) do
-            [
-              *super(),
+            let(:expected_events) do
               [
-                :stderr,
-                :puts,
-                'Uncovered mutations detected, exiting nonzero!'
+                *super(),
+                [
+                  :stderr,
+                  :puts,
+                  'Uncovered mutations detected, exiting nonzero!'
+                ]
               ]
-            ]
+            end
+
+            include_examples 'CLI run'
           end
 
-          include_examples 'CLI run'
+          context 'on not having found tests' do
+            let(:tests) { [] }
+
+            let(:expected_events) do
+              [
+                *super()[0..-2],
+                [
+                  :stderr,
+                  :puts,
+                  Mutant::CLI::Command::Environment::Run::NO_TESTS_MESSAGE
+                ]
+              ]
+            end
+
+            let(:expected_exit) { false }
+
+            include_examples 'CLI run'
+          end
         end
 
         context 'with valid subject expression' do
