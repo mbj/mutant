@@ -17,3 +17,4 @@ matcher:
   - Mutant::Zombifier#call
   # Mutation only alive for Ruby <2.7
   - Mutant::Mutator::Node::Literal::Range#dispatch
+  - Mutant::Mutator::Node::Numblock#dispatch
