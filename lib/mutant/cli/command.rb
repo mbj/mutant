@@ -130,6 +130,8 @@ module Mutant
       end
 
       def add_global_options(parser)
+        parser.separator("mutant version: #{VERSION}")
+        parser.separator(nil)
         parser.separator('Global Options:')
         parser.separator(nil)
 

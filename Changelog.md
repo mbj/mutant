@@ -1,4 +1,4 @@
-# v0.10.33 unreleased
+# v0.10.34 2021-08-30
 
 * [#1252](https://github.com/mbj/mutant/pull/1252)
   Remove not universally useful binary left negation operator.

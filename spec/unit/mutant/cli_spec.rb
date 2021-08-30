@@ -84,10 +84,12 @@ RSpec.describe Mutant::CLI do
     end
 
     def self.main_body
-      <<~'MESSAGE'.strip
+      <<~MESSAGE.strip
         usage: mutant <run|environment|subscription|util> [options]
 
         Summary: mutation testing engine main command
+
+        mutant version: #{Mutant::VERSION}
 
         Global Options:
 
@@ -169,12 +171,14 @@ RSpec.describe Mutant::CLI do
     end
 
     make do
-      message = <<~'MESSAGE'
+      message = <<~MESSAGE
         mutant subscription: Missing required subcommand!
 
         usage: mutant subscription <show|test> [options]
 
         Summary: Subscription subcommands
+
+        mutant version: #{Mutant::VERSION}
 
         Global Options:
 
@@ -207,10 +211,12 @@ RSpec.describe Mutant::CLI do
     end
 
     make do
-      message = <<~'MESSAGE'
+      message = <<~MESSAGE
         usage: mutant subscription show [options]
 
         Summary: Show subscription status
+
+        mutant version: #{Mutant::VERSION}
 
         Global Options:
 
@@ -227,10 +233,12 @@ RSpec.describe Mutant::CLI do
     end
 
     make do
-      message = <<~'MESSAGE'
+      message = <<~MESSAGE
         usage: mutant run [options]
 
         Summary: Run code analysis
+
+        mutant version: #{Mutant::VERSION}
 
         Global Options:
 
@@ -269,10 +277,12 @@ RSpec.describe Mutant::CLI do
     end
 
     make do
-      message = <<~'MESSAGE'
+      message = <<~MESSAGE
         usage: mutant util <mutation> [options]
 
         Summary: Utility subcommands
+
+        mutant version: #{Mutant::VERSION}
 
         Global Options:
 
@@ -293,10 +303,12 @@ RSpec.describe Mutant::CLI do
     end
 
     make do
-      message = <<~'MESSAGE'
+      message = <<~MESSAGE
         usage: mutant util mutation [options]
 
         Summary: Print mutations of a code snippet
+
+        mutant version: #{Mutant::VERSION}
 
         Global Options:
 
