@@ -16,6 +16,20 @@ module Mutant
             See https://github.com/mbj/mutant#licensing
           MESSAGE
 
+          NO_TESTS_MESSAGE = <<~'MESSAGE'
+            ===============
+            Mutant found no tests. Mutation testing cannot be started.
+
+            This can have various reasons:
+
+            * You did not setup an integration, see:
+              https://github.com/mbj/mutant/blob/main/docs/configuration.md#integration
+            * You set environment variables like RSPEC_OPTS that filter out all tests.
+            * You set configuration optiosn like `config.filter_run :focus` which do
+              make rspec to not report any test.
+            ===============
+          MESSAGE
+
           # Test if command needs to be executed in zombie environment
           #
           # @return [Bool]
@@ -28,8 +42,17 @@ module Mutant
           def action
             soft_fail(License.call(world))
               .bind { bootstrap }
+              .bind(&method(:validate_tests))
               .bind(&Runner.public_method(:call))
               .bind(&method(:from_result))
+          end
+
+          def validate_tests(environment)
+            if environment.integration.all_tests.length.zero?
+              Either::Left.new(NO_TESTS_MESSAGE)
+            else
+              Either::Right.new(environment)
+            end
           end
 
           def from_result(result)

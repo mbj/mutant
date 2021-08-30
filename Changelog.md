@@ -12,6 +12,11 @@
 * [#1257](https://github.com/mbj/mutant/pull/1257)
   Fix crash on numblock mutations.
 
+* [#1258](https://github.com/mbj/mutant/pull/1258)
+  Add improved UI on detecting 0 tests.
+  This should be beneficial in onboarding scenarios or after manual
+  persistend rspec selections.
+
 # v0.10.33 2021-08-25
 
 * [#1249](https://github.com/mbj/mutant/pull/1249/files)
