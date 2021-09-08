@@ -83,7 +83,7 @@ per developer. CI usage for licensed developers is included.
 
 Opensource projects have to acquire their free license per repository.
 
-The license distribution happens through the `mutant-license` gem in mutants dependencies.
+The license distribution happens through the `mutant-license` gem in mutant’s dependencies.
 This gem is dynamically generated per licensee and comes with a unique license gem source
 URL.
 
@@ -98,8 +98,7 @@ end
 
 The mutant license gem contains metadata that allows mutant to verify licensed use.
 
-For commercial licenses mutant checks the git commit author or the configured git email
-to be in the set of licensed developers.
+For commercial licenses mutant checks the git commit author or the configured git email to be in the set of licensed developers.
 
 For opensource licenses mutant checks the git remotes against the licensed git repositories.
 This allows the project maintainer to sign up and not bother collaborators with the details.
@@ -176,8 +175,7 @@ of their private time.
 Additionally, the following features where sponsored by organizations:
 
 * The `mutant-minitest` integration was sponsored by [Arkency](https://arkency.com/)
-* Mutant's initial concurrency support was sponsored by an undisclosed company that does
-  currently not wish to be listed here.
+* Mutant's initial concurrency support was sponsored by an undisclosed company that does  currently not wish to be listed here.
 
 ### Legal
 

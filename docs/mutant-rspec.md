@@ -21,7 +21,7 @@ To add mutant to your rspec code base you need to:
 
 ## Run through example
 
-This uses [mbj/auom](https://github.com/mbj/auom) a small library that
+This uses [mbj/auom](https://github.com/mbj/auom), a small library that
 has 100% mutation coverage. Its tests execute very fast and do not have any IO
 so its a good playground example to interact with.
 
@@ -128,3 +128,5 @@ these example groups *must* kill the mutation.
 ```sh
 RAILS_ENV=test bundle exec mutant run -r ./config/environment --use rspec User
 ```
+
+TODO something about using `mutant_expression` metadata here.

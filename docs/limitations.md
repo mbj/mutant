@@ -6,8 +6,8 @@ Subject
 
 Mutant cannot emit mutations for some subjects.
 
-* methods defined within a closure.  For example, methods defined using `module_eval`, `class_eval`,
-  `define_method`, or `define_singleton_method`:
+* methods defined within a closure.  For example, methods defined using
+  `module_eval`, `class_eval`, `define_method`, or `define_singleton_method`:
 
     ```ruby
     class Example
@@ -29,7 +29,7 @@ Mutant cannot emit mutations for some subjects.
     end
     ```
 
-* singleton methods not defined on a constant or `self`
+* singleton methods not defined on a constant or on `self`
 
     ```ruby
     class Foo
@@ -38,6 +38,15 @@ Mutant cannot emit mutations for some subjects.
 
       myself = self
       def myself.qux; end # cannot mutate
+
+      class << self
+        def corge; end # ok
+      end
+    end
+
+    foo = "Hello"
+    class << foo
+      def greet!; end # cannot mutate
     end
     ```
 
