@@ -128,7 +128,7 @@ For commercial use mutants pricing is subscription based.
 | -------- | ---------------- |--------  | ------- | ----------------------------------------------------- |
 | USD      | any              | 1 month  | 30$     | Credit Card                                           |
 | USD      | any              | 1 year   | 300$    | Credit Card, ACH transfer                             |
-| USD      | >10              | custom   | custom  | Credit Card, ACH transfer, Wire tranfer, custom       |
+| USD      | >10              | custom   | custom  | Credit Card, ACH transfer, Wire transfer, custom      |
 | EUR      | any              | 1 month  | 25€     | Credit Card, SEPA Direct Debit                        |
 | EUR      | any              | 1 year   | 250€    | Credit Card, SEPA Direct Debit, SEPA Transfer         |
 | EUR      | >10              | custom   | custom  | Credit Card, SEPA Direct Debit, SEPA Transfer, custom |
