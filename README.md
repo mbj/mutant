@@ -118,31 +118,41 @@ include:
 
 I do not need any more details.
 
-### Getting a commercial license
+### Pricing
 
-Mutant offers a per developer subscription a monthly plan for 30$, or an annual plan for 300$.
+**Mutant is free for [opensource use](#getting-an-opensource-license)!**
 
-Above 10 developer licensees per customer I'm open to negotiate more discounts.
+For commercial use mutants pricing is subscription based.
 
-Should you want to procure a commercial mutant license please [mail me](mailto:mbj@schirp-dso.com?subject=Mutant%20Commercial%20License).
+| Currency | No. Subscribers  | Duration | Cost    | Payment Methods                                       |
+| -------- | ---------------- |--------  | ------- | ----------------------------------------------------- |
+| USD      | any              | 1 month  | 30$     | Credit Card                                           |
+| USD      | any              | 1 year   | 300$    | Credit Card, ACH transfer                             |
+| USD      | >10              | custom   | custom  | Credit Card, ACH transfer, Wire tranfer, custom       |
+| EUR      | any              | 1 month  | 25€     | Credit Card, SEPA Direct Debit                        |
+| EUR      | any              | 1 year   | 250€    | Credit Card, SEPA Direct Debit, SEPA Transfer         |
+| EUR      | >10              | custom   | custom  | Credit Card, SEPA Direct Debit, SEPA Transfer, custom |
+
+Should you want to procure a commercial mutant subscription please [mail me](mailto:mbj@schirp-dso.com?subject=Mutant%20Commercial%20License).
 
 Please include the following information:
 
-* Your invoice address, including your Tax ID (For EU customers VAT-ID is mandatory)
-* Per licensed user the git author email address as returned by `git config user.email`
+* Your business invoice address.
+* A payment email address, if different from your email address.
+* Only for the EU: A valid VAT-ID is *required*, no sales to private customers to avoid the
+  horrors cross border VAT / MOSS.
+  VAT for customers outside of Malta will use **reverse charging**.
+* *Per developer* the git author email address as returned by `git config user.email`
 
 Also feel free to ask any other question I forgot to proactively answer here.
-
-#### Payment methods
-
-* For monthly subscriptions: Exclusively CC.
-* For annual subscriptions: CC (worldwide) or ACH (US) / SEPA (EU) wire transfer.
 
 #### Pricing Why?
 
 The idea is to charge 1$ per developer per day. Mutant reduces the time spend on code reviews.
 
 This time saved should be worth way more than the 1$ per day.
+
+EUR prices are set to mirror USD prices, but aviod conversion losses at the customer.
 
 If you think this is not true for your code base, either my claims are wrong our your use of mutant is wrong.
 I'd be happy to hear about your case as I'm certainly willing to help you in using mutant right, and in case
