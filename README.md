@@ -76,15 +76,18 @@ Labels:
 
 ## Licensing
 
-Mutant was recently transitioned commercial software, with a free usage plan for opensource projects.
+Mutant is commercial software, with a free usage plan for opensource projects.
 
 Commercial projects have to acquire a license per developer, with unlimited repositories
 per developer. CI usage for licensed developers is included.
 
-Opensource projects have to acquire their free license per repository.
+Opensource projects have to acquire their free license per repository. That license will
+work for any contributor implicitly. Typically the project maintainer gets the license.
 
-The license distribution happens through the `mutant-license` gem in mutants dependencies.
-This gem is dynamically generated per licensee and comes with a unique license gem source
+The license distribution happens through the `mutant-license` gem. Mutant installs without
+that dependency, but will not be very cooperative unless `mutant-license` is also available.
+
+The license gem is dynamically generated per licensee and comes with a unique license gem source
 URL.
 
 After signup for a license the following has to be added to your `Gemfile` replacing `${key}`
@@ -128,10 +131,10 @@ For commercial use mutants pricing is subscription based.
 | -------- | ---------------- |--------  | ------- | ----------------------------------------------------- |
 | USD      | any              | 1 month  | 30$     | Credit Card                                           |
 | USD      | any              | 1 year   | 300$    | Credit Card, ACH transfer                             |
-| USD      | >10              | custom   | custom  | Credit Card, ACH transfer, Wire transfer, custom      |
+| USD      | >20              | custom   | custom  | Credit Card, ACH transfer, Wire transfer, custom      |
 | EUR      | any              | 1 month  | 25€     | Credit Card, SEPA Direct Debit                        |
 | EUR      | any              | 1 year   | 250€    | Credit Card, SEPA Direct Debit, SEPA Transfer         |
-| EUR      | >10              | custom   | custom  | Credit Card, SEPA Direct Debit, SEPA Transfer, custom |
+| EUR      | >20              | custom   | custom  | Credit Card, SEPA Direct Debit, SEPA Transfer, custom |
 
 Should you want to procure a commercial mutant subscription please [mail me](mailto:mbj@schirp-dso.com?subject=Mutant%20Commercial%20License).
 
@@ -145,6 +148,8 @@ Please include the following information:
 * *Per developer* the git author email address as returned by `git config user.email`
 
 Also feel free to ask any other question I forgot to proactively answer here.
+
+Also checkout the [commercial FAQ](/docs/commercial.md).
 
 #### Pricing Why?
 
@@ -160,6 +165,7 @@ I'm wrong I'd be happy to improve mutant to the point I'm right again.
 
 ## Topics
 
+* [Commercial use / private repositories](/docs/commercial.md)
 * [Nomenclature](/docs/nomenclature.md)
 * [Reading Reports](/docs/reading-reports.md)
 * [Known Problems](/docs/known-problems.md)
