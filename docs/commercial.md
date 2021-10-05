@@ -42,7 +42,7 @@ server that enables mutants functionality in commercial repositories.
 How do I determine the number of required subscriptions?
 --------------------------------------------------------
 
-Collect the git author email from each of your developers that need to use utant.
+Collect the git author email from each of your developers that need to use mutant.
 Use `git config --get user.email`.  Count that list.
 
 Mutant on CI will work on any commit authored by a developer in that list.
@@ -141,7 +141,7 @@ BTW: As mutant does NOT control the HTTP call side (bundler does instead) there 
 information leak being caused by mutant. Apart from HTTP logs at the license server.
 
 At no point in time Schirp DSO LTD gets access to your source code, your customers data
-or onther sensitive material.
+or other sensitive material.
 
 Should mutant gain more features that would enable features such as distributed
 analysis and reporting, these features will be opt in, with a big warning.
