@@ -45,7 +45,7 @@ How do I determine the number of required subscriptions?
 Collect the git author email from each of your developers that need to use utant.
 Use `git config --get user.email`.  Count that list.
 
-Mutant on CI will fork on any commit authored by a developer in that list.
+Mutant on CI will work on any commit authored by a developer in that list.
 
 So a designer, who contributes to your repository, but never touches Ruby/Mutant:
 Will not be forced to get a mutant subscription.
@@ -57,14 +57,14 @@ If your credit card cannot be charged, even after retries: The subscription will
 considered inactive and you loose access to mutants license gem. Which prevents `bundle install`
 and adjacent commands to succeed.
 
-**Please note that pricing can chance**. Once you purchase a subscription, you get hat price
+**Please note that pricing can chance**. Once you purchase a subscription, you get that price
 forever **as long you pay on time**. If your subscription expires for a non-payment, you will lose
 that pricing and need to repurchase at current pricing.
 
 What does the license require me to do?
 ---------------------------------------
 
-Your purchase gets you unique access credentials for accessing hte license gem which enables
+Your purchase gets you unique access credentials for accessing the license gem which enables
 mutant on a private repository. The license requires you to keep these access credentials private.
 
 If your access credentials are ever found to be publicized:
