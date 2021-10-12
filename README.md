@@ -159,10 +159,6 @@ This time saved should be worth way more than the 1$ per day.
 
 EUR prices are set to mirror USD prices, but avoid conversion losses at the customer.
 
-If you think this is not true for your code base, either my claims are wrong our your use of mutant is wrong.
-I'd be happy to hear about your case as I'm certainly willing to help you in using mutant right, and in case
-I'm wrong I'd be happy to improve mutant to the point I'm right again.
-
 ## Topics
 
 * [Commercial use / private repositories](/docs/commercial.md)
