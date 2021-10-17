@@ -1,3 +1,10 @@
+# v0.10.35 2021-10-17
+
+* [#1269](https://github.com/mbj/mutant/pull/1269)
+  Add `mutant environment irb` command. Starts an IRB session for the
+  configured mutant environment. Very useful for iterating on environment
+  setup issues.
+
 # v0.10.34 2021-08-30
 
 * [#1252](https://github.com/mbj/mutant/pull/1252)

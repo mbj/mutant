@@ -557,6 +557,39 @@ RSpec.describe Mutant::CLI do
       end
     end
 
+    context 'environment irb' do
+      include_context 'environment'
+
+      before do
+        allow(TOPLEVEL_BINDING).to receive(:irb) do
+          events << :irb_execution
+        end
+      end
+
+      let(:arguments) { %w[environment irb] }
+
+      context 'without additional arguments' do
+        let(:expected_exit) { true }
+
+        let(:expected_events) do
+          [
+            [
+              :load_config_file,
+              world
+            ],
+            [
+              :bootstrap,
+              world,
+              bootstrap_config.inspect
+            ],
+            :irb_execution
+          ]
+        end
+
+        include_examples 'CLI run'
+      end
+    end
+
     context 'environment test list' do
       include_context 'environment'
 
