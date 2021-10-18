@@ -82,7 +82,17 @@ module Mutant
         end
 
         def source_location
-          target_method.source_location
+          signature = sorbet_signature
+
+          if signature
+            signature.method.source_location
+          else
+            target_method.source_location
+          end
+        end
+
+        def sorbet_signature
+          T::Private::Methods.signature_for_method(target_method)
         end
 
         def subject

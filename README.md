@@ -170,6 +170,7 @@ EUR prices are set to mirror USD prices, but avoid conversion losses at the cust
 * [Rspec Integration](/docs/mutant-rspec.md)
 * [Minitest Integration](/docs/mutant-minitest.md)
 * [Configuration](/docs/configuration.md)
+* [Sorbet](/docs/sorbet.md)
 
 ## Communication
 
