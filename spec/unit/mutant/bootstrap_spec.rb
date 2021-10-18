@@ -148,7 +148,7 @@ RSpec.describe Mutant::Bootstrap do
 
       let(:expected_warning) do
         "Object#name from: #{invalid_class} raised an error: " \
-        "RuntimeError. #{Mutant::Env::SEMANTICS_MESSAGE}"
+          "RuntimeError. #{Mutant::Env::SEMANTICS_MESSAGE}"
       end
 
       # Not really a class, but does not leak a "wrong" class
@@ -187,7 +187,7 @@ RSpec.describe Mutant::Bootstrap do
 
       let(:expected_warning) do
         "Object#name from: #{invalid_class} " \
-        "returned Object. #{Mutant::Env::SEMANTICS_MESSAGE}"
+          "returned Object. #{Mutant::Env::SEMANTICS_MESSAGE}"
       end
 
       include_examples 'bootstrap call'

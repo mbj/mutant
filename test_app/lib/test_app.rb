@@ -107,6 +107,26 @@ module TestApp
   def self.root
     File.expand_path('..', __dir__)
   end
+
+  module InstanceMethodTests
+    class WithSignature
+      extend T::Sig
+
+      sig { void }
+      def foo
+      end
+    end
+  end
+
+  module SingletonMethodTests
+    class WithSignature
+      extend T::Sig
+
+      sig { void }
+      def self.foo
+      end
+    end
+  end
 end
 
 require 'test_app/metaclasses'

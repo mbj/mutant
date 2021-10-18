@@ -44,6 +44,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
       instance_double(
         Method,
         name:            :some_method,
+        owner:           nil,
         source_location: source_location
       )
     end
@@ -182,5 +183,13 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
 
       it_should_behave_like 'a method matcher'
     end
+  end
+
+  context 'with sorbet signature' do
+    let(:scope)        { base::WithSignature }
+    let(:method_line)  { 116                 }
+    let(:method_arity) { 0                   }
+
+    it_should_behave_like 'a method matcher'
   end
 end

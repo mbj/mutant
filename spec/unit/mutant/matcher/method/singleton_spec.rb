@@ -85,4 +85,12 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
       it_should_behave_like 'a method matcher'
     end
   end
+
+  context 'with sorbet signature' do
+    let(:scope)        { base::WithSignature }
+    let(:method_line)  { 126                 }
+    let(:method_arity) { 0                   }
+
+    it_should_behave_like 'a method matcher'
+  end
 end
