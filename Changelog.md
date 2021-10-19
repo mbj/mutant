@@ -1,6 +1,6 @@
 # v.0.11.0 2021-10-18
 
-* [#1270](https://github.com/mbj/mutant/pull/1269)
+* [#1270](https://github.com/mbj/mutant/pull/1270)
 
   Add sorbet method matching. Allows mutant to operate on methods
   with a sorbet signature. Does not yet use the signature to constrain
@@ -11,7 +11,7 @@
    a clean dependency, that unless told to: Will not perform core extensions.
 
   As mutant is a development dependency it should not be an issue for a project
-  that mutant itself will soonm use sorbet type checks to accelerate its
+  that mutant itself will soon use sorbet type checks to accelerate its
   development.
 
   Please report any issues the addition of the `sorbet-runtime` dependency to
