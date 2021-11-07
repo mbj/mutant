@@ -1,5 +1,12 @@
 # v.0.11.1 2021-11-xx
 
+* [#1275](https://github.com/mbj/mutant/pull/1275)
+
+  [Fix #1273]
+
+  Prevent crashes on degenerate object interfaces where method reflection returns
+  methods that are later not accessible via `#instnace_method`.
+
 * [#1274](https://github.com/mbj/mutant/pull/1274)
 
   Add ability to set environment variables via the CLI.

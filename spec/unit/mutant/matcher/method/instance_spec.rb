@@ -192,4 +192,12 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
 
     it_should_behave_like 'a method matcher'
   end
+
+  context 'on delegate class' do
+    let(:scope)        { TestApp::DelegateTest }
+    let(:method_line)  { 134                   }
+    let(:method_arity) { 0                     }
+
+    it_should_behave_like 'a method matcher'
+  end
 end
