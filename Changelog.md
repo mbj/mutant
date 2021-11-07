@@ -1,5 +1,10 @@
 # v.0.11.1 2021-11-xx
 
+* [#1276](https://github.com/mbj/mutant/pull/1276)
+
+  Improve matching speed. This is especiablly noticable in lager projects.
+  Mutant now creates way less objects while matching subjects.
+
 * [#1275](https://github.com/mbj/mutant/pull/1275)
 
   Fix: [#1273](https://github.com/mbj/mutant/issues/1273)

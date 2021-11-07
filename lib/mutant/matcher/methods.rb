@@ -40,7 +40,7 @@ module Mutant
 
       def candidate_names
         CANDIDATE_NAMES
-          .map { |name| candidate_scope.public_send(name) }
+          .map { |name| candidate_scope.public_send(name, false) }
           .reduce(:+)
           .sort
       end
