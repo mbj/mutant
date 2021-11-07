@@ -86,7 +86,7 @@ separate and individuall developers cannot update the subscription.
 Can I get a refund?
 -------------------
 
-Yes, for monthly subscription the **last payed month** gets refunded on cancellation.
+Yes, for monthly subscription the **last paid month** gets refunded on cancellation.
 Email [mbj@schirp-dso](mailto:mbj@schirp-dso.com).
 
 How do I update my info?
