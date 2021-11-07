@@ -127,6 +127,12 @@ module TestApp
       end
     end
   end
+
+  require 'delegate'
+
+  class DelegateTest < DelegateClass(String)
+    def foo; end
+  end
 end
 
 require 'test_app/metaclasses'

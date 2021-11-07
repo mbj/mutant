@@ -21,7 +21,7 @@ module Mutant
       # @return [Enumerable<Subject>]
       def call(env)
         Chain.new(
-          methods.map { |method| matcher.new(scope, method) }
+          methods(env).map { |method| matcher.new(scope, method) }
         ).call(env)
       end
 
@@ -31,17 +31,16 @@ module Mutant
         self.class::MATCHER
       end
 
-      def methods
+      def methods(env)
         candidate_names.each_with_object([]) do |name, methods|
-          method = access(name)
-          methods << method if method.owner.equal?(candidate_scope)
+          method = access(env, name)
+          methods << method if method&.owner.equal?(candidate_scope)
         end
       end
-      memoize :methods
 
       def candidate_names
         CANDIDATE_NAMES
-          .map(&candidate_scope.public_method(:public_send))
+          .map { |name| candidate_scope.public_send(name) }
           .reduce(:+)
           .sort
       end
@@ -55,7 +54,7 @@ module Mutant
 
       private
 
-        def access(method_name)
+        def access(_env, method_name)
           scope.method(method_name)
         end
 
@@ -71,7 +70,7 @@ module Mutant
 
       private
 
-        def access(method_name)
+        def access(_env, method_name)
           scope.method(method_name)
         end
 
@@ -84,11 +83,33 @@ module Mutant
       class Instance < self
         MATCHER = Matcher::Method::Instance
 
+        MESSAGE = <<~'MESSAGE'
+          Caught an exception while accessing a method with
+          #instance_method that is part of #{public,privat,protected}_instance_methods.
+
+          This is a bug in your ruby implementation its stdlib, libaries our your code.
+
+          Mutant will ignore this method:
+
+          Object:    %<scope>s
+          Method:    %<method_name>s
+          Exception: %<exception>s
+
+          See: https://github.com/mbj/mutant/issues/1273
+        MESSAGE
+
       private
 
-        def access(method_name)
+        # rubocop:disable Lint/RescueException
+        def access(env, method_name)
           scope.instance_method(method_name)
+        rescue Exception => exception
+          env.warn(
+            MESSAGE % { scope: scope, method_name: method_name, exception: exception }
+          )
+          nil
         end
+        # rubocop:enable Lint/RescueException
 
         def candidate_scope
           scope
