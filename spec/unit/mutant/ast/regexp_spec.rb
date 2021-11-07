@@ -85,7 +85,7 @@ RegexpSpec.expect_mapping(/A/, :regexp_root_expression) do
     s(:regexp_literal_literal, 'A'))
 end
 
-RegexpSpec.expect_mapping(/\p{Alpha}/, :regexp_alpha_property) do
+RegexpSpec.expect_mapping(/\p{alpha}/, :regexp_alpha_property) do
   s(:regexp_root_expression,
     s(:regexp_alpha_property))
 end
@@ -414,7 +414,7 @@ RegexpSpec.expect_mapping(/\{/, :regexp_interval_open_escape) do
     s(:regexp_interval_open_escape))
 end
 
-RegexpSpec.expect_mapping(/\p{L}/, :regexp_letter_property) do
+RegexpSpec.expect_mapping(/\p{letter}/, :regexp_letter_property) do
   s(:regexp_root_expression,
     s(:regexp_letter_property))
 end
@@ -602,7 +602,7 @@ RegexpSpec.expect_mapping(/.?+/, :regexp_possessive_zero_or_one) do
       s(:regexp_dot_meta)))
 end
 
-RegexpSpec.expect_mapping(/\P{Print}/, :regexp_print_nonproperty) do
+RegexpSpec.expect_mapping(/\P{print}/, :regexp_print_nonproperty) do
   s(:regexp_root_expression,
     s(:regexp_print_nonproperty))
 end
@@ -637,32 +637,32 @@ RegexpSpec.expect_mapping(/.*?/, :regexp_reluctant_zero_or_more) do
       s(:regexp_dot_meta)))
 end
 
-RegexpSpec.expect_mapping(/\p{Arabic}/, :regexp_arabic_property) do
+RegexpSpec.expect_mapping(/\p{arabic}/, :regexp_arabic_property) do
   s(:regexp_root_expression,
     s(:regexp_arabic_property))
 end
 
-RegexpSpec.expect_mapping(/\p{Han}/, :regexp_han_property) do
+RegexpSpec.expect_mapping(/\p{han}/, :regexp_han_property) do
   s(:regexp_root_expression,
     s(:regexp_han_property))
 end
 
-RegexpSpec.expect_mapping(/\p{Hangul}/, :regexp_hangul_property) do
+RegexpSpec.expect_mapping(/\p{hangul}/, :regexp_hangul_property) do
   s(:regexp_root_expression,
     s(:regexp_hangul_property))
 end
 
-RegexpSpec.expect_mapping(/\p{Hiragana}/, :regexp_hiragana_property) do
+RegexpSpec.expect_mapping(/\p{hiragana}/, :regexp_hiragana_property) do
   s(:regexp_root_expression,
     s(:regexp_hiragana_property))
 end
 
-RegexpSpec.expect_mapping(/\p{Latin}/, :regexp_latin_property) do
+RegexpSpec.expect_mapping(/\p{latin}/, :regexp_latin_property) do
   s(:regexp_root_expression,
     s(:regexp_latin_property))
 end
 
-RegexpSpec.expect_mapping(/\p{Katakana}/, :regexp_katakana_property) do
+RegexpSpec.expect_mapping(/\p{katakana}/, :regexp_katakana_property) do
   s(:regexp_root_expression,
     s(:regexp_katakana_property))
 end

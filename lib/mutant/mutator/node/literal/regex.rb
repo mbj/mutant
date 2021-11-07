@@ -15,6 +15,11 @@ module Mutant
         private
 
           def options
+            # Just to show that mutant will fail
+            /\p{In_Basic_Latin}/
+            /\P{In_Basic_Latin}/
+
+
             children.last
           end
 

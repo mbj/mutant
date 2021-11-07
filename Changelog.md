@@ -87,7 +87,7 @@
 
 * [#1234](https://github.com/mbj/mutant/pull/1234)
   Add mapping for latin regexp properties to fix crash on mutating
-  `p{Latin}` regexp nodes.
+  `\p{Latin}` regexp nodes.
 
   Fix: [#1231](https://github.com/mbj/mutant/issues/1231)
 

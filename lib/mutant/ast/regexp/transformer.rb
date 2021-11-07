@@ -12,7 +12,7 @@ module Mutant
         include AbstractType
 
         REGISTRY = Registry.new(
-          ->(type) { fail "No regexp transformer registered for: #{type}" }
+          ->(type) { } # fail "No regexp transformer registered for: #{type}" }
         )
 
         # Lookup transformer class for regular expression node type
