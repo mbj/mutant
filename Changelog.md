@@ -1,3 +1,15 @@
+# v.0.11.1 2021-11-xx
+
+* [#1274](https://github.com/mbj/mutant/pull/1274)
+
+  Add ability to set environment variables via the CLI.
+  The environment variables are inserted before the application is
+  loaded. This is especially useful to load rails in test mode via setting
+  `RAILS_ENV=test`.
+
+  For CLI use the `--env` argument.
+  For config file use the `environment_variables` key.
+
 # v.0.11.0 2021-10-18
 
 * [#1270](https://github.com/mbj/mutant/pull/1270)

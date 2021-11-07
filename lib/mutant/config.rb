@@ -5,9 +5,12 @@ module Mutant
   #
   # Does not reference any "external" volatile state. The configuration applied
   # to current environment is being represented by the Mutant::Env object.
+  #
+  # rubocop:disable Metrics/ClassLength
   class Config
     include Adamantium, Anima.new(
       :coverage_criteria,
+      :environment_variables,
       :expression_parser,
       :fail_fast,
       :hooks,
@@ -48,16 +51,17 @@ module Mutant
     # rubocop:disable Metrics/MethodLength
     def merge(other)
       other.with(
-        coverage_criteria: coverage_criteria.merge(other.coverage_criteria),
-        fail_fast:         fail_fast || other.fail_fast,
-        hooks:             hooks + other.hooks,
-        includes:          includes + other.includes,
-        integration:       other.integration || integration,
-        jobs:              other.jobs || jobs,
-        matcher:           matcher.merge(other.matcher),
-        mutation_timeout:  other.mutation_timeout || mutation_timeout,
-        requires:          requires + other.requires,
-        zombie:            zombie || other.zombie
+        coverage_criteria:     coverage_criteria.merge(other.coverage_criteria),
+        environment_variables: environment_variables.merge(other.environment_variables),
+        fail_fast:             fail_fast || other.fail_fast,
+        hooks:                 hooks + other.hooks,
+        includes:              includes + other.includes,
+        integration:           other.integration || integration,
+        jobs:                  other.jobs || jobs,
+        matcher:               matcher.merge(other.matcher),
+        mutation_timeout:      other.mutation_timeout || mutation_timeout,
+        requires:              requires + other.requires,
+        zombie:                zombie || other.zombie
       )
     end
     # rubocop:enable Metrics/AbcSize
@@ -117,6 +121,24 @@ module Mutant
       )
     )
 
+    # Parse a hash of environment variables
+    #
+    # @param [Hash<Object,Object>]
+    #
+    # @return [Either<String,Hash<String,String>]
+    #
+    def self.parse_environment_variables(hash)
+      invalid = hash.keys.reject { |key| key.instance_of?(String) }
+      return Either::Left.new("Non string keys: #{invalid}") if invalid.any?
+
+      invalid = hash.keys.grep_v(/\A[A-Za-z\d]+\z/)
+      return Either::Left.new("Invalid keys: #{invalid}") if invalid.any?
+
+      invalid = hash.values.reject { |value| value.instance_of?(String) }
+      return Either::Left.new("Non string values: #{invalid}") if invalid.any?
+
+      Either::Right.new(hash)
+    end
     TRANSFORM = Transform::Sequence.new(
       [
         Transform::Exception.new(SystemCallError, :read.to_proc),
@@ -124,14 +146,23 @@ module Mutant
         Transform::Hash.new(
           optional: [
             Transform::Hash::Key.new('coverage_criteria', ->(value) { CoverageCriteria::TRANSFORM.call(value) }),
-            Transform::Hash::Key.new('fail_fast',         Transform::BOOLEAN),
-            Transform::Hash::Key.new('hooks',             PATHNAME_ARRAY),
-            Transform::Hash::Key.new('includes',          Transform::STRING_ARRAY),
-            Transform::Hash::Key.new('integration',       Transform::STRING),
-            Transform::Hash::Key.new('jobs',              Transform::INTEGER),
-            Transform::Hash::Key.new('matcher',           Matcher::Config::LOADER),
-            Transform::Hash::Key.new('mutation_timeout',  Transform::FLOAT),
-            Transform::Hash::Key.new('requires',          Transform::STRING_ARRAY)
+            Transform::Hash::Key.new(
+              'environment_variables',
+              Transform::Sequence.new(
+                [
+                  Transform::Primitive.new(Hash),
+                  Transform::Block.capture(:environment_variables, &method(:parse_environment_variables))
+                ]
+              )
+            ),
+            Transform::Hash::Key.new('fail_fast',             Transform::BOOLEAN),
+            Transform::Hash::Key.new('hooks',                 PATHNAME_ARRAY),
+            Transform::Hash::Key.new('includes',              Transform::STRING_ARRAY),
+            Transform::Hash::Key.new('integration',           Transform::STRING),
+            Transform::Hash::Key.new('jobs',                  Transform::INTEGER),
+            Transform::Hash::Key.new('matcher',               Matcher::Config::LOADER),
+            Transform::Hash::Key.new('mutation_timeout',      Transform::FLOAT),
+            Transform::Hash::Key.new('requires',              Transform::STRING_ARRAY)
           ],
           required: []
         ),
@@ -141,4 +172,5 @@ module Mutant
 
     private_constant(:TRANSFORM)
   end # Config
+  # rubocop:enable Metrics/ClassLength
 end # Mutant

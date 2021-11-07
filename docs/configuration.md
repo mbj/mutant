@@ -28,6 +28,20 @@ requires:
 
 Additional requires can be added by providing the `-r` or `--require` option to the CLI.
 
+#### `environment_variables`
+
+Allows to set environment variables that are loaded just before the target application is
+loaded. This is especially useful when dealing with rails that has to be initialized with
+`RAILS_ENV=test` to behave correctly under mutation testing.
+
+```yml
+---
+environment_variables:
+  RAILS_ENV: test
+```
+
+Additional environment variables can be added by providing the `--env KEY=VALUE` option to the CLI.
+
 #### `integration`
 
 Specifies which mutant integration to use. If your tests are writen in [RSpec](https://rspec.info/), this should be set to `rspec`. If your tests are written in [minitest](https://github.com/seattlerb/minitest), this should be set to `minitest`.

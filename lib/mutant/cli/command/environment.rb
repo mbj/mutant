@@ -15,6 +15,8 @@ module Mutant
             add_matcher_options
           ].freeze
 
+        ENV_PATTERN = /\A(?<key>[A-Za-z\d]+)=(?<value>.*)\z/.freeze
+
       private
 
         def initialize(attributes)
@@ -62,6 +64,7 @@ module Mutant
           set(matcher: @config.matcher.add(attribute, value))
         end
 
+        # rubocop:disable Metrics/MethodLength
         def add_environment_options(parser)
           parser.separator('Environment:')
           parser.on('--zombie', 'Run mutant zombified') do
@@ -73,7 +76,14 @@ module Mutant
           parser.on('-r', '--require NAME', 'Require file with NAME') do |name|
             add(:requires, name)
           end
+          parser.on('--env KEY=VALUE', 'Set environment variable') do |value|
+            match = ENV_PATTERN.match(value) || fail("Invalid env variable: #{value.inspect}")
+            set(
+              environment_variables: @config.environment_variables.merge(match[:key] => match[:value])
+            )
+          end
         end
+        # rubocop:enable Metrics/MethodLength
 
         def add_integration_options(parser)
           parser.separator('Integration:')

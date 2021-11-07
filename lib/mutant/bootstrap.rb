@@ -71,6 +71,10 @@ module Mutant
 
       hooks.run(:env_infection_pre, env)
 
+      config.environment_variables.each do |key, value|
+        world.environment_variables[key] = value
+      end
+
       config.includes.each(&world.load_path.public_method(:<<))
       config.requires.each(&world.kernel.public_method(:require))
 

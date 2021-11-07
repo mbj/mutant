@@ -250,6 +250,7 @@ RSpec.describe Mutant::CLI do
                 --zombie                     Run mutant zombified
             -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
             -r, --require NAME               Require file with NAME
+                --env KEY=VALUE              Set environment variable
 
 
         Runner:
@@ -963,6 +964,28 @@ RSpec.describe Mutant::CLI do
           end
 
           include_examples 'CLI run'
+        end
+
+        context 'with --env option' do
+          let(:arguments) { super() + %W[--env #{argument}] }
+
+          context 'on valid env syntax' do
+            let(:argument) { 'foo=bar' }
+
+            let(:bootstrap_config) do
+              super().with(environment_variables: { 'foo' => 'bar' })
+            end
+
+            include_examples 'CLI run'
+          end
+
+          context 'on invalid env syntax' do
+            let(:argument) { 'foobar' }
+
+            it 'raises expected error' do
+              expect { apply }.to raise_error(RuntimeError, 'Invalid env variable: "foobar"')
+            end
+          end
         end
 
         context 'with --jobs option on absent file config' do

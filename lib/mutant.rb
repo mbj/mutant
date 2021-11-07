@@ -234,46 +234,48 @@ require 'mutant/license/subscription/commercial'
 
 module Mutant
   WORLD = World.new(
-    condition_variable: ConditionVariable,
-    gem:                Gem,
-    gem_method:         method(:gem),
-    io:                 IO,
-    json:               JSON,
-    kernel:             Kernel,
-    load_path:          $LOAD_PATH,
-    marshal:            Marshal,
-    mutex:              Mutex,
-    object_space:       ObjectSpace,
-    open3:              Open3,
-    pathname:           Pathname,
-    process:            Process,
-    stderr:             $stderr,
-    stdout:             $stdout,
-    thread:             Thread,
-    timer:              Timer.new(Process)
+    condition_variable:    ConditionVariable,
+    environment_variables: ENV,
+    gem:                   Gem,
+    gem_method:            method(:gem),
+    io:                    IO,
+    json:                  JSON,
+    kernel:                Kernel,
+    load_path:             $LOAD_PATH,
+    marshal:               Marshal,
+    mutex:                 Mutex,
+    object_space:          ObjectSpace,
+    open3:                 Open3,
+    pathname:              Pathname,
+    process:               Process,
+    stderr:                $stderr,
+    stdout:                $stdout,
+    thread:                Thread,
+    timer:                 Timer.new(Process)
   )
 
   # Reopen class to initialize constant to avoid dep circle
   class Config
     DEFAULT = new(
-      coverage_criteria: Config::CoverageCriteria::EMPTY,
-      expression_parser: Expression::Parser.new([
+      coverage_criteria:     Config::CoverageCriteria::EMPTY,
+      expression_parser:     Expression::Parser.new([
         Expression::Method,
         Expression::Methods,
         Expression::Namespace::Exact,
         Expression::Namespace::Recursive
       ]),
-      fail_fast:         false,
-      hooks:             EMPTY_ARRAY,
-      includes:          EMPTY_ARRAY,
-      integration:       nil,
-      isolation:         Mutant::Isolation::Fork.new(WORLD),
-      jobs:              nil,
-      matcher:           Matcher::Config::DEFAULT,
-      mutation_timeout:  nil,
-      reporter:          Reporter::CLI.build(WORLD.stdout),
-      requires:          EMPTY_ARRAY,
-      zombie:            false
+      fail_fast:             false,
+      environment_variables: EMPTY_HASH,
+      hooks:                 EMPTY_ARRAY,
+      includes:              EMPTY_ARRAY,
+      integration:           nil,
+      isolation:             Mutant::Isolation::Fork.new(WORLD),
+      jobs:                  nil,
+      matcher:               Matcher::Config::DEFAULT,
+      mutation_timeout:      nil,
+      reporter:              Reporter::CLI.build(WORLD.stdout),
+      requires:              EMPTY_ARRAY,
+      zombie:                false
     )
   end # Config
 
