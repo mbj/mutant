@@ -78,7 +78,8 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
 
     let(:scope) do
       Class.new do
-        def self.public_instance_methods
+        def self.public_instance_methods(ancestors)
+          fail if ancestors
           %i[foo]
         end
       end
