@@ -22,12 +22,13 @@ RSpec.describe Mutant::Bootstrap do
 
   let(:config) do
     Mutant::Config::DEFAULT.with(
-      includes:    %w[include-a include-b],
-      integration: integration,
-      jobs:        1,
-      matcher:     matcher_config,
-      reporter:    instance_double(Mutant::Reporter),
-      requires:    %w[require-a require-b]
+      environment_variables: { 'foo' => 'bar' },
+      includes:              %w[include-a include-b],
+      integration:           integration,
+      jobs:                  1,
+      matcher:               matcher_config,
+      reporter:              instance_double(Mutant::Reporter),
+      requires:              %w[require-a require-b]
     )
   end
 
@@ -52,11 +53,12 @@ RSpec.describe Mutant::Bootstrap do
   let(:world) do
     instance_double(
       Mutant::World,
-      kernel:       kernel,
-      load_path:    load_path,
-      object_space: object_space,
-      pathname:     Pathname,
-      timer:        timer
+      environment_variables: {},
+      kernel:                kernel,
+      load_path:             load_path,
+      object_space:          object_space,
+      pathname:              Pathname,
+      timer:                 timer
     )
   end
 
@@ -80,6 +82,11 @@ RSpec.describe Mutant::Bootstrap do
         receiver:  hooks,
         selector:  :run,
         arguments: [:env_infection_pre, env_initial]
+      },
+      {
+        receiver:  world.environment_variables,
+        selector:  :[]=,
+        arguments: %w[foo bar]
       },
       {
         receiver:  load_path,

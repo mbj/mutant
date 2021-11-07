@@ -5,6 +5,7 @@ module Mutant
   class World
     include Adamantium, Anima.new(
       :condition_variable,
+      :environment_variables,
       :gem,
       :gem_method,
       :io,

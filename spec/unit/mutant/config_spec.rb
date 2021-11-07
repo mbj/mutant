@@ -169,6 +169,20 @@ RSpec.describe Mutant::Config do
       include_examples 'maybe value'
     end
 
+    context 'merging environment variables' do
+      let(:key)            { :environment_variables                         }
+      let(:original_value) { { 'KEY_A' => 'VALUE_A', 'KEY_B' => 'VALUE_B' } }
+      let(:other_value)    { { 'KEY_A' => 'VALUE_X', 'KEY_C' => 'VALUE_C' } }
+
+      it 'merges with preference for other' do
+        expect_value(
+          'KEY_A' => 'VALUE_X',
+          'KEY_B' => 'VALUE_B',
+          'KEY_C' => 'VALUE_C'
+        )
+      end
+    end
+
     context 'merging integration' do
       let(:key)            { :integration }
       let(:original_value) { 'rspec'      }
@@ -408,6 +422,44 @@ RSpec.describe Mutant::Config do
         it 'returns expected error' do
           expect(apply).to eql(Mutant::Either::Left.new(expected_message))
         end
+      end
+    end
+  end
+
+  describe '.parse_enviroment_variables' do
+    def apply
+      described_class.parse_environment_variables(input)
+    end
+
+    context 'on non string keys' do
+      let(:input) { { 1 => 'foo' } }
+
+      it 'returns expected value' do
+        expect(apply).to eql(left('Non string keys: [1]'))
+      end
+    end
+
+    context 'on malformed string keys' do
+      let(:input) { { 'foo=' => 'foo' } }
+
+      it 'returns expected value' do
+        expect(apply).to eql(left('Invalid keys: ["foo="]'))
+      end
+    end
+
+    context 'non string values' do
+      let(:input) { { 'foo' => 1 } }
+
+      it 'returns expected value' do
+        expect(apply).to eql(left('Non string values: [1]'))
+      end
+    end
+
+    context 'valid input' do
+      let(:input) { { 'foo' => 'bar' } }
+
+      it 'returns expected value' do
+        expect(apply).to eql(right('foo' => 'bar'))
       end
     end
   end
