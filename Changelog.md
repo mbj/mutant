@@ -2,7 +2,7 @@
 
 * [#1276](https://github.com/mbj/mutant/pull/1276)
 
-  Improve matching speed. This is especiablly noticable in lager projects.
+  Improve matching speed. This is especiablly noticeable in larger projects.
   Mutant now creates way less objects while matching subjects.
 
 * [#1275](https://github.com/mbj/mutant/pull/1275)
@@ -10,7 +10,7 @@
   Fix: [#1273](https://github.com/mbj/mutant/issues/1273)
 
   Prevent crashes on degenerate object interfaces where method reflection returns
-  methods that are later not accessible via `#instnace_method`.
+  methods that are later not accessible via `#instance_method`.
 
 * [#1274](https://github.com/mbj/mutant/pull/1274)
 
@@ -398,7 +398,7 @@
 
 # v0.10.2 2020-11-02
 
-* Fix type error on subscription show subcommand whith active commercial license.
+* Fix type error on subscription show subcommand with active commercial license.
   [#1074](https://github.com/mbj/mutant/pull/1084)
 
 # v0.10.1 2020-10-29

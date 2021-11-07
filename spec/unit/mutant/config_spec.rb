@@ -426,7 +426,7 @@ RSpec.describe Mutant::Config do
     end
   end
 
-  describe '.parse_enviroment_variables' do
+  describe '.parse_environment_variables' do
     def apply
       described_class.parse_environment_variables(input)
     end

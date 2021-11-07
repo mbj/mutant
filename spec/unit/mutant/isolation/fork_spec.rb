@@ -332,7 +332,7 @@ RSpec.describe Mutant::Isolation::Fork do
         context 'when child terminates immediately' do
           let(:post_reads) { [child_nowait(child_status_success)] }
 
-          it 'returns sucess result' do
+          it 'returns success result' do
             verify_events do
               expect(apply).to eql(
                 described_class::Result.new(

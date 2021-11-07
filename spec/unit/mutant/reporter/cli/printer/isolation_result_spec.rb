@@ -64,7 +64,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       STR
     end
 
-    context 'on unsucessful process status' do
+    context 'on unsuccessful process status' do
       let(:process_status) do
         instance_double(Process::Status, 'unsuccessful status', success?: false)
       end

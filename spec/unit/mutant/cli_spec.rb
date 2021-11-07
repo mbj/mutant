@@ -1050,13 +1050,13 @@ RSpec.describe Mutant::CLI do
           let(:env_config)       { Mutant::Config::DEFAULT }
           let(:file_config)      { Mutant::Config::DEFAULT }
 
-          context 'without coverage criterias in env or file' do
+          context 'without coverage criteria in env or file' do
             let(:bootstrap_config) { Mutant::Config::DEFAULT.expand_defaults }
 
             include_examples 'CLI run'
           end
 
-          context 'with coverage criterias in file' do
+          context 'with coverage criteria in file' do
             let(:file_config) do
               Mutant::Config::DEFAULT.with(
                 coverage_criteria: Mutant::Config::CoverageCriteria::DEFAULT.with(

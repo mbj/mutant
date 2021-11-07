@@ -44,7 +44,7 @@ Additional environment variables can be added by providing the `--env KEY=VALUE`
 
 #### `integration`
 
-Specifies which mutant integration to use. If your tests are writen in [RSpec](https://rspec.info/), this should be set to `rspec`. If your tests are written in [minitest](https://github.com/seattlerb/minitest), this should be set to `minitest`.
+Specifies which mutant integration to use. If your tests are written in [RSpec](https://rspec.info/), this should be set to `rspec`. If your tests are written in [minitest](https://github.com/seattlerb/minitest), this should be set to `minitest`.
 
 ```yml
 ---
