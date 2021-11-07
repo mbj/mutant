@@ -2,7 +2,7 @@
 
 * [#1275](https://github.com/mbj/mutant/pull/1275)
 
-  [Fix #1273]
+  Fix: [#1273](https://github.com/mbj/mutant/issues/1273)
 
   Prevent crashes on degenerate object interfaces where method reflection returns
   methods that are later not accessible via `#instnace_method`.
@@ -76,7 +76,7 @@
 * [#1235](https://github.com/mbj/mutant/pull/1235)
   Add more ugly workaround on Ruby loosing binmode settings.
 
-  [Fix #1228]
+  Fix: [#1228](https://github.com/mbj/mutant/issues/1228)
 
 # v0.10.31 2021-05-03
 
@@ -84,14 +84,14 @@
   Add mapping for latin regexp properties to fix crash on mutating
   `p{Latin}` regexp nodes.
 
-  [Fix #1231]
+  Fix: [#1231](https://github.com/mbj/mutant/issues/1231)
 
 # v0.10.30 2021-04-25
 
 * [#1229](https://github.com/mbj/mutant/pull/1229)
   Add workaround to a Ruby bug that looses the binmode setting on forks.
 
-  [Fix #1228]
+  Fix: [#1228](https://github.com/mbj/mutant/issues/1228)
 
 # v0.10.29 2021-03-08
 
