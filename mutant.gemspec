@@ -26,7 +26,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('parser',         '~> 3.0.0')
   gem.add_runtime_dependency('regexp_parser',  '~> 2.0', '>= 2.0.3')
   gem.add_runtime_dependency('sorbet-runtime', '~> 0.5.0')
-  gem.add_runtime_dependency('unparser',       '~> 0.6.0')
+  gem.add_runtime_dependency('unparser',       '~> 0.6.1')
 
   gem.add_development_dependency('parallel',   '~> 1.3')
   gem.add_development_dependency('rspec',      '~> 3.10')
