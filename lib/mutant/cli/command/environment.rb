@@ -15,8 +15,6 @@ module Mutant
             add_matcher_options
           ].freeze
 
-        ENV_PATTERN = /\A(?<key>[A-Za-z\d]+)=(?<value>.*)\z/.freeze
-
       private
 
         def initialize(attributes)
@@ -77,7 +75,7 @@ module Mutant
             add(:requires, name)
           end
           parser.on('--env KEY=VALUE', 'Set environment variable') do |value|
-            match = ENV_PATTERN.match(value) || fail("Invalid env variable: #{value.inspect}")
+            match = ENV_VARIABLE_KEY_VALUE_REGEXP.match(value) || fail("Invalid env variable: #{value.inspect}")
             set(
               environment_variables: @config.environment_variables.merge(match[:key] => match[:value])
             )
