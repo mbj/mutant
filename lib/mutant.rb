@@ -169,23 +169,25 @@ require 'mutant/subject/method/instance'
 require 'mutant/subject/method/singleton'
 require 'mutant/subject/method/metaclass'
 require 'mutant/matcher'
-require 'mutant/matcher/config'
 require 'mutant/matcher/chain'
+require 'mutant/matcher/config'
+require 'mutant/matcher/descendant'
+require 'mutant/matcher/filter'
 require 'mutant/matcher/method'
-require 'mutant/matcher/method/singleton'
-require 'mutant/matcher/method/metaclass'
 require 'mutant/matcher/method/instance'
+require 'mutant/matcher/method/metaclass'
+require 'mutant/matcher/method/singleton'
 require 'mutant/matcher/methods'
 require 'mutant/matcher/namespace'
-require 'mutant/matcher/scope'
-require 'mutant/matcher/filter'
 require 'mutant/matcher/null'
+require 'mutant/matcher/scope'
 require 'mutant/matcher/static'
 require 'mutant/expression'
-require 'mutant/expression/parser'
 require 'mutant/expression/method'
 require 'mutant/expression/methods'
 require 'mutant/expression/namespace'
+require 'mutant/expression/parser'
+require 'mutant/expression/rails'
 require 'mutant/test'
 require 'mutant/timer'
 require 'mutant/integration'
@@ -267,7 +269,8 @@ module Mutant
         Expression::Method,
         Expression::Methods,
         Expression::Namespace::Exact,
-        Expression::Namespace::Recursive
+        Expression::Namespace::Recursive,
+        Expression::Rails
       ]),
       fail_fast:             false,
       environment_variables: EMPTY_HASH,

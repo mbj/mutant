@@ -50,6 +50,16 @@ module Mutant
       end
     end
 
+    # Try const get
+    #
+    # @param [String]
+    #
+    # @return [Class|Module|nil]
+    def try_const_get(name)
+      kernel.const_get(name)
+    rescue NameError
+    end
+
     # Deadline
     #
     # @param [Float, nil] allowed_time

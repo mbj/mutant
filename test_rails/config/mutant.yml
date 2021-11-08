@@ -1,0 +1,9 @@
+environment_variables:
+  RAILS_ENV: test
+integration: minitest
+includes:
+- test
+requires:
+- ./config/environment.rb
+hooks:
+- ./config/mutant-hooks.rb

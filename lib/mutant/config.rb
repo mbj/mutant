@@ -78,6 +78,8 @@ module Mutant
         .map(&world.pathname.public_method(:new))
         .select(&:readable?)
 
+      Kernel.system("cat config/mutant.yml")
+
       if files.one?
         load_contents(files.first).fmap(&DEFAULT.public_method(:with))
       elsif files.empty?

@@ -14,7 +14,7 @@ module Mutant
       def call(env)
         matchers.flat_map do |matcher|
           matcher.call(env)
-        end
+        end.uniq
       end
 
     end # Chain
