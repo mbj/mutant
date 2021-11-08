@@ -38,6 +38,11 @@ module Mutant
   EMPTY_ARRAY    = [].freeze
   EMPTY_HASH     = {}.freeze
   SCOPE_OPERATOR = '::'
+
+  env_key = /[a-zA-Z_\d]+/
+
+  ENV_VARIABLE_KEY_VALUE_REGEXP = /\A(?<key>#{env_key}+)=(?<value>.*)\z/.freeze
+  ENV_VARIABLE_KEY_REGEXP       = /\A#{env_key}\z/.freeze
 end # Mutant
 
 require 'mutant/procto'

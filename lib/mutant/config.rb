@@ -131,7 +131,7 @@ module Mutant
       invalid = hash.keys.reject { |key| key.instance_of?(String) }
       return Either::Left.new("Non string keys: #{invalid}") if invalid.any?
 
-      invalid = hash.keys.grep_v(/\A[A-Za-z\d]+\z/)
+      invalid = hash.keys.grep_v(ENV_VARIABLE_KEY_REGEXP)
       return Either::Left.new("Invalid keys: #{invalid}") if invalid.any?
 
       invalid = hash.values.reject { |value| value.instance_of?(String) }
