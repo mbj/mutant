@@ -1,4 +1,4 @@
-# v.0.11.1 2021-11-xx
+# v.0.11.1 2021-11-08
 
 * [#1276](https://github.com/mbj/mutant/pull/1276)
 
