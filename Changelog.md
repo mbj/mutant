@@ -1,5 +1,13 @@
 # v0.11.2 2021-11-15
 
+* [#1285](https://github.com/mbj/mutant/pull/1283)
+
+  Prevent multipath matches. Should multiple match expessions evaluate to the same subject,
+  mutant now only visits that subject once.
+
+  This prevents blowing up the mutation testing work on bigger applications with more
+  complex match expressions.
+
 * [#1283](https://github.com/mbj/mutant/pull/1283)
 
   Add descendants matchers. These matchers allow to select subjects in inheritance trees

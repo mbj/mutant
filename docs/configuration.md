@@ -99,6 +99,12 @@ matcher:
   - Your::App::Namespace::Dirty#some_method # ignore a specific class method
 ```
 
+If you specify match expressions on the command line they overwrite all expressions
+in the config file.
+
+Also note that a subject can only be matched once. So `Foo*` and `Foo::Bar*` expressions
+would not match duplicate subjects.
+
 #### `jobs`
 
 Specify how many processes mutant uses to kill mutations. Defaults to the number of processors on your system.
