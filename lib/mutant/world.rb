@@ -50,6 +50,19 @@ module Mutant
       end
     end
 
+    # Try const get
+    #
+    # @param [String]
+    #
+    # @return [Class|Module|nil]
+    #
+    # rubocop:disable Lint/SuppressedException
+    def try_const_get(name)
+      kernel.const_get(name)
+    rescue NameError
+    end
+    # rubocop:enable Lint/SuppressedException
+
     # Deadline
     #
     # @param [Float, nil] allowed_time

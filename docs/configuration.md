@@ -82,6 +82,7 @@ matcher:
   - Your::App::Namespace* # select all subjects on a specific constant, recursively
   - Your::App::Namespace#some_method # select a specific instance method
   - Your::App::Namespace.some_method # select a specific class method
+  - descendants:ApplicationController # select all descendands of application controller (and itself)
   # Expressions of subjects to ignore during mutation testing.
   # Multiple entries are allowed and matches from each expression
   # are unioned.

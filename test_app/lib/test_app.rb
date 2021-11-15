@@ -133,6 +133,17 @@ module TestApp
   class DelegateTest < DelegateClass(String)
     def foo; end
   end
+
+  class Foo
+    class Bar < self
+      class Baz < self
+        def foo
+        end
+      end
+    end
+  end
+
+  ROOT = Pathname.new(__dir__).parent
 end
 
 require 'test_app/metaclasses'

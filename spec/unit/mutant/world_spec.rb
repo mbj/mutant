@@ -87,4 +87,26 @@ RSpec.describe Mutant::World do
       end
     end
   end
+
+  describe '#try_const_get' do
+    def apply
+      subject.try_const_get(const_name)
+    end
+
+    context 'on known const name' do
+      let(:const_name) { 'Mutant' }
+
+      it 'returns nil' do
+        expect(apply).to be(Mutant)
+      end
+    end
+
+    context 'on unknown const name' do
+      let(:const_name) { 'TestApp::Unknown' }
+
+      it 'returns nil' do
+        expect(apply).to be(nil)
+      end
+    end
+  end
 end
