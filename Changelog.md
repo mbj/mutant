@@ -1,8 +1,21 @@
+# v.0.11.2 2021-11-15
+
+* [#1283](https://github.com/mbj/mutant/pull/1283)
+
+  Add descendants matchers. These matchers allow to select subjects in inheritance trees
+  that are not namespace based.
+
+  This is very useful for non namespaced (rails) applications. As users can now use match expressions
+  like `descendants:ApplicationController` to match all descants of `ApplicationController` including
+  `ApplicationController`.
+
+  This feature is not bound to rails inheritance trees and can be used with any inheritance tree.
+
 # v.0.11.1 2021-11-08
 
 * [#1276](https://github.com/mbj/mutant/pull/1276)
 
-  Improve matching speed. This is especiablly noticeable in larger projects.
+  Improve matching speed. This is especially noticeable in larger projects.
   Mutant now creates way less objects while matching subjects.
 
 * [#1275](https://github.com/mbj/mutant/pull/1275)
