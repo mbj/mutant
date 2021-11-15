@@ -1,4 +1,4 @@
-# v.0.11.2 2021-11-15
+# v0.11.2 2021-11-15
 
 * [#1283](https://github.com/mbj/mutant/pull/1283)
 
@@ -11,7 +11,7 @@
 
   This feature is not bound to rails inheritance trees and can be used with any inheritance tree.
 
-# v.0.11.1 2021-11-08
+# v0.11.1 2021-11-08
 
 * [#1276](https://github.com/mbj/mutant/pull/1276)
 
@@ -35,7 +35,7 @@
   For CLI use the `--env` argument.
   For config file use the `environment_variables` key.
 
-# v.0.11.0 2021-10-18
+# v0.11.0 2021-10-18
 
 * [#1270](https://github.com/mbj/mutant/pull/1270)
 
