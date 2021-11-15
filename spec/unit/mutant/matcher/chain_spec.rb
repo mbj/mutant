@@ -17,10 +17,10 @@ RSpec.describe Mutant::Matcher::Chain, '#call' do
 
     expect(matcher_b).to receive(:call)
       .with(env)
-      .and_return([subject_b])
+      .and_return([subject_a, subject_b])
   end
 
-  it 'returns concatenated matches' do
+  it 'returns concatenated unique matches' do
     should eql([subject_a, subject_b])
   end
 end
