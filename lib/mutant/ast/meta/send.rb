@@ -8,12 +8,14 @@ module Mutant
       # Metadata for send nodes
       class Send
         include NamedChildren, Concord.new(:node), NodePredicates
+        extend Sexp
 
         children :receiver, :selector
 
         public :receiver, :selector
 
         ATTRIBUTE_ASSIGNMENT_SELECTOR_SUFFIX = '='
+        SORBET_RECEIVERS = [s(:const, nil, :T), s(:const, s(:cbase), :T)].freeze
 
         # Arguments of mutated node
         #
@@ -27,6 +29,13 @@ module Mutant
         # @return [Boolean]
         def proc?
           naked_proc? || proc_new?
+        end
+
+        # Test if message receiver is :T
+        #
+        # @return [Boolean]
+        def sorbet_receiver?
+          SORBET_RECEIVERS.include?(receiver)
         end
 
         # Test if AST node is a valid attribute assignment

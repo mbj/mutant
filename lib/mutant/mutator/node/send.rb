@@ -57,6 +57,8 @@ module Mutant
       private
 
         def dispatch
+          return if meta.sorbet_receiver?
+
           emit_singletons
 
           if meta.binary_method_operator?
