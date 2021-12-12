@@ -61,7 +61,6 @@ module Mutant
         private
 
           def print_details
-            visit(IsolationResult, isolation_result)
             __send__(MAP.fetch(mutation.class))
           end
 

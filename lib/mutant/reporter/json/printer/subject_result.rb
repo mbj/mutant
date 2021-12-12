@@ -13,10 +13,9 @@ module Mutant
           #
           # @return [undefined]
           def run
+            puts "---\n---\n"
+            puts 'Failed subject:'
             status(subject.identification)
-            tests.each do |test|
-              puts("- #{test.identification}")
-            end
             visit_collection(CoverageResult, uncovered_results)
           end
 

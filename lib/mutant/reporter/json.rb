@@ -51,6 +51,7 @@ module Mutant
       #
       # @return [self]
       def warn(_message)
+        # NOOP
         self
       end
 
