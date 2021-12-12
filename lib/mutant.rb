@@ -228,7 +228,19 @@ require 'mutant/reporter/cli/printer/mutation'
 require 'mutant/reporter/cli/printer/mutation_result'
 require 'mutant/reporter/cli/printer/status_progressive'
 require 'mutant/reporter/cli/printer/subject_result'
-require 'mutant/reporter/cli/format'
+require 'mutant/reporter/json'
+require 'mutant/reporter/json/printer'
+require 'mutant/reporter/json/printer/config'
+require 'mutant/reporter/json/printer/coverage_result'
+require 'mutant/reporter/json/printer/env'
+require 'mutant/reporter/json/printer/env_progress'
+require 'mutant/reporter/json/printer/env_result'
+require 'mutant/reporter/json/printer/isolation_result'
+require 'mutant/reporter/json/printer/mutation'
+require 'mutant/reporter/json/printer/mutation_result'
+require 'mutant/reporter/json/printer/status_progressive'
+require 'mutant/reporter/json/printer/subject_result'
+require 'mutant/reporter/json/format'
 require 'mutant/repository'
 require 'mutant/repository/diff'
 require 'mutant/repository/diff/ranges'
@@ -281,7 +293,7 @@ module Mutant
       jobs:                  nil,
       matcher:               Matcher::Config::DEFAULT,
       mutation_timeout:      nil,
-      reporter:              Reporter::CLI.build(WORLD.stdout),
+      reporter:              Reporter::Json.build(WORLD.stdout),
       requires:              EMPTY_ARRAY,
       zombie:                false
     )
