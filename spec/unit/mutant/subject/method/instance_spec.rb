@@ -8,8 +8,7 @@ RSpec.describe Mutant::Subject::Method::Instance do
     )
   end
 
-  let(:call_block?) { true                              }
-  let(:node)        { Unparser.parse('def foo; end')    }
+  let(:node) { Unparser.parse('def foo; end') }
 
   let(:context) do
     Mutant::Context.new(
@@ -88,21 +87,6 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
 
         def self.name
           'MemoizableClass'
-        end
-
-        def foo; end
-        memoize :foo
-      end
-    end
-  end
-
-  shared_context 'adamantium scope setup' do
-    let(:scope) do
-      Class.new do
-        include Unparser::Adamantium
-
-        def self.name
-          'AdamantiumClass'
         end
 
         def foo; end

@@ -20,7 +20,6 @@ RSpec.describe Mutant::Meta::Example do
     )
   end
 
-  let(:file)           { 'foo/bar.rb' }
   let(:node)           { s(:true)     }
   let(:mutation_nodes) { [s(:false)]  }
 
