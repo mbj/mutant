@@ -24,8 +24,6 @@ RSpec.describe Mutant::Timer::Deadline do
       object.expired?
     end
 
-    let(:allowed_time) { 1.0 }
-
     context 'when deadline has not yet expired' do
       let(:allowed_time) { 1.5 }
 
@@ -78,8 +76,6 @@ RSpec.describe Mutant::Timer::Deadline do
     def apply
       object.status
     end
-
-    let(:allowed_time) { 1.0 }
 
     context 'when deadline has not yet expired' do
       let(:allowed_time) { 1.5 }

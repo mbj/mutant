@@ -472,12 +472,10 @@ RSpec.describe Mutant::CLI do
       let(:bootstrap_config)     { env_config.merge(file_config).expand_defaults        }
       let(:bootstrap_result)     { right(env)                                           }
       let(:env_result)           { instance_double(Mutant::Result::Env, success?: true) }
-      let(:expected_events)      { [license_validation_event]                           }
       let(:expected_exit)        { true                                                 }
       let(:file_config_result)   { right(file_config)                                   }
       let(:license_result)       { right(subscription)                                  }
       let(:runner_result)        { right(env_result)                                    }
-      let(:subject_a_expression) { parse_expression('Object#send')                      }
       let(:subjects)             { [subject_a]                                          }
       let(:tests)                { [test_a, test_b]                                     }
 

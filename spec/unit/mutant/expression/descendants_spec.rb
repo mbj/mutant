@@ -2,7 +2,6 @@
 
 RSpec.describe Mutant::Expression::Descendants do
   let(:object) { parse_expression(input)    }
-  let(:env)    { Fixtures::TEST_ENV         }
   let(:input)  { 'descendants:TestApp::Foo' }
 
   describe '#matcher' do
