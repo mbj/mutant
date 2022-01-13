@@ -1,3 +1,9 @@
+# v0.11.3 2022-01-13
+
+* Placeholder
+
+  * Update parser to support ruby-3.1
+
 # v0.11.2 2021-11-15
 
 * [#1285](https://github.com/mbj/mutant/pull/1283)
