@@ -9,7 +9,6 @@ RSpec.describe Mutant::Bootstrap do
   let(:load_path)            { instance_double(Array, :load_path)     }
   let(:match_warnings)       { []                                     }
   let(:object_space)         { class_double(ObjectSpace)              }
-  let(:object_space_modules) { []                                     }
   let(:start_expressions)    { []                                     }
   let(:subject_expressions)  { []                                     }
   let(:timer)                { instance_double(Mutant::Timer)         }

@@ -12,7 +12,6 @@ describe Mutant::Repository::Diff do
     let(:line_range) { 4..5                        }
     let(:path)       { Pathname.new('/foo/bar.rb') }
     let(:pathname)   { class_double(Pathname)      }
-    let(:repo_root)  { Pathname.new('/foo')        }
 
     let(:world) do
       instance_double(
