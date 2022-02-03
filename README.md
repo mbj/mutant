@@ -1,4 +1,4 @@
-mutant
+mutatn hello
 ======
 
 ![Build Status](https://github.com/mbj/mutant/workflows/CI/badge.svg)
