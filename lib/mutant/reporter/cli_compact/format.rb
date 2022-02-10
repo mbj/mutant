@@ -2,7 +2,7 @@
 
 module Mutant
   class Reporter
-    class Json
+    class CliCompact
       # CLI output format
       #
       # rubocop:disable Style/FormatString

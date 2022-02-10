@@ -2,7 +2,7 @@
 
 module Mutant
   class Reporter
-    class Json
+    class CliCompact
       # CLI runner status printer base class
       class Printer
         include(

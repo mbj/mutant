@@ -2,7 +2,7 @@
 
 module Mutant
   class Reporter
-    class Json
+    class CliCompact
       class Printer
         # Reporter for mutation results
         class MutationResult < self

@@ -3,7 +3,7 @@
 module Mutant
   class Reporter
     # Reporter that reports in human readable format
-    class Json < self
+    class CliCompact < self
       include Concord.new(:output, :format)
 
       # Build reporter
