@@ -96,9 +96,11 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
     it 'warns about degnerate interfacew' do
       apply
 
+      method_name = :foo
+
       exception =
         begin
-          scope.instance_method(:foo)
+          scope.instance_method(method_name)
         rescue NameError => exception
           exception
         end
@@ -113,7 +115,9 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
 
         Object:    %<scope>s
         Method:    foo
-        Exception: %<exception>s
+        Exception:
+
+        %<exception>s
 
         See: https://github.com/mbj/mutant/issues/1273
       MESSAGE

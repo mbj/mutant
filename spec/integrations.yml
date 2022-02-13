@@ -28,6 +28,8 @@
     - language/source_encoding_spec.rb
     - library/base64/decode64_spec.rb
     - library/cgi/escapeHTML_spec.rb
+    # invalid regexp on 3.1 parser
+    - regexp_parser/test/parser/test_escapes.rb
     - security/cve_2010_1330_spec.rb
 - name: regexp_parser
   namespace: Regexp
@@ -36,7 +38,14 @@
   integration: rspec
   mutation_coverage: false
   mutation_generation: true
-  exclude: []
+  exclude:
+  # Does not parse on 3.1 parser.
+  - lib/regexp_parser/expression.rb
+  - lib/regexp_parser/syntax/version_lookup.rb
+  - test/expression/test_to_s.rb
+  - test/parser/test_escapes.rb
+  - test/scanner/test_escapes.rb
+  - test/token/test_token.rb
 - name: auom
   namespace: AUOM
   repo_uri: 'https://github.com/mbj/auom.git'
@@ -53,6 +62,21 @@
   mutation_coverage: true
   mutation_generation: true
   exclude: []
+- name: unparser
+  namespace: Unparser
+  repo_uri: 'https://github.com/mbj/unparser.git'
+  repo_ref: 'origin/main'
+  integration: minitest
+  mutation_coverage: false
+  mutation_generation: true
+  exclude:
+  # invalid regexp on <2.7 parser
+  - test/corpus/literal/pattern.rb
+  - test/corpus/literal/since/27.rb
+  # invalid regexp on <3.0 parser
+  - test/corpus/literal/since/30.rb
+  # invalid regexp on <3.1 parser
+  - test/corpus/literal/since/31.rb
 - name: axiom
   namespace: Axiom
   repo_uri: 'https://github.com/dkubb/axiom.git'

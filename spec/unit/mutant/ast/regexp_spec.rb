@@ -164,12 +164,17 @@ RegexpSpec.expect_mapping(/\|/, :regexp_alternation_escape) do
     s(:regexp_alternation_escape))
 end
 
-RegexpSpec.expect_mapping(/\c2/, :regexp_control_escape) do
-  s(:regexp_root_expression,
-    s(:regexp_control_escape, '\\c2'))
+RegexpSpec.expect_mapping(
+  Regexp.new('\c2'.dup.force_encoding('ascii-8bit')),
+  :regexp_control_escape
+) do
+  s(:regexp_root_expression, s(:regexp_control_escape, '\\c2'))
 end
 
-RegexpSpec.expect_mapping(/\M-B/n, :regexp_meta_sequence_escape) do
+RegexpSpec.expect_mapping(
+  Regexp.new('\M-B'.dup.force_encoding('ascii-8bit'), 'n'),
+  :regexp_meta_sequence_escape
+) do
   s(:regexp_root_expression,
     s(:regexp_meta_sequence_escape, '\M-B'))
 end

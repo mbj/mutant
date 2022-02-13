@@ -6,6 +6,8 @@ module Mutant
       # Mutator for arguments node
       class Arguments < self
 
+        ANONYMOUS_BLOCKARG_PRED = ::Parser::AST::Node.new(:blockarg, [nil]).method(:eql?)
+
         handle(:args)
 
       private
@@ -17,14 +19,23 @@ module Mutant
         end
 
         def emit_argument_presence
-          emit_type
+          emit_type unless removed_block_arg?(EMPTY_ARRAY)
 
           Util::Array::Presence.call(children).each do |children|
-            unless children.one? && n_mlhs?(children.first)
+            unless removed_block_arg?(children) || (children.one? && n_mlhs?(children.first))
               emit_type(*children)
             end
           end
         end
+
+        def removed_block_arg?(children)
+          anonymous_block_arg? && children.none?(&ANONYMOUS_BLOCKARG_PRED)
+        end
+
+        def anonymous_block_arg?
+          children.any?(&ANONYMOUS_BLOCKARG_PRED)
+        end
+        memoize :anonymous_block_arg?
 
         def emit_argument_mutations
           children.each_with_index do |child, index|

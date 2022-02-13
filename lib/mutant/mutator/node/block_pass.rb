@@ -12,6 +12,7 @@ module Mutant
       private
 
         def dispatch
+          return unless argument
           emit_argument_mutations
           emit_symbol_to_proc_mutations
         end
