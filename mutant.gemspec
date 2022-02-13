@@ -23,10 +23,10 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 2.6'
 
   gem.add_runtime_dependency('diff-lcs',       '~> 1.3')
-  gem.add_runtime_dependency('parser',         '~> 3.0.0')
+  gem.add_runtime_dependency('parser',         '~> 3.1.0')
   gem.add_runtime_dependency('regexp_parser',  '~> 2.0', '>= 2.0.3')
   gem.add_runtime_dependency('sorbet-runtime', '~> 0.5.0')
-  gem.add_runtime_dependency('unparser',       '~> 0.6.2')
+  gem.add_runtime_dependency('unparser',       '~> 0.6.4')
 
   gem.add_development_dependency('parallel',   '~> 1.3')
   gem.add_development_dependency('rspec',      '~> 3.10')
