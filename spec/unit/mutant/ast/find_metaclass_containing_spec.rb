@@ -56,7 +56,17 @@ RSpec.describe Mutant::AST::FindMetaclassContaining do
       context 'inside a begin block' do
         let(:metaclass_node) { s(:sclass, s(:self), s(:begin, method_node)) }
 
-        it { expect(subject).to be(metaclass_node) }
+        context 'as only child' do
+          it { expect(subject).to be(metaclass_node) }
+        end
+
+        context 'as sibling child' do
+          let(:metaclass_node) do
+            s(:sclass, s(:self), s(:begin, method_node, s(:def, 'test_2', s(:nil))))
+          end
+
+          it { expect(subject).to be(metaclass_node) }
+        end
       end
 
       context 'inside a different class' do
