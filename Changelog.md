@@ -1,3 +1,11 @@
+# v0.11.3 2022-02-13
+
+* [#1302](https://github.com/mbj/mutant/pull/1302)
+
+  Change to parser/unparser that works on 3.1 syntax. This does not mean
+  mutant is yet fully 3.1 compatible. Mostly that mutant does not block the parser
+  dependency anymore. And unparser is ready for Ruby 3.1.
+
 # v0.11.2 2021-11-15
 
 * [#1285](https://github.com/mbj/mutant/pull/1283)
