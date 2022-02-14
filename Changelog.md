@@ -1,3 +1,9 @@
+# v0.11.4 2022-02-13
+
+* [#1303](https://github.com/mbj/mutant/pull/1303)
+
+  Add full Ruby 3.1 support.
+
 # v0.11.3 2022-02-13
 
 * [#1302](https://github.com/mbj/mutant/pull/1302)

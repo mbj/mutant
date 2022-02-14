@@ -93,7 +93,9 @@ module Mutant
 
           Object:    %<scope>s
           Method:    %<method_name>s
-          Exception: %<exception>s
+          Exception:
+
+          %<exception>s
 
           See: https://github.com/mbj/mutant/issues/1273
         MESSAGE
