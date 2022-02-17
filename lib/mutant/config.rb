@@ -22,7 +22,8 @@ module Mutant
       :mutation_timeout,
       :reporter,
       :requires,
-      :zombie
+      :zombie,
+      :compacted_log
     )
 
     %i[fail_fast zombie].each do |name|
@@ -61,7 +62,8 @@ module Mutant
         matcher:               matcher.merge(other.matcher),
         mutation_timeout:      other.mutation_timeout || mutation_timeout,
         requires:              requires + other.requires,
-        zombie:                zombie || other.zombie
+        zombie:                zombie || other.zombie,
+        compacted_log:             other.compacted_log || compacted_log
       )
     end
     # rubocop:enable Metrics/AbcSize
@@ -159,6 +161,7 @@ module Mutant
             Transform::Hash::Key.new('hooks',                 PATHNAME_ARRAY),
             Transform::Hash::Key.new('includes',              Transform::STRING_ARRAY),
             Transform::Hash::Key.new('integration',           Transform::STRING),
+            Transform::Hash::Key.new('compacted_log',         Transform::BOOLEAN),
             Transform::Hash::Key.new('jobs',                  Transform::INTEGER),
             Transform::Hash::Key.new('matcher',               Matcher::Config::LOADER),
             Transform::Hash::Key.new('mutation_timeout',      Transform::FLOAT),

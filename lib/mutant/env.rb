@@ -80,7 +80,7 @@ module Mutant
     #
     # @return [self]
     def warn(message)
-      config.reporter.warn(message)
+      config.reporter.warn(message) unless config.compacted_log
       self
     end
 
