@@ -61,7 +61,7 @@ module Mutant
       #
       # @return [self]
       def report(env)
-        Printer::EnvResult.call(output, env)
+        Printer::EnvResult.call(output, env, env.env) # TODO: think how to refactor
         self
       end
 

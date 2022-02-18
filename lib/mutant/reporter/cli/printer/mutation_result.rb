@@ -61,7 +61,7 @@ module Mutant
         private
 
           def print_details
-            visit(IsolationResult, isolation_result)
+            visit(IsolationResult, isolation_result) unless env.config.compacted_log
             __send__(MAP.fetch(mutation.class))
           end
 

@@ -51,7 +51,7 @@ module Mutant
 
         def format(printer, object)
           buffer = new_buffer
-          printer.call(Output.new(tty, buffer), object)
+          printer.call(Output.new(tty, buffer), object, object) # TODO: think how to refactor
           buffer.rewind
           buffer.read
         end

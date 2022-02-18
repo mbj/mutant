@@ -13,9 +13,11 @@ module Mutant
           #
           # @return [undefined]
           def run
-            status(subject.identification)
-            tests.each do |test|
-              puts("- #{test.identification}")
+            unless env.config.compacted_log
+              status(subject.identification)
+              tests.each do |test|
+                puts("- #{test.identification}")
+              end
             end
             visit_collection(CoverageResult, uncovered_results)
           end
