@@ -82,8 +82,8 @@ RSpec.describe Mutant::License::Subscription do
 
       let(:git_remote) do
         <<~REMOTE
-          origin\tgit@github.com:mbj/mutant (fetch)
-          origin\tgit@github.com:mbj/mutant (push)
+          origin\tgit@github.com:mbj/Mutant (fetch)
+          origin\tgit@github.com:mbj/Mutant (push)
         REMOTE
       end
 

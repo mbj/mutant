@@ -36,7 +36,7 @@ module Mutant
               fail "Unmatched git remote URL: #{input.inspect}"
             end
 
-            new(match[:host], match[:path])
+            new(match[:host], match[:path].downcase)
           end
           private_class_method :parse_url
         end
