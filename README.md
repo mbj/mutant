@@ -156,7 +156,6 @@ Also checkout the [commercial FAQ](/docs/commercial.md).
 * [Commercial use / private repositories](/docs/commercial.md)
 * [Nomenclature](/docs/nomenclature.md)
 * [Reading Reports](/docs/reading-reports.md)
-* [Known Problems](/docs/known-problems.md)
 * [Limitations](/docs/limitations.md)
 * [Concurrency](/docs/concurrency.md)
 * [Rspec Integration](/docs/mutant-rspec.md)
