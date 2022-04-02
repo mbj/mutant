@@ -1,5 +1,9 @@
 # v0.11.5 unreleased
 
+* [#1311](https://github.com/mbj/mutant/pull/1311)
+
+  Change to fully enforced license.
+
 * [#1310](https://github.com/mbj/mutant/pull/1310)
 
   Remove support for Ruby-2.6 as its EOL.
