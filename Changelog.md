@@ -1,3 +1,9 @@
+# v0.11.5 unreleased
+
+* [#1309](https://github.com/mbj/mutant/pull/1309)
+
+  Change to ignore case mismatches in git repository names on license check.
+
 # v0.11.4 2022-02-13
 
 * [#1303](https://github.com/mbj/mutant/pull/1303)
