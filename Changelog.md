@@ -1,5 +1,9 @@
 # v0.11.5 unreleased
 
+* [#1310](https://github.com/mbj/mutant/pull/1310)
+
+  Remove support for Ruby-2.6 as its EOL.
+
 * [#1309](https://github.com/mbj/mutant/pull/1309)
 
   Change to ignore case mismatches in git repository names on license check.
