@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.extra_rdoc_files = %w[LICENSE]
   gem.executables      = %w[mutant]
 
-  gem.required_ruby_version = '>= 2.6'
+  gem.required_ruby_version = '>= 2.7'
 
   gem.add_runtime_dependency('diff-lcs',       '~> 1.3')
   gem.add_runtime_dependency('parser',         '~> 3.1.0')
