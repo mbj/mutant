@@ -716,30 +716,13 @@ RSpec.describe Mutant::CLI do
       include_context 'environment'
 
       context 'on invalid license' do
-        let(:expected_exit)    { true                  }
-        let(:license_result)   { left('license-error') }
+        let(:expected_exit)  { false                 }
+        let(:license_result) { left('license-error') }
 
         let(:expected_events) do
           [
             license_validation_event,
-            [:stderr, :puts, 'license-error'],
-            [:stderr, :puts, "[Mutant-License-Error]: Soft fail, continuing in 60 seconds\n"],
-            [:stderr, :puts, "[Mutant-License-Error]: Next major version will enforce the license\n"],
-            [:stderr, :puts, "[Mutant-License-Error]: See https://github.com/mbj/mutant#licensing\n"],
-            [:sleep, 60],
-            [
-              :load_config_file,
-              world
-            ],
-            [
-              :bootstrap,
-              world,
-              bootstrap_config.inspect
-            ],
-            [
-              :runner,
-              env.inspect
-            ]
+            [:stderr, :puts, 'license-error']
           ]
         end
 
