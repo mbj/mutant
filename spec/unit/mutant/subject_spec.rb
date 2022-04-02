@@ -67,6 +67,12 @@ RSpec.describe Mutant::Subject do
     it_should_behave_like 'a command method'
   end
 
+  describe '#post_insert' do
+    subject { object.post_insert }
+
+    it_should_behave_like 'a command method'
+  end
+
   describe '#node' do
     subject { object.node }
 

@@ -3,8 +3,9 @@
 RSpec.describe Mutant::Subject::Method::Instance do
   let(:object) do
     described_class.new(
-      context: context,
-      node:    node
+      context:    context,
+      node:       node,
+      visibility: :private
     )
   end
 
@@ -62,6 +63,19 @@ RSpec.describe Mutant::Subject::Method::Instance do
     it_should_behave_like 'a command method'
   end
 
+  describe '#post_insert' do
+    subject { object.post_insert }
+
+    it 'sets method visibility' do
+      expect { subject }
+        .to change { scope.private_instance_methods.include?(:foo) }
+        .from(false)
+        .to(true)
+    end
+
+    it_should_behave_like 'a command method'
+  end
+
   describe '#source' do
     subject { object.source }
 
@@ -72,8 +86,9 @@ end
 RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   let(:object) do
     described_class.new(
-      context: context,
-      node:    node
+      context:    context,
+      node:       node,
+      visibility: :public
     )
   end
 

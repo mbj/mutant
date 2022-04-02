@@ -41,6 +41,16 @@ module Mutant
             node.children.fetch(NAME_INDEX).equal?(method_name)
           end
 
+          def visibility
+            if scope.private_instance_methods.include?(method_name)
+              :private
+            elsif scope.protected_instance_methods.include?(method_name)
+              :protected
+            else
+              :public
+            end
+          end
+
           # Evaluator specialized for memoized instance methods
           class Memoized < self
             SUBJECT_CLASS = Subject::Method::Instance::Memoized

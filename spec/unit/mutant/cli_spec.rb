@@ -496,11 +496,12 @@ RSpec.describe Mutant::CLI do
 
       let(:subject_a) do
         Mutant::Subject::Method::Instance.new(
-          context: Mutant::Context.new(
+          context:    Mutant::Context.new(
             Object,
             'subject.rb'
           ),
-          node:    s(:def, :send, s(:args), nil)
+          node:       s(:def, :send, s(:args), nil),
+          visibility: :public
         )
       end
 

@@ -69,7 +69,10 @@ module Mutant
         kernel:  kernel,
         source:  monkeypatch,
         subject: subject
-      )
+      ).fmap do
+        subject.post_insert
+        nil
+      end
     end
 
     # Rendered mutation diff

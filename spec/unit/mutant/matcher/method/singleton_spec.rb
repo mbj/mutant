@@ -4,7 +4,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   subject { object.call(env) }
 
   let(:object)       { described_class.new(scope, method)                }
-  let(:method)       { scope.public_method(method_name)                  }
+  let(:method)       { scope.method(method_name)                         }
   let(:type)         { :defs                                             }
   let(:method_name)  { :foo                                              }
   let(:method_arity) { 0                                                 }
@@ -50,7 +50,21 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
     let(:scope)       { base::DefinedOnSelf }
     let(:method_line) { 61                  }
 
-    it_should_behave_like 'a method matcher'
+    it_should_behave_like 'a method matcher' do
+      %i[public protected private].each do |visibility|
+        context 'with %s visibility' % visibility do
+          let(:expected_visibility) { visibility }
+
+          before do
+            scope.singleton_class.__send__(visibility, method_name)
+          end
+
+          it 'returns expected subjects' do
+            expect(subject).to eql([mutation_subject.with(visibility: visibility)])
+          end
+        end
+      end
+    end
   end
 
   context 'when defined on constant' do

@@ -33,6 +33,13 @@ module Mutant
       self
     end
 
+    # Perform post insert cleanup
+    #
+    # @return [self]
+    def post_insert
+      self
+    end
+
     # Source line range
     #
     # @return [Range<Integer>]

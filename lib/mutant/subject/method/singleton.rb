@@ -17,6 +17,11 @@ module Mutant
           self
         end
 
+        def post_insert
+          scope.singleton_class.__send__(visibility, name)
+          self
+        end
+
       end # Singleton
     end # Method
   end # Subject

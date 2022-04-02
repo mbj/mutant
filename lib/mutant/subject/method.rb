@@ -4,6 +4,7 @@ module Mutant
   class Subject
     # Abstract base class for method subjects
     class Method < self
+      include anima.add(:visibility)
 
       # Method name
       #

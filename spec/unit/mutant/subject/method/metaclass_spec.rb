@@ -3,8 +3,9 @@
 RSpec.describe Mutant::Subject::Method::Metaclass do
   let(:object) do
     described_class.new(
-      context: context,
-      node:    node
+      context:    context,
+      node:       node,
+      visibility: :public
     )
   end
 

@@ -3,8 +3,9 @@
 RSpec.describe Mutant::Subject::Method::Singleton do
   let(:object) do
     described_class.new(
-      context: context,
-      node:    node
+      context:    context,
+      node:       node,
+      visibility: :private
     )
   end
 
@@ -46,6 +47,19 @@ RSpec.describe Mutant::Subject::Method::Singleton do
 
     it 'undefines method on scope' do
       expect { subject }.to change { scope.public_methods.include?(:foo) }.from(true).to(false)
+    end
+
+    it_should_behave_like 'a command method'
+  end
+
+  describe '#post_insert' do
+    subject { object.post_insert }
+
+    it 'sets method visibility' do
+      expect { subject }
+        .to change { scope.private_methods.include?(:foo) }
+        .from(false)
+        .to(true)
     end
 
     it_should_behave_like 'a command method'

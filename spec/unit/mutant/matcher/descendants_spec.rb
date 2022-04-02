@@ -13,11 +13,12 @@ RSpec.describe Mutant::Matcher::Descendants do
     let(:expected_subjects) do
       [
         Mutant::Subject::Method::Instance.new(
-          context: Mutant::Context.new(
+          context:    Mutant::Context.new(
             TestApp::Foo::Bar::Baz,
             TestApp::ROOT.join('lib/test_app.rb')
           ),
-          node:    s(:def, :foo, s(:args), nil)
+          node:       s(:def, :foo, s(:args), nil),
+          visibility: :public
         )
       ]
     end
