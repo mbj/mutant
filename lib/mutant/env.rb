@@ -142,11 +142,10 @@ module Mutant
         result = mutation.insert(world.kernel)
         hooks.run(:mutation_insert_post, mutation)
 
-        if result.equal?(Loader::Result::VoidValue.instance)
-          Result::Test::VoidValue.instance
-        else
-          integration.call(tests)
-        end
+        result.either(
+          ->(_) { Result::Test::VoidValue.instance },
+          ->(_) { integration.call(tests) }
+        )
       end
     end
 

@@ -45,7 +45,7 @@ RSpec.describe Mutant::Loader, '.call' do
 
   context 'without exception being raised' do
     it 'returns success result' do
-      expect(apply).to be(described_class::Result::Success.instance)
+      expect(apply).to be(described_class::SUCCESS)
     end
 
     include_examples 'kernel eval'
@@ -58,7 +58,7 @@ RSpec.describe Mutant::Loader, '.call' do
     end
 
     it 'returns void value result' do
-      expect(apply).to be(described_class::Result::VoidValue.instance)
+      expect(apply).to be(described_class::VOID_VALUE)
     end
 
     include_examples 'kernel eval'

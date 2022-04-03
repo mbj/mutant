@@ -9,17 +9,8 @@ module Mutant
 
     private_constant(*constants(false))
 
-    class Result
-      include Singleton
-
-      # Vale returned on successful load
-      class Success < self
-      end # Success
-
-      # Vale returned on MRI detecting void value expressions
-      class VoidValue < self
-      end # VoidValue
-    end # Result
+    VOID_VALUE = Either::Left.new(nil)
+    SUCCESS    = Either::Right.new(nil)
 
     # Call loader
     #
@@ -45,12 +36,12 @@ module Mutant
     rescue SyntaxError => exception
       # rubocop:disable Style/GuardClause
       if VOID_VALUE_REGEXP.match?(exception.message)
-        Result::VoidValue.instance
+        VOID_VALUE
       else
         raise
       end
     else
-      Result::Success.instance
+      SUCCESS
     end
   end # Loader
 end # Mutant
