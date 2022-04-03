@@ -17,10 +17,7 @@ module Mutant
 
     include AST::Sexp
 
-    # rubocop:disable Lint/InheritException
     LoadError = Class.new(::LoadError)
-    # rubocop:enable Lint/InheritException
-
     # Initialize object
     #
     # @param [Symbol] namespace

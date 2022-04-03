@@ -135,20 +135,33 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
 
     it_should_behave_like 'a method matcher'
 
-    it 'returns expected subjects' do
-      context = Mutant::Context.new(
+    let(:context) do
+      Mutant::Context.new(
         TestApp::InstanceMethodTests::WithMemoizer,
         MutantSpec::ROOT.join('test_app', 'lib', 'test_app.rb')
       )
+    end
 
-      expect(subject).to eql(
-        [
-          Mutant::Subject::Method::Instance.new(
-            context: context,
-            node:    s(:def, :bar, s(:args), nil)
-          )
-        ]
-      )
+    let(:expected_subjects) do
+      [
+        Mutant::Subject::Method::Instance.new(
+          context:    context,
+          node:       s(:def, :bar, s(:args), nil),
+          visibility: expected_visibility
+        )
+      ]
+    end
+
+    %i[public protected private].each do |visibility|
+      context 'with %s visibility' % visibility do
+        let(:expected_visibility) { visibility }
+
+        before { context.scope.__send__(visibility, method_name) }
+
+        it 'returns expected subjects' do
+          expect(subject).to eql(expected_subjects)
+        end
+      end
     end
   end
 

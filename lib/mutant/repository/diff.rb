@@ -50,7 +50,7 @@ module Mutant
             Mutant
               .traverse(->(line) { parse_line(root, line) }, lines)
               .fmap do |paths|
-                paths.map { |path| [path.path, path] }.to_h
+                paths.to_h { |path| [path.path, path] }
               end
           end
       end

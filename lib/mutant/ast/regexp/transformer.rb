@@ -110,9 +110,9 @@ module Mutant
             #
             # @return [Table]
             def self.create(*rows)
-              table = rows.map do |ast_type, token, klass|
+              table = rows.to_h do |ast_type, token, klass|
                 [ast_type, Mapping.new(::Regexp::Token.new(*token), klass)]
-              end.to_h
+              end
 
               new(table)
             end

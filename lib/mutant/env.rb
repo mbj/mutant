@@ -68,9 +68,9 @@ module Mutant
     #
     # @return Hash{Mutation => Enumerable<Test>}
     def selections
-      subjects.map do |subject|
+      subjects.to_h do |subject|
         [subject, selector.call(subject)]
-      end.to_h
+      end
     end
     memoize :selections
 

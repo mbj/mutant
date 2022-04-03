@@ -1,5 +1,11 @@
 # v0.11.5 unreleased
 
+* [#1314](https://github.com/mbj/mutant/pull/1314)
+
+  Fix visibility of mutated methods to retain original value.
+
+  Fix: [#1242]
+
 * [#1311](https://github.com/mbj/mutant/pull/1311)
 
   Change to fully enforced license.

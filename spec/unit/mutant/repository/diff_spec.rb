@@ -22,9 +22,9 @@ describe Mutant::Repository::Diff do
     end
 
     let(:allowed_paths) do
-      %w[/foo bar.rb baz.rb].map do |path|
+      %w[/foo bar.rb baz.rb].to_h do |path|
         [path, Pathname.new(path)]
-      end.to_h
+      end
     end
 
     let(:file_diff_expectations) { [] }

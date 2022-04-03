@@ -17,6 +17,11 @@ module Mutant
           self
         end
 
+        def post_insert
+          scope.__send__(visibility, name)
+          self
+        end
+
         # Mutator for memoizable memoized instance methods
         class Memoized < self
           include AST::Sexp

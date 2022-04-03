@@ -52,26 +52,66 @@ RSpec.describe Mutant::Mutation do
     end
 
     before do
-      expect(mutation_subject).to receive(:prepare)
-        .ordered
+      allow(mutation_subject).to receive(:prepare)
         .and_return(mutation_subject)
 
-      expect(Mutant::Loader).to receive(:call)
-        .ordered
-        .with(
-          binding: TOPLEVEL_BINDING,
-          kernel:  kernel,
-          source:  expected_source,
-          subject: mutation_subject
-        )
+      allow(mutation_subject).to receive(:post_insert)
+        .and_return(mutation_subject)
+
+      allow(Mutant::Loader).to receive(:call)
         .and_return(loader_result)
     end
 
-    let(:expected_source) { '1'                             }
-    let(:loader_result)   { instance_double(Mutant::Either) }
+    let(:expected_source) { '1' }
 
-    it 'returns loader result' do
-      expect(apply).to be(loader_result)
+    context 'on successful loader result' do
+      let(:loader_result) { Mutant::Loader::SUCCESS }
+
+      it 'performs insertion with cleanup' do
+        apply
+
+        expect(mutation_subject).to have_received(:prepare).ordered
+
+        expect(Mutant::Loader).to have_received(:call)
+          .ordered
+          .with(
+            binding: TOPLEVEL_BINDING,
+            kernel:  kernel,
+            source:  expected_source,
+            subject: mutation_subject
+          )
+
+        expect(mutation_subject).to have_received(:post_insert).ordered
+      end
+
+      it 'returns loader result' do
+        expect(apply).to eql(loader_result)
+      end
+    end
+
+    context 'on failed loader result' do
+      let(:loader_result) { Mutant::Loader::VOID_VALUE }
+
+      it 'does perform insertion without cleanup' do
+        apply
+
+        expect(mutation_subject).to have_received(:prepare).ordered
+
+        expect(Mutant::Loader).to have_received(:call)
+          .ordered
+          .with(
+            binding: TOPLEVEL_BINDING,
+            kernel:  kernel,
+            source:  expected_source,
+            subject: mutation_subject
+          )
+
+        expect(mutation_subject).to_not have_received(:post_insert)
+      end
+
+      it 'returns loader result' do
+        expect(apply).to eql(loader_result)
+      end
     end
   end
 

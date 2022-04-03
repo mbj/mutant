@@ -99,16 +99,40 @@ module Mutant
           node = matched_node_path.last || return
 
           self.class::SUBJECT_CLASS.new(
-            context: context,
-            node:    node
+            context:    context,
+            node:       node,
+            visibility: visibility
           )
         end
-        memoize :subject
 
         def matched_node_path
           AST.find_last_path(ast, &method(:match?))
         end
         memoize :matched_node_path
+
+        def visibility
+          # This can be cleaned up once we are on >ruby-3.0
+          # Method#{public,private,protected}? exists there.
+          #
+          # On Ruby 3.1 this can just be:
+          #
+          # if target_method.private?
+          #   :private
+          # elsif target_method.protected?
+          #   :protected
+          # else
+          #   :public
+          # end
+          #
+          # Change to this once 3.0 is EOL.
+          if scope.private_methods.include?(method_name)
+            :private
+          elsif scope.protected_methods.include?(method_name)
+            :protected
+          else
+            :public
+          end
+        end
       end # Evaluator
 
       private_constant(*constants(false))
