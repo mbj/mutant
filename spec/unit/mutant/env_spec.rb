@@ -103,9 +103,9 @@ RSpec.describe Mutant::Env do
     end
 
     context 'when loader is successful' do
-      let(:isolation_result) { isolation_success(test_result)           }
-      let(:loader_result)    { Mutant::Loader::Result::Success.instance }
-      let(:test_result)      { instance_double(Mutant::Result::Test)    }
+      let(:isolation_result) { isolation_success(test_result)        }
+      let(:loader_result)    { Mutant::Either::Right.new(nil)        }
+      let(:test_result)      { instance_double(Mutant::Result::Test) }
 
       before do
         allow(integration).to receive_messages(call: test_result)
@@ -124,8 +124,8 @@ RSpec.describe Mutant::Env do
       include_examples 'mutation kill'
     end
 
-    context 'when loader reports void value' do
-      let(:loader_result) { Mutant::Loader::Result::VoidValue.instance }
+    context 'when loader is not successful' do
+      let(:loader_result) { Mutant::Either::Left.new(nil) }
 
       let(:isolation_result) do
         isolation_success(Mutant::Result::Test::VoidValue.instance)

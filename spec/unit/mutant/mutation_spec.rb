@@ -67,8 +67,8 @@ RSpec.describe Mutant::Mutation do
         .and_return(loader_result)
     end
 
-    let(:expected_source) { '1'                                     }
-    let(:loader_result)   { instance_double(Mutant::Loader::Result) }
+    let(:expected_source) { '1'                             }
+    let(:loader_result)   { instance_double(Mutant::Either) }
 
     it 'returns loader result' do
       expect(apply).to be(loader_result)
