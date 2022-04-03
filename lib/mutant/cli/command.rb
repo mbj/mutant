@@ -184,9 +184,9 @@ module Mutant
       end
 
       def format_subcommands
-        commands = subcommands.map do |subcommand|
+        commands = subcommands.to_h do |subcommand|
           [subcommand.command_name, subcommand.short_description]
-        end.to_h
+        end
 
         width = commands.each_key.map(&:length).max
 

@@ -25,7 +25,7 @@ module Mutant
 
       private_constant(*constants(false))
 
-      DEFAULT = new(anima.attribute_names.map { |name| [name, []] }.to_h)
+      DEFAULT = new(anima.attribute_names.to_h { |name| [name, []] })
 
       expression = Transform::Block.capture(:expression) do |input|
         Mutant::Config::DEFAULT.expression_parser.call(input)
@@ -74,8 +74,7 @@ module Mutant
       def merge(other)
         self.class.new(
           to_h
-            .map { |name, value| [name, value + other.public_send(name)] }
-            .to_h
+            .to_h { |name, value| [name, value + other.public_send(name)] }
         )
       end
 
