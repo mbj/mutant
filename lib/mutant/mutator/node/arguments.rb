@@ -57,7 +57,7 @@ module Mutant
         end
 
         def invalid_argument_replacement?(mutant, index)
-          n_arg?(mutant) && children[0...index].any?(&method(:n_optarg?))
+          n_arg?(mutant) && children[...index].any?(&method(:n_optarg?))
         end
 
         def emit_mlhs_expansion

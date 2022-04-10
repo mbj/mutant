@@ -806,7 +806,7 @@ RSpec.describe Mutant::CLI do
 
             let(:expected_events) do
               [
-                *super()[0..-2],
+                *super()[..-2],
                 [
                   :stderr,
                   :puts,
