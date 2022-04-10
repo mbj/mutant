@@ -1,3 +1,9 @@
+# v0.11.6 2022-04-10
+
+* [#1317](https://github.com/mbj/mutant/pull/1317)
+
+  Fix forward arg mutations.
+
 # v0.11.5 2022-04-03
 
 * [#1314](https://github.com/mbj/mutant/pull/1314)

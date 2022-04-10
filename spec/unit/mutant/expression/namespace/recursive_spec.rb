@@ -49,19 +49,19 @@ RSpec.describe Mutant::Expression::Namespace::Recursive do
       context 'on constants' do
         let(:other) { parse_expression('TestApp::Literal::Deep') }
 
-        it { should be(input[0..-2].length) }
+        it { should be(input[..-2].length) }
       end
 
       context 'on singleton method' do
         let(:other) { parse_expression('TestApp::Literal.foo') }
 
-        it { should be(input[0..-2].length) }
+        it { should be(input[..-2].length) }
       end
 
       context 'on instance method' do
         let(:other) { parse_expression('TestApp::Literal#foo') }
 
-        it { should be(input[0..-2].length) }
+        it { should be(input[..-2].length) }
       end
     end
   end

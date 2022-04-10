@@ -22,7 +22,7 @@ module Mutant
 
         def mutate_conditions
           conditions = children.length - 1
-          children[0..-2].each_index do |index|
+          children[..-2].each_index do |index|
             delete_child(index) if conditions > 1
             mutate_child(index)
           end

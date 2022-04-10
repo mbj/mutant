@@ -7,7 +7,7 @@ module Mutant
         # Mutator for attribute assignments
         class AttributeAssignment < self
 
-          ATTRIBUTE_RANGE = (0..-2).freeze
+          ATTRIBUTE_RANGE = (..-2).freeze
 
           private_constant(*constants(false))
 
