@@ -170,7 +170,6 @@ Mutant::Meta::Example.add :def do
 end
 
 Mutant::Meta::Example.add :def do
-
   source 'def self.foo(a, b); end'
 
   # Deletion of each argument
