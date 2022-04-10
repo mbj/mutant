@@ -241,7 +241,9 @@ module Mutant
 
           argument = Mutant::Util.one(arguments)
 
-          emit_propagation(argument) unless n_kwargs?(argument)
+          return if n_kwargs?(argument) || n_forwarded_args?(argument)
+
+          emit_propagation(argument)
         end
 
         def mutate_receiver

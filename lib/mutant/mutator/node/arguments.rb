@@ -19,17 +19,27 @@ module Mutant
         end
 
         def emit_argument_presence
-          emit_type unless removed_block_arg?(EMPTY_ARRAY)
+          emit_type unless removed_block_arg?(EMPTY_ARRAY) || forward_arg?
 
-          Util::Array::Presence.call(children).each do |children|
-            unless removed_block_arg?(children) || (children.one? && n_mlhs?(children.first))
-              emit_type(*children)
+          children.each_with_index do |removed, index|
+            new_arguments = children.dup
+            new_arguments.delete_at(index)
+            unless n_forward_arg?(removed) || removed_block_arg?(new_arguments) || only_mlhs?(new_arguments)
+              emit_type(*new_arguments)
             end
           end
         end
 
-        def removed_block_arg?(children)
-          anonymous_block_arg? && children.none?(&ANONYMOUS_BLOCKARG_PRED)
+        def only_mlhs?(new_arguments)
+          new_arguments.one? && n_mlhs?(new_arguments.first)
+        end
+
+        def forward_arg?
+          children.last && n_forward_arg?(children.last)
+        end
+
+        def removed_block_arg?(new_arguments)
+          anonymous_block_arg? && new_arguments.none?(&ANONYMOUS_BLOCKARG_PRED)
         end
 
         def anonymous_block_arg?

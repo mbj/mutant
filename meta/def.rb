@@ -187,3 +187,29 @@ Mutant::Meta::Example.add :def do
   mutation 'def self.foo(a, b); raise; end'
   mutation 'def self.foo(a, b); super; end'
 end
+
+Mutant::Meta::Example.add :def do
+  source 'def foo(...); end'
+
+  mutation 'def foo(...); raise; end'
+  mutation 'def foo(...); super; end'
+end
+
+Mutant::Meta::Example.add :def do
+  source 'def foo(a, ...); end'
+
+  mutation 'def foo(_a, ...); end'
+  mutation 'def foo(a, ...); raise; end'
+  mutation 'def foo(a, ...); super; end'
+  mutation 'def foo(...); end'
+end
+
+Mutant::Meta::Example.add :def, :send do
+  source 'def foo(...); bar(...) end'
+
+  mutation 'def foo(...); bar; end'
+  mutation 'def foo(...); raise; end'
+  mutation 'def foo(...); super; end'
+  mutation 'def foo(...); nil; end'
+  mutation 'def foo(...); end'
+end
