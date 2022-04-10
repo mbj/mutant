@@ -10,7 +10,7 @@ jobs:
     name: Base steps
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Check Whitespace
       run: git diff --check -- HEAD~1
   ruby-spec:
@@ -23,7 +23,7 @@ jobs:
         ruby: [ruby-2.7, ruby-3.0, ruby-3.1]
         os: [macos-latest, ubuntu-latest]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
@@ -39,7 +39,7 @@ jobs:
         ruby: [ruby-2.7, ruby-3.0, ruby-3.1]
         os: [macos-latest, ubuntu-latest]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - uses: ruby/setup-ruby@v1
@@ -57,7 +57,7 @@ jobs:
         ruby: [ruby-2.7, ruby-3.0, ruby-3.1]
         os: [macos-latest, ubuntu-latest]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
@@ -77,7 +77,7 @@ jobs:
         ruby: [ruby-2.7, ruby-3.0, ruby-3.1]
         os: [macos-latest, ubuntu-latest]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
@@ -93,7 +93,7 @@ jobs:
         ruby: [ruby-2.7, ruby-3.0, ruby-3.1]
         os: [macos-latest, ubuntu-latest]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
@@ -109,7 +109,7 @@ jobs:
         ruby: [ruby-2.7, ruby-3.0, ruby-3.1]
         os: [macos-latest, ubuntu-latest]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
@@ -125,7 +125,7 @@ jobs:
         ruby: [ruby-2.7, ruby-3.0, ruby-3.1]
         os: [macos-latest, ubuntu-latest]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
