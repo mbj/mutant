@@ -1,3 +1,9 @@
+# v0.11.7 2022-04-25
+
+* [#1319](https://github.com/mbj/mutant/pull/1319)
+
+  Fix regexp mapper to do full, ruby version specific unicode property mapping.
+
 # v0.11.6 2022-04-10
 
 * [#1317](https://github.com/mbj/mutant/pull/1317)
@@ -148,7 +154,7 @@
 
 * [#1234](https://github.com/mbj/mutant/pull/1234)
   Add mapping for latin regexp properties to fix crash on mutating
-  `p{Latin}` regexp nodes.
+  `\p{Latin}` regexp nodes.
 
   Fix: [#1231](https://github.com/mbj/mutant/issues/1231)
 
