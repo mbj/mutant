@@ -107,4 +107,16 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
 
     it_should_behave_like 'a method matcher'
   end
+
+  context 'on inline disabled method' do
+    let(:scope)        { TestApp::InlineDisabled }
+    let(:method_line)  { 152                     }
+    let(:method_arity) { 0                       }
+
+    it_should_behave_like 'a method matcher' do
+      it 'returns disabled inline config' do
+        expect(mutation_subject.config.inline_disable).to be(true)
+      end
+    end
+  end
 end

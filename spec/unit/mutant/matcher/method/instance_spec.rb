@@ -145,6 +145,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     let(:expected_subjects) do
       [
         Mutant::Subject::Method::Instance.new(
+          config:     Mutant::Subject::Config::DEFAULT,
           context:    context,
           node:       s(:def, :bar, s(:args), nil),
           visibility: expected_visibility
@@ -212,5 +213,17 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     let(:method_arity) { 0                     }
 
     it_should_behave_like 'a method matcher'
+  end
+
+  context 'on inline disabled method' do
+    let(:scope)        { TestApp::InlineDisabled }
+    let(:method_line)  { 148                     }
+    let(:method_arity) { 0                       }
+
+    it_should_behave_like 'a method matcher' do
+      it 'returns disabled inline config' do
+        expect(mutation_subject.config.inline_disable).to be(true)
+      end
+    end
   end
 end

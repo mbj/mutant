@@ -143,6 +143,16 @@ module TestApp
     end
   end
 
+  class InlineDisabled
+    # mutant:disable
+    def foo
+    end
+
+    # mutant:disable
+    def self.foo
+    end
+  end
+
   ROOT = Pathname.new(__dir__).parent
 end
 

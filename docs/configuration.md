@@ -1,5 +1,30 @@
 # Configuration
 
+There are 3 ways of configuring mutant:
+
+1. In the source code via processing comments.
+2. Via the CLI
+3. Via a config file.
+
+### Processing Comments
+
+Mutant currently only supports the `mutant:disable` directive that can be added in a
+source code comment to ignore a specific subject.
+
+Example:
+
+```ruby
+class SomeClass
+  # mutant:disable
+  def some_method
+  end
+end
+```
+
+More inline configuration will be made available over time.
+
+### Configuration File
+
 Mutant can be configured with a config file that can be named one of the following: `.mutant.yml`, `config/mutant.yml`, or `mutant.yml`
 
 The following options can be configured through the config file:
@@ -92,6 +117,9 @@ matcher:
   #
   # Note that subject ignores from the command line are added to the subject ignores
   # configured on the command line!
+  #
+  # Also matcher ignores generally shold be used for entire namespaces, and individual
+  # methods be disabled directly in source code via `mutant:disable` directives.
   ignore:
   - Your::App::Namespace::Dirty # ignore all subjects on a specific constant
   - Your::App::Namespace::Dirty* # ignore all subjects on a specific constant, recursively

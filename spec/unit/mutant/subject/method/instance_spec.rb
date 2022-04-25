@@ -3,6 +3,7 @@
 RSpec.describe Mutant::Subject::Method::Instance do
   let(:object) do
     described_class.new(
+      config:     Mutant::Subject::Config::DEFAULT,
       context:    context,
       node:       node,
       visibility: :private
@@ -86,6 +87,7 @@ end
 RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   let(:object) do
     described_class.new(
+      config:     Mutant::Subject::Config::DEFAULT,
       context:    context,
       node:       node,
       visibility: :public

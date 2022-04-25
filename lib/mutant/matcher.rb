@@ -26,7 +26,7 @@ module Mutant
     end
 
     def self.allowed_subject?(config, subject)
-      select_subject?(config, subject) && !ignore_subject?(config, subject)
+      select_subject?(config, subject) && !ignore_subject?(config, subject) && !subject.inline_disabled?
     end
     private_class_method :allowed_subject?
 

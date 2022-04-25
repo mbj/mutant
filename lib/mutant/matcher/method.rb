@@ -99,6 +99,7 @@ module Mutant
           node = matched_node_path.last || return
 
           self.class::SUBJECT_CLASS.new(
+            config:     Subject::Config.parse(ast.comment_associations.fetch(node, [])),
             context:    context,
             node:       node,
             visibility: visibility
@@ -106,7 +107,7 @@ module Mutant
         end
 
         def matched_node_path
-          AST.find_last_path(ast, &method(:match?))
+          AST.find_last_path(ast.node, &method(:match?))
         end
         memoize :matched_node_path
 

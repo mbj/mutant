@@ -45,7 +45,7 @@ module Mutant
           end
 
           def metaclass_containing(node)
-            AST::FindMetaclassContaining.call(ast, node)
+            AST::FindMetaclassContaining.call(ast.node, node)
           end
 
           def line?(node)
