@@ -7,12 +7,13 @@
 
   Use:
 
-` ```
+  ```ruby
   class Something
     # mutant:disable
     def some_method
     end
   end
+  ```
 
 # v0.11.7 2022-04-24
 
