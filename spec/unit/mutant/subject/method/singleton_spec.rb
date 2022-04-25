@@ -3,6 +3,7 @@
 RSpec.describe Mutant::Subject::Method::Singleton do
   let(:object) do
     described_class.new(
+      config:     Mutant::Subject::Config::DEFAULT,
       context:    context,
       node:       node,
       visibility: :private

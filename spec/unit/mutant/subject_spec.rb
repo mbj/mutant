@@ -18,6 +18,7 @@ RSpec.describe Mutant::Subject do
 
   let(:object) do
     class_under_test.new(
+      config:  Mutant::Subject::Config::DEFAULT,
       context: context,
       node:    node
     )
@@ -100,6 +101,22 @@ RSpec.describe Mutant::Subject do
         Mutant::Mutation::Evil.new(object, mutation_a),
         Mutant::Mutation::Evil.new(object, mutation_b)
       ])
+    end
+  end
+
+  describe '#inline_disabled?' do
+    subject { object.inline_disabled? }
+
+    context 'on default config' do
+      it { should be(false) }
+    end
+
+    context 'when config has an inline disable' do
+      let(:object) do
+        super().with(config: super().config.with(inline_disable: true))
+      end
+
+      it { should be(true) }
     end
   end
 end

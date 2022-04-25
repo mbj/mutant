@@ -19,6 +19,7 @@ RSpec.describe Mutant::Selector::Expression do
 
     let(:mutation_subject) do
       subject_class.new(
+        config:  Mutant::Subject::Config::DEFAULT,
         context: context,
         node:    node
       )

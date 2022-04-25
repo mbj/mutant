@@ -1,3 +1,19 @@
+# v0.11.8 2022-04-25
+
+* [#1320](https://github.com/mbj/mutant/pull/1320)
+
+  Add inline mutant disable configuration. This allows individual subjects to be marked as
+  disbled directly in the code.
+
+  Use:
+
+` ```
+  class Something
+    # mutant:disable
+    def some_method
+    end
+  end
+
 # v0.11.7 2022-04-24
 
 * [#1319](https://github.com/mbj/mutant/pull/1319)

@@ -4,7 +4,7 @@ module Mutant
   # Subject of a mutation
   class Subject
     include AbstractType, Adamantium, Enumerable
-    include Anima.new(:context, :node)
+    include Anima.new(:config, :context, :node)
 
     # Mutations for this subject
     #
@@ -18,6 +18,10 @@ module Mutant
       )
     end
     memoize :mutations
+
+    def inline_disabled?
+      config.inline_disable
+    end
 
     # Source path
     #

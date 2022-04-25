@@ -45,20 +45,40 @@ RSpec.describe Mutant::Matcher do
     end
 
     let(:subject_a) do
-      instance_double(Mutant::Subject, 'subject a', expression: expression('Foo::Bar#a'))
+      instance_double(
+        Mutant::Subject,
+        'subject a',
+        expression:       expression('Foo::Bar#a'),
+        inline_disabled?: false
+      )
     end
 
     let(:subject_b) do
-      instance_double(Mutant::Subject, 'subject b', expression: expression('Foo::Bar#b'))
+      instance_double(
+        Mutant::Subject,
+        'subject b',
+        expression:       expression('Foo::Bar#b'),
+        inline_disabled?: false
+      )
     end
 
     def expression(input, matcher = anon_matcher)
       expression_class.new(parse_expression(input), matcher)
     end
 
-    context 'empty ignores and empty filter' do
+    context 'no restrictions of any kinds' do
       it 'returns expected subjects' do
         expect(apply.call(env)).to eql([subject_a, subject_b])
+      end
+    end
+
+    context 'with explicit disable' do
+      before do
+        allow(subject_b).to receive_messages(inline_disabled?: true)
+      end
+
+      it 'returns expected subjects' do
+        expect(apply.call(env)).to eql([subject_a])
       end
     end
 
