@@ -36,7 +36,6 @@ module Mutant
           class ASTToExpression < Transformer::ASTToExpression
             include LookupTable
 
-            # rubocop:disable Metrics/BlockLength
             properties = ::Regexp::Syntax
               .version_class("ruby/#{RUBY_VERSION}")
               .features.fetch(:property)
@@ -44,14 +43,8 @@ module Mutant
                 property_specifier      = "\\p{#{property}}"
                 non_property_specifier  = "\\P{#{property}}"
 
-                begin
-                  property_regex     = /#{property_specifier}/
-                  non_property_regex = /#{non_property_specifier}/
-                  # This is probably a regexp_parser bug, ignoring registration of that property
-                  # See: https://github.com/ammar/regexp_parser/issues/84
-                rescue RegexpError
-                  next
-                end
+                property_regex     = /#{property_specifier}/
+                non_property_regex = /#{non_property_specifier}/
 
                 [
                   [
@@ -73,8 +66,7 @@ module Mutant
                     ::Regexp::Parser.parse(non_property_regex).expressions.first.class
                   ]
                 ]
-              end.compact
-            # rubocop:enable Metrics/BlockLength
+            end
 
             # rubocop:disable Layout/LineLength
             TABLE = Table.create(
