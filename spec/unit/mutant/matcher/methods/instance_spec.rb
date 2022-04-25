@@ -107,9 +107,9 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
 
       expect(capture_reporter.warnings).to eql([<<~'MESSAGE' % { scope: scope, exception: exception }])
         Caught an exception while accessing a method with
-        #instance_method that is part of #{public,privat,protected}_instance_methods.
+        #instance_method that is part of #{public,private,protected}_instance_methods.
 
-        This is a bug in your ruby implementation its stdlib, libaries our your code.
+        This is a bug in your ruby implementation, its stdlib, your dependencies, or your code.
 
         Mutant will ignore this method:
 
