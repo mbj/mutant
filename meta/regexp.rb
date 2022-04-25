@@ -1,5 +1,143 @@
 # frozen_string_literal: true
 
+# Generated based on: https://github.com/ammar/regexp_parser/blob/311f70f8b4c3fbd99129846294bbd330ba538622/spec/lexer/refcalls_spec.rb
+Mutant::Meta::Example.add :regexp do
+  source '/(?<X>abc)\k<X>/'
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source '/(abc)\k<1>/'
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source "/(abc)\\k'1'/"
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source '/(abc)\k<-1>/'
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source "/(abc)\\k'-1'/"
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source '/(?<X>abc)\g<X>/'
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source "/(?<X>abc)\\g'X'/"
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source '/(abc)\g<1>/'
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source "/(abc)\\g'1'/"
+
+  singleton_mutations
+  regexp_mutations
+end
+
+# ## NOTE: This example seems to be an invalid regexp. I've included it for completeness.
+# Mutant::Meta::Example.add :regexp do
+#   source '/\g<0>/'
+
+#   singleton_mutations
+#   regexp_mutations
+# end
+
+# ## NOTE: This example seems to be an invalid regexp. I've included it for completeness.
+# Mutant::Meta::Example.add :regexp do
+#   source "/\\g'0'/"
+
+#   singleton_mutations
+#   regexp_mutations
+# end
+
+Mutant::Meta::Example.add :regexp do
+  source '/(abc)\g<-1>/'
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source "/(abc)\\g'-1'/"
+
+  singleton_mutations
+  regexp_mutations
+end
+
+# ## NOTE: This example seems to be an invalid regexp. I've included it for completeness.
+# Mutant::Meta::Example.add :regexp do
+#   source '/(abc)\g<+1>/'
+
+#   singleton_mutations
+#   regexp_mutations
+# end
+
+# ## NOTE: This example seems to be an invalid regexp. I've included it for completeness.
+# Mutant::Meta::Example.add :regexp do
+#   source "/(abc)\\g'+1'/"
+
+#   singleton_mutations
+#   regexp_mutations
+# end
+
+Mutant::Meta::Example.add :regexp do
+  source '/(?<X>abc)\k<X-0>/'
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source "/(?<X>abc)\\k'X-0'/"
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source '/(abc)\k<1-0>/'
+
+  singleton_mutations
+  regexp_mutations
+end
+
+Mutant::Meta::Example.add :regexp do
+  source "/(abc)\\k'1-0'/"
+
+  singleton_mutations
+  regexp_mutations
+end
+
 Mutant::Meta::Example.add :regexp do
   source '/foo/'
 
