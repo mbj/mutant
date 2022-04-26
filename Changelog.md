@@ -1,3 +1,9 @@
+# Unreleased
+
+* [#1324](https://github.com/mbj/mutant/pull/1324)
+  
+  Remove useless `loop { code }` -> `loop { nil }` mutation.
+
 # v0.11.8 2022-04-25
 
 * [#1320](https://github.com/mbj/mutant/pull/1320)

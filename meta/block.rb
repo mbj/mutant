@@ -183,11 +183,12 @@ Mutant::Meta::Example.add :block do
 end
 
 Mutant::Meta::Example.add :block do
-  source 'loop { true }'
+  source 'loop { 1 }'
 
   singleton_mutations
-  mutation 'true'
-  mutation 'loop { false }'
+  mutation '1'
+  mutation 'loop { 0 }'
+  mutation 'loop { 2 }'
   mutation 'loop { raise }'
   mutation 'loop'
 end
