@@ -26,7 +26,9 @@ module Mutant
 
           return unless body
           emit(body) unless body_has_control?
-          emit_body_mutations
+          emit_body_mutations do |node|
+            !(n_nil?(node) && unconditional_loop?)
+          end
 
           mutate_body_receiver
         end
