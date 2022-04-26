@@ -1,3 +1,9 @@
+# Unreleased
+
+* [#1328](https://github.com/mbj/mutant/pull/1328)
+
+  Fix incomplete mutations for named regexp capture groups. As an example, `/(?<name>\w\d)/` now gets mutated to `/(?<name>\W\d)/` and `/(?<name>\w\D)/` instead of just the former case.
+
 # v0.11.9 2022-05-01
 
 * [#1327](https://github.com/mbj/mutant/pull/1327)

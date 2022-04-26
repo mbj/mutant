@@ -25,4 +25,5 @@ Mutant::Meta::Example.add :regexp_named_group do
   regexp_mutations
 
   mutation '/(?<_foo>\W\d)/'
+  mutation '/(?<_foo>\w\D)/'
 end
