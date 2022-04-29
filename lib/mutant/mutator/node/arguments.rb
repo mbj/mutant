@@ -16,6 +16,7 @@ module Mutant
           emit_argument_presence
           emit_argument_mutations
           emit_mlhs_expansion
+          emit_procarg0_removal
         end
 
         def emit_argument_presence
@@ -73,6 +74,13 @@ module Mutant
           children.each_with_index.select do |child,|
             n_mlhs?(child)
           end
+        end
+
+        def emit_procarg0_removal
+          return unless children.one? && n_procarg0?((procarg0 = Mutant::Util.one(children)))
+
+          arguments = procarg0.children
+          emit_type(*arguments) if arguments.count > 1
         end
 
       end # Arguments
