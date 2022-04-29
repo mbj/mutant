@@ -11,8 +11,6 @@ matcher:
   - Mutant*
   ignore:
   - Mutant::Isolation::Fork::Parent#call
-  - Mutant::Mutator::Node::Argument#skip?
-  - Mutant::Mutator::Node::ProcargZero#dispatch
   - Mutant::Zombifier#call
   # Mutation only alive for ruby < 3.1
   - Mutant::Mutator::Node::Arguments#anonymous_block_arg?

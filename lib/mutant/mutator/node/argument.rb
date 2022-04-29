@@ -24,7 +24,7 @@ module Mutant
         end
 
         def skip?
-          name.to_s.start_with?(UNDERSCORE)
+          name.start_with?(UNDERSCORE)
         end
 
         # Mutator for optional arguments

@@ -14,7 +14,7 @@ module Mutant
         def dispatch
           name = Mutant::Util.one(argument.children)
 
-          emit_type(s(:arg, :"_#{name}")) unless name.to_s.start_with?('_')
+          emit_type(s(:arg, :"_#{name}")) unless name.start_with?('_')
         end
       end # ProcargZero
     end # Node
