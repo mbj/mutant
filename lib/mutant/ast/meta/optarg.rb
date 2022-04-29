@@ -19,7 +19,7 @@ module Mutant
         #
         # @return [Boolean]
         def used?
-          !name.to_s.start_with?(UNDERSCORE)
+          !name.start_with?(UNDERSCORE)
         end
       end # Optarg
 

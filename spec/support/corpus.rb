@@ -139,7 +139,7 @@ module MutantSpec
       #
       # @return [Integer] mutations generated
       def check_generation(path)
-        node = Parser::CurrentRuby.parse(path.read) or return 0
+        node = Unparser.parse(path.read) or return 0
 
         mutations = Mutant::Mutator.mutate(node)
 

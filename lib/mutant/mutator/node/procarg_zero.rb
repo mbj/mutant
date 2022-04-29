@@ -7,14 +7,10 @@ module Mutant
 
         handle :procarg0
 
-        children :argument
-
       private
 
         def dispatch
-          name = Mutant::Util.one(argument.children)
-
-          emit_type(s(:arg, :"_#{name}")) unless name.to_s.start_with?('_')
+          children.each_index(&method(:mutate_child))
         end
       end # ProcargZero
     end # Node

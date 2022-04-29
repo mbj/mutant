@@ -1,5 +1,13 @@
 # Unreleased
 
+- [#1326](https://github.com/mbj/mutant/pull/1326)
+
+  Fix crash with certain block argument edge cases such as `foo { |(*)| }`.
+
+  Fix mutation from `foo { |(a, b)| }` to `foo { |(_a, b)| }` and `foo { |(a, _b)| }` instead of the less useful mutation to only `foo { |_a| }`.
+
+  Add `foo { |(a, b)| }` -> `foo { |a, b| }` mutation.
+
 * [#1324](https://github.com/mbj/mutant/pull/1324)
   
   Remove useless `loop { code }` -> `loop { nil }` mutation.
