@@ -1,5 +1,9 @@
 # Unreleased
 
+* [#1327](https://github.com/mbj/mutant/pull/1327)
+
+  Add explicit mutation handler for xstr nodes.
+
 - [#1326](https://github.com/mbj/mutant/pull/1326)
 
   Fix crash with certain block argument edge cases such as `foo { |(*)| }`.
@@ -9,7 +13,7 @@
   Add `foo { |(a, b)| }` -> `foo { |a, b| }` mutation.
 
 * [#1324](https://github.com/mbj/mutant/pull/1324)
-  
+
   Remove useless `loop { code }` -> `loop { nil }` mutation.
 
 # v0.11.8 2022-04-25

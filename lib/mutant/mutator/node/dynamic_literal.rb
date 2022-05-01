@@ -6,7 +6,7 @@ module Mutant
       # Mutator for dynamic literals
       class DynamicLiteral < self
 
-        handle(:dstr, :dsym)
+        handle(:dstr, :dsym, :xstr)
 
       private
 
