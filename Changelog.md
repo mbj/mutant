@@ -1,3 +1,11 @@
+# Unreleased
+
+* [#1332](https://github.com/mbj/mutant/pull/1332)
+
+  Fix incomplete mutations for regexp capture groups. As an example, `/(\w\d)/` now gets mutated to `/(\W\d)/` and `/(\w\D)/` instead of just the former case.
+
+  Fix capture group -> passive group mutations which would not get properly generated in many cases. As an example, `/(\w\d)/` would get mutated to `/(?:\w)/` instead of `/(?:\w\d)/` like it will now.
+
 # v0.11.10 2022-05-02
 
 * [#1328](https://github.com/mbj/mutant/pull/1328)

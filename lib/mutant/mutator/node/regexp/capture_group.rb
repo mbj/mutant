@@ -8,15 +8,13 @@ module Mutant
         class CaptureGroup < Node
           handle(:regexp_capture_group)
 
-          children :group
-
         private
 
           def dispatch
-            return unless group
+            return if children.empty?
 
-            emit(s(:regexp_passive_group, group))
-            emit_group_mutations
+            emit(s(:regexp_passive_group, *children))
+            children.each_index(&method(:mutate_child))
           end
         end # EndOfLineAnchor
       end # Regexp
