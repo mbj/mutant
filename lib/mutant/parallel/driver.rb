@@ -4,7 +4,7 @@ module Mutant
   module Parallel
     # Driver for parallelized execution
     class Driver
-      include Adamantium, Anima.new(
+      include Anima.new(
         :threads,
         :var_active_jobs,
         :var_final,
@@ -16,6 +16,11 @@ module Mutant
 
       private(*anima.attribute_names)
 
+      def initialize(**attributes)
+        @alive = true
+        super
+      end
+
       # Wait for computation to finish, with timeout
       #
       # @param [Float] timeout
@@ -23,9 +28,20 @@ module Mutant
       # @return [Variable::Result<Sink#status>]
       #   current status
       def wait_timeout(timeout)
-        var_final.take_timeout(timeout)
+        var_final.take_timeout(timeout) if @alive
 
         finalize(status)
+      end
+
+      # Stop parallel computation
+      #
+      # This will cause all work to be immediately stopped.
+      #
+      # @return [self]
+      def stop
+        @alive = false
+        threads.each(&:kill)
+        self
       end
 
     private

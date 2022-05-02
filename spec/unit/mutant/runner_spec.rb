@@ -60,52 +60,123 @@ RSpec.describe Mutant::Runner do
       described_class.call(env)
     end
 
-    let(:raw_expectations) do
-      [
-        {
-          receiver:  reporter,
-          selector:  :start,
-          arguments: [env]
-        },
-        {
-          receiver:  env,
-          selector:  :method,
-          arguments: [:cover_index],
-          reaction:  { return: block }
-        },
-        {
-          receiver:  Mutant::Parallel,
-          selector:  :async,
-          arguments: [world, parallel_config],
-          reaction:  { return: driver }
-        },
-        {
-          receiver:  driver,
-          selector:  :wait_timeout,
-          arguments: [delay],
-          reaction:  { return: status_a }
-        },
-        {
-          receiver:  reporter,
-          selector:  :progress,
-          arguments: [status_a]
-        },
-        {
-          receiver:  driver,
-          selector:  :wait_timeout,
-          arguments: [delay],
-          reaction:  { return: status_b }
-        },
-        {
-          receiver:  reporter,
-          selector:  :report,
-          arguments: [env_result]
-        }
-      ]
+    context 'when not stopped' do
+      let(:raw_expectations) do
+        [
+          {
+            receiver:  reporter,
+            selector:  :start,
+            arguments: [env]
+          },
+          {
+            receiver:  env,
+            selector:  :method,
+            arguments: [:cover_index],
+            reaction:  { return: block }
+          },
+          {
+            receiver:  Mutant::Parallel,
+            selector:  :async,
+            arguments: [world, parallel_config],
+            reaction:  { return: driver }
+          },
+          {
+            receiver:  Signal,
+            selector:  :trap,
+            arguments: ['INT']
+          },
+          {
+            receiver:  driver,
+            selector:  :wait_timeout,
+            arguments: [delay],
+            reaction:  { return: status_a }
+          },
+          {
+            receiver:  reporter,
+            selector:  :progress,
+            arguments: [status_a]
+          },
+          {
+            receiver:  driver,
+            selector:  :wait_timeout,
+            arguments: [delay],
+            reaction:  { return: status_b }
+          },
+          {
+            receiver:  reporter,
+            selector:  :report,
+            arguments: [env_result]
+          }
+        ]
+      end
+
+      before do
+        allow(driver).to receive_messages(stop: driver)
+      end
+
+      it 'returns env result' do
+        verify_events { expect(apply).to eql(Mutant::Either::Right.new(env_result)) }
+      end
     end
 
-    it 'returns env result' do
-      verify_events { expect(apply).to eql(Mutant::Either::Right.new(env_result)) }
+    context 'when stopped' do
+      let(:raw_expectations) do
+        [
+          {
+            receiver:  reporter,
+            selector:  :start,
+            arguments: [env]
+          },
+          {
+            receiver:  env,
+            selector:  :method,
+            arguments: [:cover_index],
+            reaction:  { return: block }
+          },
+          {
+            receiver:  Mutant::Parallel,
+            selector:  :async,
+            arguments: [world, parallel_config],
+            reaction:  { return: driver }
+          },
+          {
+            receiver:  Signal,
+            selector:  :trap,
+            arguments: ['INT'],
+            reaction:  { yields: [] }
+          },
+          {
+            receiver: driver,
+            selector: :stop
+          },
+          {
+            receiver:  driver,
+            selector:  :wait_timeout,
+            arguments: [delay],
+            reaction:  { return: status_a }
+          },
+          {
+            receiver:  reporter,
+            selector:  :progress,
+            arguments: [status_a]
+          },
+          {
+            receiver:  driver,
+            selector:  :wait_timeout,
+            arguments: [delay],
+            reaction:  { return: status_b }
+          },
+          {
+            receiver:  reporter,
+            selector:  :report,
+            arguments: [env_result]
+          }
+        ]
+      end
+
+      it 'returns env result' do
+        verify_events { expect(apply).to eql(Mutant::Either::Right.new(env_result)) }
+      end
     end
   end
 end

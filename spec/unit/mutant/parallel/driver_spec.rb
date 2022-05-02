@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Mutant::Parallel::Driver do
+RSpec.describe Mutant::Parallel::Driver, mutant_expression: 'Mutant::Parallel::Driver*' do
   let(:active_jobs)     { []                                                    }
   let(:sink_status)     { instance_double(Object)                               }
   let(:thread_a)        { instance_double(Thread, alive?: true)                 }
@@ -35,6 +35,31 @@ RSpec.describe Mutant::Parallel::Driver do
     )
   end
 
+  describe '#stop' do
+    def apply
+      subject.stop
+    end
+
+    let(:raw_expectations) do
+      [
+        {
+          receiver: thread_a,
+          selector: :kill
+        },
+        {
+          receiver: thread_b,
+          selector: :kill
+        }
+      ]
+    end
+
+    it 'returns self' do
+      verify_events do
+        expect(apply).to eql(subject)
+      end
+    end
+  end
+
   describe '#wait_timeout' do
     def apply
       subject.wait_timeout(timeout)
@@ -57,77 +82,115 @@ RSpec.describe Mutant::Parallel::Driver do
       end
     end
 
-    let(:raw_expectations) do
-      [
-        {
-          receiver:  var_final,
-          selector:  :take_timeout,
-          arguments: [timeout],
-          reaction:  { return: Mutant::Variable.const_get(:Result)::Timeout.new }
-        },
-        {
-          receiver: var_active_jobs,
-          selector: :with,
-          reaction: { yields: [active_jobs] }
-        },
-        {
-          receiver: var_sink,
-          selector: :with,
-          reaction: { yields: [sink] }
-        }
-      ]
-    end
+    shared_examples 'when done' do
+      context 'when done' do
+        before do
+          allow(thread_a).to receive_messages(alive?: false)
+          allow(thread_b).to receive_messages(alive?: false)
+        end
 
-    context 'when not done' do
-      let(:expected_status) do
-        Mutant::Parallel::Status.new(
-          active_jobs: active_jobs,
-          done:        false,
-          payload:     sink_status
-        )
+        let(:raw_expectations) do
+          [
+            *super(),
+            {
+              receiver: worker_a,
+              selector: :join
+            },
+            {
+              receiver: worker_b,
+              selector: :join
+            },
+            {
+              receiver: thread_a,
+              selector: :join
+            },
+            {
+              receiver: thread_b,
+              selector: :join
+            }
+          ]
+
+        end
+
+        let(:expected_status) do
+          Mutant::Parallel::Status.new(
+            active_jobs: active_jobs,
+            done:        true,
+            payload:     sink_status
+          )
+        end
+
+        include_examples 'returns expected status'
       end
-
-      include_examples 'returns expected status'
     end
 
-    context 'when done' do
-      before do
-        allow(thread_a).to receive_messages(alive?: false)
-        allow(thread_b).to receive_messages(alive?: false)
+    context 'when stopped' do
+      def apply
+        subject.stop
+        super()
       end
 
       let(:raw_expectations) do
         [
-          *super(),
-          {
-            receiver: worker_a,
-            selector: :join
-          },
-          {
-            receiver: worker_b,
-            selector: :join
-          },
           {
             receiver: thread_a,
-            selector: :join
+            selector: :kill
           },
           {
             receiver: thread_b,
-            selector: :join
+            selector: :kill
+          },
+          {
+            receiver: var_active_jobs,
+            selector: :with,
+            reaction: { yields: [active_jobs] }
+          },
+          {
+            receiver: var_sink,
+            selector: :with,
+            reaction: { yields: [sink] }
           }
         ]
-
       end
 
-      let(:expected_status) do
-        Mutant::Parallel::Status.new(
-          active_jobs: active_jobs,
-          done:        true,
-          payload:     sink_status
-        )
+      include_examples 'when done'
+    end
+
+    context 'when not stopped' do
+      let(:raw_expectations) do
+        [
+          {
+            receiver:  var_final,
+            selector:  :take_timeout,
+            arguments: [timeout],
+            reaction:  { return: Mutant::Variable.const_get(:Result)::Timeout.new }
+          },
+          {
+            receiver: var_active_jobs,
+            selector: :with,
+            reaction: { yields: [active_jobs] }
+          },
+          {
+            receiver: var_sink,
+            selector: :with,
+            reaction: { yields: [sink] }
+          }
+        ]
       end
 
-      include_examples 'returns expected status'
+      context 'when not done' do
+        let(:expected_status) do
+          Mutant::Parallel::Status.new(
+            active_jobs: active_jobs,
+            done:        false,
+            payload:     sink_status
+          )
+        end
+
+        include_examples 'returns expected status'
+      end
+
+      include_examples 'when done'
     end
   end
 end

@@ -1,8 +1,12 @@
-# Unreleased
+# v0.11.10 2022-05-02
 
 * [#1328](https://github.com/mbj/mutant/pull/1328)
 
   Fix incomplete mutations for named regexp capture groups. As an example, `/(?<name>\w\d)/` now gets mutated to `/(?<name>\W\d)/` and `/(?<name>\w\D)/` instead of just the former case.
+
+* [#1331](https://github.com/mbj/mutant/pull/1331)
+
+  Add graceful but urgent exit on SIGINT.
 
 # v0.11.9 2022-05-01
 
