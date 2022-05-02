@@ -25,6 +25,10 @@ module Mutant
     private_class_method :run_mutation_analysis
 
     def self.run_driver(reporter, driver)
+      Signal.trap('INT') do
+        driver.stop
+      end
+
       loop do
         status = driver.wait_timeout(reporter.delay)
         break status.payload if status.done?

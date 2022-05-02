@@ -138,7 +138,8 @@ module XSpec
           "#{message},
           observation:
           #{observation.inspect}
-          expectation: #{expectation.inspect}"
+          expectation:
+          #{expectation.inspect}"
         MESSAGE
       end
     end # Verifier
