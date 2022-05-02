@@ -19,10 +19,10 @@ Mutant::Meta::Example.add :regexp_named_group do
 end
 
 Mutant::Meta::Example.add :regexp_named_group do
-  source '/(?<_foo>\w)/'
+  source '/(?<_foo>\w\d)/'
 
   singleton_mutations
   regexp_mutations
 
-  mutation '/(?<_foo>\W)/'
+  mutation '/(?<_foo>\W\d)/'
 end
