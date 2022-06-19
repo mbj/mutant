@@ -46,7 +46,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
   end
 
   context 'on present mutaiton timeout' do
-    let(:reportable) { config.with(mutation_timeout: 2.1) }
+    let(:reportable) { config.with(mutation: config.mutation.with(timeout: 2.1)) }
 
     describe '.call' do
       it_reports(<<~'REPORT')

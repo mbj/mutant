@@ -19,7 +19,7 @@ module Mutant
       :isolation,
       :jobs,
       :matcher,
-      :mutation_timeout,
+      :mutation,
       :reporter,
       :requires,
       :zombie
@@ -38,6 +38,20 @@ module Mutant
       config/mutant.yml
       mutant.yml
     ].freeze
+
+    MUTATION_TIMEOUT_DEPRECATION = <<~'MESSAGE'
+      Deprecated configuration toplevel key `mutation_timeout` found.
+
+      This key will be removed in the next mayor version.
+      Instead place your mutation timeout configuration under the `mutation` key
+      like this:
+
+      ```
+      # mutant.yml
+      mutation:
+        timeout: 10.0 # float here.
+      ```
+    MESSAGE
 
     private_constant(*constants(false))
 
@@ -59,7 +73,7 @@ module Mutant
         integration:           other.integration || integration,
         jobs:                  other.jobs || jobs,
         matcher:               matcher.merge(other.matcher),
-        mutation_timeout:      other.mutation_timeout || mutation_timeout,
+        mutation:              mutation.merge(other.mutation),
         requires:              requires + other.requires,
         zombie:                zombie || other.zombie
       )
@@ -78,7 +92,7 @@ module Mutant
         .select(&:readable?)
 
       if files.one?
-        load_contents(files.first).fmap(&DEFAULT.public_method(:with))
+        load_contents(env, files.first).fmap(&DEFAULT.public_method(:with))
       elsif files.empty?
         Either::Right.new(DEFAULT)
       else
@@ -96,13 +110,29 @@ module Mutant
       )
     end
 
-    def self.load_contents(path)
+    def self.load_contents(env, path)
       Transform::Named
-        .new(path.to_s, TRANSFORM)
+        .new(
+          path.to_s,
+          sequence(env.config.reporter)
+        )
         .call(path)
         .lmap(&:compact_message)
     end
     private_class_method :load_contents
+
+    def self.sequence(reporter)
+      Transform::Sequence.new(
+        [
+          Transform::Exception.new(SystemCallError, :read.to_proc),
+          Transform::Exception.new(YAML::SyntaxError, YAML.public_method(:safe_load)),
+          Transform::Primitive.new(Hash),
+          Transform::Success.new(->(hash) { deprecations(reporter, hash) }),
+          *TRANSFORMS
+        ]
+      )
+    end
+    private_class_method :sequence
 
     # The configuration from the environment
     #
@@ -138,38 +168,45 @@ module Mutant
 
       Either::Right.new(hash)
     end
-    TRANSFORM = Transform::Sequence.new(
-      [
-        Transform::Exception.new(SystemCallError, :read.to_proc),
-        Transform::Exception.new(YAML::SyntaxError, YAML.public_method(:safe_load)),
-        Transform::Hash.new(
-          optional: [
-            Transform::Hash::Key.new('coverage_criteria', ->(value) { CoverageCriteria::TRANSFORM.call(value) }),
-            Transform::Hash::Key.new(
-              'environment_variables',
-              Transform::Sequence.new(
-                [
-                  Transform::Primitive.new(Hash),
-                  Transform::Block.capture(:environment_variables, &method(:parse_environment_variables))
-                ]
-              )
-            ),
-            Transform::Hash::Key.new('fail_fast',             Transform::BOOLEAN),
-            Transform::Hash::Key.new('hooks',                 PATHNAME_ARRAY),
-            Transform::Hash::Key.new('includes',              Transform::STRING_ARRAY),
-            Transform::Hash::Key.new('integration',           Transform::STRING),
-            Transform::Hash::Key.new('jobs',                  Transform::INTEGER),
-            Transform::Hash::Key.new('matcher',               Matcher::Config::LOADER),
-            Transform::Hash::Key.new('mutation_timeout',      Transform::FLOAT),
-            Transform::Hash::Key.new('requires',              Transform::STRING_ARRAY)
-          ],
-          required: []
-        ),
-        Transform::Hash::Symbolize.new
-      ]
-    )
 
-    private_constant(:TRANSFORM)
+    def self.deprecations(reporter, hash)
+      if hash.key?('mutation_timeout')
+        reporter.warn(MUTATION_TIMEOUT_DEPRECATION)
+
+        (hash['mutation'] ||= {})['timeout'] ||= hash.delete('mutation_timeout')
+      end
+
+      hash
+    end
+
+    TRANSFORMS = [
+      Transform::Hash.new(
+        optional: [
+          Transform::Hash::Key.new('coverage_criteria', ->(value) { CoverageCriteria::TRANSFORM.call(value) }),
+          Transform::Hash::Key.new(
+            'environment_variables',
+            Transform::Sequence.new(
+              [
+                Transform::Primitive.new(Hash),
+                Transform::Block.capture(:environment_variables, &method(:parse_environment_variables))
+              ]
+            )
+          ),
+          Transform::Hash::Key.new('fail_fast',   Transform::BOOLEAN),
+          Transform::Hash::Key.new('hooks',       PATHNAME_ARRAY),
+          Transform::Hash::Key.new('includes',    Transform::STRING_ARRAY),
+          Transform::Hash::Key.new('integration', Transform::STRING),
+          Transform::Hash::Key.new('jobs',        Transform::INTEGER),
+          Transform::Hash::Key.new('matcher',     Matcher::Config::LOADER),
+          Transform::Hash::Key.new('mutation',    Mutation::Config::TRANSFORM),
+          Transform::Hash::Key.new('requires',    Transform::STRING_ARRAY)
+        ],
+        required: []
+      ),
+      Transform::Hash::Symbolize.new
+    ].freeze
+
+    private_constant(:TRANSFORMS)
   end # Config
   # rubocop:enable Metrics/ClassLength
 end # Mutant

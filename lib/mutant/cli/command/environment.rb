@@ -123,7 +123,7 @@ module Mutant
             set(jobs: Integer(number))
           end
           parser.on('-t', '--mutation-timeout NUMBER', 'Per mutation analysis timeout') do |number|
-            set(mutation_timeout: Float(number))
+            set(mutation: @config.mutation.with(timeout: Float(number)))
           end
         end
       end # Run

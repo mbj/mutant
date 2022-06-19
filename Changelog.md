@@ -1,3 +1,16 @@
+# Unreleased
+
+* [#1340](https://github.com/mbj/mutant/pull/1340)
+
+  Deprecate `mutation_timeout` toplevel configuration key.
+
+  Now use:
+
+  ```
+  mutation:
+    timeout: 10.0
+  ```
+
 # v0.11.12 2022-06-20
 
 * [#1339](https://github.com/mbj/mutant/pull/1339)
@@ -5,6 +18,10 @@
   Add support for minitest-0.5.16, and its srant initalization. Currently mutant randomizes selected minitest
   tests by default. AS this is also the minitest default for versions past 0.5.16 this should be a good enough
   behavior.
+
+* [#1333](https://github.com/mbj/mutant/pull/1333)
+
+  Add mutation AST filtering. This allows to not emit mutations on user specified ASTS.
 
 * [#1332](https://github.com/mbj/mutant/pull/1332)
 

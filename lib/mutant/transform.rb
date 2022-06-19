@@ -421,6 +421,20 @@ module Mutant
       end
     end # Sequence
 
+    # Always successful transformation
+    class Success < self
+      include Concord.new(:block)
+
+      # Apply transformation to input
+      #
+      # @param [Object]
+      #
+      # @return [Either<Error, Object>]
+      def call(input)
+        success(block.call(input))
+      end
+    end # Sequence
+
     # Generic exception transformer
     class Exception < self
       include Concord.new(:error_class, :block)

@@ -506,10 +506,10 @@ RSpec.describe Mutant::CLI do
 
       let(:file_config) do
         Mutant::Config::DEFAULT.with(
-          integration:      'file-integration',
-          includes:         %w[include-file],
-          requires:         %w[require-file],
-          mutation_timeout: 5
+          integration: 'file-integration',
+          includes:    %w[include-file],
+          requires:    %w[require-file],
+          mutation:    Mutant::Mutation::Config::DEFAULT.with(timeout: 5.0)
         )
       end
 
@@ -1040,9 +1040,15 @@ RSpec.describe Mutant::CLI do
         end
 
         context 'with --mutation-timeout option' do
-          let(:arguments)               { super() + %w[--mutation-timeout 10]  }
-          let(:bootstrap_config)        { super().with(mutation_timeout: 10.0) }
-          let(:load_config_file_config) { super().with(mutation_timeout: 10.0) }
+          let(:arguments)               { super() + %w[--mutation-timeout 10] }
+
+          let(:load_config_file_config) do
+            super().with(mutation: super().mutation.with(timeout: 10.0))
+          end
+
+          let(:bootstrap_config) do
+            super().with(mutation: super().mutation.with(timeout: 10.0))
+          end
 
           include_examples 'CLI run'
         end

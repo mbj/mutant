@@ -93,6 +93,7 @@ require 'mutant/parallel/source'
 require 'mutant/parallel/worker'
 require 'mutant/require_highjack'
 require 'mutant/mutation'
+require 'mutant/mutation/config'
 require 'mutant/mutator'
 require 'mutant/mutator/util'
 require 'mutant/mutator/util/array'
@@ -288,7 +289,7 @@ module Mutant
       isolation:             Mutant::Isolation::Fork.new(WORLD),
       jobs:                  nil,
       matcher:               Matcher::Config::DEFAULT,
-      mutation_timeout:      nil,
+      mutation:              Mutation::Config::DEFAULT,
       reporter:              Reporter::CLI.build(WORLD.stdout),
       requires:              EMPTY_ARRAY,
       zombie:                false
