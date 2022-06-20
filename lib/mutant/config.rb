@@ -69,13 +69,12 @@ module Mutant
 
     # Load config file
     #
-    # @param [World] world
-    # @param [Config] config
+    # @param [Env] env
     #
     # @return [Either<String,Config>]
-    def self.load_config_file(world)
+    def self.load_config_file(env)
       files = CANDIDATES
-        .map(&world.pathname.public_method(:new))
+        .map(&env.world.pathname.public_method(:new))
         .select(&:readable?)
 
       if files.one?

@@ -305,7 +305,7 @@ RSpec.describe Mutant::Config do
 
   describe '.load_config_file' do
     def apply
-      described_class.load_config_file(world)
+      described_class.load_config_file(Mutant::Env.empty(world, config))
     end
 
     let(:config) { Mutant::Config::DEFAULT                            }
