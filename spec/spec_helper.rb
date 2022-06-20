@@ -97,6 +97,7 @@ module XSpecHelper
       stderr:                instance_double(IO),
       stdout:                instance_double(IO),
       thread:                class_double(Thread),
+      random:                class_double(Random),
       timer:                 instance_double(Mutant::Timer)
     )
   end

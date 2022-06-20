@@ -82,6 +82,8 @@ module Mutant
           .map(&:to_s)
           .each(&world.kernel.public_method(:require))
 
+        ::Minitest.seed ||= world.random.srand if ::Minitest.respond_to?(:seed=)
+
         self
       end
 

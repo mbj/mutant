@@ -1,4 +1,10 @@
-# Unreleased
+# v0.11.12 2022-06-20
+
+* [#1339](https://github.com/mbj/mutant/pull/1339)
+
+  Add support for minitest-0.5.16, and its srant initalization. Currently mutant randomizes selected minitest
+  tests by default. AS this is also the minitest default for versions past 0.5.16 this should be a good enough
+  behavior.
 
 * [#1332](https://github.com/mbj/mutant/pull/1332)
 
