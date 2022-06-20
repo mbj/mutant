@@ -18,6 +18,7 @@ module Mutant
       :open3,
       :pathname,
       :process,
+      :random,
       :stderr,
       :stdout,
       :thread,

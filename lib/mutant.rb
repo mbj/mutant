@@ -262,6 +262,7 @@ module Mutant
     open3:                 Open3,
     pathname:              Pathname,
     process:               Process,
+    random:                Random,
     stderr:                $stderr,
     stdout:                $stdout,
     thread:                Thread,
