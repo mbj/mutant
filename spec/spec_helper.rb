@@ -37,7 +37,7 @@ module Fixtures
     )
 
   TEST_ENV = Mutant::Bootstrap
-    .call(Mutant::WORLD, test_config)
+    .call(Mutant::Env.empty(Mutant::WORLD, test_config))
     .from_right
 end # Fixtures
 

@@ -24,16 +24,15 @@ module Mutant
 
     # Run Bootstrap
     #
-    # @param [World] world
-    # @param [Config] config
+    # @param [Env] env
     #
     # @return [Either<String, Env>]
     #
     # rubocop:disable Metrics/MethodLength
-    def self.call(world, config)
-      env = load_hooks(Env.empty(world, config))
+    def self.call(env)
+      env = load_hooks(env)
         .tap(&method(:infect))
-        .with(matchable_scopes: matchable_scopes(world, config))
+        .with(matchable_scopes: matchable_scopes(env))
 
       subjects = start_subject(env, Matcher.from_config(env.config.matcher).call(env))
 
@@ -82,8 +81,10 @@ module Mutant
     end
     private_class_method :infect
 
-    def self.matchable_scopes(world, config)
-      scopes = world.object_space.each_object(Module).each_with_object([]) do |scope, aggregate|
+    def self.matchable_scopes(env)
+      config = env.config
+
+      scopes = env.world.object_space.each_object(Module).each_with_object([]) do |scope, aggregate|
         expression = expression(config.reporter, config.expression_parser, scope) || next
         aggregate << Scope.new(scope, expression)
       end
