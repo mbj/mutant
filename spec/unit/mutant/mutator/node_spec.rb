@@ -28,7 +28,8 @@ RSpec.describe Mutant::Mutator::Node do
 
         def dispatch
           left
-          emit_left(s(:nil))
+          emit_left(s(:int, 1))
+          emit_left_mutations
           emit_right_mutations do |node|
             node.eql?(s(:nil))
           end
@@ -41,7 +42,12 @@ RSpec.describe Mutant::Mutator::Node do
     end
 
     specify do
-      expect(apply).to eql([s(:and, s(:nil), s(:true))].to_set)
+      expect(apply).to eql(
+        [
+          s(:and, s(:false), s(:true)),
+          s(:and, s(:int, 1), s(:true))
+        ].to_set
+      )
     end
   end
 end
