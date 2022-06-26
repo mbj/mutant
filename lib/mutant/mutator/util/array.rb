@@ -21,23 +21,6 @@ module Mutant
           end
 
         end # Presence
-
-        # Array element mutator
-        class Element < Util
-
-        private
-
-          def dispatch
-            input.each_with_index do |element, index|
-              Mutator.mutate(element).each do |mutation|
-                dup = dup_input
-                dup[index] = mutation
-                emit(dup)
-              end
-            end
-          end
-
-        end # Element
       end # Array
     end # Util
   end # Mutator

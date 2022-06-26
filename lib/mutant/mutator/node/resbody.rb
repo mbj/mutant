@@ -15,17 +15,7 @@ module Mutant
         def dispatch
           emit_assignment(nil)
           emit_body_mutations if body
-          mutate_captures
         end
-
-        def mutate_captures
-          return unless captures
-          Util::Array::Element.call(captures.children).each do |matchers|
-            next if matchers.any?(&method(:n_nil?))
-            emit_captures(s(:array, *matchers))
-          end
-        end
-
       end # Resbody
     end # Node
   end # Mutator
