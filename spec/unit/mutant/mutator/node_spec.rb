@@ -5,7 +5,7 @@ aggregate = Hash.new { |hash, key| hash[key] = [] }
 Mutant::Meta::Example::ALL
   .each_with_object(aggregate) do |example, agg|
     example.types.each do |type|
-      agg[Mutant::Mutator::REGISTRY.lookup(type)] << example
+      agg[Mutant::Mutator::Node::REGISTRY.lookup(type)] << example
     end
   end
 
@@ -21,6 +21,24 @@ aggregate.each do |mutator, examples|
 end
 
 RSpec.describe Mutant::Mutator::Node do
+  describe '.handle' do
+    subject do
+      Class.new(described_class) do
+        const_set(:REGISTRY, Mutant::Registry.new(->(_) { fail }))
+
+        handle :send
+
+        def dispatch
+          emit(parent)
+        end
+      end
+    end
+
+    it 'should register mutator' do
+      expect(subject.mutate(s(:send), s(:parent))).to eql([s(:parent)].to_set)
+    end
+  end
+
   describe 'internal DSL' do
     let(:klass) do
       Class.new(described_class) do

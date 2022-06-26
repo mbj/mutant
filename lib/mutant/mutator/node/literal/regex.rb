@@ -33,7 +33,7 @@ module Mutant
             # Regular expressions with interpolation are skipped.
             return unless (body_ast = AST::Regexp.expand_regexp_ast(input))
 
-            Mutator.mutate(body_ast).each do |mutation|
+            mutate(body_ast).each do |mutation|
               source = AST::Regexp.to_expression(mutation).to_s
               emit_type(s(:str, source), options)
             end

@@ -27,7 +27,7 @@ module Mutant
 
         def emit_argument_mutations
           children.each_with_index do |child, index|
-            Mutator.mutate(child).each do |mutant|
+            mutate(child).each do |mutant|
               unless forbid_argument?(mutant)
                 emit_child_update(index, mutant)
               end

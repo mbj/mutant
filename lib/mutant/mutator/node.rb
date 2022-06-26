@@ -12,6 +12,25 @@ module Mutant
 
       TAUTOLOGY = ->(_input) { true }
 
+      REGISTRY = Registry.new(->(_) { Node::Generic })
+
+      # Lookup and invoke dedicated AST mutator
+      #
+      # @param input [Parser::AST::Node]
+      # @param parent [nil,Mutant::Mutator::Node]
+      #
+      # @return [Set<Parser::AST::Node>]
+      def self.mutate(node, parent = nil)
+        self::REGISTRY.lookup(node.type).call(node, parent)
+      end
+
+      def self.handle(*types)
+        types.each do |type|
+          self::REGISTRY.register(type, self)
+        end
+      end
+      private_class_method :handle
+
       # Helper to define a named child
       #
       # @param [Parser::AST::Node] node
@@ -37,9 +56,13 @@ module Mutant
       alias_method :node,     :input
       alias_method :dup_node, :dup_input
 
+      def mutate(node, parent = nil)
+        self.class.mutate(node, parent)
+      end
+
       def mutate_child(index, &block)
         block ||= TAUTOLOGY
-        Mutator.mutate(children.fetch(index), self).each do |mutation|
+        mutate(children.fetch(index), self).each do |mutation|
           next unless block.call(mutation)
           emit_child_update(index, mutation)
         end
