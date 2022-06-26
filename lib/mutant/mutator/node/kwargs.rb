@@ -20,14 +20,14 @@ module Mutant
         end
 
         def emit_argument_presence
-          Util::Array::Presence.call(children).each do |children|
+          Util::Array::Presence.call(input: children, parent: nil).each do |children|
             emit_type(*children) unless children.empty?
           end
         end
 
         def emit_argument_mutations
           children.each_with_index do |child, index|
-            mutate(child).each do |mutant|
+            mutate(node: child).each do |mutant|
               unless forbid_argument?(mutant)
                 emit_child_update(index, mutant)
               end

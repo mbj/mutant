@@ -34,7 +34,7 @@ module Mutant
           def mutate_name
             prefix, regexp = MAP.fetch(node.type)
             stripped = name.to_s.sub(regexp, EMPTY_STRING)
-            Util::Symbol.call(stripped).each do |name|
+            Util::Symbol.call(input: stripped, parent: nil).each do |name|
               emit_name(:"#{prefix}#{name}")
             end
           end

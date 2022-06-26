@@ -141,7 +141,7 @@ module MutantSpec
       def check_generation(path)
         node = Unparser.parse(path.read) or return 0
 
-        mutations = Mutant::Mutator::Node.mutate(node)
+        mutations = Mutant::Mutator::Node.mutate(node: node)
 
         mutations.each do |mutation|
           check_generation_invariants(node, mutation)

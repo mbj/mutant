@@ -61,7 +61,7 @@ module Mutant
 
           def print_mutations(target)
             world.stdout.puts(target.identification)
-            Mutator::Node.mutate(target.node).each do |mutation|
+            Mutator::Node.mutate(node: target.node).each do |mutation|
               Reporter::CLI::Printer::Mutation.call(
                 world.stdout,
                 Mutant::Mutation::Evil.new(target, mutation)

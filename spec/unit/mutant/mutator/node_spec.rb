@@ -35,7 +35,7 @@ RSpec.describe Mutant::Mutator::Node do
     end
 
     it 'should register mutator' do
-      expect(subject.mutate(s(:send), s(:parent))).to eql([s(:parent)].to_set)
+      expect(subject.mutate(node: s(:send), parent: s(:parent))).to eql([s(:parent)].to_set)
     end
   end
 
@@ -56,7 +56,7 @@ RSpec.describe Mutant::Mutator::Node do
     end
 
     def apply
-      klass.call(s(:and, s(:true), s(:true)))
+      klass.call(input: s(:and, s(:true), s(:true)), parent: nil)
     end
 
     specify do

@@ -20,8 +20,8 @@ module Mutant
       # @param parent [nil,Mutant::Mutator::Node]
       #
       # @return [Set<Parser::AST::Node>]
-      def self.mutate(node, parent = nil)
-        self::REGISTRY.lookup(node.type).call(node, parent)
+      def self.mutate(node:, parent: nil)
+        self::REGISTRY.lookup(node.type).call(input: node, parent: parent)
       end
 
       def self.handle(*types)
@@ -56,13 +56,13 @@ module Mutant
       alias_method :node,     :input
       alias_method :dup_node, :dup_input
 
-      def mutate(node, parent = nil)
-        self.class.mutate(node, parent)
+      def mutate(node:, parent: nil)
+        self.class.mutate(node: node, parent: parent)
       end
 
       def mutate_child(index, &block)
         block ||= TAUTOLOGY
-        mutate(children.fetch(index), self).each do |mutation|
+        mutate(node: children.fetch(index), parent: self).each do |mutation|
           next unless block.call(mutation)
           emit_child_update(index, mutation)
         end

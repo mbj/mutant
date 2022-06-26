@@ -5,8 +5,8 @@ module Mutant
   class Mutator
     include(
       Adamantium,
-      Concord.new(:input, :parent),
       AbstractType,
+      Anima.new(:input, :parent),
       Procto
     )
 
@@ -19,7 +19,7 @@ module Mutant
 
   private
 
-    def initialize(_input, _parent = nil)
+    def initialize(_attributes)
       super
 
       @output = Set.new
@@ -41,7 +41,7 @@ module Mutant
     end
 
     def run(mutator)
-      mutator.call(input).each(&method(:emit))
+      mutator.call(input: input, parent: nil).each(&method(:emit))
     end
 
     def dup_input

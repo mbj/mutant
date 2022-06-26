@@ -88,7 +88,7 @@ RSpec.describe Mutant::Subject do
     before do
       expect(Mutant::Mutator::Node)
         .to receive(:mutate)
-        .with(node)
+        .with(node: node)
         .and_return([mutation_a, mutation_b])
     end
 
