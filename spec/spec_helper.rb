@@ -18,6 +18,7 @@ end
 
 require './spec/shared/framework_integration_behavior'
 require './spec/shared/method_matcher_behavior'
+require './spec/shared/config_merge_behavior'
 require './spec/support/corpus'
 require './spec/support/file_system'
 require './spec/support/ruby_vm'

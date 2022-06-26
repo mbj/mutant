@@ -20,7 +20,7 @@ module Mutant
             info 'Jobs:            %s',    object.jobs || 'auto'
             info 'Includes:        %s',    object.includes
             info 'Requires:        %s',    object.requires
-            info 'MutationTimeout: %0.9g', object.mutation_timeout if object.mutation_timeout
+            info 'MutationTimeout: %0.9g', object.mutation.timeout if object.mutation.timeout
           end
           # rubocop:enable Metrics/AbcSize
 

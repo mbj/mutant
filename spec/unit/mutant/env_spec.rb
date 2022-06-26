@@ -40,13 +40,17 @@ RSpec.describe Mutant::Env do
     )
   end
 
+  let(:mutation_config) do
+    Mutant::Mutation::Config::DEFAULT.with(timeout: 1.0)
+  end
+
   let(:config) do
     instance_double(
       Mutant::Config,
       expression_parser: instance_double(Mutant::Expression::Parser),
       integration:       integration_class,
       isolation:         isolation,
-      mutation_timeout:  1.0,
+      mutation:          mutation_config,
       reporter:          reporter
     )
   end
@@ -114,7 +118,7 @@ RSpec.describe Mutant::Env do
       it 'performs IO in expected sequence' do
         apply
 
-        expect(isolation).to have_received(:call).ordered.with(config.mutation_timeout)
+        expect(isolation).to have_received(:call).ordered.with(config.mutation.timeout)
         expect(hooks).to have_received(:run).ordered.with(:mutation_insert_pre, mutation)
         expect(mutation).to have_received(:insert).ordered.with(world.kernel)
         expect(hooks).to have_received(:run).ordered.with(:mutation_insert_post, mutation)

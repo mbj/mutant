@@ -137,7 +137,7 @@ module Mutant
   private
 
     def run_mutation_tests(mutation, tests)
-      config.isolation.call(config.mutation_timeout) do
+      config.isolation.call(config.mutation.timeout) do
         hooks.run(:mutation_insert_pre, mutation)
         result = mutation.insert(world.kernel)
         hooks.run(:mutation_insert_post, mutation)

@@ -145,21 +145,23 @@ jobs: 8
 The number of jobs can be overridden by the `-j` or `--jobs` option in the CLI.
 See mutant's configuration file, [mutant.yml](/mutant.yml), for a complete example.
 
-#### `mutation_timeout`
+#### `mutation`
 
-Specify the maximum time, in seconds, a mutation gets analysed.
+Configuration of the mutations to generate.
 
 ```yml
----
-# Control the maximum time per mutation spend on analysis.
-# Unit is in fractional seconds.
-#
-# Default absent.
-#
-# Absent value: No limit on per mutation analysis time.
-# Present value: Limit per mutation analysis time to specified value in seconds.
-mutation_timeout: 1.0
+mutation:
+  # Control the maximum time per mutation spend on analysis.
+  # Unit is in fractional seconds.
+  #
+  # Default absent.
+  #
+  # Absent value: No limit on per mutation analysis time.
+  # Present value: Limit per mutation analysis time to specified value in seconds.
+  mutation_timeout: 1.0
 ```
+
+The toplevel key `mutation_timeout` is a deprecated alias for the `timeout` key under `mutation`.
 
 Use `timeout` setting under `coverage_criteria` in the config file to control
 if timeouts are allowed to cover mutations.

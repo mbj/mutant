@@ -125,48 +125,12 @@ RSpec.describe Mutant::Config do
       end
     end
 
-    shared_examples 'maybe value' do
-      context 'when original has value' do
-        context 'when other does not have value' do
-          let(:other_value) { nil }
-
-          it 'sets value to original value' do
-            expect_value(original_value)
-          end
-        end
-
-        context 'when other does have a value' do
-          it 'sets value to other value' do
-            expect_value(other_value)
-          end
-        end
-      end
-
-      context 'when original does not have value' do
-        let(:original_value) { nil }
-
-        context 'when other does not have value' do
-          let(:other_value) { nil }
-
-          it 'sets value to nil value' do
-            expect_value(nil)
-          end
-        end
-
-        context 'when other does have a value' do
-          it 'sets value to other value' do
-            expect_value(other_value)
-          end
-        end
-      end
-    end
-
     context 'merging jobs' do
       let(:key)            { :jobs }
       let(:original_value) { 2     }
       let(:other_value)    { 3     }
 
-      include_examples 'maybe value'
+      include_examples 'maybe value merge'
     end
 
     context 'merging environment variables' do
@@ -188,7 +152,7 @@ RSpec.describe Mutant::Config do
       let(:original_value) { 'rspec'      }
       let(:other_value)    { 'minitest'   }
 
-      include_examples 'maybe value'
+      include_examples 'maybe value merge'
     end
 
     context 'merging expression_parser' do
@@ -221,12 +185,13 @@ RSpec.describe Mutant::Config do
       include_examples 'overwrite value'
     end
 
-    context 'merging mutation timeout' do
-      let(:key)            { :mutation_timeout }
-      let(:original_value) { 1.0               }
-      let(:other_value)    { 2.0               }
+    context 'merging mutation config' do
+      let(:key)            { :mutation                                            }
+      let(:original_value) { Mutant::Mutation::Config::DEFAULT.with(timeout: 1.0) }
+      let(:other_value)    { Mutant::Mutation::Config::DEFAULT.with(timeout: 2.0) }
+      let(:result_value)   { Mutant::Mutation::Config::DEFAULT.with(timeout: 2.0) }
 
-      include_examples 'maybe value'
+      include_examples 'descendant merge'
     end
 
     context 'merging zombie' do
@@ -390,6 +355,25 @@ RSpec.describe Mutant::Config do
           end
         end
 
+        context 'when yaml is invalid' do
+          let(:path_contents) do
+            <<~'YAML'
+              ---
+              : true
+            YAML
+          end
+
+          # rubocop:disable Layout/LineLength
+          let(:expected_message) do
+            'mutant.yml/Mutant::Transform::Sequence/1/Mutant::Transform::Exception: (<unknown>): did not find expected key while parsing a block mapping at line 2 column 1'
+          end
+          # rubocop:enable Layout/LineLength
+
+          it 'returns expected error' do
+            expect(apply).to eql(Mutant::Either::Left.new(expected_message))
+          end
+        end
+
         context 'when yaml contents cannot be transformed' do
           let(:path_contents) do
             <<~'YAML'
@@ -400,7 +384,7 @@ RSpec.describe Mutant::Config do
 
           # rubocop:disable Layout/LineLength
           let(:expected_message) do
-            'mutant.yml/Mutant::Transform::Sequence/2/Mutant::Transform::Hash/["integration"]/String: Expected: String but got: TrueClass'
+            'mutant.yml/Mutant::Transform::Sequence/4/Mutant::Transform::Hash/["integration"]/String: Expected: String but got: TrueClass'
           end
           # rubocop:enable Layout/LineLength
 
@@ -421,6 +405,45 @@ RSpec.describe Mutant::Config do
 
         it 'returns expected error' do
           expect(apply).to eql(Mutant::Either::Left.new(expected_message))
+        end
+      end
+
+      context 'deprecated mutation_timeout toplevel key' do
+        let(:path_contents) do
+          <<~'YAML'
+            ---
+            mutation_timeout: 10.0
+          YAML
+        end
+
+        before do
+          allow(config.reporter).to receive_messages(warn: config.reporter)
+        end
+
+        it 'renders expected warning' do
+          apply
+
+          expect(config.reporter).to have_received(:warn).with(<<~'MESSAGE')
+            Deprecated configuration toplevel key `mutation_timeout` found.
+
+            This key will be removed in the next mayor version.
+            Instead place your mutation timeout configuration under the `mutation` key
+            like this:
+
+            ```
+            # mutant.yml
+            mutation:
+              timeout: 10.0 # float here.
+            ```
+          MESSAGE
+        end
+
+        it 'returns expected config' do
+          expect(apply.from_right.mutation).to eql(
+            Mutant::Config::DEFAULT.with(
+              mutation: Mutant::Mutation::Config::DEFAULT.with(timeout: 10.0)
+            ).mutation
+          )
         end
       end
     end
