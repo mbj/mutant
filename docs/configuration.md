@@ -158,7 +158,7 @@ mutation:
   #
   # Absent value: No limit on per mutation analysis time.
   # Present value: Limit per mutation analysis time to specified value in seconds.
-  mutation_timeout: 1.0
+  timeout: 1.0
 ```
 
 The toplevel key `mutation_timeout` is a deprecated alias for the `timeout` key under `mutation`.
