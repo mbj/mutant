@@ -13,8 +13,11 @@ module Mutant
           emit_optarg_body_assignments
           emit_body(N_RAISE)
           emit_body(N_ZSUPER)
-          emit_body(nil)
-          emit_body_mutations if body
+
+          return unless body && !ignore?(body)
+
+          emit_body(nil) unless body.children.any?(&method(:ignore?))
+          emit_body_mutations
         end
 
         def emit_optarg_body_assignments

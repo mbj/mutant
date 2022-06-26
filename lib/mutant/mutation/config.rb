@@ -3,15 +3,21 @@
 module Mutant
   class Mutation
     class Config
-      include Anima.new(:timeout)
+      include Anima.new(:ignore_patterns, :timeout)
 
-      DEFAULT = new(timeout: nil)
+      DEFAULT = new(
+        timeout:         nil,
+        ignore_patterns: []
+      )
+
+      ignore_pattern = Transform::Block.capture('ignore pattern', &AST::Pattern.method(:parse))
 
       TRANSFORM = Transform::Sequence.new(
         [
           Transform::Hash.new(
             optional: [
-              Transform::Hash::Key.new('timeout', Transform::FLOAT)
+              Transform::Hash::Key.new('ignore_patterns', Transform::Array.new(ignore_pattern)),
+              Transform::Hash::Key.new('timeout',         Transform::FLOAT)
             ],
             required: []
           ),

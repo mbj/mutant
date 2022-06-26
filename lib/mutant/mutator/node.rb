@@ -10,6 +10,8 @@ module Mutant
       include AbstractType, Unparser::Constants
       include AST::NamedChildren, AST::NodePredicates, AST::Sexp, AST::Nodes
 
+      include anima.add(:config)
+
       TAUTOLOGY = ->(_input) { true }
 
       REGISTRY = Registry.new(->(_) { Node::Generic })
@@ -20,8 +22,16 @@ module Mutant
       # @param parent [nil,Mutant::Mutator::Node]
       #
       # @return [Set<Parser::AST::Node>]
-      def self.mutate(node:, parent: nil)
-        self::REGISTRY.lookup(node.type).call(input: node, parent: parent)
+      def self.mutate(config:, node:, parent: nil)
+        config.ignore_patterns.each do |pattern|
+          return Set.new if pattern.match?(node)
+        end
+
+        self::REGISTRY.lookup(node.type).call(
+          config: config,
+          input:  node,
+          parent: parent
+        )
       end
 
       def self.handle(*types)
@@ -57,7 +67,7 @@ module Mutant
       alias_method :dup_node, :dup_input
 
       def mutate(node:, parent: nil)
-        self.class.mutate(node: node, parent: parent)
+        self.class.mutate(config: config, node: node, parent: parent)
       end
 
       def mutate_child(index, &block)
@@ -119,6 +129,19 @@ module Mutant
         end
       end
 
+      def run(mutator)
+        mutator.call(
+          config: config,
+          input:  input,
+          parent: nil
+        ).each(&method(:emit))
+      end
+
+      def ignore?(node)
+        config.ignore_patterns.any? do |pattern|
+          pattern.match?(node)
+        end
+      end
     end # Node
   end # Mutator
 end # Mutant

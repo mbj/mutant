@@ -10,7 +10,7 @@ Mutant::Meta::Example::ALL
   end
 
 aggregate.each do |mutator, examples|
-  RSpec.describe mutator do
+  RSpec.describe mutator, mutant_expression: 'Mutant::Mutator::Node*' do
     it 'generates expected mutations' do
       examples.each do |example|
         verification = example.verification
@@ -35,7 +35,13 @@ RSpec.describe Mutant::Mutator::Node do
     end
 
     it 'should register mutator' do
-      expect(subject.mutate(node: s(:send), parent: s(:parent))).to eql([s(:parent)].to_set)
+      expect(
+        subject.mutate(
+          config: Mutant::Mutation::Config::DEFAULT,
+          node:   s(:send),
+          parent: s(:parent)
+        )
+      ).to eql([s(:parent)].to_set)
     end
   end
 
@@ -56,7 +62,11 @@ RSpec.describe Mutant::Mutator::Node do
     end
 
     def apply
-      klass.call(input: s(:and, s(:true), s(:true)), parent: nil)
+      klass.call(
+        config: Mutant::Mutation::Config::DEFAULT,
+        input:  s(:and, s(:true), s(:true)),
+        parent: nil
+      )
     end
 
     specify do
@@ -66,6 +76,72 @@ RSpec.describe Mutant::Mutator::Node do
           s(:and, s(:int, 1), s(:true))
         ].to_set
       )
+    end
+  end
+
+  describe '.mutate', mutant_expression: 'Mutant::Mutator::Node*' do
+    def apply
+      described_class.mutate(
+        config: config,
+        node:   node
+      )
+    end
+
+    let(:node) { s(:true) }
+
+    let(:config) do
+      Mutant::Mutation::Config::DEFAULT.with(
+        ignore_patterns: [ignore_pattern]
+      )
+    end
+
+    context 'ignore pattern matching node' do
+      let(:ignore_pattern) { Mutant::AST::Pattern.parse('true').from_right }
+
+      context 'on direct match' do
+        it 'returns no mutations' do
+          expect(apply).to eql(Set.new)
+        end
+      end
+
+      context 'on indirect single child match' do
+        let(:node) do
+          s(:def, :foo, s(:args), s(:true))
+        end
+
+        it 'returns no ignored mutations' do
+          expect(apply).to eql(
+            [
+              s(:def, :foo, s(:args), s(:send, nil, :raise)),
+              s(:def, :foo, s(:args), s(:zsuper))
+            ].to_set
+          )
+        end
+      end
+
+      context 'on indirect multiple child match' do
+        let(:node) do
+          s(:def, :foo, s(:args), s(:begin, s(:true), s(:false)))
+        end
+
+        it 'returns no ignored mutations' do
+          expect(apply).to eql(
+            [
+              s(:def, :foo, s(:args), s(:send, nil, :raise)),
+              s(:def, :foo, s(:args), s(:zsuper)),
+              s(:def, :foo, s(:args), s(:begin, s(:true), s(:true)))
+            ].to_set
+          )
+        end
+      end
+    end
+
+    context 'ignore pattern not matching node' do
+       let(:ignore_pattern) { Mutant::AST::Pattern.parse('false').from_right }
+
+       it 'returns no mutations' do
+         expect(apply).to eql([s(:false)].to_set)
+       end
     end
   end
 end

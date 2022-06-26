@@ -3,16 +3,17 @@
 module Mutant
   class Subject
     class Config
-      include Adamantium, Anima.new(:inline_disable)
+      include Adamantium, Anima.new(:inline_disable, :mutation)
 
-      DEFAULT = new(inline_disable: false)
+      DEFAULT = new(inline_disable: false, mutation: Mutation::Config::DEFAULT)
 
       DISABLE_REGEXP = /(\s|^)mutant:disable(?:\s|$)/.freeze
       SYNTAX_REGEXP  = /\A(?:#|=begin\n)/.freeze
 
-      def self.parse(comments)
+      def self.parse(comments:, mutation:)
         new(
-          inline_disable: comments.any? { |comment| DISABLE_REGEXP.match?(comment_body(comment)) }
+          inline_disable: comments.any? { |comment| DISABLE_REGEXP.match?(comment_body(comment)) },
+          mutation:       mutation
         )
       end
 

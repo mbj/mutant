@@ -40,10 +40,6 @@ module Mutant
       output << object
     end
 
-    def run(mutator)
-      mutator.call(input: input, parent: nil).each(&method(:emit))
-    end
-
     def dup_input
       input.dup
     end

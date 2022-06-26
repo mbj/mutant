@@ -3,8 +3,13 @@
 RSpec.describe Mutant::Subject::Config do
   describe '.parse' do
     def apply
-      described_class.parse(comments)
+      described_class.parse(
+        comments: comments,
+        mutation: mutation_config
+      )
     end
+
+    let(:mutation_config) { Mutant::Mutation::Config::DEFAULT }
 
     let(:comments) do
       node, comments = Unparser.parse_with_comments(source)
@@ -20,7 +25,12 @@ RSpec.describe Mutant::Subject::Config do
 
     shared_examples 'returns disabled config' do
       it 'returns default config' do
-        expect(apply).to eql(described_class.new(inline_disable: true))
+        expect(apply).to eql(
+          described_class.new(
+            inline_disable: true,
+            mutation:       mutation_config
+          )
+        )
       end
     end
 

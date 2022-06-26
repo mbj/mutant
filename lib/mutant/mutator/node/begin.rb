@@ -12,8 +12,9 @@ module Mutant
       private
 
         def dispatch
+          ignore_single = children.any?(&method(:ignore?))
           mutate_single_child do |child|
-            emit(child)
+            emit(child) unless ignore_single
           end
         end
       end # Begin

@@ -159,7 +159,14 @@ mutation:
   # Absent value: No limit on per mutation analysis time.
   # Present value: Limit per mutation analysis time to specified value in seconds.
   timeout: 1.0
+  # Add ignore AST patterns that skip mutation generation
+  # This is useful to not emit mutations for log statements etc
+  ignore_patterns:
+  - send{selector=log}
 ```
+
+Please consult the [AST-Pattern documentation](/docs/ast-pattern.md) for details of AST pattern
+matching.
 
 The toplevel key `mutation_timeout` is a deprecated alias for the `timeout` key under `mutation`.
 

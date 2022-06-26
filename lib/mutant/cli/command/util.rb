@@ -14,6 +14,12 @@ module Mutant
           OPTIONS           = %i[add_target_options].freeze
 
           def action
+            @ignore_patterns.map! do |syntax|
+              AST::Pattern.parse(syntax).from_right do |message|
+                return Either::Left.new(message)
+              end
+            end
+
             @targets.each(&method(:print_mutations))
             Either::Right.new(nil)
           end
@@ -50,18 +56,27 @@ module Mutant
           def initialize(_arguments)
             super
 
-            @targets = []
+            @targets         = []
+            @ignore_patterns = []
           end
 
           def add_target_options(parser)
             parser.on('-e', '--evaluate SOURCE') do |source|
               @targets << Target::Source.new(source)
             end
+
+            parser.on('-i', '--ignore-pattern AST_PATTERN') do |pattern|
+              @ignore_patterns << pattern
+            end
           end
 
           def print_mutations(target)
             world.stdout.puts(target.identification)
-            Mutator::Node.mutate(node: target.node).each do |mutation|
+
+            Mutator::Node.mutate(
+              config: Mutant::Mutation::Config::DEFAULT.with(ignore_patterns: @ignore_patterns),
+              node:   target.node
+            ).each do |mutation|
               Reporter::CLI::Printer::Mutation.call(
                 world.stdout,
                 Mutant::Mutation::Evil.new(target, mutation)

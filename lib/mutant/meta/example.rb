@@ -55,7 +55,10 @@ module Mutant
       #
       # @return [Enumerable<Mutant::Mutation>]
       def generated
-        Mutator::Node.mutate(node: node).map do |node|
+        Mutator::Node.mutate(
+          config: Mutation::Config::DEFAULT,
+          node:   node
+        ).map do |node|
           Mutation::Evil.new(self, node)
         end
       end
