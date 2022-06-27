@@ -99,10 +99,17 @@ module Mutant
           node = matched_node_path.last || return
 
           self.class::SUBJECT_CLASS.new(
-            config:     Subject::Config.parse(ast.comment_associations.fetch(node, [])),
+            config:     subject_config(node),
             context:    context,
             node:       node,
             visibility: visibility
+          )
+        end
+
+        def subject_config(node)
+          Subject::Config.parse(
+            comments: ast.comment_associations.fetch(node, []),
+            mutation: env.config.mutation
           )
         end
 

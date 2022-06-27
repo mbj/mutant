@@ -26,7 +26,7 @@ module Mutant
           end
 
           def mutate_name
-            Util::Symbol.call(name).each do |name|
+            Util::Symbol.call(input: name, parent: nil).each do |name|
               emit_name(name.upcase)
             end
           end

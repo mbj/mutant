@@ -1,5 +1,20 @@
 # Unreleased
 
+* [#1341](https://github.com/mbj/mutant/pull/1341)
+
+  Add user defined mutation filtering.
+
+  Mutant will not emit mutations for AST patterns defined by the new
+  mutation specific option `ignore_patterns`.
+
+  ```
+  mutation:
+    ignore_patterns:
+    - send{selector=log} # does no emit any mutation for `logger.log` or similar.
+  ```
+
+  The supported syntax is way [more powerful](https://github.com/mbj/mutant/blob/main/docs/ast-pattern.md) than this simple example.
+
 * [#1340](https://github.com/mbj/mutant/pull/1340)
 
   Deprecate `mutation_timeout` toplevel configuration key.

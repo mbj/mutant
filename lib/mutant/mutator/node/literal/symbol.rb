@@ -15,9 +15,9 @@ module Mutant
 
           def dispatch
             emit_singletons
-            Util::Symbol.call(value).each(&method(:emit_type))
-          end
 
+            Util::Symbol.call(input: value, parent: nil).each(&method(:emit_type))
+          end
         end # Symbol
       end # Literal
     end # Node

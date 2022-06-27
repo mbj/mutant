@@ -5,12 +5,12 @@ aggregate = Hash.new { |hash, key| hash[key] = [] }
 Mutant::Meta::Example::ALL
   .each_with_object(aggregate) do |example, agg|
     example.types.each do |type|
-      agg[Mutant::Mutator::REGISTRY.lookup(type)] << example
+      agg[Mutant::Mutator::Node::REGISTRY.lookup(type)] << example
     end
   end
 
 aggregate.each do |mutator, examples|
-  RSpec.describe mutator do
+  RSpec.describe mutator, mutant_expression: 'Mutant::Mutator::Node*' do
     it 'generates expected mutations' do
       examples.each do |example|
         verification = example.verification
@@ -21,6 +21,30 @@ aggregate.each do |mutator, examples|
 end
 
 RSpec.describe Mutant::Mutator::Node do
+  describe '.handle' do
+    subject do
+      Class.new(described_class) do
+        const_set(:REGISTRY, Mutant::Registry.new(->(_) { fail }))
+
+        handle :send
+
+        def dispatch
+          emit(parent)
+        end
+      end
+    end
+
+    it 'should register mutator' do
+      expect(
+        subject.mutate(
+          config: Mutant::Mutation::Config::DEFAULT,
+          node:   s(:send),
+          parent: s(:parent)
+        )
+      ).to eql([s(:parent)].to_set)
+    end
+  end
+
   describe 'internal DSL' do
     let(:klass) do
       Class.new(described_class) do
@@ -28,7 +52,8 @@ RSpec.describe Mutant::Mutator::Node do
 
         def dispatch
           left
-          emit_left(s(:nil))
+          emit_left(s(:int, 1))
+          emit_left_mutations
           emit_right_mutations do |node|
             node.eql?(s(:nil))
           end
@@ -37,11 +62,86 @@ RSpec.describe Mutant::Mutator::Node do
     end
 
     def apply
-      klass.call(s(:and, s(:true), s(:true)))
+      klass.call(
+        config: Mutant::Mutation::Config::DEFAULT,
+        input:  s(:and, s(:true), s(:true)),
+        parent: nil
+      )
     end
 
     specify do
-      expect(apply).to eql([s(:and, s(:nil), s(:true))].to_set)
+      expect(apply).to eql(
+        [
+          s(:and, s(:false), s(:true)),
+          s(:and, s(:int, 1), s(:true))
+        ].to_set
+      )
+    end
+  end
+
+  describe '.mutate', mutant_expression: 'Mutant::Mutator::Node*' do
+    def apply
+      described_class.mutate(
+        config: config,
+        node:   node
+      )
+    end
+
+    let(:node) { s(:true) }
+
+    let(:config) do
+      Mutant::Mutation::Config::DEFAULT.with(
+        ignore_patterns: [ignore_pattern]
+      )
+    end
+
+    context 'ignore pattern matching node' do
+      let(:ignore_pattern) { Mutant::AST::Pattern.parse('true').from_right }
+
+      context 'on direct match' do
+        it 'returns no mutations' do
+          expect(apply).to eql(Set.new)
+        end
+      end
+
+      context 'on indirect single child match' do
+        let(:node) do
+          s(:def, :foo, s(:args), s(:true))
+        end
+
+        it 'returns no ignored mutations' do
+          expect(apply).to eql(
+            [
+              s(:def, :foo, s(:args), s(:send, nil, :raise)),
+              s(:def, :foo, s(:args), s(:zsuper))
+            ].to_set
+          )
+        end
+      end
+
+      context 'on indirect multiple child match' do
+        let(:node) do
+          s(:def, :foo, s(:args), s(:begin, s(:true), s(:false)))
+        end
+
+        it 'returns no ignored mutations' do
+          expect(apply).to eql(
+            [
+              s(:def, :foo, s(:args), s(:send, nil, :raise)),
+              s(:def, :foo, s(:args), s(:zsuper)),
+              s(:def, :foo, s(:args), s(:begin, s(:true), s(:true)))
+            ].to_set
+          )
+        end
+      end
+    end
+
+    context 'ignore pattern not matching node' do
+       let(:ignore_pattern) { Mutant::AST::Pattern.parse('false').from_right }
+
+       it 'returns no mutations' do
+         expect(apply).to eql([s(:false)].to_set)
+       end
     end
   end
 end

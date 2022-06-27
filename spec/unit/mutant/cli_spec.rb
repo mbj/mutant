@@ -319,6 +319,7 @@ RSpec.describe Mutant::CLI do
 
 
             -e, --evaluate SOURCE
+            -i, --ignore-pattern AST_PATTERN
       MESSAGE
 
       {
@@ -343,6 +344,32 @@ RSpec.describe Mutant::CLI do
           [:stdout, :write, message]
         ],
         expected_exit:   true,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      {
+        arguments:       %w[util mutation -e true -i true],
+        expected_events: [
+          [:stdout, :puts, '<cli-source>']
+        ],
+        expected_exit:   true,
+        expected_zombie: false
+      }
+    end
+
+    make do
+      {
+        arguments:       %w[util mutation -e true -i foo],
+        expected_events: [
+          [:stderr, :puts, <<~'MESSAGE'.strip]
+            Expected valid node type got: foo
+            foo
+            ^^^
+          MESSAGE
+        ],
+        expected_exit:   false,
         expected_zombie: false
       }
     end

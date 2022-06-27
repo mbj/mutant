@@ -10,7 +10,36 @@ module Mutant
       include AbstractType, Unparser::Constants
       include AST::NamedChildren, AST::NodePredicates, AST::Sexp, AST::Nodes
 
+      include anima.add(:config)
+
       TAUTOLOGY = ->(_input) { true }
+
+      REGISTRY = Registry.new(->(_) { Node::Generic })
+
+      # Lookup and invoke dedicated AST mutator
+      #
+      # @param input [Parser::AST::Node]
+      # @param parent [nil,Mutant::Mutator::Node]
+      #
+      # @return [Set<Parser::AST::Node>]
+      def self.mutate(config:, node:, parent: nil)
+        config.ignore_patterns.each do |pattern|
+          return Set.new if pattern.match?(node)
+        end
+
+        self::REGISTRY.lookup(node.type).call(
+          config: config,
+          input:  node,
+          parent: parent
+        )
+      end
+
+      def self.handle(*types)
+        types.each do |type|
+          self::REGISTRY.register(type, self)
+        end
+      end
+      private_class_method :handle
 
       # Helper to define a named child
       #
@@ -37,9 +66,13 @@ module Mutant
       alias_method :node,     :input
       alias_method :dup_node, :dup_input
 
+      def mutate(node:, parent: nil)
+        self.class.mutate(config: config, node: node, parent: parent)
+      end
+
       def mutate_child(index, &block)
         block ||= TAUTOLOGY
-        Mutator.mutate(children.fetch(index), self).each do |mutation|
+        mutate(node: children.fetch(index), parent: self).each do |mutation|
           next unless block.call(mutation)
           emit_child_update(index, mutation)
         end
@@ -96,6 +129,19 @@ module Mutant
         end
       end
 
+      def run(mutator)
+        mutator.call(
+          config: config,
+          input:  input,
+          parent: nil
+        ).each(&method(:emit))
+      end
+
+      def ignore?(node)
+        config.ignore_patterns.any? do |pattern|
+          pattern.match?(node)
+        end
+      end
     end # Node
   end # Mutator
 end # Mutant
