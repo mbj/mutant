@@ -1,4 +1,4 @@
-# Unreleased
+# v0.11.12 2022-06-27
 
 * [#1341](https://github.com/mbj/mutant/pull/1341)
 
@@ -32,7 +32,7 @@
     timeout: 10.0
   ```
 
-# v0.11.12 2022-06-20
+# v0.11.11 2022-06-20
 
 * [#1339](https://github.com/mbj/mutant/pull/1339)
 
