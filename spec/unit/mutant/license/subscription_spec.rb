@@ -114,6 +114,12 @@ RSpec.describe Mutant::License::Subscription do
       end
 
       context 'when repository is whitelisted' do
+        context 'on different casing' do
+          let(:repository) { 'github.com/MBJ/MUTANT' }
+
+          it_is_successful
+        end
+
         context 'on ssh url without protocol and without suffix' do
           it_is_successful
         end
