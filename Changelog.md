@@ -15,6 +15,12 @@
 
   The supported syntax is way [more powerful](https://github.com/mbj/mutant/blob/main/docs/ast-pattern.md) than this simple example.
 
+* [#1342](https://github.com/mbj/mutant/pull/1340)
+
+  Fix: [#1308] again.
+
+  Properly normalize repository names on OSS license check.
+
 * [#1340](https://github.com/mbj/mutant/pull/1340)
 
   Deprecate `mutation_timeout` toplevel configuration key.

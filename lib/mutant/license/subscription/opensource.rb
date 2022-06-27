@@ -18,7 +18,7 @@ module Mutant
           end
 
           def self.parse(input)
-            new(*input.split('/', 2))
+            new(*input.split('/', 2).map(&:downcase))
           end
 
           def self.parse_remote(input)
