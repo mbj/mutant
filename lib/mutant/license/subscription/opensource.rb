@@ -39,7 +39,17 @@ module Mutant
             new(match[:host], match[:path].downcase)
           end
           private_class_method :parse_url
-        end
+
+          def allow?(other)
+            other.host.eql?(host) && path_match?(other.path)
+          end
+
+        private
+
+          def path_match?(other_path)
+            path.eql?(other_path) || (path.end_with?('/*') && other_path.start_with?(path[..-2]))
+          end
+        end # Opensource
 
         def self.from_json(value)
           new(
@@ -60,7 +70,7 @@ module Mutant
       private
 
         def check_subscription(actual)
-          if (licensed & actual).any?
+          if licensed.any? { |repository| actual.any? { |other| repository.allow?(other) } }
             success
           else
             failure(licensed, actual)

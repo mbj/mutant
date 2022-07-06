@@ -1,3 +1,7 @@
+# v0.11.13 2022-06-27
+
+* Add support for org wide opensource licensing.
+
 # v0.11.12 2022-06-27
 
 * [#1341](https://github.com/mbj/mutant/pull/1341)

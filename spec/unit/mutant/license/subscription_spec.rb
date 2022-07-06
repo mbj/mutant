@@ -77,8 +77,8 @@ RSpec.describe Mutant::License::Subscription do
     end
 
     describe 'on opensource license' do
-      let(:git_remote_result) { right(git_remote)       }
-      let(:repository)        { 'github.com/mbj/mutant' }
+      let(:git_remote_result)    { right(git_remote)         }
+      let(:allowed_repositories) { %w[github.com/mbj/mutant] }
 
       let(:git_remote) do
         <<~REMOTE
@@ -91,7 +91,7 @@ RSpec.describe Mutant::License::Subscription do
         {
           'type'     => 'oss',
           'contents' => {
-            'repositories' => [repository]
+            'repositories' => allowed_repositories
           }
         }
       end
@@ -115,7 +115,45 @@ RSpec.describe Mutant::License::Subscription do
 
       context 'when repository is whitelisted' do
         context 'on different casing' do
-          let(:repository) { 'github.com/MBJ/MUTANT' }
+          let(:allowed_repositories) { %w[github.com/MBJ/MUTANT] }
+
+          it_is_successful
+        end
+
+        context 'via path pattern' do
+          let(:allowed_repositories) { %w[github.com/mbj/*] }
+
+          let(:subscription) do
+            Mutant::License::Subscription::Opensource.new(
+              [
+                Mutant::License::Subscription::Opensource::Repository.new(
+                  'github.com',
+                  'mbj/*'
+                )
+              ].to_set
+            )
+          end
+
+          it_is_successful
+        end
+
+        context 'one in many' do
+          let(:allowed_repositories) { %w[github.com/mbj/mutant github.com/mbj/unparser] }
+
+          let(:subscription) do
+            Mutant::License::Subscription::Opensource.new(
+              [
+                Mutant::License::Subscription::Opensource::Repository.new(
+                  'github.com',
+                  'mbj/mutant'
+                ),
+                Mutant::License::Subscription::Opensource::Repository.new(
+                  'github.com',
+                  'mbj/unparser'
+                )
+              ].to_set
+            )
+          end
 
           it_is_successful
         end
@@ -157,6 +195,19 @@ RSpec.describe Mutant::License::Subscription do
           it_is_successful
         end
 
+        context 'on multiple diifferent urls' do
+          let(:git_remote) do
+            <<~REMOTE
+              origin\thttps://github.com/mbj/mutant (fetch)
+              origin\thttps://github.com/mbj/mutant (push)
+              origin\thttps://github.com/mbj/unparser (fetch)
+              origin\thttps://github.com/mbj/unparser (push)
+            REMOTE
+          end
+
+          it_is_successful
+        end
+
         context 'on https url with .git suffix' do
           let(:git_remote) do
             <<~REMOTE
@@ -182,15 +233,96 @@ RSpec.describe Mutant::License::Subscription do
       end
 
       context 'when repository is not whitelisted' do
-        let(:repository) { 'github.com/mbj/unparser' }
+        context 'on different host' do
+          let(:allowed_repositories) { %w[gitlab.com/mbj/mutant] }
 
-        it_fails_with_message(<<~'MESSAGE')
-          Can not validate opensource license.
-          Licensed:
-          github.com/mbj/unparser
-          Present:
-          github.com/mbj/mutant
-        MESSAGE
+          it_fails_with_message(<<~'MESSAGE')
+            Can not validate opensource license.
+            Licensed:
+            gitlab.com/mbj/mutant
+            Present:
+            github.com/mbj/mutant
+          MESSAGE
+        end
+
+        context 'on different depository last empty' do
+          let(:allowed_repositories) { %w[github.com/a] }
+
+          let(:git_remote) do
+            <<~REMOTE
+              origin\thttps://github.com/b.git (fetch)
+              origin\thttps://github.com/b.git (push)
+            REMOTE
+          end
+
+          it_fails_with_message(<<~'MESSAGE')
+            Can not validate opensource license.
+            Licensed:
+            github.com/a
+            Present:
+            github.com/b
+          MESSAGE
+        end
+
+        context 'on different depository last chars' do
+          let(:allowed_repositories) { %w[github.com/mbj/mutanb] }
+
+          it_fails_with_message(<<~'MESSAGE')
+            Can not validate opensource license.
+            Licensed:
+            github.com/mbj/mutanb
+            Present:
+            github.com/mbj/mutant
+          MESSAGE
+        end
+
+        context 'on different depository partial overlap' do
+          let(:allowed_repositories) { %w[github.com/mb/*] }
+
+          it_fails_with_message(<<~'MESSAGE')
+            Can not validate opensource license.
+            Licensed:
+            github.com/mb/*
+            Present:
+            github.com/mbj/mutant
+          MESSAGE
+        end
+
+        context 'on different org path pattern' do
+          let(:allowed_repositories) { %w[github.com/schirp-dso/*] }
+
+          it_fails_with_message(<<~'MESSAGE')
+            Can not validate opensource license.
+            Licensed:
+            github.com/schirp-dso/*
+            Present:
+            github.com/mbj/mutant
+          MESSAGE
+        end
+
+        context 'on different org' do
+          let(:allowed_repositories) { %w[github.com/schirp-dso/mutant] }
+
+          it_fails_with_message(<<~'MESSAGE')
+            Can not validate opensource license.
+            Licensed:
+            github.com/schirp-dso/mutant
+            Present:
+            github.com/mbj/mutant
+          MESSAGE
+        end
+
+        context 'on different repo' do
+          let(:allowed_repositories) { %w[github.com/mbj/unparser] }
+
+          it_fails_with_message(<<~'MESSAGE')
+            Can not validate opensource license.
+            Licensed:
+            github.com/mbj/unparser
+            Present:
+            github.com/mbj/mutant
+          MESSAGE
+        end
       end
     end
 
