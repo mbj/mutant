@@ -42,7 +42,7 @@ module Mutant
     MUTATION_TIMEOUT_DEPRECATION = <<~'MESSAGE'
       Deprecated configuration toplevel key `mutation_timeout` found.
 
-      This key will be removed in the next mayor version.
+      This key will be removed in the next major version.
       Instead place your mutation timeout configuration under the `mutation` key
       like this:
 
