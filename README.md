@@ -127,14 +127,16 @@ I do not need any more details.
 
 For commercial use mutants pricing is subscription based.
 
-| Currency | No. Subscribers  | Duration | Cost    | Payment Methods                                       |
-| -------- | ---------------- |--------  | ------- | ----------------------------------------------------- |
-| USD      | any              | 1 month  | 90$     | Credit Card                                           |
-| USD      | any              | 1 year   | 900$    | Credit Card, ACH transfer                             |
-| USD      | >20              | custom   | custom  | Credit Card, ACH transfer, Wire transfer, custom      |
-| EUR      | any              | 1 month  | 75€     | Credit Card, SEPA Direct Debit                        |
-| EUR      | any              | 1 year   | 750€    | Credit Card, SEPA Direct Debit, SEPA Transfer         |
-| EUR      | >20              | custom   | custom  | Credit Card, SEPA Direct Debit, SEPA Transfer, custom |
+| Currency | Duration | Cost    | Payment Methods                                       |
+| -------- | -------  | ------- | ----------------------------------------------------- |
+| USD      | 1 month  | 90$     | Credit Card                                           |
+| USD      | 1 year   | 900$    | Credit Card, ACH transfer                             |
+| EUR      | 1 month  | 75€     | Credit Card, SEPA Direct Debit                        |
+| EUR      | 1 year   | 750€    | Credit Card, SEPA Direct Debit, SEPA Transfer         |
+
+Costs are **per developer using mutant on any number of repositories**.
+
+Volume licenses with custom plans are available on request.
 
 Should you want to procure a commercial mutant subscription please [mail me](mailto:mbj@schirp-dso.com?subject=Mutant%20Commercial%20License).
 
