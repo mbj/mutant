@@ -167,14 +167,50 @@ RSpec.describe Mutant::AST::Structure::Node do
     end
 
     context 'with individual fixed descendants' do
-      it 'returns self' do
-        expect(apply).to be(instance)
+      context 'when descendants are present' do
+        it 'returns self' do
+          expect(apply).to be(instance)
+        end
+
+        it 'yields the descendants' do
+          apply
+
+          expect(yields).to eql([s(:int, 1)])
+        end
       end
 
-      it 'yields the descendants' do
-        apply
+      context 'when descendant is absent' do
+        context 'and has a nil child array entry' do
+          let(:node) do
+            s(:test_type, :test_value, nil)
+          end
 
-        expect(yields).to eql([s(:int, 1)])
+          it 'returns self' do
+            expect(apply).to be(instance)
+          end
+
+          it 'does not yield the descendants' do
+            apply
+
+            expect(yields).to eql([])
+          end
+        end
+
+        context 'and is not present hin child array entry' do
+          let(:node) do
+            s(:test_type, :test_value)
+          end
+
+          it 'returns self' do
+            expect(apply).to be(instance)
+          end
+
+          it 'does not yield the descendants' do
+            apply
+
+            expect(yields).to eql([])
+          end
+        end
       end
     end
 

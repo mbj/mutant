@@ -26,7 +26,7 @@ module Mutant
           end
 
           def value(node)
-            node.children.fetch(index)
+            node.children.at(index)
           end
         end
 
