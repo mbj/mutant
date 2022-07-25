@@ -246,7 +246,7 @@ module Mutant
           type:     :class,
           fixed:    Node.fixed(
             [
-              [Node::Fixed::Descendant, :name],
+              [Node::Fixed::Attribute, :name],
               [Node::Fixed::Descendant, :superclass],
               [Node::Fixed::Descendant, :body]
             ]
