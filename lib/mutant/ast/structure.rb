@@ -387,6 +387,11 @@ module Mutant
           variable: nil
         ),
         Node.new(
+          type:     :forwarded_args,
+          fixed:    EMPTY_ARRAY,
+          variable: nil
+        ),
+        Node.new(
           type:     :for,
           fixed:    Node.fixed(
             [
