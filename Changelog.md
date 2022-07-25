@@ -1,3 +1,9 @@
+# v0.11.14 2022-07-25
+
+* [#1347](https://github.com/mbj/mutant/pull/1347/files)
+
+  Fix AST structure metadata issues.
+
 # v0.11.13 2022-06-27
 
 * Add support for org wide opensource licensing.

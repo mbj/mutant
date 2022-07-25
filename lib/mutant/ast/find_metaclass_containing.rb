@@ -22,11 +22,11 @@ module Mutant
       #
       # @api private
       def call
-        AST.find_last_path(root) do |current|
-          next unless n_sclass?(current)
+        Structure.for(root.type).each_node(root) do |current|
+          return current if n_sclass?(current) && metaclass_of?(current)
+        end
 
-          metaclass_of?(current)
-        end.last
+        nil
       end
 
     private

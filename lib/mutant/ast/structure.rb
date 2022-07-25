@@ -26,7 +26,7 @@ module Mutant
           end
 
           def value(node)
-            node.children.fetch(index)
+            node.children.at(index)
           end
         end
 
@@ -246,7 +246,7 @@ module Mutant
           type:     :class,
           fixed:    Node.fixed(
             [
-              [Node::Fixed::Descendant, :name],
+              [Node::Fixed::Attribute, :name],
               [Node::Fixed::Descendant, :superclass],
               [Node::Fixed::Descendant, :body]
             ]
@@ -384,6 +384,11 @@ module Mutant
         Node.new(
           type:     :float,
           fixed:    Node.fixed([[Node::Fixed::Attribute, :value]]),
+          variable: nil
+        ),
+        Node.new(
+          type:     :forwarded_args,
+          fixed:    EMPTY_ARRAY,
           variable: nil
         ),
         Node.new(

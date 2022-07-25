@@ -38,9 +38,11 @@ module Mutant
         end
 
         def body_has_control?
-          AST.find_last_path(body) do |node|
-            n_break?(node) || n_next?(node)
-          end.any?
+          AST::Structure.for(body.type).each_node(body) do |node|
+            return true if n_break?(node) || n_next?(node)
+          end
+
+          false
         end
 
         def mutate_body_receiver
