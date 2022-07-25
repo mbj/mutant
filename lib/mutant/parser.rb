@@ -5,13 +5,6 @@ module Mutant
   class Parser
     include Adamantium, Equalizer.new
 
-    class AST
-      include Anima.new(
-        :node,
-        :comment_associations
-      )
-    end
-
     # Initialize object
     #
     # @return [undefined]

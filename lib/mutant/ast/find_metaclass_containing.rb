@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  module AST
+  class AST
     # Given an AST, finds the sclass that directly(-ish) contains the provided
     # node.
     # This won't match arbitrarily complex structures - it only searches the
@@ -10,7 +10,7 @@ module Mutant
     # Descending into 'begin' nodes is supported because these are generated for
     # the one-line syntax class << self; def foo; end
     class FindMetaclassContaining
-      include NodePredicates, Concord.new(:root, :target), Procto
+      include NodePredicates, Concord.new(:ast, :target), Procto
 
       SCLASS_BODY_INDEX = 1
 
@@ -22,7 +22,7 @@ module Mutant
       #
       # @api private
       def call
-        Structure.for(root.type).each_node(root) do |current|
+        Structure.for(ast.node.type).each_node(ast.node) do |current|
           return current if n_sclass?(current) && metaclass_of?(current)
         end
 

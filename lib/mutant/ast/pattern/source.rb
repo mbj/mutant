@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  module AST
+  class AST
     class Pattern
       class Source
         include Anima.new(:string)

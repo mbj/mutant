@@ -30,8 +30,9 @@ module Mutant
 
         # Instance method specific evaluator
         class Evaluator < Evaluator
-          SUBJECT_CLASS = Subject::Method::Instance
-          NAME_INDEX    = 0
+          MATCH_NODE_TYPE = :def
+          NAME_INDEX      = 0
+          SUBJECT_CLASS   = Subject::Method::Instance
 
         private
 

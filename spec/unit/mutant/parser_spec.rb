@@ -38,7 +38,7 @@ RSpec.describe Mutant::Parser do
 
     it 'returns parsed source' do
       expect(subject.inspect).to eql(
-        described_class::AST.new(
+        Mutant::AST.new(
           comment_associations: expected_associations,
           node:                 s(:begin, expected_node, expected_node)
         ).inspect

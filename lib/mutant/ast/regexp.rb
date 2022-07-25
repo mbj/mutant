@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  module AST
+  class AST
     # Regexp source mapper
     module Regexp
       # Parse regex string into expression

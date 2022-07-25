@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  module AST
+  class AST
     module Regexp
       class Transformer
         # Regexp AST transformer for nodes that encode a text value

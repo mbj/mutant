@@ -22,10 +22,11 @@ module Mutant
         # Metaclass method evaluator
         class Evaluator < Evaluator
           # Terminology note: the "receiver" is the `self` in `class << self`
-          SUBJECT_CLASS         = Subject::Method::Metaclass
-          NAME_INDEX            = 0
           CONST_NAME_INDEX      = 1
+          MATCH_NODE_TYPE       = :def
+          NAME_INDEX            = 0
           SCLASS_RECEIVER_INDEX = 0
+          SUBJECT_CLASS         = Subject::Method::Metaclass
           RECEIVER_WARNING      = 'Can only match :def inside :sclass on ' \
                                   ':self or :const, got :sclass on %p ' \
                                   'unable to match'
@@ -45,7 +46,7 @@ module Mutant
           end
 
           def metaclass_containing(node)
-            AST::FindMetaclassContaining.call(ast.node, node)
+            AST::FindMetaclassContaining.call(ast, node)
           end
 
           def line?(node)
