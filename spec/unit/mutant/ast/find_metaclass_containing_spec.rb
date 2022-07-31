@@ -7,8 +7,14 @@ RSpec.describe Mutant::AST::FindMetaclassContaining do
     let(:metaclass_node) { s(:sclass, s(:self), method_node) }
     let(:method_node)    { s(:def, 'test', s(:nil))          }
 
-    let(:ast)  { metaclass_node }
-    let(:node) { method_node    }
+    let(:node) { method_node }
+
+    let(:ast) do
+      Mutant::AST.new(
+        comment_associations: [],
+        node:                 metaclass_node
+      )
+    end
 
     context 'when called without node' do
       let(:node) { nil }

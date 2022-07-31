@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  module AST
+  class AST
 
     # Helper methods to define named children
     module NamedChildren

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  module AST
+  class AST
     module Regexp
       class Transformer
         # Transformer for root nodes

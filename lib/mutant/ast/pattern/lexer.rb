@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  module AST
+  class AST
     class Pattern
       # rubocop:disable Metrics/ClassLength
       class Lexer

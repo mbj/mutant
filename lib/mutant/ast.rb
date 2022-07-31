@@ -1,41 +1,43 @@
 # frozen_string_literal: true
 
 module Mutant
-  # AST helpers
-  module AST
+  class AST
+    include Adamantium, Anima.new(
+      :node,
+      :comment_associations
+    )
 
-    # Find last node satisfying predicate (as block)
-    #
-    # @return [Parser::AST::Node]
-    #   if satisfying node is found
-    #
-    # @yield [Parser::AST::Node]
-    #
-    # @yieldreturn [Boolean]
-    #   true in case node satisfies predicate
-    #
-    # @return [nil]
-    #   otherwise
-    def self.find_last_path(node, &predicate)
-      fail ArgumentError, 'block expected' unless block_given?
-      path = []
-      walk(node, [node]) do |candidate, stack|
-        if predicate.call(candidate)
-          path = stack.dup
-        end
-      end
-      path
+    class View
+      include Adamantium, Anima.new(:node, :path)
     end
 
-    def self.walk(node, stack, &block)
-      block.call(node, stack)
+    def view(symbol)
+      type_map.fetch(symbol, EMPTY_HASH).map do |node, path|
+        View.new(node: node, path: path)
+      end
+    end
+
+  private
+
+    def type_map
+      type_map = {}
+
+      walk_path(node) do |node, path|
+        path_map = type_map[node.type] ||= {}.tap(&:compare_by_identity)
+        path_map[node] = path
+      end
+
+      type_map
+    end
+    memoize :type_map
+
+    def walk_path(node, stack = [node.type], &block)
+      block.call(node, stack.dup)
       node.children.grep(::Parser::AST::Node) do |child|
-        stack.push(child)
-        walk(child, stack, &block)
+        stack.push(child.type)
+        walk_path(child, stack, &block)
         stack.pop
       end
     end
-    private_class_method :walk
-
   end # AST
 end # Mutant

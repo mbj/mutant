@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  module AST
+  class AST
     # Groups of node types
     module Types # rubocop:disable Metrics/ModuleLength
       ASSIGNABLE_VARIABLES = Set.new(%i[ivasgn lvasgn cvasgn gvasgn]).freeze

@@ -51,11 +51,9 @@ module Mutant
         def skip?
           location = source_location
 
-          file = location&.first
-
-          if location.nil? || !file.end_with?('.rb')
+          if location.nil? || !location.first.end_with?('.rb')
             env.warn(SOURCE_LOCATION_WARNING_FORMAT % target_method)
-          elsif matched_node_path.any?(&method(:n_block?))
+          elsif matched_view&.path&.any?(&:block.public_method(:equal?))
             env.warn(CLOSURE_WARNING_FORMAT % target_method)
           end
         end
@@ -96,7 +94,7 @@ module Mutant
         end
 
         def subject
-          node = matched_node_path.last || return
+          node = matched_view&.node || return
 
           self.class::SUBJECT_CLASS.new(
             config:     subject_config(node),
@@ -113,10 +111,13 @@ module Mutant
           )
         end
 
-        def matched_node_path
-          AST.find_last_path(ast.node, &method(:match?))
+        def matched_view
+          ast
+            .view(self.class::MATCH_NODE_TYPE)
+            .select { |view| match?(view.node) }
+            .last
         end
-        memoize :matched_node_path
+        memoize :matched_view
 
         def visibility
           # This can be cleaned up once we are on >ruby-3.0

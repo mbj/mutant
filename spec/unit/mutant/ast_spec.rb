@@ -1,56 +1,42 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::AST do
-  let(:object) { described_class }
+  let(:object) { described_class.new(comment_associations: [], node: node) }
 
-  describe '.find_last_path' do
-    subject { object.find_last_path(root, &block) }
-
-    let(:root)    { s(:root, parent)             }
-    let(:child_a) { s(:child_a)                  }
-    let(:child_b) { s(:child_b)                  }
-    let(:parent)  { s(:parent, child_a, child_b) }
-
-    def path
-      subject.map(&:type)
+  describe '#view' do
+    def apply(symbol)
+      object.view(symbol)
     end
 
-    context 'when no node matches' do
-      let(:block) { ->(_) { false } }
-
-      it { should eql([]) }
+    let(:node) do
+      s(:begin, s(:int, 1), s(:int, 2), s(:int, 3))
     end
 
-    context 'when called without block' do
-      let(:block) { nil }
-
-      it 'raises error' do
-        expect { subject }.to raise_error(ArgumentError, 'block expected')
+    context 'on not matched node' do
+      it 'returns empty view' do
+        expect(apply(:send)).to eql([])
       end
     end
 
-    context 'on non Parser::AST::Node child' do
-      let(:block)   { ->(node) { fail if node.equal?(child_a) } }
-      let(:child_a) { AST::Node.new(:foo) }
-
-      it 'does not yield that node' do
-        expect(path).to eql([])
+    context 'on root node' do
+      it 'returns expected view' do
+        expect(apply(:begin)).to eql(
+          [
+            described_class::View.new(node: node, path: %i[begin])
+          ]
+        )
       end
     end
 
-    context 'when one node matches' do
-      let(:block) { ->(node) { node.equal?(child_a) } }
-
-      it 'returns the full path' do
-        expect(path).to eql(%i[root parent child_a])
-      end
-    end
-
-    context 'when two nodes match' do
-      let(:block) { ->(node) { node.equal?(child_a) || node.equal?(child_b) } }
-
-      it 'returns the last full path' do
-        expect(path).to eql(%i[root parent child_b])
+    context 'on descendant node' do
+      it 'returns expected view' do
+        expect(apply(:int)).to eql(
+          [
+            described_class::View.new(node: s(:int, 1), path: %i[begin int]),
+            described_class::View.new(node: s(:int, 2), path: %i[begin int]),
+            described_class::View.new(node: s(:int, 3), path: %i[begin int])
+          ]
+        )
       end
     end
   end

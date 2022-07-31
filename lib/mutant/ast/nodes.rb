@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  module AST
+  class AST
     # Singleton nodes
     module Nodes
       extend Sexp

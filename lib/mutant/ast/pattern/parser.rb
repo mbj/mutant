@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  module AST
+  class AST
     # rubocop:disable Metrics/ClassLength
     # rubocop:disable Metrics/MethodLength
     class Pattern

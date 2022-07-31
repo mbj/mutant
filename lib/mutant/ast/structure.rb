@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  module AST
+  class AST
     # AST Structure metadata
     # rubocop:disable Metrics/ModuleLength
     module Structure

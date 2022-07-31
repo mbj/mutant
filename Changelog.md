@@ -1,4 +1,10 @@
-# v0.11.14 2022-07-25
+# v0.11.14 2022-07-31
+
+* [#1348](https://github.com/mbj/mutant/pull/1348)
+
+  Change to improved AST matching performance. Mutant boot performance
+  is positively affected mostly on larger projects with larger AST node
+  count per file.
 
 * [#1347](https://github.com/mbj/mutant/pull/1347/files)
 
