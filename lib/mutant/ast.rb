@@ -11,25 +11,25 @@ module Mutant
       include Adamantium, Anima.new(:node, :path)
     end
 
-    def view(symbol)
-      type_map.fetch(symbol, EMPTY_HASH).map do |node, path|
+    def on_line(line)
+      line_map.fetch(line, EMPTY_HASH).map do |node, path|
         View.new(node: node, path: path)
       end
     end
 
   private
 
-    def type_map
-      type_map = {}
+    def line_map
+      line_map = {}
 
       walk_path(node) do |node, path|
-        path_map = type_map[node.type] ||= {}.tap(&:compare_by_identity)
-        path_map[node] = path
+        expression = node.location.expression || next
+        (line_map[expression.line] ||= []) << [node, path]
       end
 
-      type_map
+      line_map
     end
-    memoize :type_map
+    memoize :line_map
 
     def walk_path(node, stack = [node.type], &block)
       block.call(node, stack.dup)
