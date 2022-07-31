@@ -23,8 +23,28 @@ module Mutant
 
   private
 
+    def parse_cached(source)
+      path = "cache-#{key(source)}"
+
+      if File.exist?(path)
+        Marshal.load(File.binread(path))
+      else
+        Unparser.parse_with_comments(source).tap do |value|
+          File.binwrite(path, Marshal.dump(value))
+        end
+      end
+    end
+
+    def key(source)
+      [
+        RUBY_VERSION,
+        ::Parser::VERSION,
+        Digest::SHA256.hexdigest(source),
+      ].join('-')
+    end
+
     def parse(source)
-      node, comments = Unparser.parse_with_comments(source)
+      node, comments = parse_cached(source)
 
       AST.new(
         node:                 node,
