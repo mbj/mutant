@@ -3,38 +3,42 @@
 RSpec.describe Mutant::AST do
   let(:object) { described_class.new(comment_associations: [], node: node) }
 
-  describe '#view' do
-    def apply(symbol)
-      object.view(symbol)
+  describe '#on_line' do
+    def apply(line)
+      object.on_line(line)
     end
 
     let(:node) do
-      s(:begin, s(:int, 1), s(:int, 2), s(:int, 3))
+      Unparser.parse(<<~RUBY)
+
+        begin
+          1; 2
+        end
+      RUBY
     end
 
-    context 'on not matched node' do
+    context 'unpopulated line' do
       it 'returns empty view' do
-        expect(apply(:send)).to eql([])
+        expect(apply(1)).to eql([])
       end
     end
 
-    context 'on root node' do
+    context 'line populated with one node' do
       it 'returns expected view' do
-        expect(apply(:begin)).to eql(
+        expect(apply(2)).to eql(
           [
-            described_class::View.new(node: node, path: %i[begin])
+            described_class::View.new(node: node, path: %i[kwbegin])
           ]
         )
       end
     end
 
-    context 'on descendant node' do
+    context 'line populated with more than one' do
       it 'returns expected view' do
-        expect(apply(:int)).to eql(
+        expect(apply(3)).to eql(
           [
-            described_class::View.new(node: s(:int, 1), path: %i[begin int]),
-            described_class::View.new(node: s(:int, 2), path: %i[begin int]),
-            described_class::View.new(node: s(:int, 3), path: %i[begin int])
+            described_class::View.new(node: s(:int, 1), path: %i[kwbegin int]),
+            described_class::View.new(node: s(:int, 2), path: %i[kwbegin int])
           ]
         )
       end

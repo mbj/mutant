@@ -41,21 +41,38 @@ module Mutant
         #
         # @return [Enumerable<Subject>]
         def call
-          return EMPTY_ARRAY if skip?
-
-          [subject].compact
-        end
-
-      private
-
-        def skip?
           location = source_location
 
           if location.nil? || !location.first.end_with?('.rb')
             env.warn(SOURCE_LOCATION_WARNING_FORMAT % target_method)
-          elsif matched_view&.path&.any?(&:block.public_method(:equal?))
-            env.warn(CLOSURE_WARNING_FORMAT % target_method)
+
+            return EMPTY_ARRAY
           end
+
+          match_view
+        end
+
+      private
+
+        def match_view
+          return EMPTY_ARRAY if matched_view.nil?
+
+          if matched_view.path.any?(&:block.public_method(:equal?))
+            env.warn(CLOSURE_WARNING_FORMAT % target_method)
+
+            return EMPTY_ARRAY
+          end
+
+          [subject]
+        end
+
+        def subject
+          self.class::SUBJECT_CLASS.new(
+            config:     subject_config(matched_view.node),
+            context:    context,
+            node:       matched_view.node,
+            visibility: visibility
+          )
         end
 
         def method_name
@@ -93,17 +110,6 @@ module Mutant
           T::Private::Methods.signature_for_method(target_method)
         end
 
-        def subject
-          node = matched_view&.node || return
-
-          self.class::SUBJECT_CLASS.new(
-            config:     subject_config(node),
-            context:    context,
-            node:       node,
-            visibility: visibility
-          )
-        end
-
         def subject_config(node)
           Subject::Config.parse(
             comments: ast.comment_associations.fetch(node, []),
@@ -112,9 +118,11 @@ module Mutant
         end
 
         def matched_view
+          return if source_location.nil?
+
           ast
-            .view(self.class::MATCH_NODE_TYPE)
-            .select { |view| match?(view.node) }
+            .on_line(source_line)
+            .select { |view| view.node.type.eql?(self.class::MATCH_NODE_TYPE) && match?(view.node) }
             .last
         end
         memoize :matched_view
