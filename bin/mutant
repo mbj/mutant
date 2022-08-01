@@ -1,55 +1,64 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-trap('INT') do |status|
-  effective_status = status ? status + 128 : 128
-  exit! effective_status
-end
+module Mutant
+  # Record executable timestamp
+  @executable_timestamp = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
-require 'mutant'
+  trap('INT') do |status|
+    effective_status = status ? status + 128 : 128
+    exit! effective_status
+  end
 
-Mutant::CLI.parse(
-  arguments: ARGV,
-  world:     Mutant::WORLD
-).either(
-  ->(message) { Mutant::WORLD.stderr.puts(message); Kernel.exit(false) },
-  # rubocop:disable Metrics/BlockLength
-  lambda do |command|
-    status =
+  require 'mutant'
+
+  WORLD.record(:cli_parse) do
+    CLI.parse(
+      arguments: ARGV,
+      world:     Mutant::WORLD
+    )
+  end.either(
+    ->(message) { Mutant::WORLD.stderr.puts(message); Kernel.exit(false) },
+    # rubocop:disable Metrics/BlockLength
+    lambda do |command|
       if command.zombie?
-        $stderr.puts('Running mutant zombified!')
-        Mutant::Zombifier.call(
-          namespace:        :Zombie,
-          load_path:        $LOAD_PATH,
-          kernel:           Kernel,
-          pathname:         Pathname,
-          require_highjack: Mutant::RequireHighjack
-            .public_method(:call)
-            .to_proc
-            .curry
-            .call(Kernel),
-          root_require:     'mutant',
-          includes:         %w[
-            adamantium
-            anima
-            concord
-            equalizer
-            mprelude
-            mutant
-            unparser
-            variable
-          ]
-        )
+        command = WORLD.record(:zombify) do
+          $stderr.puts('Running mutant zombified!')
+          Zombifier.call(
+            namespace:        :Zombie,
+            load_path:        $LOAD_PATH,
+            kernel:           Kernel,
+            pathname:         Pathname,
+            require_highjack: RequireHighjack
+              .public_method(:call)
+              .to_proc
+              .curry
+              .call(Kernel),
+            root_require:     'mutant',
+            includes:         %w[
+              adamantium
+              anima
+              concord
+              equalizer
+              mprelude
+              mutant
+              unparser
+              variable
+            ]
+          )
 
-        Zombie::Mutant::CLI.parse(
-          arguments: ARGV,
-          world:     Zombie::Mutant::WORLD
-        ).from_right.call
-      else
-        command.call
+          Zombie::Mutant::CLI.parse(
+            arguments: ARGV,
+            world:     Mutant::WORLD
+          ).from_right
+        end
       end
 
-    Kernel.exit(status)
-  end
-  # rubocop:enable Metrics/BlockLength
-)
+      WORLD.record(:execute) { command.call }.tap do |status|
+        WORLD.recorder.print_profile(WORLD.stderr) if command.print_profile?
+        WORLD.kernel.exit(status)
+      end
+    end
+    # rubocop:enable Metrics/BlockLength
+  )
+end

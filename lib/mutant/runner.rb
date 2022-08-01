@@ -15,14 +15,16 @@ module Mutant
     def self.run_mutation_analysis(env)
       reporter = reporter(env)
 
-      run_driver(
-        reporter,
-        Parallel.async(env.world, mutation_test_config(env))
-      ).tap do |result|
-        reporter.report(result)
-      end
+      env
+        .record(:analysis) { run_driver(reporter, async_driver(env)) }
+        .tap { |result| env.record(:report) { reporter.report(result) } }
     end
     private_class_method :run_mutation_analysis
+
+    def self.async_driver(env)
+      Parallel.async(env.world, mutation_test_config(env))
+    end
+    private_class_method :async_driver
 
     def self.run_driver(reporter, driver)
       Signal.trap('INT') do

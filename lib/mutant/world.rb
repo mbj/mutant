@@ -19,6 +19,7 @@ module Mutant
       :pathname,
       :process,
       :random,
+      :recorder,
       :stderr,
       :stdout,
       :thread,
@@ -76,6 +77,10 @@ module Mutant
       else
         Timer::Deadline::None.new
       end
+    end
+
+    def record(name, &block)
+      recorder.record(name, &block)
     end
   end # World
 end # Mutant

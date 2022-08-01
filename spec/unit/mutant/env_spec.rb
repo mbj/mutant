@@ -247,4 +247,25 @@ RSpec.describe Mutant::Env do
       )
     end
   end
+
+  describe '#record' do
+    before do
+      allow(subject.world.recorder).to receive(:record) do |name, &block|
+        events << [name, block.call]
+      end
+    end
+
+    let(:block)  { -> { :value } }
+    let(:events) { [] }
+
+    def apply
+      subject.record(:test_segment, &block)
+    end
+
+    it 'forwards calls to configured segment recorder' do
+      apply
+
+      expect(events).to eql([%i[test_segment value]])
+    end
+  end
 end

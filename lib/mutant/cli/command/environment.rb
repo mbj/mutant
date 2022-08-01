@@ -27,8 +27,8 @@ module Mutant
         def bootstrap
           env = Env.empty(world, @config)
 
-          Config.load_config_file(env)
-            .fmap(&method(:expand))
+          env
+            .record(:config) { Config.load_config_file(env).fmap(&method(:expand)) }
             .bind { Bootstrap.call(env.with(config: @config)) }
         end
 

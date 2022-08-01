@@ -7,6 +7,8 @@ module Mutant
   # the impure world to produce an environment.
   #
   # env = config interpreted against the world
+  #
+  # rubocop:disable Metrics/ModuleLength
   module Bootstrap
     include Adamantium, Anima.new(:config, :parser, :world)
 
@@ -30,66 +32,94 @@ module Mutant
     #
     # rubocop:disable Metrics/MethodLength
     def self.call(env)
-      env = load_hooks(env)
-        .tap(&method(:infect))
-        .with(matchable_scopes: matchable_scopes(env))
+      env.record(:bootstrap) do
+        env = load_hooks(env)
+          .tap(&method(:infect))
+          .with(matchable_scopes: matchable_scopes(env))
 
-      subjects = start_subject(env, Matcher.from_config(env.config.matcher).call(env))
+        matched_subjects = env.record(:subject_match) do
+          Matcher.from_config(env.config.matcher).call(env)
+        end
 
-      Integration.setup(env).fmap do |integration|
-        env.with(
-          integration: integration,
-          mutations:   subjects.flat_map(&:mutations),
-          selector:    Selector::Expression.new(integration),
-          subjects:    subjects
-        )
+        selected_subjects = subject_select(env, matched_subjects)
+
+        mutations = env.record(:mutation_generate) do
+          selected_subjects.flat_map(&:mutations)
+        end
+
+        Integration.setup(env).fmap do |integration|
+          env.with(
+            integration: integration,
+            mutations:   mutations,
+            selector:    Selector::Expression.new(integration),
+            subjects:    selected_subjects
+          )
+        end
       end
     end
     # rubocop:enable Metrics/MethodLength
 
     def self.load_hooks(env)
-      env.with(hooks: Hooks.load_config(env.config))
+      env.record(__method__) do
+        env.with(hooks: Hooks.load_config(env.config))
+      end
     end
     private_class_method :load_hooks
 
-    def self.start_subject(env, subjects)
-      start_expressions = env.config.matcher.start_expressions
+    def self.subject_select(env, subjects)
+      env.record(__method__) do
+        start_expressions = env.config.matcher.start_expressions
 
-      return subjects if start_expressions.empty?
+        return subjects if start_expressions.empty?
 
-      subjects.drop_while do |subject|
-        start_expressions.none? do |expression|
-          expression.prefix?(subject.expression)
+        subjects.drop_while do |subject|
+          start_expressions.none? do |expression|
+            expression.prefix?(subject.expression)
+          end
         end
       end
     end
-    private_class_method :start_subject
+    private_class_method :subject_select
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def self.infect(env)
-      config, hooks, world = env.config, env.hooks, env.world
+      env.record(__method__) do
+        config, hooks, world = env.config, env.hooks, env.world
 
-      hooks.run(:env_infection_pre, env)
+        env.record(:hooks_env_infection_pre) do
+          hooks.run(:env_infection_pre, env)
+        end
 
-      config.environment_variables.each do |key, value|
-        world.environment_variables[key] = value
+        env.record(:require_target) do
+          config.environment_variables.each do |key, value|
+            world.environment_variables[key] = value
+          end
+
+          config.includes.each(&world.load_path.public_method(:<<))
+          config.requires.each(&world.kernel.public_method(:require))
+        end
+
+        env.record(:hooks_env_infection_post) do
+          hooks.run(:env_infection_post, env)
+        end
       end
-
-      config.includes.each(&world.load_path.public_method(:<<))
-      config.requires.each(&world.kernel.public_method(:require))
-
-      hooks.run(:env_infection_post, env)
     end
     private_class_method :infect
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
 
     def self.matchable_scopes(env)
-      config = env.config
+      env.record(__method__) do
+        config = env.config
 
-      scopes = env.world.object_space.each_object(Module).each_with_object([]) do |scope, aggregate|
-        expression = expression(config.reporter, config.expression_parser, scope) || next
-        aggregate << Scope.new(scope, expression)
+        scopes = env.world.object_space.each_object(Module).each_with_object([]) do |scope, aggregate|
+          expression = expression(config.reporter, config.expression_parser, scope) || next
+          aggregate << Scope.new(scope, expression)
+        end
+
+        scopes.sort_by { |scope| scope.expression.syntax }
       end
-
-      scopes.sort_by { |scope| scope.expression.syntax }
     end
     private_class_method :matchable_scopes
 
@@ -132,4 +162,5 @@ module Mutant
     end
     private_class_method :semantics_warning
   end # Bootstrap
+  # rubocop:enable Metrics/ModuleLength
 end # Mutant

@@ -23,6 +23,37 @@ RSpec.describe Mutant::World do
     end
   end
 
+  describe '#record' do
+    subject do
+      super().with(
+        recorder: recorder
+      )
+    end
+
+    def apply
+      subject.record(name, &block)
+    end
+
+    let(:block)  { -> { result }           }
+    let(:name)   { :test_name              }
+    let(:result) { instance_double(Object) }
+
+    let(:recorder) do
+      instance_double(Mutant::Segment::Recorder)
+    end
+
+    before do
+      allow(recorder).to receive(:record) do |observed_name, &block|
+        expect(observed_name).to be(name)
+        block.call
+      end
+    end
+
+    it 'records segment' do
+      expect(apply).to be(result)
+    end
+  end
+
   describe '#capture_stdout' do
     def apply
       subject.capture_stdout(command)

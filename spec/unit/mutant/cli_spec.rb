@@ -4,6 +4,7 @@ RSpec.describe Mutant::CLI do
   describe '.parse' do
     let(:env_config)              { Mutant::Config::DEFAULT.with(jobs: 4)     }
     let(:events)                  { []                                        }
+    let(:expected_print_profile)  { false                                     }
     let(:expected_zombie)         { false                                     }
     let(:kernel)                  { class_double(Kernel)                      }
     let(:stderr)                  { instance_double(IO, :stderr, tty?: false) }
@@ -13,10 +14,11 @@ RSpec.describe Mutant::CLI do
     let(:world) do
       instance_double(
         Mutant::World,
-        kernel: kernel,
-        stderr: stderr,
-        stdout: stdout,
-        timer:  timer
+        kernel:   kernel,
+        recorder: instance_double(Mutant::Segment::Recorder),
+        stderr:   stderr,
+        stdout:   stdout,
+        timer:    timer
       )
     end
 
@@ -60,6 +62,10 @@ RSpec.describe Mutant::CLI do
         expect(apply.from_right.call).to be(expected_exit)
       end
 
+      it 'sets expected print_profile flag' do
+        expect(apply.from_right.print_profile?).to be(expected_print_profile)
+      end
+
       it 'sets expected zombie flag' do
         expect(apply.from_right.zombie?).to be(expected_zombie)
       end
@@ -82,7 +88,13 @@ RSpec.describe Mutant::CLI do
 
     @test_klass =
       Class.new do
-        include Unparser::Anima.new(:arguments, :expected_exit, :expected_events, :expected_zombie)
+        include Unparser::Anima.new(
+          :arguments,
+          :expected_events,
+          :expected_exit,
+          :expected_print_profile,
+          :expected_zombie
+        )
       end
 
     def self.make
@@ -101,6 +113,7 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --profile                    Profile mutant execution
                 --zombie                     Run mutant zombified
 
         Available subcommands:
@@ -158,10 +171,11 @@ RSpec.describe Mutant::CLI do
       message = "#{main_body}\n"
 
       {
-        arguments:       %w[--help],
-        expected_events: [[:stdout, :puts, message]],
-        expected_exit:   true,
-        expected_zombie: false
+        arguments:              %w[--help],
+        expected_events:        [[:stdout, :puts, message]],
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        false
       }
     end
 
@@ -169,19 +183,21 @@ RSpec.describe Mutant::CLI do
       message = "#{main_body}\n"
 
       {
-        arguments:       %w[--zombie --help],
-        expected_events: [[:stdout, :puts, message]],
-        expected_exit:   true,
-        expected_zombie: true
+        arguments:              %w[--zombie --help],
+        expected_events:        [[:stdout, :puts, message]],
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        true
       }
     end
 
     make do
       {
-        arguments:       %w[--version],
-        expected_events: [[:stdout, :puts, "mutant-#{Mutant::VERSION}"]],
-        expected_exit:   true,
-        expected_zombie: false
+        arguments:              %w[--version],
+        expected_events:        [[:stdout, :puts, "mutant-#{Mutant::VERSION}"]],
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        false
       }
     end
 
@@ -199,6 +215,7 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --profile                    Profile mutant execution
                 --zombie                     Run mutant zombified
 
         Available subcommands:
@@ -236,14 +253,16 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --profile                    Profile mutant execution
                 --zombie                     Run mutant zombified
       MESSAGE
 
       {
-        arguments:       %w[subscription show --help],
-        expected_events: [[:stdout, :puts, message]],
-        expected_exit:   true,
-        expected_zombie: false
+        arguments:              %w[subscription show --help],
+        expected_events:        [[:stdout, :puts, message]],
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        false
       }
     end
 
@@ -259,6 +278,7 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --profile                    Profile mutant execution
                 --zombie                     Run mutant zombified
 
 
@@ -285,10 +305,11 @@ RSpec.describe Mutant::CLI do
       MESSAGE
 
       {
-        arguments:       %w[run --help],
-        expected_events: [[:stdout, :puts, message]],
-        expected_exit:   true,
-        expected_zombie: false
+        arguments:              %w[run --help],
+        expected_events:        [[:stdout, :puts, message]],
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        false
       }
     end
 
@@ -304,6 +325,7 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --profile                    Profile mutant execution
                 --zombie                     Run mutant zombified
 
 
@@ -330,10 +352,58 @@ RSpec.describe Mutant::CLI do
       MESSAGE
 
       {
-        arguments:       %w[--zombie run --help],
-        expected_events: [[:stdout, :puts, message]],
-        expected_exit:   true,
-        expected_zombie: true
+        arguments:              %w[--profile run --help],
+        expected_events:        [[:stdout, :puts, message]],
+        expected_exit:          true,
+        expected_print_profile: true,
+        expected_zombie:        false
+      }
+    end
+
+    make do
+      message = <<~MESSAGE
+        usage: mutant run [options]
+
+        Summary: Run code analysis
+
+        mutant version: #{Mutant::VERSION}
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+                --profile                    Profile mutant execution
+                --zombie                     Run mutant zombified
+
+
+        Environment:
+            -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
+            -r, --require NAME               Require file with NAME
+                --env KEY=VALUE              Set environment variable
+
+
+        Runner:
+                --fail-fast                  Fail fast
+            -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
+            -t, --mutation-timeout NUMBER    Per mutation analysis timeout
+
+
+        Integration:
+                --use INTEGRATION            Use INTEGRATION to kill mutations
+
+
+        Matcher:
+                --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
+                --start-subject EXPRESSION   Start mutation testing at a specific subject
+                --since REVISION             Only select subjects touched since REVISION
+      MESSAGE
+
+      {
+        arguments:              %w[--zombie run --help],
+        expected_events:        [[:stdout, :puts, message]],
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        true
       }
     end
 
@@ -349,6 +419,7 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --profile                    Profile mutant execution
                 --zombie                     Run mutant zombified
 
         Available subcommands:
@@ -357,10 +428,11 @@ RSpec.describe Mutant::CLI do
       MESSAGE
 
       {
-        arguments:       %w[util --help],
-        expected_events: [[:stdout, :puts, message]],
-        expected_exit:   true,
-        expected_zombie: false
+        arguments:              %w[util --help],
+        expected_events:        [[:stdout, :puts, message]],
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        false
       }
     end
 
@@ -376,6 +448,7 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --profile                    Profile mutant execution
                 --zombie                     Run mutant zombified
 
 
@@ -384,10 +457,11 @@ RSpec.describe Mutant::CLI do
       MESSAGE
 
       {
-        arguments:       %w[util mutation --help],
-        expected_events: [[:stdout, :puts, message]],
-        expected_exit:   true,
-        expected_zombie: false
+        arguments:              %w[util mutation --help],
+        expected_events:        [[:stdout, :puts, message]],
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        false
       }
     end
 
@@ -399,39 +473,42 @@ RSpec.describe Mutant::CLI do
       MESSAGE
 
       {
-        arguments:       %w[util mutation -e true],
-        expected_events: [
+        arguments:              %w[util mutation -e true],
+        expected_events:        [
           [:stdout, :puts, '<cli-source>'],
           [:stdout, :write, message]
         ],
-        expected_exit:   true,
-        expected_zombie: false
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        false
       }
     end
 
     make do
       {
-        arguments:       %w[util mutation -e true -i true],
-        expected_events: [
+        arguments:              %w[util mutation -e true -i true],
+        expected_events:        [
           [:stdout, :puts, '<cli-source>']
         ],
-        expected_exit:   true,
-        expected_zombie: false
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        false
       }
     end
 
     make do
       {
-        arguments:       %w[util mutation -e true -i foo],
-        expected_events: [
+        arguments:              %w[util mutation -e true -i foo],
+        expected_events:        [
           [:stderr, :puts, <<~'MESSAGE'.strip]
             Expected valid node type got: foo
             foo
             ^^^
           MESSAGE
         ],
-        expected_exit:   false,
-        expected_zombie: false
+        expected_exit:          false,
+        expected_print_profile: false,
+        expected_zombie:        false
       }
     end
 
@@ -443,13 +520,14 @@ RSpec.describe Mutant::CLI do
       MESSAGE
 
       {
-        arguments:       %w[util mutation test_app/simple.rb],
-        expected_events: [
+        arguments:              %w[util mutation test_app/simple.rb],
+        expected_events:        [
           [:stdout, :puts, 'file:test_app/simple.rb'],
           [:stdout, :write, message]
         ],
-        expected_exit:   true,
-        expected_zombie: false
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        false
       }
     end
 
@@ -612,6 +690,11 @@ RSpec.describe Mutant::CLI do
           file_config_result
         end
 
+        allow(world).to receive(:record) do |name, &block|
+          events << [:record, name]
+          block.call
+        end
+
         allow(Mutant::Bootstrap).to receive(:call) do |env|
           events << [:bootstrap, env.inspect]
           bootstrap_result
@@ -650,6 +733,10 @@ RSpec.describe Mutant::CLI do
 
         let(:expected_events) do
           [
+            %i[
+              record
+              config
+            ],
             [
               :load_config_file,
               Mutant::Env.empty(world, load_config_file_config).inspect
@@ -676,6 +763,10 @@ RSpec.describe Mutant::CLI do
 
         let(:expected_events) do
           [
+            %i[
+              record
+              config
+            ],
             [
               :load_config_file,
               Mutant::Env.empty(world, load_config_file_config).inspect
@@ -716,6 +807,10 @@ RSpec.describe Mutant::CLI do
 
         let(:expected_events) do
           [
+            %i[
+              record
+              config
+            ],
             [
               :load_config_file,
               Mutant::Env.empty(world, load_config_file_config).inspect
@@ -767,6 +862,10 @@ RSpec.describe Mutant::CLI do
 
         let(:expected_events) do
           [
+            %i[
+              record
+              config
+            ],
             [
               :load_config_file,
               Mutant::Env.empty(world, load_config_file_config).inspect
@@ -814,6 +913,10 @@ RSpec.describe Mutant::CLI do
         let(:expected_events) do
           [
             license_validation_event,
+            %i[
+              record
+              config
+            ],
             [
               :load_config_file,
               Mutant::Env.empty(world, load_config_file_config).inspect

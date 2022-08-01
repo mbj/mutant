@@ -57,6 +57,7 @@ RSpec.describe Mutant::Bootstrap do
       load_path:             load_path,
       object_space:          object_space,
       pathname:              Pathname,
+      recorder:              instance_double(Mutant::Segment::Recorder),
       timer:                 timer
     )
   end
@@ -72,15 +73,45 @@ RSpec.describe Mutant::Bootstrap do
   let(:raw_expectations) do
     [
       {
+        receiver:  world,
+        selector:  :record,
+        arguments: [:bootstrap],
+        reaction:  { yields: [] }
+      },
+      {
+        receiver:  world,
+        selector:  :record,
+        arguments: [:load_hooks],
+        reaction:  { yields: [] }
+      },
+      {
         receiver:  Mutant::Hooks,
         selector:  :load_config,
         arguments: [config],
         reaction:  { return: hooks }
       },
       {
+        receiver:  world,
+        selector:  :record,
+        arguments: [:infect],
+        reaction:  { yields: [] }
+      },
+      {
+        receiver:  world,
+        selector:  :record,
+        arguments: [:hooks_env_infection_pre],
+        reaction:  { yields: [] }
+      },
+      {
         receiver:  hooks,
         selector:  :run,
         arguments: [:env_infection_pre, env_initial]
+      },
+      {
+        receiver:  world,
+        selector:  :record,
+        arguments: [:require_target],
+        reaction:  { yields: [] }
       },
       {
         receiver:  world.environment_variables,
@@ -108,9 +139,21 @@ RSpec.describe Mutant::Bootstrap do
         arguments: %w[require-b]
       },
       {
+        receiver:  world,
+        selector:  :record,
+        arguments: [:hooks_env_infection_post],
+        reaction:  { yields: [] }
+      },
+      {
         receiver:  hooks,
         selector:  :run,
         arguments: [:env_infection_post, env_initial]
+      },
+      {
+        receiver:  world,
+        selector:  :record,
+        arguments: [:matchable_scopes],
+        reaction:  { yields: [] }
       },
       {
         receiver:  object_space,
@@ -119,6 +162,24 @@ RSpec.describe Mutant::Bootstrap do
         reaction:  { return: object_space_modules.each }
       },
       *match_warnings,
+      {
+        receiver:  world,
+        selector:  :record,
+        arguments: [:subject_match],
+        reaction:  { yields: [] }
+      },
+      {
+        receiver:  world,
+        selector:  :record,
+        arguments: [:subject_select],
+        reaction:  { yields: [] }
+      },
+      {
+        receiver:  world,
+        selector:  :record,
+        arguments: [:mutation_generate],
+        reaction:  { yields: [] }
+      },
       {
         receiver:  Mutant::Integration,
         selector:  :setup,
