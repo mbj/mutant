@@ -18,7 +18,10 @@ module Mutant
     #
     # @return [AST::Node]
     def call(path)
-      @cache[path] ||= parse(path.read)
+      @cache[path] ||= begin
+        $stderr.puts "Parsing: #{path}"
+        parse(path.read)
+      end
     end
 
   private
