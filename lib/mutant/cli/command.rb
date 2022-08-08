@@ -4,7 +4,7 @@ module Mutant
   module CLI
     # rubocop:disable Metrics/ClassLength
     class Command
-      include AbstractType, Anima.new(:world, :main, :parent, :arguments)
+      include AbstractType, Anima.new(:world, :main, :parent)
 
       OPTIONS     = [].freeze
       SUBCOMMANDS = [].freeze
@@ -28,8 +28,8 @@ module Mutant
       # Parse command
       #
       # @return [Command]
-      def self.parse(**attributes)
-        new(main: nil, parent: nil, **attributes).__send__(:parse)
+      def self.parse(arguments:, parent: nil, world:)
+        new(main: nil, parent: parent, world: world).__send__(:parse, arguments)
       end
 
       # Command name
@@ -114,7 +114,7 @@ module Mutant
         end
       end
 
-      def parse
+      def parse(arguments)
         Either
           .wrap_error(OptionParser::InvalidOption) { parser.order(arguments) }
           .lmap(&method(:with_help))
@@ -176,7 +176,7 @@ module Mutant
           Either::Left.new(with_help('Missing required subcommand!'))
         else
           find_command(command_name).bind do |command|
-            command.parse(**to_h, parent: self, arguments: arguments)
+            command.parse(world: world, parent: self, arguments: arguments)
           end
         end
       end
