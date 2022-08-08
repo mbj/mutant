@@ -6,8 +6,6 @@ module Mutant
     class Command
       include AbstractType, Anima.new(:world, :main, :parent, :arguments)
 
-      include Equalizer.new(:parent, :arguments)
-
       OPTIONS     = [].freeze
       SUBCOMMANDS = [].freeze
 
