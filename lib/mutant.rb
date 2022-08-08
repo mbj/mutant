@@ -291,8 +291,7 @@ module Mutant
       matcher:               Matcher::Config::DEFAULT,
       mutation:              Mutation::Config::DEFAULT,
       reporter:              Reporter::CLI.build(WORLD.stdout),
-      requires:              EMPTY_ARRAY,
-      zombie:                false
+      requires:              EMPTY_ARRAY
     )
   end # Config
 

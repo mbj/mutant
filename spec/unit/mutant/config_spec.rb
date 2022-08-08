@@ -194,12 +194,6 @@ RSpec.describe Mutant::Config do
       include_examples 'descendant merge'
     end
 
-    context 'merging zombie' do
-      let(:key) { :zombie }
-
-      include_examples 'sticky boolean'
-    end
-
     context 'merging fail fast' do
       let(:key) { :fail_fast }
 

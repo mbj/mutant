@@ -21,11 +21,10 @@ module Mutant
       :matcher,
       :mutation,
       :reporter,
-      :requires,
-      :zombie
+      :requires
     )
 
-    %i[fail_fast zombie].each do |name|
+    %i[fail_fast].each do |name|
       define_method(:"#{name}?") { public_send(name) }
     end
 
@@ -74,8 +73,7 @@ module Mutant
         jobs:                  other.jobs || jobs,
         matcher:               matcher.merge(other.matcher),
         mutation:              mutation.merge(other.mutation),
-        requires:              requires + other.requires,
-        zombie:                zombie || other.zombie
+        requires:              requires + other.requires
       )
     end
     # rubocop:enable Metrics/AbcSize
