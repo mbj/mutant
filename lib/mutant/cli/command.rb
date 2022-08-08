@@ -16,15 +16,6 @@ module Mutant
         define_method(:add_officious) {}
       end # OptionParser
 
-      class FailParse < self
-        include Concord.new(:world, :message)
-
-        def call
-          world.stderr.puts(message)
-          false
-        end
-      end
-
       # Parse command
       #
       # @return [Command]
