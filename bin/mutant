@@ -8,43 +8,48 @@ end
 
 require 'mutant'
 
-command = Mutant::CLI.parse(
+Mutant::CLI.parse(
   arguments: ARGV,
   world:     Mutant::WORLD
-)
+).either(
+  ->(message) { Mutant::WORLD.stderr.puts(message); Kernel.exit(false) },
+  # rubocop:disable Metrics/BlockLength
+  lambda do |command|
+    status =
+      if command.zombie?
+        $stderr.puts('Running mutant zombified!')
+        Mutant::Zombifier.call(
+          namespace:        :Zombie,
+          load_path:        $LOAD_PATH,
+          kernel:           Kernel,
+          pathname:         Pathname,
+          require_highjack: Mutant::RequireHighjack
+            .public_method(:call)
+            .to_proc
+            .curry
+            .call(Kernel),
+          root_require:     'mutant',
+          includes:         %w[
+            adamantium
+            anima
+            concord
+            equalizer
+            mprelude
+            mutant
+            unparser
+            variable
+          ]
+        )
 
-status =
-  if command.zombie?
-    $stderr.puts('Running mutant zombified!')
-    Mutant::Zombifier.call(
-      namespace:        :Zombie,
-      load_path:        $LOAD_PATH,
-      kernel:           Kernel,
-      pathname:         Pathname,
-      require_highjack: Mutant::RequireHighjack
-        .public_method(:call)
-        .to_proc
-        .curry
-        .call(Kernel),
-      root_require:     'mutant',
-      includes:         %w[
-        adamantium
-        anima
-        concord
-        equalizer
-        mprelude
-        mutant
-        unparser
-        variable
-      ]
-    )
+        Zombie::Mutant::CLI.parse(
+          arguments: ARGV,
+          world:     Zombie::Mutant::WORLD
+        ).from_right.call
+      else
+        command.call
+      end
 
-    Zombie::Mutant::CLI.parse(
-      arguments: ARGV,
-      world:     Zombie::Mutant::WORLD
-    ).call
-  else
-    command.call
+    Kernel.exit(status)
   end
-
-Kernel.exit(status)
+  # rubocop:enable Metrics/BlockLength
+)

@@ -30,13 +30,6 @@ module Mutant
             ===============
           MESSAGE
 
-          # Test if command needs to be executed in zombie environment
-          #
-          # @return [Bool]
-          def zombie?
-            @config.zombie
-          end
-
         private
 
           def action

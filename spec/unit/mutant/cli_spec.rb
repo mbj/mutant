@@ -4,7 +4,7 @@ RSpec.describe Mutant::CLI do
   describe '.parse' do
     let(:env_config)              { Mutant::Config::DEFAULT.with(jobs: 4)     }
     let(:events)                  { []                                        }
-    let(:expect_zombie)           { false                                     }
+    let(:expected_zombie)         { false                                     }
     let(:kernel)                  { class_double(Kernel)                      }
     let(:load_config_file_config) { Mutant::Config::DEFAULT                   }
     let(:stderr)                  { instance_double(IO, :stderr, tty?: false) }
@@ -46,17 +46,17 @@ RSpec.describe Mutant::CLI do
 
     shared_examples 'CLI run' do
       it 'performs expected events' do
-        apply.call
+        apply.from_right.call
 
         expect(YAML.dump(events)).to eql(YAML.dump(expected_events))
       end
 
       it 'exits with expected value' do
-        expect(apply.call).to be(expected_exit)
+        expect(apply.from_right.call).to be(expected_exit)
       end
 
       it 'sets expected zombie flag' do
-        expect(apply.zombie?).to be(expect_zombie)
+        expect(apply.from_right.zombie?).to be(expected_zombie)
       end
     end
 
@@ -96,6 +96,7 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --zombie                     Run mutant zombified
 
         Available subcommands:
 
@@ -106,49 +107,46 @@ RSpec.describe Mutant::CLI do
       MESSAGE
     end
 
-    make do
+    context 'empty arguments' do
       message = <<~MESSAGE
         mutant: Missing required subcommand!
 
         #{main_body}
       MESSAGE
 
-      {
-        arguments:       %w[],
-        expected_events: [[:stderr, :puts, message]],
-        expected_exit:   false,
-        expected_zombie: false
-      }
+      let(:arguments) { [] }
+
+      it 'returns expected message' do
+        expect(apply).to eql(left(message))
+      end
     end
 
-    make do
+    context 'unknown subcommand' do
       message = <<~MESSAGE
         mutant: Cannot find subcommand "unknown-subcommand"
 
         #{main_body}
       MESSAGE
 
-      {
-        arguments:       %w[unknown-subcommand],
-        expected_events: [[:stderr, :puts, message]],
-        expected_exit:   false,
-        expected_zombie: false
-      }
+      let(:arguments) { %w[unknown-subcommand] }
+
+      it 'returns expected message' do
+        expect(apply).to eql(left(message))
+      end
     end
 
-    make do
+    context 'unknown subcommand' do
       message = <<~MESSAGE
         mutant: invalid option: --unknown-option
 
         #{main_body}
       MESSAGE
 
-      {
-        arguments:       %w[--unknown-option foo],
-        expected_events: [[:stderr, :puts, message]],
-        expected_exit:   false,
-        expected_zombie: false
-      }
+      let(:arguments) { %w[--unknown-option foo] }
+
+      it 'returns expected message' do
+        expect(apply).to eql(left(message))
+      end
     end
 
     make do
@@ -163,6 +161,17 @@ RSpec.describe Mutant::CLI do
     end
 
     make do
+      message = "#{main_body}\n"
+
+      {
+        arguments:       %w[--zombie --help],
+        expected_events: [[:stdout, :puts, message]],
+        expected_exit:   true,
+        expected_zombie: true
+      }
+    end
+
+    make do
       {
         arguments:       %w[--version],
         expected_events: [[:stdout, :puts, "mutant-#{Mutant::VERSION}"]],
@@ -171,7 +180,7 @@ RSpec.describe Mutant::CLI do
       }
     end
 
-    make do
+    context 'missing required subcommand' do
       message = <<~MESSAGE
         mutant subscription: Missing required subcommand!
 
@@ -185,6 +194,7 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --zombie                     Run mutant zombified
 
         Available subcommands:
 
@@ -192,23 +202,21 @@ RSpec.describe Mutant::CLI do
         test - Silently validates subscription, exits accordingly
       MESSAGE
 
-      {
-        arguments:       %w[subscription],
-        expected_events: [[:stderr, :puts, message]],
-        expected_exit:   false,
-        expected_zombie: false
-      }
+      let(:arguments) { %w[subscription] }
+
+      it 'returns expected message' do
+        expect(apply).to eql(left(message))
+      end
     end
 
-    make do
+    context 'unexpected extra argument' do
       message = 'mutant subscription show: Does not expect extra arguments'
 
-      {
-        arguments:       %w[subscription show extra-argument],
-        expected_events: [[:stderr, :puts, message]],
-        expected_exit:   false,
-        expected_zombie: false
-      }
+      let(:arguments) { %w[subscription show extra-argument] }
+
+      it 'returns expected message' do
+        expect(apply).to eql(left(message))
+      end
     end
 
     make do
@@ -223,6 +231,7 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --zombie                     Run mutant zombified
       MESSAGE
 
       {
@@ -245,10 +254,10 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --zombie                     Run mutant zombified
 
 
         Environment:
-                --zombie                     Run mutant zombified
             -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
             -r, --require NAME               Require file with NAME
                 --env KEY=VALUE              Set environment variable
@@ -280,6 +289,51 @@ RSpec.describe Mutant::CLI do
 
     make do
       message = <<~MESSAGE
+        usage: mutant run [options]
+
+        Summary: Run code analysis
+
+        mutant version: #{Mutant::VERSION}
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+                --zombie                     Run mutant zombified
+
+
+        Environment:
+            -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
+            -r, --require NAME               Require file with NAME
+                --env KEY=VALUE              Set environment variable
+
+
+        Runner:
+                --fail-fast                  Fail fast
+            -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
+            -t, --mutation-timeout NUMBER    Per mutation analysis timeout
+
+
+        Integration:
+                --use INTEGRATION            Use INTEGRATION to kill mutations
+
+
+        Matcher:
+                --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
+                --start-subject EXPRESSION   Start mutation testing at a specific subject
+                --since REVISION             Only select subjects touched since REVISION
+      MESSAGE
+
+      {
+        arguments:       %w[--zombie run --help],
+        expected_events: [[:stdout, :puts, message]],
+        expected_exit:   true,
+        expected_zombie: true
+      }
+    end
+
+    make do
+      message = <<~MESSAGE
         usage: mutant util <mutation> [options]
 
         Summary: Utility subcommands
@@ -290,6 +344,7 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --zombie                     Run mutant zombified
 
         Available subcommands:
 
@@ -316,6 +371,7 @@ RSpec.describe Mutant::CLI do
 
                 --help                       Print help
                 --version                    Print mutants version
+                --zombie                     Run mutant zombified
 
 
             -e, --evaluate SOURCE
@@ -392,25 +448,20 @@ RSpec.describe Mutant::CLI do
       }
     end
 
-    make do
-      {
-        arguments:       %w[util mutation] + ["\0"],
-        expected_events: [
-          [:stderr, :puts, 'pathname contains null byte']
-        ],
-        expected_exit:   false,
-        expected_zombie: false
-      }
+    context 'pathname with null bytes' do
+      let(:arguments) { %w[util mutation] + ["\0"] }
+
+      it 'returns expected message' do
+        expect(apply).to eql(left('pathname contains null byte'))
+      end
     end
 
-    make do
-      {
-        arguments:       %w[util mutation does-not-exist.rb],
-        expected_events: [[:stderr, :puts,
-                           'Cannot read file: No such file or directory @ rb_sysopen - does-not-exist.rb']],
-        expected_exit:   false,
-        expected_zombie: false
-      }
+    context 'cannot open config file' do
+      let(:arguments) { %w[util mutation does-not-exist.rb] }
+
+      it 'returns expected message' do
+        expect(apply).to eql(left('Cannot read file: No such file or directory @ rb_sysopen - does-not-exist.rb'))
+      end
     end
 
     @tests.each do |example|
@@ -544,15 +595,10 @@ RSpec.describe Mutant::CLI do
 
       context 'with invalid expressions' do
         let(:arguments)     { super() + [''] }
-        let(:expected_exit) { false          }
 
-        let(:expected_events) do
-          [
-            [:stderr, :puts, 'Expression: "" is invalid']
-          ]
+        it 'returns expected message' do
+          expect(apply).to eql(left('Expression: "" is invalid'))
         end
-
-        include_examples 'CLI run'
       end
 
       before do
@@ -1076,15 +1122,6 @@ RSpec.describe Mutant::CLI do
           let(:bootstrap_config) do
             super().with(mutation: super().mutation.with(timeout: 10.0))
           end
-
-          include_examples 'CLI run'
-        end
-
-        context 'with --zombie flag' do
-          let(:arguments)               { super() + %w[--zombie]     }
-          let(:bootstrap_config)        { super().with(zombie: true) }
-          let(:expect_zombie)           { true                       }
-          let(:load_config_file_config) { super().with(zombie: true) }
 
           include_examples 'CLI run'
         end

@@ -4,9 +4,7 @@ module Mutant
   module CLI
     # rubocop:disable Metrics/ClassLength
     class Command
-      include AbstractType, Anima.new(:world, :main, :parent, :arguments)
-
-      include Equalizer.new(:parent, :arguments)
+      include AbstractType, Anima.new(:world, :main, :parent, :zombie)
 
       OPTIONS     = [].freeze
       SUBCOMMANDS = [].freeze
@@ -18,21 +16,20 @@ module Mutant
         define_method(:add_officious) {}
       end # OptionParser
 
-      class FailParse < self
-        include Concord.new(:world, :message)
-
-        def call
-          world.stderr.puts(message)
-          false
-        end
-      end
-
       # Parse command
       #
       # @return [Command]
-      def self.parse(**attributes)
-        new(main: nil, parent: nil, **attributes).__send__(:parse)
+      #
+      # rubocop:disable Metrics/ParameterLists
+      def self.parse(arguments:, parent: nil, world:, zombie: false)
+        new(
+          main:   nil,
+          parent: parent,
+          world:  world,
+          zombie: zombie
+        ).__send__(:parse, arguments)
       end
+      # rubocop:enable Metrics/ParameterLists
 
       # Command name
       #
@@ -62,12 +59,7 @@ module Mutant
         [*parent&.full_name, self.class.command_name].join(' ')
       end
 
-      # Test if command needs to be executed in zombie environment
-      #
-      # @return [Bool]
-      def zombie?
-        false
-      end
+      alias_method :zombie?, :zombie
 
       abstract_method :action
 
@@ -116,7 +108,7 @@ module Mutant
         end
       end
 
-      def parse
+      def parse(arguments)
         Either
           .wrap_error(OptionParser::InvalidOption) { parser.order(arguments) }
           .lmap(&method(:with_help))
@@ -129,6 +121,7 @@ module Mutant
         parser.separator(nil)
       end
 
+      # rubocop:disable Metrics/MethodLength
       def add_global_options(parser)
         parser.separator("mutant version: #{VERSION}")
         parser.separator(nil)
@@ -141,6 +134,10 @@ module Mutant
 
         parser.on('--version', 'Print mutants version') do
           capture_main { world.stdout.puts("mutant-#{VERSION}"); true }
+        end
+
+        parser.on('--zombie', 'Run mutant zombified') do
+          @zombie = true
         end
       end
 
@@ -178,7 +175,12 @@ module Mutant
           Either::Left.new(with_help('Missing required subcommand!'))
         else
           find_command(command_name).bind do |command|
-            command.parse(**to_h, parent: self, arguments: arguments)
+            command.parse(
+              arguments: arguments,
+              parent:    self,
+              world:     world,
+              zombie:    zombie
+            )
           end
         end
       end

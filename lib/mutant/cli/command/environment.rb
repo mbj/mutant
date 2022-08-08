@@ -67,9 +67,6 @@ module Mutant
         # rubocop:disable Metrics/MethodLength
         def add_environment_options(parser)
           parser.separator('Environment:')
-          parser.on('--zombie', 'Run mutant zombified') do
-            set(zombie: true)
-          end
           parser.on('-I', '--include DIRECTORY', 'Add DIRECTORY to $LOAD_PATH') do |directory|
             add(:includes, directory)
           end

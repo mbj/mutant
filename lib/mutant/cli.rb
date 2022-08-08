@@ -6,10 +6,8 @@ module Mutant
     # Parse command
     #
     # @return [Command]
-    def self.parse(world:, **attributes)
-      Command::Root
-        .parse(world: world, **attributes)
-        .from_right { |message| Command::FailParse.new(world, message) }
+    def self.parse(arguments:, world:)
+      Command::Root.parse(arguments: arguments, world: world)
     end
   end # CLI
 end # Mutant
