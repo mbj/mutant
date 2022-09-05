@@ -6,7 +6,6 @@ RSpec.describe Mutant::CLI do
     let(:events)                  { []                                        }
     let(:expected_zombie)         { false                                     }
     let(:kernel)                  { class_double(Kernel)                      }
-    let(:load_config_file_config) { Mutant::Config::DEFAULT                   }
     let(:stderr)                  { instance_double(IO, :stderr, tty?: false) }
     let(:stdout)                  { instance_double(IO, :stdout, tty?: false) }
     let(:timer)                   { instance_double(Mutant::Timer)            }
@@ -18,6 +17,12 @@ RSpec.describe Mutant::CLI do
         stderr: stderr,
         stdout: stdout,
         timer:  timer
+      )
+    end
+
+    let(:load_config_file_config) do
+      Mutant::Config::DEFAULT.with(
+        coverage_criteria: Mutant::Config::CoverageCriteria::EMPTY
       )
     end
 
@@ -548,7 +553,7 @@ RSpec.describe Mutant::CLI do
 
     shared_context 'environment' do
       let(:arguments)            { %w[run]                                              }
-      let(:bootstrap_config)     { env_config.merge(file_config).expand_defaults        }
+      let(:bootstrap_config)     { env_config.merge(file_config)                        }
       let(:bootstrap_result)     { right(env)                                           }
       let(:env_result)           { instance_double(Mutant::Result::Env, success?: true) }
       let(:expected_exit)        { true                                                 }
@@ -1154,7 +1159,7 @@ RSpec.describe Mutant::CLI do
           let(:file_config)      { Mutant::Config::DEFAULT }
 
           context 'without coverage criteria in env or file' do
-            let(:bootstrap_config) { Mutant::Config::DEFAULT.expand_defaults }
+            let(:bootstrap_config) { Mutant::Config::DEFAULT }
 
             include_examples 'CLI run'
           end
@@ -1168,7 +1173,7 @@ RSpec.describe Mutant::CLI do
               )
             end
 
-            let(:bootstrap_config) { file_config.expand_defaults }
+            let(:bootstrap_config) { file_config }
 
             include_examples 'CLI run'
           end

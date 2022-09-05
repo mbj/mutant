@@ -1,3 +1,10 @@
+# v0.11.14 2022-09-05
+
+* [#1353](https://github.com/mbj/mutant/pull/1353)
+
+  Fix to provide a well formed `Mutant::Config::DEFAULT` constant at all times.
+  Primarily useful for custom 3rd party integrations that use mutants API directly.
+
 # v0.11.14 2022-07-31
 
 * [#1348](https://github.com/mbj/mutant/pull/1348)

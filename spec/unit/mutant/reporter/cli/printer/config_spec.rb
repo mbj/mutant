@@ -24,7 +24,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
       it_reports(<<~'REPORT')
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
-        Jobs:            1
+        Jobs:            auto
         Includes:        []
         Requires:        []
       REPORT
@@ -38,7 +38,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
       it_reports(<<~'REPORT')
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     foo
-        Jobs:            1
+        Jobs:            auto
         Includes:        []
         Requires:        []
       REPORT
@@ -52,7 +52,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
       it_reports(<<~'REPORT')
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
-        Jobs:            1
+        Jobs:            auto
         Includes:        []
         Requires:        []
         MutationTimeout: 2.1

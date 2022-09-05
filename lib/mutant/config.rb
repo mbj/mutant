@@ -98,16 +98,6 @@ module Mutant
       end
     end
 
-    # Expand config with defaults
-    #
-    # @return [Config]
-    def expand_defaults
-      with(
-        coverage_criteria: CoverageCriteria::DEFAULT.merge(coverage_criteria),
-        jobs:              jobs || 1
-      )
-    end
-
     def self.load_contents(env, path)
       Transform::Named
         .new(

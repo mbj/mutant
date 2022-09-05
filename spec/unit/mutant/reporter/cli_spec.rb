@@ -66,7 +66,7 @@ RSpec.describe Mutant::Reporter::CLI do
       Mutant environment:
       Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     null
-      Jobs:            1
+      Jobs:            auto
       Includes:        []
       Requires:        []
       Subjects:        1
@@ -84,7 +84,7 @@ RSpec.describe Mutant::Reporter::CLI do
       Mutant environment:
       Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     null
-      Jobs:            1
+      Jobs:            auto
       Includes:        []
       Requires:        []
       Subjects:        1

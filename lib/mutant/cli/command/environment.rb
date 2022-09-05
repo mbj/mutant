@@ -19,7 +19,9 @@ module Mutant
 
         def initialize(attributes)
           super(attributes)
-          @config = Config::DEFAULT
+          @config = Config::DEFAULT.with(
+            coverage_criteria: Config::CoverageCriteria::EMPTY
+          )
         end
 
         def bootstrap
@@ -37,7 +39,7 @@ module Mutant
             )
           end
 
-          @config = Config.env.merge(file_config).merge(@config).expand_defaults
+          @config = Config.env.merge(file_config).merge(@config)
         end
 
         def parse_remaining_arguments(arguments)
