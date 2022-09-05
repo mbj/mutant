@@ -1,40 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Config do
-  describe '#expand_defaults' do
-    let(:config) do
-      described_class::DEFAULT.with(
-        coverage_criteria: described_class::CoverageCriteria::EMPTY.with(
-          test_result: false
-        )
-      )
-    end
-
-    def apply
-      config.expand_defaults
-    end
-
-    context 'on empty jobs' do
-      it 'expands empty jobs' do
-        expect(apply.jobs).to eql(1)
-      end
-    end
-
-    context 'on present jobs' do
-      let(:config) { super().with(jobs: 2) }
-
-      it 'doesn not expand jobs' do
-        expect(apply.jobs).to eql(2)
-      end
-    end
-
-    it 'expands merges coverage criteria with defaults' do
-      expect(apply.coverage_criteria).to eql(
-        described_class::CoverageCriteria::DEFAULT.with(test_result: false)
-      )
-    end
-  end
-
   describe '#merge' do
     def apply
       original.merge(other)

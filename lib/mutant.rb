@@ -273,7 +273,7 @@ module Mutant
   # Reopen class to initialize constant to avoid dep circle
   class Config
     DEFAULT = new(
-      coverage_criteria:     Config::CoverageCriteria::EMPTY,
+      coverage_criteria:     Config::CoverageCriteria::DEFAULT,
       expression_parser:     Expression::Parser.new([
         Expression::Descendants,
         Expression::Method,

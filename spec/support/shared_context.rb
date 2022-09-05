@@ -104,9 +104,7 @@ module SharedContext
     end
 
     let(:config) do
-      Mutant::Config::DEFAULT.with(
-        reporter: Mutant::Reporter::Null.new
-      ).expand_defaults
+      Mutant::Config::DEFAULT.with(reporter: Mutant::Reporter::Null.new)
     end
 
     let(:subject_a_context) do
