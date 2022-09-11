@@ -14,9 +14,10 @@ module Mutant
           emit_body(N_RAISE)
           emit_body(N_ZSUPER)
 
-          return unless body && !ignore?(body)
+          return if !body || ignore?(body)
 
-          emit_body(nil) unless body.children.any?(&method(:ignore?))
+          emit_body(nil) unless n_begin?(body) && body.children.any?(&method(:ignore?))
+
           emit_body_mutations
         end
 

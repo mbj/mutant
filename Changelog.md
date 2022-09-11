@@ -1,3 +1,10 @@
+# v0.11.16 2022-09-11
+
+* [#1355](https://github.com/mbj/mutant/pull/1355)
+
+  Fix ignore patterns support for single node def nodes.
+  Fix config merge support for ignore patterns.
+
 # v0.11.15 2022-09-05
 
 * [#1353](https://github.com/mbj/mutant/pull/1353)
