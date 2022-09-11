@@ -28,7 +28,8 @@ module Mutant
 
       def merge(other)
         with(
-          timeout: other.timeout || timeout
+          ignore_patterns: other.ignore_patterns,
+          timeout:         other.timeout || timeout
         )
       end
     end # Config

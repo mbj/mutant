@@ -25,5 +25,15 @@ RSpec.describe Mutant::Mutation::Config do
 
       include_examples 'maybe value merge'
     end
+
+    context 'ignore patterns' do
+      let(:key)            { :ignore_patterns }
+      let(:original_value) { :original        }
+      let(:other_value)    { :other           }
+
+      it 'returns other value' do
+        expect(apply.ignore_patterns).to be(:other)
+      end
+    end
   end
 end
