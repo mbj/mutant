@@ -109,13 +109,32 @@ RSpec.describe Mutant::Mutator::Node do
           s(:def, :foo, s(:args), s(:true))
         end
 
-        it 'returns no ignored mutations' do
-          expect(apply).to eql(
-            [
-              s(:def, :foo, s(:args), s(:send, nil, :raise)),
-              s(:def, :foo, s(:args), s(:zsuper))
-            ].to_set
-          )
+        context 'on match' do
+          it 'returns no ignored mutations' do
+            expect(apply).to eql(
+              [
+                s(:def, :foo, s(:args), s(:send, nil, :raise)),
+                s(:def, :foo, s(:args), s(:zsuper))
+              ].to_set
+            )
+          end
+        end
+
+        context 'on non match' do
+          let(:node) do
+            s(:def, :foo, s(:args), s(:send, nil, :bar))
+          end
+
+          it 'returns all mutations' do
+            expect(apply).to eql(
+              [
+                s(:def, :foo, s(:args), nil),
+                s(:def, :foo, s(:args), s(:nil)),
+                s(:def, :foo, s(:args), s(:send, nil, :raise)),
+                s(:def, :foo, s(:args), s(:zsuper))
+              ].to_set
+            )
+          end
         end
       end
 
