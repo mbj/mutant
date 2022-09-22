@@ -131,8 +131,8 @@ For commercial use mutants pricing is subscription based.
 | -------- | -------  | ------- | ----------------------------------------------------- |
 | USD      | 1 month  | 90$     | Credit Card                                           |
 | USD      | 1 year   | 900$    | Credit Card, ACH transfer                             |
-| EUR      | 1 month  | 75€     | Credit Card, SEPA Direct Debit                        |
-| EUR      | 1 year   | 750€    | Credit Card, SEPA Direct Debit, SEPA Transfer         |
+| EUR      | 1 month  | 90€     | Credit Card, SEPA Direct Debit                        |
+| EUR      | 1 year   | 900€    | Credit Card, SEPA Direct Debit, SEPA Transfer         |
 
 Costs are **per developer using mutant on any number of repositories**.
 
