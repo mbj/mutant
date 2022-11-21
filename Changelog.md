@@ -1,3 +1,11 @@
+# v0.11.17 [unreleased]
+
+* [#1352](https://github.com/mbj/mutant/pull/1352)
+
+  Add execution profiling via `--profile`. The output format is not stable
+  yet, still this profile is very useful to differentiate mutant load time from
+  target application load time.
+
 # v0.11.16 2022-09-11
 
 * [#1355](https://github.com/mbj/mutant/pull/1355)

@@ -37,8 +37,29 @@ module Fixtures
       reporter:    Mutant::Reporter::Null.new
     )
 
+  id = 0
+
+  gen_id = -> { (id += 1).to_s }
+
+  root_segment = Mutant::Segment.new(
+    id:              0,
+    name:            :spec,
+    parent_id:       nil,
+    timestamp_end:   nil,
+    timestamp_start: 0
+  )
+
+  recorder = Mutant::Segment::Recorder.new(
+    gen_id:          gen_id,
+    root_id:         root_segment.id,
+    parent_id:       root_segment.id,
+    recording_start: 0,
+    segments:        [root_segment],
+    timer:           Mutant::WORLD.timer
+  )
+
   TEST_ENV = Mutant::Bootstrap
-    .call(Mutant::Env.empty(Mutant::WORLD, test_config))
+    .call(Mutant::Env.empty(Mutant::WORLD.with(recorder: recorder), test_config))
     .from_right
 end # Fixtures
 
@@ -95,10 +116,11 @@ module XSpecHelper
       open3:                 class_double(Open3),
       pathname:              class_double(Pathname),
       process:               class_double(Process),
+      random:                class_double(Random),
+      recorder:              instance_double(Mutant::Segment::Recorder),
       stderr:                instance_double(IO),
       stdout:                instance_double(IO),
       thread:                class_double(Thread),
-      random:                class_double(Random),
       timer:                 instance_double(Mutant::Timer)
     )
   end

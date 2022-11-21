@@ -4,7 +4,13 @@ module Mutant
   module CLI
     # rubocop:disable Metrics/ClassLength
     class Command
-      include AbstractType, Anima.new(:world, :main, :parent, :zombie)
+      include AbstractType, Anima.new(
+        :main,
+        :parent,
+        :print_profile,
+        :world,
+        :zombie
+      )
 
       OPTIONS     = [].freeze
       SUBCOMMANDS = [].freeze
@@ -21,12 +27,13 @@ module Mutant
       # @return [Command]
       #
       # rubocop:disable Metrics/ParameterLists
-      def self.parse(arguments:, parent: nil, world:, zombie: false)
+      def self.parse(arguments:, parent: nil, print_profile: false, world:, zombie: false)
         new(
-          main:   nil,
-          parent: parent,
-          world:  world,
-          zombie: zombie
+          main:          nil,
+          parent:        parent,
+          print_profile: print_profile,
+          world:         world,
+          zombie:        zombie
         ).__send__(:parse, arguments)
       end
       # rubocop:enable Metrics/ParameterLists
@@ -59,7 +66,8 @@ module Mutant
         [*parent&.full_name, self.class.command_name].join(' ')
       end
 
-      alias_method :zombie?, :zombie
+      alias_method :print_profile?, :print_profile
+      alias_method :zombie?,        :zombie
 
       abstract_method :action
 
@@ -136,6 +144,10 @@ module Mutant
           capture_main { world.stdout.puts("mutant-#{VERSION}"); true }
         end
 
+        parser.on('--profile', 'Profile mutant execution') do
+          @print_profile = true
+        end
+
         parser.on('--zombie', 'Run mutant zombified') do
           @zombie = true
         end
@@ -176,10 +188,11 @@ module Mutant
         else
           find_command(command_name).bind do |command|
             command.parse(
-              arguments: arguments,
-              parent:    self,
-              world:     world,
-              zombie:    zombie
+              arguments:     arguments,
+              parent:        self,
+              print_profile: print_profile,
+              world:         world,
+              zombie:        zombie
             )
           end
         end

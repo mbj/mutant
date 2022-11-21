@@ -134,6 +134,15 @@ module Mutant
     end
     memoize :test_subject_ratio
 
+    # Record segment
+    #
+    # @param [Symbol] name
+    #
+    # @return [self]
+    def record(name, &block)
+      world.record(name, &block)
+    end
+
   private
 
     def run_mutation_tests(mutation, tests)

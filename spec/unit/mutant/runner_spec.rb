@@ -70,6 +70,12 @@ RSpec.describe Mutant::Runner do
           },
           {
             receiver:  env,
+            selector:  :record,
+            arguments: [:analysis],
+            reaction:  { yields: [] }
+          },
+          {
+            receiver:  env,
             selector:  :method,
             arguments: [:cover_index],
             reaction:  { return: block }
@@ -103,6 +109,12 @@ RSpec.describe Mutant::Runner do
             reaction:  { return: status_b }
           },
           {
+            receiver:  env,
+            selector:  :record,
+            arguments: [:report],
+            reaction:  { yields: [] }
+          },
+          {
             receiver:  reporter,
             selector:  :report,
             arguments: [env_result]
@@ -126,6 +138,12 @@ RSpec.describe Mutant::Runner do
             receiver:  reporter,
             selector:  :start,
             arguments: [env]
+          },
+          {
+            receiver:  env,
+            selector:  :record,
+            arguments: [:analysis],
+            reaction:  { yields: [] }
           },
           {
             receiver:  env,
@@ -165,6 +183,12 @@ RSpec.describe Mutant::Runner do
             selector:  :wait_timeout,
             arguments: [delay],
             reaction:  { return: status_b }
+          },
+          {
+            receiver:  env,
+            selector:  :record,
+            arguments: [:report],
+            reaction:  { yields: [] }
           },
           {
             receiver:  reporter,
