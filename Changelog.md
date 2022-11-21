@@ -1,10 +1,15 @@
-# v0.11.17 [unreleased]
+# v0.11.17 2022-11-12
 
 * [#1352](https://github.com/mbj/mutant/pull/1352)
 
   Add execution profiling via `--profile`. The output format is not stable
   yet, still this profile is very useful to differentiate mutant load time from
   target application load time.
+
+* [#1358](https://github.com/mbj/mutant/pull/1358)
+
+  Improve worker process termination speed. Reduces pause before report print
+  especially on high core count machines.
 
 # v0.11.16 2022-09-11
 
