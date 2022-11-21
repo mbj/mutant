@@ -49,6 +49,7 @@ module Mutant
       def finalize(status)
         status.tap do
           if status.done?
+            workers.each(&:signal)
             workers.each(&:join)
             threads.each(&:join)
           end

@@ -77,8 +77,12 @@ module Mutant
         self
       end
 
-      def join
+      def signal
         process.kill('TERM', pid)
+        self
+      end
+
+      def join
         process.wait(pid)
         self
       end
