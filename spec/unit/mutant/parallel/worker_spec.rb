@@ -207,13 +207,38 @@ RSpec.describe Mutant::Parallel::Worker do
       [
         {
           receiver:  world.process,
-          selector:  :kill,
-          arguments: ['TERM', pid]
-        },
-        {
-          receiver:  world.process,
           selector:  :wait,
           arguments: [pid]
+        }
+      ]
+    end
+
+    it 'terminates and waits for process' do
+      verify_events { expect(apply).to be(object) }
+    end
+  end
+
+  describe '#signal' do
+    let(:object) do
+      described_class.new(
+        connection: connection,
+        index:      index,
+        pid:        pid,
+        process:    world.process,
+        **shared
+      )
+    end
+
+    def apply
+      object.signal
+    end
+
+    let(:raw_expectations) do
+      [
+        {
+          receiver:  world.process,
+          selector:  :kill,
+          arguments: ['TERM', pid]
         }
       ]
     end

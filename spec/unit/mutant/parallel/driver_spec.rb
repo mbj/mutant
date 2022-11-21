@@ -94,6 +94,14 @@ RSpec.describe Mutant::Parallel::Driver, mutant_expression: 'Mutant::Parallel::D
             *super(),
             {
               receiver: worker_a,
+              selector: :signal
+            },
+            {
+              receiver: worker_b,
+              selector: :signal
+            },
+            {
+              receiver: worker_a,
               selector: :join
             },
             {
