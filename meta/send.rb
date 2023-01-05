@@ -704,6 +704,21 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
+  source 'a.match?(/\Afoo#{}/)'
+
+  singleton_mutations
+
+  mutation 'a'
+  mutation 'a.match?'
+  mutation 'a.match?(//)'
+  mutation 'a.match?(/nomatch\A/)'
+  mutation '/\Afoo#{}/'
+  mutation 'self.match?(/\Afoo#{}/)'
+  mutation 'false'
+  mutation 'true'
+end
+
+Mutant::Meta::Example.add :send do
   source 'match(/\A\d/)'
 
   singleton_mutations
@@ -770,6 +785,36 @@ Mutant::Meta::Example.add :send do
   mutation 'a.match(/nomatch\A/)'
   mutation 'self.match(/foo\z/)'
   mutation "a.end_with?('foo')"
+end
+
+Mutant::Meta::Example.add :send do
+  source <<~'RUBY'
+    a.match?(/(?:
+    )/)
+  RUBY
+
+  singleton_mutations
+
+  mutation 'a'
+
+  mutation <<~'RUBY'
+    /(?:
+    )/
+  RUBY
+
+  mutation <<~'RUBY'
+    self.match?(/(?:
+    )/)
+  RUBY
+
+  mutation <<~'RUBY'
+    a.match?
+  RUBY
+
+  mutation 'false'
+  mutation 'true'
+  mutation 'a.match?(//)'
+  mutation 'a.match?(/nomatch\A/)'
 end
 
 Mutant::Meta::Example.add :send do
