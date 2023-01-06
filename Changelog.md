@@ -1,5 +1,10 @@
 # v0.11.18 unreleased
 
+* [#1361](https://github.com/mbj/mutant/pull/1361)
+
+  Upgrade regexp-parser to 2.6.1. This also re-implements the regexp mutation
+  emitter to be more maintainable, no semantic changes expected.
+
 * [#1362](http://github.com/mbj/mutant/pull/1362)
 
   Adapt to behavior change in ruby 3.1.3 where methods inherited 

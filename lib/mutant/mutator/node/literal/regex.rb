@@ -29,17 +29,17 @@ module Mutant
           end
 
           def mutate_body
-            # NOTE: will only mutate parts of regexp body if the body is composed of only strings.
-            # Regular expressions with interpolation are skipped.
-            return unless (body_ast = AST::Regexp.expand_regexp_ast(input))
+            string = Regexp.regexp_body(input) or return
 
-            mutate(node: body_ast).each do |mutation|
-              source = AST::Regexp.to_expression(mutation).to_s
-              emit_type(s(:str, source), options)
-            end
+            Regexp
+              .mutate(::Regexp::Parser.parse(string))
+              .each(&method(:emit_regexp_body))
           end
 
-        end # Regex
+          def emit_regexp_body(expression)
+            emit_type(s(:str, expression.to_str), options)
+          end
+        end # Regexp
       end # Literal
     end # Node
   end # Mutator

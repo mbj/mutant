@@ -50,9 +50,19 @@ module Mutant
           }.freeze
         }.freeze
 
-        REGEXP_MATCH_METHODS    = %i[=~ match match?].freeze
-        REGEXP_START_WITH_NODES = %i[regexp_bos_anchor regexp_literal_literal].freeze
-        REGEXP_END_WITH_NODES   = %i[regexp_literal_literal regexp_eos_anchor].freeze
+        REGEXP_MATCH_METHODS = %i[=~ match match?].freeze
+
+        REGEXP_START_WITH_NODES =
+          [
+            ::Regexp::Expression::Anchor::BeginningOfString,
+            ::Regexp::Expression::Literal
+          ].freeze
+
+        REGEXP_END_WITH_NODES =
+          [
+            ::Regexp::Expression::Literal,
+            ::Regexp::Expression::Anchor::EndOfString
+          ].freeze
 
       private
 
@@ -114,33 +124,33 @@ module Mutant
           end
         end
 
-        def emit_start_end_with_mutations # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+        # rubocop:disable Metrics/CyclomaticComplexity
+        # rubocop:disable Metrics/MethodLength
+        def emit_start_end_with_mutations
           return unless REGEXP_MATCH_METHODS.include?(selector) && arguments.one?
 
           argument = Mutant::Util.one(arguments)
 
-          return unless argument.type.equal?(:regexp) && (
-            regexp_ast = AST::Regexp.expand_regexp_ast(argument)
-          )
+          return unless argument.type.equal?(:regexp)
 
-          regexp_children = regexp_ast.children
+          string = Regexp.regexp_body(argument) or return
 
-          case regexp_children.map(&:type)
+          expressions = ::Regexp::Parser.parse(string)
+
+          case expressions.map(&:class)
           when REGEXP_START_WITH_NODES
-            emit_start_with(regexp_children)
+            emit_start_with(expressions.last.text)
           when REGEXP_END_WITH_NODES
-            emit_end_with(regexp_children)
+            emit_end_with(expressions.first.text)
           end
         end
 
-        def emit_start_with(regexp_nodes)
-          literal = Mutant::Util.one(regexp_nodes.last.children)
-          emit_type(receiver, :start_with?, s(:str, literal))
+        def emit_start_with(string)
+          emit_type(receiver, :start_with?, s(:str, string))
         end
 
-        def emit_end_with(regexp_nodes)
-          literal = Mutant::Util.one(regexp_nodes.first.children)
-          emit_type(receiver, :end_with?, s(:str, literal))
+        def emit_end_with(string)
+          emit_type(receiver, :end_with?, s(:str, string))
         end
 
         def emit_predicate_mutations

@@ -72,6 +72,16 @@ Mutant::Meta::Example.add :regexp do
   mutation '/(?(1)(foo)(?:bar))/'
 end
 
+Mutant::Meta::Example.add :regexp do
+  source <<~'RUBY'
+    /(?:
+    )/
+  RUBY
+
+  singleton_mutations
+  regexp_mutations
+end
+
 Pathname
   .glob(Pathname.new(__dir__).join('regexp', '*.rb'))
   .sort

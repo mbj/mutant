@@ -13,10 +13,6 @@ module MutantSpec
   module Corpus
     TMP = ROOT.join('tmp').freeze
 
-    # Not in the docs. Number from chatting with their support.
-    # 2 processors allocated per container, 4 processes works well.
-    CIRCLE_CI_CONTAINER_PROCESSES = 4
-
     private_constant(*constants(false))
 
     # Project under corpus test
@@ -93,7 +89,7 @@ module MutantSpec
         options = {
           finish:       method(:finish),
           start:        method(:start),
-          in_processes: parallel_processes
+          in_processes: Etc.nprocessors
         }
 
         total = Parallel.map(effective_ruby_paths, options, &method(:check_generation))
@@ -203,17 +199,6 @@ module MutantSpec
           .sort_by(&:size)
           .reverse
           .reject { |path| exclude.include?(path.relative_path_from(repo_path).to_s) }
-      end
-
-      # Number of parallel processes to use
-      #
-      # @return [Integer]
-      def parallel_processes
-        if ENV.key?('CI')
-          CIRCLE_CI_CONTAINER_PROCESSES
-        else
-          Etc.nprocessors
-        end
       end
 
       # Repository path
