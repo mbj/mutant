@@ -1,5 +1,9 @@
 # v0.11.18 unreleased
 
+* [#1363](https://github.com/mbj/mutant/pull/1363)
+
+  Add ruby-3.2 runtime support.
+
 * [#1361](https://github.com/mbj/mutant/pull/1361)
 
   Upgrade regexp-parser to 2.6.1. This also re-implements the regexp mutation

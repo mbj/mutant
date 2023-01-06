@@ -8,3 +8,4 @@ end
 # Place for shared git sources, used for developing updates to dependencies
 # where the git sources (without this file) need to be consistently edited 
 # into multiple Gemfiles.
+gem 'unparser', github: 'mbj/unparser', branch: 'add/ruby-3.2'
