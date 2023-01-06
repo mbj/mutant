@@ -51,14 +51,26 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
     let(:subject_a) { instance_double(Mutant::Subject)  }
     let(:subject_b) { instance_double(Mutant::Subject)  }
     let(:subject_c) { instance_double(Mutant::Subject)  }
-    let(:subjects)  { [subject_a, subject_b, subject_c] }
+    let(:subject_d) { instance_double(Mutant::Subject)  }
+
+    let(:subjects) do
+      [subject_a, subject_b, subject_c].tap do |value|
+        value << subject_d if RUBY_VERSION >= '3.1.3'
+      end
+    end
 
     before do
-      {
+      expected_subjects = {
         method_a: subject_a,
         method_b: subject_b,
         method_c: subject_c
-      }.each do |method, subject|
+      }
+
+      if RUBY_VERSION >= '3.1.3'
+        expected_subjects[:method_d] = subject_d
+      end
+
+      expected_subjects.each do |method, subject|
         matcher = instance_double(Mutant::Matcher)
         expect(matcher).to receive(:call).with(env).and_return([subject])
 
