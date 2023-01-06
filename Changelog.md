@@ -1,3 +1,11 @@
+# v0.11.18 unreleased
+
+* [#1362](http://github.com/mbj/mutant/pull/1362)
+
+  Adapt to behavior change in ruby 3.1.3 where methods inherited 
+  from module inclusions that just got visibility changes are now 
+  owned by the included module/class.
+
 # v0.11.17 2022-11-12
 
 * [#1352](https://github.com/mbj/mutant/pull/1352)
