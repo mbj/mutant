@@ -1,4 +1,8 @@
-# v0.11.18 unreleased
+# v0.11.18 2023-01-08
+
+* [#1367](https://github.com/mbj/mutant/pull/1367)
+
+  Add ruby-3.2 support.
 
 * [#1361](https://github.com/mbj/mutant/pull/1361)
 

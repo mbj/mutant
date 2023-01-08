@@ -41,7 +41,7 @@ module Mutant
           end
 
           def validate_tests(environment)
-            if environment.integration.all_tests.length.zero?
+            if environment.integration.all_tests.empty?
               Either::Left.new(NO_TESTS_MESSAGE)
             else
               Either::Right.new(environment)

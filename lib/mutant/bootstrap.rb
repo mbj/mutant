@@ -113,7 +113,7 @@ module Mutant
       env.record(__method__) do
         config = env.config
 
-        scopes = env.world.object_space.each_object(Module).each_with_object([]) do |scope, aggregate|
+        scopes = env.world.object_space.each_object(Module).with_object([]) do |scope, aggregate|
           expression = expression(config.reporter, config.expression_parser, scope) || next
           aggregate << Scope.new(scope, expression)
         end

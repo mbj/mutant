@@ -30,44 +30,40 @@ Mutant::Meta::Example.add :erange do
   mutation '1...101'
 end
 
-unless RUBY_VERSION.start_with?('2.5')
-  Mutant::Meta::Example.add :erange do
-    source '1...'
+Mutant::Meta::Example.add :erange do
+  source '1...'
 
-    singleton_mutations
-    mutation '0...'
-    mutation '2...'
-    mutation 'nil...'
-  end
-
-  Mutant::Meta::Example.add :irange do
-    source '1..'
-
-    singleton_mutations
-    mutation '0..'
-    mutation '2..'
-    mutation 'nil..'
-  end
+  singleton_mutations
+  mutation '0...'
+  mutation '2...'
+  mutation 'nil...'
 end
 
-if RUBY_VERSION >= '2.7.'
-  Mutant::Meta::Example.add :erange do
-    source '...1'
+Mutant::Meta::Example.add :irange do
+  source '1..'
 
-    singleton_mutations
-    mutation '...0'
-    mutation '..1'
-    mutation '...2'
-    mutation '...nil'
-  end
+  singleton_mutations
+  mutation '0..'
+  mutation '2..'
+  mutation 'nil..'
+end
 
-  Mutant::Meta::Example.add :irange do
-    source '..1'
+Mutant::Meta::Example.add :erange do
+  source '...1'
 
-    singleton_mutations
-    mutation '..0'
-    mutation '...1'
-    mutation '..2'
-    mutation '..nil'
-  end
+  singleton_mutations
+  mutation '...0'
+  mutation '..1'
+  mutation '...2'
+  mutation '...nil'
+end
+
+Mutant::Meta::Example.add :irange do
+  source '..1'
+
+  singleton_mutations
+  mutation '..0'
+  mutation '...1'
+  mutation '..2'
+  mutation '..nil'
 end
