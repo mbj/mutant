@@ -1,15 +1,15 @@
 PATH
   remote: ..
   specs:
-    mutant (0.11.17)
+    mutant (0.11.18)
       diff-lcs (~> 1.3)
-      parser (~> 3.1.0)
+      parser (~> 3.2.0)
       regexp_parser (~> 2.6.1)
       sorbet-runtime (~> 0.5.0)
-      unparser (~> 0.6.5)
-    mutant-minitest (0.11.17)
+      unparser (~> 0.6.6)
+    mutant-minitest (0.11.18)
       minitest (~> 5.11)
-      mutant (= 0.11.17)
+      mutant (= 0.11.18)
 
 GEM
   remote: https://oss:Px2ENN7S91OmWaD5G7MIQJi1dmtmYrEh@gem.mutant.dev/
@@ -22,16 +22,16 @@ GEM
     ast (2.4.2)
     diff-lcs (1.5.0)
     minitest (5.17.0)
-    parser (3.1.3.0)
+    parser (3.2.0.0)
       ast (~> 2.4.1)
     regexp_parser (2.6.1)
-    sorbet-runtime (0.5.10601)
-    unparser (0.6.5)
+    sorbet-runtime (0.5.10607)
+    unparser (0.6.6)
       diff-lcs (~> 1.3)
-      parser (>= 3.1.0)
+      parser (>= 3.2.0)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   mutant!
@@ -39,4 +39,4 @@ DEPENDENCIES
   mutant-minitest!
 
 BUNDLED WITH
-   2.3.6
+   2.4.2

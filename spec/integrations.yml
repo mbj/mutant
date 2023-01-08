@@ -77,6 +77,8 @@
   - test/corpus/literal/since/30.rb
   # invalid regexp on <3.1 parser
   - test/corpus/literal/since/31.rb
+  # invalid arguments on <3.2 parser
+  - test/corpus/literal/since/32.rb
 - name: axiom
   namespace: Axiom
   repo_uri: 'https://github.com/dkubb/axiom.git'

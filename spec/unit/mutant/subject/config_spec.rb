@@ -14,7 +14,7 @@ RSpec.describe Mutant::Subject::Config do
     let(:comments) do
       node, comments = Unparser.parse_with_comments(source)
 
-      ::Parser::Source::Comment.associate_by_identity(node, comments).fetch(node, [])
+      Parser::Source::Comment.associate_by_identity(node, comments).fetch(node, [])
     end
 
     shared_examples 'returns default config' do

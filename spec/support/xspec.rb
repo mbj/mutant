@@ -166,8 +166,7 @@ module XSpec
       verifier = new(expectations)
 
       hooks = expectations
-        .map { |expectation| [expectation.receiver, expectation.selector] }
-        .to_set
+        .to_set { |expectation| [expectation.receiver, expectation.selector] }
 
       hooks.each do |receiver, selector|
         rspec_context.instance_eval do

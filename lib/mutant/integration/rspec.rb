@@ -74,7 +74,7 @@ module Mutant
     private
 
       def all_tests_index
-        all_examples.each_with_index.each_with_object({}) do |(example, example_index), index|
+        all_examples.each_with_index.with_object({}) do |(example, example_index), index|
           index[parse_example(example, example_index)] = example
         end
       end
