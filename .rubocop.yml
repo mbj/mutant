@@ -187,3 +187,6 @@ Style/KeywordParametersOrder:
 # Empty blocks are useful
 Lint/EmptyBlock:
   Enabled: false
+# Bad advice, as the '' are the least powerful syntax
+Style/RedundantHeredocDelimiterQuotes:
+  Enabled: false

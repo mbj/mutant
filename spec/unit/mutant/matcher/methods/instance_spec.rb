@@ -14,6 +14,7 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
       attr_reader :warnings
 
       def initialize
+        super
         @warnings = []
       end
 
