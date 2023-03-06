@@ -16,6 +16,7 @@ module Mutant
       :mutex,
       :object_space,
       :open3,
+      :parser,
       :pathname,
       :process,
       :random,

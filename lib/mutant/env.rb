@@ -9,7 +9,6 @@ module Mutant
       :integration,
       :matchable_scopes,
       :mutations,
-      :parser,
       :selector,
       :subjects,
       :world
@@ -37,7 +36,6 @@ module Mutant
         ),
         matchable_scopes: EMPTY_ARRAY,
         mutations:        EMPTY_ARRAY,
-        parser:           Parser.new,
         selector:         Selector::Null.new,
         subjects:         EMPTY_ARRAY,
         world:            world
@@ -62,6 +60,13 @@ module Mutant
         mutation_index:   mutation_index,
         runtime:          timer.now - start
       )
+    end
+
+    # The parser
+    #
+    # @return [Parser]
+    def parser
+      world.parser
     end
 
     # The test selections

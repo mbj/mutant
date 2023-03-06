@@ -2,11 +2,19 @@
 
 RSpec.describe Mutant::Repository::SubjectFilter do
   context '#call' do
-    subject { object.call(mutant_subject) }
+    def apply
+      subject.call(mutant_subject)
+    end
 
-    let(:object) { described_class.new(diff)                 }
-    let(:diff)   { instance_double(Mutant::Repository::Diff) }
-    let(:value)  { instance_double(Object, 'value')          }
+    subject do
+      described_class.new(
+        diff:     diff,
+        revision: 'revision',
+        world:    fake_world
+      )
+    end
+
+    let(:diff) { instance_double(Mutant::Repository::Diff) }
 
     let(:mutant_subject) do
       double(
@@ -20,11 +28,15 @@ RSpec.describe Mutant::Repository::SubjectFilter do
       expect(diff).to receive(:touches?).with(
         mutant_subject.source_path,
         mutant_subject.source_lines
-      ).and_return(value)
+      ).and_return(touches?)
     end
 
-    it 'connects return value to repository diff API' do
-      expect(subject).to be(value)
+    context 'when subject lines are not touched' do
+      let(:touches?) { false }
+
+      it 'returns false' do
+        expect(apply).to be(false)
+      end
     end
   end
 end

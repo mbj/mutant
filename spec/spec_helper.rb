@@ -114,6 +114,7 @@ module XSpecHelper
       mutex:                 class_double(Mutex),
       object_space:          class_double(ObjectSpace),
       open3:                 class_double(Open3),
+      parser:                class_double(Mutant::Parser),
       pathname:              class_double(Pathname),
       process:               class_double(Process),
       random:                class_double(Random),

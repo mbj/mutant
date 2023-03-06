@@ -246,6 +246,7 @@ module Mutant
     require 'mutant/repository'
     require 'mutant/repository/diff'
     require 'mutant/repository/diff/ranges'
+    require 'mutant/repository/file_revision'
     require 'mutant/zombifier'
     require 'mutant/range'
     require 'mutant/license'
@@ -319,6 +320,7 @@ module Mutant
     mutex:                 Mutex,
     object_space:          ObjectSpace,
     open3:                 Open3,
+    parser:                Parser.new,
     pathname:              Pathname,
     process:               Process,
     random:                Random,
