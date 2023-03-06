@@ -301,7 +301,7 @@ RSpec.describe Mutant::CLI do
         Matcher:
                 --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
                 --start-subject EXPRESSION   Start mutation testing at a specific subject
-                --since REVISION             Only select subjects touched since REVISION
+                --since REVISION             Only select dirty subjects since REVISION
       MESSAGE
 
       {
@@ -348,7 +348,7 @@ RSpec.describe Mutant::CLI do
         Matcher:
                 --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
                 --start-subject EXPRESSION   Start mutation testing at a specific subject
-                --since REVISION             Only select subjects touched since REVISION
+                --since REVISION             Only select dirty subjects since REVISION
       MESSAGE
 
       {
@@ -395,7 +395,7 @@ RSpec.describe Mutant::CLI do
         Matcher:
                 --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
                 --start-subject EXPRESSION   Start mutation testing at a specific subject
-                --since REVISION             Only select subjects touched since REVISION
+                --since REVISION             Only select dirty subjects since REVISION
       MESSAGE
 
       {
@@ -1290,10 +1290,12 @@ RSpec.describe Mutant::CLI do
               matcher: file_config.matcher.with(
                 subject_filters: [
                   Mutant::Repository::SubjectFilter.new(
-                    Mutant::Repository::Diff.new(
+                    diff:     Mutant::Repository::Diff.new(
                       to:    'reference',
                       world: world
-                    )
+                    ),
+                    revision: 'reference',
+                    world:    world
                   )
                 ]
               )
@@ -1305,10 +1307,12 @@ RSpec.describe Mutant::CLI do
               matcher: file_config.matcher.with(
                 subject_filters: [
                   Mutant::Repository::SubjectFilter.new(
-                    Mutant::Repository::Diff.new(
+                    diff:     Mutant::Repository::Diff.new(
                       to:    'reference',
                       world: world
-                    )
+                    ),
+                    revision: 'reference',
+                    world:    world
                   )
                 ]
               )

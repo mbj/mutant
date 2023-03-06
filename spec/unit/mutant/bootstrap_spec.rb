@@ -56,6 +56,7 @@ RSpec.describe Mutant::Bootstrap do
       kernel:                kernel,
       load_path:             load_path,
       object_space:          object_space,
+      parser:                Mutant::Parser.new,
       pathname:              Pathname,
       recorder:              instance_double(Mutant::Segment::Recorder),
       timer:                 timer

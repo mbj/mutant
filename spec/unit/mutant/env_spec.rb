@@ -8,7 +8,6 @@ RSpec.describe Mutant::Env do
       integration:      integration,
       matchable_scopes: [],
       mutations:        [mutation],
-      parser:           Mutant::Parser.new,
       selector:         selector,
       subjects:         subjects,
       world:            world
@@ -239,7 +238,6 @@ RSpec.describe Mutant::Env do
           integration:      integration,
           matchable_scopes: Mutant::EMPTY_ARRAY,
           mutations:        Mutant::EMPTY_ARRAY,
-          parser:           Mutant::Parser.new,
           selector:         Mutant::Selector::Null.new,
           subjects:         Mutant::EMPTY_ARRAY,
           world:            world
@@ -266,6 +264,12 @@ RSpec.describe Mutant::Env do
       apply
 
       expect(events).to eql([%i[test_segment value]])
+    end
+  end
+
+  describe '#parser' do
+    it 'returns the world parser' do
+      expect(subject.parser).to be(world.parser)
     end
   end
 end

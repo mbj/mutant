@@ -102,11 +102,13 @@ module Mutant
           parser.on('--start-subject EXPRESSION', 'Start mutation testing at a specific subject') do |pattern|
             add_matcher(:start_expressions, @config.expression_parser.call(pattern).from_right)
           end
-          parser.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
+          parser.on('--since REVISION', 'Only select dirty subjects since REVISION') do |revision|
             add_matcher(
               :subject_filters,
               Repository::SubjectFilter.new(
-                Repository::Diff.new(to: revision, world: world)
+                diff:     Repository::Diff.new(to: revision, world: world),
+                revision: revision,
+                world:    world
               )
             )
           end
