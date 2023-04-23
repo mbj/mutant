@@ -18,10 +18,13 @@ module Mutant
 
         # Progress representation
         #
-        # @param [Runner::Status] status
-        #
         # @return [String]
         abstract_method :progress
+
+        # Progress representation
+        #
+        # @return [String]
+        abstract_method :test_progress
 
         # Report delay in seconds
         #
@@ -69,11 +72,25 @@ module Mutant
             format(Printer::Env, env)
           end
 
+          # Test start representation
+          #
+          # @return [String]
+          def test_start(env)
+            format(Printer::Test::Env, env)
+          end
+
           # Progress representation
           #
           # @return [String]
           def progress(status)
             format(Printer::StatusProgressive, status)
+          end
+
+          # Progress representation
+          #
+          # @return [String]
+          def test_progress(status)
+            format(Printer::Test::StatusProgressive, status)
           end
 
         private

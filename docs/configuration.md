@@ -182,7 +182,7 @@ mutation:
   ignore_patterns:
   - send{selector=log}
   # Select full mutation operators by default mutant only applies the light set
-  # Only difference between full and light right now is that light does not apply 
+  # Only difference between full and light right now is that light does not apply
   # `#== -> #eql?` mutation
   # At this moment there is no CLI equivalent for this setting.
   operators: full # or `light`

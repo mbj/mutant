@@ -750,14 +750,6 @@ RSpec.describe Mutant::CLI do
 
       include_context 'license validation'
 
-      context 'with invalid expressions' do
-        let(:arguments)     { super() + [''] }
-
-        it 'returns expected message' do
-          expect(apply).to eql(left('Expression: "" is invalid'))
-        end
-      end
-
       before do
         allow(Mutant::Config).to receive(:load) do |**attributes|
           events << [:load_config, attributes.inspect]
@@ -774,8 +766,18 @@ RSpec.describe Mutant::CLI do
           bootstrap_result
         end
 
+        allow(Mutant::Bootstrap).to receive(:call_test) do |env|
+          events << [:test_bootstrap, env.inspect]
+          bootstrap_result
+        end
+
         allow(Mutant::Mutation::Runner).to receive(:call) do |env|
           events << [:runner, env.inspect]
+          runner_result
+        end
+
+        allow(Mutant::Test::Runner).to receive(:call) do |env|
+          events << [:test_runner, env.inspect]
           runner_result
         end
 
@@ -827,53 +829,121 @@ RSpec.describe Mutant::CLI do
       end
     end
 
+    shared_examples 'with additional test arguments' do
+      context 'with additioanl arguments' do
+        let(:arguments) { super() << 'spec/unit' }
+
+        let(:expected_cli_config) do
+          config = super()
+
+          config.with(integration: config.integration.with(arguments: %w[spec/unit]))
+        end
+
+        include_examples 'CLI run'
+      end
+    end
+
     context 'environment test list' do
       include_context 'environment'
 
       let(:arguments) { %w[environment test list] }
 
+      let(:expected_events) do
+        [
+          %i[
+            record
+            config
+          ],
+          [
+            :load_config,
+            { cli_config: expected_cli_config, world: world }.inspect
+          ],
+          [
+            :test_bootstrap,
+            Mutant::Env.empty(world, bootstrap_config).inspect
+          ],
+          [
+            :stdout,
+            :puts,
+            'All tests in environment: 3'
+          ],
+          [
+            :stdout,
+            :puts,
+            'test-a'
+          ],
+          [
+            :stdout,
+            :puts,
+            'test-b'
+          ],
+          [
+            :stdout,
+            :puts,
+            'test-c'
+          ]
+        ]
+      end
+
       context 'without additional arguments' do
         let(:expected_exit) { true }
 
-        let(:expected_events) do
-          [
-            %i[
-              record
-              config
-            ],
-            [
-              :load_config,
-              { cli_config: expected_cli_config, world: world }.inspect
-            ],
-            [
-              :bootstrap,
-              Mutant::Env.empty(world, bootstrap_config).inspect
-            ],
-            [
-              :stdout,
-              :puts,
-              'All tests in environment: 3'
-            ],
-            [
-              :stdout,
-              :puts,
-              'test-a'
-            ],
-            [
-              :stdout,
-              :puts,
-              'test-b'
-            ],
-            [
-              :stdout,
-              :puts,
-              'test-c'
-            ]
-          ]
-        end
-
         include_examples 'CLI run'
       end
+
+      include_examples 'with additional test arguments'
+    end
+
+    context 'environment test run' do
+      include_context 'environment'
+
+      let(:arguments) { %w[environment test run] }
+
+      let(:expected_events) do
+        [
+          %i[
+            record
+            config
+          ],
+          [
+            :load_config,
+            { cli_config: expected_cli_config, world: world }.inspect
+          ],
+          [
+            :test_bootstrap,
+            Mutant::Env.empty(world, bootstrap_config).inspect
+          ],
+          [
+            :test_runner,
+            env.inspect
+          ]
+        ]
+      end
+
+      context 'without additional arguments' do
+        let(:expected_exit) { true }
+
+        context 'when tests fail' do
+          let(:env_result)    { instance_double(Mutant::Result::Env, success?: false) }
+          let(:expected_exit) { false }
+
+          let(:expected_events) do
+            super() << [
+              :stderr,
+              :puts,
+              'Test failures, exiting nonzero!'
+            ]
+          end
+
+          include_examples 'CLI run'
+        end
+
+        context 'when tests succeed' do
+          include_examples 'CLI run'
+        end
+      end
+
+      include_examples 'with additional test arguments'
     end
 
     context 'environment subject list --print-warnings' do

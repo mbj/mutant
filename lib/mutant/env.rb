@@ -66,8 +66,16 @@ module Mutant
       )
     end
 
+    def run_test_index(test_index)
+      integration.call([integration.all_tests.fetch(test_index)])
+    end
+
     def emit_mutation_worker_process_start(index:)
       hooks.run(:mutation_worker_process_start, index: index)
+    end
+
+    def emit_test_worker_process_start(index:)
+      hooks.run(:test_worker_process_start, index: index)
     end
 
     # The test selections
@@ -175,7 +183,6 @@ module Mutant
     def timer
       world.timer
     end
-
   end # Env
   # rubocop:enable Metrics/ClassLength
 end # Mutant

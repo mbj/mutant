@@ -205,6 +205,8 @@ module Mutant
     require 'mutant/expression/namespace'
     require 'mutant/expression/parser'
     require 'mutant/test'
+    require 'mutant/test/runner'
+    require 'mutant/test/runner/sink'
     require 'mutant/timer'
     require 'mutant/integration'
     require 'mutant/integration/null'
@@ -244,6 +246,7 @@ module Mutant
     require 'mutant/reporter/cli/printer/mutation_result'
     require 'mutant/reporter/cli/printer/status_progressive'
     require 'mutant/reporter/cli/printer/subject_result'
+    require 'mutant/reporter/cli/printer/test'
     require 'mutant/reporter/cli/format'
     require 'mutant/repository'
     require 'mutant/repository/diff'
@@ -328,7 +331,9 @@ module Mutant
     recorder:              recorder,
     stderr:                $stderr,
     stdout:                $stdout,
+    tempfile:              Tempfile,
     thread:                Thread,
+    time:                  Time,
     timer:                 timer
   )
 

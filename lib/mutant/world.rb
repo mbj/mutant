@@ -22,7 +22,9 @@ module Mutant
       :recorder,
       :stderr,
       :stdout,
+      :tempfile,
       :thread,
+      :time,
       :timer
     )
 

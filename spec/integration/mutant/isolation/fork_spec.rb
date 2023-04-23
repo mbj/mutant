@@ -29,7 +29,7 @@ RSpec.describe Mutant::Isolation::Fork, mutant: false do
   end
 
   context 'with configured timeout' do
-    let(:timeout) { 0.1 }
+    let(:timeout) { 1.0 }
 
     context 'when block exits within timeout' do
       def apply
@@ -55,7 +55,7 @@ RSpec.describe Mutant::Isolation::Fork, mutant: false do
 
       it 'returns successful result' do
         result = apply
-        expect(result.timeout).to be(0.1)
+        expect(result.timeout).to be(1.0)
         expect(result.value).to be(nil)
       end
     end

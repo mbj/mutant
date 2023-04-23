@@ -26,13 +26,16 @@ jobs:
           ruby: ruby-3.1
         - os: macos-latest
           ruby: ruby-3.0
+        execution:
+        - bundle exec rspec spec/unit
+        - bundle exec mutant environment test run spec/unit
     steps:
     - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle exec rspec spec/unit
+    - run: ${{ matrix.execution }}
   ruby-mutant:
     name: Mutation coverage
     runs-on: ${{ matrix.os }}

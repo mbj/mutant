@@ -19,12 +19,26 @@ module Mutant
     # @return [self]
     abstract_method :start
 
-    # Report collector state
+    # Report test start
+    #
+    # @param [Env] env
+    #
+    # @return [self]
+    abstract_method :test_start
+
+    # Report final state
     #
     # @param [Runner::Collector] collector
     #
     # @return [self]
     abstract_method :report
+
+    # Report final test state
+    #
+    # @param [Runner::Collector] collector
+    #
+    # @return [self]
+    abstract_method :test_report
 
     # Report progress on object
     #
@@ -32,6 +46,13 @@ module Mutant
     #
     # @return [self]
     abstract_method :progress
+
+    # Report progress on object
+    #
+    # @param [Object] object
+    #
+    # @return [self]
+    abstract_method :test_progress
 
     # The reporter delay
     #

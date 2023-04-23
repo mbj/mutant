@@ -4,6 +4,15 @@ module Mutant
   class Timer
     include Anima.new(:process)
 
+    # Monotonic elapsed time of block execution
+    #
+    # @return [Float]
+    def elapsed
+      start = now
+      yield
+      now - start
+    end
+
     # The now monotonic time
     #
     # @return [Float]
