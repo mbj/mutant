@@ -132,7 +132,7 @@ module Mutant
         def initialize
           super(
             passed:  false,
-            runtime: 0.0,
+            runtime: 0.0
           )
         end
       end # VoidValue
