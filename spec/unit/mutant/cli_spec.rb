@@ -700,7 +700,7 @@ RSpec.describe Mutant::CLI do
           bootstrap_result
         end
 
-        allow(Mutant::Runner).to receive(:call) do |env|
+        allow(Mutant::Mutation::Runner).to receive(:call) do |env|
           events << [:runner, env.inspect]
           runner_result
         end

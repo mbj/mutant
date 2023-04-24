@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Mutant::Runner do
+RSpec.describe Mutant::Mutation::Runner do
   describe '.call' do
     let(:block)      { instance_double(Proc)                           }
     let(:delay)      { instance_double(Float)                          }
@@ -46,7 +46,7 @@ RSpec.describe Mutant::Runner do
         block:        block,
         jobs:         1,
         process_name: 'mutant-worker-process',
-        sink:         Mutant::Runner::Sink.new(env),
+        sink:         described_class::Sink.new(env),
         source:       Mutant::Parallel::Source::Array.new(env.mutations.each_index.to_a),
         thread_name:  'mutant-worker-thread'
       )

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Mutant::Runner::Sink do
+describe Mutant::Mutation::Runner::Sink do
   setup_shared_context
 
   shared_context 'one result' do
