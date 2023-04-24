@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Mutant
-  # Abstract base class for mutant environments
+  # Mutation testing execution environment
   class Env
     include Adamantium, Anima.new(
       :config,
