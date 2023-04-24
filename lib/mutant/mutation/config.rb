@@ -13,16 +13,22 @@ module Mutant
       ignore_pattern = Transform::Block.capture('ignore pattern', &AST::Pattern.method(:parse))
 
       TRANSFORM = Transform::Sequence.new(
-        [
+        steps: [
           Transform::Hash.new(
             optional: [
-              Transform::Hash::Key.new('ignore_patterns', Transform::Array.new(ignore_pattern)),
-              Transform::Hash::Key.new('timeout',         Transform::FLOAT)
+              Transform::Hash::Key.new(
+                transform: Transform::Array.new(transform: ignore_pattern),
+                value:     'ignore_patterns'
+              ),
+              Transform::Hash::Key.new(
+                transform: Transform::FLOAT,
+                value:     'timeout'
+              )
             ],
             required: []
           ),
           Transform::Hash::Symbolize.new,
-          Transform::Success.new(DEFAULT.method(:with))
+          Transform::Success.new(block: DEFAULT.method(:with))
         ]
       )
 

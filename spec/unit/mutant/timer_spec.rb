@@ -1,13 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Timer do
-  let(:object) { described_class.new(process) }
-
-  let(:events) { [] }
-
-  let(:times) { [1.0, 2.0] }
-
-  let(:process) { class_double(Process) }
+  let(:events)  { []                                    }
+  let(:object)  { described_class.new(process: process) }
+  let(:process) { class_double(Process)                 }
+  let(:times)   { [1.0, 2.0]                            }
 
   before do
     allow(process).to receive(:clock_gettime) do |argument|

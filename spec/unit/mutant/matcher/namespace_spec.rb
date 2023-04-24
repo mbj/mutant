@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Matcher::Namespace, '#call' do
-  let(:object)      { described_class.new(parse_expression('TestApp*')) }
-  let(:env)         { instance_double(Mutant::Env)                      }
-  let(:raw_scope_a) { instance_double(Class, name: 'TestApp::Literal')  }
-  let(:raw_scope_b) { instance_double(Class, name: 'TestApp::Foo')      }
-  let(:raw_scope_c) { instance_double(Class, name: 'TestAppOther')      }
-  let(:subject_a)   { instance_double(Mutant::Subject)                  }
-  let(:subject_b)   { instance_double(Mutant::Subject)                  }
+  let(:object)      { described_class.new(expression: parse_expression('TestApp*')) }
+  let(:env)         { instance_double(Mutant::Env)                                  }
+  let(:raw_scope_a) { instance_double(Class, name: 'TestApp::Literal')              }
+  let(:raw_scope_b) { instance_double(Class, name: 'TestApp::Foo')                  }
+  let(:raw_scope_c) { instance_double(Class, name: 'TestAppOther')                  }
+  let(:subject_a)   { instance_double(Mutant::Subject)                              }
+  let(:subject_b)   { instance_double(Mutant::Subject)                              }
 
   before do
     [
@@ -22,13 +22,13 @@ RSpec.describe Mutant::Matcher::Namespace, '#call' do
       expect(matcher).to receive(:call).with(env).and_return(subjects)
 
       expect(klass).to receive(:new)
-        .with(scope)
+        .with(scope: scope)
         .and_return(matcher)
     end
 
     allow(env).to receive(:matchable_scopes).and_return(
       [raw_scope_a, raw_scope_b, raw_scope_c].map do |raw_scope|
-        Mutant::Scope.new(raw_scope, parse_expression(raw_scope.name))
+        Mutant::Scope.new(raw: raw_scope, expression: parse_expression(raw_scope.name))
       end
     )
   end

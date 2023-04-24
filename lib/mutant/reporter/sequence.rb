@@ -3,7 +3,7 @@
 module Mutant
   class Reporter
     class Sequence < self
-      include Concord.new(:reporters)
+      include Anima.new(:reporters)
 
       %i[warn progress report start].each do |name|
         define_method(name) do |value|

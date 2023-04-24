@@ -9,7 +9,7 @@ module Mutant
     # to hook in custom matchers. In that case the scope matchers to expand
     # should be passed as arguments to the constructor.
     class Scope < self
-      include Concord.new(:scope)
+      include Anima.new(:scope)
 
       MATCHERS = [
         Matcher::Methods::Singleton,
@@ -25,13 +25,13 @@ module Mutant
       #
       # @return [Enumerable<Subject>]
       def call(env)
-        Chain.new(effective_matchers).call(env)
+        Chain.new(matchers: effective_matchers).call(env)
       end
 
     private
 
       def effective_matchers
-        MATCHERS.map { |matcher| matcher.new(scope) }
+        MATCHERS.map { |matcher| matcher.new(scope: scope) }
       end
 
     end # Scope

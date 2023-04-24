@@ -7,7 +7,7 @@ module Mutant
 
       # Metadata for send nodes
       class Send
-        include NamedChildren, Concord.new(:node), NodePredicates
+        include NamedChildren, Anima.new(:node), NodePredicates
 
         children :receiver, :selector
 
@@ -50,7 +50,7 @@ module Mutant
         def receiver_possible_top_level_const?
           return false unless receiver && n_const?(receiver)
 
-          Const.new(receiver).possible_top_level?
+          Const.new(node: receiver).possible_top_level?
         end
 
       private
@@ -63,7 +63,7 @@ module Mutant
           receiver                &&
             selector.equal?(:new) &&
             n_const?(receiver)    &&
-            Const.new(receiver).name.equal?(:Proc)
+            Const.new(node: receiver).name.equal?(:Proc)
         end
 
       end # Send

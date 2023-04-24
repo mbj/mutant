@@ -4,7 +4,7 @@ module Mutant
   # Represent a mutated node with its subject
   class Mutation
     include AbstractType, Adamantium
-    include Concord::Public.new(:subject, :node)
+    include Anima.new(:subject, :node)
 
     CODE_DELIMITER = "\0"
     CODE_RANGE     = (..4).freeze

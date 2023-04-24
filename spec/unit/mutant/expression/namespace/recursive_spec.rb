@@ -7,7 +7,7 @@ RSpec.describe Mutant::Expression::Namespace::Recursive do
   describe '#matcher' do
     subject { object.matcher }
 
-    it { should eql(Mutant::Matcher::Namespace.new(object)) }
+    it { should eql(Mutant::Matcher::Namespace.new(expression: object)) }
   end
 
   describe '#syntax' do

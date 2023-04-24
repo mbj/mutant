@@ -20,8 +20,8 @@ module Mutant
     # @return [Matcher]
     def self.from_config(config)
       Filter.new(
-        Chain.new(config.subjects.map(&:matcher)),
-        method(:allowed_subject?).curry.call(config)
+        matcher:   Chain.new(matchers: config.subjects.map(&:matcher)),
+        predicate: method(:allowed_subject?).curry.call(config)
       )
     end
 

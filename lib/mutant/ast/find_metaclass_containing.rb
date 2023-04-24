@@ -10,7 +10,7 @@ module Mutant
     # Descending into 'begin' nodes is supported because these are generated for
     # the one-line syntax class << self; def foo; end
     class FindMetaclassContaining
-      include NodePredicates, Concord.new(:ast, :target), Procto
+      include NodePredicates, Anima.new(:ast, :target), Procto
 
       SCLASS_BODY_INDEX = 1
 

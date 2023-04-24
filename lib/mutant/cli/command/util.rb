@@ -35,7 +35,7 @@ module Mutant
             memoize :node
 
             class File < self
-              include Concord.new(:pathname, :source)
+              include Anima.new(:pathname, :source)
 
               public :source
 
@@ -45,7 +45,7 @@ module Mutant
             end # File
 
             class Source < self
-              include Concord::Public.new(:source)
+              include Anima.new(:source)
 
               def identification
                 '<cli-source>'
@@ -62,7 +62,7 @@ module Mutant
 
           def add_target_options(parser)
             parser.on('-e', '--evaluate SOURCE') do |source|
-              @targets << Target::Source.new(source)
+              @targets << Target::Source.new(source: source)
             end
 
             parser.on('-i', '--ignore-pattern AST_PATTERN') do |pattern|
@@ -78,8 +78,8 @@ module Mutant
               node:   target.node
             ).each do |mutation|
               Reporter::CLI::Printer::Mutation.call(
-                world.stdout,
-                Mutant::Mutation::Evil.new(target, mutation)
+                object: Mutant::Mutation::Evil.new(subject: target, node: mutation),
+                output: world.stdout
               )
             end
           end
@@ -97,7 +97,7 @@ module Mutant
           end
 
           def read_file(pathname)
-            Either::Right.new(Target::File.new(pathname, pathname.read))
+            Either::Right.new(Target::File.new(pathname: pathname, source: pathname.read))
           rescue StandardError => exception
             Either::Left.new("Cannot read file: #{exception}")
           end

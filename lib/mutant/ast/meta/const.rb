@@ -7,7 +7,7 @@ module Mutant
 
       # Metadata for const nodes
       class Const
-        include NamedChildren, Concord.new(:node), NodePredicates
+        include NamedChildren, Anima.new(:node), NodePredicates
 
         children :base, :name
 

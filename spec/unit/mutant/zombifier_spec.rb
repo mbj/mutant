@@ -86,7 +86,7 @@ RSpec.describe Mutant::Zombifier do
 
   let(:file_system) do
     MutantSpec::FileSystem.new(
-      file_entries.transform_values(&MutantSpec::FileState.public_method(:new))
+      file_states: file_entries.transform_values(&MutantSpec::FileState.public_method(:new))
     )
   end
 

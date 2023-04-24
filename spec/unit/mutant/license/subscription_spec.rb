@@ -9,9 +9,9 @@ RSpec.describe Mutant::License::Subscription do
     context 'on commercial license' do
       let(:object) do
         described_class::Commercial.new(
-          [
-            described_class::Commercial::Author.new('mbj@schirp-dso.com'),
-            described_class::Commercial::Author.new('other@schirp-dso.com')
+          licensed: [
+            described_class::Commercial::Author.new(email: 'mbj@schirp-dso.com'),
+            described_class::Commercial::Author.new(email: 'other@schirp-dso.com')
           ].to_set
         )
       end
@@ -29,9 +29,9 @@ RSpec.describe Mutant::License::Subscription do
     context 'on opensource license' do
       let(:object) do
         described_class::Opensource.new(
-          [
-            described_class::Opensource::Repository.new('github.com', 'mbj/mutant'),
-            described_class::Opensource::Repository.new('github.com', 'mbj/unparser')
+          licensed: [
+            described_class::Opensource::Repository.new(host: 'github.com', path: 'mbj/mutant'),
+            described_class::Opensource::Repository.new(host: 'github.com', path: 'mbj/unparser')
           ].to_set
         )
       end
@@ -104,10 +104,10 @@ RSpec.describe Mutant::License::Subscription do
 
       let(:subscription) do
         Mutant::License::Subscription::Opensource.new(
-          [
+          licensed: [
             Mutant::License::Subscription::Opensource::Repository.new(
-              'github.com',
-              'mbj/mutant'
+              host: 'github.com',
+              path: 'mbj/mutant'
             )
           ].to_set
         )
@@ -125,10 +125,10 @@ RSpec.describe Mutant::License::Subscription do
 
           let(:subscription) do
             Mutant::License::Subscription::Opensource.new(
-              [
+              licensed: [
                 Mutant::License::Subscription::Opensource::Repository.new(
-                  'github.com',
-                  'mbj/*'
+                  host: 'github.com',
+                  path: 'mbj/*'
                 )
               ].to_set
             )
@@ -142,14 +142,14 @@ RSpec.describe Mutant::License::Subscription do
 
           let(:subscription) do
             Mutant::License::Subscription::Opensource.new(
-              [
+              licensed: [
                 Mutant::License::Subscription::Opensource::Repository.new(
-                  'github.com',
-                  'mbj/mutant'
+                  host: 'github.com',
+                  path: 'mbj/mutant'
                 ),
                 Mutant::License::Subscription::Opensource::Repository.new(
-                  'github.com',
-                  'mbj/unparser'
+                  host: 'github.com',
+                  path: 'mbj/unparser'
                 )
               ].to_set
             )
@@ -357,9 +357,8 @@ RSpec.describe Mutant::License::Subscription do
 
       let(:subscription) do
         Mutant::License::Subscription::Commercial.new(
-          licensed_authors
-            .map(&Mutant::License::Subscription::Commercial::Author.public_method(:new))
-            .to_set
+          licensed: licensed_authors
+            .to_set { |email| Mutant::License::Subscription::Commercial::Author.new(email: email) }
         )
       end
 

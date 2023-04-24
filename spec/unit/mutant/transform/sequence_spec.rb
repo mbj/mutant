@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Sequence do
-  subject { described_class.new(steps) }
+  subject { described_class.new(steps: steps) }
 
   let(:steps) do
     [
@@ -15,7 +15,7 @@ RSpec.describe Mutant::Transform::Sequence do
   end
 
   let(:key_transform) do
-    Mutant::Transform::Hash::Key.new('foo', Mutant::Transform::Boolean.new)
+    Mutant::Transform::Hash::Key.new(value: 'foo', transform: Mutant::Transform::Boolean.new)
   end
 
   let(:boolean_transform) do

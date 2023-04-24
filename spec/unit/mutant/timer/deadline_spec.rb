@@ -81,7 +81,7 @@ RSpec.describe Mutant::Timer::Deadline do
       let(:allowed_time) { 1.5 }
 
       it 'returns status with time left' do
-        expect(apply).to eql(described_class::Status.new(0.5))
+        expect(apply).to eql(described_class::Status.new(time_left: 0.5))
       end
     end
 
@@ -89,14 +89,14 @@ RSpec.describe Mutant::Timer::Deadline do
       let(:allowed_time) { 0.5 }
 
       it 'returns status with time passed' do
-        expect(apply).to eql(described_class::Status.new(-0.5))
+        expect(apply).to eql(described_class::Status.new(time_left: -0.5))
       end
     end
   end
 end
 
 RSpec.describe Mutant::Timer::Deadline::Status do
-  let(:object) { described_class.new(time_left) }
+  let(:object) { described_class.new(time_left: time_left) }
 
   describe '#ok?' do
     def apply
@@ -157,7 +157,7 @@ RSpec.describe Mutant::Timer::Deadline::None do
     end
 
     it 'returns endles status' do
-      expect(apply).to eql(described_class::Status.new(nil))
+      expect(apply).to eql(described_class::Status.new(time_left: nil))
     end
   end
 end

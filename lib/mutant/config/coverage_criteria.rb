@@ -20,12 +20,21 @@ module Mutant
 
       TRANSFORM =
         Transform::Sequence.new(
-          [
+          steps: [
             Transform::Hash.new(
               optional: [
-                Transform::Hash::Key.new('process_abort', Transform::BOOLEAN),
-                Transform::Hash::Key.new('test_result',   Transform::BOOLEAN),
-                Transform::Hash::Key.new('timeout',       Transform::BOOLEAN)
+                Transform::Hash::Key.new(
+                  transform: Transform::BOOLEAN,
+                  value:     'process_abort'
+                ),
+                Transform::Hash::Key.new(
+                  transform: Transform::BOOLEAN,
+                  value:     'test_result'
+                ),
+                Transform::Hash::Key.new(
+                  transform: Transform::BOOLEAN,
+                  value:     'timeout'
+                )
               ],
               required: []
             ),

@@ -14,8 +14,8 @@ RSpec.describe Mutant::Subject::Method::Instance do
 
   let(:context) do
     Mutant::Context.new(
-      scope,
-      instance_double(Pathname)
+      scope:       scope,
+      source_path: instance_double(Pathname)
     )
   end
 
@@ -94,8 +94,8 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     )
   end
 
-  let(:context)  { Mutant::Context.new(scope, double('Source Path')) }
-  let(:node)     { Unparser.parse('def foo; end')                    }
+  let(:context)  { Mutant::Context.new(scope: scope, source_path: double('Source Path')) }
+  let(:node)     { Unparser.parse('def foo; end')                                        }
 
   shared_context 'memoizable scope setup' do
     let(:scope) do
@@ -134,16 +134,16 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     let(:expected) do
       [
         Mutant::Mutation::Neutral.new(
-          object,
-          s(:begin, s(:def, :foo, s(:args), nil), memoize_node)
+          subject: object,
+          node:    s(:begin, s(:def, :foo, s(:args), nil), memoize_node)
         ),
         Mutant::Mutation::Evil.new(
-          object,
-          s(:begin, s(:def, :foo, s(:args), s(:send, nil, :raise)), memoize_node)
+          subject: object,
+          node:    s(:begin, s(:def, :foo, s(:args), s(:send, nil, :raise)), memoize_node)
         ),
         Mutant::Mutation::Evil.new(
-          object,
-          s(:begin, s(:def, :foo, s(:args), s(:zsuper)), memoize_node)
+          subject: object,
+          node:    s(:begin, s(:def, :foo, s(:args), s(:zsuper)), memoize_node)
         )
       ]
     end

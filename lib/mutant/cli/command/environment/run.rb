@@ -36,7 +36,7 @@ module Mutant
             License.call(world)
               .bind { bootstrap }
               .bind(&method(:validate_tests))
-              .bind(&Runner.public_method(:call))
+              .bind(&Mutation::Runner.public_method(:call))
               .bind(&method(:from_result))
           end
 

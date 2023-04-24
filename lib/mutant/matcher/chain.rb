@@ -4,7 +4,7 @@ module Mutant
   class Matcher
     # Matcher chaining results of other matchers together
     class Chain < self
-      include Concord.new(:matchers)
+      include Anima.new(:matchers)
 
       # Call matcher
       #

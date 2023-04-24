@@ -4,7 +4,7 @@ RSpec.describe Mutant::AST::NamedChildren do
   describe '.included' do
     let(:klass) do
       Class.new do
-        include Mutant::AST::NamedChildren, Unparser::Concord.new(:node)
+        include Mutant::AST::NamedChildren, Unparser::Anima.new(:node)
 
         children :foo, :bar
       end
@@ -18,7 +18,7 @@ RSpec.describe Mutant::AST::NamedChildren do
       end
     end
 
-    let(:instance) { klass.new(node) }
+    let(:instance) { klass.new(node: node) }
 
     let(:node_foo) { s(:foo) }
     let(:node_bar) { s(:bar) }

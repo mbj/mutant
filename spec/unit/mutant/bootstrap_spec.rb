@@ -45,7 +45,7 @@ RSpec.describe Mutant::Bootstrap do
   let(:expected_env) do
     env_with_scopes.with(
       integration: integration,
-      selector:    Mutant::Selector::Expression.new(integration)
+      selector:    Mutant::Selector::Expression.new(integration: integration)
     )
   end
 
@@ -287,14 +287,14 @@ RSpec.describe Mutant::Bootstrap do
       let(:env_with_scopes) do
         env_initial.with(
           matchable_scopes: [
-            Mutant::Scope.new(TestApp::Empty,   subject_expressions.last),
-            Mutant::Scope.new(TestApp::Literal, subject_expressions.first)
+            Mutant::Scope.new(raw: TestApp::Empty,   expression: subject_expressions.last),
+            Mutant::Scope.new(raw: TestApp::Literal, expression: subject_expressions.first)
           ]
         )
       end
 
       let(:expected_subjects) do
-        Mutant::Matcher::Scope.new(TestApp::Literal).call(env_initial)
+        Mutant::Matcher::Scope.new(scope: TestApp::Literal).call(env_initial)
       end
 
       let(:expected_env) do
@@ -326,7 +326,7 @@ RSpec.describe Mutant::Bootstrap do
             )
 
             Mutant::Matcher::Scope
-              .new(TestApp::Literal)
+              .new(scope: TestApp::Literal)
               .call(Mutant::Env.empty(world, config)).last
           end
 

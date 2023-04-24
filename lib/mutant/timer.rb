@@ -2,7 +2,7 @@
 
 module Mutant
   class Timer
-    include Concord.new(:process)
+    include Anima.new(:process)
 
     # The now monotonic time
     #
@@ -28,7 +28,7 @@ module Mutant
 
       # Deadline status snapshot
       class Status
-        include Concord::Public.new(:time_left)
+        include Anima.new(:time_left)
 
         # Test if deadline is not yet expired
         def ok?
@@ -40,7 +40,7 @@ module Mutant
       #
       # @return [Status]
       def status
-        Status.new(time_left)
+        Status.new(time_left: time_left)
       end
 
       # Probe the time left

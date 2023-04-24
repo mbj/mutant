@@ -5,7 +5,7 @@ module Mutant
     class Subscription
       class Opensource < self
         class Repository
-          include Concord.new(:host, :path)
+          include Anima.new(:host, :path)
 
           REMOTE_REGEXP    = /\A[^\t]+\t(?<url>[^ ]+) \((?:fetch|push)\)\n\z/.freeze
           GIT_SSH_REGEXP   = %r{\A[^@]+@(?<host>[^:/]+)[:/](?<path>.+?)(?:\.git)?\z}.freeze
@@ -18,7 +18,8 @@ module Mutant
           end
 
           def self.parse(input)
-            new(*input.split('/', 2).map(&:downcase))
+            host, path = *input.split('/', 2).map(&:downcase)
+            new(host: host, path: path)
           end
 
           def self.parse_remote(input)
@@ -36,7 +37,7 @@ module Mutant
               fail "Unmatched git remote URL: #{input.inspect}"
             end
 
-            new(match[:host], match[:path].downcase)
+            new(host: match[:host], path: match[:path].downcase)
           end
           private_class_method :parse_url
 
@@ -52,12 +53,7 @@ module Mutant
         end # Opensource
 
         def self.from_json(value)
-          new(
-            value
-              .fetch('repositories')
-              .map(&Repository.public_method(:parse))
-              .to_set
-          )
+          new(licensed: value.fetch('repositories').map(&Repository.public_method(:parse)).to_set)
         end
 
         def call(world)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Named do
-  subject { described_class.new(name, transform) }
+  subject { described_class.new(name: name, transform: transform) }
 
   let(:name)      { 'transform-name'               }
   let(:transform) { Mutant::Transform::Boolean.new }

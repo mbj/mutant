@@ -7,7 +7,7 @@ module Mutant
 
       # Metadata for resbody nodes
       class Resbody
-        include NamedChildren, Concord.new(:node)
+        include NamedChildren, Anima.new(:node)
 
         children :captures, :assignment, :body
 

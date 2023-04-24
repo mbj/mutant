@@ -15,8 +15,8 @@ RSpec.describe Mutant::Matcher::Descendants do
         Mutant::Subject::Method::Instance.new(
           config:     Mutant::Subject::Config::DEFAULT,
           context:    Mutant::Context.new(
-            TestApp::Foo::Bar::Baz,
-            TestApp::ROOT.join('lib/test_app.rb')
+            scope:       TestApp::Foo::Bar::Baz,
+            source_path: TestApp::ROOT.join('lib/test_app.rb')
           ),
           node:       s(:def, :foo, s(:args), nil),
           visibility: :public

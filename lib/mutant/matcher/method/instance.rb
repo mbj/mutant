@@ -12,7 +12,9 @@ module Mutant
         # @param [UnboundMethod] method
         #
         # @return [Matcher::Method::Instance]
-        def self.new(scope, target_method)
+        #
+        # rubocop:disable Metrics/MethodLength
+        def self.new(scope:, target_method:)
           evaluator =
             if memoized_method?(scope, target_method.name)
               Evaluator::Memoized
@@ -20,8 +22,13 @@ module Mutant
               Evaluator
             end
 
-          super(scope, target_method, evaluator)
+          super(
+            evaluator:     evaluator,
+            scope:         scope,
+            target_method: target_method
+          )
         end
+        # rubocop:enable Metrics/MethodLength
 
         def self.memoized_method?(scope, method_name)
           scope < Adamantium && scope.memoized?(method_name)
@@ -37,8 +44,6 @@ module Mutant
         private
 
           def match?(node)
-            n_def?(node)                           &&
-            node.location.line.equal?(source_line) &&
             node.children.fetch(NAME_INDEX).equal?(method_name)
           end
 

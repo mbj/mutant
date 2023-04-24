@@ -28,7 +28,7 @@ module Mutant
     # * Child process freezing after closing the pipes needs to be
     #   detected by parent process.
     class Fork < self
-      include(Adamantium, Concord.new(:world))
+      include(Adamantium, Anima.new(:world))
 
       READ_SIZE = 4096
 

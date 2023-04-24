@@ -13,7 +13,7 @@ RSpec.describe Mutant::Subject::Method::Singleton do
   let(:node) { s(:defs, s(:self), :foo, s(:args)) }
 
   let(:context) do
-    Mutant::Context.new(scope, instance_double(Pathname))
+    Mutant::Context.new(scope: scope, source_path: instance_double(Pathname))
   end
 
   let(:scope) do

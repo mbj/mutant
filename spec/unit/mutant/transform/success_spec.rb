@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Success do
-  subject { described_class.new(block) }
+  subject { described_class.new(block: block) }
 
   let(:block) { ->(value) { value * 2 } }
 

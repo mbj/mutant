@@ -5,7 +5,7 @@ module XSpec
   Concord = Unparser::Concord
 
   class MessageReaction
-    include Concord.new(:event_list)
+    include Anima.new(:event_list)
 
     TERMINATE_EVENTS = %i[return exception].to_set.freeze
     VALID_EVENTS     = %i[return execute exception yields].to_set.freeze
@@ -26,7 +26,7 @@ module XSpec
     def self.parse(events)
       event_list = events.to_a
       assert_valid(event_list)
-      new(event_list)
+      new(event_list: event_list)
     end
 
   private
@@ -112,11 +112,11 @@ module XSpec
     end
 
     def call(observation)
-      Verifier.new(self, observation).call
+      Verifier.new(expectation: self, observation: observation).call
     end
 
     class Verifier
-      include Concord.new(:expectation, :observation)
+      include Anima.new(:expectation, :observation)
 
       VERIFIED_ATTRIBUTES = %i[receiver selector arguments].freeze
 
@@ -150,7 +150,7 @@ module XSpec
   end # MessageObservation
 
   class ExpectationVerifier
-    include Concord.new(:expectations)
+    include Anima.new(:expectations)
 
     def call(observation)
       expectation = expectations.shift or fail "No expected message but observed #{observation.inspect}"
@@ -163,7 +163,7 @@ module XSpec
 
     # rubocop:disable Metrics/MethodLength
     def self.verify(rspec_context, expectations)
-      verifier = new(expectations)
+      verifier = new(expectations: expectations)
 
       hooks = expectations
         .to_set { |expectation| [expectation.receiver, expectation.selector] }

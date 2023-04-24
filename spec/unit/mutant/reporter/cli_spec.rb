@@ -3,12 +3,9 @@
 RSpec.describe Mutant::Reporter::CLI do
   setup_shared_context
 
-  let(:object) { described_class.new(output, format) }
-  let(:tty?)   { false                               }
-
-  let(:format) do
-    described_class::Format::Progressive.new(tty?)
-  end
+  let(:format) { described_class::Format::Progressive.new(tty: tty?) }
+  let(:object) { described_class.new(format: format, output: output) }
+  let(:tty?)   { false                                               }
 
   def contents
     output.rewind
@@ -29,18 +26,18 @@ RSpec.describe Mutant::Reporter::CLI do
       let(:tty?)   { true                            }
       let(:output) { instance_double(IO, tty?: true) }
 
-      it { should eql(described_class.new(output, format)) }
+      it { should eql(described_class.new(format: format, output: output)) }
     end
 
     context 'when output is not a tty' do
       context 'and does not respond to #tty?' do
         let(:output) { nil }
 
-        it { should eql(described_class.new(output, format)) }
+        it { should eql(described_class.new(format: format, output: output)) }
       end
 
       context 'and does respond to #tty?' do
-        it { should eql(described_class.new(output, format)) }
+        it { should eql(described_class.new(format: format, output: output)) }
       end
     end
   end

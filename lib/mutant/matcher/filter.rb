@@ -4,7 +4,7 @@ module Mutant
   class Matcher
     # Matcher filter
     class Filter < self
-      include Concord.new(:matcher, :predicate)
+      include Anima.new(:matcher, :predicate)
 
       # Enumerate matches
       #

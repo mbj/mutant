@@ -23,7 +23,7 @@ module Mutant
 
         def emit_optarg_body_assignments
           arguments.children.each do |argument|
-            next unless n_optarg?(argument) && AST::Meta::Optarg.new(argument).used?
+            next unless n_optarg?(argument) && AST::Meta::Optarg.new(node: argument).used?
 
             emit_body_prepend(s(:lvasgn, *argument))
           end

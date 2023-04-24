@@ -3,7 +3,7 @@
 RSpec.describe Mutant::Reporter::CLI::Printer do
   let(:output) { StringIO.new }
 
-  subject { class_under_test.call(output, reportable) }
+  subject { class_under_test.call(output: output, object: reportable) }
 
   def self.it_reports(expectation)
     it 'writes expected report' do

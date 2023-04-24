@@ -101,8 +101,8 @@ module Mutant
     def self.load_contents(env, path)
       Transform::Named
         .new(
-          path.to_s,
-          sequence(env.config.reporter)
+          name:      path.to_s,
+          transform: sequence(env.config.reporter)
         )
         .call(path)
         .lmap(&:compact_message)
@@ -111,11 +111,11 @@ module Mutant
 
     def self.sequence(reporter)
       Transform::Sequence.new(
-        [
-          Transform::Exception.new(SystemCallError, :read.to_proc),
-          Transform::Exception.new(YAML::SyntaxError, YAML.public_method(:safe_load)),
-          Transform::Primitive.new(Hash),
-          Transform::Success.new(->(hash) { deprecations(reporter, hash) }),
+        steps: [
+          Transform::Exception.new(error_class: SystemCallError,   block: :read.to_proc),
+          Transform::Exception.new(error_class: YAML::SyntaxError, block: YAML.public_method(:safe_load)),
+          Transform::Primitive.new(primitive: Hash),
+          Transform::Success.new(block: ->(hash) { deprecations(reporter, hash) }),
           *TRANSFORMS
         ]
       )
@@ -130,10 +130,10 @@ module Mutant
     end
 
     PATHNAME_ARRAY = Transform::Array.new(
-      Transform::Sequence.new(
-        [
+      transform: Transform::Sequence.new(
+        steps: [
           Transform::STRING,
-          Transform::Exception.new(ArgumentError, Pathname.public_method(:new))
+          Transform::Exception.new(error_class: ArgumentError, block: Pathname.public_method(:new))
         ]
       )
     )
@@ -170,24 +170,51 @@ module Mutant
     TRANSFORMS = [
       Transform::Hash.new(
         optional: [
-          Transform::Hash::Key.new('coverage_criteria', ->(value) { CoverageCriteria::TRANSFORM.call(value) }),
           Transform::Hash::Key.new(
-            'environment_variables',
-            Transform::Sequence.new(
-              [
-                Transform::Primitive.new(Hash),
+            transform: ->(value) { CoverageCriteria::TRANSFORM.call(value) },
+            value:     'coverage_criteria'
+          ),
+          Transform::Hash::Key.new(
+            transform: Transform::Sequence.new(
+              steps: [
+                Transform::Primitive.new(primitive: Hash),
                 Transform::Block.capture(:environment_variables, &method(:parse_environment_variables))
               ]
-            )
+            ),
+            value:     'environment_variables'
           ),
-          Transform::Hash::Key.new('fail_fast',   Transform::BOOLEAN),
-          Transform::Hash::Key.new('hooks',       PATHNAME_ARRAY),
-          Transform::Hash::Key.new('includes',    Transform::STRING_ARRAY),
-          Transform::Hash::Key.new('integration', Transform::STRING),
-          Transform::Hash::Key.new('jobs',        Transform::INTEGER),
-          Transform::Hash::Key.new('matcher',     Matcher::Config::LOADER),
-          Transform::Hash::Key.new('mutation',    Mutation::Config::TRANSFORM),
-          Transform::Hash::Key.new('requires',    Transform::STRING_ARRAY)
+          Transform::Hash::Key.new(
+            transform: Transform::BOOLEAN,
+            value:     'fail_fast'
+          ),
+          Transform::Hash::Key.new(
+            transform: PATHNAME_ARRAY,
+            value:     'hooks'
+          ),
+          Transform::Hash::Key.new(
+            transform: Transform::STRING_ARRAY,
+            value:     'includes'
+          ),
+          Transform::Hash::Key.new(
+            transform: Transform::STRING,
+            value:     'integration'
+          ),
+          Transform::Hash::Key.new(
+            transform: Transform::INTEGER,
+            value:     'jobs'
+          ),
+          Transform::Hash::Key.new(
+            transform: Matcher::Config::LOADER,
+            value:     'matcher'
+          ),
+          Transform::Hash::Key.new(
+            transform: Mutation::Config::TRANSFORM,
+            value:     'mutation'
+          ),
+          Transform::Hash::Key.new(
+            transform: Transform::STRING_ARRAY,
+            value:     'requires'
+          )
         ],
         required: []
       ),

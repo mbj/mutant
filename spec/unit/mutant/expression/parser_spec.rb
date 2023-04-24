@@ -34,7 +34,7 @@ RSpec.describe Mutant::Expression::Parser do
 
     context 'on ambiguous input' do
       subject do
-        described_class.new([test_a, test_b])
+        described_class.new(types: [test_a, test_b])
       end
 
       let(:test_a) do

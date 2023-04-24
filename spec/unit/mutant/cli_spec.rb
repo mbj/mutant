@@ -659,7 +659,7 @@ RSpec.describe Mutant::CLI do
       let(:subject_a) do
         Mutant::Subject::Method::Instance.new(
           config:     Mutant::Subject::Config::DEFAULT,
-          context:    Mutant::Context.new(Object, 'subject.rb'),
+          context:    Mutant::Context.new(scope: Object, source_path: 'subject.rb'),
           node:       s(:def, :send, s(:args), nil),
           visibility: :public
         )
@@ -700,7 +700,7 @@ RSpec.describe Mutant::CLI do
           bootstrap_result
         end
 
-        allow(Mutant::Runner).to receive(:call) do |env|
+        allow(Mutant::Mutation::Runner).to receive(:call) do |env|
           events << [:runner, env.inspect]
           runner_result
         end
@@ -1290,7 +1290,7 @@ RSpec.describe Mutant::CLI do
               matcher: file_config.matcher.with(
                 subject_filters: [
                   Mutant::Repository::SubjectFilter.new(
-                    Mutant::Repository::Diff.new(
+                    diff: Mutant::Repository::Diff.new(
                       to:    'reference',
                       world: world
                     )
@@ -1305,7 +1305,7 @@ RSpec.describe Mutant::CLI do
               matcher: file_config.matcher.with(
                 subject_filters: [
                   Mutant::Repository::SubjectFilter.new(
-                    Mutant::Repository::Diff.new(
+                    diff: Mutant::Repository::Diff.new(
                       to:    'reference',
                       world: world
                     )

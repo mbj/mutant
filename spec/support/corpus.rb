@@ -82,7 +82,7 @@ module MutantSpec
       #   otherwise
       def verify_mutation_generation
         checkout
-        timer = Mutant::Timer.new(Process)
+        timer = Mutant::Timer.new(process: Process)
 
         start = timer.now
 
@@ -260,38 +260,62 @@ module MutantSpec
       Transform = Mutant::Transform
 
       integration = Transform::Sequence.new(
-        [
+        steps: [
           Transform::Hash.new(
             optional: [],
             required: [
-              Transform::Hash::Key.new('exclude',             Transform::STRING_ARRAY),
-              Transform::Hash::Key.new('integration',         Transform::STRING),
-              Transform::Hash::Key.new('mutation_coverage',   Transform::BOOLEAN),
-              Transform::Hash::Key.new('mutation_generation', Transform::BOOLEAN),
-              Transform::Hash::Key.new('name',                Transform::STRING),
-              Transform::Hash::Key.new('namespace',           Transform::STRING),
-              Transform::Hash::Key.new('repo_ref',            Transform::STRING),
-              Transform::Hash::Key.new('repo_uri',            Transform::STRING)
+              Transform::Hash::Key.new(
+                transform: Transform::STRING_ARRAY,
+                value:     'exclude'
+              ),
+              Transform::Hash::Key.new(
+                transform: Transform::STRING,
+                value:     'integration'
+              ),
+              Transform::Hash::Key.new(
+                transform: Transform::BOOLEAN,
+                value:     'mutation_coverage'
+              ),
+              Transform::Hash::Key.new(
+                transform: Transform::BOOLEAN,
+                value:     'mutation_generation'
+              ),
+              Transform::Hash::Key.new(
+                transform: Transform::STRING,
+                value:     'name'
+              ),
+              Transform::Hash::Key.new(
+                transform: Transform::STRING,
+                value:     'namespace'
+              ),
+              Transform::Hash::Key.new(
+                transform: Transform::STRING,
+                value:     'repo_ref'
+              ),
+              Transform::Hash::Key.new(
+                transform: Transform::STRING,
+                value:     'repo_uri'
+              )
             ]
           ),
           Transform::Hash::Symbolize.new,
-          Transform::Exception.new(RuntimeError, Project.public_method(:new))
+          Transform::Exception.new(error_class: RuntimeError, block: Project.public_method(:new))
         ]
       )
 
       transform =
         Transform::Sequence.new(
-          [
-            Transform::Exception.new(SystemCallError, :read.to_proc),
-            Transform::Exception.new(YAML::SyntaxError, YAML.public_method(:safe_load)),
-            Transform::Array.new(integration)
+          steps: [
+            Transform::Exception.new(error_class: SystemCallError,   block: :read.to_proc),
+            Transform::Exception.new(error_class: YAML::SyntaxError, block: YAML.public_method(:safe_load)),
+            Transform::Array.new(transform: integration)
           ]
         )
 
       path = ROOT.join('spec', 'integrations.yml')
 
       ALL = Transform::Named
-        .new(path, transform)
+        .new(name: path, transform: transform)
         .call(path)
         .lmap(&:compact_message)
         .lmap(&method(:fail))

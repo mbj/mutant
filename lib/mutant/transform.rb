@@ -56,13 +56,13 @@ module Mutant
 
     # Wrapper adding a name to a transformation
     class Named < self
-      include Concord.new(:name, :transformer)
+      include Anima.new(:name, :transform)
 
       # Apply transformation to input
       #
       # @return [Either<Error, Object>]
       def call(input)
-        transformer.call(input).lmap(&method(:wrap_error))
+        transform.call(input).lmap(&method(:wrap_error))
       end
 
       # Named slug
@@ -166,7 +166,7 @@ module Mutant
 
     # Transform guarding a specific primitive
     class Primitive < self
-      include Concord.new(:primitive)
+      include Anima.new(:primitive)
 
       MESSAGE = 'Expected: %<expected>s but got: %<actual>s'
 
@@ -228,10 +228,10 @@ module Mutant
 
     # Transform an array via mapping it over transform
     class Array < self
-      include Concord.new(:transform)
+      include Anima.new(:transform)
 
       MESSAGE   = 'Failed to coerce array at index: %<index>d'
-      PRIMITIVE = Primitive.new(::Array)
+      PRIMITIVE = Primitive.new(primitive: ::Array)
 
       private_constant(*constants(false))
 
@@ -275,7 +275,7 @@ module Mutant
       include Anima.new(:optional, :required)
 
       KEY_MESSAGE = 'Missing keys: %<missing>s, Unexpected keys: %<unexpected>s'
-      PRIMITIVE   = Primitive.new(::Hash)
+      PRIMITIVE   = Primitive.new(primitive: ::Hash)
 
       private_constant(*constants(false))
 
@@ -293,7 +293,7 @@ module Mutant
 
       # Key specific transformation
       class Key < Transform
-        include Concord::Public.new(:value, :transform)
+        include Anima.new(:value, :transform)
 
         # Rendering slug
         #
@@ -401,7 +401,7 @@ module Mutant
 
     # Sequence of transformations
     class Sequence < self
-      include Concord.new(:steps)
+      include Anima.new(:steps)
 
       # Apply transformation to input
       #
@@ -423,7 +423,7 @@ module Mutant
 
     # Always successful transformation
     class Success < self
-      include Concord.new(:block)
+      include Anima.new(:block)
 
       # Apply transformation to input
       #
@@ -437,7 +437,7 @@ module Mutant
 
     # Generic exception transformer
     class Exception < self
-      include Concord.new(:error_class, :block)
+      include Anima.new(:error_class, :block)
 
       # Apply transformation to input
       #
@@ -452,9 +452,9 @@ module Mutant
     end # Exception
 
     BOOLEAN      = Transform::Boolean.new
-    FLOAT        = Transform::Primitive.new(Float)
-    INTEGER      = Transform::Primitive.new(Integer)
-    STRING       = Transform::Primitive.new(String)
-    STRING_ARRAY = Transform::Array.new(STRING)
+    FLOAT        = Transform::Primitive.new(primitive: Float)
+    INTEGER      = Transform::Primitive.new(primitive: Integer)
+    STRING       = Transform::Primitive.new(primitive: String)
+    STRING_ARRAY = Transform::Array.new(transform: STRING)
   end # Transform
 end # Mutant

@@ -5,14 +5,14 @@ module Mutant
     class Subscription
       class Commercial < self
         class Author
-          include Concord.new(:email)
+          include Anima.new(:email)
 
           alias_method :to_s, :email
           public :to_s
         end
 
         def self.from_json(value)
-          new(value.fetch('authors').map(&Author.public_method(:new)).to_set)
+          new(licensed: value.fetch('authors').to_set { |email| Author.new(email: email) })
         end
 
         def call(world)
@@ -43,7 +43,7 @@ module Mutant
           world
             .capture_stdout(command)
             .fmap(&:chomp)
-            .fmap(&Author.public_method(:new))
+            .fmap { |email| Author.new(email: email) }
             .fmap { |value| Set.new([value]) }
             .from_right { Set.new }
         end

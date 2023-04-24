@@ -8,7 +8,7 @@ module Mutant
         include(
           AbstractType,
           Adamantium,
-          Concord.new(:output, :object),
+          Anima.new(:output, :object),
           Procto
         )
 
@@ -61,7 +61,7 @@ module Mutant
         end
 
         def visit(printer, object)
-          printer.call(output, object)
+          printer.call(output: output, object: object)
         end
 
         def info(string, *arguments)

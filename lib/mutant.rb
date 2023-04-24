@@ -224,8 +224,8 @@ module Mutant
     require 'mutant/cli/command/environment/test'
     require 'mutant/cli/command/util'
     require 'mutant/cli/command/root'
-    require 'mutant/runner'
-    require 'mutant/runner/sink'
+    require 'mutant/mutation/runner'
+    require 'mutant/mutation/runner/sink'
     require 'mutant/result'
     require 'mutant/reporter'
     require 'mutant/reporter/null'
@@ -295,7 +295,7 @@ module Mutant
     )
   end
 
-  timer = Timer.new(Process)
+  timer = Timer.new(process: Process)
 
   recorder = Segment::Recorder.new(
     gen_id:          gen_id,
@@ -333,19 +333,21 @@ module Mutant
   class Config
     DEFAULT = new(
       coverage_criteria:     Config::CoverageCriteria::DEFAULT,
-      expression_parser:     Expression::Parser.new([
-        Expression::Descendants,
-        Expression::Method,
-        Expression::Methods,
-        Expression::Namespace::Exact,
-        Expression::Namespace::Recursive
-      ]),
+      expression_parser:     Expression::Parser.new(
+        types: [
+          Expression::Descendants,
+          Expression::Method,
+          Expression::Methods,
+          Expression::Namespace::Exact,
+          Expression::Namespace::Recursive
+        ]
+      ),
       environment_variables: EMPTY_HASH,
       fail_fast:             false,
       hooks:                 EMPTY_ARRAY,
       includes:              EMPTY_ARRAY,
       integration:           nil,
-      isolation:             Mutant::Isolation::Fork.new(WORLD),
+      isolation:             Mutant::Isolation::Fork.new(world: WORLD),
       jobs:                  nil,
       matcher:               Matcher::Config::DEFAULT,
       mutation:              Mutation::Config::DEFAULT,

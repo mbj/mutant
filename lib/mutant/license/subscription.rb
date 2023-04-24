@@ -3,7 +3,7 @@
 module Mutant
   module License
     class Subscription
-      include Concord.new(:licensed)
+      include Anima.new(:licensed)
 
       FORMAT = <<~'MESSAGE'
         %<subscription_name>s subscription:

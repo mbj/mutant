@@ -7,7 +7,7 @@ module Mutant
 
       # Metadata for optional argument nodes
       class Optarg
-        include NamedChildren, Concord.new(:node)
+        include NamedChildren, Anima.new(:node)
 
         UNDERSCORE = '_'
 

@@ -36,9 +36,9 @@ module Mutant
       # @return [Matcher::Method]
       def matcher
         matcher_candidates = MATCHERS.fetch(scope_symbol)
-          .map { |submatcher| submatcher.new(scope) }
+          .map { |submatcher| submatcher.new(scope: scope) }
 
-        Matcher::Chain.new(matcher_candidates)
+        Matcher::Chain.new(matchers: matcher_candidates)
       end
 
       # Length of match with other expression

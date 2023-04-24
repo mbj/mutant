@@ -4,7 +4,7 @@ module Mutant
   module Repository
     # Subject filter based on repository diff
     class SubjectFilter
-      include Adamantium, Concord.new(:diff)
+      include Adamantium, Anima.new(:diff)
 
       # Test if subject was touched in diff
       #

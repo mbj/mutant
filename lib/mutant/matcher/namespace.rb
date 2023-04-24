@@ -4,7 +4,7 @@ module Mutant
   class Matcher
     # Matcher for specific namespace
     class Namespace < self
-      include Concord::Public.new(:expression)
+      include Anima.new(:expression)
 
       # Enumerate subjects
       #
@@ -13,7 +13,7 @@ module Mutant
       # @return [Enumerable<Subject>]
       def call(env)
         Chain.new(
-          matched_scopes(env).map { |scope| Scope.new(scope.raw) }
+          matchers: matched_scopes(env).map { |scope| Scope.new(scope: scope.raw) }
         ).call(env)
       end
 

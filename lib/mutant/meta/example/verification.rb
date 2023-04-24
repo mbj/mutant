@@ -5,7 +5,7 @@ module Mutant
     class Example
       # Example verification
       class Verification
-        include Adamantium, Concord.new(:example, :mutations)
+        include Adamantium, Anima.new(:example, :mutations)
 
         # Test if mutation was verified successfully
         #
@@ -94,7 +94,7 @@ module Mutant
 
         def missing
           (example.expected.map(&:node) - mutations.map(&:node)).map do |node|
-            Mutation::Evil.new(example, node)
+            Mutation::Evil.new(subject: example, node: node)
           end
         end
         memoize :missing

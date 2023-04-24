@@ -3,13 +3,13 @@
 RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   subject { object.call(env) }
 
-  let(:base)          { TestApp::InstanceMethodTests                      }
-  let(:method)        { scope.instance_method(method_name)                }
-  let(:method_arity)  { 0                                                 }
-  let(:method_name)   { :foo                                              }
-  let(:object)        { described_class.new(scope, method)                }
-  let(:source_path)   { MutantSpec::ROOT.join('test_app/lib/test_app.rb') }
-  let(:type)          { :def                                              }
+  let(:base)          { TestApp::InstanceMethodTests                             }
+  let(:method)        { scope.instance_method(method_name)                       }
+  let(:method_arity)  { 0                                                        }
+  let(:method_name)   { :foo                                                     }
+  let(:object)        { described_class.new(scope: scope, target_method: method) }
+  let(:source_path)   { MutantSpec::ROOT.join('test_app/lib/test_app.rb')        }
+  let(:type)          { :def                                                     }
 
   let(:world) do
     instance_double(
@@ -137,8 +137,8 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
 
     let(:context) do
       Mutant::Context.new(
-        TestApp::InstanceMethodTests::WithMemoizer,
-        MutantSpec::ROOT.join('test_app', 'lib', 'test_app.rb')
+        scope:       TestApp::InstanceMethodTests::WithMemoizer,
+        source_path: MutantSpec::ROOT.join('test_app', 'lib', 'test_app.rb')
       )
     end
 

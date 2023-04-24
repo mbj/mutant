@@ -14,7 +14,7 @@ RSpec.describe Mutant::Mutation do
   let(:root_node) { s(:int, 1)                       }
 
   let(:object) do
-    mutation_class.new(mutation_subject, node)
+    mutation_class.new(subject: mutation_subject, node: node)
   end
 
   let(:mutation_subject) do

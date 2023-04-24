@@ -10,7 +10,7 @@ RSpec.describe Mutant::Transform::Error do
   let(:attributes) do
     transform =
       if direct_cause
-        Mutant::Transform::Named.new('root', direct_cause.transform)
+        Mutant::Transform::Named.new(name: 'root', transform: direct_cause.transform)
       else
         Mutant::Transform::Boolean.new
       end
@@ -27,7 +27,7 @@ RSpec.describe Mutant::Transform::Error do
     let(:direct_cause) do
       transform =
         if indirect_cause
-          Mutant::Transform::Named.new('direct-cause', indirect_cause.transform)
+          Mutant::Transform::Named.new(name: 'direct-cause', transform: indirect_cause.transform)
         else
           Mutant::Transform::Boolean.new
         end
@@ -117,7 +117,7 @@ RSpec.describe Mutant::Transform::Error do
       context 'with empty slug' do
         let(:direct_cause) do
           super().with(
-            transform: Mutant::Transform::Named.new('', indirect_cause.transform)
+            transform: Mutant::Transform::Named.new(name: '', transform: indirect_cause.transform)
           )
         end
 
