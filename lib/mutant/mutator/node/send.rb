@@ -194,7 +194,7 @@ module Mutant
         def emit_double_negation_mutation
           return unless selector.equal?(:!) && n_send?(receiver)
 
-          negated = AST::Meta::Send.new(meta.receiver)
+          negated = AST::Meta::Send.new(receiver)
           emit(negated.receiver) if negated.selector.equal?(:!)
         end
 
