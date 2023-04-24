@@ -37,8 +37,6 @@ module Mutant
         private
 
           def match?(node)
-            n_def?(node)                           &&
-            node.location.line.equal?(source_line) &&
             node.children.fetch(NAME_INDEX).equal?(method_name)
           end
 

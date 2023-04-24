@@ -27,14 +27,7 @@ module Mutant
         private
 
           def match?(node)
-            n_defs?(node) && line?(node) && name?(node) && receiver?(node)
-          end
-
-          def line?(node)
-            node
-              .location
-              .line
-              .equal?(source_line)
+            name?(node) && receiver?(node)
           end
 
           def name?(node)

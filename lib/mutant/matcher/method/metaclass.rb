@@ -34,10 +34,7 @@ module Mutant
         private
 
           def match?(node)
-            n_def?(node) &&
-              name?(node) &&
-              line?(node) &&
-              metaclass_receiver?(node)
+            name?(node) && metaclass_receiver?(node)
           end
 
           def metaclass_receiver?(node)
@@ -47,13 +44,6 @@ module Mutant
 
           def metaclass_containing(node)
             AST::FindMetaclassContaining.call(ast, node)
-          end
-
-          def line?(node)
-            node
-              .location
-              .line
-              .equal?(source_line)
           end
 
           def name?(node)
