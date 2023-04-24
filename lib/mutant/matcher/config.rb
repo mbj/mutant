@@ -31,15 +31,21 @@ module Mutant
         Mutant::Config::DEFAULT.expression_parser.call(input)
       end
 
-      expression_array = Transform::Array.new(expression)
+      expression_array = Transform::Array.new(transform: expression)
 
       LOADER =
         Transform::Sequence.new(
-          [
+          steps: [
             Transform::Hash.new(
               optional: [
-                Transform::Hash::Key.new('subjects', expression_array),
-                Transform::Hash::Key.new('ignore', expression_array)
+                Transform::Hash::Key.new(
+                  transform: expression_array,
+                  value:     'subjects'
+                ),
+                Transform::Hash::Key.new(
+                  transform: expression_array,
+                  value:     'ignore'
+                )
               ],
               required: []
             ),

@@ -16,7 +16,7 @@ module Mutant
           config: config.mutation,
           node:   node
         ).map do |mutant|
-          Mutation::Evil.new(self, wrap_node(mutant))
+          Mutation::Evil.new(subject: self, node: wrap_node(mutant))
         end
       )
     end
@@ -92,7 +92,7 @@ module Mutant
   private
 
     def neutral_mutation
-      Mutation::Neutral.new(self, wrap_node(node))
+      Mutation::Neutral.new(subject: self, node: wrap_node(node))
     end
 
     def wrap_node(node)

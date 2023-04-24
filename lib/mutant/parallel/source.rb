@@ -27,7 +27,7 @@ module Mutant
 
       # Job source backed by a finite array
       class Array
-        include Concord.new(:jobs)
+        include Anima.new(:jobs)
 
         # Initialize objecto
         #

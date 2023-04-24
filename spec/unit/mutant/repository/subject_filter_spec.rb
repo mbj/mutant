@@ -4,7 +4,7 @@ RSpec.describe Mutant::Repository::SubjectFilter do
   context '#call' do
     subject { object.call(mutant_subject) }
 
-    let(:object) { described_class.new(diff)                 }
+    let(:object) { described_class.new(diff: diff)           }
     let(:diff)   { instance_double(Mutant::Repository::Diff) }
     let(:value)  { instance_double(Object, 'value')          }
 

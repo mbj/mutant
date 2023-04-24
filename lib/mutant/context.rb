@@ -3,7 +3,7 @@
 module Mutant
   # An abstract context where mutations can be applied to.
   class Context
-    include Adamantium, Concord::Public.new(:scope, :source_path)
+    include Adamantium, Anima.new(:scope, :source_path)
     extend AST::Sexp
 
     NAMESPACE_DELIMITER = '::'
@@ -73,11 +73,6 @@ module Mutant
       end
     end
     memoize :match_expressions
-
-    # Scope wrapped by context
-    #
-    # @return [Module|Class]
-    attr_reader :scope
 
   private
 

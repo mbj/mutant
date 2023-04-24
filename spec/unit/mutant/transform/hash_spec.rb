@@ -3,9 +3,9 @@
 RSpec.describe Mutant::Transform::Hash do
   subject { described_class.new(attributes) }
 
-  let(:required) { []                                       }
-  let(:optional) { []                                       }
-  let(:symbol)   { Mutant::Transform::Primitive.new(Symbol) }
+  let(:required) { []                                                  }
+  let(:optional) { []                                                  }
+  let(:symbol)   { Mutant::Transform::Primitive.new(primitive: Symbol) }
 
   let(:attributes) do
     {
@@ -29,8 +29,8 @@ RSpec.describe Mutant::Transform::Hash do
       end
 
       context 'missing key' do
-        let(:input)    { {}                                       }
-        let(:required) { [described_class::Key.new(:foo, symbol)] }
+        let(:input)    { {}                                                         }
+        let(:required) { [described_class::Key.new(value: :foo, transform: symbol)] }
 
         let(:error) do
           Mutant::Transform::Error.new(
@@ -64,8 +64,8 @@ RSpec.describe Mutant::Transform::Hash do
       end
 
       context 'using required' do
-        let(:input)    { { foo: :bar }                            }
-        let(:required) { [described_class::Key.new(:foo, symbol)] }
+        let(:input)    { { foo: :bar }                                              }
+        let(:required) { [described_class::Key.new(value: :foo, transform: symbol)] }
 
         it 'returns success' do
           expect(apply).to eql(Mutant::Either::Right.new(input))
@@ -73,7 +73,7 @@ RSpec.describe Mutant::Transform::Hash do
       end
 
       context 'using optional' do
-        let(:optional) { [described_class::Key.new(:foo, symbol)] }
+        let(:optional) { [described_class::Key.new(value: :foo, transform: symbol)] }
 
         context 'not providing the optional key' do
           let(:input) { {} }
@@ -128,7 +128,7 @@ RSpec.describe Mutant::Transform::Hash do
       context 'key transform error' do
         let(:input) { { foo: 'bar' } }
 
-        let(:key_transform) { described_class::Key.new(:foo, symbol) }
+        let(:key_transform) { described_class::Key.new(value: :foo, transform: symbol) }
 
         context 'on optional key' do
           let(:optional) { [key_transform] }
@@ -180,7 +180,7 @@ RSpec.describe Mutant::Transform::Hash::Symbolize do
 end
 
 RSpec.describe Mutant::Transform::Hash::Key do
-  subject { described_class.new(:foo, boolean) }
+  subject { described_class.new(value: :foo, transform: boolean) }
 
   let(:boolean) { Mutant::Transform::Boolean.new }
 

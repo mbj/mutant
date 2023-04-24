@@ -79,7 +79,7 @@ module Mutant
         end
 
         def meta
-          AST::Meta::Send.new(node)
+          AST::Meta::Send.new(node: node)
         end
         memoize :meta
 
@@ -173,7 +173,7 @@ module Mutant
 
           return unless dynamic_selector && n_sym?(dynamic_selector)
 
-          method_name = AST::Meta::Symbol.new(dynamic_selector).name
+          method_name = AST::Meta::Symbol.new(node: dynamic_selector).name
 
           emit(s(node.type, receiver, method_name, *actual_arguments))
         end
@@ -194,7 +194,7 @@ module Mutant
         def emit_double_negation_mutation
           return unless selector.equal?(:!) && n_send?(receiver)
 
-          negated = AST::Meta::Send.new(receiver)
+          negated = AST::Meta::Send.new(node: receiver)
           emit(negated.receiver) if negated.selector.equal?(:!)
         end
 
@@ -223,7 +223,7 @@ module Mutant
         def emit_const_get_mutation
           return unless selector.equal?(:const_get) && n_sym?(arguments.first)
 
-          emit(s(:const, receiver, AST::Meta::Symbol.new(arguments.first).name))
+          emit(s(:const, receiver, AST::Meta::Symbol.new(node: arguments.first).name))
         end
 
         def emit_selector_replacement

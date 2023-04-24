@@ -29,7 +29,7 @@ module Mutant
       #
       # This looks actually like a missing object on minitest implementation.
       class TestCase
-        include Adamantium, Concord.new(:klass, :test_method)
+        include Adamantium, Anima.new(:klass, :test_method)
 
         # Identification string
         #
@@ -150,7 +150,7 @@ module Mutant
       end
 
       def test_case(runnable)
-        runnable.runnable_methods.map { |method| TestCase.new(runnable, method) }
+        runnable.runnable_methods.map { |method| TestCase.new(klass: runnable, test_method: method) }
       end
     end # Minitest
   end # Integration

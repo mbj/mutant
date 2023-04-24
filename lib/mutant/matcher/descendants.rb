@@ -10,7 +10,7 @@ module Mutant
         const = env.world.try_const_get(const_name) or return EMPTY_ARRAY
 
         Chain.new(
-          matched_scopes(env, const).map { |scope| Scope.new(scope.raw) }
+          matchers: matched_scopes(env, const).map { |scope| Scope.new(scope: scope.raw) }
         ).call(env)
       end
 

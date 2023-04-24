@@ -22,7 +22,7 @@ module Mutant
       #
       # @return [Verification]
       def verification
-        Verification.new(self, generated)
+        Verification.new(example: self, mutations: generated)
       end
       memoize :verification
 
@@ -38,8 +38,8 @@ module Mutant
       # @return [Context]
       def context
         Context.new(
-          Object,
-          location.path
+          scope:       Object,
+          source_path: location.path
         )
       end
 
@@ -59,7 +59,7 @@ module Mutant
           config: Mutation::Config::DEFAULT,
           node:   node
         ).map do |node|
-          Mutation::Evil.new(self, node)
+          Mutation::Evil.new(subject: self, node: node)
         end
       end
       memoize :generated

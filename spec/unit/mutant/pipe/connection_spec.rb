@@ -215,8 +215,8 @@ RSpec.describe Mutant::Pipe::Connection do
       expect(object).to eql(
         described_class.new(
           marshal: marshal,
-          reader:  described_class::Frame.new(pipe_a.to_reader),
-          writer:  described_class::Frame.new(pipe_b.to_writer)
+          reader:  described_class::Frame.new(io: pipe_a.to_reader),
+          writer:  described_class::Frame.new(io: pipe_b.to_writer)
         )
       )
     end

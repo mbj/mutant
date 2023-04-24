@@ -7,7 +7,7 @@ module Mutant
 
       # Metadata for symbol nodes
       class Symbol
-        include NamedChildren, Concord.new(:node)
+        include NamedChildren, Anima.new(:node)
 
         children :name
 

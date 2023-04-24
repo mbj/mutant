@@ -46,8 +46,8 @@ RSpec.describe Mutant::Mutation::Runner do
         block:        block,
         jobs:         1,
         process_name: 'mutant-worker-process',
-        sink:         described_class::Sink.new(env),
-        source:       Mutant::Parallel::Source::Array.new(env.mutations.each_index.to_a),
+        sink:         described_class::Sink.new(env: env),
+        source:       Mutant::Parallel::Source::Array.new(jobs: env.mutations.each_index.to_a),
         thread_name:  'mutant-worker-thread'
       )
     end

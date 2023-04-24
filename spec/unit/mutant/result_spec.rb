@@ -3,14 +3,14 @@
 RSpec.describe Mutant::Result do
   let(:object) do
     Class.new do
-      include Mutant::Result, Unparser::Concord.new(:runtime, :killtime)
+      include Mutant::Result, Unparser::Anima.new(:runtime, :killtime)
 
       def collection
         [[1]]
       end
 
       sum :length, :collection
-    end.new(3.0, 1.0)
+    end.new(runtime: 3.0, killtime: 1.0)
   end
 
   describe '.included' do

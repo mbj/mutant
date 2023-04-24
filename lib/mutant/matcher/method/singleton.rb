@@ -8,12 +8,9 @@ module Mutant
 
         # New singleton method matcher
         #
-        # @param [Class, Module] scope
-        # @param [Symbol] method_name
-        #
         # @return [Matcher::Method::Singleton]
-        def self.new(scope, method_name)
-          super(scope, method_name, Evaluator)
+        def self.new(scope:, target_method:)
+          super(scope: scope, target_method: target_method, evaluator: Evaluator)
         end
 
         # Singleton method evaluator

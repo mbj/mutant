@@ -4,7 +4,7 @@ module Mutant
   class Matcher
     # Matcher returning subjects already known at its creation time
     class Static
-      include Concord.new(:subjects)
+      include Anima.new(:subjects)
 
       # Call matcher
       #

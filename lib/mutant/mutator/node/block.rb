@@ -48,7 +48,7 @@ module Mutant
         def mutate_body_receiver
           return if n_lambda?(send) || !n_send?(body)
 
-          body_meta = AST::Meta::Send.new(body)
+          body_meta = AST::Meta::Send.new(node: body)
 
           emit(s(:send, send, body_meta.selector, *body_meta.arguments))
         end
@@ -56,7 +56,7 @@ module Mutant
         def valid_send_mutation?(node)
           return unless n_send?(node)
 
-          last = AST::Meta::Send.new(node).arguments.last
+          last = AST::Meta::Send.new(node: node).arguments.last
 
           !last&.type.equal?(:block_pass)
         end

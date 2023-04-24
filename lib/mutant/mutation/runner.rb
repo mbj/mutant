@@ -44,8 +44,8 @@ module Mutant
           block:        env.method(:cover_index),
           jobs:         env.config.jobs,
           process_name: 'mutant-worker-process',
-          sink:         Sink.new(env),
-          source:       Parallel::Source::Array.new(env.mutations.each_index.to_a),
+          sink:         Sink.new(env: env),
+          source:       Parallel::Source::Array.new(jobs: env.mutations.each_index.to_a),
           thread_name:  'mutant-worker-thread'
         )
       end

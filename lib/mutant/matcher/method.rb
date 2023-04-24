@@ -6,7 +6,7 @@ module Mutant
     class Method < self
       include AbstractType,
               Adamantium,
-              Concord::Public.new(:scope, :target_method, :evaluator)
+              Anima.new(:scope, :target_method, :evaluator)
 
       SOURCE_LOCATION_WARNING_FORMAT =
         '%s does not have a valid source location, unable to emit subject'
@@ -20,7 +20,7 @@ module Mutant
       #
       # @return [Enumerable<Subject>]
       def call(env)
-        evaluator.call(scope, target_method, env)
+        evaluator.call(scope: scope, target_method: target_method, env: env)
       end
 
       # Abstract method match evaluator
@@ -32,7 +32,7 @@ module Mutant
         include(
           AbstractType,
           Adamantium,
-          Concord.new(:scope, :target_method, :env),
+          Anima.new(:scope, :target_method, :env),
           Procto,
           AST::NodePredicates
         )
@@ -80,7 +80,7 @@ module Mutant
         end
 
         def context
-          Context.new(scope, source_path)
+          Context.new(scope: scope, source_path: source_path)
         end
 
         def ast

@@ -19,7 +19,7 @@ module SharedContext
 
   def it_reports(expected_content)
     it 'writes expected report to output' do
-      described_class.call(output, reportable)
+      described_class.call(output: output, object: reportable)
       output.rewind
       expect(output.read).to eql(expected_content)
     end
@@ -28,15 +28,21 @@ module SharedContext
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
   def setup_shared_context
-    let(:mutation_a)      { Mutant::Mutation::Evil.new(subject_a, mutation_a_node)   }
     let(:mutation_a_node) { s(:false)                                                }
-    let(:mutation_b)      { Mutant::Mutation::Evil.new(subject_a, mutation_b_node)   }
     let(:mutation_b_node) { s(:nil)                                                  }
     let(:mutations)       { [mutation_a, mutation_b]                                 }
     let(:output)          { StringIO.new                                             }
     let(:subject_a_node)  { s(:true)                                                 }
     let(:test_a)          { instance_double(Mutant::Test, identification: 'test-a')  }
     let(:subjects)        { [subject_a]                                              }
+
+    let(:mutation_a) do
+      Mutant::Mutation::Evil.new(subject: subject_a, node: mutation_a_node)
+    end
+
+    let(:mutation_b) do
+      Mutant::Mutation::Evil.new(subject: subject_a, node: mutation_b_node)
+    end
 
     let(:job_a) do
       Mutant::Parallel::Source::Job.new(
@@ -109,8 +115,8 @@ module SharedContext
 
     let(:subject_a_context) do
       Mutant::Context.new(
-        Object,
-        'suvject-a.rb'
+        scope:       Object,
+        source_path: 'suvject-a.rb'
       )
     end
 

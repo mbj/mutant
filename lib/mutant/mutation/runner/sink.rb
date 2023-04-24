@@ -4,7 +4,7 @@ module Mutant
   class Mutation
     module Runner
       class Sink
-        include Concord.new(:env)
+        include Anima.new(:env)
 
         # Initialize object
         #

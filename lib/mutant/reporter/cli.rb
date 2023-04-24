@@ -4,7 +4,7 @@ module Mutant
   class Reporter
     # Reporter that reports in human readable format
     class CLI < self
-      include Concord.new(:output, :format)
+      include Anima.new(:output, :format)
 
       # Build reporter
       #
@@ -13,8 +13,8 @@ module Mutant
       # @return [Reporter::CLI]
       def self.build(output)
         new(
-          output,
-          Format::Progressive.new(output.respond_to?(:tty?) && output.tty?)
+          format: Format::Progressive.new(tty: output.respond_to?(:tty?) && output.tty?),
+          output: output
         )
       end
 
@@ -61,7 +61,7 @@ module Mutant
       #
       # @return [self]
       def report(env)
-        Printer::EnvResult.call(output, env)
+        Printer::EnvResult.call(output: output, object: env)
         self
       end
 

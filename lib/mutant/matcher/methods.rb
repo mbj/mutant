@@ -4,7 +4,7 @@ module Mutant
   class Matcher
     # Abstract base class for matcher that returns method subjects from scope
     class Methods < self
-      include AbstractType, Concord.new(:scope)
+      include AbstractType, Anima.new(:scope)
 
       CANDIDATE_NAMES = %i[
         public_instance_methods
@@ -21,7 +21,9 @@ module Mutant
       # @return [Enumerable<Subject>]
       def call(env)
         Chain.new(
-          methods(env).map { |method| matcher.new(scope, method) }
+          matchers: methods(env).map do |target_method|
+            matcher.new(scope: scope, target_method: target_method)
+          end
         ).call(env)
       end
 

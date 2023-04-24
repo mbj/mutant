@@ -51,7 +51,7 @@ module Mutant
           env.with(
             integration: integration,
             mutations:   mutations,
-            selector:    Selector::Expression.new(integration),
+            selector:    Selector::Expression.new(integration: integration),
             subjects:    selected_subjects
           )
         end
@@ -115,7 +115,7 @@ module Mutant
 
         scopes = env.world.object_space.each_object(Module).with_object([]) do |scope, aggregate|
           expression = expression(config.reporter, config.expression_parser, scope) || next
-          aggregate << Scope.new(scope, expression)
+          aggregate << Scope.new(raw: scope, expression: expression)
         end
 
         scopes.sort_by { |scope| scope.expression.syntax }

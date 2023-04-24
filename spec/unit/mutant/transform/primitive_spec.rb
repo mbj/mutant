@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Primitive do
-  subject { described_class.new(primitive) }
+  subject { described_class.new(primitive: primitive) }
 
   let(:primitive) { String }
 

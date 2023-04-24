@@ -35,7 +35,7 @@ module Mutant
         #
         # @return [Matcher]
         def matcher
-          Matcher::Namespace.new(self)
+          Matcher::Namespace.new(expression: self)
         end
 
         # Length of match with other expression
@@ -69,7 +69,7 @@ module Mutant
           scope = find_scope
 
           if scope
-            Matcher::Scope.new(scope)
+            Matcher::Scope.new(scope: scope)
           else
             Matcher::Null.new
           end

@@ -4,7 +4,7 @@ module Mutant
   class Selector
     # Expression based test selector
     class Expression < self
-      include Concord.new(:integration)
+      include Anima.new(:integration)
 
       # Tests for subject
       #

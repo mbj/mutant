@@ -7,7 +7,7 @@ module Mutant
       #
       # rubocop:disable Style/FormatString
       class Format
-        include AbstractType, Concord.new(:tty)
+        include AbstractType, Anima.new(:tty)
 
         # Start representation
         #
@@ -32,7 +32,7 @@ module Mutant
 
         # Output abstraction to decouple tty? from buffer
         class Output
-          include Concord.new(:tty, :buffer)
+          include Anima.new(:tty, :buffer)
 
           # Test if output is a tty
           #
@@ -51,7 +51,7 @@ module Mutant
 
         def format(printer, object)
           buffer = new_buffer
-          printer.call(Output.new(tty, buffer), object)
+          printer.call(output: Output.new(tty: tty, buffer: buffer), object: object)
           buffer.rewind
           buffer.read
         end

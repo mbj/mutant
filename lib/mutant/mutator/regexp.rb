@@ -13,10 +13,10 @@ module Mutant
       end
 
       class Registry
-        include Concord.new(:contents)
+        include Anima.new(:contents)
 
         def initialize
-          super({})
+          super(contents: {})
         end
 
         def register(expression_class, mutator_class)

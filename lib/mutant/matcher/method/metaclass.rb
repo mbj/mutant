@@ -11,12 +11,9 @@ module Mutant
 
         # New singleton method matcher
         #
-        # @param [Class, Module] scope
-        # @param [Symbol] method_name
-        #
         # @return [Matcher::Method::Singleton]
-        def self.new(scope, method_name)
-          super(scope, method_name, Evaluator)
+        def self.new(scope:, target_method:)
+          super(scope: scope, target_method: target_method, evaluator: Evaluator)
         end
 
         # Metaclass method evaluator
@@ -43,7 +40,7 @@ module Mutant
           end
 
           def metaclass_containing(node)
-            AST::FindMetaclassContaining.call(ast, node)
+            AST::FindMetaclassContaining.call(ast: ast, target: node)
           end
 
           def name?(node)

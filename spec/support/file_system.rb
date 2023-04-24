@@ -20,12 +20,12 @@ module MutantSpec
   end # FileState
 
   class FakePathname
-    include Adamantium, Concord.new(:file_system, :pathname)
+    include Adamantium, Anima.new(:file_system, :pathname)
 
     def join(*arguments)
       self.class.new(
-        file_system,
-        pathname.join(*arguments)
+        file_system: file_system,
+        pathname:    pathname.join(*arguments)
       )
     end
 
@@ -49,14 +49,14 @@ module MutantSpec
   end # FakePathname
 
   class FileSystem
-    include Adamantium, Concord.new(:file_states)
+    include Adamantium, Anima.new(:file_states)
 
     def state(filename)
       file_states.fetch(filename, FileState::DOES_NOT_EXIST)
     end
 
     def path(filename)
-      FakePathname.new(self, Pathname.new(filename))
+      FakePathname.new(file_system: self, pathname: Pathname.new(filename))
     end
   end # FileSystem
 end # MutantSpec

@@ -3,13 +3,13 @@
 module Mutant
   # Registry for mapping AST types to classes
   class Registry
-    include Concord.new(:contents, :default)
+    include Anima.new(:contents, :default)
 
     # Initialize object
     #
     # @return [undefined]
     def initialize(default)
-      super({}, default)
+      super(contents: {}, default: default)
     end
 
     # Raised when the type is an invalid type

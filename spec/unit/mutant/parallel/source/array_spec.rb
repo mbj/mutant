@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Parallel::Source::Array do
-  subject { described_class.new(payloads) }
+  subject { described_class.new(jobs: jobs) }
 
-  let(:payloads) { %i[a b c] }
+  let(:jobs) { %i[a b c] }
 
   describe '#next' do
     def job(**attributes)
@@ -27,7 +27,7 @@ RSpec.describe Mutant::Parallel::Source::Array do
     end
 
     context 'when there is no next job' do
-      let(:payloads) { [] }
+      let(:jobs) { [] }
 
       it 'raises error' do
         expect { apply }.to raise_error(Mutant::Parallel::Source::NoJobError)
@@ -47,7 +47,7 @@ RSpec.describe Mutant::Parallel::Source::Array do
     end
 
     context 'when there is no next job' do
-      let(:payloads) { [] }
+      let(:jobs) { [] }
 
       it 'returns false' do
         expect(apply).to be(false)

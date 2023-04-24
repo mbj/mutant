@@ -53,17 +53,27 @@ RSpec.describe Mutant::Expression::Methods do
     context 'with an instance method' do
       let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '#' } }
 
-      it { should eql(Mutant::Matcher::Chain.new([Mutant::Matcher::Methods::Instance.new(TestApp::Literal)])) }
+      specify do
+        should eql(
+          Mutant::Matcher::Chain.new(
+            matchers: [Mutant::Matcher::Methods::Instance.new(scope: TestApp::Literal)]
+          )
+        )
+      end
     end
 
     context 'with a singleton method' do
       let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '.' } }
 
       it do
-        should eql(Mutant::Matcher::Chain.new([
-          Mutant::Matcher::Methods::Singleton.new(TestApp::Literal),
-          Mutant::Matcher::Methods::Metaclass.new(TestApp::Literal)
-        ]))
+        should eql(
+          Mutant::Matcher::Chain.new(
+            matchers: [
+              Mutant::Matcher::Methods::Singleton.new(scope: TestApp::Literal),
+              Mutant::Matcher::Methods::Metaclass.new(scope: TestApp::Literal)
+            ]
+          )
+        )
       end
     end
   end

@@ -3,7 +3,7 @@
 module Mutant
   class Expression
     class Parser
-      include Concord.new(:types)
+      include Anima.new(:types)
 
       # Parse expression
       #

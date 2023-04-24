@@ -16,7 +16,7 @@ describe Mutant::Mutation::Runner::Sink do
     end
   end
 
-  let(:object) { described_class.new(env) }
+  let(:object) { described_class.new(env: env) }
 
   describe '#result' do
     subject { object.result(mutation_a_index_result) }

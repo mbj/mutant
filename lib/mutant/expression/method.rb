@@ -41,11 +41,14 @@ module Mutant
       # @return [Matcher]
       def matcher
         matcher_candidates = MATCHERS.fetch(scope_symbol)
-          .map { |submatcher| submatcher.new(scope) }
+          .map { |submatcher| submatcher.new(scope: scope) }
 
-        methods_matcher = Matcher::Chain.new(matcher_candidates)
+        methods_matcher = Matcher::Chain.new(matchers: matcher_candidates)
 
-        Matcher::Filter.new(methods_matcher, ->(subject) { subject.expression.eql?(self) })
+        Matcher::Filter.new(
+          matcher:   methods_matcher,
+          predicate: ->(subject) { subject.expression.eql?(self) }
+        )
       end
 
       def self.try_parse(input)

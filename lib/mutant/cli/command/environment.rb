@@ -105,9 +105,7 @@ module Mutant
           parser.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
             add_matcher(
               :subject_filters,
-              Repository::SubjectFilter.new(
-                Repository::Diff.new(to: revision, world: world)
-              )
+              Repository::SubjectFilter.new(diff: Repository::Diff.new(to: revision, world: world))
             )
           end
         end

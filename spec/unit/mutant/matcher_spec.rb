@@ -23,7 +23,7 @@ RSpec.describe Mutant::Matcher do
 
     let(:expression_class) do
       Class.new(Mutant::Expression) do
-        include Unparser::Concord.new(:child, :matcher)
+        include Unparser::Anima.new(:child, :matcher)
 
         %w[syntax prefix?].each do |name|
           define_method(name) do |*arguments, &block|
@@ -63,7 +63,7 @@ RSpec.describe Mutant::Matcher do
     end
 
     def expression(input, matcher = anon_matcher)
-      expression_class.new(parse_expression(input), matcher)
+      expression_class.new(child: parse_expression(input), matcher: matcher)
     end
 
     context 'no restrictions of any kinds' do

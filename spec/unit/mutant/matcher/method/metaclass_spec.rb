@@ -5,13 +5,13 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
 
   subject { object.call(env) }
 
-  let(:object)       { described_class.new(scope, method) }
-  let(:method)       { scope.public_method(method_name)   }
-  let(:type)         { :def                               }
-  let(:method_name)  { :foo                               }
-  let(:method_arity) { 0                                  }
-  let(:base)         { TestApp::MetaclassMethodTests      }
-  let(:source_path)  { MutantSpec::ROOT.join(source_path) }
+  let(:object)       { described_class.new(scope: scope, target_method: method) }
+  let(:method)       { scope.public_method(method_name)                         }
+  let(:type)         { :def                                                     }
+  let(:method_name)  { :foo                                                     }
+  let(:method_arity) { 0                                                        }
+  let(:base)         { TestApp::MetaclassMethodTests                            }
+  let(:source_path)  { MutantSpec::ROOT.join(source_path)                       }
 
   let(:world) do
     instance_double(

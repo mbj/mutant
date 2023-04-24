@@ -32,9 +32,9 @@ RSpec.describe Mutant::Context do
     end
   end
 
-  let(:object)      { described_class.new(scope, source_path) }
-  let(:source_path) { instance_double(Pathname)               }
-  let(:scope)       { TestApp::Literal                        }
+  let(:object)      { described_class.new(scope: scope, source_path: source_path) }
+  let(:source_path) { instance_double(Pathname)                                   }
+  let(:scope)       { TestApp::Literal                                            }
 
   describe '#identification' do
     subject { object.identification }

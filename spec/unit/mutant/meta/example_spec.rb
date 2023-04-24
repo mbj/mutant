@@ -25,7 +25,7 @@ RSpec.describe Mutant::Meta::Example do
 
   let(:mutations) do
     mutation_nodes.map do |node|
-      Mutant::Mutation::Evil.new(object, node)
+      Mutant::Mutation::Evil.new(subject: object, node: node)
     end
   end
 
@@ -46,13 +46,13 @@ RSpec.describe Mutant::Meta::Example do
   describe '#verification' do
     subject { object.verification }
 
-    it { should eql(Mutant::Meta::Example::Verification.new(object, mutations)) }
+    it { should eql(Mutant::Meta::Example::Verification.new(example: object, mutations: mutations)) }
   end
 
   describe '#context' do
     subject { object.context }
 
-    it { should eql(Mutant::Context.new(Object, location.path)) }
+    it { should eql(Mutant::Context.new(scope: Object, source_path: location.path)) }
   end
 
   describe '#identification' do

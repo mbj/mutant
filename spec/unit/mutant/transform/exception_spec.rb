@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Exception do
-  subject { described_class.new(error_class, block) }
+  subject { described_class.new(error_class: error_class, block: block) }
 
   let(:error_class) do
     Class.new(RuntimeError)

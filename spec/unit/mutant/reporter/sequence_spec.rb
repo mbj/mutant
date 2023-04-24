@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Reporter::Sequence do
-  let(:object)     { described_class.new([reporter_a, reporter_b]) }
-  let(:value)      { instance_double(Object)                       }
-  let(:reporter_a) { instance_double(Mutant::Reporter, delay: 1.0) }
-  let(:reporter_b) { instance_double(Mutant::Reporter, delay: 2.0) }
+  let(:object)     { described_class.new(reporters: [reporter_a, reporter_b]) }
+  let(:value)      { instance_double(Object)                                  }
+  let(:reporter_a) { instance_double(Mutant::Reporter, delay: 1.0)            }
+  let(:reporter_b) { instance_double(Mutant::Reporter, delay: 2.0)            }
 
   %i[report progress warn start].each do |name|
     describe "##{name}" do

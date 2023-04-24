@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Meta::Example::Verification do
-  let(:object)          { described_class.new(example, mutations) }
-  let(:original_source) { 'true'                                  }
+  let(:object)          { described_class.new(example: example, mutations: mutations) }
+  let(:original_source) { 'true'                                                      }
 
   let(:location) do
     instance_double(
@@ -25,7 +25,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
 
   let(:mutations) do
     generated_nodes.map do |node|
-      Mutant::Mutation::Evil.new(example, node)
+      Mutant::Mutation::Evil.new(subject: example, node: node)
     end
   end
 

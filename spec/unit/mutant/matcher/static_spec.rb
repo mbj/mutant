@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Matcher::Static, '#call' do
-  let(:object)   { described_class.new(subjects) }
-  let(:env)      { instance_double(Mutant::Env)  }
-  let(:subjects) { instance_double(Array)        }
+  let(:object)   { described_class.new(subjects: subjects) }
+  let(:env)      { instance_double(Mutant::Env)            }
+  let(:subjects) { instance_double(Array)                  }
 
   subject { object.call(env) }
 

@@ -2,7 +2,7 @@
 
 module Mutant
   class Hooks
-    include Adamantium, Concord::Public.new(:map)
+    include Adamantium, Anima.new(:map)
 
     DEFAULTS = %i[
       env_infection_pre
@@ -23,12 +23,12 @@ module Mutant
     end
 
     def self.empty
-      new(DEFAULTS)
+      new(map: DEFAULTS)
     end
 
     def merge(other)
       self.class.new(
-        other.map.merge(map) { |_key, new, old| (old + new).freeze }.freeze
+        map: other.map.merge(map) { |_key, new, old| (old + new).freeze }.freeze
       )
     end
 
@@ -54,7 +54,7 @@ module Mutant
       end
 
       def to_hooks
-        Hooks.new(@map.transform_values(&:freeze).freeze)
+        Hooks.new(map: @map.transform_values(&:freeze).freeze)
       end
     end # Builder
 

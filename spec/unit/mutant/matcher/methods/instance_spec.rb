@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
-  let(:object) { described_class.new(class_under_test) }
+  let(:object) { described_class.new(scope: class_under_test) }
 
   let(:env) do
     config = Fixtures::TEST_ENV.config
@@ -76,7 +76,7 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
         expect(matcher).to receive(:call).with(env).and_return([subject])
 
         expect(Mutant::Matcher::Method::Instance).to receive(:new)
-          .with(class_under_test, class_under_test.instance_method(method))
+          .with(scope: class_under_test, target_method: class_under_test.instance_method(method))
           .and_return(matcher)
       end
     end
@@ -87,7 +87,7 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
   end
 
   context 'on degenerate object interface' do
-    let(:object) { described_class.new(scope) }
+    let(:object) { described_class.new(scope: scope) }
 
     let(:scope) do
       Class.new do
