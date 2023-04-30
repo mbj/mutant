@@ -77,41 +77,43 @@ RSpec.describe Mutant::Integration::Rspec do
     )
   end
 
-  let(:examples) do
-    [
-      example_a,
-      example_b,
-      example_c,
-      example_d,
-      example_e,
-      example_f
-    ]
+  let(:leaf_example_group) do
+    class_double(
+      RSpec::Core::ExampleGroup,
+      'leaf example group',
+      examples: [example_a, example_b, example_c, example_d, example_e, example_f]
+    )
+  end
+
+  let(:root_example_group) do
+    class_double(
+      RSpec::Core::ExampleGroup,
+      'root example group',
+      examples: []
+    )
   end
 
   let(:example_groups) do
-    [
-      double(
-        'root example group',
-        descendants: [
-          double('example group', examples: examples)
-        ]
-      )
-    ]
+    [root_example_group]
   end
 
   let(:filtered_examples) do
     {
-      double('Key') => examples.dup
+      root_example_group => root_example_group.examples.dup,
+      leaf_example_group => leaf_example_group.examples.dup
     }
   end
 
   let(:rspec_world) do
-    double(
-      'rspec-world',
-      example_groups:    example_groups,
-      filtered_examples: filtered_examples
+    instance_double(
+      RSpec::Core::World,
+      example_groups:         example_groups,
+      filtered_examples:      filtered_examples,
+      ordered_example_groups: ordered_example_groups
     )
   end
+
+  let(:ordered_example_groups) { double('ordered_example_groups') }
 
   let(:all_tests) do
     [
@@ -139,6 +141,10 @@ RSpec.describe Mutant::Integration::Rspec do
   end
 
   before do
+    allow(root_example_group).to receive_messages(
+      descendants: [root_example_group, leaf_example_group]
+    )
+
     expect(RSpec::Core::ConfigurationOptions).to receive(:new)
       .with(%w[spec --fail-fast])
       .and_return(rspec_options)
@@ -172,19 +178,39 @@ RSpec.describe Mutant::Integration::Rspec do
   end
 
   describe '#call' do
-    subject { object.call(tests) }
+    subject { object.setup; object.call(tests) }
 
     let(:tests) { [all_tests.fetch(0)] }
 
     before do
-      expect(rspec_world).to receive(:ordered_example_groups) do
-        filtered_examples.values.flatten
+      expect(rspec_runner).to receive(:setup) do |error, stdout|
+        expect(error).to be($stderr)
+        expect(stdout).to be($stdout)
       end
-      expect(rspec_runner).to receive(:run_specs).with([example_a]).and_return(exit_status)
+      allow(rspec_runner).to receive_messages(run_specs: exit_status)
+    end
+
+    shared_examples '#call' do
+      it 'calls rspec runner with ordeded examples' do
+        subject
+
+        expect(rspec_runner).to have_received(:run_specs).with(ordered_example_groups)
+      end
+
+      it 'modifies filtered examples to selection' do
+        subject
+
+        expect(filtered_examples).to eql(
+          root_example_group => [],
+          leaf_example_group => [example_a]
+        )
+      end
     end
 
     context 'on unsuccessful exit' do
       let(:exit_status) { 1 }
+
+      include_examples '#call'
 
       it 'should return failed result' do
         expect(subject).to eql(
@@ -198,6 +224,8 @@ RSpec.describe Mutant::Integration::Rspec do
 
     context 'on successful exit' do
       let(:exit_status) { 0 }
+
+      include_examples '#call'
 
       it 'should return passed result' do
         expect(subject).to eql(
