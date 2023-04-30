@@ -43,6 +43,8 @@ module Mutant
       # @return [self]
       def setup
         @runner.setup($stderr, $stdout)
+        example_group_map
+        reset_examples
         self
       end
       memoize :setup
@@ -53,8 +55,7 @@ module Mutant
       #
       # @return [Result::Test]
       def call(tests)
-        examples = tests.map(&all_tests_index)
-        filter_examples(&examples.public_method(:include?))
+        setup_examples(tests.map(&all_tests_index))
         start = timer.now
         passed = @runner.run_specs(@rspec_world.ordered_example_groups).equal?(EXIT_SUCCESS)
         Result::Test.new(
@@ -72,6 +73,16 @@ module Mutant
       memoize :all_tests
 
     private
+
+      def reset_examples
+        @rspec_world.filtered_examples.each_value(&:clear)
+      end
+
+      def setup_examples(examples)
+        examples.each do |example|
+          @rspec_world.filtered_examples.fetch(example_group_map.fetch(example)) << example
+        end
+      end
 
       def all_tests_index
         all_examples.each_with_index.with_object({}) do |(example, example_index), index|
@@ -95,6 +106,15 @@ module Mutant
         )
       end
 
+      def example_group_map
+        @rspec_world.example_groups.flat_map(&:descendants).each_with_object({}) do |example_group, map|
+          example_group.examples.each do |example|
+            map[example] = example_group
+          end
+        end
+      end
+      memoize :example_group_map
+
       def parse_metadata(metadata)
         if metadata.key?(:mutant_expression)
           expression = metadata.fetch(:mutant_expression)
@@ -116,12 +136,6 @@ module Mutant
       def all_examples
         @rspec_world.example_groups.flat_map(&:descendants).flat_map(&:examples).select do |example|
           example.metadata.fetch(:mutant, true)
-        end
-      end
-
-      def filter_examples(&predicate)
-        @rspec_world.filtered_examples.each_value do |examples|
-          examples.keep_if(&predicate)
         end
       end
 
