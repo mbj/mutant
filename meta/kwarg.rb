@@ -8,3 +8,11 @@ Mutant::Meta::Example.add :kwarg do
   mutation 'def foo(bar:); super; end'
   mutation 'def foo(_bar:); end'
 end
+
+Mutant::Meta::Example.add :if do
+  source <<~RUBY
+    def foo(bar:)
+      return true ? [] : [bar]
+    end
+  RUBY
+end
