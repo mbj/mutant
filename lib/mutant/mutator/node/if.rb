@@ -5,6 +5,7 @@ module Mutant
     class Node
       # Mutator for if nodes
       class If < self
+        FLOW_MODIFIER = %i[return next break].to_set.freeze
 
         handle(:if)
 
@@ -41,6 +42,14 @@ module Mutant
           emit(else_branch)
           emit_else_branch_mutations
           emit_type(condition, nil, else_branch)
+        end
+
+        def emit_type(_condition, if_branch, else_branch)
+          super unless ternary? && (if_branch.nil? || else_branch.nil?)
+        end
+
+        def ternary?
+          parent && FLOW_MODIFIER.include?(parent.node.type)
         end
 
       end # If

@@ -70,3 +70,19 @@ Mutant::Meta::Example.add :if do
   mutation 'true if /nomatch\A/'
   mutation 'true'
 end
+
+Mutant::Meta::Example.add :if do
+  source <<~RUBY
+    return true ? true : false
+  RUBY
+
+  singleton_mutations
+  mutation 'return false'
+  mutation 'return !true ? true : false'
+  mutation 'return true'
+  mutation 'return false ? true : false'
+  mutation 'return true ? false : false'
+  mutation 'return true ? true : true'
+  mutation 'return nil'
+  mutation 'if true; true; else; false; end'
+end
