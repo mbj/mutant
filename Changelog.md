@@ -4,6 +4,11 @@
 
   Fix crash on code that must have been a ternary on original source.
 
+* [#1373](https://github.com/mbj/mutant/pull/1373)
+
+  Change to more performant rspec integration. Significant rspec runner
+  speed improvement on projets with a very large number of tests.
+
 # v0.11.18 2023-01-08
 
 * [#1367](https://github.com/mbj/mutant/pull/1367)
