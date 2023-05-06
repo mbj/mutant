@@ -1,3 +1,9 @@
+# v0.11.19 2023-05-6
+
+* [#1376](https://github.com/mbj/mutant/pull/1376)
+
+  Fix crash on code that must have been a ternary on original source.
+
 # v0.11.18 2023-01-08
 
 * [#1367](https://github.com/mbj/mutant/pull/1367)
