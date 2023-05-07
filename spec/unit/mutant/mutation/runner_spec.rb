@@ -2,12 +2,13 @@
 
 RSpec.describe Mutant::Mutation::Runner do
   describe '.call' do
-    let(:block)      { instance_double(Proc)                           }
-    let(:delay)      { instance_double(Float)                          }
-    let(:driver)     { instance_double(Mutant::Parallel::Driver)       }
-    let(:env_result) { instance_double(Mutant::Result::Env)            }
-    let(:reporter)   { instance_double(Mutant::Reporter, delay: delay) }
-    let(:world)      { fake_world                                      }
+    let(:block)                              { instance_double(Proc)                           }
+    let(:delay)                              { instance_double(Float)                          }
+    let(:driver)                             { instance_double(Mutant::Parallel::Driver)       }
+    let(:emit_mutation_worker_process_start) { instance_double(Proc)                           }
+    let(:env_result)                         { instance_double(Mutant::Result::Env)            }
+    let(:reporter)                           { instance_double(Mutant::Reporter, delay: delay) }
+    let(:world)                              { fake_world                                      }
 
     let(:env) do
       instance_double(
@@ -43,12 +44,13 @@ RSpec.describe Mutant::Mutation::Runner do
 
     let(:parallel_config) do
       Mutant::Parallel::Config.new(
-        block:        block,
-        jobs:         1,
-        process_name: 'mutant-worker-process',
-        sink:         described_class::Sink.new(env: env),
-        source:       Mutant::Parallel::Source::Array.new(jobs: env.mutations.each_index.to_a),
-        thread_name:  'mutant-worker-thread'
+        block:            block,
+        jobs:             1,
+        on_process_start: emit_mutation_worker_process_start,
+        process_name:     'mutant-worker-process',
+        sink:             described_class::Sink.new(env: env),
+        source:           Mutant::Parallel::Source::Array.new(jobs: env.mutations.each_index.to_a),
+        thread_name:      'mutant-worker-thread'
       )
     end
 
@@ -79,6 +81,12 @@ RSpec.describe Mutant::Mutation::Runner do
             selector:  :method,
             arguments: [:cover_index],
             reaction:  { return: block }
+          },
+          {
+            receiver:  env,
+            selector:  :method,
+            arguments: [:emit_mutation_worker_process_start],
+            reaction:  { return: emit_mutation_worker_process_start }
           },
           {
             receiver:  Mutant::Parallel,
@@ -150,6 +158,12 @@ RSpec.describe Mutant::Mutation::Runner do
             selector:  :method,
             arguments: [:cover_index],
             reaction:  { return: block }
+          },
+          {
+            receiver:  env,
+            selector:  :method,
+            arguments: [:emit_mutation_worker_process_start],
+            reaction:  { return: emit_mutation_worker_process_start }
           },
           {
             receiver:  Mutant::Parallel,

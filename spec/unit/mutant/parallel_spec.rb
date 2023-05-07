@@ -6,18 +6,19 @@ RSpec.describe Mutant::Parallel do
       described_class.async(world, config)
     end
 
-    let(:block)           { instance_double(Proc)                                 }
-    let(:jobs)            { 2                                                     }
-    let(:sink)            { instance_double(described_class::Sink)                }
-    let(:source)          { instance_double(described_class::Source)              }
-    let(:thread_a)        { instance_double(Thread)                               }
-    let(:thread_b)        { instance_double(Thread)                               }
-    let(:var_active_jobs) { instance_double(Mutant::Variable::IVar, :active_jobs) }
-    let(:var_final)       { instance_double(Mutant::Variable::IVar, :final)       }
-    let(:var_running)     { instance_double(Mutant::Variable::MVar, :running)     }
-    let(:var_sink)        { instance_double(Mutant::Variable::IVar, :sink)        }
-    let(:var_source)      { instance_double(Mutant::Variable::IVar, :source)      }
-    let(:world)           { fake_world                                            }
+    let(:block)            { instance_double(Proc)                                 }
+    let(:jobs)             { 2                                                     }
+    let(:on_process_start) { instance_double(Proc)                                 }
+    let(:sink)             { instance_double(described_class::Sink)                }
+    let(:source)           { instance_double(described_class::Source)              }
+    let(:thread_a)         { instance_double(Thread)                               }
+    let(:thread_b)         { instance_double(Thread)                               }
+    let(:var_active_jobs)  { instance_double(Mutant::Variable::IVar, :active_jobs) }
+    let(:var_final)        { instance_double(Mutant::Variable::IVar, :final)       }
+    let(:var_running)      { instance_double(Mutant::Variable::MVar, :running)     }
+    let(:var_sink)         { instance_double(Mutant::Variable::IVar, :sink)        }
+    let(:var_source)       { instance_double(Mutant::Variable::IVar, :source)      }
+    let(:world)            { fake_world                                            }
 
     let(:worker_a) do
       instance_double(described_class::Worker, :a, index: 0)
@@ -29,12 +30,13 @@ RSpec.describe Mutant::Parallel do
 
     let(:config) do
       Mutant::Parallel::Config.new(
-        block:        block,
-        jobs:         jobs,
-        process_name: 'parallel-process',
-        sink:         sink,
-        source:       source,
-        thread_name:  'parallel-thread'
+        block:            block,
+        jobs:             jobs,
+        on_process_start: on_process_start,
+        process_name:     'parallel-process',
+        sink:             sink,
+        source:           source,
+        thread_name:      'parallel-thread'
       )
     end
 
@@ -61,15 +63,16 @@ RSpec.describe Mutant::Parallel do
         receiver:  Mutant::Parallel::Worker,
         selector:  :start,
         arguments: [
-          block:           block,
-          index:           index,
-          process_name:    name,
-          world:           world,
-          var_active_jobs: var_active_jobs,
-          var_final:       var_final,
-          var_running:     var_running,
-          var_sink:        var_sink,
-          var_source:      var_source
+          block:            block,
+          index:            index,
+          on_process_start: config.on_process_start,
+          process_name:     name,
+          var_active_jobs:  var_active_jobs,
+          var_final:        var_final,
+          var_running:      var_running,
+          var_sink:         var_sink,
+          var_source:       var_source,
+          world:            world
         ],
         reaction:  { return: worker }
       }

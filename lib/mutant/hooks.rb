@@ -5,10 +5,11 @@ module Mutant
     include Adamantium, Anima.new(:map)
 
     DEFAULTS = %i[
-      env_infection_pre
       env_infection_post
+      env_infection_pre
       mutation_insert_post
       mutation_insert_pre
+      mutation_worker_process_start
     ].product([EMPTY_ARRAY]).to_h.transform_values(&:freeze).freeze
 
     MESSAGE = 'Unknown hook %s'

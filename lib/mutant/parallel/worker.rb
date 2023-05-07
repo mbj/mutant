@@ -3,58 +3,69 @@
 module Mutant
   module Parallel
     class Worker
-      include Adamantium, Anima.new(
-        :connection,
-        :index,
-        :pid,
-        :process,
-        :var_active_jobs,
-        :var_final,
-        :var_running,
-        :var_sink,
-        :var_source
-      )
+      class Config
+        include Adamantium, Anima.new(
+          :block,
+          :index,
+          :on_process_start,
+          :process_name,
+          :var_active_jobs,
+          :var_final,
+          :var_running,
+          :var_sink,
+          :var_source,
+          :world
+        )
+      end
 
-      private(*anima.attribute_names)
+      include Adamantium, Anima.new(:connection, :config, :pid)
 
-      public :index
+      def self.start(**attributes)
+        start_config(Config.new(**attributes))
+      end
 
       # rubocop:disable Metrics/MethodLength
-      # rubocop:disable Metrics/ParameterLists
-      def self.start(world:, block:, process_name:, **attributes)
+      def self.start_config(config)
+        world   = config.world
         io      = world.io
-        process = world.process
+        marshal = world.marshal
 
         request  = Pipe.from_io(io)
         response = Pipe.from_io(io)
 
-        pid = process.fork do
-          world.thread.current.name = process_name
-          world.process.setproctitle(process_name)
-
-          Child.new(
-            block:      block,
-            connection: Pipe::Connection.from_pipes(
-              marshal: world.marshal,
-              reader:  request,
-              writer:  response
-            )
-          ).call
+        pid = world.process.fork do
+          run_child(
+            config:     config,
+            connection: Pipe::Connection.from_pipes(marshal: marshal, reader: request, writer: response)
+          )
         end
 
         new(
           pid:        pid,
-          process:    process,
-          connection: Pipe::Connection.from_pipes(
-            marshal: world.marshal,
-            reader:  response,
-            writer:  request
-          ),
-          **attributes
+          config:     config,
+          connection: Pipe::Connection.from_pipes(marshal: marshal, reader: response, writer: request)
         )
       end
+      private_class_method :start_config
       # rubocop:enable Metrics/MethodLength
-      # rubocop:enable Metrics/ParameterLists
+
+      def self.run_child(config:, connection:)
+        world = config.world
+
+        world.thread.current.name = config.process_name
+        world.process.setproctitle(config.process_name)
+
+        config.on_process_start.call(index: config.index)
+
+        loop do
+          connection.send_value(config.block.call(connection.receive_value))
+        end
+      end
+      private_class_method :run_child
+
+      def index
+        config.index
+      end
 
       # Run worker payload
       #
@@ -89,45 +100,38 @@ module Mutant
 
     private
 
+      def process
+        config.world.process
+      end
+
       def next_job
-        var_source.with do |source|
+        config.var_source.with do |source|
           source.next if source.next?
         end
       end
 
       def add_result(result)
-        var_sink.with do |sink|
+        config.var_sink.with do |sink|
           sink.result(result)
           sink.stop?
         end
       end
 
       def job_start(job)
-        var_active_jobs.with do |active_jobs|
+        config.var_active_jobs.with do |active_jobs|
           active_jobs << job
         end
       end
 
       def job_done(job)
-        var_active_jobs.with do |active_jobs|
+        config.var_active_jobs.with do |active_jobs|
           active_jobs.delete(job)
         end
       end
 
       def finalize
-        var_final.put(nil) if var_running.modify(&:pred).zero?
+        config.var_final.put(nil) if config.var_running.modify(&:pred).zero?
       end
-
-      class Child
-        include Anima.new(:block, :connection)
-
-        def call
-          loop do
-            connection.send_value(block.call(connection.receive_value))
-          end
-        end
-      end
-      private_constant :Child
     end # Worker
   end # Parallel
 end # Mutant
