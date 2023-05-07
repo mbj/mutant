@@ -2,10 +2,12 @@
 
 RSpec.describe Mutant::Parallel::Worker do
   let(:active_jobs)     { instance_double(Set)                                  }
+  let(:block)           { ->(value) { value * 2 }                               }
   let(:connection)      { instance_double(Mutant::Pipe::Connection)             }
   let(:index)           { 0                                                     }
   let(:payload_a)       { instance_double(Object)                               }
   let(:pid)             { instance_double(Integer)                              }
+  let(:process_name)    { 'worker-process'                                      }
   let(:result_a)        { instance_double(Object)                               }
   let(:running)         { 1                                                     }
   let(:sink)            { instance_double(Mutant::Parallel::Sink)               }
@@ -27,21 +29,31 @@ RSpec.describe Mutant::Parallel::Worker do
     }
   end
 
+  subject do
+    described_class.new(
+      connection: connection,
+      pid:        pid,
+      config:     described_class::Config.new(
+        block:        block,
+        index:        index,
+        process_name: process_name,
+        world:        world,
+        **shared
+      )
+    )
+  end
+
+  describe '#index' do
+    it 'returns index' do
+      expect(subject.index).to be(index)
+    end
+  end
+
   describe '#call' do
     let(:job_a) do
       instance_double(
         Mutant::Parallel::Source::Job,
         payload: payload_a
-      )
-    end
-
-    subject do
-      described_class.new(
-        connection: connection,
-        index:      index,
-        pid:        pid,
-        process:    world.process,
-        **shared
       )
     end
 
@@ -189,18 +201,8 @@ RSpec.describe Mutant::Parallel::Worker do
   end
 
   describe '#join' do
-    let(:object) do
-      described_class.new(
-        connection: connection,
-        index:      index,
-        pid:        pid,
-        process:    world.process,
-        **shared
-      )
-    end
-
     def apply
-      object.join
+      subject.join
     end
 
     let(:raw_expectations) do
@@ -214,23 +216,13 @@ RSpec.describe Mutant::Parallel::Worker do
     end
 
     it 'terminates and waits for process' do
-      verify_events { expect(apply).to be(object) }
+      verify_events { expect(apply).to be(subject) }
     end
   end
 
   describe '#signal' do
-    let(:object) do
-      described_class.new(
-        connection: connection,
-        index:      index,
-        pid:        pid,
-        process:    world.process,
-        **shared
-      )
-    end
-
     def apply
-      object.signal
+      subject.signal
     end
 
     let(:raw_expectations) do
@@ -244,16 +236,14 @@ RSpec.describe Mutant::Parallel::Worker do
     end
 
     it 'terminates and waits for process' do
-      verify_events { expect(apply).to be(object) }
+      verify_events { expect(apply).to be(subject) }
     end
   end
 
   describe '.start' do
-    let(:block)              { ->(value) { value * 2 }                   }
     let(:child_connection)   { instance_double(Mutant::Pipe::Connection) }
     let(:parent_connection)  { instance_double(Mutant::Pipe::Connection) }
     let(:forked_main_thread) { instance_double(Thread)                   }
-    let(:process_name)       { 'worker-process'                          }
 
     def io(name)
       instance_double(IO, name)
@@ -307,6 +297,12 @@ RSpec.describe Mutant::Parallel::Worker do
           reaction: { yields: [], return: pid }
         },
         {
+          receiver:  Mutant::Pipe::Connection,
+          selector:  :from_pipes,
+          arguments: [{ marshal: world.marshal, reader: request_pipe, writer: response_pipe }],
+          reaction:  { return: child_connection }
+        },
+        {
           receiver: world.thread,
           selector: :current,
           reaction: { return: forked_main_thread }
@@ -320,12 +316,6 @@ RSpec.describe Mutant::Parallel::Worker do
           receiver:  world.process,
           selector:  :setproctitle,
           arguments: ['worker-process']
-        },
-        {
-          receiver:  Mutant::Pipe::Connection,
-          selector:  :from_pipes,
-          arguments: [{ marshal: world.marshal, reader: request_pipe, writer: response_pipe }],
-          reaction:  { return: child_connection }
         },
         {
           receiver: child_connection,
@@ -352,13 +342,7 @@ RSpec.describe Mutant::Parallel::Worker do
     end
 
     let(:expected_worker) do
-      described_class.new(
-        connection: parent_connection,
-        index:      index,
-        pid:        pid,
-        process:    world.process,
-        **shared
-      )
+      subject.with(connection: parent_connection)
     end
 
     it 'starts worker (process)' do
