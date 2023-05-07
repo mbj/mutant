@@ -32,10 +32,10 @@ module Mutant
       )
     end
 
-    def run(name, payload)
+    def run(name, **payload)
       Hooks.assert_name(name)
 
-      map.fetch(name).each { |block| block.call(payload) }
+      map.fetch(name).each { |block| block.call(**payload) }
 
       self
     end

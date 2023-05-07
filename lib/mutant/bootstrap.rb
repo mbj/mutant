@@ -88,7 +88,7 @@ module Mutant
         config, hooks, world = env.config, env.hooks, env.world
 
         env.record(:hooks_env_infection_pre) do
-          hooks.run(:env_infection_pre, env)
+          hooks.run(:env_infection_pre, env: env)
         end
 
         env.record(:require_target) do
@@ -101,7 +101,7 @@ module Mutant
         end
 
         env.record(:hooks_env_infection_post) do
-          hooks.run(:env_infection_post, env)
+          hooks.run(:env_infection_post, env: env)
         end
       end
     end

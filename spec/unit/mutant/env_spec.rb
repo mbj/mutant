@@ -119,9 +119,9 @@ RSpec.describe Mutant::Env do
         apply
 
         expect(isolation).to have_received(:call).ordered.with(config.mutation.timeout)
-        expect(hooks).to have_received(:run).ordered.with(:mutation_insert_pre, mutation)
+        expect(hooks).to have_received(:run).ordered.with(:mutation_insert_pre, mutation: mutation)
         expect(mutation).to have_received(:insert).ordered.with(world.kernel)
-        expect(hooks).to have_received(:run).ordered.with(:mutation_insert_post, mutation)
+        expect(hooks).to have_received(:run).ordered.with(:mutation_insert_post, mutation: mutation)
         expect(integration).to have_received(:call).ordered.with([test_a, test_b])
       end
 

@@ -105,7 +105,7 @@ RSpec.describe Mutant::Bootstrap do
       {
         receiver:  hooks,
         selector:  :run,
-        arguments: [:env_infection_pre, env_initial]
+        arguments: [:env_infection_pre, { env: env_initial }]
       },
       {
         receiver:  world,
@@ -147,7 +147,7 @@ RSpec.describe Mutant::Bootstrap do
       {
         receiver:  hooks,
         selector:  :run,
-        arguments: [:env_infection_post, env_initial]
+        arguments: [:env_infection_post, { env: env_initial }]
       },
       {
         receiver:  world,

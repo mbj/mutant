@@ -155,9 +155,9 @@ module Mutant
 
     def run_mutation_tests(mutation, tests)
       config.isolation.call(config.mutation.timeout) do
-        hooks.run(:mutation_insert_pre, mutation)
+        hooks.run(:mutation_insert_pre, mutation: mutation)
         result = mutation.insert(world.kernel)
-        hooks.run(:mutation_insert_post, mutation)
+        hooks.run(:mutation_insert_post, mutation: mutation)
 
         result.either(
           ->(_) { Result::Test::VoidValue.instance },
