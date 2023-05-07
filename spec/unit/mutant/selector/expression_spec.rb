@@ -6,7 +6,8 @@ RSpec.describe Mutant::Selector::Expression do
 
     let(:context)  { instance_double(Mutant::Context)   }
     let(:node)     { instance_double(Parser::AST::Node) }
-    let(:test_a)   { mk_test('SubjectA')                }
+
+    let(:test_a)   { mk_test('SubjectC', 'SubjectA')    }
     let(:test_b)   { mk_test('SubjectB')                }
     let(:test_c)   { mk_test('SubjectC')                }
 
@@ -25,10 +26,10 @@ RSpec.describe Mutant::Selector::Expression do
       )
     end
 
-    def mk_test(expression)
+    def mk_test(*expressions)
       instance_double(
         Mutant::Test,
-        expressions: [parse_expression(expression)]
+        expressions: expressions.map(&method(:parse_expression))
       )
     end
 
