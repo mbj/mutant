@@ -34,8 +34,8 @@ end
 RSpec.describe Mutant::Hooks do
   let(:source) do
     <<~'RUBY'
-      hooks.register(:mutation_insert_pre) do |param|
-        param << [__FILE__, __LINE__]
+      hooks.register(:mutation_insert_pre) do |mutation:|
+        mutation << [__FILE__, __LINE__]
       end
     RUBY
   end
@@ -90,7 +90,7 @@ RSpec.describe Mutant::Hooks do
     end
 
     it 'returns hooks equivalent to merged registration sequence' do
-      apply.run(:mutation_insert_pre, nil)
+      apply.run(:mutation_insert_pre, foo: nil)
 
       expect(yields).to eql(%i[block_a block_b])
     end
@@ -107,7 +107,7 @@ RSpec.describe Mutant::Hooks do
     end
 
     def apply
-      subject.run(name, payload)
+      subject.run(name, foo: payload)
     end
 
     include_context 'unknown hook name'
@@ -135,7 +135,7 @@ RSpec.describe Mutant::Hooks do
           expect { apply }
             .to change(yields, :to_a)
             .from([])
-            .to([payload, payload])
+            .to([{ foo: payload }, { foo: payload }])
         end
       end
     end
@@ -157,7 +157,7 @@ RSpec.describe Mutant::Hooks do
     it 'allows to capture hooks' do
       payload = []
 
-      apply.run(:mutation_insert_pre, payload)
+      apply.run(:mutation_insert_pre, mutation: payload)
 
       expect(payload).to eql([['example.rb', 2]])
     end
@@ -185,7 +185,7 @@ RSpec.describe Mutant::Hooks do
     it 'loads hooks in sequence' do
       yields = []
 
-      apply.run(:mutation_insert_pre, yields)
+      apply.run(:mutation_insert_pre, mutation: yields)
 
       expect(yields).to eql(
         [
@@ -212,9 +212,9 @@ RSpec.describe Mutant::Hooks::Builder do
       let(:name) { :mutation_insert_pre }
 
       it 'registers hook' do
-        apply.to_hooks.run(name, nil)
+        apply.to_hooks.run(name, foo: nil)
 
-        expect(yields).to eql([nil])
+        expect(yields).to eql([{ foo: nil }])
       end
 
       it 'returns self' do
