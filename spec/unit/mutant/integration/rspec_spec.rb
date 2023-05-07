@@ -122,19 +122,23 @@ RSpec.describe Mutant::Integration::Rspec do
         expressions: [parse_expression('*')]
       ),
       Mutant::Test.new(
-        id:          'rspec:1:example-c-location/Example::C blah',
-        expressions: [parse_expression('Example::C')]
-      ),
-      Mutant::Test.new(
-        id:          "rspec:2:example-d-location/Example::D\nblah",
+        id:          'rspec:1:example-b-location/example-b-full-description',
         expressions: [parse_expression('*')]
       ),
       Mutant::Test.new(
-        id:          'rspec:3:example-e-location/Example::E',
+        id:          'rspec:2:example-c-location/Example::C blah',
+        expressions: [parse_expression('Example::C')]
+      ),
+      Mutant::Test.new(
+        id:          "rspec:3:example-d-location/Example::D\nblah",
+        expressions: [parse_expression('*')]
+      ),
+      Mutant::Test.new(
+        id:          'rspec:4:example-e-location/Example::E',
         expressions: [parse_expression('Foo')]
       ),
       Mutant::Test.new(
-        id:          'rspec:4:example-f-location/Example::F',
+        id:          'rspec:5:example-f-location/Example::F',
         expressions: [parse_expression('Foo'), parse_expression('Bar')]
       )
     ]
@@ -162,6 +166,12 @@ RSpec.describe Mutant::Integration::Rspec do
     subject { object.all_tests }
 
     it { should eql(all_tests) }
+  end
+
+  describe '#available_tests' do
+    subject { object.available_tests }
+
+    it { should eql(all_tests.take(1) + all_tests.drop(2)) }
   end
 
   describe '#setup' do

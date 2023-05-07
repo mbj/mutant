@@ -1,4 +1,13 @@
-# v0.11.19 2023-05-6
+# v0.11.20 unreleased
+
+* [#1377](https://github.com/mbj/mutant/pull/1377)
+
+  Add `#available_tests` to integrations, differentiating tests eligible for
+  mutation testing from all tests availabe in the integration.
+  This will allow to re-use mutants test runner for all integration tests,
+  outside of mutation testing.
+
+# v0.11.19 2023-05-06
 
 * [#1376](https://github.com/mbj/mutant/pull/1376)
 
@@ -22,8 +31,8 @@
 
 * [#1362](http://github.com/mbj/mutant/pull/1362)
 
-  Adapt to behavior change in ruby 3.1.3 where methods inherited 
-  from module inclusions that just got visibility changes are now 
+  Adapt to behavior change in ruby 3.1.3 where methods inherited
+  from module inclusions that just got visibility changes are now
   owned by the included module/class.
 
 # v0.11.17 2022-11-12

@@ -17,7 +17,8 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Includes:        []
         Requires:        []
         Subjects:        1
-        Total-Tests:     1
+        All-Tests:       2
+        Available-Tests: 1
         Selected-Tests:  1
         Tests/Subject:   1.00 avg
         Mutations:       2
@@ -42,7 +43,8 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Includes:        []
         Requires:        []
         Subjects:        1
-        Total-Tests:     1
+        All-Tests:       2
+        Available-Tests: 1
         Selected-Tests:  1
         Tests/Subject:   1.00 avg
         Mutations:       2
@@ -69,7 +71,8 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Includes:        []
         Requires:        []
         Subjects:        1
-        Total-Tests:     1
+        All-Tests:       2
+        Available-Tests: 1
         Selected-Tests:  1
         Tests/Subject:   1.00 avg
         Mutations:       2

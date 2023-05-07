@@ -191,9 +191,9 @@ RSpec.describe Mutant::Env do
     end
   end
 
-  describe '#amount_total_tests' do
+  describe '#amount_all_tests' do
     def apply
-      subject.amount_total_tests
+      subject.amount_all_tests
     end
 
     it 'returns expected value' do

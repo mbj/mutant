@@ -13,7 +13,7 @@ module Mutant
       # @return [Enumerable<Test>]
       def call(subject)
         subject.match_expressions.each do |match_expression|
-          subject_tests = integration.all_tests.select do |test|
+          subject_tests = integration.available_tests.select do |test|
             test.expressions.any? do |test_expression|
               match_expression.prefix?(test_expression)
             end

@@ -14,7 +14,7 @@ RSpec.describe Mutant::Selector::Expression do
     let(:integration) do
       instance_double(
         Mutant::Integration,
-        all_tests: all_tests
+        available_tests: available_tests
       )
     end
 
@@ -50,31 +50,31 @@ RSpec.describe Mutant::Selector::Expression do
     subject { object.call(mutation_subject) }
 
     context 'without available tests' do
-      let(:all_tests) { [] }
+      let(:available_tests) { [] }
 
       it { should eql([]) }
     end
 
     context 'without qualifying tests' do
-      let(:all_tests) { [test_c] }
+      let(:available_tests) { [test_c] }
 
       it { should eql([]) }
     end
 
     context 'with qualifying tests for first match expression' do
-      let(:all_tests) { [test_a] }
+      let(:available_tests) { [test_a] }
 
       it { should eql([test_a]) }
     end
 
     context 'with qualifying tests for second match expression' do
-      let(:all_tests) { [test_b] }
+      let(:available_tests) { [test_b] }
 
       it { should eql([test_b]) }
     end
 
     context 'with qualifying tests for the first and second match expression' do
-      let(:all_tests) { [test_a, test_b] }
+      let(:available_tests) { [test_a, test_b] }
 
       it { should eql([test_a]) }
     end

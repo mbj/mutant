@@ -18,7 +18,8 @@ module Mutant
 
           NO_TESTS_MESSAGE = <<~'MESSAGE'
             ===============
-            Mutant found no tests. Mutation testing cannot be started.
+            Mutant found no tests available for mutation testing.
+            Mutation testing cannot be started.
 
             This can have various reasons:
 
@@ -41,7 +42,7 @@ module Mutant
           end
 
           def validate_tests(environment)
-            if environment.integration.all_tests.empty?
+            if environment.integration.available_tests.empty?
               Either::Left.new(NO_TESTS_MESSAGE)
             else
               Either::Right.new(environment)

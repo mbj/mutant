@@ -34,6 +34,7 @@ module SharedContext
     let(:output)          { StringIO.new                                             }
     let(:subject_a_node)  { s(:true)                                                 }
     let(:test_a)          { instance_double(Mutant::Test, identification: 'test-a')  }
+    let(:test_b)          { instance_double(Mutant::Test, identification: 'test-b')  }
     let(:subjects)        { [subject_a]                                              }
 
     let(:mutation_a) do
@@ -61,18 +62,19 @@ module SharedContext
     let(:env) do
       instance_double(
         Mutant::Env,
-        amount_mutations:      mutations.length,
-        amount_selected_tests: selections.values.flatten.to_set.length,
-        amount_subjects:       subjects.length,
-        amount_total_tests:    integration.all_tests.length,
-        config:                config,
-        integration:           integration,
-        mutations:             mutations,
-        selected_tests:        [test_a].to_set,
-        selections:            selections,
-        subjects:              subjects,
-        test_subject_ratio:    Rational(1),
-        world:                 world
+        amount_mutations:       mutations.length,
+        amount_selected_tests:  selections.values.flatten.to_set.length,
+        amount_subjects:        subjects.length,
+        amount_all_tests:       integration.all_tests.length,
+        amount_available_tests: integration.available_tests.length,
+        config:                 config,
+        integration:            integration,
+        mutations:              mutations,
+        selected_tests:         [test_a].to_set,
+        selections:             selections,
+        subjects:               subjects,
+        test_subject_ratio:     Rational(1),
+        world:                  world
       )
     end
 
@@ -97,7 +99,8 @@ module SharedContext
     let(:integration) do
       instance_double(
         Mutant::Integration,
-        all_tests: [test_a]
+        all_tests:       [test_a, test_b],
+        available_tests: [test_a]
       )
     end
 
