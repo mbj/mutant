@@ -7,6 +7,7 @@ module Mutant
         include Adamantium, Anima.new(
           :block,
           :index,
+          :on_process_start,
           :process_name,
           :var_active_jobs,
           :var_final,
@@ -53,6 +54,8 @@ module Mutant
 
         world.thread.current.name = config.process_name
         world.process.setproctitle(config.process_name)
+
+        config.on_process_start.call(index: config.index)
 
         loop do
           connection.send_value(config.block.call(connection.receive_value))

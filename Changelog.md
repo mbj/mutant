@@ -1,5 +1,12 @@
 # v0.11.20 unreleased
 
+* [#1378](https://github.com/mbj/mutant/pull/1379)
+
+  Add support for user defined mutation worker process hooks. 
+  These hooks are triggered before the mutation worker process starts processing mutations.
+  They can be used so setup separate test databases to avoid clobbering between
+  mutation threads or do other isolation mechanisms.
+
 * [#1377](https://github.com/mbj/mutant/pull/1377)
 
   Add `#available_tests` to integrations, differentiating tests eligible for

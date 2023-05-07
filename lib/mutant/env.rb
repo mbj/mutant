@@ -64,6 +64,10 @@ module Mutant
       )
     end
 
+    def emit_mutation_worker_process_start(index:)
+      hooks.run(:mutation_worker_process_start, index: index)
+    end
+
     # The test selections
     #
     # @return Hash{Mutation => Enumerable<Test>}

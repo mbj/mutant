@@ -3,7 +3,6 @@
 module Mutant
   # Parallel execution engine of arbitrary payloads
   module Parallel
-
     # Run async computation returning driver
     #
     # @param [World] world
@@ -24,10 +23,11 @@ module Mutant
     def self.workers(world, config, shared)
       Array.new(config.jobs) do |index|
         Worker.start(
-          block:        config.block,
-          index:        index,
-          process_name: "#{config.process_name}-#{index}",
-          world:        world,
+          block:            config.block,
+          index:            index,
+          on_process_start: config.on_process_start,
+          process_name:     "#{config.process_name}-#{index}",
+          world:            world,
           **shared
         )
       end
@@ -93,6 +93,7 @@ module Mutant
       include Adamantium, Anima.new(
         :block,
         :jobs,
+        :on_process_start,
         :process_name,
         :sink,
         :source,

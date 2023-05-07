@@ -41,12 +41,13 @@ module Mutant
 
       def self.mutation_test_config(env)
         Parallel::Config.new(
-          block:        env.method(:cover_index),
-          jobs:         env.config.jobs,
-          process_name: 'mutant-worker-process',
-          sink:         Sink.new(env: env),
-          source:       Parallel::Source::Array.new(jobs: env.mutations.each_index.to_a),
-          thread_name:  'mutant-worker-thread'
+          block:            env.method(:cover_index),
+          jobs:             env.config.jobs,
+          on_process_start: env.method(:emit_mutation_worker_process_start),
+          process_name:     'mutant-worker-process',
+          sink:             Sink.new(env: env),
+          source:           Parallel::Source::Array.new(jobs: env.mutations.each_index.to_a),
+          thread_name:      'mutant-worker-thread'
         )
       end
       private_class_method :mutation_test_config

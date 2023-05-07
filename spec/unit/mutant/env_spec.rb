@@ -146,6 +146,24 @@ RSpec.describe Mutant::Env do
     end
   end
 
+  describe '#emit_mutation_worker_process_start' do
+    let(:index) { 0 }
+
+    def apply
+      subject.emit_mutation_worker_process_start(index: index)
+    end
+
+    before do
+      allow(hooks).to receive_messages(run: undefined)
+    end
+
+    it 'dispatcehs expected hook' do
+      apply
+
+      expect(hooks).to have_received(:run).with(:mutation_worker_process_start, index: index)
+    end
+  end
+
   describe '#selections' do
     def apply
       subject.selections

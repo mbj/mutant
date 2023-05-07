@@ -1,23 +1,24 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Parallel::Worker do
-  let(:active_jobs)     { instance_double(Set)                                  }
-  let(:block)           { ->(value) { value * 2 }                               }
-  let(:connection)      { instance_double(Mutant::Pipe::Connection)             }
-  let(:index)           { 0                                                     }
-  let(:payload_a)       { instance_double(Object)                               }
-  let(:pid)             { instance_double(Integer)                              }
-  let(:process_name)    { 'worker-process'                                      }
-  let(:result_a)        { instance_double(Object)                               }
-  let(:running)         { 1                                                     }
-  let(:sink)            { instance_double(Mutant::Parallel::Sink)               }
-  let(:source)          { instance_double(Mutant::Parallel::Source)             }
-  let(:var_active_jobs) { instance_double(Mutant::Variable::IVar, :active_jobs) }
-  let(:var_final)       { instance_double(Mutant::Variable::IVar, :final)       }
-  let(:var_running)     { instance_double(Mutant::Variable::MVar, :running)     }
-  let(:var_sink)        { instance_double(Mutant::Variable::IVar, :sink)        }
-  let(:var_source)      { instance_double(Mutant::Variable::IVar, :source)      }
-  let(:world)           { fake_world                                            }
+  let(:active_jobs)      { instance_double(Set)                                  }
+  let(:block)            { ->(value) { value * 2 }                               }
+  let(:connection)       { instance_double(Mutant::Pipe::Connection)             }
+  let(:index)            { 0                                                     }
+  let(:on_process_start) { instance_double(Proc)                                 }
+  let(:payload_a)        { instance_double(Object)                               }
+  let(:pid)              { instance_double(Integer)                              }
+  let(:process_name)     { 'worker-process'                                      }
+  let(:result_a)         { instance_double(Object)                               }
+  let(:running)          { 1                                                     }
+  let(:sink)             { instance_double(Mutant::Parallel::Sink)               }
+  let(:source)           { instance_double(Mutant::Parallel::Source)             }
+  let(:var_active_jobs)  { instance_double(Mutant::Variable::IVar, :active_jobs) }
+  let(:var_final)        { instance_double(Mutant::Variable::IVar, :final)       }
+  let(:var_running)      { instance_double(Mutant::Variable::MVar, :running)     }
+  let(:var_sink)         { instance_double(Mutant::Variable::IVar, :sink)        }
+  let(:var_source)       { instance_double(Mutant::Variable::IVar, :source)      }
+  let(:world)            { fake_world                                            }
 
   let(:shared) do
     {
@@ -34,10 +35,11 @@ RSpec.describe Mutant::Parallel::Worker do
       connection: connection,
       pid:        pid,
       config:     described_class::Config.new(
-        block:        block,
-        index:        index,
-        process_name: process_name,
-        world:        world,
+        block:            block,
+        index:            index,
+        process_name:     process_name,
+        on_process_start: on_process_start,
+        world:            world,
         **shared
       )
     )
@@ -264,15 +266,16 @@ RSpec.describe Mutant::Parallel::Worker do
     # rubocop:disable Metrics/MethodLength
     def apply
       described_class.start(
-        block:           block,
-        index:           index,
-        process_name:    process_name,
-        var_active_jobs: var_active_jobs,
-        var_final:       var_final,
-        var_running:     var_running,
-        var_sink:        var_sink,
-        var_source:      var_source,
-        world:           world
+        block:            block,
+        index:            index,
+        on_process_start: on_process_start,
+        process_name:     process_name,
+        var_active_jobs:  var_active_jobs,
+        var_final:        var_final,
+        var_running:      var_running,
+        var_sink:         var_sink,
+        var_source:       var_source,
+        world:            world
       )
     end
     # rubocop:enable Metrics/MethodLength
@@ -316,6 +319,11 @@ RSpec.describe Mutant::Parallel::Worker do
           receiver:  world.process,
           selector:  :setproctitle,
           arguments: ['worker-process']
+        },
+        {
+          receiver:  on_process_start,
+          selector:  :call,
+          arguments: [{ index: index }]
         },
         {
           receiver: child_connection,
