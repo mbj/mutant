@@ -64,13 +64,21 @@ module Mutant
         )
       end
 
-      # Available tests
+      # All tests
       #
       # @return [Enumerable<Test>]
       def all_tests
         all_tests_index.keys
       end
       memoize :all_tests
+
+      # Available tests
+      #
+      # @return [Enumerable<Test>]
+      def available_tests
+        all_tests_index.select { |_test, example| example.metadata.fetch(:mutant, true) }.keys
+      end
+      memoize :available_tests
 
     private
 
@@ -134,11 +142,8 @@ module Mutant
       end
 
       def all_examples
-        @rspec_world.example_groups.flat_map(&:descendants).flat_map(&:examples).select do |example|
-          example.metadata.fetch(:mutant, true)
-        end
+        @rspec_world.example_groups.flat_map(&:descendants).flat_map(&:examples)
       end
-
     end # Rspec
   end # Integration
 end # Mutant

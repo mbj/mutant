@@ -100,13 +100,21 @@ module Mutant
     end
     memoize :amount_mutations
 
-    # Amount of tests reachable by integration
+    # Amount of all tests the integration provides
     #
     # @return [Integer]
-    def amount_total_tests
+    def amount_all_tests
       integration.all_tests.length
     end
-    memoize :amount_total_tests
+    memoize :amount_all_tests
+
+    # Amount of tests available for mutation testing
+    #
+    # @return [Integer]
+    def amount_available_tests
+      integration.available_tests.length
+    end
+    memoize :amount_available_tests
 
     # Amount of selected subjects
     #

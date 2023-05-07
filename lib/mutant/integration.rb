@@ -88,10 +88,20 @@ module Mutant
     # @return [Result::Test]
     abstract_method :call
 
-    # Available tests for integration
+    # All tests this integration can run
+    #
+    # Some tests may not be available for mutation testing.
+    # See #available_tests
     #
     # @return [Enumerable<Test>]
     abstract_method :all_tests
+
+    # All tests available for mutation testing
+    #
+    # Subset ofr #al_tests
+    #
+    # @return [Enumerable<Test>]
+    abstract_method :available_tests
 
   private
 

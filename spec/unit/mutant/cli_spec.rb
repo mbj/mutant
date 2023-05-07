@@ -639,10 +639,12 @@ RSpec.describe Mutant::CLI do
       let(:license_result)       { right(subscription)                                  }
       let(:runner_result)        { right(env_result)                                    }
       let(:subjects)             { [subject_a]                                          }
-      let(:tests)                { [test_a, test_b]                                     }
 
       let(:test_a) { instance_double(Mutant::Test, identification: 'test-a') }
       let(:test_b) { instance_double(Mutant::Test, identification: 'test-b') }
+      let(:test_c) { instance_double(Mutant::Test, identification: 'test-c') }
+
+      let(:available_tests) { [test_a, test_b] }
 
       let(:env) do
         config = Mutant::Config::DEFAULT.with(
@@ -651,7 +653,11 @@ RSpec.describe Mutant::CLI do
 
         Mutant::Env.empty(world, config)
           .with(
-            integration: instance_double(Mutant::Integration, all_tests: tests),
+            integration: instance_double(
+              Mutant::Integration,
+              all_tests:       [test_a, test_b, test_c],
+              available_tests: available_tests
+            ),
             subjects:    subjects
           )
       end
@@ -778,7 +784,7 @@ RSpec.describe Mutant::CLI do
             [
               :stdout,
               :puts,
-              'Tests in environment: 2'
+              'All tests in environment: 3'
             ],
             [
               :stdout,
@@ -789,6 +795,11 @@ RSpec.describe Mutant::CLI do
               :stdout,
               :puts,
               'test-b'
+            ],
+            [
+              :stdout,
+              :puts,
+              'test-c'
             ]
           ]
         end
@@ -850,7 +861,8 @@ RSpec.describe Mutant::CLI do
            Includes:        []
            Requires:        []
            Subjects:        1
-           Total-Tests:     2
+           All-Tests:       3
+           Available-Tests: 2
            Selected-Tests:  0
            Tests/Subject:   0.00 avg
            Mutations:       0
@@ -977,7 +989,7 @@ RSpec.describe Mutant::CLI do
           end
 
           context 'on not having found tests' do
-            let(:tests) { [] }
+            let(:available_tests) { [] }
 
             let(:expected_events) do
               [

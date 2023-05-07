@@ -122,6 +122,8 @@ module Mutant
       end
       memoize :all_tests
 
+      alias_method :available_tests, :all_tests
+
     private
 
       def all_tests_index

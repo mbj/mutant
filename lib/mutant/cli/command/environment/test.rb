@@ -21,7 +21,7 @@ module Mutant
 
             def list_tests(env)
               tests = env.integration.all_tests
-              print('Tests in environment: %d' % tests.length)
+              print('All tests in environment: %d' % tests.length)
               tests.each do |test|
                 print(test.identification)
               end
