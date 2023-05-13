@@ -53,8 +53,6 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
     it_should_behave_like 'a method matcher' do
       %i[public protected private].each do |visibility|
         context 'with %s visibility' % visibility do
-          let(:expected_visibility) { visibility }
-
           before do
             scope.singleton_class.__send__(visibility, method_name)
           end

@@ -29,12 +29,11 @@ RSpec.describe Mutant::AST::Pattern::Source do
     end
 
     context 'on non unix newline' do
-      let(:input) { "a\r\nb" }
-
+      let(:string) { "a\r\nb" }
       let(:line_index) { 0 }
 
       it 'considers the \r as part of the previous line' do
-        expect(apply).to eql('a')
+        expect(apply).to eql("a\r")
       end
     end
   end
