@@ -56,10 +56,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
-
-    it 'returns expected subjects' do
-      expect(subject).to eql([])
-    end
   end
 
   context 'when method is defined inside eval' do
@@ -73,10 +69,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
-
-    it 'returns expected subjects' do
-      expect(subject).to eql([])
-    end
   end
 
   context 'when method is defined without source location' do
@@ -90,10 +82,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
-
-    it 'returns expected subjects' do
-      expect(subject).to eql([])
-    end
   end
 
   context 'in module eval' do
@@ -106,10 +94,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
-
-    it 'returns expected subjects' do
-      expect(subject).to eql([])
-    end
   end
 
   context 'in class eval' do
@@ -122,10 +106,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
-
-    it 'returns expected subjects' do
-      expect(subject).to eql([])
-    end
   end
 
   context 'when method is defined once' do
