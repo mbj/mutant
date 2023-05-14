@@ -13,8 +13,8 @@ RSpec.describe Mutant::Matcher::Config do
       described_class.new(
         ignore:            [parse_expression('Ignore#a')],
         start_expressions: [parse_expression('Start#a')],
-        subject_filters:   [proc_a],
-        subjects:          [parse_expression('Match#a')]
+        subjects:          [parse_expression('Match#a')],
+        diffs:             []
       )
     end
 
@@ -22,8 +22,8 @@ RSpec.describe Mutant::Matcher::Config do
       described_class.new(
         ignore:            [parse_expression('Ignore#b')],
         start_expressions: [parse_expression('Start#b')],
-        subject_filters:   [proc_b],
-        subjects:          [parse_expression('Match#b')]
+        subjects:          [parse_expression('Match#b')],
+        diffs:             []
       )
     end
 
@@ -32,8 +32,8 @@ RSpec.describe Mutant::Matcher::Config do
         described_class.new(
           ignore:            [parse_expression('Ignore#a'), parse_expression('Ignore#b')],
           start_expressions: [parse_expression('Start#a'), parse_expression('Start#b')],
-          subject_filters:   [proc_a, proc_b],
-          subjects:          [parse_expression('Match#a'), parse_expression('Match#b')]
+          subjects:          [parse_expression('Match#a'), parse_expression('Match#b')],
+          diffs:             []
         )
       )
     end
@@ -71,15 +71,6 @@ RSpec.describe Mutant::Matcher::Config do
       end
 
       it { should eql('#<Mutant::Matcher::Config ignore: [Bar] subjects: [Foo]>') }
-    end
-
-    context 'with subject filter' do
-      let(:object) do
-        described_class::DEFAULT
-          .add(:subject_filters, 'foo')
-      end
-
-      it { should eql('#<Mutant::Matcher::Config subject_filters: ["foo"]>') }
     end
   end
 end

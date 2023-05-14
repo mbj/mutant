@@ -8,7 +8,7 @@ module Mutant
         :ignore,
         :subjects,
         :start_expressions,
-        :subject_filters
+        :diffs
       )
 
       INSPECT_FORMAT      = "#<#{self} %s>"
@@ -19,8 +19,8 @@ module Mutant
       PRESENTATIONS       = {
         ignore:            :syntax,
         start_expressions: :syntax,
-        subject_filters:   :inspect,
-        subjects:          :syntax
+        subjects:          :syntax,
+        diffs:             :inspect
       }.freeze
 
       private_constant(*constants(false))

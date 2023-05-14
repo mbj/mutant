@@ -7,11 +7,11 @@ RSpec.describe Mutant::Matcher do
     end
 
     let(:anon_matcher)       { instance_double(Mutant::Matcher)    }
+    let(:diffs)              { []                                  }
     let(:env)                { instance_double(Mutant::Env)        }
-    let(:ignore_expressions) { []                                  }
     let(:expression_a)       { expression('Foo::Bar#a', matcher_a) }
     let(:expression_b)       { expression('Foo::Bar#b', matcher_b) }
-    let(:subject_filters)    { []                                  }
+    let(:ignore_expressions) { []                                  }
 
     let(:matcher_a) do
       instance_double(Mutant::Matcher, call: [subject_a])
@@ -40,7 +40,7 @@ RSpec.describe Mutant::Matcher do
         ignore:            ignore_expressions,
         subjects:          [expression_a, expression_b],
         start_expressions: [],
-        subject_filters:   subject_filters
+        diffs:             diffs
       )
     end
 
@@ -49,7 +49,9 @@ RSpec.describe Mutant::Matcher do
         Mutant::Subject,
         'subject a',
         expression:       expression('Foo::Bar#a'),
-        inline_disabled?: false
+        inline_disabled?: false,
+        source_lines:     1..10,
+        source_path:      'subject/a.rb'
       )
     end
 
@@ -58,7 +60,9 @@ RSpec.describe Mutant::Matcher do
         Mutant::Subject,
         'subject b',
         expression:       expression('Foo::Bar#b'),
-        inline_disabled?: false
+        inline_disabled?: false,
+        source_lines:     100..101,
+        source_path:      'subject/b.rb'
       )
     end
 
@@ -98,25 +102,64 @@ RSpec.describe Mutant::Matcher do
       end
     end
 
-    context 'with subject filter' do
-      let(:subject_filters) do
-        [subject_a.public_method(:eql?)]
+    context 'with diffs' do
+      let(:diff_a) { instance_double(Mutant::Repository::Diff) }
+      let(:diff_b) { instance_double(Mutant::Repository::Diff) }
+
+      let(:subject_a_touches_diff_a?) { false }
+      let(:subject_b_touches_diff_a?) { false }
+      let(:subject_a_touches_diff_b?) { false }
+      let(:subject_b_touches_diff_b?) { false }
+
+      before do
+        allow(diff_a).to receive(:touches?)
+          .with(subject_a.source_path, subject_a.source_lines)
+          .and_return(subject_a_touches_diff_a?)
+
+        allow(diff_a).to receive(:touches?)
+          .with(subject_b.source_path, subject_b.source_lines)
+          .and_return(subject_b_touches_diff_a?)
+
+        allow(diff_b).to receive(:touches?)
+          .with(subject_a.source_path, subject_a.source_lines)
+          .and_return(subject_a_touches_diff_b?)
+
+        allow(diff_b).to receive(:touches?)
+          .with(subject_b.source_path, subject_b.source_lines)
+          .and_return(subject_b_touches_diff_b?)
       end
 
-      it 'returns expected subjects' do
-        expect(apply.call(env)).to eql([subject_a])
+      context 'with one diff' do
+        let(:diffs) { [diff_a] }
+
+        context 'when its touched by subject a' do
+          let(:subject_a_touches_diff_a?) { true }
+
+          it 'returns expected subjects' do
+            expect(apply.call(env)).to eql([subject_a])
+          end
+        end
       end
-    end
 
-    context 'with subject ignore and filter' do
-      let(:ignore_expressions) { [subject_b.expression] }
+      context 'with two diffs' do
+        let(:diffs) { [diff_a, diff_b] }
 
-      let(:subject_filters) do
-        [subject_b.public_method(:eql?)]
-      end
+        context 'when one is touched by subject a' do
+          let(:subject_a_touches_diff_b?) { true }
 
-      it 'returns expected subjects' do
-        expect(apply.call(env)).to eql([])
+          it 'returns expected subjects' do
+            expect(apply.call(env)).to eql([])
+          end
+        end
+
+        context 'when both are touched by subject a' do
+          let(:subject_a_touches_diff_a?) { true }
+          let(:subject_a_touches_diff_b?) { true }
+
+          it 'returns expected subjects' do
+            expect(apply.call(env)).to eql([subject_a])
+          end
+        end
       end
     end
   end

@@ -1,5 +1,9 @@
 # v0.11.20 unreleased
 
+* [#1382](https://github.com/mbj/mutant/pull/1382)
+
+  Significantly optimize parsing overhead during boot. Smaller projects may see boot time speedups of 10-20%. Larger projects may see boot time improvements of 2-3x or greater. Memory consumption is also greatly reduced (by a factor of 5x or more in some small changesets).
+
 * [#1378](https://github.com/mbj/mutant/pull/1379)
 
   Add support for user defined mutation worker process hooks. 

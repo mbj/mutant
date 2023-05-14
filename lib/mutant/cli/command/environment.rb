@@ -92,7 +92,6 @@ module Mutant
           end
         end
 
-        # rubocop:disable Metrics/MethodLength
         def add_matcher_options(parser)
           parser.separator('Matcher:')
 
@@ -103,10 +102,7 @@ module Mutant
             add_matcher(:start_expressions, @config.expression_parser.call(pattern).from_right)
           end
           parser.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
-            add_matcher(
-              :subject_filters,
-              Repository::SubjectFilter.new(diff: Repository::Diff.new(to: revision, world: world))
-            )
+            add_matcher(:diffs, Repository::Diff.new(to: revision, world: world))
           end
         end
 
