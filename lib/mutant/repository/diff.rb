@@ -22,10 +22,14 @@ module Mutant
       # @raise [RepositoryError]
       #   when git command failed
       def touches?(path, line_range)
-        touched_paths
-          .from_right { |message| fail Error, message }
-          .fetch(path) { return false }
+        touched_path(path) { return false }
           .touches?(line_range)
+      end
+
+      def touches_path?(path)
+        touched_path(path) { return false }
+
+        true
       end
 
     private
@@ -35,6 +39,10 @@ module Mutant
           .capture_stdout(%w[git rev-parse --show-toplevel])
           .fmap(&:chomp)
           .fmap(&world.pathname.public_method(:new))
+      end
+
+      def touched_path(path, &block)
+        touched_paths.from_right { |message| fail Error, message }.fetch(path, &block)
       end
 
       def touched_paths
