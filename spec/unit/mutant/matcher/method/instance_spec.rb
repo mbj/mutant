@@ -10,6 +10,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   let(:object)        { described_class.new(scope: scope, target_method: method) }
   let(:source_path)   { MutantSpec::ROOT.join('test_app/lib/test_app.rb')        }
   let(:type)          { :def                                                     }
+  let(:config)        { Mutant::Config::DEFAULT                                  }
 
   let(:world) do
     instance_double(
@@ -21,7 +22,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   let(:env) do
     instance_double(
       Mutant::Env,
-      config: Mutant::Config::DEFAULT,
+      config: config,
       parser: Fixtures::TEST_ENV.parser,
       world:  world
     )
@@ -56,9 +57,62 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
+  end
 
-    it 'returns expected subjects' do
-      expect(subject).to eql([])
+  context 'when method is defined inside of a file removed by a diff filter' do
+    let(:config)            { super().with(matcher: super().matcher.with(diffs: diffs)) }
+    let(:diff_a)            { instance_double(Mutant::Repository::Diff, :diff_a)        }
+    let(:diff_a_touches?)   { false                                                     }
+    let(:diff_b)            { instance_double(Mutant::Repository::Diff, :diff_b)        }
+    let(:diff_b_touches?)   { false                                                     }
+    let(:diffs)             { []                                                        }
+    let(:expected_warnings) { []                                                        }
+    let(:method_line)       { 13                                                        }
+    let(:method_name)       { :bar                                                      }
+    let(:scope)             { base::WithMemoizer                                        }
+
+    before do
+      allow(diff_a).to receive(:touches_path?).with(source_path).and_return(diff_a_touches?)
+      allow(diff_b).to receive(:touches_path?).with(source_path).and_return(diff_b_touches?)
+    end
+
+    context 'on absent diff filter' do
+      include_examples 'a method matcher'
+    end
+
+    context 'on single diff filter' do
+      let(:diffs) { [diff_a] }
+
+      context 'on not touching that diff' do
+        include_examples 'skipped candidate'
+      end
+
+      context 'on touching that diff' do
+        let(:diff_a_touches?) { true }
+
+        include_examples 'a method matcher'
+      end
+    end
+
+    context 'on multiple diff filter' do
+      let(:diffs) { [diff_a, diff_b] }
+
+      context 'on not touching any of the diffs' do
+        include_examples 'skipped candidate'
+      end
+
+      context 'on touching one diff' do
+        let(:diff_a_touches?) { true }
+
+        include_examples 'skipped candidate'
+      end
+
+      context 'on touching both diffs' do
+        let(:diff_a_touches?) { true }
+        let(:diff_b_touches?) { true }
+
+        include_examples 'a method matcher'
+      end
     end
   end
 
@@ -73,10 +127,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
-
-    it 'returns expected subjects' do
-      expect(subject).to eql([])
-    end
   end
 
   context 'when method is defined without source location' do
@@ -90,10 +140,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
-
-    it 'returns expected subjects' do
-      expect(subject).to eql([])
-    end
   end
 
   context 'in module eval' do
@@ -106,10 +152,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
-
-    it 'returns expected subjects' do
-      expect(subject).to eql([])
-    end
   end
 
   context 'in class eval' do
@@ -122,10 +164,6 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     include_examples 'skipped candidate'
-
-    it 'returns expected subjects' do
-      expect(subject).to eql([])
-    end
   end
 
   context 'when method is defined once' do

@@ -120,12 +120,21 @@ module Mutant
         def matched_view
           return if source_location.nil?
 
+          # This is a performance optimization when using --since to avoid the cost of parsing
+          # every source file that could possibly map to a subject. A more fine-grained filtering
+          # takes places later in the process.
+          return unless relevant_source_file?
+
           ast
             .on_line(source_line)
             .select { |view| view.node.type.eql?(self.class::MATCH_NODE_TYPE) && match?(view.node) }
             .last
         end
         memoize :matched_view
+
+        def relevant_source_file?
+          env.config.matcher.diffs.all? { |diff| diff.touches_path?(source_path) }
+        end
 
         def visibility
           # This can be cleaned up once we are on >ruby-3.0

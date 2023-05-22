@@ -1298,33 +1298,15 @@ RSpec.describe Mutant::CLI do
           let(:arguments) { super() + ['--since', 'reference'] }
 
           let(:load_config_file_config) do
-            super().with(
-              matcher: file_config.matcher.with(
-                subject_filters: [
-                  Mutant::Repository::SubjectFilter.new(
-                    diff: Mutant::Repository::Diff.new(
-                      to:    'reference',
-                      world: world
-                    )
-                  )
-                ]
-              )
-            )
+            diff = Mutant::Repository::Diff.new(to: 'reference', world: world)
+
+            super().with(matcher: file_config.matcher.with(diffs: [diff]))
           end
 
           let(:bootstrap_config) do
-            super().with(
-              matcher: file_config.matcher.with(
-                subject_filters: [
-                  Mutant::Repository::SubjectFilter.new(
-                    diff: Mutant::Repository::Diff.new(
-                      to:    'reference',
-                      world: world
-                    )
-                  )
-                ]
-              )
-            )
+            diff = Mutant::Repository::Diff.new(to: 'reference', world: world)
+
+            super().with(matcher: file_config.matcher.with(diffs: [diff]))
           end
 
           include_examples 'CLI run'

@@ -31,7 +31,9 @@ module Mutant
     private_class_method :allowed_subject?
 
     def self.select_subject?(config, subject)
-      config.subject_filters.all? { |filter| filter.call(subject) }
+      config.diffs.all? do |diff|
+        diff.touches?(subject.source_path, subject.source_lines)
+      end
     end
     private_class_method :select_subject?
 
