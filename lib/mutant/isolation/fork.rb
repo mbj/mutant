@@ -205,10 +205,6 @@ module Mutant
           _pid, status = world.process.wait2(@pid, Process::WNOHANG)
           status
         end
-
-        def add_result(result)
-          @result = defined?(@result) ? @result.add_error(result) : result
-        end
       end # Parent
       # rubocop:enable Metrics/ClassLength
 

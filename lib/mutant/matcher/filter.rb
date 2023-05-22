@@ -12,9 +12,7 @@ module Mutant
       #
       # @return [Enumerable<Subject>]
       def call(env)
-        matcher
-          .call(env)
-          .select(&predicate.method(:call))
+        matcher.call(env).select(&predicate)
       end
 
     end # Filter
