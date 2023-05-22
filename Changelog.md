@@ -5,7 +5,10 @@
   Change to `--integration` from `--use` on CLI and `integration_name` from `integration`
   key in config file.
 
-  The old keys are still supported but deprecated.
+  The old key is still supported but deprecated.
+
+  Add ability to provide multiple `--integration-argument` options that get passed down 
+  directly to rspec. Also available in the config file.
 
 # v0.11.20 2023-05-22
 

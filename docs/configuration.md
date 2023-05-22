@@ -78,6 +78,20 @@ If your tests are written in [minitest](https://github.com/seattlerb/minitest), 
 ---
 integration:
   name: rspec
+  # Optional per integration arguments. Proxies through to the integrations native CLI processor.
+  # Currently for minitest integration arguments are ignored.
+  # Note that when set this *OVERWRITES* the hardcoded defaults mutant provides. So should you
+  # provide your own arguments, for rspec you *need* to specify the `spec` directory at a minimum.
+  # Mutant is not compatible with many rspec options, take care you do not violate mutants invariants.
+  # During CLI executions you can manually add new integration arguments via `--integration-argument`,
+  # you have to specify it once per argument, so: `--integration-argument seed --integration-argument 0`
+  # would execute rspec with the `--seed 0` flag.
+  # Below shows an example configuring rspec to use a static seed from the config file.
+  arguments:
+  - --fail-fast # rspec integration default, keep this when specifying manual options!
+  - --seed # option
+  - '0' # option value, needs to be a string.
+  - spec # rspec integration default, tell rspec integration where to find specs
 ```
 
 The integration can be overridden by providing the `--integration` option to the CLI.

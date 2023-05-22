@@ -246,6 +246,7 @@ RSpec.describe Mutant::Env do
 
     it 'returns empty env' do
       integration = Mutant::Integration::Null.new(
+        arguments:         Mutant::EMPTY_ARRAY,
         expression_parser: config.expression_parser,
         world:             world
       )

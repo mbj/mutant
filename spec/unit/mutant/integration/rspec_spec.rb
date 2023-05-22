@@ -5,14 +5,17 @@ require 'mutant/integration/rspec'
 RSpec.describe Mutant::Integration::Rspec do
   let(:object) do
     described_class.new(
+      arguments:         integration_arguments,
       expression_parser: Mutant::Config::DEFAULT.expression_parser,
       world:             world
     )
   end
 
-  let(:rspec_options) { instance_double(RSpec::Core::ConfigurationOptions) }
-  let(:rspec_runner)  { instance_double(RSpec::Core::Runner)               }
-  let(:world)         { fake_world                                         }
+  let(:expected_rspec_cli)    { %w[--fail-fast spec]                               }
+  let(:integration_arguments) { []                                                 }
+  let(:rspec_options)         { instance_double(RSpec::Core::ConfigurationOptions) }
+  let(:rspec_runner)          { instance_double(RSpec::Core::Runner)               }
+  let(:world)                 { fake_world                                         }
 
   let(:example_a) do
     double(
@@ -149,8 +152,8 @@ RSpec.describe Mutant::Integration::Rspec do
       descendants: [root_example_group, leaf_example_group]
     )
 
-    expect(RSpec::Core::ConfigurationOptions).to receive(:new)
-      .with(%w[spec --fail-fast])
+    allow(RSpec::Core::ConfigurationOptions).to receive(:new)
+      .with(expected_rspec_cli)
       .and_return(rspec_options)
 
     expect(RSpec::Core::Runner).to receive(:new)
@@ -160,6 +163,15 @@ RSpec.describe Mutant::Integration::Rspec do
     expect(RSpec).to receive_messages(world: rspec_world)
 
     allow(world.timer).to receive_messages(now: 1.0)
+  end
+
+  context 'on overwritten arguments' do
+    let(:expected_rspec_cli)    { integration_arguments     }
+    let(:integration_arguments) { %w[argument-a argument-b] }
+
+    subject { object.all_tests }
+
+    it { should eql(all_tests) }
   end
 
   describe '#all_tests' do

@@ -3,6 +3,7 @@
 module Mutant
   module CLI
     class Command
+      # rubocop:disable Metrics/ClassLength
       class Environment < self
         NAME              = 'environment'
         SHORT_DESCRIPTION = 'Environment subcommands'
@@ -89,6 +90,16 @@ module Mutant
 
           parser.on('--use INTEGRATION', 'deprecated alias for --integration', &method(:assign_integration_name))
           parser.on('--integration NAME', 'Use test integration with NAME', &method(:assign_integration_name))
+
+          parser.on(
+            '--integration-argument ARGUMENT', 'Pass ARGUMENT to integration',
+            &method(:add_integration_argument)
+          )
+        end
+
+        def add_integration_argument(value)
+          config = @config.integration
+          set(integration: config.with(arguments: config.arguments + [value]))
         end
 
         def assign_integration_name(name)
