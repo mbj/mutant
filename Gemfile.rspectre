@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+gemspec name: 'mutant'
+
+# This must be specified in a separate Gemfile because `rspectre` does not support ruby 2.7
+gem 'rspectre', '~> 0.1'
+
+eval_gemfile 'Gemfile.shared'
