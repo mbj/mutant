@@ -87,9 +87,12 @@ module Mutant
         def add_integration_options(parser)
           parser.separator('Integration:')
 
-          parser.on('--use INTEGRATION', 'Use INTEGRATION to kill mutations') do |name|
-            set(integration: name)
-          end
+          parser.on('--use INTEGRATION', 'deprecated alias for --integration', &method(:assign_integration_name))
+          parser.on('--integration NAME', 'Use test integration with NAME', &method(:assign_integration_name))
+        end
+
+        def assign_integration_name(name)
+          set(integration: @config.integration.with(name: name))
         end
 
         def add_matcher_options(parser)

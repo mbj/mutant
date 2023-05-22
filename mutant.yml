@@ -1,7 +1,8 @@
 ---
 includes:
 - lib
-integration: rspec
+integration: 
+  name: rspec
 requires:
 - mutant
 - mutant/integration/rspec

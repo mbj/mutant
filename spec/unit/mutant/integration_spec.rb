@@ -32,7 +32,7 @@ RSpec.describe Mutant::Integration do
     let(:config) do
       instance_double(
         Mutant::Config,
-        integration:       integration_name,
+        integration:       Mutant::Integration::Config::DEFAULT.with(name: integration_name),
         expression_parser: expression_parser
       )
     end

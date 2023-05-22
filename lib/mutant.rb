@@ -346,7 +346,7 @@ module Mutant
       fail_fast:             false,
       hooks:                 EMPTY_ARRAY,
       includes:              EMPTY_ARRAY,
-      integration:           nil,
+      integration:           Integration::Config::DEFAULT,
       isolation:             Mutant::Isolation::Fork.new(world: WORLD),
       jobs:                  nil,
       matcher:               Matcher::Config::DEFAULT,

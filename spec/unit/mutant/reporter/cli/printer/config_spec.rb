@@ -46,7 +46,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
   end
 
   context 'on present integration' do
-    let(:reportable) { config.with(integration: 'foo') }
+    let(:reportable) { config.with(integration: Mutant::Integration::Config::DEFAULT.with(name: 'foo')) }
 
     describe '.call' do
       it_reports(<<~'REPORT')

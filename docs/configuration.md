@@ -69,14 +69,18 @@ Additional environment variables can be added by providing the `--env KEY=VALUE`
 
 #### `integration`
 
-Specifies which mutant integration to use. If your tests are written in [RSpec](https://rspec.info/), this should be set to `rspec`. If your tests are written in [minitest](https://github.com/seattlerb/minitest), this should be set to `minitest`.
+Configures the [integration](/docs/integration.md) to use, via the `name` key.
+
+If your tests are written in [RSpec](https://rspec.info/), this should be set to `rspec`.
+If your tests are written in [minitest](https://github.com/seattlerb/minitest), this should be set to `minitest`.
 
 ```yml
 ---
-integration: rspec
+integration:
+  name: rspec
 ```
 
-The integration can be overridden by providing the `--use` option to the CLI.
+The integration can be overridden by providing the `--integration` option to the CLI.
 
 #### `fail_fast`
 

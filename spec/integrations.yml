@@ -3,7 +3,7 @@
   namespace: Rubyspec
   repo_uri: 'https://github.com/ruby/rubyspec.git'
   repo_ref: 249a36c2e9fcddbb208a0d618d05f6bd9a64fd17
-  integration: mspec
+  integration_name: mspec
   mutation_coverage: false
   mutation_generation: true
   exclude:
@@ -35,7 +35,7 @@
   namespace: Regexp
   repo_uri: 'https://github.com/ammar/regexp_parser.git'
   repo_ref: 'v1.2.0'
-  integration: rspec
+  integration_name: rspec
   mutation_coverage: false
   mutation_generation: true
   exclude:
@@ -50,7 +50,7 @@
   namespace: AUOM
   repo_uri: 'https://github.com/mbj/auom.git'
   repo_ref: 'origin/master'
-  integration: rspec
+  integration_name: rspec
   mutation_coverage: true
   mutation_generation: true
   exclude: []
@@ -58,7 +58,7 @@
   namespace: AUOM
   repo_uri: 'https://github.com/mbj/auom.git'
   repo_ref: 'origin/master'
-  integration: minitest
+  integration_name: minitest
   mutation_coverage: true
   mutation_generation: true
   exclude: []
@@ -66,7 +66,7 @@
   namespace: Unparser
   repo_uri: 'https://github.com/mbj/unparser.git'
   repo_ref: 'origin/main'
-  integration: minitest
+  integration_name: minitest
   mutation_coverage: false
   mutation_generation: true
   exclude:
@@ -83,7 +83,7 @@
   namespace: Axiom
   repo_uri: 'https://github.com/dkubb/axiom.git'
   repo_ref: 'origin/master'
-  integration: rspec
+  integration_name: rspec
   mutation_coverage: false
   mutation_generation: true
   exclude: []

@@ -30,7 +30,7 @@ module MutantSpec
       include Adamantium, Anima.new(
         :mutation_coverage,
         :mutation_generation,
-        :integration,
+        :integration_name,
         :name,
         :namespace,
         :repo_uri,
@@ -52,7 +52,7 @@ module MutantSpec
             system(
               %W[
                 bundle exec mutant run
-                --use #{integration}
+                --integration #{integration_name}
                 --include lib
                 --require #{name}
                 #{namespace}*
@@ -270,7 +270,7 @@ module MutantSpec
               ),
               Transform::Hash::Key.new(
                 transform: Transform::STRING,
-                value:     'integration'
+                value:     'integration_name'
               ),
               Transform::Hash::Key.new(
                 transform: Transform::BOOLEAN,

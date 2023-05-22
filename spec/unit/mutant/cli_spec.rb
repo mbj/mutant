@@ -295,7 +295,8 @@ RSpec.describe Mutant::CLI do
 
 
         Integration:
-                --use INTEGRATION            Use INTEGRATION to kill mutations
+                --use INTEGRATION            deprecated alias for --integration
+                --integration NAME           Use test integration with NAME
 
 
         Matcher:
@@ -342,7 +343,8 @@ RSpec.describe Mutant::CLI do
 
 
         Integration:
-                --use INTEGRATION            Use INTEGRATION to kill mutations
+                --use INTEGRATION            deprecated alias for --integration
+                --integration NAME           Use test integration with NAME
 
 
         Matcher:
@@ -389,7 +391,8 @@ RSpec.describe Mutant::CLI do
 
 
         Integration:
-                --use INTEGRATION            Use INTEGRATION to kill mutations
+                --use INTEGRATION            deprecated alias for --integration
+                --integration NAME           Use test integration with NAME
 
 
         Matcher:
@@ -673,7 +676,7 @@ RSpec.describe Mutant::CLI do
 
       let(:file_config) do
         Mutant::Config::DEFAULT.with(
-          integration: 'file-integration',
+          integration: Mutant::Integration::Config::DEFAULT.with(name: 'file-integration'),
           includes:    %w[include-file],
           requires:    %w[require-file],
           mutation:    Mutant::Mutation::Config::DEFAULT.with(timeout: 5.0)
@@ -1255,16 +1258,39 @@ RSpec.describe Mutant::CLI do
         end
 
         context 'with --use option' do
-          let(:arguments)               { super() + ['--use', 'cli-integration']       }
-          let(:bootstrap_config)        { super().with(integration: 'cli-integration') }
-          let(:load_config_file_config) { super().with(integration: 'cli-integration') }
+          let(:arguments) { super() + ['--use', 'cli-integration'] }
+
+          let(:bootstrap_config) do
+            super().with(integration: super().integration.with(name: 'cli-integration'))
+          end
+
+          let(:load_config_file_config) do
+            super().with(integration: super().integration.with(name: 'cli-integration'))
+          end
 
           include_examples 'CLI run'
         end
 
-        context 'without --use option' do
-          let(:arguments)        { super()                                       }
-          let(:bootstrap_config) { super().with(integration: 'file-integration') }
+        context 'with --integration option' do
+          let(:arguments) { super() + ['--integration', 'cli-integration'] }
+
+          let(:bootstrap_config) do
+            super().with(integration: super().integration.with(name: 'cli-integration'))
+          end
+
+          let(:load_config_file_config) do
+            super().with(integration: super().integration.with(name: 'cli-integration'))
+          end
+
+          include_examples 'CLI run'
+        end
+
+        context 'without --integration option' do
+          let(:arguments) { super() }
+
+          let(:bootstrap_config) do
+            super().with(integration: super().integration.with(name: 'file-integration'))
+          end
 
           include_examples 'CLI run'
         end

@@ -16,7 +16,7 @@ module Mutant
           # rubocop:disable Metrics/AbcSize
           def run
             info 'Matcher:         %s',    object.matcher.inspect
-            info 'Integration:     %s',    object.integration || 'null'
+            info 'Integration:     %s',    object.integration.name || 'null'
             info 'Jobs:            %s',    object.jobs || 'auto'
             info 'Includes:        %s',    object.includes
             info 'Requires:        %s',    object.requires

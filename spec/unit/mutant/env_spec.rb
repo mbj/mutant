@@ -16,7 +16,7 @@ RSpec.describe Mutant::Env do
   end
 
   let(:hooks)             { instance_double(Mutant::Hooks)       }
-  let(:integration_class) { Mutant::Integration::Null            }
+  let(:integration_name)  { instance_double(String)              }
   let(:isolation)         { Mutant::Isolation::None.new          }
   let(:process_status)    { instance_double(Process::Status)     }
   let(:reporter)          { instance_double(Mutant::Reporter)    }
@@ -48,7 +48,7 @@ RSpec.describe Mutant::Env do
     instance_double(
       Mutant::Config,
       expression_parser: instance_double(Mutant::Expression::Parser),
-      integration:       integration_class,
+      integration:       Mutant::Integration::Config::DEFAULT.with(name: integration_name),
       isolation:         isolation,
       mutation:          mutation_config,
       reporter:          reporter
