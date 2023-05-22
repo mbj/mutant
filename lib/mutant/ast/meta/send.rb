@@ -33,8 +33,7 @@ module Mutant
         #
         # @return [Boolean]
         def attribute_assignment?
-          !Types::METHOD_OPERATORS.include?(selector) &&
-          selector.to_s.end_with?(ATTRIBUTE_ASSIGNMENT_SELECTOR_SUFFIX)
+          !Types::METHOD_OPERATORS.include?(selector) && selector.end_with?(ATTRIBUTE_ASSIGNMENT_SELECTOR_SUFFIX)
         end
 
         # Test for binary operator implemented as method
