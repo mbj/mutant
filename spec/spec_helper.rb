@@ -32,7 +32,7 @@ require 'test_app'
 module Fixtures
   test_config = Mutant::Config::DEFAULT
     .with(
-      integration: 'null',
+      integration: Mutant::Integration::Config::DEFAULT.with(name: 'null'),
       jobs:        1,
       reporter:    Mutant::Reporter::Null.new
     )

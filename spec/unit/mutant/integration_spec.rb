@@ -3,13 +3,15 @@
 RSpec.describe Mutant::Integration do
   let(:object) do
     Class.new(described_class).new(
+      arguments:         [],
       expression_parser: expression_parser,
       world:             world
     )
   end
 
-  let(:expression_parser) { instance_double(Mutant::Expression::Parser) }
-  let(:world)             { fake_world                                  }
+  let(:expression_parser)     { instance_double(Mutant::Expression::Parser) }
+  let(:integration_arguments) { %w[argument-a argument-b]                   }
+  let(:world)                 { fake_world                                  }
 
   describe '#setup' do
     def apply
@@ -32,7 +34,7 @@ RSpec.describe Mutant::Integration do
     let(:config) do
       instance_double(
         Mutant::Config,
-        integration:       integration_name,
+        integration:       Mutant::Integration::Config::DEFAULT.with(name: integration_name),
         expression_parser: expression_parser
       )
     end
@@ -130,6 +132,7 @@ end
 RSpec.describe Mutant::Integration::Null do
   let(:object) do
     described_class.new(
+      arguments:         %w[argument-a argument-b],
       expression_parser: expression_parser,
       world:             world
     )

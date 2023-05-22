@@ -52,6 +52,20 @@ module Mutant
       ```
     MESSAGE
 
+    INTEGRATION_DEPRECATION = <<~'MESSAGE'
+      Deprecated configuration toplevel string key `integration` found.
+
+      This key will be removed in the next major version.
+      Instead place your integration configuration under the `integration.name` key
+      like this:
+
+      ```
+      # mutant.yml
+      integration:
+        name: your_integration # typically rspec or minitest
+      ```
+    MESSAGE
+
     private_constant(*constants(false))
 
     # Merge with other config
@@ -69,7 +83,7 @@ module Mutant
         fail_fast:             fail_fast || other.fail_fast,
         hooks:                 hooks + other.hooks,
         includes:              includes + other.includes,
-        integration:           other.integration || integration,
+        integration:           integration.merge(other.integration),
         jobs:                  other.jobs || jobs,
         matcher:               matcher.merge(other.matcher),
         mutation:              mutation.merge(other.mutation),
@@ -158,14 +172,29 @@ module Mutant
     end
 
     def self.deprecations(reporter, hash)
-      if hash.key?('mutation_timeout')
-        reporter.warn(MUTATION_TIMEOUT_DEPRECATION)
-
-        (hash['mutation'] ||= {})['timeout'] ||= hash.delete('mutation_timeout')
-      end
+      mutation_timeout_deprecation(reporter, hash)
+      integration_deprecation(reporter, hash)
 
       hash
     end
+    private_class_method :deprecations
+
+    def self.mutation_timeout_deprecation(reporter, hash)
+      return unless hash.key?('mutation_timeout')
+      reporter.warn(MUTATION_TIMEOUT_DEPRECATION)
+
+      (hash['mutation'] ||= {})['timeout'] ||= hash.delete('mutation_timeout')
+    end
+    private_class_method :mutation_timeout_deprecation
+
+    def self.integration_deprecation(reporter, hash)
+      value = hash['integration']
+      return unless value.instance_of?(String)
+      reporter.warn(INTEGRATION_DEPRECATION)
+
+      hash['integration'] = { 'name' => value }
+    end
+    private_class_method :integration_deprecation
 
     TRANSFORMS = [
       Transform::Hash.new(
@@ -196,7 +225,7 @@ module Mutant
             value:     'includes'
           ),
           Transform::Hash::Key.new(
-            transform: Transform::STRING,
+            transform: ->(value) { Integration::Config::TRANSFORM.call(value) },
             value:     'integration'
           ),
           Transform::Hash::Key.new(

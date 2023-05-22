@@ -24,7 +24,7 @@ module Mutant
       ALL_EXPRESSION       = Expression::Namespace::Recursive.new(scope_name: nil)
       EXPRESSION_CANDIDATE = /\A([^ ]+)(?: )?/.freeze
       EXIT_SUCCESS         = 0
-      CLI_OPTIONS          = %w[spec --fail-fast].freeze
+      DEFAULT_CLI_OPTIONS  = %w[--fail-fast spec].freeze
       TEST_ID_FORMAT       = 'rspec:%<index>d:%<location>s/%<description>s'
 
       private_constant(*constants(false))
@@ -34,7 +34,7 @@ module Mutant
       # @return [undefined]
       def initialize(*)
         super
-        @runner      = RSpec::Core::Runner.new(RSpec::Core::ConfigurationOptions.new(CLI_OPTIONS))
+        @runner      = RSpec::Core::Runner.new(RSpec::Core::ConfigurationOptions.new(effective_arguments))
         @rspec_world = RSpec.world
       end
 
@@ -81,6 +81,10 @@ module Mutant
       memoize :available_tests
 
     private
+
+      def effective_arguments
+        arguments.empty? ? DEFAULT_CLI_OPTIONS : arguments
+      end
 
       def reset_examples
         @rspec_world.filtered_examples.each_value(&:clear)

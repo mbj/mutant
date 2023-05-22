@@ -1,12 +1,24 @@
+# v0.11.21 unreleased
+
+* [#1330](https://github.com/mbj/mutant/pull/1330)
+
+  Change to `--integration` from `--use` on CLI and `integration_name` from `integration`
+  key in config file.
+
+  The old key is still supported but deprecated.
+
+  Add ability to provide multiple `--integration-argument` options that get passed down 
+  directly to rspec. Also available in the config file.
+
 # v0.11.20 2023-05-22
 
 * [#1382](https://github.com/mbj/mutant/pull/1382)
 
   Significantly optimize parsing overhead during boot. Smaller projects may see boot time speedups of 10-20%. Larger projects may see boot time improvements of 2-3x or greater. Memory consumption is also greatly reduced (by a factor of 5x or more in some small changesets).
 
-* [#1378](https://github.com/mbj/mutant/pull/1379)
+* [#1379](https://github.com/mbj/mutant/pull/1378)
 
-  Add support for user defined mutation worker process hooks. 
+  Add support for user defined mutation worker process hooks.
   These hooks are triggered before the mutation worker process starts processing mutations.
   They can be used so setup separate test databases to avoid clobbering between
   mutation threads or do other isolation mechanisms.

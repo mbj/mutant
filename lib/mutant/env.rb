@@ -2,6 +2,7 @@
 
 module Mutant
   # Mutation testing execution environment
+  # rubocop:disable Metrics/ClassLength
   class Env
     include Adamantium, Anima.new(
       :config,
@@ -32,6 +33,7 @@ module Mutant
         config:           config,
         hooks:            Hooks.empty,
         integration:      Integration::Null.new(
+          arguments:         EMPTY_ARRAY,
           expression_parser: config.expression_parser,
           world:             world
         ),
@@ -175,4 +177,5 @@ module Mutant
     end
 
   end # Env
+  # rubocop:enable Metrics/ClassLength
 end # Mutant

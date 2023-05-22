@@ -17,6 +17,20 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
     end
   end
 
+  context 'on present jobs' do
+    let(:reportable) { config.with(jobs: 10) }
+
+    describe '.call' do
+      it_reports(<<~'REPORT')
+        Matcher:         #<Mutant::Matcher::Config empty>
+        Integration:     null
+        Jobs:            10
+        Includes:        []
+        Requires:        []
+      REPORT
+    end
+  end
+
   context 'on absent integration' do
     let(:reportable) { config }
 
@@ -32,7 +46,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
   end
 
   context 'on present integration' do
-    let(:reportable) { config.with(integration: 'foo') }
+    let(:reportable) { config.with(integration: Mutant::Integration::Config::DEFAULT.with(name: 'foo')) }
 
     describe '.call' do
       it_reports(<<~'REPORT')

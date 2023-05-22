@@ -23,7 +23,6 @@ RSpec.describe Mutant::Bootstrap do
     Mutant::Config::DEFAULT.with(
       environment_variables: { 'foo' => 'bar' },
       includes:              %w[include-a include-b],
-      integration:           integration,
       jobs:                  1,
       matcher:               matcher_config,
       reporter:              instance_double(Mutant::Reporter),
@@ -319,10 +318,9 @@ RSpec.describe Mutant::Bootstrap do
         context 'when the start subject partially excludes subjects' do
           let(:last_subject) do
             config = Mutant::Config::DEFAULT.with(
-              integration: integration,
-              jobs:        1,
-              matcher:     Mutant::Matcher::Config::DEFAULT.with(subjects: subject_expressions),
-              reporter:    instance_double(Mutant::Reporter)
+              jobs:     1,
+              matcher:  Mutant::Matcher::Config::DEFAULT.with(subjects: subject_expressions),
+              reporter: instance_double(Mutant::Reporter)
             )
 
             Mutant::Matcher::Scope

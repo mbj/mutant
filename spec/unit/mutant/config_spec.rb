@@ -114,11 +114,21 @@ RSpec.describe Mutant::Config do
     end
 
     context 'merging integration' do
-      let(:key)            { :integration }
-      let(:original_value) { 'rspec'      }
-      let(:other_value)    { 'minitest'   }
+      let(:key) { :integration }
 
-      include_examples 'maybe value merge'
+      let(:original_value) do
+        instance_double(Mutant::Integration::Config, 'original')
+      end
+
+      let(:other_value) do
+        instance_double(Mutant::Integration::Config, 'other')
+      end
+
+      let(:result_value) do
+        instance_double(Mutant::Integration::Config, 'result')
+      end
+
+      include_examples 'descendant merge'
     end
 
     context 'merging expression_parser' do
@@ -295,7 +305,8 @@ RSpec.describe Mutant::Config do
       let(:path_contents) do
         <<~'YAML'
           ---
-          integration: rspec
+          integration:
+            name: rspec
         YAML
       end
 
@@ -310,8 +321,13 @@ RSpec.describe Mutant::Config do
       context 'when file can be read' do
         context 'when yaml contents can be transformed' do
           it 'returns expected config' do
-            expect(apply)
-              .to eql(Mutant::Either::Right.new(config.with(integration: 'rspec')))
+            expect(apply).to eql(
+              Mutant::Either::Right.new(
+                config.with(
+                  integration: Mutant::Integration::Config::DEFAULT.with(name: 'rspec')
+                )
+              )
+            )
           end
         end
 
@@ -344,7 +360,7 @@ RSpec.describe Mutant::Config do
 
           # rubocop:disable Layout/LineLength
           let(:expected_message) do
-            'mutant.yml/Mutant::Transform::Sequence/4/Mutant::Transform::Hash/["integration"]/String: Expected: String but got: TrueClass'
+            'mutant.yml/Mutant::Transform::Sequence/4/Mutant::Transform::Hash/["integration"]/Mutant::Transform::Sequence/0/Hash: Expected: Hash but got: TrueClass'
           end
           # rubocop:enable Layout/LineLength
 
@@ -365,6 +381,41 @@ RSpec.describe Mutant::Config do
 
         it 'returns expected error' do
           expect(apply).to eql(Mutant::Either::Left.new(expected_message))
+        end
+      end
+
+      context 'deprecated integration toplevel string key' do
+        let(:path_contents) do
+          <<~'YAML'
+            ---
+            integration: rspec
+          YAML
+        end
+
+        before do
+          allow(config.reporter).to receive_messages(warn: config.reporter)
+        end
+
+        it 'renders expected warning' do
+          apply
+
+          expect(config.reporter).to have_received(:warn).with(<<~'MESSAGE')
+            Deprecated configuration toplevel string key `integration` found.
+
+            This key will be removed in the next major version.
+            Instead place your integration configuration under the `integration.name` key
+            like this:
+
+            ```
+            # mutant.yml
+            integration:
+              name: your_integration # typically rspec or minitest
+            ```
+          MESSAGE
+        end
+
+        it 'returns expected config' do
+          expect(apply.from_right.integration).to eql(Mutant::Integration::Config::DEFAULT.with(name: 'rspec'))
         end
       end
 

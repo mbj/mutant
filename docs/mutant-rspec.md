@@ -17,7 +17,7 @@ To add mutant to your rspec code base you need to:
    gem 'mutant-rspec'
    ```
 
-2. Run mutant against the rspec integration via the `--use rspec` flag.
+2. Run mutant against the rspec integration via the `--integration rspec` flag.
 
 ## Run through example
 
@@ -31,7 +31,7 @@ All the setup described above is already done.
 git clone https://github.com/mbj/auom
 cd auom
 bundle install # gemfile references mutant-rspec already
-bundle exec mutant run --include lib --require auom --use rspec -- 'AUOM*'
+bundle exec mutant run --include lib --require auom --integration rspec -- 'AUOM*'
 ```
 
 This prints a report like:
@@ -126,5 +126,5 @@ important, so if mutant finds example groups in the current prefix level,
 these example groups *must* kill the mutation.
 
 ```sh
-RAILS_ENV=test bundle exec mutant run -r ./config/environment --use rspec User
+RAILS_ENV=test bundle exec mutant run -r ./config/environment --integration rspec User
 ```
