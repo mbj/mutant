@@ -190,3 +190,6 @@ Lint/EmptyBlock:
 # Bad advice, as the '' are the least powerful syntax
 Style/RedundantHeredocDelimiterQuotes:
   Enabled: false
+# Bad advice, as rubygems.org cannot see dev dependencies anymore
+Gemspec/DevelopmentDependencies:
+  Enabled: false
