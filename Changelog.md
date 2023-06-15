@@ -1,4 +1,9 @@
-# v0.11.21 unreleased
+# v0.11.21 2023-06-15
+
+* [#1389](https://github.com/mbj/mutant/pull/1389)
+
+  Upgrade to unparser 0.6.8 dependency which ships an important bugfix
+  on unparsing of csend AST nodes on binary operators.
 
 * [#1330](https://github.com/mbj/mutant/pull/1330)
 
