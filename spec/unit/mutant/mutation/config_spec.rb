@@ -18,7 +18,7 @@ RSpec.describe Mutant::Mutation::Config do
       described_class::DEFAULT.with(key => other_value)
     end
 
-    context 'merging timeout' do
+    context 'timeout' do
       let(:key)            { :timeout }
       let(:original_value) { 2        }
       let(:other_value)    { 3        }
