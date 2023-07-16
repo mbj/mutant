@@ -7,6 +7,8 @@ requires:
 - mutant
 - mutant/integration/rspec
 - mutant/meta
+mutation:
+  operators: full
 matcher:
   subjects:
   - Mutant*

@@ -264,8 +264,15 @@ RSpec.describe Mutant::Config do
     end
 
     context 'when no path is readable' do
-      it 'returns original config' do
-        expect(apply).to eql(Mutant::Either::Right.new(cli_config.with(jobs: nprocessors)))
+      it 'returns cli config expanded' do
+        expect(apply).to eql(
+          Mutant::Either::Right.new(
+            cli_config.with(
+              jobs:     nprocessors,
+              mutation: Mutant::Mutation::Config::DEFAULT
+            )
+          )
+        )
       end
     end
 
@@ -311,7 +318,8 @@ RSpec.describe Mutant::Config do
               Mutant::Either::Right.new(
                 cli_config.with(
                   integration: Mutant::Integration::Config::DEFAULT.with(name: 'rspec'),
-                  jobs:        nprocessors
+                  jobs:        nprocessors,
+                  mutation:    Mutant::Mutation::Config::DEFAULT
                 )
               )
             )

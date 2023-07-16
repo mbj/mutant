@@ -34,6 +34,7 @@ module Fixtures
     .with(
       integration: Mutant::Integration::Config::DEFAULT.with(name: 'null'),
       jobs:        1,
+      mutation:    Mutant::Mutation::Config::DEFAULT,
       reporter:    Mutant::Reporter::Null.new
     )
 

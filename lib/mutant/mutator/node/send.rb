@@ -13,37 +13,6 @@ module Mutant
 
         children :receiver, :selector
 
-        SELECTOR_REPLACEMENTS = {
-          :< =>          %i[== eql? equal?],
-          :<= =>         %i[< == eql? equal?],
-          :== =>         %i[eql? equal?],
-          :=== =>        %i[is_a?],
-          :=~ =>         %i[match?],
-          :> =>          %i[== eql? equal?],
-          :>= =>         %i[> == eql? equal?],
-          __send__:      %i[public_send],
-          all?:          %i[any?],
-          any?:          %i[all?],
-          at:            %i[fetch key?],
-          fetch:         %i[key?],
-          flat_map:      %i[map],
-          gsub:          %i[sub],
-          is_a?:         %i[instance_of?],
-          kind_of?:      %i[instance_of?],
-          map:           %i[each],
-          match:         %i[match?],
-          method:        %i[public_method],
-          reverse_each:  %i[each],
-          reverse_map:   %i[map each],
-          reverse_merge: %i[merge],
-          send:          %i[public_send __send__],
-          to_a:          %i[to_ary],
-          to_h:          %i[to_hash],
-          to_i:          %i[to_int],
-          to_s:          %i[to_str],
-          values_at:     %i[fetch_values]
-        }.freeze.tap { |hash| hash.values(&:freeze) }
-
         RECEIVER_SELECTOR_REPLACEMENTS = {
           Date: {
             parse: %i[jd civil strptime iso8601 rfc3339 xmlschema rfc2822 rfc822 httpdate jisx0301]
@@ -227,7 +196,10 @@ module Mutant
         end
 
         def emit_selector_replacement
-          SELECTOR_REPLACEMENTS.fetch(selector, EMPTY_ARRAY).each(&method(:emit_selector))
+          config
+            .operators
+            .selector_replacements
+            .fetch(selector, EMPTY_ARRAY).each(&public_method(:emit_selector))
         end
 
         def emit_naked_receiver

@@ -11,25 +11,26 @@ module Mutant
         #
         # @param [Thread::Backtrace::Location] location
         # @param [Set<Symbol>] types
+        # @param [Mutation::Operators] operators
         #
         # @return [Example]
-        def self.call(location, types, block)
-          instance = new(location, types)
+        #
+        def self.call(location:, types:, operators:, block:) # rubocop:disable Metrics/ParameterLists
+          instance = new(location, types, operators)
           instance.instance_eval(&block)
           instance.example
         end
-
         private_class_method :new
 
         # Initialize object
         #
         # @return [undefined]
-        def initialize(location, types)
-          @expected    = []
-          @location    = location
-          @lvars       = []
-          @source      = nil
-          @types       = types
+        def initialize(location, types, operators)
+          @expected  = []
+          @location  = location
+          @lvars     = []
+          @operators = operators
+          @types     = types
         end
 
         # Example captured by DSL
@@ -46,6 +47,7 @@ module Mutant
             location:        @location,
             lvars:           @lvars,
             node:            @node,
+            operators:       @operators,
             original_source: @source,
             types:           @types
           )

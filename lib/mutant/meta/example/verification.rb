@@ -54,7 +54,7 @@ module Mutant
 
         def original
           [
-            'Original:',
+            "Original: (operators: #{example.operators.class.operators_name})",
             example.node,
             example.original_source
           ]

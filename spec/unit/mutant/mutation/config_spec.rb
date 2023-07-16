@@ -35,5 +35,26 @@ RSpec.describe Mutant::Mutation::Config do
         expect(apply.ignore_patterns).to be(:other)
       end
     end
+
+    context 'operators' do
+      let(:key)            { :operators }
+      let(:original_value) { :original  }
+
+      context 'if other value is present' do
+        let(:other_value) { :other }
+
+        it 'returns other value' do
+          expect(apply.operators).to be(:other)
+        end
+      end
+
+      context 'if other value is absent' do
+        let(:other_value) { nil }
+
+        it 'returns original value' do
+          expect(apply.operators).to be(:original)
+        end
+      end
+    end
   end
 end

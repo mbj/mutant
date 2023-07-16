@@ -20,9 +20,12 @@ module Mutant
         def emit_symbol_to_proc_mutations
           return unless n_sym?(argument)
 
-          Send::SELECTOR_REPLACEMENTS.fetch(*argument, EMPTY_ARRAY).each do |method|
-            emit_argument(s(:sym, method))
-          end
+          config
+            .operators
+            .selector_replacements
+            .fetch(*argument, EMPTY_ARRAY).each do |method|
+              emit_argument(s(:sym, method))
+            end
         end
       end # Block
     end # Node

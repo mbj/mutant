@@ -10,7 +10,10 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   let(:object)        { described_class.new(scope: scope, target_method: method) }
   let(:source_path)   { MutantSpec::ROOT.join('test_app/lib/test_app.rb')        }
   let(:type)          { :def                                                     }
-  let(:config)        { Mutant::Config::DEFAULT                                  }
+
+  let(:config) do
+    Mutant::Config::DEFAULT.with(mutation: Mutant::Mutation::Config::DEFAULT)
+  end
 
   let(:world) do
     instance_double(

@@ -1,3 +1,10 @@
+# v0.11.22 2023-07-16
+
+* Introduce mutation operators config 'light' and 'full'. Mutant will default to
+  light set that for the moment does not include `#== -> #eql?`.
+
+  [#1394](https://github.com/mbj/mutant/pull/1394)
+
 # v0.11.21 2023-06-15
 
 * [#1389](https://github.com/mbj/mutant/pull/1389)

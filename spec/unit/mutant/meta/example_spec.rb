@@ -7,6 +7,7 @@ RSpec.describe Mutant::Meta::Example do
       location:        location,
       lvars:           [],
       node:            node,
+      operators:       Mutant::Mutation::Operators::Full.new,
       original_source: 'true',
       types:           [node.type]
     )
@@ -31,7 +32,7 @@ RSpec.describe Mutant::Meta::Example do
 
   it 'does not define any repeated examples' do
     source_counts = described_class::ALL.each_with_object(Hash.new(0)) do |example, counts|
-      counts["#{example.location.path}:#{example.original_source}"] += 1
+      counts["#{example.location.path}:#{example.original_source}:#{example.operators.class.name}"] += 1
     end
 
     expect(source_counts.select { |_source, count| count > 1 }.keys).to eql([])

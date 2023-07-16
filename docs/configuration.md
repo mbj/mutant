@@ -165,7 +165,7 @@ See mutant's configuration file, [mutant.yml](/mutant.yml), for a complete examp
 
 #### `mutation`
 
-Configuration of the mutations to generate.
+Configuration of the mutations generator.
 
 ```yml
 mutation:
@@ -181,6 +181,11 @@ mutation:
   # This is useful to not emit mutations for log statements etc
   ignore_patterns:
   - send{selector=log}
+  # Select full mutation operators by default mutant only applies the light set
+  # Only difference between full and light right now is that light does not apply 
+  # `#== -> #eql?` mutation
+  # At this moment there is no CLI equivalent for this setting.
+  operators: full # or `light`
 ```
 
 Please consult the [AST-Pattern documentation](/docs/ast-pattern.md) for details of AST pattern

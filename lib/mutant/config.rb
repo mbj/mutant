@@ -96,7 +96,10 @@ module Mutant
     # Load the configuration
     def self.load(cli_config:, world:)
       load_config_file(reporter: cli_config.reporter, world: world).fmap do |file_config|
-        DEFAULT.with(jobs: Etc.nprocessors).merge(file_config.merge(cli_config))
+        DEFAULT.with(
+          jobs:     Etc.nprocessors,
+          mutation: Mutation::Config::DEFAULT
+        ).merge(file_config.merge(cli_config))
       end
     end
 

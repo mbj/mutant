@@ -2,13 +2,21 @@
 
 RSpec.describe Mutant::Meta::Example::DSL do
   describe '.call' do
-    subject { described_class.call(location, types, block) }
+    subject do
+      described_class.call(
+        block:     block,
+        location:  location,
+        operators: operators,
+        types:     types
+      )
+    end
 
-    let(:expected) { []                                           }
-    let(:location) { instance_double(Thread::Backtrace::Location) }
-    let(:lvars)    { []                                           }
-    let(:node)     { s(:false)                                    }
-    let(:types)    { Set.new([node.type])                         }
+    let(:expected)  { []                                           }
+    let(:location)  { instance_double(Thread::Backtrace::Location) }
+    let(:lvars)     { []                                           }
+    let(:node)      { s(:false)                                    }
+    let(:operators) { Mutant::Mutation::Operators::Full.new        }
+    let(:types)     { Set.new([node.type])                         }
 
     let(:expected_example) do
       Mutant::Meta::Example.new(
@@ -16,6 +24,7 @@ RSpec.describe Mutant::Meta::Example::DSL do
         location:        location,
         lvars:           lvars,
         node:            node,
+        operators:       operators,
         original_source: source,
         types:           types
       )
