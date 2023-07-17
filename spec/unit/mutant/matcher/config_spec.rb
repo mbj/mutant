@@ -9,12 +9,15 @@ RSpec.describe Mutant::Matcher::Config do
     let(:proc_a) { instance_double(Proc, :a) }
     let(:proc_b) { instance_double(Proc, :b) }
 
+    let(:diff_a) { instance_double(Mutant::Repository::Diff, :a) }
+    let(:diff_b) { instance_double(Mutant::Repository::Diff, :b) }
+
     let(:original) do
       described_class.new(
         ignore:            [parse_expression('Ignore#a')],
         start_expressions: [parse_expression('Start#a')],
         subjects:          [parse_expression('Match#a')],
-        diffs:             []
+        diffs:             [diff_a]
       )
     end
 
@@ -22,20 +25,36 @@ RSpec.describe Mutant::Matcher::Config do
       described_class.new(
         ignore:            [parse_expression('Ignore#b')],
         start_expressions: [parse_expression('Start#b')],
-        subjects:          [parse_expression('Match#b')],
-        diffs:             []
+        subjects:          other_subjects,
+        diffs:             [diff_b]
       )
     end
 
-    it 'merges all config keys' do
-      expect(apply).to eql(
-        described_class.new(
-          ignore:            [parse_expression('Ignore#a'), parse_expression('Ignore#b')],
-          start_expressions: [parse_expression('Start#a'), parse_expression('Start#b')],
-          subjects:          [parse_expression('Match#a'), parse_expression('Match#b')],
-          diffs:             []
+    shared_examples '#merge' do
+      it 'returns expected value' do
+        expect(apply).to eql(
+          described_class.new(
+            ignore:            [parse_expression('Ignore#a'), parse_expression('Ignore#b')],
+            start_expressions: [parse_expression('Start#a'), parse_expression('Start#b')],
+            subjects:          expected_subjects,
+            diffs:             [diff_a, diff_b]
+          )
         )
-      )
+      end
+    end
+
+    context 'when other has subjects' do
+      let(:expected_subjects) { other.subjects }
+      let(:other_subjects)    { [parse_expression('Subject#b')] }
+
+      include_examples '#merge'
+    end
+
+    context 'when other has no subjects' do
+      let(:expected_subjects) { original.subjects }
+      let(:other_subjects)    { []                }
+
+      include_examples '#merge'
     end
   end
 

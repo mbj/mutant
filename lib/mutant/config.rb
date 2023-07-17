@@ -93,30 +93,38 @@ module Mutant
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/MethodLength
 
+    # Load the configuration
+    def self.load(cli_config:, world:)
+      load_config_file(reporter: cli_config.reporter, world: world).fmap do |file_config|
+        DEFAULT.with(jobs: Etc.nprocessors).merge(file_config.merge(cli_config))
+      end
+    end
+
     # Load config file
     #
     # @param [Env] env
     #
     # @return [Either<String,Config>]
-    def self.load_config_file(env)
+    def self.load_config_file(reporter:, world:)
       files = CANDIDATES
-        .map(&env.world.pathname.public_method(:new))
+        .map(&world.pathname.public_method(:new))
         .select(&:readable?)
 
       if files.one?
-        load_contents(env, files.first).fmap(&DEFAULT.public_method(:with))
+        load_contents(reporter: reporter, path: files.first).fmap(&DEFAULT.public_method(:with))
       elsif files.empty?
         Either::Right.new(DEFAULT)
       else
         Either::Left.new(MORE_THAN_ONE_CONFIG_FILE % files.join(', '))
       end
     end
+    private_class_method :load_config_file
 
-    def self.load_contents(env, path)
+    def self.load_contents(reporter:, path:)
       Transform::Named
         .new(
           name:      path.to_s,
-          transform: sequence(env.config.reporter)
+          transform: sequence(reporter)
         )
         .call(path)
         .lmap(&:compact_message)
@@ -135,13 +143,6 @@ module Mutant
       )
     end
     private_class_method :sequence
-
-    # The configuration from the environment
-    #
-    # @return [Config]
-    def self.env
-      DEFAULT.with(jobs: Etc.nprocessors)
-    end
 
     PATHNAME_ARRAY = Transform::Array.new(
       transform: Transform::Sequence.new(

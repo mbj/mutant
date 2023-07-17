@@ -78,9 +78,11 @@ module Mutant
       #
       # @return [Config]
       def merge(other)
-        self.class.new(
-          to_h
-            .to_h { |name, value| [name, value + other.public_send(name)] }
+        with(
+          ignore:            ignore + other.ignore,
+          start_expressions: start_expressions + other.start_expressions,
+          subjects:          other.subjects.any? ? other.subjects : subjects,
+          diffs:             diffs + other.diffs
         )
       end
 
