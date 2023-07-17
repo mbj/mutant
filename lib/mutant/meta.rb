@@ -16,8 +16,13 @@ module Mutant
       # Add example
       #
       # @return [undefined]
-      def self.add(*types, &block)
-        ALL << DSL.call(caller_locations(1).first, Set.new(types), block)
+      def self.add(*types, operators: :full, &block)
+        ALL << DSL.call(
+          block:     block,
+          location:  caller_locations(1).first,
+          operators: Mutation::Operators.parse(operators.to_s).from_right,
+          types:     Set.new(types)
+        )
       end
 
       Pathname.glob(Pathname.new(__dir__).parent.parent.join('meta', '*.rb'))

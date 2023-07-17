@@ -18,7 +18,7 @@ RSpec.describe Mutant::Mutation::Config do
       described_class::DEFAULT.with(key => other_value)
     end
 
-    context 'merging timeout' do
+    context 'timeout' do
       let(:key)            { :timeout }
       let(:original_value) { 2        }
       let(:other_value)    { 3        }
@@ -33,6 +33,27 @@ RSpec.describe Mutant::Mutation::Config do
 
       it 'returns other value' do
         expect(apply.ignore_patterns).to be(:other)
+      end
+    end
+
+    context 'operators' do
+      let(:key)            { :operators }
+      let(:original_value) { :original  }
+
+      context 'if other value is present' do
+        let(:other_value) { :other }
+
+        it 'returns other value' do
+          expect(apply.operators).to be(:other)
+        end
+      end
+
+      context 'if other value is absent' do
+        let(:other_value) { nil }
+
+        it 'returns original value' do
+          expect(apply.operators).to be(:original)
+        end
       end
     end
   end

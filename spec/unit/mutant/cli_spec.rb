@@ -22,7 +22,11 @@ RSpec.describe Mutant::CLI do
       )
     end
 
-    let(:load_config_config) { expected_cli_config }
+    let(:load_config_config) do
+      expected_cli_config.with(
+        mutation: Mutant::Mutation::Config::DEFAULT.merge(expected_cli_config.mutation)
+      )
+    end
 
     let(:load_config_result) do
       Mutant::Either::Right.new(load_config_config)
@@ -673,7 +677,8 @@ RSpec.describe Mutant::CLI do
       end
 
       let(:env) do
-        config = Mutant::Config::DEFAULT.with(
+        config = bootstrap_config.with(
+          jobs:     nil,
           reporter: Mutant::Reporter::CLI.build(stdout)
         )
 
@@ -877,6 +882,7 @@ RSpec.describe Mutant::CLI do
            Jobs:            auto
            Includes:        []
            Requires:        []
+           Operators:       light
            Subjects:        1
            All-Tests:       3
            Available-Tests: 2

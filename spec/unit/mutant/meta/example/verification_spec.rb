@@ -16,8 +16,9 @@ RSpec.describe Mutant::Meta::Example::Verification do
     Mutant::Meta::Example.new(
       expected:        expected,
       location:        location,
-      node:            s(:true),
       lvars:           [],
+      node:            s(:true),
+      operators:       Mutant::Mutation::Operators::Full.new,
       original_source: original_source,
       types:           [:true]
     )
@@ -47,7 +48,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
     it 'returns empty error report' do
       expect(object.error_report).to eql(<<~'REPORT'.chomp)
         <location>
-        Original:
+        Original: (operators: full)
         (true)
         true
       REPORT
@@ -68,7 +69,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
     let(:expected_report) do
       <<~REPORT.chomp
         <location>
-        Original:
+        Original: (operators: full)
         (true)
         true
         [original] report
@@ -94,7 +95,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
     let(:expected_report) do
       <<~'REPORT'.chomp
         <location>
-        Original:
+        Original: (operators: full)
         (true)
         true
         Missing mutations:
@@ -113,7 +114,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
     let(:expected_report) do
       <<~'REPORT'.chomp
         <location>
-        Original:
+        Original: (operators: full)
         (true)
         true
         Unexpected mutations:
@@ -132,7 +133,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
     let(:expected_report) do
       <<~'REPORT'.chomp
         <location>
-        Original:
+        Original: (operators: full)
         (true)
         true
         No-Diff mutations:
@@ -163,7 +164,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
     let(:expected_report) do
       <<~REPORT.chomp
         <location>
-        Original:
+        Original: (operators: full)
         (true)
         true
         [invalid-mutation] report

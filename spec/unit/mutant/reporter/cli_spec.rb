@@ -66,6 +66,7 @@ RSpec.describe Mutant::Reporter::CLI do
       Jobs:            auto
       Includes:        []
       Requires:        []
+      Operators:       light
       Subjects:        1
       All-Tests:       2
       Available-Tests: 1
@@ -85,6 +86,7 @@ RSpec.describe Mutant::Reporter::CLI do
       Jobs:            auto
       Includes:        []
       Requires:        []
+      Operators:       light
       Subjects:        1
       All-Tests:       2
       Available-Tests: 1

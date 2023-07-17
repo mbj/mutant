@@ -138,7 +138,7 @@ module MutantSpec
         node = Unparser.parse(path.read) or return 0
 
         mutations = Mutant::Mutator::Node.mutate(
-          config: Mutant::Mutation::Config::DEFAULT,
+          config: Mutant::Mutation::Config::DEFAULT.with(operators: Mutant::Mutation::Operators::Full.new),
           node:   node
         )
 

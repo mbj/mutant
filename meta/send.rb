@@ -179,7 +179,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.to_hash'
 end
 
-Mutant::Meta::Example.add :send do
+Mutant::Meta::Example.add :send, operators: :full do
   source 'foo == bar'
 
   singleton_mutations
@@ -189,6 +189,16 @@ Mutant::Meta::Example.add :send do
   mutation 'foo == nil'
   mutation 'foo.eql?(bar)'
   mutation 'foo.equal?(bar)'
+end
+
+Mutant::Meta::Example.add :send, operators: :light do
+  source 'foo == bar'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'nil == bar'
+  mutation 'foo == nil'
 end
 
 Mutant::Meta::Example.add :send do

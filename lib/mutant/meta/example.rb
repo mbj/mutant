@@ -10,6 +10,7 @@ module Mutant
         :location,
         :lvars,
         :node,
+        :operators,
         :original_source,
         :types
       )
@@ -56,7 +57,7 @@ module Mutant
       # @return [Enumerable<Mutant::Mutation>]
       def generated
         Mutator::Node.mutate(
-          config: Mutation::Config::DEFAULT,
+          config: Mutation::Config::DEFAULT.with(operators: operators),
           node:   node
         ).map do |node|
           Mutation::Evil.new(subject: self, node: node)

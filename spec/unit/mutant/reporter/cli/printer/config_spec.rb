@@ -13,6 +13,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
         Jobs:            auto
         Includes:        []
         Requires:        []
+        Operators:       light
       REPORT
     end
   end
@@ -27,6 +28,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
         Jobs:            10
         Includes:        []
         Requires:        []
+        Operators:       light
       REPORT
     end
   end
@@ -41,6 +43,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
         Jobs:            auto
         Includes:        []
         Requires:        []
+        Operators:       light
       REPORT
     end
   end
@@ -55,6 +58,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
         Jobs:            auto
         Includes:        []
         Requires:        []
+        Operators:       light
       REPORT
     end
   end
@@ -69,6 +73,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
         Jobs:            auto
         Includes:        []
         Requires:        []
+        Operators:       light
         MutationTimeout: 2.1
       REPORT
     end
