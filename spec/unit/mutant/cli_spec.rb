@@ -22,10 +22,10 @@ RSpec.describe Mutant::CLI do
       )
     end
 
-    let(:load_config_file_config) do
-      Mutant::Config::DEFAULT.with(
-        coverage_criteria: Mutant::Config::CoverageCriteria::EMPTY
-      )
+    let(:load_config_config) { expected_cli_config }
+
+    let(:load_config_result) do
+      Mutant::Either::Right.new(load_config_config)
     end
 
     def apply
@@ -47,8 +47,6 @@ RSpec.describe Mutant::CLI do
 
       allow(stdout)
         .to receive(:write) { |message| events << [:stdout, :write, message] }
-
-      allow(Mutant::Config).to receive_messages(env: env_config)
     end
 
     shared_examples 'CLI run' do
@@ -68,6 +66,17 @@ RSpec.describe Mutant::CLI do
 
       it 'sets expected zombie flag' do
         expect(apply.from_right.zombie?).to be(expected_zombie)
+      end
+
+      context 'with loaded config not exactly equal cli config' do
+        let(:load_config_config) { super().with(jobs: 10) }
+        let(:boostrap_config)    { load_config_config     }
+
+        it 'uses the modified config for bootstrappin' do
+          apply.from_right.call
+
+          expect(YAML.dump(events)).to eql(YAML.dump(expected_events))
+        end
       end
     end
 
@@ -548,7 +557,7 @@ RSpec.describe Mutant::CLI do
       end
     end
 
-    context 'cannot open config file' do
+    context 'cannot open ruby file' do
       let(:arguments) { %w[util mutation does-not-exist.rb] }
 
       it 'returns expected message' do
@@ -640,11 +649,9 @@ RSpec.describe Mutant::CLI do
 
     shared_context 'environment' do
       let(:arguments)            { %w[run]                                              }
-      let(:bootstrap_config)     { env_config.merge(file_config)                        }
       let(:bootstrap_result)     { right(env)                                           }
       let(:env_result)           { instance_double(Mutant::Result::Env, success?: true) }
       let(:expected_exit)        { true                                                 }
-      let(:file_config_result)   { right(file_config)                                   }
       let(:license_result)       { right(subscription)                                  }
       let(:runner_result)        { right(env_result)                                    }
       let(:subjects)             { [subject_a]                                          }
@@ -654,6 +661,16 @@ RSpec.describe Mutant::CLI do
       let(:test_c) { instance_double(Mutant::Test, identification: 'test-c') }
 
       let(:available_tests) { [test_a, test_b] }
+
+      let(:bootstrap_config) do
+        load_config_result.from_right
+      end
+
+      let(:expected_cli_config) do
+        Mutant::Config::DEFAULT.with(
+          coverage_criteria: Mutant::Config::CoverageCriteria::EMPTY
+        )
+      end
 
       let(:env) do
         config = Mutant::Config::DEFAULT.with(
@@ -680,18 +697,6 @@ RSpec.describe Mutant::CLI do
         )
       end
 
-      let(:file_config) do
-        Mutant::Config::DEFAULT.with(
-          integration: Mutant::Integration::Config::DEFAULT.with(
-            arguments: %w[file-integration-argument],
-            name:      'file-integration-name'
-          ),
-          includes:    %w[include-file],
-          requires:    %w[require-file],
-          mutation:    Mutant::Mutation::Config::DEFAULT.with(timeout: 5.0)
-        )
-      end
-
       include_context 'license validation'
 
       context 'with invalid expressions' do
@@ -703,9 +708,9 @@ RSpec.describe Mutant::CLI do
       end
 
       before do
-        allow(Mutant::Config).to receive(:load_config_file) do |env|
-          events << [:load_config_file, env.inspect]
-          file_config_result
+        allow(Mutant::Config).to receive(:load) do |**attributes|
+          events << [:load_config, attributes.inspect]
+          load_config_result
         end
 
         allow(world).to receive(:record) do |name, &block|
@@ -756,8 +761,8 @@ RSpec.describe Mutant::CLI do
               config
             ],
             [
-              :load_config_file,
-              Mutant::Env.empty(world, load_config_file_config).inspect
+              :load_config,
+              { cli_config: expected_cli_config, world: world }.inspect
             ],
             [
               :bootstrap,
@@ -786,8 +791,8 @@ RSpec.describe Mutant::CLI do
               config
             ],
             [
-              :load_config_file,
-              Mutant::Env.empty(world, load_config_file_config).inspect
+              :load_config,
+              { cli_config: expected_cli_config, world: world }.inspect
             ],
             [
               :bootstrap,
@@ -835,8 +840,8 @@ RSpec.describe Mutant::CLI do
               config
             ],
             [
-              :load_config_file,
-              Mutant::Env.empty(world, load_config_file_config).inspect
+              :load_config,
+              { cli_config: expected_cli_config, world: world }.inspect
             ],
             [
               :bootstrap,
@@ -891,8 +896,8 @@ RSpec.describe Mutant::CLI do
               config
             ],
             [
-              :load_config_file,
-              Mutant::Env.empty(world, load_config_file_config).inspect
+              :load_config,
+              { cli_config: expected_cli_config, world: world }.inspect
             ],
             [
               :bootstrap,
@@ -942,8 +947,8 @@ RSpec.describe Mutant::CLI do
               config
             ],
             [
-              :load_config_file,
-              Mutant::Env.empty(world, load_config_file_config).inspect
+              :load_config,
+              { cli_config: expected_cli_config, world: world }.inspect
             ],
             [
               :bootstrap,
@@ -1023,7 +1028,7 @@ RSpec.describe Mutant::CLI do
         context 'with valid subject expression' do
           let(:arguments) { super() + ['CLISubject'] }
 
-          let(:load_config_file_config) do
+          let(:expected_cli_config) do
             super().with(
               matcher: super().matcher.with(
                 subjects: expected_bootstrap_subjects
@@ -1031,63 +1036,23 @@ RSpec.describe Mutant::CLI do
             )
           end
 
-          let(:bootstrap_config) do
-            super().with(
-              matcher: file_config.matcher.with(
-                subjects: expected_bootstrap_subjects
-              )
-            )
-          end
+          let(:expected_bootstrap_subjects) { [parse_expression('CLISubject')] }
 
-          context 'when file config has subject expressions' do
-            let(:expected_bootstrap_subjects) { [parse_expression('CLISubject')] }
-
-            let(:file_config) do
-              super().with(
-                matcher: super().matcher.with(
-                  subjects: [parse_expression('FileSubject')]
-                )
-              )
-            end
-
-            include_examples 'CLI run'
-          end
-
-          context 'when file config has no subject expressions' do
-            let(:expected_bootstrap_subjects) { [parse_expression('CLISubject')] }
-
-            include_examples 'CLI run'
-          end
+          include_examples 'CLI run'
         end
 
         context 'without subject expressions' do
-          let(:bootstrap_config) do
+          let(:expected_cli_config) do
             super().with(
-              matcher: file_config.matcher.with(
+              matcher: super().matcher.with(
                 subjects: expected_bootstrap_subjects
               )
             )
           end
 
-          context 'when file config has subject expressions' do
-            let(:expected_bootstrap_subjects) { [parse_expression('FileSubject')] }
+          let(:expected_bootstrap_subjects) { [] }
 
-            let(:file_config) do
-              super().with(
-                matcher: super().matcher.with(
-                  subjects: [parse_expression('FileSubject')]
-                )
-              )
-            end
-
-            include_examples 'CLI run'
-          end
-
-          context 'when file config has no subject expressions' do
-            let(:expected_bootstrap_subjects) { [] }
-
-            include_examples 'CLI run'
-          end
+          include_examples 'CLI run'
         end
 
         context 'with valid start-subject expression' do
@@ -1095,17 +1060,9 @@ RSpec.describe Mutant::CLI do
             super() + ['--start-subject', 'Foo#bar', '--start-subject', 'Foo#baz']
           end
 
-          let(:load_config_file_config) do
+          let(:expected_cli_config) do
             super().with(
               matcher: super().matcher.with(
-                start_expressions: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
-              )
-            )
-          end
-
-          let(:bootstrap_config) do
-            super().with(
-              matcher: file_config.matcher.with(
                 start_expressions: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
               )
             )
@@ -1119,17 +1076,9 @@ RSpec.describe Mutant::CLI do
             super() + ['--ignore-subject', 'Foo#bar', '--ignore-subject', 'Foo#baz']
           end
 
-          let(:load_config_file_config) do
+          let(:expected_cli_config) do
             super().with(
               matcher: super().matcher.with(
-                ignore: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
-              )
-            )
-          end
-
-          let(:bootstrap_config) do
-            super().with(
-              matcher: file_config.matcher.with(
                 ignore: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
               )
             )
@@ -1146,19 +1095,9 @@ RSpec.describe Mutant::CLI do
             ]
           end
 
-          let(:load_config_file_config) do
+          let(:expected_cli_config) do
             super().with(
               includes: %w[
-                include-cli-a
-                include-cli-b
-              ]
-            )
-          end
-
-          let(:bootstrap_config) do
-            super().with(
-              includes: %w[
-                include-file
                 include-cli-a
                 include-cli-b
               ]
@@ -1171,15 +1110,9 @@ RSpec.describe Mutant::CLI do
         context 'with --require option' do
           let(:arguments) { super() + %w[--require require-cli] }
 
-          let(:load_config_file_config) do
+          let(:expected_cli_config) do
             super().with(
               requires: %w[require-cli]
-            )
-          end
-
-          let(:bootstrap_config) do
-            super().with(
-              requires: %w[require-file require-cli]
             )
           end
 
@@ -1189,16 +1122,10 @@ RSpec.describe Mutant::CLI do
         context 'with --env option' do
           let(:arguments) { super() + %W[--env #{argument}] }
 
-          let(:load_config_file_config) do
-            super().with(
-              environment_variables: { 'foo' => 'bar' }
-            )
-          end
-
           context 'on valid env syntax' do
             let(:argument) { 'foo=bar' }
 
-            let(:bootstrap_config) do
+            let(:expected_cli_config) do
               super().with(environment_variables: { 'foo' => 'bar' })
             end
 
@@ -1214,44 +1141,17 @@ RSpec.describe Mutant::CLI do
           end
         end
 
-        context 'with --jobs option on absent file config' do
-          let(:arguments)        { super() + %w[--jobs 10] }
-          let(:bootstrap_config) { super().with(jobs: 10)  }
-
-          let(:load_config_file_config) do
-            super().with(jobs: 10)
-          end
-
-          include_examples 'CLI run'
-        end
-
-        context 'with --jobs option on present file config' do
-          let(:arguments)        { super() + %w[--jobs 10] }
-          let(:bootstrap_config) { super().with(jobs: 10)  }
-          let(:file_config)      { super().with(jobs: 2)   }
-
-          let(:load_config_file_config) do
-            super().with(jobs: 10)
-          end
-
-          include_examples 'CLI run'
-        end
-
-        context 'without --jobs option on present file config' do
-          let(:bootstrap_config) { super().with(jobs: 2) }
-          let(:file_config)      { super().with(jobs: 2) }
+        context 'with --jobs option' do
+          let(:arguments)           { super() + %w[--jobs 10] }
+          let(:expected_cli_config) { super().with(jobs: 10)  }
 
           include_examples 'CLI run'
         end
 
         context 'with --mutation-timeout option' do
-          let(:arguments)               { super() + %w[--mutation-timeout 10] }
+          let(:arguments) { super() + %w[--mutation-timeout 10] }
 
-          let(:load_config_file_config) do
-            super().with(mutation: super().mutation.with(timeout: 10.0))
-          end
-
-          let(:bootstrap_config) do
+          let(:expected_cli_config) do
             super().with(mutation: super().mutation.with(timeout: 10.0))
           end
 
@@ -1259,9 +1159,8 @@ RSpec.describe Mutant::CLI do
         end
 
         context 'with --fail-fast option' do
-          let(:arguments)               { super() + %w[--fail-fast]     }
-          let(:bootstrap_config)        { super().with(fail_fast: true) }
-          let(:load_config_file_config) { super().with(fail_fast: true) }
+          let(:arguments)           { super() + %w[--fail-fast]     }
+          let(:expected_cli_config) { super().with(fail_fast: true) }
 
           include_examples 'CLI run'
         end
@@ -1269,11 +1168,7 @@ RSpec.describe Mutant::CLI do
         context 'with --use option' do
           let(:arguments) { super() + ['--use', 'cli-integration'] }
 
-          let(:bootstrap_config) do
-            super().with(integration: super().integration.with(name: 'cli-integration'))
-          end
-
-          let(:load_config_file_config) do
+          let(:expected_cli_config) do
             super().with(integration: super().integration.with(name: 'cli-integration'))
           end
 
@@ -1283,11 +1178,7 @@ RSpec.describe Mutant::CLI do
         context 'with --integration option' do
           let(:arguments) { super() + ['--integration', 'cli-integration'] }
 
-          let(:bootstrap_config) do
-            super().with(integration: super().integration.with(name: 'cli-integration'))
-          end
-
-          let(:load_config_file_config) do
+          let(:expected_cli_config) do
             super().with(integration: super().integration.with(name: 'cli-integration'))
           end
 
@@ -1302,7 +1193,7 @@ RSpec.describe Mutant::CLI do
             ]
           end
 
-          let(:load_config_file_config) do
+          let(:expected_cli_config) do
             super().with(
               integration: super().integration.with(
                 arguments: %w[
@@ -1313,69 +1204,16 @@ RSpec.describe Mutant::CLI do
             )
           end
 
-          let(:bootstrap_config) do
-            super().with(
-              integration: super().integration.with(
-                arguments: %w[
-                  file-integration-argument
-                  cli-integration-argument-a
-                  cli-integration-argument-b
-                ]
-              )
-            )
-          end
-
           include_examples 'CLI run'
-        end
-
-        context 'without --integration option' do
-          let(:arguments) { super() }
-
-          let(:bootstrap_config) do
-            super().with(integration: super().integration.with(name: 'file-integration-name'))
-          end
-
-          include_examples 'CLI run'
-        end
-
-        context 'coverage criterias' do
-          let(:env_config)       { Mutant::Config::DEFAULT }
-          let(:file_config)      { Mutant::Config::DEFAULT }
-
-          context 'without coverage criteria in env or file' do
-            let(:bootstrap_config) { Mutant::Config::DEFAULT }
-
-            include_examples 'CLI run'
-          end
-
-          context 'with coverage criteria in file' do
-            let(:file_config) do
-              Mutant::Config::DEFAULT.with(
-                coverage_criteria: Mutant::Config::CoverageCriteria::DEFAULT.with(
-                  timeout: true
-                )
-              )
-            end
-
-            let(:bootstrap_config) { file_config }
-
-            include_examples 'CLI run'
-          end
         end
 
         context 'with --since option' do
           let(:arguments) { super() + ['--since', 'reference'] }
 
-          let(:load_config_file_config) do
+          let(:expected_cli_config) do
             diff = Mutant::Repository::Diff.new(to: 'reference', world: world)
 
-            super().with(matcher: file_config.matcher.with(diffs: [diff]))
-          end
-
-          let(:bootstrap_config) do
-            diff = Mutant::Repository::Diff.new(to: 'reference', world: world)
-
-            super().with(matcher: file_config.matcher.with(diffs: [diff]))
+            super().with(matcher: super().matcher.with(diffs: [diff]))
           end
 
           include_examples 'CLI run'

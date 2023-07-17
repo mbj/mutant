@@ -3,7 +3,6 @@
 module Mutant
   module CLI
     class Command
-      # rubocop:disable Metrics/ClassLength
       class Environment < self
         NAME              = 'environment'
         SHORT_DESCRIPTION = 'Environment subcommands'
@@ -29,18 +28,8 @@ module Mutant
           env = Env.empty(world, @config)
 
           env
-            .record(:config) { Config.load_config_file(env).fmap(&method(:expand)) }
-            .bind { Bootstrap.call(env.with(config: @config)) }
-        end
-
-        def expand(file_config)
-          if @config.matcher.subjects.any?
-            file_config = file_config.with(
-              matcher: file_config.matcher.with(subjects: [])
-            )
-          end
-
-          @config = Config.env.merge(file_config).merge(@config)
+            .record(:config) { Config.load(cli_config: @config, world: world) }
+            .bind { |config| Bootstrap.call(env.with(config: config)) }
         end
 
         def parse_remaining_arguments(arguments)

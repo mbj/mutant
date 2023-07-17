@@ -222,29 +222,14 @@ RSpec.describe Mutant::Config do
     end
   end
 
-  describe '.env' do
+  describe '.load' do
     def apply
-      described_class.env
+      described_class.load(cli_config: cli_config, world: world)
     end
 
-    let(:nprocessors) { instance_double(Integer, :nprocessors) }
-
-    before do
-      allow(Etc).to receive_messages(nprocessors: nprocessors)
-    end
-
-    it 'returns expected env derived config' do
-      expect(apply).to eql(described_class::DEFAULT.with(jobs: nprocessors))
-    end
-  end
-
-  describe '.load_config_file' do
-    def apply
-      described_class.load_config_file(Mutant::Env.empty(world, config))
-    end
-
-    let(:config) { Mutant::Config::DEFAULT                            }
-    let(:world)  { instance_double(Mutant::World, pathname: pathname) }
+    let(:cli_config)  { Mutant::Config::DEFAULT                            }
+    let(:nprocessors) { instance_double(Integer, :nprocessors)             }
+    let(:world)       { instance_double(Mutant::World, pathname: pathname) }
 
     let(:pathname) do
       paths = paths()
@@ -275,11 +260,12 @@ RSpec.describe Mutant::Config do
 
     before do
       allow(Pathname).to receive(:new, &paths.public_method(:fetch))
+      allow(Etc).to receive_messages(nprocessors: nprocessors)
     end
 
     context 'when no path is readable' do
       it 'returns original config' do
-        expect(apply).to eql(Mutant::Either::Right.new(config))
+        expect(apply).to eql(Mutant::Either::Right.new(cli_config.with(jobs: nprocessors)))
       end
     end
 
@@ -323,8 +309,9 @@ RSpec.describe Mutant::Config do
           it 'returns expected config' do
             expect(apply).to eql(
               Mutant::Either::Right.new(
-                config.with(
-                  integration: Mutant::Integration::Config::DEFAULT.with(name: 'rspec')
+                cli_config.with(
+                  integration: Mutant::Integration::Config::DEFAULT.with(name: 'rspec'),
+                  jobs:        nprocessors
                 )
               )
             )
@@ -393,13 +380,13 @@ RSpec.describe Mutant::Config do
         end
 
         before do
-          allow(config.reporter).to receive_messages(warn: config.reporter)
+          allow(cli_config.reporter).to receive_messages(warn: cli_config.reporter)
         end
 
         it 'renders expected warning' do
           apply
 
-          expect(config.reporter).to have_received(:warn).with(<<~'MESSAGE')
+          expect(cli_config.reporter).to have_received(:warn).with(<<~'MESSAGE')
             Deprecated configuration toplevel string key `integration` found.
 
             This key will be removed in the next major version.
@@ -428,13 +415,13 @@ RSpec.describe Mutant::Config do
         end
 
         before do
-          allow(config.reporter).to receive_messages(warn: config.reporter)
+          allow(cli_config.reporter).to receive_messages(warn: cli_config.reporter)
         end
 
         it 'renders expected warning' do
           apply
 
-          expect(config.reporter).to have_received(:warn).with(<<~'MESSAGE')
+          expect(cli_config.reporter).to have_received(:warn).with(<<~'MESSAGE')
             Deprecated configuration toplevel key `mutation_timeout` found.
 
             This key will be removed in the next major version.
@@ -449,12 +436,26 @@ RSpec.describe Mutant::Config do
           MESSAGE
         end
 
-        it 'returns expected config' do
-          expect(apply.from_right.mutation).to eql(
-            Mutant::Config::DEFAULT.with(
-              mutation: Mutant::Mutation::Config::DEFAULT.with(timeout: 10.0)
-            ).mutation
-          )
+        context 'when cli does not overwrite' do
+          it 'returns expected config' do
+            expect(apply.from_right.mutation).to eql(
+              Mutant::Config::DEFAULT.with(
+                mutation: Mutant::Mutation::Config::DEFAULT.with(timeout: 10.0)
+              ).mutation
+            )
+          end
+        end
+
+        context 'when cli does not overwrites' do
+          let(:cli_config) { super().with(mutation: super().mutation.with(timeout: 1.0)) }
+
+          it 'returns expected config' do
+            expect(apply.from_right.mutation).to eql(
+              Mutant::Config::DEFAULT.with(
+                mutation: Mutant::Mutation::Config::DEFAULT.with(timeout: 1.0)
+              ).mutation
+            )
+          end
         end
       end
     end
