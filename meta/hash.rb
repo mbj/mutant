@@ -18,3 +18,10 @@ Mutant::Meta::Example.add :hash do
   # Empty hash
   mutation '{}'
 end
+
+Mutant::Meta::Example.add :hash do
+  source 'def foo(**); { default: 1, ** }; end'
+
+  mutation 'def foo(**); { default: 1 }; end'
+  mutation 'def foo(**); {}; end'
+end
