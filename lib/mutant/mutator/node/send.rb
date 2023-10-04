@@ -223,7 +223,7 @@ module Mutant
 
           argument = Mutant::Util.one(arguments)
 
-          return if n_kwargs?(argument) || n_forwarded_args?(argument)
+          return if n_kwargs?(argument) || n_forwarded_args?(argument) || n_forwarded_restarg?(argument)
 
           emit_propagation(argument)
         end

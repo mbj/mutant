@@ -1,3 +1,9 @@
+# Unreleased
+
+* Add support for forwarded rest arguments `def foo(*); bar(*); end` which previously caused `mutant` to crash.
+
+  [#TODO](https://github.com/mbj/mutant/pull/TODO)
+
 # v0.11.22 2023-07-16
 
 * Introduce mutation operators config 'light' and 'full'. Mutant will default to
