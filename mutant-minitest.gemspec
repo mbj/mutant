@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './lib/mutant/version'
+require_relative 'lib/mutant/version'
 
 Gem::Specification.new do |gem|
   gem.name        = 'mutant-minitest'
