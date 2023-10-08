@@ -25,10 +25,14 @@ module Mutant
           children.each_with_index do |removed, index|
             new_arguments = children.dup
             new_arguments.delete_at(index)
-            unless n_forward_arg?(removed) || removed_block_arg?(new_arguments) || only_mlhs?(new_arguments)
+            unless forward_type?(removed) || removed_block_arg?(new_arguments) || only_mlhs?(new_arguments)
               emit_type(*new_arguments)
             end
           end
+        end
+
+        def forward_type?(removed)
+          n_forward_arg?(removed) || n_restarg?(removed) || n_kwrestarg?(removed)
         end
 
         def only_mlhs?(new_arguments)
@@ -36,7 +40,7 @@ module Mutant
         end
 
         def forward_arg?
-          children.last && n_forward_arg?(children.last)
+          children.any?(&method(:forward_type?))
         end
 
         def removed_block_arg?(new_arguments)

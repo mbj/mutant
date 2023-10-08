@@ -1,3 +1,7 @@
+# v0.11.23 2023-10-08
+
+* Fix restarg and kwrestarg invalid mutations.
+
 # v0.11.22 2023-07-16
 
 * Introduce mutation operators config 'light' and 'full'. Mutant will default to
