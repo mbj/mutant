@@ -195,6 +195,54 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(...); super; end'
 end
 
+if RUBY_VERSION >= '3.2'
+  Mutant::Meta::Example.add :def do
+    source 'def foo(*); bar(*); end'
+
+    mutation 'def foo(*); raise; end'
+    mutation 'def foo(*); super; end'
+    mutation 'def foo(*); end'
+    mutation 'def foo(*); nil; end'
+    mutation 'def foo(*); bar; end'
+  end
+
+  Mutant::Meta::Example.add :def do
+    source 'def foo(**); bar(**); end'
+
+    mutation 'def foo(**); raise; end'
+    mutation 'def foo(**); super; end'
+    mutation 'def foo(**); end'
+    mutation 'def foo(**); nil; end'
+    mutation 'def foo(**); bar; end'
+  end
+
+  Mutant::Meta::Example.add :hash do
+    source 'def foo(**); { default: nil, ** }; end'
+
+    mutation 'def foo(**); end'
+    mutation 'def foo(**); nil; end'
+    mutation 'def foo(**); raise; end'
+    mutation 'def foo(**); super; end'
+    mutation 'def foo(**); { ** }; end'
+    mutation 'def foo(**); { default: nil }; end'
+    mutation 'def foo(**); { default__mutant__: nil, ** }; end'
+    mutation 'def foo(**); { nil => nil, ** }; end'
+    mutation 'def foo(**); {}; end'
+  end
+end
+
+if RUBY_VERSION >= '3.1'
+  Mutant::Meta::Example.add :def do
+    source 'def foo(&); bar(&); end'
+
+    mutation 'def foo(&); raise; end'
+    mutation 'def foo(&); super; end'
+    mutation 'def foo(&); end'
+    mutation 'def foo(&); nil; end'
+    mutation 'def foo(&); bar; end'
+  end
+end
+
 Mutant::Meta::Example.add :def do
   source 'def foo(a, ...); end'
 

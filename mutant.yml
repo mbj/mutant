@@ -20,3 +20,6 @@ matcher:
   - Mutant::Mutator::Node::Arguments#emit_argument_presence
   - Mutant::Mutator::Node::Arguments#removed_block_arg?
   - Mutant::Mutator::Node::BlockPass#dispatch
+  # Mutation only alive for ruby < 3.2
+  - Mutant::Mutator::Node::Arguments#forward_type?
+  - Mutant::Mutator::Node::Send#emit_argument_propagation

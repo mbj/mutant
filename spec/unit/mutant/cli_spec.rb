@@ -114,6 +114,7 @@ RSpec.describe Mutant::CLI do
       @tests << @test_klass.new(yield)
     end
 
+    # rubocop:disable Metrics/MethodLength
     def self.main_body
       <<~MESSAGE.strip
         usage: mutant <run|environment|subscription|util> [options]
@@ -137,6 +138,7 @@ RSpec.describe Mutant::CLI do
         util         - Utility subcommands
       MESSAGE
     end
+    # rubocop:enable Metrics/MethodLength
 
     context 'empty arguments' do
       message = <<~MESSAGE
