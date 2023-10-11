@@ -135,7 +135,12 @@ module MutantSpec
       #
       # @return [Integer] mutations generated
       def check_generation(path)
-        node = Unparser.parse(path.read) or return 0
+        begin
+          node = Unparser.parse(path.read) or return 0
+        # no need to generate mutation if the source is invalid
+        rescue Parser::SyntaxError
+          return 0
+        end
 
         mutations = Mutant::Mutator::Node.mutate(
           config: Mutant::Mutation::Config::DEFAULT.with(operators: Mutant::Mutation::Operators::Full.new),
