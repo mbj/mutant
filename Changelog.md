@@ -1,6 +1,14 @@
+# v0.11.24 2023-10-10
+
+* Fix restarg and kwrestarg nested mutations.
+
+  [#1403](https://github.com/mbj/mutant/pull/1403)
+
 # v0.11.23 2023-10-08
 
 * Fix restarg and kwrestarg invalid mutations.
+
+  [#1402](https://github.com/mbj/mutant/pull/1402)
 
 # v0.11.22 2023-07-16
 

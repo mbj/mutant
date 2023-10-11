@@ -103,7 +103,7 @@ module Mutant
         end
 
         def emit_replacement
-          new_text = MAP[input.quantifier.text]
+          new_text = MAP[input.quantifier.text] or return
 
           emit(mk_dup.tap { |new| new.quantifier.text = new_text })
         end
