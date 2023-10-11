@@ -2,6 +2,8 @@
 
 * Fix restarg and kwrestarg invalid mutations.
 
+  [#1402](https://github.com/mbj/mutant/pull/1402)
+
 # v0.11.22 2023-07-16
 
 * Introduce mutation operators config 'light' and 'full'. Mutant will default to
