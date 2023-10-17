@@ -44,7 +44,7 @@ The pattern langauge is structured around AST nodes of the
 Syntax (currently) always begins with a valid node type and than
 constraints on its children within `{ child_name = child_pattern }` groups.
 
-Each node can have 2 kinds of children: Attributes and descedants.
+Each node can have 2 kinds of children: Attributes and descendants.
 
 Attributes are values, such as selectors for sends, constant and variable identifiers.
 
