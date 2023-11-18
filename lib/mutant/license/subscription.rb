@@ -54,7 +54,7 @@ module Mutant
       end
 
       def subscription_name
-        self.class.name.split('::').last.downcase
+        self.class::SUBSCRIPTION_NAME
       end
 
       def failure_message(expected, actual)

@@ -1,3 +1,9 @@
+# v0.11.25 2023-10-18
+
+* Add support for commercial organization wide licenses
+
+  [#1404](https://github.com/mbj/mutant/pull/1404)
+
 # v0.11.24 2023-10-10
 
 * Fix restarg and kwrestarg nested mutations.

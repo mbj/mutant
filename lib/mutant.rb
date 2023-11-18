@@ -251,8 +251,9 @@ module Mutant
     require 'mutant/range'
     require 'mutant/license'
     require 'mutant/license/subscription'
-    require 'mutant/license/subscription/opensource'
     require 'mutant/license/subscription/commercial'
+    require 'mutant/license/subscription/opensource'
+    require 'mutant/license/subscription/repository'
     require 'mutant/segment'
     require 'mutant/segment/recorder'
   end
