@@ -4,63 +4,14 @@ module Mutant
   module License
     class Subscription
       class Opensource < self
-        class Repository
-          include Anima.new(:host, :path)
-
-          REMOTE_REGEXP    = /\A[^\t]+\t(?<url>[^ ]+) \((?:fetch|push)\)\n\z/.freeze
-          GIT_SSH_REGEXP   = %r{\A[^@]+@(?<host>[^:/]+)[:/](?<path>.+?)(?:\.git)?\z}.freeze
-          GIT_HTTPS_REGEXP = %r{\Ahttps://(?<host>[^/]+)/(?<path>.+?)(?:\.git)?\z}.freeze
-
-          private_constant(*constants(false))
-
-          def to_s
-            [host, path].join('/')
-          end
-
-          def self.parse(input)
-            host, path = *input.split('/', 2).map(&:downcase)
-            new(host: host, path: path)
-          end
-
-          def self.parse_remote(input)
-            match = REMOTE_REGEXP.match(input) or
-              fail "Unmatched remote line: #{input.inspect}"
-
-            parse_url(match[:url])
-          end
-          private_class_method :parse_remote
-
-          def self.parse_url(input)
-            match = GIT_SSH_REGEXP.match(input) || GIT_HTTPS_REGEXP.match(input)
-
-            unless match
-              fail "Unmatched git remote URL: #{input.inspect}"
-            end
-
-            new(host: match[:host], path: match[:path].downcase)
-          end
-          private_class_method :parse_url
-
-          def allow?(other)
-            other.host.eql?(host) && path_match?(other.path)
-          end
-
-        private
-
-          def path_match?(other_path)
-            path.eql?(other_path) || (path.end_with?('/*') && other_path.start_with?(path[..-2]))
-          end
-        end # Opensource
+        SUBSCRIPTION_NAME = 'opensource repository'
 
         def self.from_json(value)
           new(licensed: value.fetch('repositories').map(&Repository.public_method(:parse)).to_set)
         end
 
         def call(world)
-          world
-            .capture_stdout(%w[git remote --verbose])
-            .fmap(&method(:parse_remotes))
-            .bind(&method(:check_subscription))
+          Repository.load_from_git(world).bind(&method(:check_subscription))
         end
 
       private
@@ -71,10 +22,6 @@ module Mutant
           else
             failure(licensed, actual)
           end
-        end
-
-        def parse_remotes(input)
-          input.lines.map(&Repository.method(:parse_remote)).to_set
         end
 
       end # Opensource
