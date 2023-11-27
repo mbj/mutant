@@ -5,7 +5,7 @@ AllCops:
     - 'tmp/**/*'
     - 'vendor/**/*'
   NewCops: enable
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.0
   # This is output on every run of `rubocop` and feels fairly noisy.
   SuggestExtensions: false
 

@@ -1,3 +1,7 @@
+# v0.11.26 unreleased
+
+* Drop support for ruby 2.7
+
 # v0.11.25 2023-10-18
 
 * Add support for commercial organization wide licenses
@@ -37,7 +41,7 @@
 
   The old key is still supported but deprecated.
 
-  Add ability to provide multiple `--integration-argument` options that get passed down 
+  Add ability to provide multiple `--integration-argument` options that get passed down
   directly to rspec. Also available in the config file.
 
 # v0.11.20 2023-05-22

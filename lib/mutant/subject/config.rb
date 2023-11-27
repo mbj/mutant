@@ -7,8 +7,8 @@ module Mutant
 
       DEFAULT = new(inline_disable: false, mutation: Mutation::Config::DEFAULT)
 
-      DISABLE_REGEXP = /(\s|^)mutant:disable(?:\s|$)/.freeze
-      SYNTAX_REGEXP  = /\A(?:#|=begin\n)/.freeze
+      DISABLE_REGEXP = /(\s|^)mutant:disable(?:\s|$)/
+      SYNTAX_REGEXP  = /\A(?:#|=begin\n)/
 
       def self.parse(comments:, mutation:)
         new(

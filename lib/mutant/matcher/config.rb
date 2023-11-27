@@ -11,7 +11,7 @@ module Mutant
         :diffs
       )
 
-      INSPECT_FORMAT      = "#<#{self} %s>"
+      INSPECT_FORMAT      = "#<#{self} %s>".freeze
       ATTRIBUTE_DELIMITER = ' '
       ATTRIBUTE_FORMAT    = '%s: [%s]'
       ENUM_DELIMITER      = ','

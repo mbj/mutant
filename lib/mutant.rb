@@ -63,8 +63,8 @@ module Mutant
 
   env_key = /[a-zA-Z_\d]+/
 
-  ENV_VARIABLE_KEY_VALUE_REGEXP = /\A(?<key>#{env_key}+)=(?<value>.*)\z/.freeze
-  ENV_VARIABLE_KEY_REGEXP       = /\A#{env_key}\z/.freeze
+  ENV_VARIABLE_KEY_VALUE_REGEXP = /\A(?<key>#{env_key}+)=(?<value>.*)\z/
+  ENV_VARIABLE_KEY_REGEXP       = /\A#{env_key}\z/
 
   # rubocop:disable Metrics/BlockLength
   record.call(:require_mutant_lib) do

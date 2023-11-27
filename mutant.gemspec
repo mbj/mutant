@@ -22,7 +22,7 @@ Gem::Specification.new do |gem|
 
   gem.metadata['rubygems_mfa_required'] = 'true'
 
-  gem.required_ruby_version = '>= 2.7'
+  gem.required_ruby_version = '>= 3.0'
 
   gem.add_runtime_dependency('diff-lcs',       '~> 1.3')
   gem.add_runtime_dependency('parser',         '~> 3.2.2', '>= 3.2.2.4')

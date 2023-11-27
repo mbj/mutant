@@ -22,7 +22,7 @@ module Mutant
     class Rspec < self
 
       ALL_EXPRESSION       = Expression::Namespace::Recursive.new(scope_name: nil)
-      EXPRESSION_CANDIDATE = /\A([^ ]+)(?: )?/.freeze
+      EXPRESSION_CANDIDATE = /\A([^ ]+)(?: )?/
       EXIT_SUCCESS         = 0
       DEFAULT_CLI_OPTIONS  = %w[--fail-fast spec].freeze
       TEST_ID_FORMAT       = 'rspec:%<index>d:%<location>s/%<description>s'

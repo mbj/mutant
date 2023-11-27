@@ -5,7 +5,7 @@ module Mutant
     class Node
       # Base mutator for index operations
       class Index < self
-        NO_VALUE_RANGE    = (1..-1).freeze
+        NO_VALUE_RANGE    = (1..-1)
         SEND_REPLACEMENTS = %i[at fetch key?].freeze
 
         private_constant(*constants(false))
@@ -67,7 +67,7 @@ module Mutant
 
         # Mutator for index assignments
         class Assign < self
-          REGULAR_RANGE = (1..-2).freeze
+          REGULAR_RANGE = (1..-2)
 
           private_constant(*constants(false))
 

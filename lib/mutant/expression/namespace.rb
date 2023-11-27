@@ -9,7 +9,7 @@ module Mutant
 
       # Recursive namespace expression
       class Recursive < self
-        REGEXP = /\A#{SCOPE_NAME_PATTERN}?\*\z/.freeze
+        REGEXP = /\A#{SCOPE_NAME_PATTERN}?\*\z/
 
         # Initialize object
         #
@@ -17,7 +17,7 @@ module Mutant
         def initialize(*)
           super
 
-          @syntax = "#{scope_name}*".freeze # rubocop:disable Style/RedundantFreeze
+          @syntax = "#{scope_name}*".freeze
 
           @recursion_pattern = Regexp.union(
             /\A#{scope_name}\z/,
@@ -60,7 +60,7 @@ module Mutant
         MATCHER = Matcher::Scope
         private_constant(*constants(false))
 
-        REGEXP = /\A#{SCOPE_NAME_PATTERN}\z/.freeze
+        REGEXP = /\A#{SCOPE_NAME_PATTERN}\z/
 
         # Matcher matcher on expression
         #

@@ -6,11 +6,11 @@ module Mutant
       class Repository
         include Anima.new(:host, :path)
 
-        REMOTE_REGEXP    = /\A[^\t]+\t(?<url>[^ ]+) \((?:fetch|push)\)\n\z/.freeze
-        GIT_SSH_REGEXP   = %r{\A[^@]+@(?<host>[^:/]+)[:/](?<path>.+?)(?:\.git)?\z}.freeze
-        GIT_HTTPS_REGEXP = %r{\Ahttps://(?<host>[^/]+)/(?<path>.+?)(?:\.git)?\z}.freeze
+        REMOTE_REGEXP    = /\A[^\t]+\t(?<url>[^ ]+) \((?:fetch|push)\)\n\z/
+        GIT_SSH_REGEXP   = %r{\A[^@]+@(?<host>[^:/]+)[:/](?<path>.+?)(?:\.git)?\z}
+        GIT_HTTPS_REGEXP = %r{\Ahttps://(?<host>[^/]+)/(?<path>.+?)(?:\.git)?\z}
         WILDCARD         = '/*'
-        WILDCARD_RANGE   = (..-WILDCARD.length).freeze
+        WILDCARD_RANGE   = (..-WILDCARD.length)
 
         private_constant(*constants(false))
 
