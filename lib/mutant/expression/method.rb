@@ -20,11 +20,11 @@ module Mutant
         '#' => [Matcher::Methods::Instance].freeze
       }.freeze
 
-      METHOD_NAME_PATTERN = /(?<method_name>.+)/.freeze
+      METHOD_NAME_PATTERN = /(?<method_name>.+)/
 
       private_constant(*constants(false))
 
-      REGEXP = /\A#{SCOPE_NAME_PATTERN}#{SCOPE_SYMBOL_PATTERN}#{METHOD_NAME_PATTERN}\z/.freeze
+      REGEXP = /\A#{SCOPE_NAME_PATTERN}#{SCOPE_SYMBOL_PATTERN}#{METHOD_NAME_PATTERN}\z/
 
       def initialize(*)
         super

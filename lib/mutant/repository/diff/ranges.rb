@@ -4,8 +4,8 @@ module Mutant
   module Repository
     class Diff
       module Ranges
-        DECIMAL = /(?:0|[1-9]\d*)/.freeze
-        REGEXP  = /\A@@ -(#{DECIMAL})(?:,(#{DECIMAL}))? \+(#{DECIMAL})(?:,(#{DECIMAL}))? @@/.freeze
+        DECIMAL = /(?:0|[1-9]\d*)/
+        REGEXP  = /\A@@ -(#{DECIMAL})(?:,(#{DECIMAL}))? \+(#{DECIMAL})(?:,(#{DECIMAL}))? @@/
 
         private_constant(*constants(false))
 

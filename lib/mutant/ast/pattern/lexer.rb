@@ -6,7 +6,7 @@ module Mutant
       # rubocop:disable Metrics/ClassLength
       class Lexer
         WHITESPACE     = [' ', "\t", "\n"].to_set.freeze
-        STRING_PATTERN = /\A[a-zA-Z][_a-zA-Z0-9]*\z/.freeze
+        STRING_PATTERN = /\A[a-zA-Z][_a-zA-Z0-9]*\z/
 
         SINGLE_CHAR =
           {

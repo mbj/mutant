@@ -12,7 +12,7 @@ module Mutant
 
         define_named_child(:else_body, -1)
 
-        RESCUE_INDICES = (1..-2).freeze
+        RESCUE_INDICES = (1..-2)
 
       private
 

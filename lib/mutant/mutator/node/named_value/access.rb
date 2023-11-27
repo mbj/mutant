@@ -18,7 +18,7 @@ module Mutant
 
           # Named value access emitter for instance variables
           class Ivar < Access
-            NAME_RANGE = (1..-1).freeze
+            NAME_RANGE = (1..-1)
 
             handle(:ivar)
 

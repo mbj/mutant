@@ -7,7 +7,7 @@ module Mutant
     include Anima.new(:subject, :node)
 
     CODE_DELIMITER = "\0"
-    CODE_RANGE     = (..4).freeze
+    CODE_RANGE     = (..4)
 
     # Mutation identification code
     #

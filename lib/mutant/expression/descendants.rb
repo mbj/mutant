@@ -5,7 +5,7 @@ module Mutant
     class Descendants < self
       include Anima.new(:const_name)
 
-      REGEXP = /\Adescendants:(?<const_name>.+)\z/.freeze
+      REGEXP = /\Adescendants:(?<const_name>.+)\z/
 
       def syntax
         "descendants:#{const_name}"

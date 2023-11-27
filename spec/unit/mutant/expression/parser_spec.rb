@@ -40,14 +40,14 @@ RSpec.describe Mutant::Expression::Parser do
       let(:test_a) do
         Class.new(Mutant::Expression) do
           include Unparser::Anima.new
-          const_set(:REGEXP, /\Atest-syntax\z/.freeze)
+          const_set(:REGEXP, /\Atest-syntax\z/)
         end
       end
 
       let(:test_b) do
         Class.new(Mutant::Expression) do
           include Unparser::Anima.new
-          const_set(:REGEXP, /^test-syntax$/.freeze)
+          const_set(:REGEXP, /^test-syntax$/)
         end
       end
 

@@ -48,9 +48,6 @@
   mutation_coverage: false
   mutation_generation: true
   exclude:
-  # invalid regexp on <2.7 parser
-  - test/corpus/literal/pattern.rb
-  - test/corpus/literal/since/27.rb
   # invalid regexp on <3.0 parser
   - test/corpus/literal/since/30.rb
   # invalid regexp on <3.1 parser

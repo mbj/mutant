@@ -19,7 +19,7 @@ module Mutant
 
       private_constant(*constants(false))
 
-      REGEXP = /\A#{SCOPE_NAME_PATTERN}#{SCOPE_SYMBOL_PATTERN}\z/.freeze
+      REGEXP = /\A#{SCOPE_NAME_PATTERN}#{SCOPE_SYMBOL_PATTERN}\z/
 
       def initialize(*)
         super

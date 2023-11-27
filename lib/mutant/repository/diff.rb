@@ -6,7 +6,7 @@ module Mutant
     class Diff
       include Adamantium, Anima.new(:world, :to)
 
-      FORMAT = /\A:\d{6} \d{6} [a-f\d]{40} [a-f\d]{40} [ACDMRTUX]\t(.*)\n\z/.freeze
+      FORMAT = /\A:\d{6} \d{6} [a-f\d]{40} [a-f\d]{40} [ACDMRTUX]\t(.*)\n\z/
 
       private_constant(*constants(false))
 
@@ -85,8 +85,8 @@ module Mutant
       class Path
         include Adamantium, Anima.new(:world, :to, :path)
 
-        DECIMAL = /(?:0|[1-9]\d*)/.freeze
-        REGEXP  = /\A@@ -(#{DECIMAL})(?:,(#{DECIMAL}))? \+(#{DECIMAL})(?:,(#{DECIMAL}))? @@/.freeze
+        DECIMAL = /(?:0|[1-9]\d*)/
+        REGEXP  = /\A@@ -(#{DECIMAL})(?:,(#{DECIMAL}))? \+(#{DECIMAL})(?:,(#{DECIMAL}))? @@/
 
         private_constant(*constants(false))
 
