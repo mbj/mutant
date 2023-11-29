@@ -30,7 +30,7 @@ specific:
 ```
 send
   { selector = info
-  , recevier = send{selector=logger}
+  , receiver = send{selector=logger}
   }
 ```
 
