@@ -1,4 +1,4 @@
-# v0.11.26 unreleased
+# v0.11.26 2023-12-01
 
 * [#1409](https://github.com/mbj/mutant/pull/1409)
 
