@@ -1,6 +1,8 @@
 # v0.11.26 unreleased
 
-* Drop support for ruby 2.7
+* [#1405](https://github.com/mbj/mutant/pull/1406)
+
+  Drop support for ruby 2.7.
 
 # v0.11.25 2023-10-18
 
