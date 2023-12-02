@@ -1,5 +1,10 @@
 # v0.11.26 unreleased
 
+* [#1409](https://github.com/mbj/mutant/pull/1409)
+
+  Fix config file support for AST pattern ignores. Before this fix the AST ignore
+  patterns would only be picked up when specified via CLI.
+
 * [#1405](https://github.com/mbj/mutant/pull/1406)
 
   Drop support for ruby 2.7.
