@@ -49,7 +49,7 @@ module Mutant
 
       def merge(other)
         with(
-          ignore_patterns: other.ignore_patterns,
+          ignore_patterns: other.ignore_patterns.any? ? other.ignore_patterns : ignore_patterns,
           operators:       other.operators || operators,
           timeout:         other.timeout || timeout
         )

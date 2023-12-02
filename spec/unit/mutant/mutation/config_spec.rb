@@ -28,11 +28,22 @@ RSpec.describe Mutant::Mutation::Config do
 
     context 'ignore patterns' do
       let(:key)            { :ignore_patterns }
-      let(:original_value) { :original        }
-      let(:other_value)    { :other           }
+      let(:original_value) { %i[original]     }
 
-      it 'returns other value' do
-        expect(apply.ignore_patterns).to be(:other)
+      context 'when other has ignore patterns' do
+        let(:other_value) { %i[other] }
+
+        it 'returns other value' do
+          expect(apply.ignore_patterns).to eql(%i[other])
+        end
+      end
+
+      context 'when other has no ignore patterns' do
+        let(:other_value) { [] }
+
+        it 'returns other value' do
+          expect(apply.ignore_patterns).to eql(%i[original])
+        end
       end
     end
 
