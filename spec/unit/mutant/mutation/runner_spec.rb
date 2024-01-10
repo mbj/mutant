@@ -8,7 +8,8 @@ RSpec.describe Mutant::Mutation::Runner do
     let(:emit_mutation_worker_process_start) { instance_double(Proc)                           }
     let(:env_result)                         { instance_double(Mutant::Result::Env)            }
     let(:reporter)                           { instance_double(Mutant::Reporter, delay: delay) }
-    let(:world)                              { fake_world                                      }
+    let(:world)                              { instance_double(Mutant::World)                  }
+    let(:timer)                              { instance_double(Mutant::Timer)                  }
 
     let(:env) do
       instance_double(
@@ -55,6 +56,7 @@ RSpec.describe Mutant::Mutation::Runner do
     end
 
     before do
+      allow(world).to receive_messages(timer: timer)
       allow(world.timer).to receive_messages(now: 1.0)
     end
 
@@ -69,6 +71,11 @@ RSpec.describe Mutant::Mutation::Runner do
             receiver:  reporter,
             selector:  :start,
             arguments: [env]
+          },
+          {
+            receiver:  world,
+            selector:  :process_warmup,
+            arguments: []
           },
           {
             receiver:  env,
@@ -146,6 +153,11 @@ RSpec.describe Mutant::Mutation::Runner do
             receiver:  reporter,
             selector:  :start,
             arguments: [env]
+          },
+          {
+            receiver:  world,
+            selector:  :process_warmup,
+            arguments: []
           },
           {
             receiver:  env,

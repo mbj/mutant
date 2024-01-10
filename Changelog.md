@@ -1,12 +1,15 @@
 # v0.11.28
 
-* Fix CLI parsing issue where arguments given to `mutant environment` where silently ignored.
-  [#1416](https://github.com/mbj/mutant/pull/1416)
+* [#1416](https://github.com/mbj/mutant/pull/1416)
+  Fix CLI parsing issue where arguments given to `mutant environment` where silently ignored.
 
-* Change to report efficiency instead of overhead.
+* [#1415](https://github.com/mbj/mutant/pull/1415)
+  Change to report efficiency instead of overhead.
   Efficiency is defined by `killtime / runtime`.
 
-  [#1415](https://github.com/mbj/mutant/pull/1415)
+* [#1413](https://github.com/mbj/mutant/pull/1413)
+
+  Add `Process.warmup` optimization for ruby-3.3+ which yields a noticable speed improvement.
 
 # v0.11.27 2023-12-01
 
