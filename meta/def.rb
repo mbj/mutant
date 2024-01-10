@@ -230,35 +230,37 @@ if RUBY_VERSION >= '3.2'
     mutation 'def foo(**); {}; end'
   end
 
-  Mutant::Meta::Example.add :hash do
-    source 'def foo(**); bar { { ** } }; end'
+  if RUBY_VERSION <= '3.3'
+    Mutant::Meta::Example.add :hash do
+      source 'def foo(**); bar { { ** } }; end'
 
-    mutation 'def foo(**); bar { nil }; end'
-    mutation 'def foo(**); bar { raise }; end'
-    mutation 'def foo(**); bar { {} }; end'
-    mutation 'def foo(**); bar { }; end'
-    mutation 'def foo(**); bar; end'
-    mutation 'def foo(**); end'
-    mutation 'def foo(**); nil; end'
-    mutation 'def foo(**); raise; end'
-    mutation 'def foo(**); super; end'
-    mutation 'def foo(**); { ** }; end'
-  end
+      mutation 'def foo(**); bar { nil }; end'
+      mutation 'def foo(**); bar { raise }; end'
+      mutation 'def foo(**); bar { {} }; end'
+      mutation 'def foo(**); bar { }; end'
+      mutation 'def foo(**); bar; end'
+      mutation 'def foo(**); end'
+      mutation 'def foo(**); nil; end'
+      mutation 'def foo(**); raise; end'
+      mutation 'def foo(**); super; end'
+      mutation 'def foo(**); { ** }; end'
+    end
 
-  Mutant::Meta::Example.add :hash do
-    source 'def foo(*); bar { boz(*) }; end'
+    Mutant::Meta::Example.add :hash do
+      source 'def foo(*); bar { boz(*) }; end'
 
-    mutation 'def foo(*); bar { boz }; end'
-    mutation 'def foo(*); bar { nil }; end'
-    mutation 'def foo(*); bar { raise }; end'
-    mutation 'def foo(*); bar { }; end'
-    mutation 'def foo(*); bar.boz(*); end'
-    mutation 'def foo(*); bar; end'
-    mutation 'def foo(*); boz(*); end'
-    mutation 'def foo(*); end'
-    mutation 'def foo(*); nil; end'
-    mutation 'def foo(*); raise; end'
-    mutation 'def foo(*); super; end'
+      mutation 'def foo(*); bar { boz }; end'
+      mutation 'def foo(*); bar { nil }; end'
+      mutation 'def foo(*); bar { raise }; end'
+      mutation 'def foo(*); bar { }; end'
+      mutation 'def foo(*); bar.boz(*); end'
+      mutation 'def foo(*); bar; end'
+      mutation 'def foo(*); boz(*); end'
+      mutation 'def foo(*); end'
+      mutation 'def foo(*); nil; end'
+      mutation 'def foo(*); raise; end'
+      mutation 'def foo(*); super; end'
+    end
   end
 end
 
