@@ -206,6 +206,7 @@ module Mutant
           emit(receiver) if receiver && !left_op_assignment?
         end
 
+        # rubocop:disable Style/HashEachMethods - its not a hash ;)
         def mutate_arguments
           emit_type(receiver, selector)
           remaining_children_with_index.each do |_node, index|

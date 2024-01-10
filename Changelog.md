@@ -1,3 +1,9 @@
+# v0.11.27 2023-12-01
+
+* [#1414](https://github.com/mbj/mutant/pull/1414)
+
+  Update to parser-3.3.0 dependency.
+
 # v0.11.26 2023-12-01
 
 * [#1409](https://github.com/mbj/mutant/pull/1409)
