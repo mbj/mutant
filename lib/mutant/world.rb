@@ -82,5 +82,9 @@ module Mutant
     def record(name, &block)
       recorder.record(name, &block)
     end
+
+    def process_warmup
+      process.warmup if process.respond_to?(:warmup)
+    end
   end # World
 end # Mutant

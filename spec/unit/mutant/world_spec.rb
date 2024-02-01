@@ -140,4 +140,43 @@ RSpec.describe Mutant::World do
       end
     end
   end
+
+  describe '#process_warmup' do
+    let(:process) { double(Process) }
+
+    subject { super().with(process: process) }
+
+    def apply
+      subject.process_warmup
+    end
+
+    before do
+      allow(process).to receive_messages(
+        respond_to?: respond_to?,
+        warmup:      process
+      )
+    end
+
+    context 'when process supports warmup' do
+      let(:respond_to?) { true }
+
+      it 'performs warmup' do
+        apply
+
+        expect(process).to have_received(:respond_to?).with(:warmup).ordered
+        expect(process).to have_received(:warmup).ordered
+      end
+    end
+
+    context 'when process supports warmup' do
+      let(:respond_to?) { false }
+
+      it 'performs warmup' do
+        apply
+
+        expect(process).to have_received(:respond_to?).with(:warmup)
+        expect(process).to_not have_received(:warmup)
+      end
+    end
+  end
 end
