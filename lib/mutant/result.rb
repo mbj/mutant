@@ -50,17 +50,6 @@ module Mutant
 
     private_constant(*constants(false))
 
-    # Mutant overhead running mutatet tests
-    #
-    # This is NOT the overhead of mutation testing, just an engine specific
-    # measurement for the efficiency of the parallelization engine, kill
-    # isolation etc.
-    #
-    # @return [Float]
-    def overhead
-      runtime - killtime
-    end
-
     # Hook called when module gets included
     #
     # @param [Class, Module] host

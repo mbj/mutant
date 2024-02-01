@@ -77,7 +77,7 @@ Kills:           1003
 Alive:           0
 Runtime:         9.68s
 Killtime:        3.80s
-Overhead:        154.30%
+Efficiency:      39.25%
 Mutations/s:     103.67
 Coverage:        100.00%
 ```
@@ -140,7 +140,7 @@ Kills:           1008
 Alive:           1
 Runtime:         9.38s
 Killtime:        3.47s
-Overhead:        170.06%
+Efficiency:      39.25%
 Mutations/s:     107.60
 Coverage:        99.90%
 ```

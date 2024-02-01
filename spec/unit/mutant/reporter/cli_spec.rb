@@ -99,7 +99,7 @@ RSpec.describe Mutant::Reporter::CLI do
       Timeouts:        0
       Runtime:         4.00s
       Killtime:        2.00s
-      Overhead:        100.00%
+      Efficiency:      50.00%
       Mutations/s:     0.50
       Coverage:        100.00%
     REPORT
