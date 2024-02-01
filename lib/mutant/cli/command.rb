@@ -6,7 +6,7 @@ module Mutant
     class Command
       include AbstractType, Anima.new(
         :main,
-        :parent,
+        :parent_names,
         :print_profile,
         :world,
         :zombie
@@ -27,10 +27,10 @@ module Mutant
       # @return [Command]
       #
       # rubocop:disable Metrics/ParameterLists
-      def self.parse(arguments:, parent: nil, print_profile: false, world:, zombie: false)
+      def self.parse(arguments:, parent_names: nil, print_profile: false, world:, zombie: false)
         new(
           main:          nil,
-          parent:        parent,
+          parent_names:  parent_names,
           print_profile: print_profile,
           world:         world,
           zombie:        zombie
@@ -63,7 +63,7 @@ module Mutant
       #
       # @return [String]
       def full_name
-        [*parent&.full_name, self.class.command_name].join(' ')
+        [*parent_names, self.class.command_name].join(' ')
       end
 
       alias_method :print_profile?, :print_profile
@@ -97,11 +97,15 @@ module Mutant
           add_global_options(parser)
           add_subcommands(parser)
 
-          self.class::OPTIONS.each do |method_name|
+          effective_options.each do |method_name|
             2.times { parser.separator(nil) }
             __send__(method_name, parser)
           end
         end
+      end
+
+      def effective_options
+        self.class::OPTIONS
       end
 
       def capture_main(&block)
@@ -189,7 +193,7 @@ module Mutant
           find_command(command_name).bind do |command|
             command.parse(
               arguments:     arguments,
-              parent:        self,
+              parent_names:  [*parent_names, self.class::NAME],
               print_profile: print_profile,
               world:         world,
               zombie:        zombie
