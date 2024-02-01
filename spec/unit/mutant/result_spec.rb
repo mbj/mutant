@@ -22,12 +22,4 @@ RSpec.describe Mutant::Result do
       expect(object.length).to be(1)
     end
   end
-
-  describe '#overhead' do
-    subject { object.overhead }
-
-    it 'returns difference between runtime and killtime' do
-      should eql(2.0)
-    end
-  end
 end

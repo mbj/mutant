@@ -29,7 +29,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Timeouts:        0
         Runtime:         4.00s
         Killtime:        0.00s
-        Overhead:        Inf%
+        Efficiency:      0.00%
         Mutations/s:     0.00
         Coverage:        100.00%
       STR
@@ -56,7 +56,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Timeouts:        0
         Runtime:         4.00s
         Killtime:        2.00s
-        Overhead:        100.00%
+        Efficiency:      50.00%
         Mutations/s:     0.50
         Coverage:        100.00%
       STR
@@ -85,7 +85,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Timeouts:        0
         Runtime:         4.00s
         Killtime:        2.00s
-        Overhead:        100.00%
+        Efficiency:      50.00%
         Mutations/s:     0.50
         Coverage:        50.00%
       STR

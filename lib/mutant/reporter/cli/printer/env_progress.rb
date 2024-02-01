@@ -14,7 +14,6 @@ module Mutant
             :coverage,
             :env,
             :killtime,
-            :overhead,
             :runtime
           )
 
@@ -25,7 +24,7 @@ module Mutant
             [:info,   'Timeouts:        %s',      :amount_timeouts        ],
             [:info,   'Runtime:         %0.2fs',  :runtime                ],
             [:info,   'Killtime:        %0.2fs',  :killtime               ],
-            [:info,   'Overhead:        %0.2f%%', :overhead_percent       ],
+            [:info,   'Efficiency:      %0.2f%%', :efficiency_percent     ],
             [:info,   'Mutations/s:     %0.2f',   :mutations_per_second   ],
             [:status, 'Coverage:        %0.2f%%', :coverage_percent       ]
           ].each(&:freeze)
@@ -50,8 +49,8 @@ module Mutant
             coverage * 100
           end
 
-          def overhead_percent
-            (overhead / killtime) * 100
+          def efficiency_percent
+            (killtime / runtime) * 100
           end
         end # EnvProgress
       end # Printer

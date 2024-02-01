@@ -14,7 +14,6 @@ module Mutant
             :amount_mutations_alive,
             :amount_mutations_killed,
             :killtime,
-            :overhead,
             :runtime
           )
 

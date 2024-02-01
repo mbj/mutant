@@ -1,3 +1,10 @@
+# v0.11.28
+
+* Change to report efficiency instead of overhead.
+  Efficiency is defined by `killtime / runtime`.
+
+  [#1415](https://github.com/mbj/mutant/pull/1415)
+
 # v0.11.27 2023-12-01
 
 * [#1414](https://github.com/mbj/mutant/pull/1414)
