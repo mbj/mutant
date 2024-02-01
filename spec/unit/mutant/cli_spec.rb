@@ -555,6 +555,38 @@ RSpec.describe Mutant::CLI do
       }
     end
 
+    make do
+      message = <<~MESSAGE
+        usage: mutant environment <subject|show|irb|test> [options]
+
+        Summary: Environment subcommands
+
+        mutant version: #{Mutant::VERSION}
+
+        Global Options:
+
+                --help                       Print help
+                --version                    Print mutants version
+                --profile                    Profile mutant execution
+                --zombie                     Run mutant zombified
+
+        Available subcommands:
+
+        subject - Subject subcommands
+        show    - Display environment without coverage analysis
+        irb     - Run irb with mutant environment loaded
+        test    - test subcommands
+      MESSAGE
+
+      {
+        arguments:              %w[environment --help],
+        expected_events:        [[:stdout, :puts, message]],
+        expected_exit:          true,
+        expected_print_profile: false,
+        expected_zombie:        false
+      }
+    end
+
     context 'pathname with null bytes' do
       let(:arguments) { %w[util mutation] + ["\0"] }
 

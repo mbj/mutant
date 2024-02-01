@@ -56,6 +56,10 @@ module Mutant
           set(matcher: @config.matcher.add(attribute, value))
         end
 
+        def effective_options
+          instance_of?(Environment) ? EMPTY_ARRAY : super()
+        end
+
         # rubocop:disable Metrics/MethodLength
         def add_environment_options(parser)
           parser.separator('Environment:')

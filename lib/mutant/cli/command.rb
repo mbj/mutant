@@ -97,11 +97,15 @@ module Mutant
           add_global_options(parser)
           add_subcommands(parser)
 
-          self.class::OPTIONS.each do |method_name|
+          effective_options.each do |method_name|
             2.times { parser.separator(nil) }
             __send__(method_name, parser)
           end
         end
+      end
+
+      def effective_options
+        self.class::OPTIONS
       end
 
       def capture_main(&block)
