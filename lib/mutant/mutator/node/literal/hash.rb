@@ -36,7 +36,9 @@ module Mutant
           private
 
             def dispatch
-              emit_key_mutations
+              emit_key_mutations do |mutation|
+                !mutation.eql?(s(:nil))
+              end
               emit_value_mutations
             end
 

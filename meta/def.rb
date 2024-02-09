@@ -226,7 +226,6 @@ if RUBY_VERSION >= '3.2'
     mutation 'def foo(**); { ** }; end'
     mutation 'def foo(**); { default: nil }; end'
     mutation 'def foo(**); { default__mutant__: nil, ** }; end'
-    mutation 'def foo(**); { nil => nil, ** }; end'
     mutation 'def foo(**); {}; end'
   end
 

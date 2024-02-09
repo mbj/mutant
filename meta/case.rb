@@ -2,6 +2,20 @@
 
 Mutant::Meta::Example.add :case do
   source <<-RUBY
+    case nil
+    in { a: nil }
+    end
+  RUBY
+
+  mutation <<~RUBY
+    case nil
+    in {a__mutant__: nil}
+    end
+  RUBY
+end
+
+Mutant::Meta::Example.add :case do
+  source <<-RUBY
     case
     when true
     else

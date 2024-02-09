@@ -1,14 +1,14 @@
 PATH
   remote: ..
   specs:
-    mutant (0.11.27)
+    mutant (0.11.28)
       diff-lcs (~> 1.3)
       parser (~> 3.3.0)
       regexp_parser (~> 2.8.2)
       sorbet-runtime (~> 0.5.0)
       unparser (~> 0.6.9)
-    mutant-rspec (0.11.27)
-      mutant (= 0.11.27)
+    mutant-rspec (0.11.28)
+      mutant (= 0.11.28)
       rspec-core (>= 3.8.0, < 4.0.0)
 
 GEM
