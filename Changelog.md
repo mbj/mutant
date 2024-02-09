@@ -1,4 +1,7 @@
-# v0.11.28
+# v0.11.28 2024-02-09
+
+* [#1418](https://github.com/mbj/mutant/pull/1418)
+  Fix mutation to invalid pattern match.
 
 * [#1416](https://github.com/mbj/mutant/pull/1416)
   Fix CLI parsing issue where arguments given to `mutant environment` where silently ignored.
