@@ -15,8 +15,6 @@ module Mutant
       def self.run_mutation_analysis(env)
         reporter = reporter(env)
 
-        env.world.process_warmup
-
         env
           .record(:analysis) { run_driver(reporter, async_driver(env)) }
           .tap { |result| env.record(:report) { reporter.report(result) } }

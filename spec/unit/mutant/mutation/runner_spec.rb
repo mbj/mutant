@@ -73,11 +73,6 @@ RSpec.describe Mutant::Mutation::Runner do
             arguments: [env]
           },
           {
-            receiver:  world,
-            selector:  :process_warmup,
-            arguments: []
-          },
-          {
             receiver:  env,
             selector:  :record,
             arguments: [:analysis],
@@ -153,11 +148,6 @@ RSpec.describe Mutant::Mutation::Runner do
             receiver:  reporter,
             selector:  :start,
             arguments: [env]
-          },
-          {
-            receiver:  world,
-            selector:  :process_warmup,
-            arguments: []
           },
           {
             receiver:  env,

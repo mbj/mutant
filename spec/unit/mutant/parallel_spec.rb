@@ -18,7 +18,15 @@ RSpec.describe Mutant::Parallel do
     let(:var_running)      { instance_double(Mutant::Variable::MVar, :running)     }
     let(:var_sink)         { instance_double(Mutant::Variable::IVar, :sink)        }
     let(:var_source)       { instance_double(Mutant::Variable::IVar, :source)      }
-    let(:world)            { fake_world                                            }
+
+    let(:world) do
+      instance_double(
+        Mutant::World,
+        condition_variable: class_double(ConditionVariable),
+        mutex:              class_double(Mutex),
+        thread:             class_double(Thread)
+      )
+    end
 
     let(:worker_a) do
       instance_double(described_class::Worker, :a, index: 0)
@@ -109,6 +117,11 @@ RSpec.describe Mutant::Parallel do
         mvar(var_running, value: 2),
         ivar(var_sink, value: sink),
         ivar(var_source, value: source),
+        {
+          receiver:  world,
+          selector:  :process_warmup,
+          arguments: []
+        },
         worker(0, 'parallel-process-0', worker_a),
         worker(1, 'parallel-process-1', worker_b),
         *thread('parallel-thread-0', thread_a, worker_a),

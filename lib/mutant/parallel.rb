@@ -10,7 +10,10 @@ module Mutant
     #
     # @return [Driver]
     def self.async(world, config)
-      shared  = shared_state(world, config)
+      shared = shared_state(world, config)
+
+      world.process_warmup
+
       workers = workers(world, config, shared)
 
       Driver.new(
