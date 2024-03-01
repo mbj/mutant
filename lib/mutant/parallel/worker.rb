@@ -9,6 +9,7 @@ module Mutant
           :index,
           :on_process_start,
           :process_name,
+          :timeout,
           :var_active_jobs,
           :var_final,
           :var_running,
@@ -18,38 +19,49 @@ module Mutant
         )
       end
 
-      include Adamantium, Anima.new(:connection, :config, :pid)
+      include Adamantium, Anima.new(:config, :connection, :log_reader, :pid, :response_reader)
 
       def self.start(**attributes)
         start_config(Config.new(**attributes))
       end
 
       # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/AbcSize
       def self.start_config(config)
         world   = config.world
         io      = world.io
         marshal = world.marshal
 
-        request  = Pipe.from_io(io)
-        response = Pipe.from_io(io)
+        log, request, response = Pipe.from_io(io), Pipe.from_io(io), Pipe.from_io(io)
 
         pid = world.process.fork do
+          log_writer = log.to_writer
+
+          world.stderr.reopen(log_writer)
+          world.stdout.reopen(log_writer)
+
           run_child(
             config:     config,
-            connection: Pipe::Connection.from_pipes(marshal: marshal, reader: request, writer: response)
+            connection: Connection.from_pipes(marshal: marshal, reader: request, writer: response),
+            log_writer: log_writer
           )
         end
 
+        connection = Connection.from_pipes(marshal: marshal, reader: response, writer: request)
+
         new(
-          pid:        pid,
-          config:     config,
-          connection: Pipe::Connection.from_pipes(marshal: marshal, reader: response, writer: request)
+          config:          config,
+          connection:      connection,
+          log_reader:      log.to_reader,
+          response_reader: connection.reader.io,
+          pid:             pid
         )
       end
       private_class_method :start_config
+      # rubocop:enable Metrics/AbcSize
       # rubocop:enable Metrics/MethodLength
 
-      def self.run_child(config:, connection:)
+      def self.run_child(config:, connection:, log_writer:)
         world = config.world
 
         world.thread.current.name = config.process_name
@@ -58,7 +70,9 @@ module Mutant
         config.on_process_start.call(index: config.index)
 
         loop do
-          connection.send_value(config.block.call(connection.receive_value))
+          value = config.block.call(connection.receive_value)
+          log_writer.flush
+          connection.send_value(value)
         end
       end
       private_class_method :run_child
@@ -67,26 +81,39 @@ module Mutant
         config.index
       end
 
-      # Run worker payload
+      # Run worker loop
       #
       # @return [self]
+      #
+      # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/AbcSize
       def call
         loop do
           job = next_job or break
 
           job_start(job)
 
-          result = connection.call(job.payload)
+          connection.send_value(job.payload)
+
+          response = Connection::Reader.read_response(
+            deadline:        config.world.deadline(config.timeout),
+            io:              config.world.io,
+            log_reader:      log_reader,
+            marshal:         config.world.marshal,
+            response_reader: response_reader
+          )
 
           job_done(job)
 
-          break if add_result(result)
+          break if add_response(response) || response.error
         end
 
         finalize
 
         self
       end
+      # rubocop:enable Metrics/AbcSize
+      # rubocop:enable Metrics/MethodLength
 
       def signal
         process.kill('TERM', pid)
@@ -110,9 +137,9 @@ module Mutant
         end
       end
 
-      def add_result(result)
+      def add_response(response)
         config.var_sink.with do |sink|
-          sink.result(result)
+          sink.response(response)
           sink.stop?
         end
       end

@@ -4,6 +4,8 @@ module Mutant
   class Mutation
     module Runner
       class Sink
+        include Parallel::Sink
+
         include Anima.new(:env)
 
         # Initialize object
@@ -35,11 +37,13 @@ module Mutant
 
         # Handle mutation finish
         #
-        # @param [Result::MutationIndex] mutation_index_result
+        # @param [Parallel::Response] response
         #
         # @return [self]
-        def result(mutation_index_result)
-          mutation_result = mutation_result(mutation_index_result)
+        def response(response)
+          fail response.error if response.error
+
+          mutation_result = mutation_result(response.result)
 
           subject = mutation_result.mutation.subject
 

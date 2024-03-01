@@ -3,37 +3,63 @@
 describe Mutant::Mutation::Runner::Sink do
   setup_shared_context
 
+  let(:mutation_a_index_response) do
+    Mutant::Parallel::Response.new(
+      result: mutation_a_index_result,
+      log:    '',
+      error:  nil
+    )
+  end
+
+  let(:mutation_b_index_response) do
+    Mutant::Parallel::Response.new(
+      result: mutation_b_index_result,
+      log:    '',
+      error:  nil
+    )
+  end
+
   shared_context 'one result' do
     before do
-      object.result(mutation_a_index_result)
+      object.response(mutation_a_index_response)
     end
   end
 
   shared_context 'two results' do
     before do
-      object.result(mutation_a_index_result)
-      object.result(mutation_b_index_result)
+      object.response(mutation_a_index_response)
+      object.response(mutation_b_index_response)
     end
   end
 
   let(:object) { described_class.new(env: env) }
 
-  describe '#result' do
-    subject { object.result(mutation_a_index_result) }
+  describe '#response' do
+    subject { object.response(mutation_a_index_response) }
 
-    it 'aggregates results in #status' do
-      subject
-      object.result(mutation_b_index_result)
-      expect(object.status).to eql(
-        Mutant::Result::Env.new(
-          env:             env,
-          runtime:         0.0,
-          subject_results: [subject_a_result]
+    context 'on success' do
+      it 'aggregates results in #status' do
+        subject
+        object.response(mutation_b_index_response)
+        expect(object.status).to eql(
+          Mutant::Result::Env.new(
+            env:             env,
+            runtime:         0.0,
+            subject_results: [subject_a_result]
+          )
         )
-      )
+      end
+
+      it_should_behave_like 'a command method'
     end
 
-    it_should_behave_like 'a command method'
+    context 'on error' do
+      let(:mutation_a_index_response) { super().with(error: EOFError) }
+
+      it 're-raises the error' do
+        expect { subject }.to raise_error(EOFError)
+      end
+    end
   end
 
   describe '#status' do

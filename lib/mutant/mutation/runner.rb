@@ -22,7 +22,7 @@ module Mutant
       private_class_method :run_mutation_analysis
 
       def self.async_driver(env)
-        Parallel.async(env.world, mutation_test_config(env))
+        Parallel.async(world: env.world, config: mutation_test_config(env))
       end
       private_class_method :async_driver
 
@@ -47,6 +47,7 @@ module Mutant
           process_name:     'mutant-worker-process',
           sink:             Sink.new(env: env),
           source:           Parallel::Source::Array.new(jobs: env.mutations.each_index.to_a),
+          timeout:          nil,
           thread_name:      'mutant-worker-thread'
         )
       end
