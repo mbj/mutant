@@ -3,9 +3,9 @@
 RSpec.describe Mutant::Reporter::CLI do
   setup_shared_context
 
-  let(:format) { described_class::Format::Progressive.new(tty: tty?) }
-  let(:object) { described_class.new(format: format, output: output) }
-  let(:tty?)   { false                                               }
+  let(:format) { described_class::Format::Progressive.new(tty: tty?)                        }
+  let(:object) { described_class.new(format: format, output: output, print_warnings: false) }
+  let(:tty?)   { false                                                                      }
 
   def contents
     output.rewind
@@ -26,18 +26,18 @@ RSpec.describe Mutant::Reporter::CLI do
       let(:tty?)   { true                            }
       let(:output) { instance_double(IO, tty?: true) }
 
-      it { should eql(described_class.new(format: format, output: output)) }
+      it { should eql(described_class.new(format: format, output: output, print_warnings: false)) }
     end
 
     context 'when output is not a tty' do
       context 'and does not respond to #tty?' do
         let(:output) { nil }
 
-        it { should eql(described_class.new(format: format, output: output)) }
+        it { should eql(described_class.new(format: format, output: output, print_warnings: false)) }
       end
 
       context 'and does respond to #tty?' do
-        it { should eql(described_class.new(format: format, output: output)) }
+        it { should eql(described_class.new(format: format, output: output, print_warnings: false)) }
       end
     end
   end
@@ -47,7 +47,15 @@ RSpec.describe Mutant::Reporter::CLI do
 
     let(:message) { 'message' }
 
-    it_reports("message\n")
+    context 'when print warnings is disabled' do
+      it_reports('')
+    end
+
+    context 'when print warnings is enabled' do
+      let(:object) { super().with(print_warnings: true) }
+
+      it_reports("message\n")
+    end
   end
 
   describe '#delay' do
