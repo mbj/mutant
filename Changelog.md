@@ -1,3 +1,8 @@
+# v0.11.29 [unreleased]
+
+* [#1421](https://github.com/mbj/mutant/pull/1421)
+  Change to optional warning display via --print-warnings environment option.
+
 # v0.11.28 2024-02-09
 
 * [#1418](https://github.com/mbj/mutant/pull/1418)

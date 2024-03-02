@@ -3,6 +3,7 @@
 module Mutant
   module CLI
     class Command
+      # rubocop:disable Metrics/ClassLength
       class Environment < self
         NAME              = 'environment'
         SHORT_DESCRIPTION = 'Environment subcommands'
@@ -13,6 +14,7 @@ module Mutant
             add_runner_options
             add_integration_options
             add_matcher_options
+            add_reporter_options
           ].freeze
 
       private
@@ -126,7 +128,16 @@ module Mutant
             set(mutation: @config.mutation.with(timeout: Float(number)))
           end
         end
+
+        def add_reporter_options(parser)
+          parser.separator('Reporting:')
+
+          parser.on('--print-warnings', 'Print warnings') do
+            set(reporter: @config.reporter.with(print_warnings: true))
+          end
+        end
       end # Run
+      # rubocop:enable Metrics/ClassLength
     end # Command
   end # CLI
 end # Mutant

@@ -4,7 +4,7 @@ module Mutant
   class Reporter
     # Reporter that reports in human readable format
     class CLI < self
-      include Anima.new(:output, :format)
+      include Anima.new(:print_warnings, :output, :format)
 
       # Build reporter
       #
@@ -13,8 +13,9 @@ module Mutant
       # @return [Reporter::CLI]
       def self.build(output)
         new(
-          format: Format::Progressive.new(tty: output.respond_to?(:tty?) && output.tty?),
-          output: output
+          format:         Format::Progressive.new(tty: output.respond_to?(:tty?) && output.tty?),
+          print_warnings: false,
+          output:         output
         )
       end
 
@@ -51,7 +52,7 @@ module Mutant
       #
       # @return [self]
       def warn(message)
-        output.puts(message)
+        output.puts(message) if print_warnings
         self
       end
 

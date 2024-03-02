@@ -320,6 +320,10 @@ RSpec.describe Mutant::CLI do
                 --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
                 --start-subject EXPRESSION   Start mutation testing at a specific subject
                 --since REVISION             Only select subjects touched since REVISION
+
+
+        Reporting:
+                --print-warnings             Print warnings
       MESSAGE
 
       {
@@ -370,6 +374,10 @@ RSpec.describe Mutant::CLI do
                 --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
                 --start-subject EXPRESSION   Start mutation testing at a specific subject
                 --since REVISION             Only select subjects touched since REVISION
+
+
+        Reporting:
+                --print-warnings             Print warnings
       MESSAGE
 
       {
@@ -420,6 +428,10 @@ RSpec.describe Mutant::CLI do
                 --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
                 --start-subject EXPRESSION   Start mutation testing at a specific subject
                 --since REVISION             Only select subjects touched since REVISION
+
+
+        Reporting:
+                --print-warnings             Print warnings
       MESSAGE
 
       {
@@ -862,6 +874,48 @@ RSpec.describe Mutant::CLI do
 
         include_examples 'CLI run'
       end
+    end
+
+    context 'environment subject list --print-warnings' do
+      include_context 'environment'
+
+      let(:arguments) { %w[environment subject list --print-warnings] }
+
+      let(:expected_exit) { true }
+
+      let(:expected_events) do
+        [
+          %i[
+            record
+            config
+          ],
+          [
+            :load_config,
+            {
+              cli_config: expected_cli_config.with(
+                reporter: expected_cli_config.reporter.with(print_warnings: true)
+              ),
+              world:      world
+            }.inspect
+          ],
+          [
+            :bootstrap,
+            Mutant::Env.empty(world, bootstrap_config).inspect
+          ],
+          [
+            :stdout,
+            :puts,
+            'Subjects in environment: 1'
+          ],
+          [
+            :stdout,
+            :puts,
+            'Object#send'
+          ]
+        ]
+      end
+
+      include_examples 'CLI run'
     end
 
     context 'environment subject list' do
