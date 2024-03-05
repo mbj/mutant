@@ -51,7 +51,8 @@ RSpec.describe Mutant::Mutation::Runner do
         process_name:     'mutant-worker-process',
         sink:             described_class::Sink.new(env: env),
         source:           Mutant::Parallel::Source::Array.new(jobs: env.mutations.each_index.to_a),
-        thread_name:      'mutant-worker-thread'
+        thread_name:      'mutant-worker-thread',
+        timeout:          nil
       )
     end
 
@@ -93,7 +94,7 @@ RSpec.describe Mutant::Mutation::Runner do
           {
             receiver:  Mutant::Parallel,
             selector:  :async,
-            arguments: [world, parallel_config],
+            arguments: [{ world: world, config: parallel_config }],
             reaction:  { return: driver }
           },
           {
@@ -170,7 +171,7 @@ RSpec.describe Mutant::Mutation::Runner do
           {
             receiver:  Mutant::Parallel,
             selector:  :async,
-            arguments: [world, parallel_config],
+            arguments: [{ world: world, config: parallel_config }],
             reaction:  { return: driver }
           },
           {

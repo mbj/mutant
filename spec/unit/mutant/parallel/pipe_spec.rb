@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Mutant::Pipe do
+RSpec.describe Mutant::Parallel::Pipe do
   let(:io)     { class_double(IO)        }
   let(:reader) { instance_double(IO, :a) }
   let(:writer) { instance_double(IO, :a) }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Mutant::Pipe::Connection do
+RSpec.describe Mutant::Parallel::Connection do
   let(:marshal)        { class_double(Marshal) }
   let(:request)        { 1                     }
   let(:request_bytes)  { 'request-bytes'       }
@@ -9,7 +9,7 @@ RSpec.describe Mutant::Pipe::Connection do
 
   let(:pipe_a) do
     instance_double(
-      Mutant::Pipe,
+      Mutant::Parallel::Pipe,
       to_reader: instance_double(IO, :reader_a),
       to_writer: instance_double(IO, :writer_a)
     )
@@ -17,7 +17,7 @@ RSpec.describe Mutant::Pipe::Connection do
 
   let(:pipe_b) do
     instance_double(
-      Mutant::Pipe,
+      Mutant::Parallel::Pipe,
       to_reader: instance_double(IO, :reader_b),
       to_writer: instance_double(IO, :writer_b)
     )
@@ -187,25 +187,6 @@ RSpec.describe Mutant::Pipe::Connection do
             expect { apply }.to raise_error(described_class::Error, 'Unexpected EOF')
           end
         end
-      end
-    end
-  end
-
-  describe '#call' do
-    def apply
-      object.call(request)
-    end
-
-    let(:raw_expectations) do
-      [
-        *send_request,
-        *receive_response
-      ]
-    end
-
-    it 'performs expected events' do
-      verify_events do
-        expect(apply).to eql(response)
       end
     end
   end

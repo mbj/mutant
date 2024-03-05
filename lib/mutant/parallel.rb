@@ -9,7 +9,7 @@ module Mutant
     # @param [Config] config
     #
     # @return [Driver]
-    def self.async(world, config)
+    def self.async(config:, world:)
       shared = shared_state(world, config)
 
       world.process_warmup
@@ -23,6 +23,7 @@ module Mutant
       )
     end
 
+    # rubocop:disable Metric/MethodLength
     def self.workers(world, config, shared)
       Array.new(config.jobs) do |index|
         Worker.start(
@@ -30,12 +31,14 @@ module Mutant
           index:            index,
           on_process_start: config.on_process_start,
           process_name:     "#{config.process_name}-#{index}",
+          timeout:          config.timeout,
           world:            world,
           **shared
         )
       end
     end
     private_class_method :workers
+    # rubocop:enable Metric/MethodLength
 
     def self.shared_state(world, config)
       {
@@ -69,16 +72,16 @@ module Mutant
     end
     private_class_method :shared
 
-    # Job result sink
-    class Sink
+    # Job result sink signature
+    module Sink
       include AbstractType
 
       # Process job result
       #
-      # @param [Object]
+      # @param [Response]
       #
       # @return [self]
-      abstract_method :result
+      abstract_method :response
 
       # The sink status
       #
@@ -100,9 +103,14 @@ module Mutant
         :process_name,
         :sink,
         :source,
-        :thread_name
+        :thread_name,
+        :timeout
       )
     end # Config
+
+    class Response
+      include Anima.new(:error, :log, :result)
+    end
 
     # Parallel execution status
     class Status

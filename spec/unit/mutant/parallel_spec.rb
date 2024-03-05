@@ -3,7 +3,7 @@
 RSpec.describe Mutant::Parallel do
   describe '.async' do
     def apply
-      described_class.async(world, config)
+      described_class.async(config: config, world: world)
     end
 
     let(:block)            { instance_double(Proc)                                 }
@@ -44,7 +44,8 @@ RSpec.describe Mutant::Parallel do
         process_name:     'parallel-process',
         sink:             sink,
         source:           source,
-        thread_name:      'parallel-thread'
+        thread_name:      'parallel-thread',
+        timeout:          1.0
       )
     end
 
@@ -75,6 +76,7 @@ RSpec.describe Mutant::Parallel do
           index:            index,
           on_process_start: config.on_process_start,
           process_name:     name,
+          timeout:          1.0,
           var_active_jobs:  var_active_jobs,
           var_final:        var_final,
           var_running:      var_running,
