@@ -55,7 +55,7 @@ module Mutant
         def read_till_final
           readers = [response_reader, log_reader]
 
-          until result || error
+          until !@results.empty? || error
             status = deadline.status
 
             break timeout unless status.ok?

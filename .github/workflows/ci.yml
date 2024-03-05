@@ -84,7 +84,8 @@ jobs:
         bundle exec rspec                                            \
           spec/integration/mutant/null_spec.rb                       \
           spec/integration/mutant/isolation/fork_spec.rb             \
-          spec/integration/mutant/test_mutator_handles_types_spec.rb
+          spec/integration/mutant/test_mutator_handles_types_spec.rb \
+          spec/integration/mutant/parallel_spec.rb
   ruby-integration-minitest:
     name: Integration Minitest
     runs-on: ${{ matrix.os }}
