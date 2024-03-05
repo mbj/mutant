@@ -64,6 +64,39 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
     end
 
     context 'on result' do
+      context 'with nil result' do
+        let(:result) { nil }
+
+        let(:raw_expectations) do
+          [
+            deadline_status,
+            select([response_reader]),
+            binmode(response_reader),
+            read(io: response_reader, bytes: 4, chunk: header_segment),
+            deadline_status,
+            select([response_reader]),
+            binmode(response_reader),
+            read(
+              bytes: result_segment.bytesize,
+              chunk: result_segment,
+              io:    response_reader
+            ),
+            marshal_load
+          ]
+        end
+
+        it 'returns parallel result' do
+          verify_events do
+            expect(apply).to eql(
+              Mutant::Parallel::Response.new(
+                error:  nil,
+                log:    '',
+                result: result
+              )
+            )
+          end
+        end
+      end
       context 'with full reads' do
         let(:raw_expectations) do
           [

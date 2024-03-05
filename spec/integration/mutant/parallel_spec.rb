@@ -51,17 +51,17 @@ RSpec.describe 'parallel', mutant: false do
       [
         Mutant::Parallel::Response.new(
           error:  nil,
-          output: "Booting: 0\nPayload: 1\n",
+          log:    "Booting: 0\nPayload: 1\n",
           result: 2
         ),
         Mutant::Parallel::Response.new(
           error:  nil,
-          output: "Payload: 2\n",
+          log:    "Payload: 2\n",
           result: 4
         ),
         Mutant::Parallel::Response.new(
           error:  nil,
-          output: "Payload: 3\n",
+          log:    "Payload: 3\n",
           result: 6
         )
       ]
@@ -98,10 +98,10 @@ RSpec.describe 'parallel', mutant: false do
 
     response_a, response_b = responses
 
-    expect(response_a).to eql(Mutant::Parallel::Response.new(output: '', result: nil, error: nil))
+    expect(response_a).to eql(Mutant::Parallel::Response.new(log: '', result: nil, error: nil))
     expect(response_b.error).to be(EOFError)
     expect(response_b.result).to be(nil)
-    expect(response_b.output.match?('<main>')).to be(true)
+    expect(response_b.log.match?('<main>')).to be(true)
   end
 
   specify 'massive' do
@@ -134,12 +134,12 @@ RSpec.describe 'parallel', mutant: false do
       [
         Mutant::Parallel::Response.new(
           error:  nil,
-          output: "#{b}\n#{b}\n",
+          log:    "#{b}\n#{b}\n",
           result: b
         ),
         Mutant::Parallel::Response.new(
           error:  nil,
-          output: "#{b}#{b}\n",
+          log:    "#{b}#{b}\n",
           result: b * 2
         )
       ]
@@ -175,7 +175,7 @@ RSpec.describe 'parallel', mutant: false do
     expect(responses.length).to be(3)
 
     responses.each do |response|
-      expect(response.output.match?(/<iteration \d+>/)).to be(true)
+      expect(response.log.match?(/<iteration \d+>/)).to be(true)
     end
   end
 
@@ -233,7 +233,7 @@ RSpec.describe 'parallel', mutant: false do
     expect(sink.status).to eql(
       [
         Mutant::Parallel::Response.new(
-          output: '',
+          log:    '',
           result: nil,
           error:  Timeout
         )
