@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Matcher::Methods::Singleton, '#call' do
-  let(:object) { described_class.new(scope: class_under_test) }
-  let(:env)    { Fixtures::TEST_ENV                           }
+  let(:object) { described_class.new(scope: scope) }
+  let(:env)    { Fixtures::TEST_ENV                }
 
   let(:class_under_test) do
     parent = Module.new do
@@ -31,6 +31,13 @@ RSpec.describe Mutant::Matcher::Methods::Singleton, '#call' do
 
   let(:subjects) { [subject_a, subject_b, subject_c] }
 
+  let(:scope) do
+    Mutant::Scope.new(
+      expression: instance_double(Mutant::Expression),
+      raw:        class_under_test
+    )
+  end
+
   before do
     matcher = Mutant::Matcher::Method::Singleton
 
@@ -40,7 +47,7 @@ RSpec.describe Mutant::Matcher::Methods::Singleton, '#call' do
       method_c: subject_c
     }.each do |method, subject|
       allow(matcher).to receive(:new)
-        .with(scope: class_under_test, target_method: class_under_test.method(method))
+        .with(scope: scope, target_method: class_under_test.method(method))
         .and_return(Mutant::Matcher::Static.new(subjects: [subject]))
     end
   end

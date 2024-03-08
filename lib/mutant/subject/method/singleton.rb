@@ -13,12 +13,12 @@ module Mutant
         #
         # @return [self]
         def prepare
-          scope.singleton_class.__send__(:undef_method, name)
+          scope.raw.singleton_class.undef_method(name)
           self
         end
 
         def post_insert
-          scope.singleton_class.__send__(visibility, name)
+          scope.raw.singleton_class.__send__(visibility, name)
           self
         end
 

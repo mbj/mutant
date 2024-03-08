@@ -4,7 +4,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   subject { object.call(env) }
 
   let(:object)       { described_class.new(scope: scope, target_method: method) }
-  let(:method)       { scope.method(method_name)                                }
+  let(:method)       { scope.raw.method(method_name)                            }
   let(:type)         { :defs                                                    }
   let(:method_name)  { :foo                                                     }
   let(:method_arity) { 0                                                        }
@@ -36,7 +36,13 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   end
 
   context 'when also defined on lvar' do
-    let(:scope) { base::DefinedOnLvar }
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::DefinedOnLvar
+      )
+    end
+
     let(:expected_warnings) do
       [
         'Can only match :defs on :self or :const got :lvar unable to match'
@@ -47,14 +53,20 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   end
 
   context 'when defined on self' do
-    let(:scope)       { base::DefinedOnSelf }
-    let(:method_line) { 61                  }
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::DefinedOnSelf
+      )
+    end
+
+    let(:method_line) { 61 }
 
     it_should_behave_like 'a method matcher' do
       %i[public protected private].each do |visibility|
         context 'with %s visibility' % visibility do
           before do
-            scope.singleton_class.__send__(visibility, method_name)
+            scope.raw.singleton_class.__send__(visibility, method_name)
           end
 
           it 'returns expected subjects' do
@@ -67,15 +79,27 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
 
   context 'when defined on constant' do
     context 'inside namespace' do
-      let(:scope)       { base::DefinedOnConstant::InsideNamespace }
-      let(:method_line) { 71                                       }
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedOnConstant::InsideNamespace
+        )
+      end
+
+      let(:method_line) { 71 }
 
       it_should_behave_like 'a method matcher'
     end
 
     context 'outside namespace' do
-      let(:scope)       { base::DefinedOnConstant::OutsideNamespace }
-      let(:method_line) { 78                                        }
+      let(:method_line) { 78 }
+
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedOnConstant::OutsideNamespace
+        )
+      end
 
       it_should_behave_like 'a method matcher'
     end
@@ -83,33 +107,57 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
 
   context 'when defined multiple times in the same line' do
     context 'with method on different scope' do
-      let(:scope)        { base::DefinedMultipleTimes::SameLine::DifferentScope }
-      let(:method_line)  { 97                                                   }
-      let(:method_arity) { 1                                                    }
+      let(:method_line)  { 97 }
+      let(:method_arity) { 1  }
+
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedMultipleTimes::SameLine::DifferentScope
+        )
+      end
 
       it_should_behave_like 'a method matcher'
     end
 
     context 'with different name' do
-      let(:scope)        { base::DefinedMultipleTimes::SameLine::DifferentName }
-      let(:method_line)  { 101                                                 }
+      let(:method_line) { 101 }
+
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedMultipleTimes::SameLine::DifferentName
+        )
+      end
 
       it_should_behave_like 'a method matcher'
     end
   end
 
   context 'with sorbet signature' do
-    let(:scope)        { base::WithSignature }
-    let(:method_line)  { 126                 }
-    let(:method_arity) { 0                   }
+    let(:method_line)  { 126 }
+    let(:method_arity) { 0   }
+
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithSignature
+      )
+    end
 
     it_should_behave_like 'a method matcher'
   end
 
   context 'on inline disabled method' do
-    let(:scope)        { TestApp::InlineDisabled }
-    let(:method_line)  { 152                     }
-    let(:method_arity) { 0                       }
+    let(:method_line)  { 152 }
+    let(:method_arity) { 0   }
+
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        TestApp::InlineDisabled
+      )
+    end
 
     it_should_behave_like 'a method matcher' do
       it 'returns disabled inline config' do

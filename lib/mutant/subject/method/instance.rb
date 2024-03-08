@@ -13,12 +13,12 @@ module Mutant
         #
         # @return [self]
         def prepare
-          scope.undef_method(name)
+          scope.raw.undef_method(name)
           self
         end
 
         def post_insert
-          scope.__send__(visibility, name)
+          scope.raw.__send__(visibility, name)
           self
         end
 
@@ -31,6 +31,7 @@ module Mutant
           # @return [self]
           def prepare
             scope
+              .raw
               .instance_variable_get(:@memoized_methods)
               .delete(name)
 

@@ -151,9 +151,9 @@ module Mutant
           # end
           #
           # Change to this once 3.0 is EOL.
-          if scope.private_methods.include?(method_name)
+          if scope.raw.private_methods.include?(method_name)
             :private
-          elsif scope.protected_methods.include?(method_name)
+          elsif scope.raw.protected_methods.include?(method_name)
             :protected
           else
             :public

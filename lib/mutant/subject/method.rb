@@ -20,7 +20,7 @@ module Mutant
         Expression::Method.new(
           method_name:  name.to_s,
           scope_symbol: self.class::SYMBOL,
-          scope_name:   scope.name
+          scope_name:   scope.raw.name
         )
       end
       memoize :expression

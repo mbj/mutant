@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Matcher::Scope, '#call' do
-  let(:scope)     { TestApp }
   let(:object)    { described_class.new(scope: scope) }
   let(:env)       { instance_double(Mutant::Env)      }
   let(:matcher_a) { instance_double(Mutant::Matcher)  }
@@ -10,6 +9,13 @@ RSpec.describe Mutant::Matcher::Scope, '#call' do
   let(:subject_a) { instance_double(Mutant::Subject)  }
   let(:subject_b) { instance_double(Mutant::Subject)  }
   let(:subject_c) { instance_double(Mutant::Subject)  }
+
+  let(:scope) do
+    Mutant::Scope.new(
+      expression: instance_double(Mutant::Expression),
+      raw:        TestApp
+    )
+  end
 
   subject { object.call(env) }
 

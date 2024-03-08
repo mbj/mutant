@@ -57,11 +57,11 @@ module Mutant
       private
 
         def access(_env, method_name)
-          scope.method(method_name)
+          scope.raw.method(method_name)
         end
 
         def candidate_scope
-          scope.singleton_class
+          scope.raw.singleton_class
         end
 
       end # Singleton
@@ -73,11 +73,11 @@ module Mutant
       private
 
         def access(_env, method_name)
-          scope.method(method_name)
+          scope.raw.method(method_name)
         end
 
         def candidate_scope
-          scope.singleton_class
+          scope.raw.singleton_class
         end
       end # Metaclass
 
@@ -105,18 +105,19 @@ module Mutant
       private
 
         # rubocop:disable Lint/RescueException
+        # mutant:disable - unstable source locations under < ruby-3.2
         def access(env, method_name)
-          scope.instance_method(method_name)
+          candidate_scope.instance_method(method_name)
         rescue Exception => exception
           env.warn(
-            MESSAGE % { scope: scope, method_name: method_name, exception: exception }
+            MESSAGE % { scope: scope, method_name: method_name, exception: exception.inspect }
           )
           nil
         end
         # rubocop:enable Lint/RescueException
 
         def candidate_scope
-          scope
+          scope.raw
         end
 
       end # Instance

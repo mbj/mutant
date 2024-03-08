@@ -66,10 +66,10 @@ module Mutant
         #
         # @return [Matcher]
         def matcher
-          scope = find_scope
+          raw_scope = find_raw_scope
 
-          if scope
-            Matcher::Scope.new(scope: scope)
+          if raw_scope
+            Matcher::Scope.new(scope: Scope.new(expression: self, raw: raw_scope))
           else
             Matcher::Null.new
           end
@@ -83,7 +83,7 @@ module Mutant
 
       private
 
-        def find_scope
+        def find_raw_scope
           Object.const_get(scope_name)
         rescue NameError # rubocop:disable Lint/SuppressedException
         end

@@ -53,7 +53,14 @@ RSpec.describe Mutant::Meta::Example do
   describe '#context' do
     subject { object.context }
 
-    it { should eql(Mutant::Context.new(scope: Object, source_path: location.path)) }
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: Mutant::Expression::Namespace::Exact.new(scope_name: 'Object'),
+        raw:        Object
+      )
+    end
+
+    it { should eql(Mutant::Context.new(scope: scope, source_path: location.path)) }
   end
 
   describe '#identification' do

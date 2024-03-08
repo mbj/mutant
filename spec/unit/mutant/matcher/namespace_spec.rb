@@ -22,7 +22,7 @@ RSpec.describe Mutant::Matcher::Namespace, '#call' do
       expect(matcher).to receive(:call).with(env).and_return(subjects)
 
       expect(klass).to receive(:new)
-        .with(scope: scope)
+        .with(scope: Mutant::Scope.new(raw: scope, expression: parse_expression(scope.name)))
         .and_return(matcher)
     end
 

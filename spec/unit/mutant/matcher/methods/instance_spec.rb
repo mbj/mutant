@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
-  let(:object) { described_class.new(scope: class_under_test) }
+  let(:object) { described_class.new(scope: scope) }
+
+  let(:scope) do
+    Mutant::Scope.new(
+      expression: instance_double(Mutant::Expression),
+      raw:        class_under_test
+    )
+  end
 
   let(:env) do
     config = Fixtures::TEST_ENV.config
@@ -76,7 +83,7 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
         expect(matcher).to receive(:call).with(env).and_return([subject])
 
         expect(Mutant::Matcher::Method::Instance).to receive(:new)
-          .with(scope: class_under_test, target_method: class_under_test.instance_method(method))
+          .with(scope: scope, target_method: class_under_test.instance_method(method))
           .and_return(matcher)
       end
     end
@@ -90,12 +97,15 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
     let(:object) { described_class.new(scope: scope) }
 
     let(:scope) do
-      Class.new do
-        def self.public_instance_methods(ancestors)
-          fail if ancestors
-          %i[foo]
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        Class.new do
+          def self.public_instance_methods(ancestors)
+            fail if ancestors
+            %i[foo]
+          end
         end
-      end
+      )
     end
 
     def apply
@@ -111,14 +121,16 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
 
       method_name = :foo
 
+      candidate_scope = scope.raw
+
       exception =
         begin
-          scope.instance_method(method_name)
+          candidate_scope.instance_method(method_name)
         rescue NameError => exception
           exception
         end
 
-      expect(capture_reporter.warnings).to eql([<<~'MESSAGE' % { scope: scope, exception: exception }])
+      expect(capture_reporter.warnings).to eql([<<~'MESSAGE' % { scope: scope, exception: exception.inspect }])
         Caught an exception while accessing a method with
         #instance_method that is part of #{public,private,protected}_instance_methods.
 

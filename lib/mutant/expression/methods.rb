@@ -57,7 +57,10 @@ module Mutant
     private
 
       def scope
-        Object.const_get(scope_name)
+        Scope.new(
+          expression: Namespace::Exact.new(scope_name: scope_name),
+          raw:        Object.const_get(scope_name)
+        )
       end
 
     end # Methods

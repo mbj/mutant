@@ -39,7 +39,7 @@ module Mutant
       # @return [Context]
       def context
         Context.new(
-          scope:       Object,
+          scope:       scope,
           source_path: location.path
         )
       end
@@ -64,6 +64,15 @@ module Mutant
         end
       end
       memoize :generated
+
+    private
+
+      def scope
+        Scope.new(
+          expression: Expression::Namespace::Exact.new(scope_name: 'Object'),
+          raw:        Object
+        )
+      end
 
     end # Example
   end # Meta

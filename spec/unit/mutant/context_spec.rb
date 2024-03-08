@@ -2,12 +2,12 @@
 
 RSpec.describe Mutant::Context do
   describe '.wrap' do
-    subject { described_class.wrap(scope, node) }
+    subject { described_class.wrap(raw_scope, node) }
 
     let(:node) { s(:str, 'test') }
 
     context 'with Module as scope' do
-      let(:scope) { Mutant }
+      let(:raw_scope) { Mutant }
 
       let(:expected) do
         s(:module,
@@ -19,7 +19,7 @@ RSpec.describe Mutant::Context do
     end
 
     context 'with Class as scope' do
-      let(:scope) { Mutant::Context }
+      let(:raw_scope) { Mutant::Context }
 
       let(:expected) do
         s(:class,
@@ -34,12 +34,18 @@ RSpec.describe Mutant::Context do
 
   let(:object)      { described_class.new(scope: scope, source_path: source_path) }
   let(:source_path) { instance_double(Pathname)                                   }
-  let(:scope)       { TestApp::Literal                                            }
+
+  let(:scope) do
+    Mutant::Scope.new(
+      expression: instance_double(Mutant::Expression),
+      raw:        TestApp::Literal
+    )
+  end
 
   describe '#identification' do
     subject { object.identification }
 
-    it { should eql(scope.name) }
+    it { should eql(scope.raw.name) }
   end
 
   describe '#root' do
@@ -70,7 +76,12 @@ RSpec.describe Mutant::Context do
     subject { object.unqualified_name }
 
     context 'with top level constant name' do
-      let(:scope) { TestApp }
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        TestApp
+        )
+      end
 
       it 'should return the unqualified name' do
         should eql('TestApp')
@@ -92,7 +103,12 @@ RSpec.describe Mutant::Context do
     subject { object.match_expressions }
 
     context 'on toplevel scope' do
-      let(:scope) { TestApp }
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        TestApp
+        )
+      end
 
       it { should eql([parse_expression('TestApp*')]) }
     end

@@ -12,8 +12,8 @@ module Mutant
     #
     # @return [Parser::AST::Node]
     def root(node)
-      nesting.reverse.reduce(node) do |current, scope|
-        self.class.wrap(scope, current)
+      nesting.reverse.reduce(node) do |current, raw_scope|
+        self.class.wrap(raw_scope, current)
       end
     end
 
@@ -21,22 +21,13 @@ module Mutant
     #
     # @return [String]
     def identification
-      scope.name
+      scope.raw.name
     end
 
     # Wrap node into ast node
-    #
-    # @param [Class, Module] scope
-    # @param [Parser::AST::Node] node
-    #
-    # @return [Parser::AST::Class]
-    #   if scope is of kind Class
-    #
-    # @return [Parser::AST::Module]
-    #   if scope is of kind module
-    def self.wrap(scope, node)
-      name = s(:const, nil, scope.name.split(NAMESPACE_DELIMITER).last.to_sym)
-      case scope
+    def self.wrap(raw_scope, node)
+      name = s(:const, nil, raw_scope.name.split(NAMESPACE_DELIMITER).last.to_sym)
+      case raw_scope
       when Class
         s(:class, name, nil, node)
       when Module
@@ -77,7 +68,7 @@ module Mutant
   private
 
     def name_nesting
-      scope.name.split(NAMESPACE_DELIMITER)
+      scope.raw.name.split(NAMESPACE_DELIMITER)
     end
     memoize :name_nesting
 

@@ -15,7 +15,10 @@ RSpec.describe Mutant::Matcher::Descendants do
         Mutant::Subject::Method::Instance.new(
           config:     Mutant::Subject::Config::DEFAULT,
           context:    Mutant::Context.new(
-            scope:       TestApp::Foo::Bar::Baz,
+            scope:       Mutant::Scope.new(
+              raw:        TestApp::Foo::Bar::Baz,
+              expression: parse_expression('TestApp::Foo::Bar::Baz')
+            ),
             source_path: TestApp::ROOT.join('lib/test_app.rb')
           ),
           node:       s(:def, :foo, s(:args), nil),
