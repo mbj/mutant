@@ -245,7 +245,7 @@ RSpec.describe 'parallel', mutant: false do
     expect(sink.status).to eql(
       [
         Mutant::Parallel::Response.new(
-          error:  Timeout,
+          error:  Timeout::Error,
           job:    Mutant::Parallel::Source::Job.new(index: 0, payload: 1),
           log:    '',
           result: nil

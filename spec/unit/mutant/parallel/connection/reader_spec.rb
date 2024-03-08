@@ -191,7 +191,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
         verify_events do
           expect(apply).to eql(
             Mutant::Parallel::Response.new(
-              error:  Timeout,
+              error:  Timeout::Error,
               job:    job,
               log:    '<log>',
               result: nil
@@ -241,7 +241,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
         verify_events do
           expect(apply).to eql(
             Mutant::Parallel::Response.new(
-              error:  Timeout,
+              error:  Timeout::Error,
               job:    job,
               log:    '',
               result: nil
@@ -262,7 +262,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
         verify_events do
           expect(apply).to eql(
             Mutant::Parallel::Response.new(
-              error:  Timeout,
+              error:  Timeout::Error,
               job:    job,
               log:    '',
               result: nil

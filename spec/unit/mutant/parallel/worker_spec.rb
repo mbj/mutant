@@ -317,7 +317,7 @@ RSpec.describe Mutant::Parallel::Worker do
     context 'when processing jobs till error' do
       let(:response_a) do
         Mutant::Parallel::Response.new(
-          error:  Timeout,
+          error:  Timeout::Error,
           job:    0,
           log:    'log',
           result: nil

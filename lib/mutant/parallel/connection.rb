@@ -81,7 +81,7 @@ module Mutant
       private
 
         def timeout
-          @errors << Timeout
+          @errors << Timeout::Error
         end
 
         def advance_result
