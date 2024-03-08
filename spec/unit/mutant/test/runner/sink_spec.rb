@@ -45,12 +45,27 @@ describe Mutant::Test::Runner::Sink do
     )
   end
 
+  let(:job_a) do
+    Mutant::Parallel::Source::Job.new(
+      index:   0,
+      payload: nil
+    )
+  end
+
+  let(:job_b) do
+    Mutant::Parallel::Source::Job.new(
+      index:   0,
+      payload: nil
+    )
+  end
+
   let(:test_result_a) { test_result_a_raw.with(output: test_response_a.log) }
   let(:test_result_b) { test_result_b_raw.with(output: test_response_b.log) }
 
   let(:test_response_a) do
     Mutant::Parallel::Response.new(
       error:  nil,
+      job:    job_a,
       result: test_result_a_raw,
       log:    '<test-a>'
     )
@@ -59,6 +74,7 @@ describe Mutant::Test::Runner::Sink do
   let(:test_response_b) do
     Mutant::Parallel::Response.new(
       error:  nil,
+      job:    job_b,
       result: test_result_b_raw,
       log:    '<test-b>'
     )
@@ -112,6 +128,7 @@ describe Mutant::Test::Runner::Sink do
           object.response(
             Mutant::Parallel::Response.new(
               error:  EOFError,
+              job:    0,
               log:    'some log',
               result: nil
             )

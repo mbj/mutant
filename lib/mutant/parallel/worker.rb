@@ -98,6 +98,7 @@ module Mutant
           response = Connection::Reader.read_response(
             deadline:        config.world.deadline(config.timeout),
             io:              config.world.io,
+            job:             job,
             log_reader:      log_reader,
             marshal:         config.world.marshal,
             response_reader: response_reader
