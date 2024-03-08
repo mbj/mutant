@@ -19,8 +19,9 @@ module Mutant
     #   * location
     #   Is NOT enough. It would not be unique. So we add an "example index"
     #   for unique reference.
+    #
+    # rubocop:disable Metrics/ClassLength
     class Rspec < self
-
       ALL_EXPRESSION       = Expression::Namespace::Recursive.new(scope_name: nil)
       EXPRESSION_CANDIDATE = /\A([^ ]+)(?: )?/
       EXIT_SUCCESS         = 0
@@ -28,6 +29,11 @@ module Mutant
       TEST_ID_FORMAT       = 'rspec:%<index>d:%<location>s/%<description>s'
 
       private_constant(*constants(false))
+
+      def freeze
+        super() if @setup_elapsed
+        self
+      end
 
       # Initialize rspec integration
       #
@@ -42,10 +48,15 @@ module Mutant
       #
       # @return [self]
       def setup
-        @runner.setup($stderr, $stdout)
-        example_group_map
+        @setup_elapsed = timer.elapsed do
+          @runner.setup(world.stderr, world.stdout)
+          fail 'Rspec setup failure' if RSpec.world.respond_to?(:rspec_is_quitting) && RSpec.world.rspec_is_quitting
+          example_group_map
+        end
+        @runner.configuration.force(color_mode: :on)
+        @runner.configuration.reporter
         reset_examples
-        self
+        freeze
       end
       memoize :setup
 
@@ -54,15 +65,24 @@ module Mutant
       # @param [Enumerable<Mutant::Test>] tests
       #
       # @return [Result::Test]
+      #
+      # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/MethodLength
       def call(tests)
+        reset_examples
         setup_examples(tests.map(&all_tests_index))
+        @runner.configuration.start_time = world.time.now - @setup_elapsed
         start = timer.now
         passed = @runner.run_specs(@rspec_world.ordered_example_groups).equal?(EXIT_SUCCESS)
+        @runner.configuration.reset_reporter
         Result::Test.new(
+          output:  '',
           passed:  passed,
           runtime: timer.now - start
         )
       end
+      # rubocop:enable Metrics/AbcSize
+      # rubocop:enable Metrics/MethodLength
 
       # All tests
       #
@@ -149,5 +169,6 @@ module Mutant
         @rspec_world.example_groups.flat_map(&:descendants).flat_map(&:examples)
       end
     end # Rspec
+    # rubocop:enable Metrics/ClassLength
   end # Integration
 end # Mutant

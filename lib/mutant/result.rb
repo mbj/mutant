@@ -105,12 +105,62 @@ module Mutant
       def stop?
         env.config.fail_fast && !subject_results.all?(&:success?)
       end
-
     end # Env
+
+    # TestEnv result object
+    class TestEnv
+      include Result, Anima.new(
+        :env,
+        :runtime,
+        :test_results
+      )
+
+      # Test if run is successful
+      #
+      # @return [Boolean]
+      def success?
+        amount_tests_failed.equal?(0)
+      end
+      memoize :success?
+
+      # Failed subject results
+      #
+      # @return [Array<Result::Test>]
+      def failed_test_results
+        test_results.reject(&:success?)
+      end
+      memoize :failed_test_results
+
+      def stop?
+        env.config.fail_fast && !test_results.all?(&:success?)
+      end
+
+      def testtime
+        test_results.map(&:runtime).sum(0.0)
+      end
+
+      def amount_tests
+        env.integration.all_tests.length
+      end
+
+      def amount_test_results
+        test_results.length
+      end
+
+      def amount_tests_failed
+        failed_test_results.length
+      end
+
+      def amount_tests_success
+        test_results.count(&:passed)
+      end
+    end # TestEnv
 
     # Test result
     class Test
-      include Anima.new(:passed, :runtime)
+      include Anima.new(:passed, :runtime, :output)
+
+      alias_method :success?, :passed
 
       class VoidValue < self
         include Singleton
@@ -120,6 +170,7 @@ module Mutant
         # @return [undefined]
         def initialize
           super(
+            output:  '',
             passed:  false,
             runtime: 0.0
           )

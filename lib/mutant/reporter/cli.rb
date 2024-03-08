@@ -29,6 +29,16 @@ module Mutant
         self
       end
 
+      # Report test start
+      #
+      # @param [Env] env
+      #
+      # @return [self]
+      def test_start(env)
+        write(format.test_start(env))
+        self
+      end
+
       # Report progress object
       #
       # @param [Parallel::Status] status
@@ -36,6 +46,14 @@ module Mutant
       # @return [self]
       def progress(status)
         write(format.progress(status))
+        self
+      end
+
+      # Report progress object
+      #
+      # @return [self]
+      def test_progress(status)
+        write(format.test_progress(status))
         self
       end
 
@@ -63,6 +81,16 @@ module Mutant
       # @return [self]
       def report(env)
         Printer::EnvResult.call(output: output, object: env)
+        self
+      end
+
+      # Report env
+      #
+      # @param [Result::Env] env
+      #
+      # @return [self]
+      def test_report(env)
+        Printer::Test::EnvResult.call(output: output, object: env)
         self
       end
 

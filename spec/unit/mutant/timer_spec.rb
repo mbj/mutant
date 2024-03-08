@@ -4,7 +4,7 @@ RSpec.describe Mutant::Timer do
   let(:events)  { []                                    }
   let(:object)  { described_class.new(process: process) }
   let(:process) { class_double(Process)                 }
-  let(:times)   { [1.0, 2.0]                            }
+  let(:times)   { [0.5, 2.0]                            }
 
   before do
     allow(process).to receive(:clock_gettime) do |argument|
@@ -22,7 +22,7 @@ RSpec.describe Mutant::Timer do
     end
 
     it 'returns current monotonic time' do
-      expect(apply).to be(1.0)
+      expect(apply).to be(0.5)
       expect(apply).to be(2.0)
     end
 
@@ -31,6 +31,24 @@ RSpec.describe Mutant::Timer do
         .to change(events, :to_a)
         .from([])
         .to(%i[clock_gettime])
+    end
+  end
+
+  describe '#elapsed' do
+    let(:executions) { [] }
+
+    def apply
+      object.elapsed do
+        executions << nil
+      end
+    end
+
+    it 'executes the block' do
+      expect { apply }.to change { executions }.from([]).to([nil])
+    end
+
+    it 'returns execution time' do
+      expect(apply).to eql(1.5)
     end
   end
 end

@@ -13,9 +13,11 @@ RSpec.describe Mutant::Integration::Rspec do
 
   let(:expected_rspec_cli)    { %w[--fail-fast spec]                               }
   let(:integration_arguments) { []                                                 }
+  let(:rspec_configuration)   { instance_double(RSpec::Core::Configuration)        }
   let(:rspec_options)         { instance_double(RSpec::Core::ConfigurationOptions) }
   let(:rspec_runner)          { instance_double(RSpec::Core::Runner)               }
   let(:world)                 { fake_world                                         }
+  let(:rspec_is_quitting)     { false                                              }
 
   let(:example_a) do
     double(
@@ -112,7 +114,8 @@ RSpec.describe Mutant::Integration::Rspec do
       RSpec::Core::World,
       example_groups:         example_groups,
       filtered_examples:      filtered_examples,
-      ordered_example_groups: ordered_example_groups
+      ordered_example_groups: ordered_example_groups,
+      rspec_is_quitting:      rspec_is_quitting
     )
   end
 
@@ -162,6 +165,13 @@ RSpec.describe Mutant::Integration::Rspec do
 
     expect(RSpec).to receive_messages(world: rspec_world)
 
+    allow(rspec_configuration).to receive(:start_time=)
+    allow(rspec_configuration).to receive(:force)
+    allow(rspec_configuration).to receive(:reporter)
+    allow(rspec_configuration).to receive(:reset_reporter)
+    allow(rspec_runner).to receive_messages(configuration: rspec_configuration)
+    allow(world.time).to receive_messages(now: Time.at(10))
+    allow(world.timer).to receive(:elapsed).and_return(2.0).and_yield
     allow(world.timer).to receive_messages(now: 1.0)
   end
 
@@ -191,12 +201,16 @@ RSpec.describe Mutant::Integration::Rspec do
 
     before do
       expect(rspec_runner).to receive(:setup) do |error, stdout|
-        expect(error).to be($stderr)
-        expect(stdout).to be($stdout)
+        expect(error).to be(world.stderr)
+        expect(stdout).to be(world.stdout)
       end
     end
 
     it { should be(object) }
+
+    it 'freezes object' do
+      expect { subject }.to change { object.frozen? }.from(false).to(true)
+    end
   end
 
   describe '#call' do
@@ -206,8 +220,8 @@ RSpec.describe Mutant::Integration::Rspec do
 
     before do
       expect(rspec_runner).to receive(:setup) do |error, stdout|
-        expect(error).to be($stderr)
-        expect(stdout).to be($stdout)
+        expect(error).to be(world.stderr)
+        expect(stdout).to be(world.stdout)
       end
       allow(rspec_runner).to receive_messages(run_specs: exit_status)
     end
@@ -217,6 +231,18 @@ RSpec.describe Mutant::Integration::Rspec do
         subject
 
         expect(rspec_runner).to have_received(:run_specs).with(ordered_example_groups)
+      end
+
+      it 'updates rspec start time' do
+        subject
+
+        expect(rspec_configuration).to have_received(:start_time=).with(Time.at(8))
+      end
+
+      it 'resets reporter' do
+        subject
+
+        expect(rspec_configuration).to have_received(:reset_reporter)
       end
 
       it 'modifies filtered examples to selection' do
@@ -237,6 +263,7 @@ RSpec.describe Mutant::Integration::Rspec do
       it 'should return failed result' do
         expect(subject).to eql(
           Mutant::Result::Test.new(
+            output:  '',
             passed:  false,
             runtime: 0.0
           )
@@ -252,9 +279,32 @@ RSpec.describe Mutant::Integration::Rspec do
       it 'should return passed result' do
         expect(subject).to eql(
           Mutant::Result::Test.new(
+            output:  '',
             passed:  true,
             runtime: 0.0
           )
+        )
+      end
+    end
+
+    context 'on multiple calls' do
+      let(:exit_status) { 0 }
+
+      let(:tests_initial)  { all_tests.take(2) }
+      let(:tests_followup) { all_tests.drop(1).take(2) }
+
+      def apply
+        object.setup
+        object.call(tests_initial)
+        object.call(tests_followup)
+      end
+
+      it 'modifies filtered examples to selection' do
+        apply
+
+        expect(filtered_examples).to eql(
+          root_example_group => [],
+          leaf_example_group => [example_b, example_c]
         )
       end
     end

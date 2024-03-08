@@ -8,6 +8,21 @@ module Mutant
           NAME              = 'test'
           SHORT_DESCRIPTION = 'test subcommands'
 
+        private
+
+          def parse_remaining_arguments(arguments)
+            arguments.each(&method(:add_integration_argument))
+            Either::Right.new(self)
+          end
+
+          def bootstrap
+            env = Env.empty(world, @config)
+
+            env
+              .record(:config) { Config.load(cli_config: @config, world: world) }
+              .bind { |config| Bootstrap.call_test(env.with(config: config)) }
+          end
+
           class List < self
             NAME              = 'list'
             SHORT_DESCRIPTION = 'List tests detected in the environment'
@@ -28,7 +43,29 @@ module Mutant
             end
           end
 
-          SUBCOMMANDS = [List].freeze
+          class Run < self
+            NAME              = 'run'
+            SHORT_DESCRIPTION = 'Run tests'
+            SUBCOMMANDS       = EMPTY_ARRAY
+
+          private
+
+            def action
+              bootstrap
+                .bind(&Mutant::Test::Runner.public_method(:call))
+                .bind(&method(:from_result))
+            end
+
+            def from_result(result)
+              if result.success?
+                Either::Right.new(nil)
+              else
+                Either::Left.new('Test failures, exiting nonzero!')
+              end
+            end
+          end
+
+          SUBCOMMANDS = [List, Run].freeze
         end # Test
       end # Environment
     end # Command

@@ -1,23 +1,15 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Bootstrap do
-  let(:env_with_scopes)      { env_initial                            }
   let(:hooks)                { instance_double(Mutant::Hooks)         }
   let(:integration)          { instance_double(Mutant::Integration)   }
   let(:integration_result)   { Mutant::Either::Right.new(integration) }
   let(:kernel)               { fake_kernel.new                        }
   let(:load_path)            { instance_double(Array, :load_path)     }
-  let(:match_warnings)       { []                                     }
   let(:object_space)         { class_double(ObjectSpace)              }
   let(:start_expressions)    { []                                     }
   let(:subject_expressions)  { []                                     }
   let(:timer)                { instance_double(Mutant::Timer)         }
-
-  let(:fake_kernel) do
-    Class.new do
-      def require(_); end
-    end
-  end
 
   let(:config) do
     Mutant::Config::DEFAULT.with(
@@ -30,21 +22,20 @@ RSpec.describe Mutant::Bootstrap do
     )
   end
 
-  let(:matcher_config) do
-    Mutant::Matcher::Config::DEFAULT.with(
-      subjects:          subject_expressions,
-      start_expressions: start_expressions
-    )
-  end
-
   let(:env_initial) do
     Mutant::Env.empty(world, config).with(hooks: hooks)
   end
 
-  let(:expected_env) do
-    env_with_scopes.with(
-      integration: integration,
-      selector:    Mutant::Selector::Expression.new(integration: integration)
+  let(:fake_kernel) do
+    Class.new do
+      def require(_); end
+    end
+  end
+
+  let(:matcher_config) do
+    Mutant::Matcher::Config::DEFAULT.with(
+      subjects:          subject_expressions,
+      start_expressions: start_expressions
     )
   end
 
@@ -69,140 +60,155 @@ RSpec.describe Mutant::Bootstrap do
     end
   end
 
-  let(:raw_expectations) do
-    [
-      {
-        receiver:  world,
-        selector:  :record,
-        arguments: [:bootstrap],
-        reaction:  { yields: [] }
-      },
-      {
-        receiver:  world,
-        selector:  :record,
-        arguments: [:load_hooks],
-        reaction:  { yields: [] }
-      },
-      {
-        receiver:  Mutant::Hooks,
-        selector:  :load_config,
-        arguments: [config],
-        reaction:  { return: hooks }
-      },
-      {
-        receiver:  world,
-        selector:  :record,
-        arguments: [:infect],
-        reaction:  { yields: [] }
-      },
-      {
-        receiver:  world,
-        selector:  :record,
-        arguments: [:hooks_env_infection_pre],
-        reaction:  { yields: [] }
-      },
-      {
-        receiver:  hooks,
-        selector:  :run,
-        arguments: [:env_infection_pre, { env: env_initial }]
-      },
-      {
-        receiver:  world,
-        selector:  :record,
-        arguments: [:require_target],
-        reaction:  { yields: [] }
-      },
-      {
-        receiver:  world.environment_variables,
-        selector:  :[]=,
-        arguments: %w[foo bar]
-      },
-      {
-        receiver:  load_path,
-        selector:  :<<,
-        arguments: %w[include-a]
-      },
-      {
-        receiver:  load_path,
-        selector:  :<<,
-        arguments: %w[include-b]
-      },
-      {
-        receiver:  kernel,
-        selector:  :require,
-        arguments: %w[require-a]
-      },
-      {
-        receiver:  kernel,
-        selector:  :require,
-        arguments: %w[require-b]
-      },
-      {
-        receiver:  world,
-        selector:  :record,
-        arguments: [:hooks_env_infection_post],
-        reaction:  { yields: [] }
-      },
-      {
-        receiver:  hooks,
-        selector:  :run,
-        arguments: [:env_infection_post, { env: env_initial }]
-      },
-      {
-        receiver:  world,
-        selector:  :record,
-        arguments: [:matchable_scopes],
-        reaction:  { yields: [] }
-      },
-      {
-        receiver:  object_space,
-        selector:  :each_object,
-        arguments: [Module],
-        reaction:  { return: object_space_modules.each }
-      },
-      *match_warnings,
-      {
-        receiver:  world,
-        selector:  :record,
-        arguments: [:subject_match],
-        reaction:  { yields: [] }
-      },
-      {
-        receiver:  world,
-        selector:  :record,
-        arguments: [:subject_select],
-        reaction:  { yields: [] }
-      },
-      {
-        receiver:  world,
-        selector:  :record,
-        arguments: [:mutation_generate],
-        reaction:  { yields: [] }
-      },
-      {
-        receiver:  Mutant::Integration,
-        selector:  :setup,
-        arguments: [env_with_scopes],
-        reaction:  { return: integration_result }
+  describe '#call' do
+    let(:env_with_scopes) { env_initial }
+    let(:match_warnings)  { []          }
 
-      }
-    ]
-  end
+    let(:expected_env) do
+      env_with_scopes.with(
+        integration: integration,
+        selector:    Mutant::Selector::Expression.new(integration: integration)
+      )
+    end
 
-  def self.expect_warnings
-    let(:match_warnings) do
+    let(:raw_expectations) do
       [
         {
-          receiver:  config.reporter,
-          selector:  :warn,
-          arguments: [expected_warning],
-          reaction:  { return: config.reporter }
+          receiver:  world,
+          selector:  :record,
+          arguments: [:bootstrap],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:load_hooks],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  Mutant::Hooks,
+          selector:  :load_config,
+          arguments: [config],
+          reaction:  { return: hooks }
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:infect],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:hooks_env_infection_pre],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  hooks,
+          selector:  :run,
+          arguments: [:env_infection_pre, { env: env_initial }]
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:require_target],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  world.environment_variables,
+          selector:  :[]=,
+          arguments: %w[foo bar]
+        },
+        {
+          receiver:  load_path,
+          selector:  :<<,
+          arguments: %w[include-a]
+        },
+        {
+          receiver:  load_path,
+          selector:  :<<,
+          arguments: %w[include-b]
+        },
+        {
+          receiver:  kernel,
+          selector:  :require,
+          arguments: %w[require-a]
+        },
+        {
+          receiver:  kernel,
+          selector:  :require,
+          arguments: %w[require-b]
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:hooks_env_infection_post],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  hooks,
+          selector:  :run,
+          arguments: [:env_infection_post, { env: env_initial }]
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:matchable_scopes],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  object_space,
+          selector:  :each_object,
+          arguments: [Module],
+          reaction:  { return: object_space_modules.each }
+        },
+        *match_warnings,
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:subject_match],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:subject_select],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:mutation_generate],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:setup_integration],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  Mutant::Integration,
+          selector:  :setup,
+          arguments: [env_with_scopes],
+          reaction:  { return: integration_result }
         }
       ]
     end
-  end
 
-  describe '.call' do
+    def self.expect_warnings
+      let(:match_warnings) do
+        [
+          {
+            receiver:  config.reporter,
+            selector:  :warn,
+            arguments: [expected_warning],
+            reaction:  { return: config.reporter }
+          }
+        ]
+      end
+    end
+
     def apply
       described_class.call(Mutant::Env.empty(world, config))
     end
@@ -338,5 +344,55 @@ RSpec.describe Mutant::Bootstrap do
         end
       end
     end
+  end
+
+  describe '#call_test' do
+    def apply
+      described_class.call_test(env_initial)
+    end
+
+    let(:expected_env) do
+      env_initial.with(
+        integration: integration,
+        selector:    Mutant::Selector::Expression.new(integration: integration)
+      )
+    end
+
+    let(:raw_expectations) do
+      [
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:bootstrap],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:load_hooks],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  Mutant::Hooks,
+          selector:  :load_config,
+          arguments: [config],
+          reaction:  { return: hooks }
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:setup_integration],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  Mutant::Integration,
+          selector:  :setup,
+          arguments: [env_initial],
+          reaction:  { return: integration_result }
+        }
+      ]
+    end
+
+    include_examples 'bootstrap call'
   end
 end

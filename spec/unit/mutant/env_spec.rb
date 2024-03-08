@@ -77,6 +77,37 @@ RSpec.describe Mutant::Env do
     )
   end
 
+  describe '#run_test_index' do
+    def apply
+      subject.run_test_index(test_index)
+    end
+
+    let(:test_index) { 0 }
+
+    let(:test_result) do
+      Mutant::Result::Test.new(
+        passed:  true,
+        runtime: 0.1,
+        output:  ''
+      )
+    end
+
+    let(:raw_expectations) do
+      [
+        {
+          receiver:  integration,
+          selector:  :call,
+          arguments: [[test_a]],
+          reaction:  { return: test_result }
+        }
+      ]
+    end
+
+    it 'returns env result' do
+      verify_events { expect(apply).to eql(test_result) }
+    end
+  end
+
   describe '#cover_index' do
     let(:mutation_index) { 0 }
 
@@ -157,10 +188,28 @@ RSpec.describe Mutant::Env do
       allow(hooks).to receive_messages(run: undefined)
     end
 
-    it 'dispatcehs expected hook' do
+    it 'dispatches expected hook' do
       apply
 
       expect(hooks).to have_received(:run).with(:mutation_worker_process_start, index: index)
+    end
+  end
+
+  describe '#emit_test_worker_process_start' do
+    let(:index) { 0 }
+
+    def apply
+      subject.emit_test_worker_process_start(index: index)
+    end
+
+    before do
+      allow(hooks).to receive_messages(run: undefined)
+    end
+
+    it 'dispatches expected hook' do
+      apply
+
+      expect(hooks).to have_received(:run).with(:test_worker_process_start, index: index)
     end
   end
 

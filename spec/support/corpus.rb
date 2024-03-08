@@ -210,7 +210,7 @@ module MutantSpec
       #
       # @return [Pathname]
       def repo_path
-        TMP.join(name)
+        TMP.join("#{name}-#{Digest::SHA256.hexdigest(inspect)}")
       end
 
       # Test if installation should be skipped

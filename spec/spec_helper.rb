@@ -100,6 +100,7 @@ module XSpecHelper
     double('undefined')
   end
 
+  # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
   def fake_world
     Mutant::World.new(
@@ -119,12 +120,15 @@ module XSpecHelper
       process:               class_double(Process),
       random:                class_double(Random),
       recorder:              instance_double(Mutant::Segment::Recorder),
-      stderr:                instance_double(IO),
-      stdout:                instance_double(IO),
+      stderr:                instance_double(IO, :stderr),
+      stdout:                instance_double(IO, :stdout),
+      tempfile:              class_double(Tempfile),
       thread:                class_double(Thread),
+      time:                  class_double(Time),
       timer:                 instance_double(Mutant::Timer)
     )
   end
+  # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength
 end # XSpecHelper
 

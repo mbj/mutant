@@ -47,6 +47,32 @@ module Mutant
           selected_subjects.flat_map(&:mutations)
         end
 
+        setup_integration(
+          env:               env,
+          mutations:         mutations,
+          selected_subjects: selected_subjects
+        )
+      end
+    end
+    # rubocop:enable Metrics/MethodLength
+
+    # Run test only bootstrap
+    #
+    # @param [Env] env
+    #
+    # @return [Either<String, Env>]
+    def self.call_test(env)
+      env.record(:bootstrap) do
+        setup_integration(
+          env:               load_hooks(env),
+          mutations:         [],
+          selected_subjects: []
+        )
+      end
+    end
+
+    def self.setup_integration(env:, mutations:, selected_subjects:)
+      env.record(__method__) do
         Integration.setup(env).fmap do |integration|
           env.with(
             integration: integration,
@@ -57,7 +83,7 @@ module Mutant
         end
       end
     end
-    # rubocop:enable Metrics/MethodLength
+    private_class_method :setup_integration
 
     def self.load_hooks(env)
       env.record(__method__) do

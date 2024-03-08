@@ -84,6 +84,18 @@ RSpec.describe Mutant::Reporter::CLI do
     REPORT
   end
 
+  describe '#test_start' do
+    subject { object.test_start(env) }
+
+    it_reports(<<~REPORT)
+      Test environment:
+      Fail-Fast:    false
+      Integration:  null
+      Jobs:         auto
+      Tests:        2
+    REPORT
+  end
+
   describe '#report' do
     subject { object.report(env_result) }
 
@@ -141,5 +153,59 @@ RSpec.describe Mutant::Reporter::CLI do
         it_reports "progress: 02/02 alive: 1 runtime: 4.00s killtime: 2.00s mutations/s: 0.50\n"
       end
     end
+  end
+
+  describe '#test_progress' do
+    subject { object.test_progress(test_status) }
+
+    let(:tty?) { true }
+
+    let(:test_env) do
+      Mutant::Result::TestEnv.new(
+        env:          env,
+        runtime:      1.0,
+        test_results: []
+      )
+    end
+
+    let(:test_status) do
+      Mutant::Parallel::Status.new(
+        active_jobs: 1,
+        done:        false,
+        payload:     test_env
+      )
+    end
+
+    # rubocop:disable Layout/LineLength
+    # rubocop:disable Style/StringConcatenation
+    it_reports Unparser::Color::GREEN.format('progress: 00/02 failed: 0 runtime: 1.00s testtime: 0.00s tests/s: 0.00') + "\n"
+    # rubocop:enable Style/StringConcatenation
+    # rubocop:enable Layout/LineLength
+  end
+
+  describe '#test_report' do
+    subject { object.test_report(test_env) }
+
+    let(:test_env) do
+      Mutant::Result::TestEnv.new(
+        env:          env,
+        runtime:      1.0,
+        test_results: []
+      )
+    end
+
+    it_reports <<~'STR'
+      Test environment:
+      Fail-Fast:    false
+      Integration:  null
+      Jobs:         auto
+      Tests:        2
+      Test-Results: 0
+      Test-Failed:  0
+      Test-Success: 0
+      Runtime:      1.00s
+      Testtime:     0.00s
+      Efficiency:   0.00%
+    STR
   end
 end
