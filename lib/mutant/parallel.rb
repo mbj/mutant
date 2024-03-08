@@ -109,7 +109,7 @@ module Mutant
     end # Config
 
     class Response
-      include Anima.new(:error, :log, :result)
+      include Anima.new(:error, :job, :log, :result)
     end
 
     # Parallel execution status

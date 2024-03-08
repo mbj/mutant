@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'etc'
 require 'mutant'
 require 'parallel'
 
@@ -21,11 +22,8 @@ module MutantSpec
       MUTEX = Mutex.new
 
       MUTATION_GENERATION_MESSAGE = 'Total Mutations/Time/Parse-Errors: %s/%0.2fs - %0.2f/s'
-      START_MESSAGE               = 'Starting - %s'
-      FINISH_MESSAGE              = 'Mutations - %4i - %s'
+      FINISH_MESSAGE              = '%4i - %s'
       RUBY_GLOB_PATTERN           = '**/*.rb'
-
-      DEFAULT_MUTATION_COUNT = 0
 
       include Adamantium, Anima.new(
         :mutation_coverage,
@@ -73,6 +71,33 @@ module MutantSpec
         end
       end
 
+      class Sink
+        include Mutant::Parallel::Sink
+
+        attr_reader :total
+
+        def initialize
+          @total = 0
+        end
+
+        def stop?
+          false
+        end
+
+        def status
+          @total
+        end
+
+        def response(response)
+          if response.error
+            Mutant::WORLD.stderr.puts(response.log)
+            fail response.error
+          end
+          puts(FINISH_MESSAGE % [response.result, response.job.payload])
+          @total += response.result
+        end
+      end
+
       # Verify mutation generation
       #
       # @return [self]
@@ -82,22 +107,36 @@ module MutantSpec
       #   otherwise
       def verify_mutation_generation
         checkout
-        timer = Mutant::Timer.new(process: Process)
 
-        start = timer.now
+        sink = Sink.new
 
-        options = {
-          finish:       method(:finish),
-          start:        method(:start),
-          in_processes: Etc.nprocessors
-        }
+        elapsed = Mutant::WORLD.timer.elapsed do
+          driver = Mutant::Parallel.async(
+            config: parallel_config(sink),
+            world:  Mutant::WORLD
+          )
 
-        total = Parallel.map(effective_ruby_paths, options, &method(:check_generation))
-          .reduce(DEFAULT_MUTATION_COUNT, :+)
+          loop do
+            status = driver.wait_timeout(1)
+            break if status.done?
+          end
+        end
 
-        took = timer.now - start
-        puts MUTATION_GENERATION_MESSAGE % [total, took, total / took]
+        puts MUTATION_GENERATION_MESSAGE % [sink.total, elapsed, sink.total / elapsed]
         self
+      end
+
+      def parallel_config(sink)
+        Mutant::Parallel::Config.new(
+          block:            method(:check_generation),
+          jobs:             Etc.nprocessors,
+          sink:             sink,
+          timeout:          nil,
+          process_name:     'mutation-generation',
+          source:           Mutant::Parallel::Source::Array.new(jobs: effective_ruby_paths),
+          on_process_start: ->(_) {},
+          thread_name:      'mutation-generation'
+        )
       end
 
       # Checkout repository
@@ -218,33 +257,6 @@ module MutantSpec
       # @return [Boolean]
       def noinstall?
         ENV.key?('NOINSTALL')
-      end
-
-      # Print start progress
-      #
-      # @param [Pathname] path
-      # @param [Integer] _index
-      #
-      # @return [undefined]
-      #
-      def start(path, _index)
-        MUTEX.synchronize do
-          puts START_MESSAGE % path
-        end
-      end
-
-      # Print finish progress
-      #
-      # @param [Pathname] path
-      # @param [Integer] _index
-      # @param [Integer] count
-      #
-      # @return [undefined]
-      #
-      def finish(path, _index, count)
-        MUTEX.synchronize do
-          puts FINISH_MESSAGE % [count, path]
-        end
       end
 
       # Helper method to execute system commands

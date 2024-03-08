@@ -41,12 +41,13 @@ module Mutant
           @results = []
         end
 
-        def self.read_response(**attributes)
+        def self.read_response(job:, **attributes)
           reader = new(**attributes).read_till_final
 
           Response.new(
-            log:    reader.log,
             error:  reader.error,
+            job:    job,
+            log:    reader.log,
             result: reader.result
           )
         end

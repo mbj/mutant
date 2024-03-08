@@ -5,17 +5,19 @@ describe Mutant::Mutation::Runner::Sink do
 
   let(:mutation_a_index_response) do
     Mutant::Parallel::Response.new(
-      result: mutation_a_index_result,
+      error:  nil,
+      job:    0,
       log:    '',
-      error:  nil
+      result: mutation_a_index_result
     )
   end
 
   let(:mutation_b_index_response) do
     Mutant::Parallel::Response.new(
-      result: mutation_b_index_result,
+      error:  nil,
+      job:    0,
       log:    '',
-      error:  nil
+      result: mutation_b_index_result
     )
   end
 

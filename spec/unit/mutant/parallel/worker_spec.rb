@@ -209,15 +209,16 @@ RSpec.describe Mutant::Parallel::Worker do
     end
 
     # rubocop:disable Metrics/MethodLength
-    def read_response(response)
+    def read_response(job, response)
       {
         receiver:  Mutant::Parallel::Connection::Reader,
         arguments: [
           {
             deadline:        deadline,
             io:              world.io,
-            marshal:         world.marshal,
+            job:             job,
             log_reader:      log_pipe.to_reader,
+            marshal:         world.marshal,
             response_reader: response_pipe.to_reader
           }
         ],
@@ -239,6 +240,7 @@ RSpec.describe Mutant::Parallel::Worker do
     let(:response_a) do
       Mutant::Parallel::Response.new(
         error:  nil,
+        job:    0,
         log:    'log-a',
         result: result_a
       )
@@ -247,6 +249,7 @@ RSpec.describe Mutant::Parallel::Worker do
     let(:response_b) do
       Mutant::Parallel::Response.new(
         error:  nil,
+        job:    0,
         log:    'log-b',
         result: result_b
       )
@@ -262,7 +265,7 @@ RSpec.describe Mutant::Parallel::Worker do
           add_job(job_a),
           send_value(payload_a),
           new_deadline,
-          read_response(response_a),
+          read_response(job_a, response_a),
           with(var_active_jobs, active_jobs),
           remove_job(job_a),
           with(var_sink, sink),
@@ -285,7 +288,7 @@ RSpec.describe Mutant::Parallel::Worker do
           add_job(job_a),
           send_value(payload_a),
           new_deadline,
-          read_response(response_a),
+          read_response(job_a, response_a),
           with(var_active_jobs, active_jobs),
           remove_job(job_a),
           with(var_sink, sink),
@@ -298,7 +301,7 @@ RSpec.describe Mutant::Parallel::Worker do
           add_job(job_b),
           send_value(payload_b),
           new_deadline,
-          read_response(response_b),
+          read_response(job_b, response_b),
           with(var_active_jobs, active_jobs),
           remove_job(job_b),
           with(var_sink, sink),
@@ -315,6 +318,7 @@ RSpec.describe Mutant::Parallel::Worker do
       let(:response_a) do
         Mutant::Parallel::Response.new(
           error:  Timeout,
+          job:    0,
           log:    'log',
           result: nil
         )
@@ -329,7 +333,7 @@ RSpec.describe Mutant::Parallel::Worker do
           add_job(job_a),
           send_value(payload_a),
           new_deadline,
-          read_response(response_a),
+          read_response(job_a, response_a),
           with(var_active_jobs, active_jobs),
           remove_job(job_a),
           with(var_sink, sink),
