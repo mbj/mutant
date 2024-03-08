@@ -217,10 +217,24 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
 
     it_should_behave_like 'a method matcher'
 
+    let(:constant_scope) do
+      Mutant::Context::ConstantScope::Module.new(
+        const:      s(:const, nil, :TestApp),
+        descendant: Mutant::Context::ConstantScope::Module.new(
+          const:      s(:const, nil, :InstanceMethodTests),
+          descendant: Mutant::Context::ConstantScope::Module.new(
+            const:      s(:const, nil, :WithMemoizer),
+            descendant: Mutant::Context::ConstantScope::None.new
+          )
+        )
+      )
+    end
+
     let(:context) do
       Mutant::Context.new(
-        scope:       scope,
-        source_path: MutantSpec::ROOT.join('test_app', 'lib', 'test_app.rb')
+        constant_scope: constant_scope,
+        scope:          scope,
+        source_path:    MutantSpec::ROOT.join('test_app', 'lib', 'test_app.rb')
       )
     end
 

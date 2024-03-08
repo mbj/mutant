@@ -39,8 +39,9 @@ module Mutant
       # @return [Context]
       def context
         Context.new(
-          scope:       scope,
-          source_path: location.path
+          constant_scope: Context::ConstantScope::None.new,
+          scope:          scope,
+          source_path:    location.path
         )
       end
 

@@ -1,4 +1,8 @@
-# v0.11.29 [unreleased]
+# v0.11.29 2024-03-09
+
+* [#1426](https://github.com/mbj/mutant/pull/1426)
+  Fix mutations to unintentionally change constant scope.
+  This fixes: https://github.com/mbj/mutant/issues/1422.
 
 * [#1421](https://github.com/mbj/mutant/pull/1421)
   Change to optional warning display via --print-warnings environment option.

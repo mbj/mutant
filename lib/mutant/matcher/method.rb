@@ -14,6 +14,11 @@ module Mutant
       CLOSURE_WARNING_FORMAT =
         '%s is dynamically defined in a closure, unable to emit subject'
 
+      CONSTANT_SCOPES = {
+        class:  Context::ConstantScope::Class,
+        module: Context::ConstantScope::Module
+      }.freeze
+
       # Matched subjects
       #
       # @param [Env] env
@@ -28,6 +33,8 @@ module Mutant
       # Present to avoid passing the env argument around in case the
       # logic would be implemented directly on the Matcher::Method
       # instance
+      #
+      # rubocop:disable Metrics/ClassLength
       class Evaluator
         include(
           AbstractType,
@@ -57,7 +64,7 @@ module Mutant
         def match_view
           return EMPTY_ARRAY if matched_view.nil?
 
-          if matched_view.path.any?(&:block.public_method(:equal?))
+          if matched_view.stack.any? { |node| node.type.equal?(:block) }
             env.warn(CLOSURE_WARNING_FORMAT % target_method)
 
             return EMPTY_ARRAY
@@ -80,7 +87,26 @@ module Mutant
         end
 
         def context
-          Context.new(scope: scope, source_path: source_path)
+          Context.new(constant_scope: constant_scope, scope: scope, source_path: source_path)
+        end
+
+        # rubocop:disable Metrics/MethodLength
+        def constant_scope
+          matched_view
+            .stack
+            .reverse
+            .reduce(Context::ConstantScope::None.new) do |descendant, node|
+              klass = CONSTANT_SCOPES[node.type]
+
+              if klass
+                klass.new(
+                  const:      node.children.fetch(0),
+                  descendant: descendant
+                )
+              else
+                descendant
+              end
+          end
         end
 
         def ast

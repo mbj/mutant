@@ -3,11 +3,45 @@
 module Mutant
   # An abstract context where mutations can be applied to.
   class Context
-    include Adamantium, Anima.new(:scope, :source_path)
-    extend AST::Sexp
+    include Adamantium, Anima.new(:constant_scope, :scope, :source_path)
+
+    class ConstantScope
+      include AST::Sexp
+
+      class Class < self
+        include Anima.new(:const, :descendant)
+
+        def call(node)
+          s(:class, const, nil, descendant.call(node))
+        end
+      end
+
+      class Module < self
+        include Anima.new(:const, :descendant)
+
+        def call(node)
+          s(:module, const, descendant.call(node))
+        end
+      end
+
+      class None < self
+        include Equalizer.new
+
+        def call(node)
+          node
+        end
+      end
+    end
 
     def match_expressions
       scope.match_expressions
+    end
+
+    # Return root node for mutation
+    #
+    # @return [Parser::AST::Node]
+    def root(node)
+      constant_scope.call(node)
     end
 
     # Identification string
@@ -17,24 +51,5 @@ module Mutant
       scope.raw.name
     end
 
-    # Return root node for mutation
-    #
-    # @return [Parser::AST::Node]
-    def root(node)
-      scope.nesting.reverse.reduce(node) do |current, raw_scope|
-        self.class.wrap(raw_scope, current)
-      end
-    end
-
-    # Wrap node into ast node
-    def self.wrap(raw_scope, node)
-      name = s(:const, nil, raw_scope.name.split(Scope::NAMESPACE_DELIMITER).last.to_sym)
-      case raw_scope
-      when Class
-        s(:class, name, nil, node)
-      when Module
-        s(:module, name, node)
-      end
-    end
   end # Context
 end # Mutant

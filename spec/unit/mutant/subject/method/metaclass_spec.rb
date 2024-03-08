@@ -12,8 +12,16 @@ RSpec.describe Mutant::Subject::Method::Metaclass do
 
   let(:node) { s(:def, :foo, s(:args)) }
 
+  let(:constant_scope) do
+    Mutant::Context::ConstantScope::None.new
+  end
+
   let(:context) do
-    Mutant::Context.new(scope: scope, source_path: instance_double(Pathname))
+    Mutant::Context.new(
+      constant_scope: constant_scope,
+      scope:          scope,
+      source_path:    instance_double(Pathname)
+    )
   end
 
   let(:scope) do

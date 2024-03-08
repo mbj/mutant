@@ -128,8 +128,9 @@ module SharedContext
 
     let(:subject_a_context) do
       Mutant::Context.new(
-        scope:       scope,
-        source_path: 'suvject-a.rb'
+        constant_scope: Mutant::Context::ConstantScope::None.new,
+        scope:          scope,
+        source_path:    'subject-a.rb'
       )
     end
 

@@ -12,10 +12,15 @@ RSpec.describe Mutant::Subject::Method::Instance do
 
   let(:node) { Unparser.parse('def foo; end') }
 
+  let(:constant_scope) do
+    Mutant::Context::ConstantScope::None.new
+  end
+
   let(:context) do
     Mutant::Context.new(
-      scope:       scope,
-      source_path: instance_double(Pathname)
+      constant_scope: constant_scope,
+      scope:          scope,
+      source_path:    instance_double(Pathname)
     )
   end
 
@@ -97,8 +102,19 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     )
   end
 
-  let(:context)  { Mutant::Context.new(scope: scope, source_path: double('Source Path')) }
-  let(:node)     { Unparser.parse('def foo; end')                                        }
+  let(:constant_scope) do
+    Mutant::Context::ConstantScope::None.new
+  end
+
+  let(:context) do
+    Mutant::Context.new(
+      constant_scope: constant_scope,
+      scope:          scope,
+      source_path:    instance_double(Pathname)
+    )
+  end
+
+  let(:node) { Unparser.parse('def foo; end') }
 
   shared_context 'memoizable scope setup' do
     let(:scope) do
