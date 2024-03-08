@@ -62,7 +62,7 @@ module Mutant
 
           def sclass_const_name?(node)
             name = node.children.fetch(CONST_NAME_INDEX)
-            name.to_s.eql?(context.unqualified_name)
+            name.to_s.eql?(scope.unqualified_name)
           end
 
         end # Evaluator

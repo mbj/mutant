@@ -72,33 +72,6 @@ RSpec.describe Mutant::Context do
     end
   end
 
-  describe '#unqualified_name' do
-    subject { object.unqualified_name }
-
-    context 'with top level constant name' do
-      let(:scope) do
-        Mutant::Scope.new(
-          expression: instance_double(Mutant::Expression),
-          raw:        TestApp
-        )
-      end
-
-      it 'should return the unqualified name' do
-        should eql('TestApp')
-      end
-
-      it_should_behave_like 'an idempotent method'
-    end
-
-    context 'with scoped constant name' do
-      it 'should return the unqualified name' do
-        should eql('Literal')
-      end
-
-      it_should_behave_like 'an idempotent method'
-    end
-  end
-
   describe '#match_expressions' do
     subject { object.match_expressions }
 

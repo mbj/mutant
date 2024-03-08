@@ -46,7 +46,7 @@ module Mutant
 
           def receiver_name?(node)
             name = node.children.fetch(NAME_INDEX)
-            name.to_s.eql?(context.unqualified_name)
+            name.to_s.eql?(scope.unqualified_name)
           end
 
         end # Evaluator
