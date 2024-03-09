@@ -1,90 +1,109 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Context do
-  describe '.wrap' do
-    subject { described_class.wrap(scope, node) }
-
-    let(:node) { s(:str, 'test') }
-
-    context 'with Module as scope' do
-      let(:scope) { Mutant }
-
-      let(:expected) do
-        s(:module,
-          s(:const, nil, :Mutant),
-          s(:str, 'test'))
-      end
-
-      it { should eql(expected) }
-    end
-
-    context 'with Class as scope' do
-      let(:scope) { Mutant::Context }
-
-      let(:expected) do
-        s(:class,
-          s(:const, nil, :Context),
-          nil,
-          s(:str, 'test'))
-      end
-
-      it { should eql(expected) }
-    end
+  let(:object) do
+    described_class.new(
+      constant_scope: constant_scope,
+      scope:          scope,
+      source_path:    source_path
+    )
   end
 
-  let(:object)      { described_class.new(scope: scope, source_path: source_path) }
-  let(:source_path) { instance_double(Pathname)                                   }
-  let(:scope)       { TestApp::Literal                                            }
+  let(:source_path) { instance_double(Pathname) }
+
+  let(:scope) do
+    Mutant::Scope.new(
+      expression: instance_double(Mutant::Expression),
+      raw:        TestApp::Literal
+    )
+  end
+
+  let(:constant_scope) do
+    described_class::ConstantScope::Module.new(
+      const:      s(:const, nil, :TestApp),
+      descendant: described_class::ConstantScope::Class.new(
+        const:      s(:const, nil, :Literal),
+        descendant: described_class::ConstantScope::None.new
+      )
+    )
+  end
 
   describe '#identification' do
     subject { object.identification }
 
-    it { should eql(scope.name) }
+    it { should eql(scope.raw.name) }
   end
 
   describe '#root' do
     subject { object.root(node) }
 
-    let(:node) { s(:sym, :node) }
-
-    let(:expected_source) do
-      generate(parse(<<-RUBY))
-        module TestApp
-          class Literal
-            :node
-          end
-        end
-      RUBY
-    end
-
     let(:generated_source) do
       Unparser.unparse(subject)
     end
 
-    it 'should create correct source' do
-      expect(generated_source).to eql(expected_source)
-    end
-  end
+    let(:node) { s(:sym, :node) }
 
-  describe '#unqualified_name' do
-    subject { object.unqualified_name }
-
-    context 'with top level constant name' do
-      let(:scope) { TestApp }
-
-      it 'should return the unqualified name' do
-        should eql('TestApp')
+    context 'nested in module' do
+      let(:expected_source) do
+        generate(parse(<<-RUBY))
+          module TestApp
+            class Literal
+              :node
+            end
+          end
+        RUBY
       end
 
-      it_should_behave_like 'an idempotent method'
+      it 'should create correct source' do
+        expect(generated_source).to eql(expected_source)
+      end
     end
 
-    context 'with scoped constant name' do
-      it 'should return the unqualified name' do
-        should eql('Literal')
+    context 'nested in class' do
+      let(:constant_scope) do
+        described_class::ConstantScope::Class.new(
+          const:      s(:const, nil, :TestApp),
+          descendant: described_class::ConstantScope::Module.new(
+            const:      s(:const, nil, :Literal),
+            descendant: described_class::ConstantScope::None.new
+          )
+        )
       end
 
-      it_should_behave_like 'an idempotent method'
+      let(:expected_source) do
+        generate(parse(<<-RUBY))
+          class TestApp
+            module Literal
+              :node
+            end
+          end
+        RUBY
+      end
+
+      it 'should create correct source' do
+        expect(generated_source).to eql(expected_source)
+      end
+    end
+
+    context 'flat' do
+      let(:constant_scope) do
+        described_class::ConstantScope::Class.new(
+          const:      s(:const, s(:const, nil, :TestApp), :Literal),
+          descendant: described_class::ConstantScope::None.new
+        )
+      end
+
+      let(:expected_source) do
+        generate(parse(<<~RUBY))
+          class TestApp::Literal
+            :node
+          end
+        RUBY
+      end
+
+      it 'should create correct source' do
+        expect(generated_source).to eql(expected_source)
+      end
     end
   end
 
@@ -92,7 +111,12 @@ RSpec.describe Mutant::Context do
     subject { object.match_expressions }
 
     context 'on toplevel scope' do
-      let(:scope) { TestApp }
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        TestApp
+        )
+      end
 
       it { should eql([parse_expression('TestApp*')]) }
     end

@@ -3,83 +3,53 @@
 module Mutant
   # An abstract context where mutations can be applied to.
   class Context
-    include Adamantium, Anima.new(:scope, :source_path)
-    extend AST::Sexp
+    include Adamantium, Anima.new(:constant_scope, :scope, :source_path)
 
-    NAMESPACE_DELIMITER = '::'
+    class ConstantScope
+      include AST::Sexp
+
+      class Class < self
+        include Anima.new(:const, :descendant)
+
+        def call(node)
+          s(:class, const, nil, descendant.call(node))
+        end
+      end
+
+      class Module < self
+        include Anima.new(:const, :descendant)
+
+        def call(node)
+          s(:module, const, descendant.call(node))
+        end
+      end
+
+      class None < self
+        include Equalizer.new
+
+        def call(node)
+          node
+        end
+      end
+    end
+
+    def match_expressions
+      scope.match_expressions
+    end
 
     # Return root node for mutation
     #
     # @return [Parser::AST::Node]
     def root(node)
-      nesting.reverse.reduce(node) do |current, scope|
-        self.class.wrap(scope, current)
-      end
+      constant_scope.call(node)
     end
 
     # Identification string
     #
     # @return [String]
     def identification
-      scope.name
+      scope.raw.name
     end
-
-    # Wrap node into ast node
-    #
-    # @param [Class, Module] scope
-    # @param [Parser::AST::Node] node
-    #
-    # @return [Parser::AST::Class]
-    #   if scope is of kind Class
-    #
-    # @return [Parser::AST::Module]
-    #   if scope is of kind module
-    def self.wrap(scope, node)
-      name = s(:const, nil, scope.name.split(NAMESPACE_DELIMITER).last.to_sym)
-      case scope
-      when Class
-        s(:class, name, nil, node)
-      when Module
-        s(:module, name, node)
-      end
-    end
-
-    # Nesting of scope
-    #
-    # @return [Enumerable<Class,Module>]
-    def nesting
-      const = Object
-      name_nesting.map do |name|
-        const = const.const_get(name)
-      end
-    end
-    memoize :nesting
-
-    # Unqualified name of scope
-    #
-    # @return [String]
-    def unqualified_name
-      name_nesting.last
-    end
-
-    # Match expressions for scope
-    #
-    # @return [Enumerable<Expression>]
-    def match_expressions
-      name_nesting.each_index.reverse_each.map do |index|
-        Expression::Namespace::Recursive.new(
-          scope_name: name_nesting.take(index.succ).join(NAMESPACE_DELIMITER)
-        )
-      end
-    end
-    memoize :match_expressions
-
-  private
-
-    def name_nesting
-      scope.name.split(NAMESPACE_DELIMITER)
-    end
-    memoize :name_nesting
 
   end # Context
 end # Mutant

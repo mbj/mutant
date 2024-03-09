@@ -4,7 +4,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   subject { object.call(env) }
 
   let(:base)          { TestApp::InstanceMethodTests                             }
-  let(:method)        { scope.instance_method(method_name)                       }
+  let(:method)        { scope.raw.instance_method(method_name)                   }
   let(:method_arity)  { 0                                                        }
   let(:method_name)   { :foo                                                     }
   let(:object)        { described_class.new(scope: scope, target_method: method) }
@@ -40,7 +40,13 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'when method is defined inside file that does not end with .rb' do
-    let(:scope)           { base::WithMemoizer               }
+    let(:scope)           do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithMemoizer
+      )
+    end
+
     let(:source_location) { [file, instance_double(Integer)] }
     let(:file)            { 'example.erb'                    }
 
@@ -72,7 +78,13 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     let(:expected_warnings) { []                                                        }
     let(:method_line)       { 13                                                        }
     let(:method_name)       { :bar                                                      }
-    let(:scope)             { base::WithMemoizer                                        }
+
+    let(:scope)             do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithMemoizer
+      )
+    end
 
     before do
       allow(diff_a).to receive(:touches_path?).with(source_path).and_return(diff_a_touches?)
@@ -120,8 +132,14 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'when method is defined inside eval' do
-    let(:scope)  { base::WithMemoizer           }
-    let(:method) { scope.instance_method(:boz)  }
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithMemoizer
+      )
+    end
+
+    let(:method) { scope.raw.instance_method(:boz) }
 
     let(:expected_warnings) do
       [
@@ -133,8 +151,14 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'when method is defined without source location' do
-    let(:scope)  { Module                            }
-    let(:method) { scope.instance_method(:object_id) }
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        Module
+      )
+    end
+
+    let(:method) { scope.raw.instance_method(:object_id) }
 
     let(:expected_warnings) do
       [
@@ -146,7 +170,12 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'in module eval' do
-    let(:scope) { base::InModuleEval }
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::InModuleEval
+      )
+    end
 
     let(:expected_warnings) do
       [
@@ -158,7 +187,12 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'in class eval' do
-    let(:scope) { base::InClassEval }
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::InClassEval
+      )
+    end
 
     let(:expected_warnings) do
       [
@@ -170,16 +204,37 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'when method is defined once' do
-    let(:method_name) { :bar               }
-    let(:scope)       { base::WithMemoizer }
-    let(:method_line) { 13                 }
+    let(:method_name) { :bar }
+
+    let(:scope)       do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithMemoizer
+      )
+    end
+
+    let(:method_line) { 13 }
 
     it_should_behave_like 'a method matcher'
 
+    let(:constant_scope) do
+      Mutant::Context::ConstantScope::Module.new(
+        const:      s(:const, nil, :TestApp),
+        descendant: Mutant::Context::ConstantScope::Module.new(
+          const:      s(:const, nil, :InstanceMethodTests),
+          descendant: Mutant::Context::ConstantScope::Module.new(
+            const:      s(:const, nil, :WithMemoizer),
+            descendant: Mutant::Context::ConstantScope::None.new
+          )
+        )
+      )
+    end
+
     let(:context) do
       Mutant::Context.new(
-        scope:       TestApp::InstanceMethodTests::WithMemoizer,
-        source_path: MutantSpec::ROOT.join('test_app', 'lib', 'test_app.rb')
+        constant_scope: constant_scope,
+        scope:          scope,
+        source_path:    MutantSpec::ROOT.join('test_app', 'lib', 'test_app.rb')
       )
     end
 
@@ -198,7 +253,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
       context 'with %s visibility' % visibility do
         let(:expected_visibility) { visibility }
 
-        before { context.scope.__send__(visibility, method_name) }
+        before { context.scope.raw.__send__(visibility, method_name) }
 
         it 'returns expected subjects' do
           expect(subject).to eql(expected_subjects)
@@ -208,15 +263,27 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'when method is defined once with a memoizer' do
-    let(:scope)       { base::WithMemoizer }
-    let(:method_line) { 15                 }
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithMemoizer
+      )
+    end
+
+    let(:method_line) { 15 }
 
     it_should_behave_like 'a method matcher'
   end
 
   context 'when method is defined multiple times' do
     context 'on different lines' do
-      let(:scope)        { base::DefinedMultipleTimes::DifferentLines }
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedMultipleTimes::DifferentLines
+        )
+      end
+
       let(:method_line)  { 24                                         }
       let(:method_arity) { 1                                          }
 
@@ -224,7 +291,13 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     context 'on the same line' do
-      let(:scope)        { base::DefinedMultipleTimes::SameLineSameScope }
+      let(:scope)        do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedMultipleTimes::SameLineSameScope
+        )
+      end
+
       let(:method_line)  { 29                                            }
       let(:method_arity) { 1                                             }
 
@@ -232,7 +305,13 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     end
 
     context 'on the same line with different scope' do
-      let(:scope)        { base::DefinedMultipleTimes::SameLineDifferentScope }
+      let(:scope)        do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedMultipleTimes::SameLineDifferentScope
+        )
+      end
+
       let(:method_line)  { 33                                                 }
       let(:method_arity) { 1                                                  }
 
@@ -241,7 +320,13 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'with sorbet signature' do
-    let(:scope)        { base::WithSignature }
+    let(:scope)        do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithSignature
+      )
+    end
+
     let(:method_line)  { 116                 }
     let(:method_arity) { 0                   }
 
@@ -249,7 +334,13 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'on delegate class' do
-    let(:scope)        { TestApp::DelegateTest }
+    let(:scope)        do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        TestApp::DelegateTest
+      )
+    end
+
     let(:method_line)  { 134                   }
     let(:method_arity) { 0                     }
 
@@ -257,7 +348,13 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'on inline disabled method' do
-    let(:scope)        { TestApp::InlineDisabled }
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        TestApp::InlineDisabled
+      )
+    end
+
     let(:method_line)  { 148                     }
     let(:method_arity) { 0                       }
 

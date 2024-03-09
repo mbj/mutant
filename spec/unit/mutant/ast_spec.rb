@@ -11,8 +11,10 @@ RSpec.describe Mutant::AST do
     let(:node) do
       Unparser.parse(<<~RUBY)
 
-        begin
-          1; 2
+        def foo
+          begin
+            1; 2
+          end
         end
       RUBY
     end
@@ -27,7 +29,7 @@ RSpec.describe Mutant::AST do
       it 'returns expected view' do
         expect(apply(2)).to eql(
           [
-            described_class::View.new(node: node, path: %i[kwbegin])
+            described_class::View.new(node: node, stack: [])
           ]
         )
       end
@@ -35,10 +37,10 @@ RSpec.describe Mutant::AST do
 
     context 'line populated with more than one' do
       it 'returns expected view' do
-        expect(apply(3)).to eql(
+        expect(apply(4)).to eql(
           [
-            described_class::View.new(node: s(:int, 1), path: %i[kwbegin int]),
-            described_class::View.new(node: s(:int, 2), path: %i[kwbegin int])
+            described_class::View.new(node: s(:int, 1), stack: [node, node.children.fetch(2)]),
+            described_class::View.new(node: s(:int, 2), stack: [node, node.children.fetch(2)])
           ]
         )
       end

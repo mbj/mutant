@@ -12,20 +12,31 @@ RSpec.describe Mutant::Subject::Method::Metaclass do
 
   let(:node) { s(:def, :foo, s(:args)) }
 
+  let(:constant_scope) do
+    Mutant::Context::ConstantScope::None.new
+  end
+
   let(:context) do
-    Mutant::Context.new(scope: scope, source_path: instance_double(Pathname))
+    Mutant::Context.new(
+      constant_scope: constant_scope,
+      scope:          scope,
+      source_path:    instance_double(Pathname)
+    )
   end
 
   let(:scope) do
-    Class.new do
-      class << self
-        def foo; end
+    Mutant::Scope.new(
+      expression: instance_double(Mutant::Expression),
+      raw:        Class.new do
+          class << self
+            def foo; end
 
-        def name
-          'Test'
-        end
-      end
-    end
+            def name
+              'Test'
+            end
+          end
+                  end
+    )
   end
 
   describe '#expression' do
@@ -49,7 +60,7 @@ RSpec.describe Mutant::Subject::Method::Metaclass do
     subject { object.prepare }
 
     it 'undefines method on scope' do
-      expect { subject }.to change { scope.public_methods.include?(:foo) }.from(true).to(false)
+      expect { subject }.to change { scope.raw.public_methods.include?(:foo) }.from(true).to(false)
     end
 
     it_should_behave_like 'a command method'

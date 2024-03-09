@@ -298,8 +298,15 @@ RSpec.describe Mutant::Bootstrap do
         )
       end
 
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: parse_expression('TestApp::Literal'),
+          raw:        TestApp::Literal
+        )
+      end
+
       let(:expected_subjects) do
-        Mutant::Matcher::Scope.new(scope: TestApp::Literal).call(env_initial)
+        Mutant::Matcher::Scope.new(scope: scope).call(env_initial)
       end
 
       let(:expected_env) do
@@ -330,7 +337,7 @@ RSpec.describe Mutant::Bootstrap do
             )
 
             Mutant::Matcher::Scope
-              .new(scope: TestApp::Literal)
+              .new(scope: scope)
               .call(Mutant::Env.empty(world, config)).last
           end
 

@@ -10,13 +10,33 @@ RSpec.describe Mutant::Matcher::Descendants do
       subject.call(env)
     end
 
+    let(:constant_scope) do
+      Mutant::Context::ConstantScope::Module.new(
+        const:      s(:const, nil, :TestApp),
+        descendant: Mutant::Context::ConstantScope::Class.new(
+          const:      s(:const, nil, :Foo),
+          descendant: Mutant::Context::ConstantScope::Class.new(
+            const:      s(:const, nil, :Bar),
+            descendant: Mutant::Context::ConstantScope::Class.new(
+              const:      s(:const, nil, :Baz),
+              descendant: Mutant::Context::ConstantScope::None.new
+            )
+          )
+        )
+      )
+    end
+
     let(:expected_subjects) do
       [
         Mutant::Subject::Method::Instance.new(
           config:     Mutant::Subject::Config::DEFAULT,
           context:    Mutant::Context.new(
-            scope:       TestApp::Foo::Bar::Baz,
-            source_path: TestApp::ROOT.join('lib/test_app.rb')
+            constant_scope: constant_scope,
+            scope:          Mutant::Scope.new(
+              raw:        TestApp::Foo::Bar::Baz,
+              expression: parse_expression('TestApp::Foo::Bar::Baz')
+            ),
+            source_path:    TestApp::ROOT.join('lib/test_app.rb')
           ),
           node:       s(:def, :foo, s(:args), nil),
           visibility: :public

@@ -20,7 +20,7 @@ module Mutant
       '%<scope_class>s#name from: %<scope>s raised an error: %<exception>s'
 
     CLASS_NAME_TYPE_MISMATCH_FORMAT =
-      '%<scope_class>s#name from: %<scope>s returned %<name>s'
+      '%<scope_class>s#name from: %<raw_scope>s returned %<name>s'
 
     private_constant(*constants(false))
 
@@ -139,9 +139,9 @@ module Mutant
       env.record(__method__) do
         config = env.config
 
-        scopes = env.world.object_space.each_object(Module).with_object([]) do |scope, aggregate|
-          expression = expression(config.reporter, config.expression_parser, scope) || next
-          aggregate << Scope.new(raw: scope, expression: expression)
+        scopes = env.world.object_space.each_object(Module).with_object([]) do |raw_scope, aggregate|
+          expression = expression(config.reporter, config.expression_parser, raw_scope) || next
+          aggregate << Scope.new(raw: raw_scope, expression: expression)
         end
 
         scopes.sort_by { |scope| scope.expression.syntax }
@@ -149,31 +149,31 @@ module Mutant
     end
     private_class_method :matchable_scopes
 
-    def self.scope_name(reporter, scope)
-      scope.name
+    def self.scope_name(reporter, raw_scope)
+      raw_scope.name
     rescue => exception
       semantics_warning(
         reporter,
         CLASS_NAME_RAISED_EXCEPTION,
         exception:   exception.inspect,
-        scope:       scope,
-        scope_class: scope.class
+        scope:       raw_scope,
+        scope_class: raw_scope.class
       )
       nil
     end
     private_class_method :scope_name
 
     # rubocop:disable Metrics/MethodLength
-    def self.expression(reporter, expression_parser, scope)
-      name = scope_name(reporter, scope) or return
+    def self.expression(reporter, expression_parser, raw_scope)
+      name = scope_name(reporter, raw_scope) or return
 
       unless name.instance_of?(String)
         semantics_warning(
           reporter,
           CLASS_NAME_TYPE_MISMATCH_FORMAT,
           name:        name,
-          scope_class: scope.class,
-          scope:       scope
+          scope_class: raw_scope.class,
+          raw_scope:   raw_scope
         )
         return
       end

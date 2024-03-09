@@ -15,7 +15,7 @@ module Mutant
         #
         # @return [self]
         def prepare
-          scope.singleton_class.public_send(:undef_method, name)
+          scope.raw.singleton_class.undef_method(name)
           self
         end
 

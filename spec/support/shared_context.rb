@@ -119,10 +119,18 @@ module SharedContext
       )
     end
 
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: Mutant::Expression::Namespace::Exact.new(scope_name: 'Object'),
+        raw:        Object
+      )
+    end
+
     let(:subject_a_context) do
       Mutant::Context.new(
-        scope:       Object,
-        source_path: 'suvject-a.rb'
+        constant_scope: Mutant::Context::ConstantScope::None.new,
+        scope:          scope,
+        source_path:    'subject-a.rb'
       )
     end
 

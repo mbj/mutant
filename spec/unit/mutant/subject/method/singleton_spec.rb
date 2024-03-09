@@ -12,18 +12,25 @@ RSpec.describe Mutant::Subject::Method::Singleton do
 
   let(:node) { s(:defs, s(:self), :foo, s(:args)) }
 
+  let(:constant_scope) do
+    Mutant::Context::ConstantScope::None.new
+  end
+
   let(:context) do
-    Mutant::Context.new(scope: scope, source_path: instance_double(Pathname))
+    Mutant::Context.new(constant_scope: constant_scope, scope: scope, source_path: instance_double(Pathname))
   end
 
   let(:scope) do
-    Class.new do
-      def self.foo; end
+    Mutant::Scope.new(
+      expression: instance_double(Mutant::Expression),
+      raw:        Class.new do
+        def self.foo; end
 
-      def self.name
-        'Test'
+        def self.name
+          'Test'
+        end
       end
-    end
+    )
   end
 
   describe '#expression' do
@@ -47,7 +54,7 @@ RSpec.describe Mutant::Subject::Method::Singleton do
     subject { object.prepare }
 
     it 'undefines method on scope' do
-      expect { subject }.to change { scope.public_methods.include?(:foo) }.from(true).to(false)
+      expect { subject }.to change { scope.raw.public_methods.include?(:foo) }.from(true).to(false)
     end
 
     it_should_behave_like 'a command method'
@@ -58,7 +65,7 @@ RSpec.describe Mutant::Subject::Method::Singleton do
 
     it 'sets method visibility' do
       expect { subject }
-        .to change { scope.private_methods.include?(:foo) }
+        .to change { scope.raw.private_methods.include?(:foo) }
         .from(false)
         .to(true)
     end

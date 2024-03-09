@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Matcher::Methods::Metaclass, '#call' do
-  let(:object) { described_class.new(scope: class_under_test) }
-  let(:env)    { Fixtures::TEST_ENV                           }
+  let(:object) { described_class.new(scope: scope) }
+  let(:env)    { Fixtures::TEST_ENV                }
+
+  let(:scope) do
+    Mutant::Scope.new(
+      expression: instance_double(Mutant::Expression),
+      raw:        class_under_test
+    )
+  end
 
   let(:class_under_test) do
     parent = Module.new do
@@ -51,7 +58,7 @@ RSpec.describe Mutant::Matcher::Methods::Metaclass, '#call' do
       method_c: subject_c
     }.each do |method, subject|
       allow(matcher).to receive(:new)
-        .with(scope: class_under_test, target_method: class_under_test.method(method))
+        .with(scope: scope, target_method: class_under_test.method(method))
         .and_return(Mutant::Matcher::Static.new(subjects: [subject]))
     end
   end

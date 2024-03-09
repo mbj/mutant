@@ -13,7 +13,7 @@ module Mutant
       # @return [Enumerable<Subject>]
       def call(env)
         Chain.new(
-          matchers: matched_scopes(env).map { |scope| Scope.new(scope: scope.raw) }
+          matchers: matched_scopes(env).map { |scope| Scope.new(scope: scope) }
         ).call(env)
       end
 

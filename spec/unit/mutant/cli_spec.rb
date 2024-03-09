@@ -739,10 +739,21 @@ RSpec.describe Mutant::CLI do
           )
       end
 
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        Object
+        )
+      end
+
+      let(:constant_scope) do
+        Mutant::Context::ConstantScope::None.new
+      end
+
       let(:subject_a) do
         Mutant::Subject::Method::Instance.new(
           config:     Mutant::Subject::Config::DEFAULT,
-          context:    Mutant::Context.new(scope: Object, source_path: 'subject.rb'),
+          context:    Mutant::Context.new(constant_scope: constant_scope, scope: scope, source_path: 'subject.rb'),
           node:       s(:def, :send, s(:args), nil),
           visibility: :public
         )

@@ -8,12 +8,12 @@ module Mutant
     )
 
     class View
-      include Adamantium, Anima.new(:node, :path)
+      include Adamantium, Anima.new(:node, :stack)
     end
 
     def on_line(line)
-      line_map.fetch(line, EMPTY_HASH).map do |node, path|
-        View.new(node: node, path: path)
+      line_map.fetch(line, EMPTY_HASH).map do |node, stack|
+        View.new(node: node, stack: stack)
       end
     end
 
@@ -22,21 +22,20 @@ module Mutant
     def line_map
       line_map = {}
 
-      walk_path(node) do |node, path|
+      walk_path(node, []) do |node, stack|
         expression = node.location.expression || next
-        (line_map[expression.line] ||= []) << [node, path]
+        (line_map[expression.line] ||= []) << [node, stack]
       end
 
       line_map
     end
     memoize :line_map
 
-    def walk_path(node, stack = [node.type], &block)
-      block.call(node, stack.dup)
+    def walk_path(node, stack, &block)
+      block.call(node, stack)
+      stack = [*stack, node]
       node.children.grep(::Parser::AST::Node) do |child|
-        stack.push(child.type)
         walk_path(child, stack, &block)
-        stack.pop
       end
     end
   end # AST

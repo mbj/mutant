@@ -12,27 +12,35 @@ RSpec.describe Mutant::Subject::Method::Instance do
 
   let(:node) { Unparser.parse('def foo; end') }
 
+  let(:constant_scope) do
+    Mutant::Context::ConstantScope::None.new
+  end
+
   let(:context) do
     Mutant::Context.new(
-      scope:       scope,
-      source_path: instance_double(Pathname)
+      constant_scope: constant_scope,
+      scope:          scope,
+      source_path:    instance_double(Pathname)
     )
   end
 
   let(:scope) do
-    Class.new do
-      attr_reader :bar
+    Mutant::Scope.new(
+      expression: instance_double(Mutant::Expression),
+      raw:        Class.new do
+        attr_reader :bar
 
-      def initialize
-        @bar = :boo
+        def initialize
+          @bar = :boo
+        end
+
+        def foo; end
+
+        def self.name
+          'Test'
+        end
       end
-
-      def foo; end
-
-      def self.name
-        'Test'
-      end
-    end
+    )
   end
 
   describe '#expression' do
@@ -56,7 +64,7 @@ RSpec.describe Mutant::Subject::Method::Instance do
 
     it 'undefines method on scope' do
       expect { subject }
-        .to change { scope.instance_methods.include?(:foo) }
+        .to change { scope.raw.instance_methods.include?(:foo) }
         .from(true)
         .to(false)
     end
@@ -69,7 +77,7 @@ RSpec.describe Mutant::Subject::Method::Instance do
 
     it 'sets method visibility' do
       expect { subject }
-        .to change { scope.private_instance_methods.include?(:foo) }
+        .to change { scope.raw.private_instance_methods.include?(:foo) }
         .from(false)
         .to(true)
     end
@@ -94,21 +102,35 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     )
   end
 
-  let(:context)  { Mutant::Context.new(scope: scope, source_path: double('Source Path')) }
-  let(:node)     { Unparser.parse('def foo; end')                                        }
+  let(:constant_scope) do
+    Mutant::Context::ConstantScope::None.new
+  end
+
+  let(:context) do
+    Mutant::Context.new(
+      constant_scope: constant_scope,
+      scope:          scope,
+      source_path:    instance_double(Pathname)
+    )
+  end
+
+  let(:node) { Unparser.parse('def foo; end') }
 
   shared_context 'memoizable scope setup' do
     let(:scope) do
-      Class.new do
-        include Unparser::Adamantium
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        Class.new do
+          include Unparser::Adamantium
 
-        def self.name
-          'MemoizableClass'
+          def self.name
+            'MemoizableClass'
+          end
+
+          def foo; end
+          memoize :foo
         end
-
-        def foo; end
-        memoize :foo
-      end
+      )
     end
   end
 
@@ -118,11 +140,11 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     subject { object.prepare }
 
     it 'undefines memoizer' do
-      expect { subject }.to change { scope.memoized?(:foo) }.from(true).to(false)
+      expect { subject }.to change { scope.raw.memoized?(:foo) }.from(true).to(false)
     end
 
     it 'undefines method on scope' do
-      expect { subject }.to change { scope.instance_methods.include?(:foo) }.from(true).to(false)
+      expect { subject }.to change { scope.raw.instance_methods.include?(:foo) }.from(true).to(false)
     end
 
     it_should_behave_like 'a command method'

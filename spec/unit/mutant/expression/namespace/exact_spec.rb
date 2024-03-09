@@ -7,6 +7,13 @@ RSpec.describe Mutant::Expression::Namespace::Exact do
   describe '#matcher' do
     subject { object.matcher }
 
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: Mutant::Expression::Namespace::Exact.new(scope_name: 'TestApp::Literal'),
+        raw:        TestApp::Literal
+      )
+    end
+
     context 'when constant does not exist' do
       let(:input) { 'TestApp::DoesNotExist' }
 
@@ -14,7 +21,7 @@ RSpec.describe Mutant::Expression::Namespace::Exact do
     end
 
     context 'when constant exists' do
-      it { should eql(Mutant::Matcher::Scope.new(scope: TestApp::Literal)) }
+      it { should eql(Mutant::Matcher::Scope.new(scope: scope)) }
     end
   end
 

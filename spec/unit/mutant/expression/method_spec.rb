@@ -30,6 +30,17 @@ RSpec.describe Mutant::Expression::Method do
     context 'with an instance method' do
       let(:input) { instance_method }
 
+      it 'uses expected scope' do
+        expect(subject.matcher.matchers.map(&:scope)).to eql(
+          [
+            Mutant::Scope.new(
+              expression: Mutant::Expression::Namespace::Exact.new(scope_name: 'TestApp::Literal'),
+              raw:        TestApp::Literal
+            )
+          ]
+        )
+      end
+
       it 'returns correct matcher' do
         expect(subject.call(env).map(&:expression)).to eql([object])
       end

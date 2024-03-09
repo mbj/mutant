@@ -50,13 +50,20 @@ RSpec.describe Mutant::Expression::Methods do
   describe '#matcher' do
     subject { object.matcher }
 
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: Mutant::Expression::Namespace::Exact.new(scope_name: 'TestApp::Literal'),
+        raw:        TestApp::Literal
+      )
+    end
+
     context 'with an instance method' do
       let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '#' } }
 
       specify do
         should eql(
           Mutant::Matcher::Chain.new(
-            matchers: [Mutant::Matcher::Methods::Instance.new(scope: TestApp::Literal)]
+            matchers: [Mutant::Matcher::Methods::Instance.new(scope: scope)]
           )
         )
       end
@@ -69,8 +76,8 @@ RSpec.describe Mutant::Expression::Methods do
         should eql(
           Mutant::Matcher::Chain.new(
             matchers: [
-              Mutant::Matcher::Methods::Singleton.new(scope: TestApp::Literal),
-              Mutant::Matcher::Methods::Metaclass.new(scope: TestApp::Literal)
+              Mutant::Matcher::Methods::Singleton.new(scope: scope),
+              Mutant::Matcher::Methods::Metaclass.new(scope: scope)
             ]
           )
         )

@@ -50,10 +50,21 @@ RSpec.describe Mutant::Meta::Example do
     it { should eql(Mutant::Meta::Example::Verification.new(example: object, mutations: mutations)) }
   end
 
+  let(:constant_scope) do
+    Mutant::Context::ConstantScope::None.new
+  end
+
   describe '#context' do
     subject { object.context }
 
-    it { should eql(Mutant::Context.new(scope: Object, source_path: location.path)) }
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: Mutant::Expression::Namespace::Exact.new(scope_name: 'Object'),
+        raw:        Object
+      )
+    end
+
+    it { should eql(Mutant::Context.new(constant_scope: constant_scope, scope: scope, source_path: location.path)) }
   end
 
   describe '#identification' do

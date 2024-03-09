@@ -6,7 +6,7 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
   subject { object.call(env) }
 
   let(:object)       { described_class.new(scope: scope, target_method: method) }
-  let(:method)       { scope.public_method(method_name)                         }
+  let(:method)       { scope.raw.public_method(method_name)                     }
   let(:type)         { :def                                                     }
   let(:method_name)  { :foo                                                     }
   let(:method_arity) { 0                                                        }
@@ -38,7 +38,13 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
   end
 
   context 'when also defined on lvar' do
-    let(:scope) { base::DefinedOnLvar }
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::DefinedOnLvar
+      )
+    end
+
     let(:expected_warnings) do
       [
         'Can only match :def inside :sclass on :self or :const, got :sclass on :lvar unable to match'
@@ -49,14 +55,26 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
   end
 
   context 'when defined on self' do
-    let(:scope)       { base::DefinedOnSelf }
-    let(:method_line) { 7                   }
+    let(:method_line) { 7 }
+
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::DefinedOnSelf
+      )
+    end
 
     it_should_behave_like 'a method matcher'
 
     context 'when scope is a metaclass' do
-      let(:scope) { base::DefinedOnSelf::InsideMetaclass.metaclass }
       let(:method_line) { 28 }
+
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedOnSelf::InsideMetaclass.metaclass
+        )
+      end
 
       it_should_behave_like 'a method matcher'
     end
@@ -64,15 +82,27 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
 
   context 'when defined on constant' do
     context 'inside namespace' do
-      let(:scope)       { base::DefinedOnConstant::InsideNamespace }
-      let(:method_line) { 44                                       }
+      let(:method_line) { 44 }
+
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedOnConstant::InsideNamespace
+        )
+      end
 
       it_should_behave_like 'a method matcher'
     end
 
     context 'outside namespace' do
-      let(:scope)       { base::DefinedOnConstant::OutsideNamespace }
-      let(:method_line) { 52                                        }
+      let(:method_line) { 52 }
+
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedOnConstant::OutsideNamespace
+        )
+      end
 
       it_should_behave_like 'a method matcher'
     end
@@ -80,16 +110,28 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
 
   context 'when defined multiple times in the same line' do
     context 'with method on different scope' do
-      let(:scope)        { base::DefinedMultipleTimes::SameLine::DifferentScope }
-      let(:method_line)  { 76                                                   }
-      let(:method_arity) { 1                                                    }
+      let(:method_line)  { 76 }
+      let(:method_arity) { 1  }
+
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedMultipleTimes::SameLine::DifferentScope
+        )
+      end
 
       it_should_behave_like 'a method matcher'
     end
 
     context 'with different name' do
-      let(:scope)        { base::DefinedMultipleTimes::SameLine::DifferentName }
-      let(:method_line)  { 80                                                  }
+      let(:method_line) { 80 }
+
+      let(:scope) do
+        Mutant::Scope.new(
+          expression: instance_double(Mutant::Expression),
+          raw:        base::DefinedMultipleTimes::SameLine::DifferentName
+        )
+      end
 
       it_should_behave_like 'a method matcher'
     end
@@ -98,8 +140,14 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
   # tests that the evaluator correctly returns nil when the metaclass doesn't
   # directly contain the method
   context 'when defined inside a class in a metaclass' do
-    let(:scope)       { base::NotActuallyInAMetaclass                      }
-    let(:method)      { scope.metaclass::SomeClass.new.public_method(:foo) }
+    let(:method) { scope.raw.metaclass::SomeClass.new.public_method(:foo) }
+
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::NotActuallyInAMetaclass
+      )
+    end
 
     it { is_expected.to be_empty }
   end

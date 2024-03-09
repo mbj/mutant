@@ -8,7 +8,7 @@ module Mutant
 
         # Dispatching builder, detects memoizable case
         #
-        # @param [Class, Module] scope
+        # @param [Scope] scope
         # @param [UnboundMethod] method
         #
         # @return [Matcher::Method::Instance]
@@ -31,7 +31,7 @@ module Mutant
         # rubocop:enable Metrics/MethodLength
 
         def self.memoized_method?(scope, method_name)
-          scope < Adamantium && scope.memoized?(method_name)
+          scope.raw < Adamantium && scope.raw.memoized?(method_name)
         end
         private_class_method :memoized_method?
 
@@ -48,9 +48,9 @@ module Mutant
           end
 
           def visibility
-            if scope.private_instance_methods.include?(method_name)
+            if scope.raw.private_instance_methods.include?(method_name)
               :private
-            elsif scope.protected_instance_methods.include?(method_name)
+            elsif scope.raw.protected_instance_methods.include?(method_name)
               :protected
             else
               :public
@@ -65,6 +65,7 @@ module Mutant
 
             def source_location
               scope
+                .raw
                 .unmemoized_instance_method(method_name)
                 .source_location
             end
