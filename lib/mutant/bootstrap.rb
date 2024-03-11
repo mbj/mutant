@@ -71,8 +71,12 @@ module Mutant
       end
     end
 
+    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Style/MultilineBlockChain
     def self.setup_integration(env:, mutations:, selected_subjects:)
       env.record(__method__) do
+        hooks = env.hooks
+        hooks.run(:setup_integration_pre)
         Integration.setup(env).fmap do |integration|
           env.with(
             integration: integration,
@@ -80,10 +84,12 @@ module Mutant
             selector:    Selector::Expression.new(integration: integration),
             subjects:    selected_subjects
           )
-        end
+        end.tap { hooks.run(:setup_integration_post) }
       end
     end
     private_class_method :setup_integration
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Style/MultilineBlockChain
 
     def self.load_hooks(env)
       env.record(__method__) do
