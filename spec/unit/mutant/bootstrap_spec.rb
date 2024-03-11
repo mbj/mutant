@@ -188,10 +188,20 @@ RSpec.describe Mutant::Bootstrap do
           reaction:  { yields: [] }
         },
         {
+          receiver:  hooks,
+          selector:  :run,
+          arguments: [:setup_integration_pre]
+        },
+        {
           receiver:  Mutant::Integration,
           selector:  :setup,
           arguments: [env_with_scopes],
           reaction:  { return: integration_result }
+        },
+        {
+          receiver:  hooks,
+          selector:  :run,
+          arguments: [:setup_integration_post]
         }
       ]
     end
@@ -392,10 +402,20 @@ RSpec.describe Mutant::Bootstrap do
           reaction:  { yields: [] }
         },
         {
+          receiver:  hooks,
+          selector:  :run,
+          arguments: [:setup_integration_pre]
+        },
+        {
           receiver:  Mutant::Integration,
           selector:  :setup,
           arguments: [env_initial],
           reaction:  { return: integration_result }
+        },
+        {
+          receiver:  hooks,
+          selector:  :run,
+          arguments: [:setup_integration_post]
         }
       ]
     end

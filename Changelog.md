@@ -1,3 +1,11 @@
+# v0.11.30 2024-03-11
+
+* [#1427](https://github.com/mbj/mutant/pull/1427)
+
+  Add integration setup hooks.
+  * `setup_integration_pre` - called before the test integration setup.
+  * `setup_integration_post` - called after the test integration setup.
+
 # v0.11.29 2024-03-09
 
 * [#1426](https://github.com/mbj/mutant/pull/1426)
