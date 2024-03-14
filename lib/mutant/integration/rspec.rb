@@ -50,7 +50,7 @@ module Mutant
       def setup
         @setup_elapsed = timer.elapsed do
           @runner.setup(world.stderr, world.stdout)
-          fail 'Rspec setup failure' if RSpec.world.respond_to?(:rspec_is_quitting) && RSpec.world.rspec_is_quitting
+          fail 'Rspec setup failure' if @rspec_world.wants_to_quit
           example_group_map
         end
         @runner.configuration.force(color_mode: :on)

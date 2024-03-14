@@ -1,3 +1,9 @@
+# v0.11.31 2024-03-14
+
+* [#1428](https://github.com/mbj/mutant/pull/1428)
+
+  Improve rspec integration. Mutant now properly exits early if rspec cannot load examples.
+
 # v0.11.30 2024-03-11
 
 * [#1427](https://github.com/mbj/mutant/pull/1427)
