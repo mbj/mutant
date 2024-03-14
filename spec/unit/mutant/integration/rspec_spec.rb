@@ -17,7 +17,7 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:rspec_options)         { instance_double(RSpec::Core::ConfigurationOptions) }
   let(:rspec_runner)          { instance_double(RSpec::Core::Runner)               }
   let(:world)                 { fake_world                                         }
-  let(:rspec_is_quitting)     { false                                              }
+  let(:wants_to_quit)         { false                                              }
 
   let(:example_a) do
     double(
@@ -115,7 +115,7 @@ RSpec.describe Mutant::Integration::Rspec do
       example_groups:         example_groups,
       filtered_examples:      filtered_examples,
       ordered_example_groups: ordered_example_groups,
-      rspec_is_quitting:      rspec_is_quitting
+      wants_to_quit:          wants_to_quit
     )
   end
 
