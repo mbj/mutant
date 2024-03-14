@@ -23,7 +23,7 @@ module Mutant
       )
     end
 
-    # rubocop:disable Metric/MethodLength
+    # rubocop:disable Metrics/MethodLength
     def self.workers(world, config, shared)
       Array.new(config.jobs) do |index|
         Worker.start(
@@ -38,7 +38,7 @@ module Mutant
       end
     end
     private_class_method :workers
-    # rubocop:enable Metric/MethodLength
+    # rubocop:enable Metrics/MethodLength
 
     def self.shared_state(world, config)
       {
