@@ -17,6 +17,7 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:rspec_options)         { instance_double(RSpec::Core::ConfigurationOptions) }
   let(:rspec_runner)          { instance_double(RSpec::Core::Runner)               }
   let(:world)                 { fake_world                                         }
+  let(:is_quitting)           { false                                              }
   let(:wants_to_quit)         { false                                              }
 
   let(:example_a) do
@@ -206,10 +207,82 @@ RSpec.describe Mutant::Integration::Rspec do
       end
     end
 
-    it { should be(object) }
+    shared_examples 'success' do
+      it { should be(object) }
 
-    it 'freezes object' do
-      expect { subject }.to change { object.frozen? }.from(false).to(true)
+      it 'freezes object' do
+        expect { subject }.to change { object.frozen? }.from(false).to(true)
+      end
+    end
+
+    context 'on success' do
+      include_examples 'success'
+    end
+
+    shared_examples 'setup failure' do
+      def apply
+        object.setup
+      end
+
+      it 'raises expeced error' do
+        expect { apply }.to raise_error('RSpec setup failure')
+      end
+    end
+
+    context 'on rspec setup failure' do
+      context 'when rspec wants to quit' do
+        let(:wants_to_quit) { true }
+
+        include_examples 'setup failure'
+      end
+
+      context 'when rspec does not want to quit' do
+        before do
+          allow(rspec_world).to receive_messages(respond_to?: supports_is_quitting)
+        end
+
+        shared_examples 'support query' do
+          it 'queries support' do
+            begin
+              subject
+            # rubocop:disable
+            rescue
+              # rubocop:enable
+            end
+
+            expect(rspec_world).to have_received(:respond_to?).with(:rspec_is_quitting)
+          end
+        end
+
+        context 'and rspec supports is currently quitting' do
+          let(:supports_is_quitting) { true }
+
+          before do
+            allow(rspec_world).to receive_messages(rspec_is_quitting: rspec_is_quitting)
+          end
+
+          context 'and its currently quitting' do
+            let(:rspec_is_quitting) { true }
+
+            include_examples 'setup failure'
+            include_examples 'support query'
+          end
+
+          context 'and its not currently quitting' do
+            let(:rspec_is_quitting) { false }
+
+            include_examples 'success'
+            include_examples 'support query'
+          end
+        end
+
+        context 'and rspec does not support is currently quitting' do
+          let(:supports_is_quitting) { false }
+
+          include_examples 'success'
+          include_examples 'support query'
+        end
+      end
     end
   end
 

@@ -50,7 +50,7 @@ module Mutant
       def setup
         @setup_elapsed = timer.elapsed do
           @runner.setup(world.stderr, world.stdout)
-          fail 'Rspec setup failure' if @rspec_world.wants_to_quit
+          fail 'RSpec setup failure' if rspec_setup_failure?
           example_group_map
         end
         @runner.configuration.force(color_mode: :on)
@@ -101,6 +101,14 @@ module Mutant
       memoize :available_tests
 
     private
+
+      def rspec_setup_failure?
+        @rspec_world.wants_to_quit || rspec_is_quitting?
+      end
+
+      def rspec_is_quitting?
+        @rspec_world.respond_to?(:rspec_is_quitting) && @rspec_world.rspec_is_quitting
+      end
 
       def effective_arguments
         arguments.empty? ? DEFAULT_CLI_OPTIONS : arguments

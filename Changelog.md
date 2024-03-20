@@ -1,3 +1,9 @@
+# v0.11.32 2024-03-20
+
+* [#1430](https://github.com/mbj/mutant/pull/1430)
+
+  Also factor in Rspec 3.9+ signal `rspec_is_quitting` to detect rspec not being able to load examples.
+
 # v0.11.31 2024-03-14
 
 * [#1428](https://github.com/mbj/mutant/pull/1428)
