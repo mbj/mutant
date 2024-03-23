@@ -5,7 +5,7 @@ RSpec.describe Mutant::Expression::Namespace::Exact do
   let(:input)  { 'TestApp::Literal'      }
 
   describe '#matcher' do
-    subject { object.matcher }
+    subject { object.matcher(env: instance_double(Mutant::Env)) }
 
     let(:scope) do
       Mutant::Scope.new(

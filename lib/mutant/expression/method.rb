@@ -39,7 +39,9 @@ module Mutant
       # Matcher for expression
       #
       # @return [Matcher]
-      def matcher
+      #
+      # rubocop:disable Lint/UnusedMethodArgument
+      def matcher(env:)
         matcher_candidates = MATCHERS.fetch(scope_symbol)
           .map { |submatcher| submatcher.new(scope: scope) }
 

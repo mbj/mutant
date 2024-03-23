@@ -38,7 +38,7 @@ module Mutant
           .with(matchable_scopes: matchable_scopes(env))
 
         matched_subjects = env.record(:subject_match) do
-          Matcher.from_config(env.config.matcher).call(env)
+          Matcher.expand(env: env).call(env)
         end
 
         selected_subjects = subject_select(env, matched_subjects)

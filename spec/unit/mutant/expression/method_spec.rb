@@ -25,7 +25,7 @@ RSpec.describe Mutant::Expression::Method do
   end
 
   describe '#matcher' do
-    subject { object.matcher }
+    subject { object.matcher(env: instance_double(Mutant::Env)) }
 
     context 'with an instance method' do
       let(:input) { instance_method }

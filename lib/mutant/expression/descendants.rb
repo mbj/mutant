@@ -11,7 +11,8 @@ module Mutant
         "descendants:#{const_name}"
       end
 
-      def matcher
+      # rubocop:disable Lint/UnusedMethodArgument
+      def matcher(env:)
         Matcher::Descendants.new(const_name: const_name)
       end
     end # Descendants

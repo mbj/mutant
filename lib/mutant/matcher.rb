@@ -15,13 +15,15 @@ module Mutant
 
     # Turn config into matcher
     #
-    # @param [Config] config
+    # @param [Env] env
     #
     # @return [Matcher]
-    def self.from_config(config)
+    def self.expand(env:)
+      matcher_config = env.config.matcher
+
       Filter.new(
-        matcher:   Chain.new(matchers: config.subjects.map(&:matcher)),
-        predicate: method(:allowed_subject?).curry.call(config)
+        matcher:   Chain.new(matchers: matcher_config.subjects.map { |subject| subject.matcher(env: env) }),
+        predicate: method(:allowed_subject?).curry.call(matcher_config)
       )
     end
 

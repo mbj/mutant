@@ -1,17 +1,23 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Matcher do
-  describe '.from_config' do
+  describe '.expand' do
     def apply
-      described_class.from_config(config)
+      described_class.expand(env: env)
     end
 
     let(:anon_matcher)       { instance_double(Mutant::Matcher)    }
     let(:diffs)              { []                                  }
-    let(:env)                { instance_double(Mutant::Env)        }
     let(:expression_a)       { expression('Foo::Bar#a', matcher_a) }
     let(:expression_b)       { expression('Foo::Bar#b', matcher_b) }
     let(:ignore_expressions) { []                                  }
+
+    let(:env) do
+      instance_double(
+        Mutant::Env,
+        config: instance_double(Mutant::Config, matcher: config)
+      )
+    end
 
     let(:matcher_a) do
       instance_double(Mutant::Matcher, call: [subject_a])
@@ -24,6 +30,7 @@ RSpec.describe Mutant::Matcher do
     let(:expression_class) do
       Class.new(Mutant::Expression) do
         include Unparser::Anima.new(:child, :matcher)
+        include Unparser::Equalizer.new
 
         %w[syntax prefix?].each do |name|
           define_method(name) do |*arguments, &block|
@@ -31,7 +38,10 @@ RSpec.describe Mutant::Matcher do
           end
         end
 
-        public :matcher
+        define_method(:matcher) do |env:|
+          fail unless env
+          @matcher
+        end
       end
     end
 

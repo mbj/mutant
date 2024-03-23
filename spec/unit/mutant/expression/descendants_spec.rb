@@ -6,7 +6,7 @@ RSpec.describe Mutant::Expression::Descendants do
 
   describe '#matcher' do
     def apply
-      object.matcher
+      object.matcher(env: instance_double(Mutant::Env))
     end
 
     it 'returns expected matcher' do

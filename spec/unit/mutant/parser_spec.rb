@@ -4,7 +4,9 @@ RSpec.describe Mutant::Parser do
   let(:object) { described_class.new }
 
   describe '#call' do
-    let(:path) { instance_double(Pathname) }
+    let(:path) { instance_double(Pathname, expand_path: expanded_path) }
+
+    let(:expanded_path) { instance_double(Pathname) }
 
     let(:expected_node) { s(:sym, :source) }
 
