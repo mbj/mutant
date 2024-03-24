@@ -1,3 +1,12 @@
+# v0.11.33 2024-03-24
+
+* [#1431](https://github.com/mbj/mutant/pull/1431)
+
+  Add source match expression, source `source:$glob_expression`, example `source:{app,lib}/**/*.rb`
+  works with anything that `Pathname#glob` suppors.
+
+  Allows to match all toplevel class/module constants defined in the matched ruby files.
+
 # v0.11.32 2024-03-20
 
 * [#1430](https://github.com/mbj/mutant/pull/1430)
