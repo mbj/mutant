@@ -18,7 +18,7 @@ module Mutant
     #
     # @return [AST::Node]
     def call(path)
-      @cache[path] ||= parse(path.read)
+      @cache[path.expand_path] ||= parse(path.read)
     end
 
   private

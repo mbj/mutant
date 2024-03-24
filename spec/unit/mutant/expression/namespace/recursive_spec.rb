@@ -5,7 +5,7 @@ RSpec.describe Mutant::Expression::Namespace::Recursive do
   let(:input)  { 'TestApp::Literal*'     }
 
   describe '#matcher' do
-    subject { object.matcher }
+    subject { object.matcher(env: instance_double(Mutant::Env)) }
 
     it { should eql(Mutant::Matcher::Namespace.new(expression: object)) }
   end

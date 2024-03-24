@@ -204,6 +204,7 @@ module Mutant
     require 'mutant/expression/methods'
     require 'mutant/expression/namespace'
     require 'mutant/expression/parser'
+    require 'mutant/expression/source'
     require 'mutant/test'
     require 'mutant/test/runner'
     require 'mutant/test/runner/sink'
@@ -347,7 +348,8 @@ module Mutant
           Expression::Method,
           Expression::Methods,
           Expression::Namespace::Exact,
-          Expression::Namespace::Recursive
+          Expression::Namespace::Recursive,
+          Expression::Source
         ]
       ),
       environment_variables: EMPTY_HASH,

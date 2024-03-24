@@ -48,7 +48,7 @@ RSpec.describe Mutant::Expression::Methods do
   end
 
   describe '#matcher' do
-    subject { object.matcher }
+    subject { object.matcher(env: instance_double(Mutant::Env)) }
 
     let(:scope) do
       Mutant::Scope.new(

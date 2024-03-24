@@ -34,7 +34,9 @@ module Mutant
         # Matcher for expression
         #
         # @return [Matcher]
-        def matcher
+        #
+        # rubocop:disable Lint/UnusedMethodArgument
+        def matcher(env:)
           Matcher::Namespace.new(expression: self)
         end
 
@@ -65,7 +67,7 @@ module Mutant
         # Matcher matcher on expression
         #
         # @return [Matcher]
-        def matcher
+        def matcher(env:)
           raw_scope = find_raw_scope
 
           if raw_scope
