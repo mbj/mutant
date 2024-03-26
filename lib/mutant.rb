@@ -174,6 +174,7 @@ module Mutant
     require 'mutant/mutator/node/procarg_zero'
     require 'mutant/mutator/node/kwargs'
     require 'mutant/mutator/node/numblock'
+    require 'mutant/mutator/node/const_pattern'
     require 'mutant/mutator/regexp'
     require 'mutant/loader'
     require 'mutant/context'
