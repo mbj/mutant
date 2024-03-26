@@ -1,3 +1,11 @@
+# v0.11.34 2024-03-26
+
+* [#1432](https://github.com/mbj/mutant/pull/1432)
+
+  Fix const pattern mutation to not generate invalid ast. The generic node mutation would generate invalid AST.
+  This also removes some recursion into the nested pattern. Still this is preferable till we add explicit
+  pattern mutation operators.
+
 # v0.11.33 2024-03-24
 
 * [#1431](https://github.com/mbj/mutant/pull/1431)
