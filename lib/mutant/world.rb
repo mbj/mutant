@@ -39,19 +39,25 @@ module Mutant
       INSPECT
     end
 
+    class CommandStatus
+      include Adamantium, Anima.new(:process_status, :stderr, :stdout)
+    end # CommandStatus
+
     # Capture stdout of a command
     #
     # @param [Array<String>] command
     #
-    # @return [Either<String,String>]
-    def capture_stdout(command)
-      stdout, status = open3.capture2(*command, binmode: true)
+    # @return [Either<CommandStatus,CommandStatus>]
+    def capture_command(command)
+      stdout, stderr, process_status = open3.capture3(*command, binmode: true)
 
-      if status.success?
-        Either::Right.new(stdout)
-      else
-        Either::Left.new("Command #{command} failed!")
-      end
+      (process_status.success? ? Either::Right : Either::Left).new(
+        CommandStatus.new(
+          process_status: process_status,
+          stderr:         stderr,
+          stdout:         stdout
+        )
+      )
     end
 
     # Try const get

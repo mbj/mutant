@@ -54,15 +54,24 @@ RSpec.describe Mutant::World do
     end
   end
 
-  describe '#capture_stdout' do
+  describe '#capture_command' do
     def apply
-      subject.capture_stdout(command)
+      subject.capture_command(command)
     end
 
-    let(:open3)          { class_double(Open3)              }
-    let(:stdout)         { instance_double(String, :stdout) }
-    let(:subject)        { super().with(open3: open3)       }
-    let(:command)        { %w[foo bar baz]                  }
+    let(:open3)   { class_double(Open3)              }
+    let(:stdout)  { instance_double(String, :stdout) }
+    let(:stderr)  { instance_double(String, :stderr) }
+    let(:subject) { super().with(open3: open3)       }
+    let(:command) { %w[foo bar baz]                  }
+
+    let(:command_status) do
+      described_class::CommandStatus.new(
+        process_status: process_status,
+        stderr:         stderr,
+        stdout:         stdout
+      )
+    end
 
     let(:process_status) do
       instance_double(
@@ -72,14 +81,14 @@ RSpec.describe Mutant::World do
     end
 
     before do
-      allow(open3).to receive_messages(capture2: [stdout, process_status])
+      allow(open3).to receive_messages(capture3: [stdout, stderr, process_status])
     end
 
     context 'when process exists successful' do
       let(:success?) { true }
 
       it 'returns stdout' do
-        expect(apply).to eql(Mutant::Either::Right.new(stdout))
+        expect(apply).to eql(right(command_status))
       end
     end
 
@@ -87,7 +96,7 @@ RSpec.describe Mutant::World do
       let(:success?) { false }
 
       it 'returns stdout' do
-        expect(apply).to eql(Mutant::Either::Left.new("Command #{command.inspect} failed!"))
+        expect(apply).to eql(Mutant::Either::Left.new(command_status))
       end
     end
   end

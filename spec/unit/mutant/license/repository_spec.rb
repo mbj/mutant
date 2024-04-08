@@ -60,16 +60,19 @@ RSpec.describe Mutant::License::Subscription::Repository do
       described_class.load_from_git(world)
     end
 
-    let(:world) { instance_double(Mutant::World) }
-
     before do
-      allow(world).to receive(:capture_stdout, &commands.public_method(:fetch))
+      allow(world).to receive(:capture_command, &commands.public_method(:fetch))
     end
 
-    let(:git_remote_result)    { right(git_remote)         }
-    let(:allowed_repositories) { %w[github.com/mbj/mutant] }
+    let(:allowed_repositories) { %w[github.com/mbj/mutant]      }
+    let(:git_remote_result)    { right(git_remote_status)       }
+    let(:world)                { instance_double(Mutant::World) }
 
-    let(:git_remote) do
+    let(:git_remote_status) do
+      instance_double(Mutant::World::CommandStatus, stdout: git_remote_stdout)
+    end
+
+    let(:git_remote_stdout) do
       <<~REMOTE
         origin\tgit@github.com:mbj/Mutant (fetch)
         origin\tgit@github.com:mbj/Mutant (push)
@@ -102,7 +105,7 @@ RSpec.describe Mutant::License::Subscription::Repository do
     end
 
     context 'on ssh url with protocol and without suffix' do
-      let(:git_remote) do
+      let(:git_remote_stdout) do
         <<~REMOTE
           origin\tssh://git@github.com/mbj/mutant (fetch)
           origin\tssh://git@github.com/mbj/mutant (push)
@@ -113,7 +116,7 @@ RSpec.describe Mutant::License::Subscription::Repository do
     end
 
     context 'on ssh url with protocol and suffix' do
-      let(:git_remote) do
+      let(:git_remote_stdout) do
         <<~REMOTE
           origin\tssh://git@github.com/mbj/mutant.git (fetch)
           origin\tssh://git@github.com/mbj/mutant.git (push)
@@ -124,7 +127,7 @@ RSpec.describe Mutant::License::Subscription::Repository do
     end
 
     context 'on https url without suffix' do
-      let(:git_remote) do
+      let(:git_remote_stdout) do
         <<~REMOTE
           origin\thttps://github.com/mbj/mutant (fetch)
           origin\thttps://github.com/mbj/mutant (push)
@@ -135,7 +138,7 @@ RSpec.describe Mutant::License::Subscription::Repository do
     end
 
     context 'on multiple different urls' do
-      let(:git_remote) do
+      let(:git_remote_stdout) do
         <<~REMOTE
           origin\thttps://github.com/mbj/mutant (fetch)
           origin\thttps://github.com/mbj/mutant (push)
@@ -161,7 +164,7 @@ RSpec.describe Mutant::License::Subscription::Repository do
     end
 
     context 'on https url with .git suffix' do
-      let(:git_remote) do
+      let(:git_remote_stdout) do
         <<~REMOTE
           origin\thttps://github.com/mbj/mutant.git (fetch)
           origin\thttps://github.com/mbj/mutant.git (push)
@@ -172,13 +175,13 @@ RSpec.describe Mutant::License::Subscription::Repository do
     end
 
     context 'when git remote line cannot be parsed' do
-      let(:git_remote) { "some-bad-remote-line\n" }
+      let(:git_remote_stdout) { "some-bad-remote-line\n" }
 
       it_fails 'Unmatched remote line: "some-bad-remote-line\n"'
     end
 
     context 'when git remote url cannot be parsed' do
-      let(:git_remote) { "some-unknown\thttp://github.com/mbj/mutant (fetch)\n" }
+      let(:git_remote_stdout) { "some-unknown\thttp://github.com/mbj/mutant (fetch)\n" }
 
       it_fails 'Unmatched git remote URL: "http://github.com/mbj/mutant"'
     end

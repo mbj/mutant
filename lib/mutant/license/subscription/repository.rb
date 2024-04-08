@@ -20,8 +20,8 @@ module Mutant
 
         def self.load_from_git(world)
           world
-            .capture_stdout(%w[git remote --verbose])
-            .fmap(&method(:parse_remotes))
+            .capture_command(%w[git remote --verbose])
+            .fmap { |status| parse_remotes(status.stdout) }
         end
 
         def self.parse_remotes(input)

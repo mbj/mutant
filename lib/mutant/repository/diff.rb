@@ -36,9 +36,8 @@ module Mutant
 
       def repository_root
         world
-          .capture_stdout(%w[git rev-parse --show-toplevel])
-          .fmap(&:chomp)
-          .fmap(&world.pathname.public_method(:new))
+          .capture_command(%w[git rev-parse --show-toplevel])
+          .fmap { |status| world.pathname.new(status.stdout.chomp) }
       end
 
       def touched_path(path, &block)
@@ -52,11 +51,10 @@ module Mutant
 
       def diff_index(root)
         world
-          .capture_stdout(%W[git diff-index #{to}])
-          .fmap(&:lines)
-          .bind do |lines|
+          .capture_command(%W[git diff-index #{to}])
+          .bind do |status|
             Mutant
-              .traverse(->(line) { parse_line(root, line) }, lines)
+              .traverse(->(line) { parse_line(root, line) }, status.stdout.lines)
               .fmap do |paths|
                 paths.to_h { |path| [path.path, path] }
               end
@@ -105,8 +103,8 @@ module Mutant
 
         def diff_ranges
           world
-            .capture_stdout(%W[git diff --unified=0 #{to} -- #{path}])
-            .fmap(&Ranges.public_method(:parse))
+            .capture_command(%W[git diff --unified=0 #{to} -- #{path}])
+            .fmap { |status| Ranges.parse(status.stdout) }
             .from_right
         end
         memoize :diff_ranges
