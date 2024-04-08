@@ -77,54 +77,27 @@ Labels:
 
 ## Licensing
 
-Mutant is commercial software, with a free usage plan for opensource projects.
+Mutant is commercial software, with a free usage option for opensource projects.
+Opensource projects have to be on a public repository.
 
-Commercial projects have to acquire a license per developer, with unlimited repositories
-per developer. CI usage for licensed developers is included.
+Commercial projects have to pay a monthly or annual subscription fee.
 
-Opensource projects have to acquire their free license per repository. That license will
-work for any contributor implicitly. Typically the project maintainer gets the license.
+## Opensource usage
 
-The license distribution happens through the `mutant-license` gem. Mutant installs without
-that dependency, but will not be very cooperative unless `mutant-license` is also available.
+Usage is free and does not require a signup. But it requires the code is under an
+opensource license and public. Specify `--usage opensource` on the CLI or `usage: opensource`
+in the config file.
 
-The license gem is dynamically generated per licensee and comes with a unique license gem source
-URL.
+## Commercial usage
 
-After signup for a license the following has to be added to your `Gemfile` replacing `${key}`
-with the license key and `${plan}` with `com` for commercial or `oss` for opensource usage.
+Commercial use requires payment via a subscription and requires a signup. See [pricing](#pricing) for
+available plans.
 
-```ruby
-source 'https://${plan}:${key}@gem.mutant.dev' do
-  gem 'mutant-license'
-end
-```
-
-The mutant license gem contains metadata that allows mutant to verify licensed use.
-
-For commercial licenses mutant checks the git commit author or the configured git email
-to be in the set of licensed developers.
-
-For opensource licenses mutant checks the git remotes against the licensed git repositories.
-This allows the project maintainer to sign up and not bother collaborators with the details.
-
-There are, apart from initial license gem installation, no remote interaction for
-license validation.
-
-### Getting an Opensource license
-
-As stated above: Opensource projects of any kind are free to use mutant.
-
-Just mail [me](mailto:mbj@schirp-dso.com?subject=Mutant%20Opensource%20License): Please
-include:
-
-* Just the git remote URL of your repository. Repository can be anywhere, must not be on Github, just has to be public.
-
-I do not need any more details.
+After payment pecify `--usage commercial` on the CLI or `usage: commercial` in the config file.
 
 ### Pricing
 
-**Mutant is free for [opensource use](#getting-an-opensource-license)!**
+**Mutant is free for [opensource use](#opensource-usage)!**
 
 For commercial use mutants pricing is subscription based.
 
@@ -137,9 +110,11 @@ For commercial use mutants pricing is subscription based.
 
 Costs are **per developer using mutant on any number of repositories**.
 
-Volume licenses with custom plans are available on request.
+Volume subscriptions with custom plans are available on request.
 
-Should you want to procure a commercial mutant subscription please [mail me](mailto:mbj@schirp-dso.com?subject=Mutant%20Commercial%20License).
+Should you want to procure a commercial mutant subscription please
+[mail me](mailto:mbj@schirp-dso.com?subject=Mutant%20Commercial%20License) to start the payment
+process.
 
 Please include the following information:
 
@@ -147,8 +122,7 @@ Please include the following information:
 * A payment email address, if different from your email address.
 * Only for the EU: A valid VAT-ID is *required*, no sales to private customers to avoid the
   horrors cross border VAT / MOSS.
-  VAT for customers outside of Malta will use **reverse charging**.
-* *Per developer* the git author email address as returned by `git config user.email`
+  VAT for EU customers outside of Malta will use **reverse charging**.
 
 Also feel free to ask any other question I forgot to proactively answer here.
 

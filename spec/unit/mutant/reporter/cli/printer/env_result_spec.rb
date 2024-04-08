@@ -18,6 +18,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
       +false
       -----------------------
       Mutant environment:
+      Usage:           unknown
       Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     null
       Jobs:            auto

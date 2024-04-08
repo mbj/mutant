@@ -1,7 +1,8 @@
 ---
+usage: commercial
 includes:
 - lib
-integration: 
+integration:
   name: rspec
 requires:
 - mutant

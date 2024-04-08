@@ -8,6 +8,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
 
     describe '.call' do
       it_reports(<<~'REPORT')
+        Usage:           unknown
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
         Jobs:            auto
@@ -23,6 +24,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
 
     describe '.call' do
       it_reports(<<~'REPORT')
+        Usage:           unknown
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
         Jobs:            10
@@ -38,6 +40,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
 
     describe '.call' do
       it_reports(<<~'REPORT')
+        Usage:           unknown
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
         Jobs:            auto
@@ -53,6 +56,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
 
     describe '.call' do
       it_reports(<<~'REPORT')
+        Usage:           unknown
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     foo
         Jobs:            auto
@@ -68,6 +72,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
 
     describe '.call' do
       it_reports(<<~'REPORT')
+        Usage:           unknown
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
         Jobs:            auto

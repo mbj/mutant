@@ -2,7 +2,14 @@
 
 RSpec.describe 'minitest integration', mutant: false do
   let(:base_cmd) do
-    %w[bundle exec mutant run -I test -I lib --require test_app --integration minitest]
+    %w[
+      bundle exec mutant run
+      --include test
+      --include lib
+      --require test_app
+      --integration minitest
+      --usage opensource
+    ]
   end
 
   let(:gemfile) { 'Gemfile.minitest' }

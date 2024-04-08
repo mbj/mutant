@@ -21,7 +21,8 @@ module Mutant
       :matcher,
       :mutation,
       :reporter,
-      :requires
+      :requires,
+      :usage
     )
 
     %i[fail_fast].each do |name|
@@ -87,7 +88,8 @@ module Mutant
         jobs:                  other.jobs || jobs,
         matcher:               matcher.merge(other.matcher),
         mutation:              mutation.merge(other.mutation),
-        requires:              requires + other.requires
+        requires:              requires + other.requires,
+        usage:                 other.usage.merge(usage)
       )
     end
     # rubocop:enable Metrics/AbcSize
@@ -247,6 +249,10 @@ module Mutant
           Transform::Hash::Key.new(
             transform: Transform::STRING_ARRAY,
             value:     'requires'
+          ),
+          Transform::Hash::Key.new(
+            transform: Usage::TRANSFORM,
+            value:     'usage'
           )
         ],
         required: []

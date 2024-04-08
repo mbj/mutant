@@ -1,3 +1,13 @@
+# v0.12.0 [unreleased]
+
+  Drop the license gem, entirely. This reduces DRM in mutants code base to the absolute minimal.
+  Mutant is *still* comercial software that requires payment if used on a commercial code base!
+
+  Migration:
+
+  * Commercial users: Add `usage: commercial` to your config file (or `--usage commercial` to your CLI)
+  * Opensource users: Add `usage: opensource` to your config file (or `--usage opensource` to your CLI)
+
 # v0.11.34 2024-03-26
 
 * [#1432](https://github.com/mbj/mutant/pull/1432)
