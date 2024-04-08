@@ -77,7 +77,7 @@ RSpec.describe Mutant::License::Subscription do
     let(:world) { instance_double(Mutant::World) }
 
     before do
-      allow(world).to receive(:capture_stdout, &commands.public_method(:fetch))
+      allow(world).to receive(:capture_command, &commands.public_method(:fetch))
     end
 
     def self.it_fails(expected)
@@ -99,8 +99,12 @@ RSpec.describe Mutant::License::Subscription do
     end
 
     describe 'on opensource license' do
-      let(:git_remote_result)    { right(git_remote)         }
+      let(:git_remote_result)    { right(git_remote_status)  }
       let(:allowed_repositories) { %w[github.com/mbj/mutant] }
+
+      let(:git_remote_status) do
+        instance_double(Mutant::World::CommandStatus, stdout: git_remote_stdout)
+      end
 
       let(:license_json) do
         {
@@ -117,7 +121,7 @@ RSpec.describe Mutant::License::Subscription do
         }
       end
 
-      let(:git_remote) do
+      let(:git_remote_stdout) do
         <<~REMOTE
           origin\tgit@github.com:mbj/mutant (fetch)
           origin\tgit@github.com:mbj/mutant (push)
@@ -127,7 +131,7 @@ RSpec.describe Mutant::License::Subscription do
       context 'on one of many match' do
         let(:allowed_repositories) { %w[github.com/mbj/something github.com/mbj/mutant] }
 
-        let(:git_remote) do
+        let(:git_remote_stdout) do
           <<~REMOTE
             origin\tgit@github.com:mbj/mutant (fetch)
             origin\tgit@github.com:mbj/mutant (push)
@@ -182,7 +186,11 @@ RSpec.describe Mutant::License::Subscription do
 
     describe 'on commercial license' do
       context 'on organization licenses' do
-        let(:git_remote_result) { right(git_remote) }
+        let(:git_remote_result) { right(git_remote_status) }
+
+        let(:git_remote_status) do
+          instance_double(Mutant::World::CommandStatus, stdout: git_remote_stdout)
+        end
 
         let(:license_json) do
           {
@@ -200,7 +208,7 @@ RSpec.describe Mutant::License::Subscription do
           }
         end
 
-        let(:git_remote) do
+        let(:git_remote_stdout) do
           <<~REMOTE
             origin\tgit@github.com:mbj/Mutant (fetch)
             origin\tgit@github.com:mbj/Mutant (push)
@@ -227,7 +235,7 @@ RSpec.describe Mutant::License::Subscription do
         context 'on a one of many match' do
           let(:allowed_repositories) { %w[github.com/mbj/something github.com/mbj/mutant] }
 
-          let(:git_remote) do
+          let(:git_remote_stdout) do
             <<~REMOTE
               origin\tgit@github.com:mbj/mutant (fetch)
               origin\tgit@github.com:mbj/mutant (push)
@@ -268,10 +276,24 @@ RSpec.describe Mutant::License::Subscription do
       end
 
       shared_examples 'individual licenses' do
-        let(:git_config_author) { "customer-a@example.com\n"                   }
-        let(:git_config_result) { Mutant::Either::Right.new(git_config_author) }
-        let(:git_show_author)   { "customer-b@example.com\n"                   }
-        let(:git_show_result)   { Mutant::Either::Right.new(git_show_author)   }
+        let(:git_config_author) { "customer-a@example.com\n"                          }
+        let(:git_config_result) { Mutant::Either::Right.new(git_config_author_status) }
+        let(:git_show_author)   { "customer-b@example.com\n"                          }
+        let(:git_show_result)   { Mutant::Either::Right.new(git_show_author_status)   }
+
+        let(:git_config_author_status) do
+          instance_double(
+            Mutant::World::CommandStatus,
+            stdout: git_config_author
+          )
+        end
+
+        let(:git_show_author_status) do
+          instance_double(
+            Mutant::World::CommandStatus,
+            stdout: git_show_author
+          )
+        end
 
         let(:licensed_authors) do
           %w[

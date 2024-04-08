@@ -16,19 +16,28 @@ describe Mutant::Repository::Diff do
     )
   end
 
+  def mk_command_status_result(stdout)
+    right(
+      instance_double(
+        Mutant::World::CommandStatus,
+        stdout: stdout
+      )
+    )
+  end
+
   let(:raw_expectations) do
     [
       {
         receiver:  world,
-        selector:  :capture_stdout,
+        selector:  :capture_command,
         arguments: [%w[git rev-parse --show-toplevel]],
-        reaction:  { return: Mutant::Either::Right.new("/foo\n") }
+        reaction:  { return: mk_command_status_result("/foo\n") }
       },
       {
         receiver:  world,
-        selector:  :capture_stdout,
+        selector:  :capture_command,
         arguments: [%w[git diff-index to_rev]],
-        reaction:  { return: Mutant::Either::Right.new(index_stdout) }
+        reaction:  { return: mk_command_status_result(index_stdout) }
       },
       *file_diff_expectations
     ]
@@ -83,9 +92,9 @@ describe Mutant::Repository::Diff do
         [
           {
             receiver:  world,
-            selector:  :capture_stdout,
+            selector:  :capture_command,
             arguments: [%w[git diff --unified=0 to_rev -- /foo/bar.rb]],
-            reaction:  { return: Mutant::Either::Right.new(diff_stdout) }
+            reaction:  { return: mk_command_status_result(diff_stdout) }
           }
         ]
       end

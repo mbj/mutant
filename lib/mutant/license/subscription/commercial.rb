@@ -75,11 +75,9 @@ module Mutant
 
           def capture(world, command)
             world
-              .capture_stdout(command)
-              .fmap(&:chomp)
-              .fmap { |email| Author.new(email: email) }
-              .fmap { |value| Set.new([value]) }
-              .from_right { Set.new }
+              .capture_command(command)
+              .either(->(_) { EMPTY_ARRAY }, ->(status) { [Author.new(email: status.stdout.chomp)] })
+              .to_set
           end
         end # Individual
       end # Commercial
