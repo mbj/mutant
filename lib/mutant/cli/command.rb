@@ -122,7 +122,7 @@ module Mutant
 
       def parse(arguments)
         Either
-          .wrap_error(OptionParser::InvalidOption) { parser.order(arguments) }
+          .wrap_error(OptionParser::InvalidArgument, OptionParser::InvalidOption) { parser.order(arguments) }
           .lmap(&method(:with_help))
           .bind(&method(:parse_remaining))
       end
@@ -173,14 +173,6 @@ module Mutant
           parse_subcommand(remaining)
         else
           parse_remaining_arguments(remaining)
-        end
-      end
-
-      def parse_remaining_arguments(remaining)
-        if remaining.any?
-          Either::Left.new("#{full_name}: Does not expect extra arguments")
-        else
-          Either::Right.new(self)
         end
       end
 

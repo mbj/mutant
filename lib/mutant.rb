@@ -109,6 +109,7 @@ module Mutant
     require 'mutant/require_highjack'
     require 'mutant/mutation'
     require 'mutant/mutation/operators'
+    require 'mutant/usage'
     require 'mutant/mutation/config'
     require 'mutant/mutator'
     require 'mutant/mutator/util'
@@ -221,7 +222,6 @@ module Mutant
     require 'mutant/config/coverage_criteria'
     require 'mutant/cli'
     require 'mutant/cli/command'
-    require 'mutant/cli/command/subscription'
     require 'mutant/cli/command/environment'
     require 'mutant/cli/command/environment/irb'
     require 'mutant/cli/command/environment/run'
@@ -255,11 +255,6 @@ module Mutant
     require 'mutant/repository/diff/ranges'
     require 'mutant/zombifier'
     require 'mutant/range'
-    require 'mutant/license'
-    require 'mutant/license/subscription'
-    require 'mutant/license/subscription/commercial'
-    require 'mutant/license/subscription/opensource'
-    require 'mutant/license/subscription/repository'
     require 'mutant/segment'
     require 'mutant/segment/recorder'
   end
@@ -363,7 +358,8 @@ module Mutant
       matcher:               Matcher::Config::DEFAULT,
       mutation:              Mutation::Config::EMPTY,
       reporter:              Reporter::CLI.build(WORLD.stdout),
-      requires:              EMPTY_ARRAY
+      requires:              EMPTY_ARRAY,
+      usage:                 Usage::Unknown.new
     )
   end # Config
 

@@ -53,6 +53,7 @@ module MutantSpec
                 --integration #{integration_name}
                 --include lib
                 --require #{name}
+                --usage opensource
                 #{namespace}*
               ] + concurrency_limits
             )

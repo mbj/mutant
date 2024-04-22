@@ -38,6 +38,7 @@ This prints a report like:
 
 ```sh
 Mutant environment:
+Usage:           opensource
 Matcher:         #<Mutant::Matcher::Config subjects: [AUOM*]>
 Integration:     Mutant::Integration::Rspec
 Jobs:            8

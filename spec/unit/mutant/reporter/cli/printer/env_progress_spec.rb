@@ -11,6 +11,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
 
       it_reports <<~'STR'
         Mutant environment:
+        Usage:           unknown
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
         Jobs:            auto
@@ -38,6 +39,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
     context 'on full coverage' do
       it_reports <<~'STR'
         Mutant environment:
+        Usage:           unknown
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
         Jobs:            auto
@@ -67,6 +69,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
 
       it_reports <<~'STR'
         Mutant environment:
+        Usage:           unknown
         Matcher:         #<Mutant::Matcher::Config empty>
         Integration:     null
         Jobs:            auto

@@ -15,6 +15,7 @@ module Mutant
             add_integration_options
             add_matcher_options
             add_reporter_options
+            add_usage_options
           ].freeze
 
       private
@@ -135,6 +136,20 @@ module Mutant
           parser.on('--print-warnings', 'Print warnings') do
             set(reporter: @config.reporter.with(print_warnings: true))
           end
+        end
+
+        def add_usage_options(parser)
+          parser.separator('Usage:')
+
+          parser.accept(Usage, Usage::CLI_REGEXP) do |value|
+            Usage.parse(value).from_right
+          end
+
+          parser.on(
+            '--usage USAGE_TYPE',
+            Usage,
+            'License usage: opensource|commercial'
+          ) { |usage| set(usage: usage) }
         end
       end # Run
       # rubocop:enable Metrics/ClassLength

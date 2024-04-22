@@ -6,8 +6,8 @@ Is there a trial version?
 
 There is no free trial.
 
-But mutant offers to refund the last monthly
-payment on cancellation. Basically a rolling trial on monthly plans.
+But mutant offers to refund the last monthly payment on cancellation.
+Basically a rolling trial on monthly plans.
 
 Yearly and custom plans do not offer any refunds but come with discounts.
 
@@ -35,17 +35,14 @@ This per subscription is valid for any number of private repositories.
 
 Depending on your plan subscriptions renew monthly or yearly.
 
-After purchase you get access to a custom rubygem hosted on mutants license
-server that enables mutants functionality in commercial repositories.
-
+After purchase you setup the commercial usage type in mutant
+and are ready to go.
 
 How do I determine the number of required subscriptions?
 --------------------------------------------------------
 
 Collect the git author email from each of your developers that need to use mutant.
-Use `git config --get user.email`.  Count that list.
-
-Mutant on CI will work on any commit authored by a developer in that list.
+Use `git config --get user.email`. Count that list.
 
 So a designer, who contributes to your repository, but never touches Ruby/Mutant:
 Will not be forced to get a mutant subscription.
@@ -54,34 +51,11 @@ What happens if my subsription lapses?
 --------------------------------------
 
 If your credit card cannot be charged, even after retries: The subscription will be
-considered inactive and you loose access to mutants license gem. Which prevents `bundle install`
-and adjacent commands to succeed.
+considered inactive and you loose the right to run mutant.
 
 **Please note that pricing can chance**. Once you purchase a subscription, you get that price
 forever **as long you pay on time**. If your subscription expires for a non-payment, you will lose
 that pricing and need to repurchase at current pricing.
-
-What does the license require me to do?
----------------------------------------
-
-Your purchase gets you unique access credentials for accessing the license gem which enables
-mutant on a private repository. The license requires you to keep these access credentials private.
-
-If your access credentials are ever found to be publicized:
-
-1. You get a warning email with details. You need to remove the content and
-   will get new new credentials being generated.
-   The old credentials will stop working immediately so you'll need to update your
-   `Gemfile`.
-2. If your credentials are publicized a second time, we reserve the right to permanently
-   remove access (but won't unless it's really egregious - sloppy contractors happen).
-
-Do I have to share the credentials with all of my developers?
--------------------------------------------------------------
-
-In general yes. The intention is that the license details gets checked into the
-`Gemfile`. This only gives access to mutants funcionality, your billing account is
-separate and individuall developers cannot update the subscription.
 
 Can I get a refund?
 -------------------
@@ -98,7 +72,6 @@ Can I request a change to the license terms?
 --------------------------------------------
 
 Mutant is sold as is. Pricing becomes negotiatable over 20 developers.
-
 License terms may be amended for even bigger customers.
 
 Disputing a Charge
@@ -133,15 +106,8 @@ Schirp DSO LTD only collects enough customer information provide its services wh
 * Per developer: The developers git author emaill address.
 * Standard HTTP logging for the license server with 14d expiry.
 
-Mutant runs exclusively on your developers machines. Or your CI. The only time mutant
-calls a service operated by Schirp DSO LTD: Is on `bundle install`. Where `bundler` sends a
-HTTP request with your license key to the license server.
+Mutant runs exclusively on your developers machines. Or your CI.
 
-BTW: As mutant does NOT control the HTTP call side (bundler does instead) there cannot be any
-information leak being caused by mutant. Apart from HTTP logs at the license server.
-
-At no point in time Schirp DSO LTD gets access to your source code, your customers data
-or other sensitive material.
 
 Should mutant gain more features that would enable features such as distributed
 analysis and reporting, these features will be opt in, with a big warning.
@@ -153,3 +119,14 @@ Customer information is never shared or sold to anyone.
 * Stripe for subscription, credit card and SEPA direct debits.
 * Transferwise for receiving SEPA and ACH transfers.
 * AWS to host the license server.
+
+At no point in time Schirp DSO LTD gets access to your source code, your customers data
+or other sensitive material.
+
+### Pre mutant 0.12 license gem.
+
+The only time mutant calls a service operated by Schirp DSO LTD: Is on `bundle install`.
+Where `bundler` sends a HTTP request with your license key to the license server.
+
+BTW: As mutant does NOT control the HTTP call side (bundler does instead) there cannot be any
+information leak being caused by mutant. Apart from HTTP logs at the license server.

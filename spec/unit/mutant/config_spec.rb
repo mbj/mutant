@@ -113,6 +113,37 @@ RSpec.describe Mutant::Config do
       end
     end
 
+    context 'merging usage' do
+      let(:key) { :usage }
+
+      context 'when merging into unknown' do
+        let(:original_value) { Mutant::Usage::Unknown.new    }
+        let(:other_value)    { Mutant::Usage::Commercial.new }
+
+        it 'merges with preference for other' do
+          expect_value(other_value)
+        end
+      end
+
+      context 'when merging into commercial' do
+        let(:original_value) { Mutant::Usage::Commercial.new }
+        let(:other_value)    { Mutant::Usage::Unknown.new    }
+
+        it 'merges with preference for other' do
+          expect_value(original_value)
+        end
+      end
+
+      context 'when merging into opensource' do
+        let(:original_value) { Mutant::Usage::Opensource.new }
+        let(:other_value)    { Mutant::Usage::Unknown.new    }
+
+        it 'merges with preference for other' do
+          expect_value(original_value)
+        end
+      end
+    end
+
     context 'merging integration' do
       let(:key) { :integration }
 

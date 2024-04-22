@@ -9,13 +9,6 @@ module Mutant
           SHORT_DESCRIPTION = 'Run code analysis'
           SUBCOMMANDS       = EMPTY_ARRAY
 
-          UNLICENSED = <<~MESSAGE.lines.freeze
-            You are using mutant unlicensed.
-
-            See https://github.com/mbj/mutant#licensing to aquire a license.
-            Note: Its free for opensource use, which is recommended for trials.
-          MESSAGE
-
           NO_TESTS_MESSAGE = <<~'MESSAGE'
             ===============
             Mutant found no tests available for mutation testing.
@@ -34,8 +27,8 @@ module Mutant
         private
 
           def action
-            License.call(world)
-              .bind { bootstrap }
+            bootstrap
+              .bind(&method(:verify_usage))
               .bind(&method(:validate_tests))
               .bind(&Mutation::Runner.public_method(:call))
               .bind(&method(:from_result))
@@ -55,6 +48,10 @@ module Mutant
             else
               Either::Left.new('Uncovered mutations detected, exiting nonzero!')
             end
+          end
+
+          def verify_usage(environment)
+            environment.config.usage.verify.fmap { environment }
           end
         end # Run
       end # Environment

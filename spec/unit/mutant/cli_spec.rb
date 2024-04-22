@@ -2,14 +2,13 @@
 
 RSpec.describe Mutant::CLI do
   describe '.parse' do
-    let(:env_config)              { Mutant::Config::DEFAULT.with(jobs: 4)     }
-    let(:events)                  { []                                        }
-    let(:expected_print_profile)  { false                                     }
-    let(:expected_zombie)         { false                                     }
-    let(:kernel)                  { class_double(Kernel)                      }
-    let(:stderr)                  { instance_double(IO, :stderr, tty?: false) }
-    let(:stdout)                  { instance_double(IO, :stdout, tty?: false) }
-    let(:timer)                   { instance_double(Mutant::Timer)            }
+    let(:events)                 { []                                        }
+    let(:expected_print_profile) { false                                     }
+    let(:expected_zombie)        { false                                     }
+    let(:kernel)                 { class_double(Kernel)                      }
+    let(:stderr)                 { instance_double(IO, :stderr, tty?: false) }
+    let(:stdout)                 { instance_double(IO, :stdout, tty?: false) }
+    let(:timer)                  { instance_double(Mutant::Timer)            }
 
     let(:world) do
       instance_double(
@@ -24,7 +23,8 @@ RSpec.describe Mutant::CLI do
 
     let(:load_config_config) do
       expected_cli_config.with(
-        mutation: Mutant::Mutation::Config::DEFAULT.merge(expected_cli_config.mutation)
+        mutation: Mutant::Mutation::Config::DEFAULT.merge(expected_cli_config.mutation),
+        usage:    Mutant::Usage::Opensource.new
       )
     end
 
@@ -84,19 +84,6 @@ RSpec.describe Mutant::CLI do
       end
     end
 
-    shared_context 'license validation' do
-      let(:license_validation_event) do
-        [:license, :call, world]
-      end
-
-      before do
-        allow(Mutant::License).to receive(:call) do |world|
-          events << [:license, :call, world]
-          license_result
-        end
-      end
-    end
-
     @tests = []
 
     @test_klass =
@@ -117,7 +104,7 @@ RSpec.describe Mutant::CLI do
     # rubocop:disable Metrics/MethodLength
     def self.main_body
       <<~MESSAGE.strip
-        usage: mutant <run|environment|subscription|util> [options]
+        usage: mutant <run|environment|util> [options]
 
         Summary: mutation testing engine main command
 
@@ -132,10 +119,9 @@ RSpec.describe Mutant::CLI do
 
         Available subcommands:
 
-        run          - Run code analysis
-        environment  - Environment subcommands
-        subscription - Subscription subcommands
-        util         - Utility subcommands
+        run         - Run code analysis
+        environment - Environment subcommands
+        util        - Utility subcommands
       MESSAGE
     end
     # rubocop:enable Metrics/MethodLength
@@ -218,11 +204,11 @@ RSpec.describe Mutant::CLI do
 
     context 'missing required subcommand' do
       message = <<~MESSAGE
-        mutant subscription: Missing required subcommand!
+        mutant environment: Missing required subcommand!
 
-        usage: mutant subscription <show|test> [options]
+        usage: mutant environment <subject|show|irb|test> [options]
 
-        Summary: Subscription subcommands
+        Summary: Environment subcommands
 
         mutant version: #{Mutant::VERSION}
 
@@ -235,21 +221,13 @@ RSpec.describe Mutant::CLI do
 
         Available subcommands:
 
-        show - Show subscription status
-        test - Silently validates subscription, exits accordingly
+        subject - Subject subcommands
+        show    - Display environment without coverage analysis
+        irb     - Run irb with mutant environment loaded
+        test    - test subcommands
       MESSAGE
 
-      let(:arguments) { %w[subscription] }
-
-      it 'returns expected message' do
-        expect(apply).to eql(left(message))
-      end
-    end
-
-    context 'unexpected extra argument' do
-      message = 'mutant subscription show: Does not expect extra arguments'
-
-      let(:arguments) { %w[subscription show extra-argument] }
+      let(:arguments) { %w[environment] }
 
       it 'returns expected message' do
         expect(apply).to eql(left(message))
@@ -258,9 +236,9 @@ RSpec.describe Mutant::CLI do
 
     make do
       message = <<~MESSAGE
-        usage: mutant subscription show [options]
+        usage: mutant environment irb [options]
 
-        Summary: Show subscription status
+        Summary: Run irb with mutant environment loaded
 
         mutant version: #{Mutant::VERSION}
 
@@ -270,10 +248,43 @@ RSpec.describe Mutant::CLI do
                 --version                    Print mutants version
                 --profile                    Profile mutant execution
                 --zombie                     Run mutant zombified
+
+
+        Environment:
+            -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
+            -r, --require NAME               Require file with NAME
+                --env KEY=VALUE              Set environment variable
+
+
+        Runner:
+                --fail-fast                  Fail fast
+            -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
+            -t, --mutation-timeout NUMBER    Per mutation analysis timeout
+
+
+        Integration:
+                --use INTEGRATION            deprecated alias for --integration
+                --integration NAME           Use test integration with NAME
+                --integration-argument ARGUMENT
+                                             Pass ARGUMENT to integration
+
+
+        Matcher:
+                --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
+                --start-subject EXPRESSION   Start mutation testing at a specific subject
+                --since REVISION             Only select subjects touched since REVISION
+
+
+        Reporting:
+                --print-warnings             Print warnings
+
+
+        Usage:
+                --usage USAGE_TYPE           License usage: opensource|commercial
       MESSAGE
 
       {
-        arguments:              %w[subscription show --help],
+        arguments:              %w[environment irb --help],
         expected_events:        [[:stdout, :puts, message]],
         expected_exit:          true,
         expected_print_profile: false,
@@ -324,6 +335,10 @@ RSpec.describe Mutant::CLI do
 
         Reporting:
                 --print-warnings             Print warnings
+
+
+        Usage:
+                --usage USAGE_TYPE           License usage: opensource|commercial
       MESSAGE
 
       {
@@ -378,6 +393,10 @@ RSpec.describe Mutant::CLI do
 
         Reporting:
                 --print-warnings             Print warnings
+
+
+        Usage:
+                --usage USAGE_TYPE           License usage: opensource|commercial
       MESSAGE
 
       {
@@ -432,6 +451,10 @@ RSpec.describe Mutant::CLI do
 
         Reporting:
                 --print-warnings             Print warnings
+
+
+        Usage:
+                --usage USAGE_TYPE           License usage: opensource|commercial
       MESSAGE
 
       {
@@ -625,84 +648,11 @@ RSpec.describe Mutant::CLI do
       end
     end
 
-    context 'subscription show' do
-      let(:arguments) { %w[subscription show] }
-
-      include_context 'license validation'
-
-      context 'on valid license' do
-        let(:expected_exit)  { true                }
-        let(:license_result) { right(subscription) }
-
-        let(:expected_events) do
-          [
-            license_validation_event,
-            [:stdout, :puts, 'License-Description']
-          ]
-        end
-
-        let(:subscription) do
-          instance_double(
-            Mutant::License::Subscription,
-            description: 'License-Description'
-          )
-        end
-
-        include_examples 'CLI run'
-      end
-
-      context 'on invalid license' do
-        let(:expected_exit)  { false                 }
-        let(:license_result) { left('error-message') }
-
-        let(:expected_events) do
-          [
-            license_validation_event,
-            [:stderr, :puts, 'error-message']
-          ]
-        end
-
-        include_examples 'CLI run'
-      end
-    end
-
-    context 'license display test' do
-      let(:arguments) { %w[subscription test] }
-
-      let(:expected_events) do
-        [ [:license, :call, world ] ]
-      end
-
-      include_context 'license validation'
-
-      context 'on valid license' do
-        let(:expected_exit)  { true                }
-        let(:license_result) { right(subscription) }
-
-        let(:subscription) do
-          instance_double(
-            Mutant::License::Subscription,
-            description: 'License-Description'
-          )
-        end
-
-        include_examples 'CLI run'
-      end
-
-      context 'on invalid license' do
-        let(:expected_exit)   { false                 }
-        let(:license_result)  { left('error-message') }
-
-        include_examples 'CLI run'
-      end
-    end
-
     shared_context 'environment' do
       let(:arguments)            { %w[run]                                              }
       let(:bootstrap_result)     { right(env)                                           }
       let(:env_result)           { instance_double(Mutant::Result::Env, success?: true) }
       let(:expected_exit)        { true                                                 }
-      let(:license_result)       { right(subscription)                                  }
       let(:runner_result)        { right(env_result)                                    }
       let(:subjects)             { [subject_a]                                          }
 
@@ -758,8 +708,6 @@ RSpec.describe Mutant::CLI do
           visibility: :public
         )
       end
-
-      include_context 'license validation'
 
       before do
         allow(Mutant::Config).to receive(:load) do |**attributes|
@@ -1046,6 +994,7 @@ RSpec.describe Mutant::CLI do
       let(:expected_message) do
          <<~'MESSAGE'
            Mutant environment:
+           Usage:           opensource
            Matcher:         #<Mutant::Matcher::Config empty>
            Integration:     null
            Jobs:            auto
@@ -1092,31 +1041,186 @@ RSpec.describe Mutant::CLI do
     context 'run' do
       include_context 'environment'
 
-      context 'on invalid license' do
-        let(:expected_exit)  { false                 }
-        let(:license_result) { left('license-error') }
+      let(:expected_events) do
+        [
+          %i[
+            record
+            config
+          ],
+          [
+            :load_config,
+            { cli_config: expected_cli_config, world: world }.inspect
+          ],
+          [
+            :bootstrap,
+            Mutant::Env.empty(world, bootstrap_config).inspect
+          ],
+          [
+            :runner,
+            env.inspect
+          ]
+        ]
+      end
+
+      context 'on runner fail' do
+        let(:expected_exit) { false                  }
+        let(:runner_result) { left('runner failure') }
 
         let(:expected_events) do
           [
-            license_validation_event,
-            [:stderr, :puts, 'license-error']
+            *super(),
+            [
+              :stderr,
+              :puts,
+              'runner failure'
+            ]
           ]
         end
 
         include_examples 'CLI run'
       end
 
-      context 'on valid license' do
-        let(:subscription) do
-          instance_double(
-            Mutant::License::Subscription,
-            description: 'License-Description'
+      context 'on runner success with unsuccessful result' do
+        context 'on alive mutations' do
+          let(:expected_exit) { false             }
+          let(:runner_result) { right(env_result) }
+
+          let(:env_result) do
+            instance_double(
+              Mutant::Result::Env,
+              success?: false
+            )
+          end
+
+          let(:expected_events) do
+            [
+              *super(),
+              [
+                :stderr,
+                :puts,
+                'Uncovered mutations detected, exiting nonzero!'
+              ]
+            ]
+          end
+
+          include_examples 'CLI run'
+        end
+
+        context 'on not having found tests' do
+          let(:available_tests) { [] }
+
+          let(:expected_events) do
+            [
+              *super()[..-2],
+              [
+                :stderr,
+                :puts,
+                Mutant::CLI::Command::Environment::Run::NO_TESTS_MESSAGE
+              ]
+            ]
+          end
+
+          let(:expected_exit) { false }
+
+          include_examples 'CLI run'
+        end
+      end
+
+      context 'with valid subject expression' do
+        let(:arguments) { super() + ['CLISubject'] }
+
+        let(:expected_cli_config) do
+          super().with(
+            matcher: super().matcher.with(
+              subjects: expected_bootstrap_subjects
+            )
+          )
+        end
+
+        let(:expected_bootstrap_subjects) { [parse_expression('CLISubject')] }
+
+        include_examples 'CLI run'
+      end
+
+      context 'on invalid --usage' do
+        let(:arguments) { %w[run --usage invalid] }
+
+        it 'returns expected error' do
+          expect(apply).to eql(left(<<~"MESSAGE"))
+            mutant run: invalid argument: --usage invalid
+
+            usage: mutant run [options]
+
+            Summary: Run code analysis
+
+            mutant version: #{Mutant::VERSION}
+
+            Global Options:
+
+                    --help                       Print help
+                    --version                    Print mutants version
+                    --profile                    Profile mutant execution
+                    --zombie                     Run mutant zombified
+
+
+            Environment:
+                -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
+                -r, --require NAME               Require file with NAME
+                    --env KEY=VALUE              Set environment variable
+
+
+            Runner:
+                    --fail-fast                  Fail fast
+                -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
+                -t, --mutation-timeout NUMBER    Per mutation analysis timeout
+
+
+            Integration:
+                    --use INTEGRATION            deprecated alias for --integration
+                    --integration NAME           Use test integration with NAME
+                    --integration-argument ARGUMENT
+                                                 Pass ARGUMENT to integration
+
+
+            Matcher:
+                    --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
+                    --start-subject EXPRESSION   Start mutation testing at a specific subject
+                    --since REVISION             Only select subjects touched since REVISION
+
+
+            Reporting:
+                    --print-warnings             Print warnings
+
+
+            Usage:
+                    --usage USAGE_TYPE           License usage: opensource|commercial
+          MESSAGE
+        end
+      end
+
+      context 'on --usage commercial' do
+        let(:arguments) { %w[run --usage opensource] }
+
+        let(:expected_cli_config) do
+          super().with(usage: Mutant::Usage::Opensource.new)
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'on absent --usage' do
+        let(:arguments)     { %w[run] }
+        let(:expected_exit) { false   }
+
+        let(:load_config_config) do
+          expected_cli_config.with(
+            mutation: Mutant::Mutation::Config::DEFAULT.merge(expected_cli_config.mutation),
+            usage:    Mutant::Usage::Unknown.new
           )
         end
 
         let(:expected_events) do
           [
-            license_validation_event,
             %i[
               record
               config
@@ -1130,269 +1234,178 @@ RSpec.describe Mutant::CLI do
               Mutant::Env.empty(world, bootstrap_config).inspect
             ],
             [
-              :runner,
-              env.inspect
+              :stderr,
+              :puts,
+              Mutant::Usage::Unknown::MESSAGE
             ]
           ]
         end
 
-        context 'on runner fail' do
-          let(:expected_exit) { false                  }
-          let(:runner_result) { left('runner failure') }
+        include_examples 'CLI run'
+      end
 
-          let(:expected_events) do
-            [
-              *super(),
-              [
-                :stderr,
-                :puts,
-                'runner failure'
-              ]
+      context 'with valid start-subject expression' do
+        let(:arguments) do
+          super() + ['--start-subject', 'Foo#bar', '--start-subject', 'Foo#baz']
+        end
+
+        let(:expected_cli_config) do
+          super().with(
+            matcher: super().matcher.with(
+              start_expressions: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
+            )
+          )
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'with valid ignore-subject expression' do
+        let(:arguments) do
+          super() + ['--ignore-subject', 'Foo#bar', '--ignore-subject', 'Foo#baz']
+        end
+
+        let(:expected_cli_config) do
+          super().with(
+            matcher: super().matcher.with(
+              ignore: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
+            )
+          )
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'with --include option' do
+        let(:arguments) do
+          super() + %w[
+            --include include-cli-a
+            --include include-cli-b
+          ]
+        end
+
+        let(:expected_cli_config) do
+          super().with(
+            includes: %w[
+              include-cli-a
+              include-cli-b
             ]
+          )
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'with --require option' do
+        let(:arguments) { super() + %w[--require require-cli] }
+
+        let(:expected_cli_config) do
+          super().with(
+            requires: %w[require-cli]
+          )
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'with --env option' do
+        let(:arguments) { super() + %W[--env #{argument}] }
+
+        context 'on valid env syntax' do
+          let(:argument) { 'foo=bar' }
+
+          let(:expected_cli_config) do
+            super().with(environment_variables: { 'foo' => 'bar' })
           end
 
           include_examples 'CLI run'
         end
 
-        context 'on runner success with unsuccessful result' do
-          context 'on alive mutations' do
-            let(:expected_exit) { false             }
-            let(:runner_result) { right(env_result) }
+        context 'on invalid env syntax' do
+          let(:argument) { 'foobar' }
 
-            let(:env_result) do
-              instance_double(
-                Mutant::Result::Env,
-                success?: false
-              )
-            end
-
-            let(:expected_events) do
-              [
-                *super(),
-                [
-                  :stderr,
-                  :puts,
-                  'Uncovered mutations detected, exiting nonzero!'
-                ]
-              ]
-            end
-
-            include_examples 'CLI run'
-          end
-
-          context 'on not having found tests' do
-            let(:available_tests) { [] }
-
-            let(:expected_events) do
-              [
-                *super()[..-2],
-                [
-                  :stderr,
-                  :puts,
-                  Mutant::CLI::Command::Environment::Run::NO_TESTS_MESSAGE
-                ]
-              ]
-            end
-
-            let(:expected_exit) { false }
-
-            include_examples 'CLI run'
+          it 'raises expected error' do
+            expect { apply }.to raise_error(RuntimeError, 'Invalid env variable: "foobar"')
           end
         end
+      end
 
-        context 'with valid subject expression' do
-          let(:arguments) { super() + ['CLISubject'] }
+      context 'with --jobs option' do
+        let(:arguments)           { super() + %w[--jobs 10] }
+        let(:expected_cli_config) { super().with(jobs: 10)  }
 
-          let(:expected_cli_config) do
-            super().with(
-              matcher: super().matcher.with(
-                subjects: expected_bootstrap_subjects
-              )
-            )
-          end
+        include_examples 'CLI run'
+      end
 
-          let(:expected_bootstrap_subjects) { [parse_expression('CLISubject')] }
+      context 'with --mutation-timeout option' do
+        let(:arguments) { super() + %w[--mutation-timeout 10] }
 
-          include_examples 'CLI run'
+        let(:expected_cli_config) do
+          super().with(mutation: super().mutation.with(timeout: 10.0))
         end
 
-        context 'without subject expressions' do
-          let(:expected_cli_config) do
-            super().with(
-              matcher: super().matcher.with(
-                subjects: expected_bootstrap_subjects
-              )
-            )
-          end
+        include_examples 'CLI run'
+      end
 
-          let(:expected_bootstrap_subjects) { [] }
+      context 'with --fail-fast option' do
+        let(:arguments)           { super() + %w[--fail-fast]     }
+        let(:expected_cli_config) { super().with(fail_fast: true) }
 
-          include_examples 'CLI run'
+        include_examples 'CLI run'
+      end
+
+      context 'with --use option' do
+        let(:arguments) { super() + ['--use', 'cli-integration'] }
+
+        let(:expected_cli_config) do
+          super().with(integration: super().integration.with(name: 'cli-integration'))
         end
 
-        context 'with valid start-subject expression' do
-          let(:arguments) do
-            super() + ['--start-subject', 'Foo#bar', '--start-subject', 'Foo#baz']
-          end
+        include_examples 'CLI run'
+      end
 
-          let(:expected_cli_config) do
-            super().with(
-              matcher: super().matcher.with(
-                start_expressions: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
-              )
-            )
-          end
+      context 'with --integration option' do
+        let(:arguments) { super() + ['--integration', 'cli-integration'] }
 
-          include_examples 'CLI run'
+        let(:expected_cli_config) do
+          super().with(integration: super().integration.with(name: 'cli-integration'))
         end
 
-        context 'with valid ignore-subject expression' do
-          let(:arguments) do
-            super() + ['--ignore-subject', 'Foo#bar', '--ignore-subject', 'Foo#baz']
-          end
+        include_examples 'CLI run'
+      end
 
-          let(:expected_cli_config) do
-            super().with(
-              matcher: super().matcher.with(
-                ignore: %w[Foo#bar Foo#baz].map(&method(:parse_expression))
-              )
-            )
-          end
-
-          include_examples 'CLI run'
+      context 'with --integration-argument option' do
+        let(:arguments) do
+          super() + %w[
+            --integration-argument cli-integration-argument-a
+            --integration-argument cli-integration-argument-b
+          ]
         end
 
-        context 'with --include option' do
-          let(:arguments) do
-            super() + %w[
-              --include include-cli-a
-              --include include-cli-b
-            ]
-          end
-
-          let(:expected_cli_config) do
-            super().with(
-              includes: %w[
-                include-cli-a
-                include-cli-b
+        let(:expected_cli_config) do
+          super().with(
+            integration: super().integration.with(
+              arguments: %w[
+                cli-integration-argument-a
+                cli-integration-argument-b
               ]
             )
-          end
-
-          include_examples 'CLI run'
+          )
         end
 
-        context 'with --require option' do
-          let(:arguments) { super() + %w[--require require-cli] }
+        include_examples 'CLI run'
+      end
 
-          let(:expected_cli_config) do
-            super().with(
-              requires: %w[require-cli]
-            )
-          end
+      context 'with --since option' do
+        let(:arguments) { super() + ['--since', 'reference'] }
 
-          include_examples 'CLI run'
+        let(:expected_cli_config) do
+          diff = Mutant::Repository::Diff.new(to: 'reference', world: world)
+
+          super().with(matcher: super().matcher.with(diffs: [diff]))
         end
 
-        context 'with --env option' do
-          let(:arguments) { super() + %W[--env #{argument}] }
-
-          context 'on valid env syntax' do
-            let(:argument) { 'foo=bar' }
-
-            let(:expected_cli_config) do
-              super().with(environment_variables: { 'foo' => 'bar' })
-            end
-
-            include_examples 'CLI run'
-          end
-
-          context 'on invalid env syntax' do
-            let(:argument) { 'foobar' }
-
-            it 'raises expected error' do
-              expect { apply }.to raise_error(RuntimeError, 'Invalid env variable: "foobar"')
-            end
-          end
-        end
-
-        context 'with --jobs option' do
-          let(:arguments)           { super() + %w[--jobs 10] }
-          let(:expected_cli_config) { super().with(jobs: 10)  }
-
-          include_examples 'CLI run'
-        end
-
-        context 'with --mutation-timeout option' do
-          let(:arguments) { super() + %w[--mutation-timeout 10] }
-
-          let(:expected_cli_config) do
-            super().with(mutation: super().mutation.with(timeout: 10.0))
-          end
-
-          include_examples 'CLI run'
-        end
-
-        context 'with --fail-fast option' do
-          let(:arguments)           { super() + %w[--fail-fast]     }
-          let(:expected_cli_config) { super().with(fail_fast: true) }
-
-          include_examples 'CLI run'
-        end
-
-        context 'with --use option' do
-          let(:arguments) { super() + ['--use', 'cli-integration'] }
-
-          let(:expected_cli_config) do
-            super().with(integration: super().integration.with(name: 'cli-integration'))
-          end
-
-          include_examples 'CLI run'
-        end
-
-        context 'with --integration option' do
-          let(:arguments) { super() + ['--integration', 'cli-integration'] }
-
-          let(:expected_cli_config) do
-            super().with(integration: super().integration.with(name: 'cli-integration'))
-          end
-
-          include_examples 'CLI run'
-        end
-
-        context 'with --integration-argument option' do
-          let(:arguments) do
-            super() + %w[
-              --integration-argument cli-integration-argument-a
-              --integration-argument cli-integration-argument-b
-            ]
-          end
-
-          let(:expected_cli_config) do
-            super().with(
-              integration: super().integration.with(
-                arguments: %w[
-                  cli-integration-argument-a
-                  cli-integration-argument-b
-                ]
-              )
-            )
-          end
-
-          include_examples 'CLI run'
-        end
-
-        context 'with --since option' do
-          let(:arguments) { super() + ['--since', 'reference'] }
-
-          let(:expected_cli_config) do
-            diff = Mutant::Repository::Diff.new(to: 'reference', world: world)
-
-            super().with(matcher: super().matcher.with(diffs: [diff]))
-          end
-
-          include_examples 'CLI run'
-        end
+        include_examples 'CLI run'
       end
     end
   end

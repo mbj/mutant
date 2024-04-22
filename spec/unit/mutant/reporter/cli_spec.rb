@@ -69,6 +69,7 @@ RSpec.describe Mutant::Reporter::CLI do
 
     it_reports(<<~REPORT)
       Mutant environment:
+      Usage:           unknown
       Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     null
       Jobs:            auto
@@ -101,6 +102,7 @@ RSpec.describe Mutant::Reporter::CLI do
 
     it_reports(<<~REPORT)
       Mutant environment:
+      Usage:           unknown
       Matcher:         #<Mutant::Matcher::Config empty>
       Integration:     null
       Jobs:            auto
