@@ -1,4 +1,4 @@
-# v0.12.0 [unreleased]
+# v0.12.0 2024-04-22
 
   Drop the license gem, entirely. This reduces DRM in mutants code base to the absolute minimal.
   Mutant is *still* comercial software that requires payment if used on a commercial code base!
