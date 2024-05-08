@@ -93,7 +93,7 @@ in the config file.
 Commercial use requires payment via a subscription and requires a signup. See [pricing](#pricing) for
 available plans.
 
-After payment pecify `--usage commercial` on the CLI or `usage: commercial` in the config file.
+After payment specify `--usage commercial` on the CLI or `usage: commercial` in the config file.
 
 ### Pricing
 
