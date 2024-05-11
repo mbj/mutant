@@ -107,6 +107,9 @@ describe Mutant::Repository::Diff do
             @@ -4 +4 @@ header
             -a
             +b
+            @@ -8 +8 @@ header
+            -a
+            +b
           DIFF
         end
 
