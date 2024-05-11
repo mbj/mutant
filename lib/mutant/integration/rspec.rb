@@ -75,10 +75,12 @@ module Mutant
         start = timer.now
         passed = @runner.run_specs(@rspec_world.ordered_example_groups).equal?(EXIT_SUCCESS)
         @runner.configuration.reset_reporter
+
         Result::Test.new(
-          output:  '',
-          passed:  passed,
-          runtime: timer.now - start
+          job_index: nil,
+          output:    '',
+          passed:    passed,
+          runtime:   timer.now - start
         )
       end
       # rubocop:enable Metrics/AbcSize

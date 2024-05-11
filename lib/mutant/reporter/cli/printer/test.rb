@@ -68,7 +68,7 @@ module Mutant
             #
             # @return [undefined]
             def run
-              visit_collection(Result, object.failed_test_results)
+              visit_failed
               visit(Env, object.env)
               FORMATS.each do |report, format, value|
                 __send__(report, format, __send__(value))
@@ -76,6 +76,27 @@ module Mutant
             end
 
           private
+
+            def visit_failed
+              failed = object.failed_test_results
+
+              if object.env.config.fail_fast
+                visit_failed_tests(failed.take(1))
+                visit_other_failed(failed.drop(1))
+              else
+                visit_failed_tests(failed)
+              end
+            end
+
+            def visit_other_failed(other)
+              return if other.empty?
+
+              puts('Other failed tests (report suppressed from fail fast): %d' % other.length)
+            end
+
+            def visit_failed_tests(failed)
+              visit_collection(Result, failed)
+            end
 
             def efficiency_percent
               (testtime / runtime) * 100

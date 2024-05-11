@@ -86,9 +86,10 @@ RSpec.describe Mutant::Env do
 
     let(:test_result) do
       Mutant::Result::Test.new(
-        passed:  true,
-        runtime: 0.1,
-        output:  ''
+        job_index: nil,
+        output:    '',
+        passed:    true,
+        runtime:   0.1
       )
     end
 

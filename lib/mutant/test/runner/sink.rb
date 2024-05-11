@@ -22,7 +22,7 @@ module Mutant
           Result::TestEnv.new(
             env:          env,
             runtime:      env.world.timer.now - @start,
-            test_results: @test_results
+            test_results: @test_results.sort_by!(&:job_index)
           )
         end
 
@@ -42,7 +42,11 @@ module Mutant
             fail response.error
           end
 
-          @test_results << response.result.with(output: response.log)
+          @test_results << response.result.with(
+            job_index: response.job.index,
+            output:    response.log
+          )
+
           self
         end
       end # Sink

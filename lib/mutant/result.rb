@@ -158,7 +158,7 @@ module Mutant
 
     # Test result
     class Test
-      include Anima.new(:passed, :runtime, :output)
+      include Anima.new(:job_index, :passed, :runtime, :output)
 
       alias_method :success?, :passed
 
@@ -170,9 +170,10 @@ module Mutant
         # @return [undefined]
         def initialize
           super(
-            output:  '',
-            passed:  false,
-            runtime: 0.0
+            job_index: nil,
+            output:    '',
+            passed:    false,
+            runtime:   0.0
           )
         end
       end # VoidValue

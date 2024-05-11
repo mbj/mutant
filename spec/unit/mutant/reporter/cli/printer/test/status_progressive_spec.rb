@@ -33,9 +33,10 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Test::StatusProgressive do
       let(:test_results) do
         [
           Mutant::Result::Test.new(
-            output:  '',
-            passed:  false,
-            runtime: 0.5
+            job_index: 0,
+            output:    '',
+            passed:    false,
+            runtime:   0.5
           )
         ]
       end

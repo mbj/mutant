@@ -109,9 +109,10 @@ module Mutant
         reporter.report
 
         Result::Test.new(
-          output:  '',
-          passed:  reporter.passed?,
-          runtime: timer.now - start
+          job_index: nil,
+          output:    '',
+          passed:    reporter.passed?,
+          runtime:   timer.now - start
         )
       end
 
