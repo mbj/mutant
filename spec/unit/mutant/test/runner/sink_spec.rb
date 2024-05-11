@@ -8,12 +8,11 @@ describe Mutant::Test::Runner::Sink do
     instance_double(
       Mutant::Env,
       config: config,
-      world:
-              instance_double(
-                Mutant::World,
-                timer:  timer,
-                stderr: stderr
-              )
+      world:  instance_double(
+        Mutant::World,
+        timer:  timer,
+        stderr: stderr
+      )
     )
   end
 
@@ -31,17 +30,19 @@ describe Mutant::Test::Runner::Sink do
 
   let(:test_result_a_raw) do
     Mutant::Result::Test.new(
-      output:  '',
-      passed:  true,
-      runtime: 0.1
+      job_index: nil,
+      output:    '',
+      passed:    true,
+      runtime:   0.1
     )
   end
 
   let(:test_result_b_raw) do
     Mutant::Result::Test.new(
-      output:  '',
-      passed:  true,
-      runtime: 0.2
+      job_index: nil,
+      output:    '',
+      passed:    true,
+      runtime:   0.2
     )
   end
 
@@ -54,13 +55,13 @@ describe Mutant::Test::Runner::Sink do
 
   let(:job_b) do
     Mutant::Parallel::Source::Job.new(
-      index:   0,
+      index:   1,
       payload: nil
     )
   end
 
-  let(:test_result_a) { test_result_a_raw.with(output: test_response_a.log) }
-  let(:test_result_b) { test_result_b_raw.with(output: test_response_b.log) }
+  let(:test_result_a) { test_result_a_raw.with(job_index: 0, output: test_response_a.log) }
+  let(:test_result_b) { test_result_b_raw.with(job_index: 1, output: test_response_b.log) }
 
   let(:test_response_a) do
     Mutant::Parallel::Response.new(
@@ -90,7 +91,7 @@ describe Mutant::Test::Runner::Sink do
     end
   end
 
-  shared_context 'two results' do
+  shared_context 'two results, in job index order' do
     before do
       object.response(test_response_a)
       object.response(test_response_b)
@@ -171,8 +172,25 @@ describe Mutant::Test::Runner::Sink do
       it { should eql(expected_status) }
     end
 
-    context 'two results' do
-      include_context 'two results'
+    context 'two results, in job index order' do
+      include_context 'two results, in job index order'
+
+      let(:expected_status) do
+        Mutant::Result::TestEnv.new(
+          env:          env,
+          runtime:      1.5,
+          test_results: [test_result_a, test_result_b]
+        )
+      end
+
+      it { should eql(expected_status) }
+    end
+
+    context 'two results, not in job index order' do
+      before do
+        object.response(test_response_b)
+        object.response(test_response_a)
+      end
 
       let(:expected_status) do
         Mutant::Result::TestEnv.new(
@@ -206,8 +224,8 @@ describe Mutant::Test::Runner::Sink do
         end
       end
 
-      context 'two results' do
-        include_context 'two results'
+      context 'two results, in job index order' do
+        include_context 'two results, in job index order'
 
         context 'when results are successful' do
           it { should be(false) }
@@ -244,8 +262,8 @@ describe Mutant::Test::Runner::Sink do
         end
       end
 
-      context 'two results' do
-        include_context 'two results'
+      context 'two results, in job index order' do
+        include_context 'two results, in job index order'
 
         context 'when results are successful' do
           it { should be(false) }

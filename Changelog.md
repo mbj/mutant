@@ -1,3 +1,16 @@
+# v0.12.1 2024-05-11
+
+* [#1443](https://github.com/mbj/mutant/pull/1443)
+
+  Change mutants test runner to always report in test definition order deterministically.
+  Before results where recorded in order of arrival, which could result a fast test that started late to
+  be reported before a slow test that started early. Basically it makes parallel test execution reporting
+  deterministic.
+
+  Change the behavior of reporting test errors on fail fast to only display the fist test that failed.
+  Parallel test execution can result in one or more tests failing before the execution engine has time to
+  adhere to the fail fast setting.
+
 # v0.12.0 2024-04-22
 
   Drop the license gem, entirely. This reduces DRM in mutants code base to the absolute minimum.

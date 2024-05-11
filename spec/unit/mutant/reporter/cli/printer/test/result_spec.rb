@@ -5,9 +5,10 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Test::Result do
 
   let(:reportable) do
     Mutant::Result::Test.new(
-      output:  '<test-output>',
-      passed:  false,
-      runtime: 0.1
+      job_index: 0,
+      output:    '<test-output>',
+      passed:    false,
+      runtime:   0.1
     )
   end
 

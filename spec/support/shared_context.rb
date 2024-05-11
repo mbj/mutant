@@ -230,17 +230,19 @@ module SharedContext
 
     let(:mutation_a_test_result) do
       Mutant::Result::Test.new(
-        output:  '',
-        passed:  false,
-        runtime: 1.0
+        job_index: 0,
+        output:    '',
+        passed:    false,
+        runtime:   1.0
       )
     end
 
     let(:mutation_b_test_result) do
       Mutant::Result::Test.new(
-        output:  '',
-        passed:  false,
-        runtime: 1.0
+        job_index: 1,
+        output:    '',
+        passed:    false,
+        runtime:   1.0
       )
     end
 

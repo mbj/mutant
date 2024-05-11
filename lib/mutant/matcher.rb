@@ -50,5 +50,6 @@ module Mutant
         expression.prefix?(subject.expression)
       end
     end
+    private_class_method :ignore_subject?
   end # Matcher
 end # Mutant
