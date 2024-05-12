@@ -884,3 +884,54 @@ Mutant::Meta::Example.add :send do
   mutation 'foo(nil)'
   mutation 'foo(:"+__mutant__")'
 end
+
+Mutant::Meta::Example.add :send, operators: :light do
+  source 'first'
+
+  singleton_mutations
+end
+
+Mutant::Meta::Example.add :send, operators: :light do
+  source 'last'
+
+  singleton_mutations
+end
+
+Mutant::Meta::Example.add :send, operators: :full do
+  source 'first'
+
+  singleton_mutations
+
+  mutation 'last'
+end
+
+Mutant::Meta::Example.add :send, operators: :full do
+  source 'last'
+
+  singleton_mutations
+
+  mutation 'first'
+end
+
+%w[detect find max max_by min min_by].each do |selector|
+  Mutant::Meta::Example.add :send do
+    source selector
+
+    singleton_mutations
+
+    mutation 'first'
+    mutation 'last'
+  end
+
+  Mutant::Meta::Example.add :send do
+    source "#{selector}(&:block)"
+
+    singleton_mutations
+
+    mutation "#{selector}(&:block__mutant__)"
+    mutation "#{selector}(&nil)"
+    mutation 'first(&:block)'
+    mutation 'last(&:block)'
+    mutation selector
+  end
+end

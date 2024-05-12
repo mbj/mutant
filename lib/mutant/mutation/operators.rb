@@ -21,14 +21,22 @@ module Mutant
           all?:          %i[any?],
           any?:          %i[all?],
           at:            %i[fetch key?],
+          detect:        %i[first last],
           fetch:         %i[key?],
+          find:          %i[first last],
+          first:         %i[last],
           flat_map:      %i[map],
           gsub:          %i[sub],
           is_a?:         %i[instance_of?],
           kind_of?:      %i[instance_of?],
+          last:          %i[first],
           map:           %i[each],
           match:         %i[match?],
+          max:           %i[first last],
+          max_by:        %i[first last],
           method:        %i[public_method],
+          min:           %i[first last],
+          min_by:        %i[first last],
           reverse_each:  %i[each],
           reverse_map:   %i[map each],
           reverse_merge: %i[merge],
@@ -49,6 +57,8 @@ module Mutant
           .tap do |replacements|
             replacements.delete(:==)
             replacements.delete(:eql?)
+            replacements.delete(:first)
+            replacements.delete(:last)
           end
           .freeze
       end
