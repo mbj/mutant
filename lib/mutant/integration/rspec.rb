@@ -157,6 +157,7 @@ module Mutant
       end
       memoize :example_group_map
 
+      # mutant:disable -- 3.3 specific mutation on match.captures -> match
       def parse_metadata(metadata)
         if metadata.key?(:mutant_expression)
           expression = metadata.fetch(:mutant_expression)
@@ -167,7 +168,7 @@ module Mutant
           expressions.map(&method(:parse_expression))
         else
           match = EXPRESSION_CANDIDATE.match(metadata.fetch(:full_description))
-          [parse_expression(match.captures.first) { ALL_EXPRESSION }]
+          [parse_expression(Util.one(match.captures)) { ALL_EXPRESSION }]
         end
       end
 

@@ -111,14 +111,13 @@ module Mutant
     #
     # @return [Either<String,Config>]
     def self.load_config_file(reporter:, world:)
-      files = CANDIDATES
-        .map(&world.pathname.public_method(:new))
-        .select(&:readable?)
+      files = CANDIDATES.map(&world.pathname.public_method(:new)).select(&:readable?)
 
-      if files.one?
-        load_contents(reporter: reporter, path: files.first).fmap(&DEFAULT.public_method(:with))
-      elsif files.empty?
+      case files
+      in []
         Either::Right.new(DEFAULT)
+      in [file]
+        load_contents(reporter: reporter, path: file).fmap(&DEFAULT.public_method(:with))
       else
         Either::Left.new(MORE_THAN_ONE_CONFIG_FILE % files.join(', '))
       end
