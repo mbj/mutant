@@ -21,11 +21,11 @@ module Mutant
         attr_reader :log
 
         def error
-          @errors.first
+          Util.max_one(@errors)
         end
 
         def result
-          @results.first
+          Util.max_one(@results)
         end
 
         def initialize(*)
@@ -96,7 +96,7 @@ module Mutant
         end
 
         def length
-          @lengths.first
+          Util.max_one(@lengths)
         end
 
         def advance_log

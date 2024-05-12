@@ -12,9 +12,30 @@ module Mutant
     #
     # @return [Object] first entry
     def self.one(array)
-      return array.first if array.one?
+      case array
+      in [value]
+        value
+      else
+        fail SizeError, "expected size to be exactly 1 but size was #{array.size}"
+      end
+    end
 
-      fail SizeError, "expected size to be exactly 1 but size was #{array.size}"
+    # Return only element in array if it contains max one member
+    #
+    # @param array [Array]
+    #
+    # @return [Object] first entry
+    # @return [nil] if empty
+    #
+    # rubocop:disable Lint/EmptyInPattern
+    def self.max_one(array)
+      case array
+      in []
+      in [value]
+        value
+      else
+        fail SizeError, "expected size to be max 1 but size was #{array.size}"
+      end
     end
   end # Util
 end # Mutant
