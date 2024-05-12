@@ -1,5 +1,17 @@
 # v0.12.1 2024-05-11
 
+* [#1444](https://github.com/mbj/mutant/pull/1444)
+
+  Add ordering mutations to full and light operator set,
+  `#find/#detect/#min/#max/#min_by/#max_by -> #first/#last`. These mutations force
+  to provide test cases with more than one element to observe the extra
+  semantics by these methods over just `#first` and `#last`.
+
+  Add `#first -> #last` and `#last -> #first` to full operator set. These where
+  highly controversial in the past and thus where removed. People who do not care
+  about ordering of their collections can now choose the light operator set, so people who care
+  (and should care) can now care (again).
+
 * [#1443](https://github.com/mbj/mutant/pull/1443)
 
   Change mutants test runner to always report in test definition order deterministically.
