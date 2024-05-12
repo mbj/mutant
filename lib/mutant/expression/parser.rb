@@ -15,12 +15,11 @@ module Mutant
       # @return [nil]
       #   otherwise
       def call(input)
-        expressions = expressions(input)
-        case expressions.length
-        when 0
+        case expressions(input)
+        in []
           Either::Left.new("Expression: #{input.inspect} is invalid")
-        when 1
-          Either::Right.new(expressions.first)
+        in [expression]
+          Either::Right.new(expression)
         else
           Either::Left.new("Expression: #{input.inspect} is ambiguous")
         end
