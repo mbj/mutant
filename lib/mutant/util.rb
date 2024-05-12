@@ -12,9 +12,12 @@ module Mutant
     #
     # @return [Object] first entry
     def self.one(array)
-      return array.first if array.one?
-
-      fail SizeError, "expected size to be exactly 1 but size was #{array.size}"
+      case array
+      in [value]
+        value
+      else
+        fail SizeError, "expected size to be exactly 1 but size was #{array.size}"
+      end
     end
   end # Util
 end # Mutant
