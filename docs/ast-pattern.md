@@ -30,7 +30,7 @@ specific:
 ```
 send
   { selector = info
-  , receiver = send{selector=logger}
+    receiver = send{selector=logger}
   }
 ```
 
@@ -84,7 +84,7 @@ But could be made required via:
 block
   { receiver = send
     { selector = log
-    , receiver = send{selector=logger}
+      receiver = send{selector=logger}
     }
   }
 ```
