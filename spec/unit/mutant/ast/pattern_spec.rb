@@ -168,5 +168,47 @@ RSpec.describe Mutant::AST::Pattern do
         expect(apply).to eql(right(expected_node))
       end
     end
+
+    context 'example from docs' do
+      let(:string) { <<~EOS }
+        block
+          { receiver = send
+            { selector = log
+              receiver = send{selector=logger}
+            }
+          }
+      EOS
+
+      let(:expected_node) do
+        Mutant::AST::Pattern::Node.new(
+          type:       :block,
+          descendant: Mutant::AST::Pattern::Node::Descendant.new(
+            name:    :receiver,
+            pattern: Mutant::AST::Pattern::Node.new(
+              type:      :send, 
+              attribute: Mutant::AST::Pattern::Node::Attribute.new(
+                name:  :selector,
+                value: Mutant::AST::Pattern::Node::Attribute::Value::Single.new(value: :log)
+              ),
+              descendant: Mutant::AST::Pattern::Node::Descendant.new(
+                name:    :receiver,
+                pattern: Mutant::AST::Pattern::Node.new(
+                  type:      :send,
+                  attribute: Mutant::AST::Pattern::Node::Attribute.new(
+                    name:  :selector,
+                    value: Mutant::AST::Pattern::Node::Attribute::Value::Single.new(value: :logger)
+                  ),
+                )
+              )
+            )
+          )
+        )
+      end
+
+      it 'returns expected node' do
+        expect(apply).to eql(right(expected_node))
+      end
+    end
+
   end
 end
