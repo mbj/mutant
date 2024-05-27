@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.executables      = %w[mutant]
 
   gem.metadata['rubygems_mfa_required'] = 'true'
+  gem.metadata['source_code_uri'] = 'https://github.com/mbj/mutant'
 
   gem.required_ruby_version = '>= 3.0'
 
