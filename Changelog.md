@@ -1,3 +1,9 @@
+# v0.12.1 2024-06-09
+
++ [#1445](https://github.com/mbj/mutant/pull/1444)
+
+  Remove invalid mutation operator.
+
 # v0.12.1 2024-05-11
 
 * [#1444](https://github.com/mbj/mutant/pull/1444)
@@ -8,9 +14,8 @@
   semantics by these methods over just `#first` and `#last`.
 
   Add `#first -> #last` and `#last -> #first` to full operator set. These where
-  highly controversial in the past and thus where removed. People who do not care
-  about ordering of their collections can now choose the light operator set, so people who care
-  (and should care) can now care (again).
+  highly controversial in the past and thus where removed.
+  People who do not care about ordering of their collections can choose the light operator set.
 
 * [#1443](https://github.com/mbj/mutant/pull/1443)
 

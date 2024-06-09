@@ -17,7 +17,6 @@ Mutant::Meta::Example.add :super do
   source 'super(foo, bar)'
 
   singleton_mutations
-  mutation 'super()'
   mutation 'super(foo)'
   mutation 'super(bar)'
   mutation 'super(foo, nil)'
