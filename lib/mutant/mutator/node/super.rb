@@ -13,7 +13,6 @@ module Mutant
 
         def dispatch
           emit_singletons
-          emit(N_EMPTY_SUPER)
           children.each_index do |index|
             mutate_child(index)
             delete_child(index)

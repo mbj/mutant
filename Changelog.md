@@ -1,3 +1,9 @@
+# v0.12.1 2024-06-09
+
++ [#1445](https://github.com/mbj/mutant/pull/1444)
+
+  Remove invalid mutation operator.
+
 # v0.12.1 2024-05-11
 
 * [#1444](https://github.com/mbj/mutant/pull/1444)
