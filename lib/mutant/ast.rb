@@ -13,7 +13,7 @@ module Mutant
 
     def on_line(line)
       line_map.fetch(line, EMPTY_HASH).map do |node, stack|
-        View.new(node: node, stack: stack)
+        View.new(node:, stack:)
       end
     end
 

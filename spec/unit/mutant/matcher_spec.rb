@@ -3,7 +3,7 @@
 RSpec.describe Mutant::Matcher do
   describe '.expand' do
     def apply
-      described_class.expand(env: env)
+      described_class.expand(env:)
     end
 
     let(:anon_matcher)       { instance_double(Mutant::Matcher)    }
@@ -50,7 +50,7 @@ RSpec.describe Mutant::Matcher do
         ignore:            ignore_expressions,
         subjects:          [expression_a, expression_b],
         start_expressions: [],
-        diffs:             diffs
+        diffs:
       )
     end
 
@@ -77,7 +77,7 @@ RSpec.describe Mutant::Matcher do
     end
 
     def expression(input, matcher = anon_matcher)
-      expression_class.new(child: parse_expression(input), matcher: matcher)
+      expression_class.new(child: parse_expression(input), matcher:)
     end
 
     context 'no restrictions of any kinds' do

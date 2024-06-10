@@ -3,7 +3,7 @@
 RSpec.describe Mutant::Parallel do
   describe '.async' do
     def apply
-      described_class.async(config: config, world: world)
+      described_class.async(config:, world:)
     end
 
     let(:block)            { instance_double(Proc)                                 }
@@ -38,12 +38,12 @@ RSpec.describe Mutant::Parallel do
 
     let(:config) do
       Mutant::Parallel::Config.new(
-        block:            block,
-        jobs:             jobs,
-        on_process_start: on_process_start,
+        block:,
+        jobs:,
+        on_process_start:,
         process_name:     'parallel-process',
-        sink:             sink,
-        source:           source,
+        sink:,
+        source:,
         thread_name:      'parallel-thread',
         timeout:          1.0
       )
@@ -72,17 +72,17 @@ RSpec.describe Mutant::Parallel do
         receiver:  Mutant::Parallel::Worker,
         selector:  :start,
         arguments: [
-          block:            block,
-          index:            index,
+          block:,
+          index:,
           on_process_start: config.on_process_start,
           process_name:     name,
           timeout:          1.0,
-          var_active_jobs:  var_active_jobs,
-          var_final:        var_final,
-          var_running:      var_running,
-          var_sink:         var_sink,
-          var_source:       var_source,
-          world:            world
+          var_active_jobs:,
+          var_final:,
+          var_running:,
+          var_sink:,
+          var_source:,
+          world:
         ],
         reaction:  { return: worker }
       }
@@ -136,11 +136,11 @@ RSpec.describe Mutant::Parallel do
         expect(apply).to eql(
           described_class::Driver.new(
             threads:         [thread_a, thread_b],
-            var_active_jobs: var_active_jobs,
-            var_final:       var_final,
-            var_running:     var_running,
-            var_sink:        var_sink,
-            var_source:      var_source,
+            var_active_jobs:,
+            var_final:,
+            var_running:,
+            var_sink:,
+            var_source:,
             workers:         [worker_a, worker_b]
           )
         )

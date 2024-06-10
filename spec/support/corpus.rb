@@ -131,7 +131,7 @@ module MutantSpec
         Mutant::Parallel::Config.new(
           block:            method(:check_generation),
           jobs:             Etc.nprocessors,
-          sink:             sink,
+          sink:,
           timeout:          nil,
           process_name:     'mutation-generation',
           source:           Mutant::Parallel::Source::Array.new(jobs: effective_ruby_paths),
@@ -184,7 +184,7 @@ module MutantSpec
 
         mutations = Mutant::Mutator::Node.mutate(
           config: Mutant::Mutation::Config::DEFAULT.with(operators: Mutant::Mutation::Operators::Full.new),
-          node:   node
+          node:
         )
 
         mutations.each do |mutation|
@@ -333,7 +333,7 @@ module MutantSpec
       path = ROOT.join('spec', 'integrations.yml')
 
       ALL = Transform::Named
-        .new(name: path, transform: transform)
+        .new(name: path, transform:)
         .call(path)
         .lmap(&:compact_message)
         .lmap(&method(:fail))

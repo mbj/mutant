@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Block do
-  subject { described_class.new(name: name, block: block) }
+  subject { described_class.new(name:, block:) }
 
   let(:block) { ->(value) { right(value * 2) } }
   let(:name)  { :external                      }
@@ -27,7 +27,7 @@ RSpec.describe Mutant::Transform::Block do
           left(
             Mutant::Transform::Error.new(
               cause:     nil,
-              input:     input,
+              input:,
               message:   'some error',
               transform: subject
             )
@@ -53,7 +53,7 @@ RSpec.describe Mutant::Transform::Block do
     end
 
     it 'returns expected transform' do
-      expect(apply).to eql(described_class.new(name: name, block: block))
+      expect(apply).to eql(described_class.new(name:, block:))
     end
   end
 end

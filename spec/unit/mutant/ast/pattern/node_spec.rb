@@ -34,7 +34,7 @@ RSpec.describe Mutant::AST::Pattern::Node do
       let(:instance) do
         described_class.new(
           type:      :send,
-          attribute: attribute
+          attribute:
         )
       end
 
@@ -67,7 +67,7 @@ RSpec.describe Mutant::AST::Pattern::Node do
       let(:instance) do
         described_class.new(
           type:       :send,
-          descendant: descendant
+          descendant:
         )
       end
 
@@ -87,8 +87,8 @@ RSpec.describe Mutant::AST::Pattern::Node do
       let(:instance) do
         described_class.new(
           type:       :send,
-          attribute:  attribute,
-          descendant: descendant
+          attribute:,
+          descendant:
         )
       end
 
@@ -129,7 +129,7 @@ RSpec.describe Mutant::AST::Pattern::Node do
       let(:instance) do
         described_class.new(
           type:      :str,
-          attribute: attribute
+          attribute:
         )
       end
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Sequence do
-  subject { described_class.new(steps: steps) }
+  subject { described_class.new(steps:) }
 
   let(:steps) do
     [
@@ -63,7 +63,7 @@ RSpec.describe Mutant::Transform::Sequence do
       let(:hash_error) do
         Mutant::Transform::Error.new(
           cause:     key_error,
-          input:     input,
+          input:,
           message:   nil,
           transform: hash_transform
         )
@@ -72,7 +72,7 @@ RSpec.describe Mutant::Transform::Sequence do
       let(:index_error) do
         Mutant::Transform::Error.new(
           cause:     hash_error,
-          input:     input,
+          input:,
           message:   nil,
           transform: Mutant::Transform::Index.new(
             index:     0,
@@ -84,7 +84,7 @@ RSpec.describe Mutant::Transform::Sequence do
       let(:error) do
         Mutant::Transform::Error.new(
           cause:     index_error,
-          input:     input,
+          input:,
           message:   nil,
           transform: subject
         )

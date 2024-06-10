@@ -30,19 +30,19 @@ module Mutant
     # rubocop:disable Metrics/MethodLength
     def self.empty(world, config)
       new(
-        config:           config,
+        config:,
         hooks:            Hooks.empty,
         integration:      Integration::Null.new(
           arguments:         EMPTY_ARRAY,
           expression_parser: config.expression_parser,
-          world:             world
+          world:
         ),
         matchable_scopes: EMPTY_ARRAY,
         mutations:        EMPTY_ARRAY,
         parser:           Parser.new,
         selector:         Selector::Null.new,
         subjects:         EMPTY_ARRAY,
-        world:            world
+        world:
       )
     end
     # rubocop:enable Metrics/MethodLength
@@ -61,7 +61,7 @@ module Mutant
 
       Result::MutationIndex.new(
         isolation_result: run_mutation_tests(mutation, tests),
-        mutation_index:   mutation_index,
+        mutation_index:,
         runtime:          timer.now - start
       )
     end
@@ -71,11 +71,11 @@ module Mutant
     end
 
     def emit_mutation_worker_process_start(index:)
-      hooks.run(:mutation_worker_process_start, index: index)
+      hooks.run(:mutation_worker_process_start, index:)
     end
 
     def emit_test_worker_process_start(index:)
-      hooks.run(:test_worker_process_start, index: index)
+      hooks.run(:test_worker_process_start, index:)
     end
 
     # The test selections
@@ -161,17 +161,17 @@ module Mutant
     # @param [Symbol] name
     #
     # @return [self]
-    def record(name, &block)
-      world.record(name, &block)
+    def record(name, &)
+      world.record(name, &)
     end
 
   private
 
     def run_mutation_tests(mutation, tests)
       config.isolation.call(config.mutation.timeout) do
-        hooks.run(:mutation_insert_pre, mutation: mutation)
+        hooks.run(:mutation_insert_pre, mutation:)
         result = mutation.insert(world.kernel)
-        hooks.run(:mutation_insert_post, mutation: mutation)
+        hooks.run(:mutation_insert_post, mutation:)
 
         result.either(
           ->(_) { Result::Test::VoidValue.instance },

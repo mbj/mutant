@@ -19,7 +19,7 @@ module SharedContext
 
   def it_reports(expected_content)
     it 'writes expected report to output' do
-      described_class.call(output: output, object: reportable)
+      described_class.call(output:, object: reportable)
       output.rewind
       expect(output.read).to eql(expected_content)
     end
@@ -67,21 +67,21 @@ module SharedContext
         amount_subjects:        subjects.length,
         amount_all_tests:       integration.all_tests.length,
         amount_available_tests: integration.available_tests.length,
-        config:                 config,
-        integration:            integration,
-        mutations:              mutations,
+        config:,
+        integration:,
+        mutations:,
         selected_tests:         [test_a].to_set,
-        selections:             selections,
-        subjects:               subjects,
+        selections:,
+        subjects:,
         test_subject_ratio:     Rational(1),
-        world:                  world
+        world:
       )
     end
 
     let(:world) do
       instance_double(
         Mutant::World,
-        timer: timer
+        timer:
       )
     end
 
@@ -129,7 +129,7 @@ module SharedContext
     let(:subject_a_context) do
       Mutant::Context.new(
         constant_scope: Mutant::Context::ConstantScope::None.new,
-        scope:          scope,
+        scope:,
         source_path:    'subject-a.rb'
       )
     end
@@ -150,7 +150,7 @@ module SharedContext
 
     let(:env_result) do
       Mutant::Result::Env.new(
-        env:             env,
+        env:,
         runtime:         4.0,
         subject_results: [subject_a_result]
       )

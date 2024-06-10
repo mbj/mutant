@@ -22,7 +22,7 @@ module Mutant
         # @return [Result::Env]
         def status
           Result::Env.new(
-            env:             env,
+            env:,
             runtime:         env.world.timer.now - @start,
             subject_results: @subject_results.values
           )
@@ -48,7 +48,7 @@ module Mutant
           subject = mutation_result.mutation.subject
 
           @subject_results[subject] = Result::Subject.new(
-            subject:          subject,
+            subject:,
             coverage_results: previous_coverage_results(subject).dup << coverage_result(mutation_result),
             tests:            env.selections.fetch(subject)
           )
@@ -60,7 +60,7 @@ module Mutant
 
         def coverage_result(mutation_result)
           Result::Coverage.new(
-            mutation_result: mutation_result,
+            mutation_result:,
             criteria_result: mutation_result.criteria_result(env.config.coverage_criteria)
           )
         end

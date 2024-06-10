@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 describe Mutant::Test::Runner::Sink do
-  let(:object)    { described_class.new(env: env) }
-  let(:fail_fast) { false                         }
+  let(:object)    { described_class.new(env:) }
+  let(:fail_fast) { false }
 
   let(:env) do
     instance_double(
       Mutant::Env,
-      config: config,
+      config:,
       world:  instance_double(
         Mutant::World,
-        timer:  timer,
-        stderr: stderr
+        timer:,
+        stderr:
       )
     )
   end
@@ -21,7 +21,7 @@ describe Mutant::Test::Runner::Sink do
   end
 
   let(:config) do
-    instance_double(Mutant::Config, fail_fast: fail_fast)
+    instance_double(Mutant::Config, fail_fast:)
   end
 
   let(:timer) do
@@ -107,7 +107,7 @@ describe Mutant::Test::Runner::Sink do
         object.response(test_response_b)
         expect(object.status).to eql(
           Mutant::Result::TestEnv.new(
-            env:          env,
+            env:,
             runtime:      1.5,
             test_results: [test_result_a, test_result_b]
           )
@@ -149,7 +149,7 @@ describe Mutant::Test::Runner::Sink do
     context 'no results' do
       let(:expected_status) do
         Mutant::Result::TestEnv.new(
-          env:          env,
+          env:,
           runtime:      1.5,
           test_results: []
         )
@@ -163,7 +163,7 @@ describe Mutant::Test::Runner::Sink do
 
       let(:expected_status) do
         Mutant::Result::TestEnv.new(
-          env:          env,
+          env:,
           runtime:      1.5,
           test_results: [test_result_a]
         )
@@ -177,7 +177,7 @@ describe Mutant::Test::Runner::Sink do
 
       let(:expected_status) do
         Mutant::Result::TestEnv.new(
-          env:          env,
+          env:,
           runtime:      1.5,
           test_results: [test_result_a, test_result_b]
         )
@@ -194,7 +194,7 @@ describe Mutant::Test::Runner::Sink do
 
       let(:expected_status) do
         Mutant::Result::TestEnv.new(
-          env:          env,
+          env:,
           runtime:      1.5,
           test_results: [test_result_a, test_result_b]
         )

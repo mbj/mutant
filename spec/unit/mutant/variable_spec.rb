@@ -13,7 +13,7 @@ module VariableSpec
       described_class.new(
         condition_variable: condition_variable_class,
         mutex:              mutex_class,
-        value:              value
+        value:
       )
     end
 

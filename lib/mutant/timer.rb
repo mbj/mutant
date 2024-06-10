@@ -49,7 +49,7 @@ module Mutant
       #
       # @return [Status]
       def status
-        Status.new(time_left: time_left)
+        Status.new(time_left:)
       end
 
       # Probe the time left

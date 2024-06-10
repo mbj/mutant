@@ -20,7 +20,7 @@ module Mutant
 
       private
 
-        def initialize(attributes)
+        def initialize(_attributes)
           super
           @config = Config::DEFAULT.with(
             coverage_criteria: Config::CoverageCriteria::EMPTY
@@ -31,8 +31,8 @@ module Mutant
           env = Env.empty(world, @config)
 
           env
-            .record(:config) { Config.load(cli_config: @config, world: world) }
-            .bind { |config| Bootstrap.call(env.with(config: config)) }
+            .record(:config) { Config.load(cli_config: @config, world:) }
+            .bind { |config| Bootstrap.call(env.with(config:)) }
         end
 
         def parse_remaining_arguments(arguments)
@@ -99,7 +99,7 @@ module Mutant
         end
 
         def assign_integration_name(name)
-          set(integration: @config.integration.with(name: name))
+          set(integration: @config.integration.with(name:))
         end
 
         def add_matcher_options(parser)
@@ -112,7 +112,7 @@ module Mutant
             add_matcher(:start_expressions, @config.expression_parser.call(pattern).from_right)
           end
           parser.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
-            add_matcher(:diffs, Repository::Diff.new(to: revision, world: world))
+            add_matcher(:diffs, Repository::Diff.new(to: revision, world:))
           end
         end
 
@@ -149,7 +149,7 @@ module Mutant
             '--usage USAGE_TYPE',
             Usage,
             'License usage: opensource|commercial'
-          ) { |usage| set(usage: usage) }
+          ) { |usage| set(usage:) }
         end
       end # Run
       # rubocop:enable Metrics/ClassLength

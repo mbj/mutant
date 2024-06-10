@@ -30,10 +30,10 @@ module Mutant
       def self.parse(arguments:, parent_names: nil, print_profile: false, world:, zombie: false)
         new(
           main:          nil,
-          parent_names:  parent_names,
-          print_profile: print_profile,
-          world:         world,
-          zombie:        zombie
+          parent_names:,
+          print_profile:,
+          world:,
+          zombie:
         ).__send__(:parse, arguments)
       end
       # rubocop:enable Metrics/ParameterLists
@@ -184,11 +184,11 @@ module Mutant
         else
           find_command(command_name).bind do |command|
             command.parse(
-              arguments:     arguments,
+              arguments:,
               parent_names:  [*parent_names, self.class::NAME],
-              print_profile: print_profile,
-              world:         world,
-              zombie:        zombie
+              print_profile:,
+              world:,
+              zombie:
             )
           end
         end

@@ -9,7 +9,7 @@ RSpec.describe Mutant::AST::Pattern::Source do
     let(:string) { "a\n b" }
 
     let(:instance) do
-      described_class.new(string: string)
+      described_class.new(string:)
     end
 
     context 'on line index 0' do

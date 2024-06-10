@@ -63,7 +63,7 @@ RSpec.describe Mutant::Expression::Methods do
       specify do
         should eql(
           Mutant::Matcher::Chain.new(
-            matchers: [Mutant::Matcher::Methods::Instance.new(scope: scope)]
+            matchers: [Mutant::Matcher::Methods::Instance.new(scope:)]
           )
         )
       end
@@ -76,8 +76,8 @@ RSpec.describe Mutant::Expression::Methods do
         should eql(
           Mutant::Matcher::Chain.new(
             matchers: [
-              Mutant::Matcher::Methods::Singleton.new(scope: scope),
-              Mutant::Matcher::Methods::Metaclass.new(scope: scope)
+              Mutant::Matcher::Methods::Singleton.new(scope:),
+              Mutant::Matcher::Methods::Metaclass.new(scope:)
             ]
           )
         )

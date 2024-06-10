@@ -4,8 +4,8 @@ RSpec.describe Mutant::Result::Env do
   let(:object) do
     described_class.new(
       runtime:         instance_double(Float),
-      env:             env,
-      subject_results: subject_results
+      env:,
+      subject_results:
     )
   end
 
@@ -14,10 +14,10 @@ RSpec.describe Mutant::Result::Env do
   let(:env) do
     instance_double(
       Mutant::Env,
-      config:      instance_double(Mutant::Config, fail_fast: fail_fast),
-      integration: integration,
+      config:      instance_double(Mutant::Config, fail_fast:),
+      integration:,
       mutations:   [instance_double(Mutant::Mutation)],
-      selections:  selections,
+      selections:,
       subjects:    [subject_a, subject_b]
     )
   end

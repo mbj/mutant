@@ -3,7 +3,7 @@
 RSpec.describe Mutant::Matcher::Filter, '#call' do
   subject { object.call(env) }
 
-  let(:object)    { described_class.new(matcher: matcher, predicate: predicate) }
+  let(:object)    { described_class.new(matcher:, predicate:) }
   let(:matcher)   { instance_double(Mutant::Matcher)                            }
   let(:subject_a) { instance_double(Mutant::Subject)                            }
   let(:subject_b) { instance_double(Mutant::Subject)                            }

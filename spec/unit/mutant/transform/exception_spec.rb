@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Exception do
-  subject { described_class.new(error_class: error_class, block: block) }
+  subject { described_class.new(error_class:, block:) }
 
   let(:error_class) do
     Class.new(RuntimeError)
@@ -29,7 +29,7 @@ RSpec.describe Mutant::Transform::Exception do
         let(:error) do
           Mutant::Transform::Error.new(
             cause:     nil,
-            input:     input,
+            input:,
             message:   'some message',
             transform: subject
           )

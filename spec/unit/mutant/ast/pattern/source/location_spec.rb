@@ -6,7 +6,7 @@ RSpec.describe Mutant::AST::Pattern::Source::Location do
       line_index: 1,
       line_start: 1,
       range:      3..4,
-      source:     source
+      source:
     )
   end
 

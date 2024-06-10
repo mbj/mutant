@@ -79,7 +79,7 @@ module Mutant
         Result::Test.new(
           job_index: nil,
           output:    '',
-          passed:    passed,
+          passed:,
           runtime:   timer.now - start
         )
       end
@@ -137,14 +137,14 @@ module Mutant
         metadata = example.metadata
 
         id = TEST_ID_FORMAT % {
-          index:       index,
+          index:,
           location:    metadata.fetch(:location),
           description: metadata.fetch(:full_description)
         }
 
         Test.new(
           expressions: parse_metadata(metadata),
-          id:          id
+          id:
         )
       end
 
@@ -172,8 +172,8 @@ module Mutant
         end
       end
 
-      def parse_expression(input, &default)
-        expression_parser.call(input).from_right(&default)
+      def parse_expression(input, &)
+        expression_parser.call(input).from_right(&)
       end
 
       def all_examples

@@ -3,15 +3,15 @@
 RSpec.describe Mutant::Env do
   subject do
     described_class.new(
-      config:           config,
-      hooks:            hooks,
-      integration:      integration,
+      config:,
+      hooks:,
+      integration:,
       matchable_scopes: [],
       mutations:        [mutation],
       parser:           Mutant::Parser.new,
-      selector:         selector,
-      subjects:         subjects,
-      world:            world
+      selector:,
+      subjects:,
+      world:
     )
   end
 
@@ -49,9 +49,9 @@ RSpec.describe Mutant::Env do
       Mutant::Config,
       expression_parser: instance_double(Mutant::Expression::Parser),
       integration:       Mutant::Integration::Config::DEFAULT.with(name: integration_name),
-      isolation:         isolation,
+      isolation:,
       mutation:          mutation_config,
-      reporter:          reporter
+      reporter:
     )
   end
 
@@ -71,9 +71,9 @@ RSpec.describe Mutant::Env do
     Mutant::Isolation::Result.new(
       log:            '',
       exception:      nil,
-      process_status: process_status,
+      process_status:,
       timeout:        nil,
-      value:          value
+      value:
     )
   end
 
@@ -130,8 +130,8 @@ RSpec.describe Mutant::Env do
       it 'returns expected result' do
         expect(apply).to eql(
           Mutant::Result::MutationIndex.new(
-            isolation_result: isolation_result,
-            mutation_index:   mutation_index,
+            isolation_result:,
+            mutation_index:,
             runtime:          1.0
           )
         )
@@ -151,9 +151,9 @@ RSpec.describe Mutant::Env do
         apply
 
         expect(isolation).to have_received(:call).ordered.with(config.mutation.timeout)
-        expect(hooks).to have_received(:run).ordered.with(:mutation_insert_pre, mutation: mutation)
+        expect(hooks).to have_received(:run).ordered.with(:mutation_insert_pre, mutation:)
         expect(mutation).to have_received(:insert).ordered.with(world.kernel)
-        expect(hooks).to have_received(:run).ordered.with(:mutation_insert_post, mutation: mutation)
+        expect(hooks).to have_received(:run).ordered.with(:mutation_insert_post, mutation:)
         expect(integration).to have_received(:call).ordered.with([test_a, test_b])
       end
 
@@ -182,7 +182,7 @@ RSpec.describe Mutant::Env do
     let(:index) { 0 }
 
     def apply
-      subject.emit_mutation_worker_process_start(index: index)
+      subject.emit_mutation_worker_process_start(index:)
     end
 
     before do
@@ -192,7 +192,7 @@ RSpec.describe Mutant::Env do
     it 'dispatches expected hook' do
       apply
 
-      expect(hooks).to have_received(:run).with(:mutation_worker_process_start, index: index)
+      expect(hooks).to have_received(:run).with(:mutation_worker_process_start, index:)
     end
   end
 
@@ -200,7 +200,7 @@ RSpec.describe Mutant::Env do
     let(:index) { 0 }
 
     def apply
-      subject.emit_test_worker_process_start(index: index)
+      subject.emit_test_worker_process_start(index:)
     end
 
     before do
@@ -210,7 +210,7 @@ RSpec.describe Mutant::Env do
     it 'dispatches expected hook' do
       apply
 
-      expect(hooks).to have_received(:run).with(:test_worker_process_start, index: index)
+      expect(hooks).to have_received(:run).with(:test_worker_process_start, index:)
     end
   end
 
@@ -298,20 +298,20 @@ RSpec.describe Mutant::Env do
       integration = Mutant::Integration::Null.new(
         arguments:         Mutant::EMPTY_ARRAY,
         expression_parser: config.expression_parser,
-        world:             world
+        world:
       )
 
       expect(apply).to eql(
         described_class.new(
-          config:           config,
+          config:,
           hooks:            Mutant::Hooks.empty,
-          integration:      integration,
+          integration:,
           matchable_scopes: Mutant::EMPTY_ARRAY,
           mutations:        Mutant::EMPTY_ARRAY,
           parser:           Mutant::Parser.new,
           selector:         Mutant::Selector::Null.new,
           subjects:         Mutant::EMPTY_ARRAY,
-          world:            world
+          world:
         )
       )
     end

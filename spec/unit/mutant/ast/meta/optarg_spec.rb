@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::AST::Meta::Optarg do
-  subject(:object) { described_class.new(node: node) }
+  subject(:object) { described_class.new(node:) }
 
   let(:node)  { s(:optarg, name, value) }
   let(:name)  { :foo                    }

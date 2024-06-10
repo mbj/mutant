@@ -38,7 +38,7 @@ module Mutant
       # rubocop:disable Lint/UnusedMethodArgument
       def matcher(env:)
         matcher_candidates = MATCHERS.fetch(scope_symbol)
-          .map { |submatcher| submatcher.new(scope: scope) }
+          .map { |submatcher| submatcher.new(scope:) }
 
         Matcher::Chain.new(matchers: matcher_candidates)
       end
@@ -60,7 +60,7 @@ module Mutant
 
       def scope
         Scope.new(
-          expression: Namespace::Exact.new(scope_name: scope_name),
+          expression: Namespace::Exact.new(scope_name:),
           raw:        Object.const_get(scope_name)
         )
       end

@@ -31,14 +31,14 @@ RSpec.describe 'parallel', mutant: false do
       jobs:             1,
       on_process_start: ->(index:) { puts("Booting: #{index}") },
       process_name:     'test-parallel-process',
-      sink:             sink,
+      sink:,
       source:           Mutant::Parallel::Source::Array.new(jobs: [1, 2, 3]),
       thread_name:      'test-parallel-thread',
       timeout:          1.0
     )
 
     driver = Mutant::Parallel.async(
-      config: config,
+      config:,
       world:  Mutant::WORLD
     )
 
@@ -79,14 +79,14 @@ RSpec.describe 'parallel', mutant: false do
       jobs:             1,
       on_process_start: ->(index:) {},
       process_name:     'test-parallel-process',
-      sink:             sink,
+      sink:,
       source:           Mutant::Parallel::Source::Array.new(jobs: [1, 2, 3]),
       thread_name:      'test-parallel-thread',
       timeout:          1.0
     )
 
     driver = Mutant::Parallel.async(
-      config: config,
+      config:,
       world:  Mutant::WORLD
     )
 
@@ -124,14 +124,14 @@ RSpec.describe 'parallel', mutant: false do
       jobs:             1,
       on_process_start: ->(_) { puts b },
       process_name:     'test-parallel-process',
-      sink:             sink,
+      sink:,
       source:           Mutant::Parallel::Source::Array.new(jobs: [1, 2]),
       thread_name:      'test-parallel-thread',
       timeout:          1.0
     )
 
     driver = Mutant::Parallel.async(
-      config: config,
+      config:,
       world:  Mutant::WORLD
     )
 
@@ -166,14 +166,14 @@ RSpec.describe 'parallel', mutant: false do
       jobs:             1,
       on_process_start: ->(_) { Thread.start { i = 0; loop { puts("<iteration #{i += 1}>"); } } },
       process_name:     'test-parallel-process',
-      sink:             sink,
+      sink:,
       source:           Mutant::Parallel::Source::Array.new(jobs: [1, 2, 3]),
       thread_name:      'test-parallel-thread',
       timeout:          1.0
     )
 
     driver = Mutant::Parallel.async(
-      config: config,
+      config:,
       world:  Mutant::WORLD
     )
 
@@ -199,14 +199,14 @@ RSpec.describe 'parallel', mutant: false do
       jobs:             Etc.nprocessors,
       on_process_start: ->(index:) {},
       process_name:     'test-parallel-process',
-      sink:             sink,
+      sink:,
       source:           Mutant::Parallel::Source::Array.new(jobs: Array.new(1000) { |value| value }),
       thread_name:      'test-parallel-thread',
       timeout:          1.0
     )
 
     driver = Mutant::Parallel.async(
-      config: config,
+      config:,
       world:  Mutant::WORLD
     )
 
@@ -226,14 +226,14 @@ RSpec.describe 'parallel', mutant: false do
       jobs:             1,
       on_process_start: ->(index:) {},
       process_name:     'test-parallel-process',
-      sink:             sink,
+      sink:,
       source:           Mutant::Parallel::Source::Array.new(jobs: [1]),
       thread_name:      'test-parallel-thread',
       timeout:          1.0
     )
 
     driver = Mutant::Parallel.async(
-      config: config,
+      config:,
       world:  Mutant::WORLD
     )
 

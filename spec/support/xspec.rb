@@ -26,7 +26,7 @@ module XSpec
     def self.parse(events)
       event_list = events.to_a
       assert_valid(event_list)
-      new(event_list: event_list)
+      new(event_list:)
     end
 
   private
@@ -103,16 +103,16 @@ module XSpec
     # rubocop:disable Metrics/ParameterLists
     def self.parse(receiver:, selector:, arguments: [], reaction: nil, pre_action: nil)
       new(
-        receiver:   receiver,
-        selector:   selector,
-        arguments:  arguments,
-        pre_action: pre_action,
+        receiver:,
+        selector:,
+        arguments:,
+        pre_action:,
         reaction:   MessageReaction.parse(reaction || { return: nil })
       )
     end
 
     def call(observation)
-      Verifier.new(expectation: self, observation: observation).call
+      Verifier.new(expectation: self, observation:).call
     end
 
     class Verifier
@@ -163,7 +163,7 @@ module XSpec
 
     # rubocop:disable Metrics/MethodLength
     def self.verify(rspec_context, expectations)
-      verifier = new(expectations: expectations)
+      verifier = new(expectations:)
 
       hooks = expectations
         .to_set { |expectation| [expectation.receiver, expectation.selector] }
@@ -173,10 +173,10 @@ module XSpec
           allow(receiver).to receive(selector) do |*arguments, &block|
             verifier.call(
               MessageObservation.new(
-                receiver:  receiver,
-                selector:  selector,
-                arguments: arguments,
-                block:     block
+                receiver:,
+                selector:,
+                arguments:,
+                block:
               )
             )
           end

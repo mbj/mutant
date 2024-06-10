@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
-  let(:object) { described_class.new(scope: scope) }
+  let(:object) { described_class.new(scope:) }
 
   let(:scope) do
     Mutant::Scope.new(
@@ -83,7 +83,7 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
         expect(matcher).to receive(:call).with(env).and_return([subject])
 
         expect(Mutant::Matcher::Method::Instance).to receive(:new)
-          .with(scope: scope, target_method: class_under_test.instance_method(method))
+          .with(scope:, target_method: class_under_test.instance_method(method))
           .and_return(matcher)
       end
     end
@@ -94,7 +94,7 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
   end
 
   context 'on degenerate object interface' do
-    let(:object) { described_class.new(scope: scope) }
+    let(:object) { described_class.new(scope:) }
 
     let(:scope) do
       Mutant::Scope.new(
@@ -130,7 +130,7 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
           exception
         end
 
-      expect(capture_reporter.warnings).to eql([<<~'MESSAGE' % { scope: scope, exception: exception.inspect }])
+      expect(capture_reporter.warnings).to eql([<<~'MESSAGE' % { scope:, exception: exception.inspect }])
         Caught an exception while accessing a method with
         #instance_method that is part of #{public,private,protected}_instance_methods.
 

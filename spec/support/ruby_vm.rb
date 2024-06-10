@@ -53,7 +53,7 @@ module MutantSpec
 
     # A fake implementation of Kernel#require
     def require(logical_name)
-      handle_event(EventObservation.new(EventExpectation::Require, logical_name: logical_name))
+      handle_event(EventObservation.new(EventExpectation::Require, logical_name:))
     end
 
     # A fake implementation of Kernel#eval
@@ -61,8 +61,8 @@ module MutantSpec
       handle_event(
         EventObservation.new(
           EventExpectation::Eval,
-          binding:         binding,
-          source:          source,
+          binding:,
+          source:,
           source_location: location
         )
       )

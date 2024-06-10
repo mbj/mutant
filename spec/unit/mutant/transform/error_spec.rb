@@ -18,8 +18,8 @@ RSpec.describe Mutant::Transform::Error do
     {
       cause:     direct_cause,
       input:     nil,
-      message:   message,
-      transform: transform
+      message:,
+      transform:
     }
   end
 
@@ -36,7 +36,7 @@ RSpec.describe Mutant::Transform::Error do
         cause:     indirect_cause,
         input:     nil,
         message:   'direct-cause-message',
-        transform: transform
+        transform:
       )
     end
   end

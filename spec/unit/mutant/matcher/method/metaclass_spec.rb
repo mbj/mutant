@@ -5,7 +5,7 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
 
   subject { object.call(env) }
 
-  let(:object)       { described_class.new(scope: scope, target_method: method) }
+  let(:object)       { described_class.new(scope:, target_method: method) }
   let(:method)       { scope.raw.public_method(method_name)                     }
   let(:type)         { :def                                                     }
   let(:method_name)  { :foo                                                     }
@@ -25,7 +25,7 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
       Mutant::Env,
       config: Mutant::Config::DEFAULT,
       parser: Fixtures::TEST_ENV.parser,
-      world:  world
+      world:
     )
   end
 

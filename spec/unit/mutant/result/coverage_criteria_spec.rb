@@ -3,9 +3,9 @@
 RSpec.describe Mutant::Result::CoverageCriteria do
   let(:object) do
     described_class.new(
-      process_abort: process_abort,
-      test_result:   test_result,
-      timeout:       timeout
+      process_abort:,
+      test_result:,
+      timeout:
     )
   end
 

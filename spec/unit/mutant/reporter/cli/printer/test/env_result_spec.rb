@@ -5,7 +5,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Test::EnvResult do
 
   let(:reportable) do
     Mutant::Result::TestEnv.new(
-      env:          env,
+      env:,
       runtime:      0.8,
       test_results: [test_result_a, test_result_b]
     )

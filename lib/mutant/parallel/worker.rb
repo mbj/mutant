@@ -41,20 +41,20 @@ module Mutant
           world.stdout.reopen(log_writer)
 
           run_child(
-            config:     config,
-            connection: Connection.from_pipes(marshal: marshal, reader: request, writer: response),
-            log_writer: log_writer
+            config:,
+            connection: Connection.from_pipes(marshal:, reader: request, writer: response),
+            log_writer:
           )
         end
 
-        connection = Connection.from_pipes(marshal: marshal, reader: response, writer: request)
+        connection = Connection.from_pipes(marshal:, reader: response, writer: request)
 
         new(
-          config:          config,
-          connection:      connection,
+          config:,
+          connection:,
           log_reader:      log.to_reader,
           response_reader: connection.reader.io,
-          pid:             pid
+          pid:
         )
       end
       private_class_method :start_config
@@ -98,10 +98,10 @@ module Mutant
           response = Connection::Reader.read_response(
             deadline:        config.world.deadline(config.timeout),
             io:              config.world.io,
-            job:             job,
-            log_reader:      log_reader,
+            job:,
+            log_reader:,
             marshal:         config.world.marshal,
-            response_reader: response_reader
+            response_reader:
           )
 
           job_done(job)

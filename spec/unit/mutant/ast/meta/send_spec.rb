@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::AST::Meta::Send do
-  let(:object) { described_class.new(node: node) }
+  let(:object) { described_class.new(node:) }
 
   def parse(source)
     Unparser.parse(source)

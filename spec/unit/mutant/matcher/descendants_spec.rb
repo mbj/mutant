@@ -4,7 +4,7 @@ RSpec.describe Mutant::Matcher::Descendants do
   let(:env) { Fixtures::TEST_ENV }
 
   describe '#call' do
-    subject { described_class.new(const_name: const_name) }
+    subject { described_class.new(const_name:) }
 
     def apply
       subject.call(env)
@@ -31,7 +31,7 @@ RSpec.describe Mutant::Matcher::Descendants do
         Mutant::Subject::Method::Instance.new(
           config:     Mutant::Subject::Config::DEFAULT,
           context:    Mutant::Context.new(
-            constant_scope: constant_scope,
+            constant_scope:,
             scope:          Mutant::Scope.new(
               raw:        TestApp::Foo::Bar::Baz,
               expression: parse_expression('TestApp::Foo::Bar::Baz')

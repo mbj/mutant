@@ -22,7 +22,7 @@ module Mutant
       def call(env)
         Chain.new(
           matchers: methods(env).map do |target_method|
-            matcher.new(scope: scope, target_method: target_method)
+            matcher.new(scope:, target_method:)
           end
         ).call(env)
       end
@@ -110,7 +110,7 @@ module Mutant
           candidate_scope.instance_method(method_name)
         rescue Exception => exception
           env.warn(
-            MESSAGE % { scope: scope, method_name: method_name, exception: exception.inspect }
+            MESSAGE % { scope:, method_name:, exception: exception.inspect }
           )
           nil
         end

@@ -6,7 +6,7 @@ RSpec.describe Mutant::Expression::Source do
 
   describe '#matcher' do
     def apply
-      object.matcher(env: env)
+      object.matcher(env:)
     end
 
     let(:glob_expression) { 'lib/**/*.rb'                                      }
@@ -16,7 +16,7 @@ RSpec.describe Mutant::Expression::Source do
     let(:path_a)          { instance_double(Pathname, :a)                      }
     let(:path_b)          { instance_double(Pathname, :b)                      }
     let(:pathname)        { class_double(Pathname)                             }
-    let(:world)           { instance_double(Mutant::World, pathname: pathname) }
+    let(:world)           { instance_double(Mutant::World, pathname:) }
 
     let(:path_asts) do
       {
@@ -49,10 +49,10 @@ RSpec.describe Mutant::Expression::Source do
     let(:env) do
       instance_double(
         Mutant::Env,
-        config:           config,
+        config:,
         matchable_scopes: [scope_a, scope_b],
-        parser:           parser,
-        world:            world
+        parser:,
+        world:
       )
     end
 

@@ -18,7 +18,7 @@ RSpec.describe Mutant::AST::NamedChildren do
       end
     end
 
-    let(:instance) { klass.new(node: node) }
+    let(:instance) { klass.new(node:) }
 
     let(:node_foo) { s(:foo) }
     let(:node_bar) { s(:bar) }

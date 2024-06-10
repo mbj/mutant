@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Index do
-  subject { described_class.new(index: index, transform: transform) }
+  subject { described_class.new(index:, transform:) }
 
   let(:index)     { 1                              }
   let(:transform) { Mutant::Transform::Boolean.new }
@@ -43,16 +43,16 @@ RSpec.describe Mutant::Transform::Index do
       let(:boolean_error) do
         Mutant::Transform::Error.new(
           cause:     nil,
-          input:     input,
+          input:,
           message:   'Expected: boolean but got: 1',
-          transform: transform
+          transform:
         )
       end
 
       let(:error) do
         Mutant::Transform::Error.new(
           cause:     boolean_error,
-          input:     input,
+          input:,
           message:   nil,
           transform: subject
         )
@@ -74,7 +74,7 @@ RSpec.describe Mutant::Transform::Index do
         cause:     :nil,
         input:     1,
         message:   nil,
-        transform: transform
+        transform:
       )
     end
 
@@ -84,7 +84,7 @@ RSpec.describe Mutant::Transform::Index do
           cause:     error,
           input:     1,
           message:   nil,
-          transform: described_class.new(index: index, transform: transform)
+          transform: described_class.new(index:, transform:)
         )
       )
     end

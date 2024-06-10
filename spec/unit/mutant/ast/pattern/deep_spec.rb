@@ -2,7 +2,7 @@
 
 RSpec.describe Mutant::AST::Pattern::Deep do
   let(:instance) do
-    described_class.new(pattern: pattern)
+    described_class.new(pattern:)
   end
 
   let(:node) do

@@ -3,10 +3,10 @@
 RSpec.describe Mutant::Isolation::Result do
   let(:object) do
     described_class.new(
-      exception:      exception,
+      exception:,
       log:            '',
-      process_status: process_status,
-      timeout:        timeout,
+      process_status:,
+      timeout:,
       value:          nil
     )
   end

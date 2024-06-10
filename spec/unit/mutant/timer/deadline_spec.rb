@@ -3,8 +3,8 @@
 RSpec.describe Mutant::Timer::Deadline do
   let(:object) do
     described_class.new(
-      timer:        timer,
-      allowed_time: allowed_time
+      timer:,
+      allowed_time:
     )
   end
 
@@ -96,7 +96,7 @@ RSpec.describe Mutant::Timer::Deadline do
 end
 
 RSpec.describe Mutant::Timer::Deadline::Status do
-  let(:object) { described_class.new(time_left: time_left) }
+  let(:object) { described_class.new(time_left:) }
 
   describe '#ok?' do
     def apply

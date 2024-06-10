@@ -60,11 +60,11 @@ RSpec.describe Mutant::Parallel::Worker do
 
   let(:shared) do
     {
-      var_active_jobs: var_active_jobs,
-      var_final:       var_final,
-      var_running:     var_running,
-      var_sink:        var_sink,
-      var_source:      var_source
+      var_active_jobs:,
+      var_final:,
+      var_running:,
+      var_sink:,
+      var_source:
     }
   end
 
@@ -73,14 +73,14 @@ RSpec.describe Mutant::Parallel::Worker do
       connection:      parent_connection,
       log_reader:      log_pipe.to_reader,
       response_reader: response_pipe.to_reader,
-      pid:             pid,
+      pid:,
       config:          described_class::Config.new(
-        block:            block,
-        index:            index,
-        on_process_start: on_process_start,
-        process_name:     process_name,
+        block:,
+        index:,
+        on_process_start:,
+        process_name:,
         timeout:          1.0,
-        world:            world,
+        world:,
         **shared
       )
     )
@@ -214,9 +214,9 @@ RSpec.describe Mutant::Parallel::Worker do
         receiver:  Mutant::Parallel::Connection::Reader,
         arguments: [
           {
-            deadline:        deadline,
+            deadline:,
             io:              world.io,
-            job:             job,
+            job:,
             log_reader:      log_pipe.to_reader,
             marshal:         world.marshal,
             response_reader: response_pipe.to_reader
@@ -421,17 +421,17 @@ RSpec.describe Mutant::Parallel::Worker do
     # rubocop:disable Metrics/MethodLength
     def apply
       described_class.start(
-        block:            block,
-        index:            index,
-        on_process_start: on_process_start,
-        process_name:     process_name,
+        block:,
+        index:,
+        on_process_start:,
+        process_name:,
         timeout:          1.0,
-        var_active_jobs:  var_active_jobs,
-        var_final:        var_final,
-        var_running:      var_running,
-        var_sink:         var_sink,
-        var_source:       var_source,
-        world:            world
+        var_active_jobs:,
+        var_final:,
+        var_running:,
+        var_sink:,
+        var_source:,
+        world:
       )
     end
     # rubocop:enable Metrics/MethodLength
@@ -495,7 +495,7 @@ RSpec.describe Mutant::Parallel::Worker do
         {
           receiver:  on_process_start,
           selector:  :call,
-          arguments: [{ index: index }]
+          arguments: [{ index: }]
         },
         {
           receiver: child_connection,

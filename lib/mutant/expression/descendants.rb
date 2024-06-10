@@ -13,7 +13,7 @@ module Mutant
 
       # rubocop:disable Lint/UnusedMethodArgument
       def matcher(env:)
-        Matcher::Descendants.new(const_name: const_name)
+        Matcher::Descendants.new(const_name:)
       end
     end # Descendants
   end # Expression

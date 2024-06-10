@@ -4,16 +4,16 @@ RSpec.describe Mutant::Result::TestEnv do
   let(:object) do
     described_class.new(
       runtime:      instance_double(Float),
-      env:          env,
-      test_results: test_results
+      env:,
+      test_results:
     )
   end
 
   let(:env) do
     instance_double(
       Mutant::Env,
-      config:      instance_double(Mutant::Config, fail_fast: fail_fast),
-      integration: integration
+      config:      instance_double(Mutant::Config, fail_fast:),
+      integration:
     )
   end
 

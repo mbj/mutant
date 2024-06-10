@@ -255,12 +255,12 @@ RSpec.describe Mutant::Config do
 
   describe '.load' do
     def apply
-      described_class.load(cli_config: cli_config, world: world)
+      described_class.load(cli_config:, world:)
     end
 
     let(:cli_config)  { Mutant::Config::DEFAULT                            }
     let(:nprocessors) { instance_double(Integer, :nprocessors)             }
-    let(:world)       { instance_double(Mutant::World, pathname: pathname) }
+    let(:world)       { instance_double(Mutant::World, pathname:) }
 
     let(:pathname) do
       paths = paths()
@@ -291,7 +291,7 @@ RSpec.describe Mutant::Config do
 
     before do
       allow(Pathname).to receive(:new, &paths.public_method(:fetch))
-      allow(Etc).to receive_messages(nprocessors: nprocessors)
+      allow(Etc).to receive_messages(nprocessors:)
     end
 
     context 'when no path is readable' do

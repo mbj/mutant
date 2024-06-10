@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::AST do
-  let(:object) { described_class.new(comment_associations: [], node: node) }
+  let(:object) { described_class.new(comment_associations: [], node:) }
 
   describe '#on_line' do
     def apply(line)
@@ -29,7 +29,7 @@ RSpec.describe Mutant::AST do
       it 'returns expected view' do
         expect(apply(2)).to eql(
           [
-            described_class::View.new(node: node, stack: [])
+            described_class::View.new(node:, stack: [])
           ]
         )
       end

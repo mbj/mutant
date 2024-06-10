@@ -20,9 +20,9 @@ RSpec.describe Mutant::Zombifier do
       load_path:        %w[a b],
       includes:         %w[project bar],
       namespace:        :Zombie,
-      require_highjack: require_highjack,
-      root_require:     root_require,
-      pathname:         pathname,
+      require_highjack:,
+      root_require:,
+      pathname:,
       kernel:           ruby_vm
     }
   end

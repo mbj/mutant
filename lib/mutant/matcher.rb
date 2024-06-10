@@ -22,7 +22,7 @@ module Mutant
       matcher_config = env.config.matcher
 
       Filter.new(
-        matcher:   Chain.new(matchers: matcher_config.subjects.map { |subject| subject.matcher(env: env) }),
+        matcher:   Chain.new(matchers: matcher_config.subjects.map { |subject| subject.matcher(env:) }),
         predicate: method(:allowed_subject?).curry.call(matcher_config)
       )
     end

@@ -45,7 +45,7 @@ module Mutant
           jobs:             env.config.jobs,
           on_process_start: env.method(:emit_test_worker_process_start),
           process_name:     'mutant-test-runner-process',
-          sink:             Sink.new(env: env),
+          sink:             Sink.new(env:),
           source:           Parallel::Source::Array.new(jobs: env.integration.all_tests.each_index.to_a),
           thread_name:      'mutant-test-runner-thread',
           timeout:          nil

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Primitive do
-  subject { described_class.new(primitive: primitive) }
+  subject { described_class.new(primitive:) }
 
   let(:primitive) { String }
 
@@ -42,7 +42,7 @@ RSpec.describe Mutant::Transform::Primitive do
       let(:error) do
         Mutant::Transform::Error.new(
           cause:     nil,
-          input:     input,
+          input:,
           message:   'Expected: String but got: Integer',
           transform: subject
         )

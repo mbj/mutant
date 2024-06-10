@@ -7,7 +7,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   let(:method)        { scope.raw.instance_method(method_name)                   }
   let(:method_arity)  { 0                                                        }
   let(:method_name)   { :foo                                                     }
-  let(:object)        { described_class.new(scope: scope, target_method: method) }
+  let(:object)        { described_class.new(scope:, target_method: method) }
   let(:source_path)   { MutantSpec::ROOT.join('test_app/lib/test_app.rb')        }
   let(:type)          { :def                                                     }
 
@@ -25,9 +25,9 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   let(:env) do
     instance_double(
       Mutant::Env,
-      config: config,
+      config:,
       parser: Fixtures::TEST_ENV.parser,
-      world:  world
+      world:
     )
   end
 
@@ -55,7 +55,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
         Method,
         name:            :some_method,
         owner:           nil,
-        source_location: source_location
+        source_location:
       )
     end
 
@@ -69,7 +69,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
   end
 
   context 'when method is defined inside of a file removed by a diff filter' do
-    let(:config)            { super().with(matcher: super().matcher.with(diffs: diffs)) }
+    let(:config)            { super().with(matcher: super().matcher.with(diffs:)) }
     let(:diff_a)            { instance_double(Mutant::Repository::Diff, :diff_a)        }
     let(:diff_a_touches?)   { false                                                     }
     let(:diff_b)            { instance_double(Mutant::Repository::Diff, :diff_b)        }
@@ -232,8 +232,8 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
 
     let(:context) do
       Mutant::Context.new(
-        constant_scope: constant_scope,
-        scope:          scope,
+        constant_scope:,
+        scope:,
         source_path:    MutantSpec::ROOT.join('test_app', 'lib', 'test_app.rb')
       )
     end
@@ -242,7 +242,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
       [
         Mutant::Subject::Method::Instance.new(
           config:     Mutant::Subject::Config::DEFAULT,
-          context:    context,
+          context:,
           node:       s(:def, :bar, s(:args), nil),
           visibility: expected_visibility
         )

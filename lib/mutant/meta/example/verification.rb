@@ -94,7 +94,7 @@ module Mutant
 
         def missing
           (example.expected.map(&:node) - mutations.map(&:node)).map do |node|
-            Mutation::Evil.new(subject: example, node: node)
+            Mutation::Evil.new(subject: example, node:)
           end
         end
         memoize :missing

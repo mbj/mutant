@@ -163,8 +163,8 @@ module Mutant
     # Execute block under mutex
     #
     # @return [self]
-    def synchronize(&block)
-      @mutex.synchronize(&block)
+    def synchronize(&)
+      @mutex.synchronize(&)
     end
 
     # Wait for block predicate

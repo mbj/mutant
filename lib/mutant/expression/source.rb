@@ -12,14 +12,14 @@ module Mutant
       end
 
       def matcher(env:)
-        Matcher::Chain.new(matchers: find_matchers(env: env))
+        Matcher::Chain.new(matchers: find_matchers(env:))
       end
 
     private
 
       def find_matchers(env:)
-        scope_names(env: env).uniq.map do |scope_name|
-          Namespace::Recursive.new(scope_name: scope_name).matcher(env: nil)
+        scope_names(env:).uniq.map do |scope_name|
+          Namespace::Recursive.new(scope_name:).matcher(env: nil)
         end
       end
 

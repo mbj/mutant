@@ -28,7 +28,7 @@ module Mutant
                 token = peek
                 error(
                   message: "Unexpected token: #{token.type}",
-                  token:   token
+                  token:
                 )
               end
             end
@@ -74,15 +74,15 @@ module Mutant
           end
 
           Node.new(
-            attribute:  attribute,
-            descendant: descendant,
+            attribute:,
+            descendant:,
             type:       structure.type
           )
         end
 
         def parse_attribute(name)
           Node::Attribute.new(
-            name:  name,
+            name:,
             value: parse_alternative(
               group_start: method(:parse_attribute_group),
               string:      method(:parse_attribute_value)
@@ -96,14 +96,14 @@ module Mutant
           alternatives.fetch(token.type) do
             error(
               message: "Expected one of: #{alternatives.keys.join(',')} but got: #{token.type}",
-              token:   token
+              token:
             )
           end.call
         end
 
         def parse_descendant(name)
           Node::Descendant.new(
-            name:    name,
+            name:,
             pattern: parse_node
           )
         end
@@ -120,7 +120,7 @@ module Mutant
 
           expect(:group_end)
 
-          Node::Attribute::Value::Group.new(values: values)
+          Node::Attribute::Value::Group.new(values:)
         end
 
         def parse_attribute_value
@@ -153,7 +153,7 @@ module Mutant
           type = token.value.to_sym
 
           Structure::ALL.fetch(type) do
-            error(token: token, message: "Expected valid node type got: #{type}")
+            error(token:, message: "Expected valid node type got: #{type}")
           end
         end
 
@@ -169,7 +169,7 @@ module Mutant
             token
           else
             error(
-              token:   token,
+              token:,
               message: "Expected token type: #{type} but got: #{token.type}"
             )
           end

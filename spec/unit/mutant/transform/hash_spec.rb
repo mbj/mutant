@@ -9,8 +9,8 @@ RSpec.describe Mutant::Transform::Hash do
 
   let(:attributes) do
     {
-      required: required,
-      optional: optional
+      required:,
+      optional:
     }
   end
 
@@ -35,7 +35,7 @@ RSpec.describe Mutant::Transform::Hash do
         let(:error) do
           Mutant::Transform::Error.new(
             cause:     nil,
-            input:     input,
+            input:,
             message:   'Missing keys: [:foo], Unexpected keys: []',
             transform: subject
           )
@@ -52,7 +52,7 @@ RSpec.describe Mutant::Transform::Hash do
         let(:error) do
           Mutant::Transform::Error.new(
             cause:     nil,
-            input:     input,
+            input:,
             message:   'Missing keys: [], Unexpected keys: [:foo]',
             transform: subject
           )
@@ -114,7 +114,7 @@ RSpec.describe Mutant::Transform::Hash do
         let(:error) do
           Mutant::Transform::Error.new(
             cause:     inner_error,
-            input:     input,
+            input:,
             message:   nil,
             transform: subject
           )
@@ -150,7 +150,7 @@ RSpec.describe Mutant::Transform::Hash do
       let(:error) do
         Mutant::Transform::Error.new(
           cause:     nil,
-          input:     input,
+          input:,
           message:   'Expected: Hash but got: Array',
           transform: subject
         )

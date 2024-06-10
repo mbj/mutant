@@ -19,8 +19,8 @@ module Mutant
             env = Env.empty(world, @config)
 
             env
-              .record(:config) { Config.load(cli_config: @config, world: world) }
-              .bind { |config| Bootstrap.call_test(env.with(config: config)) }
+              .record(:config) { Config.load(cli_config: @config, world:) }
+              .bind { |config| Bootstrap.call_test(env.with(config:)) }
           end
 
           class List < self

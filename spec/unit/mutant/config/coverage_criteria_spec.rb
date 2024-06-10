@@ -4,9 +4,9 @@ RSpec.describe Mutant::Config::CoverageCriteria do
   describe '#merge' do
     let(:original) do
       described_class.new(
-        test_result:   test_result,
-        timeout:       timeout,
-        process_abort: process_abort
+        test_result:,
+        timeout:,
+        process_abort:
       )
     end
 

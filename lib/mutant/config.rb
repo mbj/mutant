@@ -97,7 +97,7 @@ module Mutant
 
     # Load the configuration
     def self.load(cli_config:, world:)
-      load_config_file(reporter: cli_config.reporter, world: world).fmap do |file_config|
+      load_config_file(reporter: cli_config.reporter, world:).fmap do |file_config|
         DEFAULT.with(
           jobs:     Etc.nprocessors,
           mutation: Mutation::Config::DEFAULT
@@ -117,7 +117,7 @@ module Mutant
       in []
         Either::Right.new(DEFAULT)
       in [file]
-        load_contents(reporter: reporter, path: file).fmap(&DEFAULT.public_method(:with))
+        load_contents(reporter:, path: file).fmap(&DEFAULT.public_method(:with))
       else
         Either::Left.new(MORE_THAN_ONE_CONFIG_FILE % files.join(', '))
       end

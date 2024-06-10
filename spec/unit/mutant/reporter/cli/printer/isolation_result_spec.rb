@@ -11,11 +11,11 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
 
   let(:reportable) do
     Mutant::Isolation::Result.new(
-      exception:      exception,
-      log:            log,
-      process_status: process_status,
-      timeout:        timeout,
-      value:          value
+      exception:,
+      log:,
+      process_status:,
+      timeout:,
+      value:
     )
   end
 
