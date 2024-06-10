@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Array do
-  subject { described_class.new(transform: transform) }
+  subject { described_class.new(transform:) }
 
   let(:transform) { Mutant::Transform::Boolean.new }
 
@@ -35,7 +35,7 @@ RSpec.describe Mutant::Transform::Array do
             cause:     nil,
             input:     1,
             message:   'Expected: boolean but got: 1',
-            transform: transform
+            transform:
           )
         end
 
@@ -44,14 +44,14 @@ RSpec.describe Mutant::Transform::Array do
             cause:     boolean_error,
             input:     1,
             message:   nil,
-            transform: Mutant::Transform::Index.new(index: 1, transform: transform)
+            transform: Mutant::Transform::Index.new(index: 1, transform:)
           )
         end
 
         let(:error) do
           Mutant::Transform::Error.new(
             cause:     index_error,
-            input:     input,
+            input:,
             message:   'Failed to coerce array at index: 1',
             transform: subject
           )
@@ -78,7 +78,7 @@ RSpec.describe Mutant::Transform::Array do
       let(:error) do
         Mutant::Transform::Error.new(
           cause:     nil,
-          input:     input,
+          input:,
           message:   'Expected: Array but got: FalseClass',
           transform: subject
         )

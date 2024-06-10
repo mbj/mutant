@@ -3,9 +3,9 @@
 RSpec.describe Mutant::Reporter::CLI do
   setup_shared_context
 
-  let(:format) { described_class::Format::Progressive.new(tty: tty?)                        }
-  let(:object) { described_class.new(format: format, output: output, print_warnings: false) }
-  let(:tty?)   { false                                                                      }
+  let(:format) { described_class::Format::Progressive.new(tty: tty?) }
+  let(:object) { described_class.new(format:, output:, print_warnings: false) }
+  let(:tty?)   { false }
 
   def contents
     output.rewind
@@ -26,18 +26,18 @@ RSpec.describe Mutant::Reporter::CLI do
       let(:tty?)   { true                            }
       let(:output) { instance_double(IO, tty?: true) }
 
-      it { should eql(described_class.new(format: format, output: output, print_warnings: false)) }
+      it { should eql(described_class.new(format:, output:, print_warnings: false)) }
     end
 
     context 'when output is not a tty' do
       context 'and does not respond to #tty?' do
         let(:output) { nil }
 
-        it { should eql(described_class.new(format: format, output: output, print_warnings: false)) }
+        it { should eql(described_class.new(format:, output:, print_warnings: false)) }
       end
 
       context 'and does respond to #tty?' do
-        it { should eql(described_class.new(format: format, output: output, print_warnings: false)) }
+        it { should eql(described_class.new(format:, output:, print_warnings: false)) }
       end
     end
   end
@@ -164,7 +164,7 @@ RSpec.describe Mutant::Reporter::CLI do
 
     let(:test_env) do
       Mutant::Result::TestEnv.new(
-        env:          env,
+        env:,
         runtime:      1.0,
         test_results: []
       )
@@ -190,7 +190,7 @@ RSpec.describe Mutant::Reporter::CLI do
 
     let(:test_env) do
       Mutant::Result::TestEnv.new(
-        env:          env,
+        env:,
         runtime:      1.0,
         test_results: []
       )

@@ -17,7 +17,7 @@ module Mutant
       workers = workers(world, config, shared)
 
       Driver.new(
-        workers: workers,
+        workers:,
         threads: threads(world, config, workers),
         **shared
       )
@@ -28,11 +28,11 @@ module Mutant
       Array.new(config.jobs) do |index|
         Worker.start(
           block:            config.block,
-          index:            index,
+          index:,
           on_process_start: config.on_process_start,
           process_name:     "#{config.process_name}-#{index}",
           timeout:          config.timeout,
-          world:            world,
+          world:,
           **shared
         )
       end

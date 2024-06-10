@@ -17,7 +17,7 @@ Gem::Specification.new do |gem|
 
   gem.extra_rdoc_files = %w[LICENSE]
 
-  gem.required_ruby_version = '>= 3.0'
+  gem.required_ruby_version = '>= 3.1'
 
   gem.metadata['rubygems_mfa_required'] = 'true'
 

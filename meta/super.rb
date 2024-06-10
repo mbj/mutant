@@ -4,7 +4,6 @@ Mutant::Meta::Example.add :super do
   source 'super'
 
   singleton_mutations
-  mutation 'super()'
 end
 
 Mutant::Meta::Example.add :super do

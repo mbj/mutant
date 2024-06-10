@@ -4,10 +4,10 @@ RSpec.describe Mutant::Meta::Example::DSL do
   describe '.call' do
     subject do
       described_class.call(
-        block:     block,
-        location:  location,
-        operators: operators,
-        types:     types
+        block:,
+        location:,
+        operators:,
+        types:
       )
     end
 
@@ -20,13 +20,13 @@ RSpec.describe Mutant::Meta::Example::DSL do
 
     let(:expected_example) do
       Mutant::Meta::Example.new(
-        expected:        expected,
-        location:        location,
-        lvars:           lvars,
-        node:            node,
-        operators:       operators,
+        expected:,
+        location:,
+        lvars:,
+        node:,
+        operators:,
         original_source: source,
-        types:           types
+        types:
       )
     end
 

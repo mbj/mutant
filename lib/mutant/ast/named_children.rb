@@ -83,8 +83,8 @@ module Mutant
         # @param [Symbol] name
         #
         # @return [undefined]
-        def define_private_method(name, &block)
-          define_method(name, &block)
+        def define_private_method(name, &)
+          define_method(name, &)
           private(name)
         end
 

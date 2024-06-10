@@ -14,12 +14,12 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
   describe '.read_response' do
     def apply
       described_class.read_response(
-        deadline:        deadline,
-        io:              io,
-        job:             job,
-        log_reader:      log_reader,
-        marshal:         marshal,
-        response_reader: response_reader
+        deadline:,
+        io:,
+        job:,
+        log_reader:,
+        marshal:,
+        response_reader:
       )
     end
 
@@ -52,7 +52,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
       {
         receiver: deadline,
         selector: :status,
-        reaction: { return: Mutant::Timer::Deadline::Status.new(time_left: time_left) }
+        reaction: { return: Mutant::Timer::Deadline::Status.new(time_left:) }
       }
     end
 
@@ -92,9 +92,9 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             expect(apply).to eql(
               Mutant::Parallel::Response.new(
                 error:  nil,
-                job:    job,
+                job:,
                 log:    '',
-                result: result
+                result:
               )
             )
           end
@@ -124,9 +124,9 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             expect(apply).to eql(
               Mutant::Parallel::Response.new(
                 error:  nil,
-                job:    job,
+                job:,
                 log:    '',
-                result: result
+                result:
               )
             )
           end
@@ -161,9 +161,9 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             expect(apply).to eql(
               Mutant::Parallel::Response.new(
                 error:  nil,
-                job:    job,
+                job:,
                 log:    '',
-                result: result
+                result:
               )
             )
           end
@@ -192,7 +192,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
           expect(apply).to eql(
             Mutant::Parallel::Response.new(
               error:  Timeout::Error,
-              job:    job,
+              job:,
               log:    '<log>',
               result: nil
             )
@@ -220,7 +220,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
           expect(apply).to eql(
             Mutant::Parallel::Response.new(
               error:  EOFError,
-              job:    job,
+              job:,
               log:    '',
               result: nil
             )
@@ -242,7 +242,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
           expect(apply).to eql(
             Mutant::Parallel::Response.new(
               error:  Timeout::Error,
-              job:    job,
+              job:,
               log:    '',
               result: nil
             )
@@ -263,7 +263,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
           expect(apply).to eql(
             Mutant::Parallel::Response.new(
               error:  Timeout::Error,
-              job:    job,
+              job:,
               log:    '',
               result: nil
             )

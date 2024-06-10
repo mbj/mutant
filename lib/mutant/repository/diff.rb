@@ -40,8 +40,8 @@ module Mutant
           .fmap { |status| world.pathname.new(status.stdout.chomp) }
       end
 
-      def touched_path(path, &block)
-        touched_paths.from_right { |message| fail Error, message }.fetch(path, &block)
+      def touched_path(path, &)
+        touched_paths.from_right { |message| fail Error, message }.fetch(path, &)
       end
 
       def touched_paths
@@ -62,15 +62,16 @@ module Mutant
       end
 
       # rubocop:disable Metrics/MethodLength
+      # mutant:disable (3.2 specific mutation)
       def parse_line(root, line)
         match = FORMAT.match(line)
 
         if match
           Either::Right.new(
             Path.new(
-              path:  root.join(match.captures.first),
-              to:    to,
-              world: world
+              path:  root.join(Util.one(match.captures)),
+              to:,
+              world:
             )
           )
         else

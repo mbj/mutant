@@ -7,7 +7,7 @@ RSpec.describe Mutant::Integration::Rspec do
     described_class.new(
       arguments:         integration_arguments,
       expression_parser: Mutant::Config::DEFAULT.expression_parser,
-      world:             world
+      world:
     )
   end
 
@@ -113,10 +113,10 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:rspec_world) do
     instance_double(
       RSpec::Core::World,
-      example_groups:         example_groups,
-      filtered_examples:      filtered_examples,
-      ordered_example_groups: ordered_example_groups,
-      wants_to_quit:          wants_to_quit
+      example_groups:,
+      filtered_examples:,
+      ordered_example_groups:,
+      wants_to_quit:
     )
   end
 
@@ -258,7 +258,7 @@ RSpec.describe Mutant::Integration::Rspec do
           let(:supports_is_quitting) { true }
 
           before do
-            allow(rspec_world).to receive_messages(rspec_is_quitting: rspec_is_quitting)
+            allow(rspec_world).to receive_messages(rspec_is_quitting:)
           end
 
           context 'and its currently quitting' do

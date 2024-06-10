@@ -8,9 +8,9 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Test::StatusProgressive do
 
   let(:test_env) do
     Mutant::Result::TestEnv.new(
-      env:          env,
+      env:,
       runtime:      0.8,
-      test_results: test_results
+      test_results:
     )
   end
 

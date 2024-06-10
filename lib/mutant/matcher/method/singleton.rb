@@ -10,7 +10,7 @@ module Mutant
         #
         # @return [Matcher::Method::Singleton]
         def self.new(scope:, target_method:)
-          super(scope: scope, target_method: target_method, evaluator: Evaluator)
+          super(scope:, target_method:, evaluator: Evaluator)
         end
 
         # Singleton method evaluator

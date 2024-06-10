@@ -23,7 +23,7 @@ RSpec.describe Mutant::Bootstrap do
   end
 
   let(:env_initial) do
-    Mutant::Env.empty(world, config).with(hooks: hooks)
+    Mutant::Env.empty(world, config).with(hooks:)
   end
 
   let(:fake_kernel) do
@@ -35,7 +35,7 @@ RSpec.describe Mutant::Bootstrap do
   let(:matcher_config) do
     Mutant::Matcher::Config::DEFAULT.with(
       subjects:          subject_expressions,
-      start_expressions: start_expressions
+      start_expressions:
     )
   end
 
@@ -43,12 +43,12 @@ RSpec.describe Mutant::Bootstrap do
     instance_double(
       Mutant::World,
       environment_variables: {},
-      kernel:                kernel,
-      load_path:             load_path,
-      object_space:          object_space,
+      kernel:,
+      load_path:,
+      object_space:,
       pathname:              Pathname,
       recorder:              instance_double(Mutant::Segment::Recorder),
-      timer:                 timer
+      timer:
     )
   end
 
@@ -66,8 +66,8 @@ RSpec.describe Mutant::Bootstrap do
 
     let(:expected_env) do
       env_with_scopes.with(
-        integration: integration,
-        selector:    Mutant::Selector::Expression.new(integration: integration)
+        integration:,
+        selector:    Mutant::Selector::Expression.new(integration:)
       )
     end
 
@@ -316,7 +316,7 @@ RSpec.describe Mutant::Bootstrap do
       end
 
       let(:expected_subjects) do
-        Mutant::Matcher::Scope.new(scope: scope).call(env_initial)
+        Mutant::Matcher::Scope.new(scope:).call(env_initial)
       end
 
       let(:expected_env) do
@@ -347,7 +347,7 @@ RSpec.describe Mutant::Bootstrap do
             )
 
             Mutant::Matcher::Scope
-              .new(scope: scope)
+              .new(scope:)
               .call(Mutant::Env.empty(world, config)).last
           end
 
@@ -370,8 +370,8 @@ RSpec.describe Mutant::Bootstrap do
 
     let(:expected_env) do
       env_initial.with(
-        integration: integration,
-        selector:    Mutant::Selector::Expression.new(integration: integration)
+        integration:,
+        selector:    Mutant::Selector::Expression.new(integration:)
       )
     end
 

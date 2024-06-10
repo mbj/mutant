@@ -66,9 +66,9 @@ module Mutant
       subject.prepare
       Loader.call(
         binding: TOPLEVEL_BINDING,
-        kernel:  kernel,
+        kernel:,
         source:  monkeypatch,
-        subject: subject
+        subject:
       ).fmap do
         subject.post_insert
         nil

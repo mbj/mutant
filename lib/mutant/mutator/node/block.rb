@@ -56,7 +56,7 @@ module Mutant
         def valid_send_mutation?(node)
           return false unless n_send?(node)
 
-          last = AST::Meta::Send.new(node: node).arguments.last
+          last = AST::Meta::Send.new(node:).arguments.last
 
           !last&.type.equal?(:block_pass)
         end

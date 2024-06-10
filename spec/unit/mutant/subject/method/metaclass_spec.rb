@@ -4,8 +4,8 @@ RSpec.describe Mutant::Subject::Method::Metaclass do
   let(:object) do
     described_class.new(
       config:     Mutant::Subject::Config::DEFAULT,
-      context:    context,
-      node:       node,
+      context:,
+      node:,
       visibility: :public
     )
   end
@@ -18,8 +18,8 @@ RSpec.describe Mutant::Subject::Method::Metaclass do
 
   let(:context) do
     Mutant::Context.new(
-      constant_scope: constant_scope,
-      scope:          scope,
+      constant_scope:,
+      scope:,
       source_path:    instance_double(Pathname)
     )
   end

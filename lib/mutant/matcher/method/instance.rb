@@ -23,9 +23,9 @@ module Mutant
             end
 
           super(
-            evaluator:     evaluator,
-            scope:         scope,
-            target_method: target_method
+            evaluator:,
+            scope:,
+            target_method:
           )
         end
         # rubocop:enable Metrics/MethodLength

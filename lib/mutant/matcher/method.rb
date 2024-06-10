@@ -25,7 +25,7 @@ module Mutant
       #
       # @return [Enumerable<Subject>]
       def call(env)
-        evaluator.call(scope: scope, target_method: target_method, env: env)
+        evaluator.call(scope:, target_method:, env:)
       end
 
       # Abstract method match evaluator
@@ -76,9 +76,9 @@ module Mutant
         def subject
           self.class::SUBJECT_CLASS.new(
             config:     subject_config(matched_view.node),
-            context:    context,
+            context:,
             node:       matched_view.node,
-            visibility: visibility
+            visibility:
           )
         end
 
@@ -87,7 +87,7 @@ module Mutant
         end
 
         def context
-          Context.new(constant_scope: constant_scope, scope: scope, source_path: source_path)
+          Context.new(constant_scope:, scope:, source_path:)
         end
 
         # rubocop:disable Metrics/MethodLength
@@ -101,7 +101,7 @@ module Mutant
               if klass
                 klass.new(
                   const:      node.children.fetch(0),
-                  descendant: descendant
+                  descendant:
                 )
               else
                 descendant
@@ -163,20 +163,6 @@ module Mutant
         end
 
         def visibility
-          # This can be cleaned up once we are on >ruby-3.0
-          # Method#{public,private,protected}? exists there.
-          #
-          # On Ruby 3.1 this can just be:
-          #
-          # if target_method.private?
-          #   :private
-          # elsif target_method.protected?
-          #   :protected
-          # else
-          #   :public
-          # end
-          #
-          # Change to this once 3.0 is EOL.
           if scope.raw.private_methods.include?(method_name)
             :private
           elsif scope.raw.protected_methods.include?(method_name)

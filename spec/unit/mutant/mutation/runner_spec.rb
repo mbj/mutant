@@ -7,16 +7,16 @@ RSpec.describe Mutant::Mutation::Runner do
     let(:driver)                             { instance_double(Mutant::Parallel::Driver)       }
     let(:emit_mutation_worker_process_start) { instance_double(Proc)                           }
     let(:env_result)                         { instance_double(Mutant::Result::Env)            }
-    let(:reporter)                           { instance_double(Mutant::Reporter, delay: delay) }
+    let(:reporter)                           { instance_double(Mutant::Reporter, delay:) }
     let(:world)                              { instance_double(Mutant::World)                  }
     let(:timer)                              { instance_double(Mutant::Timer)                  }
 
     let(:env) do
       instance_double(
         Mutant::Env,
-        config:    config,
+        config:,
         mutations: [instance_double(Mutant::Mutation)],
-        world:     world
+        world:
       )
     end
 
@@ -24,7 +24,7 @@ RSpec.describe Mutant::Mutation::Runner do
       instance_double(
         Mutant::Config,
         jobs:     1,
-        reporter: reporter
+        reporter:
       )
     end
 
@@ -45,11 +45,11 @@ RSpec.describe Mutant::Mutation::Runner do
 
     let(:parallel_config) do
       Mutant::Parallel::Config.new(
-        block:            block,
+        block:,
         jobs:             1,
         on_process_start: emit_mutation_worker_process_start,
         process_name:     'mutant-worker-process',
-        sink:             described_class::Sink.new(env: env),
+        sink:             described_class::Sink.new(env:),
         source:           Mutant::Parallel::Source::Array.new(jobs: env.mutations.each_index.to_a),
         thread_name:      'mutant-worker-thread',
         timeout:          nil
@@ -57,7 +57,7 @@ RSpec.describe Mutant::Mutation::Runner do
     end
 
     before do
-      allow(world).to receive_messages(timer: timer)
+      allow(world).to receive_messages(timer:)
       allow(world.timer).to receive_messages(now: 1.0)
     end
 
@@ -94,7 +94,7 @@ RSpec.describe Mutant::Mutation::Runner do
           {
             receiver:  Mutant::Parallel,
             selector:  :async,
-            arguments: [{ world: world, config: parallel_config }],
+            arguments: [{ world:, config: parallel_config }],
             reaction:  { return: driver }
           },
           {
@@ -171,7 +171,7 @@ RSpec.describe Mutant::Mutation::Runner do
           {
             receiver:  Mutant::Parallel,
             selector:  :async,
-            arguments: [{ world: world, config: parallel_config }],
+            arguments: [{ world:, config: parallel_config }],
             reaction:  { return: driver }
           },
           {

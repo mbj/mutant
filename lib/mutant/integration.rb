@@ -86,7 +86,7 @@ module Mutant
       end.lmap do |exception|
         LOAD_MESSAGE % {
           exception:        exception.inspect,
-          integration_name: integration_name
+          integration_name:
         }
       end
     end
@@ -101,7 +101,7 @@ module Mutant
         CONST_MESSAGE % {
           constant_name:    "#{self}::#{constant_name}",
           exception:        exception.inspect,
-          integration_name: integration_name
+          integration_name:
         }
       end
     end

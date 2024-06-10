@@ -26,7 +26,7 @@ RSpec.describe Mutant::World do
   describe '#record' do
     subject do
       super().with(
-        recorder: recorder
+        recorder:
       )
     end
 
@@ -62,14 +62,14 @@ RSpec.describe Mutant::World do
     let(:open3)   { class_double(Open3)              }
     let(:stdout)  { instance_double(String, :stdout) }
     let(:stderr)  { instance_double(String, :stderr) }
-    let(:subject) { super().with(open3: open3)       }
-    let(:command) { %w[foo bar baz]                  }
+    let(:subject) { super().with(open3:) }
+    let(:command) { %w[foo bar baz] }
 
     let(:command_status) do
       described_class::CommandStatus.new(
-        process_status: process_status,
-        stderr:         stderr,
-        stdout:         stdout
+        process_status:,
+        stderr:,
+        stdout:
       )
     end
 
@@ -121,7 +121,7 @@ RSpec.describe Mutant::World do
         expect(apply).to eql(
           Mutant::Timer::Deadline.new(
             timer:        subject.timer,
-            allowed_time: allowed_time
+            allowed_time:
           )
         )
       end
@@ -153,7 +153,7 @@ RSpec.describe Mutant::World do
   describe '#process_warmup' do
     let(:process) { double(Process) }
 
-    subject { super().with(process: process) }
+    subject { super().with(process:) }
 
     def apply
       subject.process_warmup

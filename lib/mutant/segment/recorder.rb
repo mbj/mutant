@@ -23,9 +23,9 @@ module Mutant
 
         yield.tap do
           segments << Segment.new(
-            id:              id,
-            name:            name,
-            parent_id:       parent_id,
+            id:,
+            name:,
+            parent_id:,
             timestamp_end:   timer.now,
             timestamp_start: start
           )
@@ -58,7 +58,7 @@ module Mutant
 
         build_node(
           value:        id_index.fetch(root_id),
-          parent_index: parent_index
+          parent_index:
         )
       end
 
@@ -69,17 +69,17 @@ module Mutant
           if segment.timestamp_end
             segment
           else
-            segment.with(timestamp_end: timestamp_end)
+            segment.with(timestamp_end:)
           end
         end
       end
 
       def build_node(value:, parent_index:)
         Node.new(
-          value:    value,
+          value:,
           children: build_children(
             parent_id:    value.id,
-            parent_index: parent_index
+            parent_index:
           )
         )
       end
@@ -87,7 +87,7 @@ module Mutant
       def build_children(parent_id:, parent_index:)
         parent_index
           .fetch(parent_id, EMPTY_ARRAY)
-          .map { |value| build_node(value: value, parent_index: parent_index) }
+          .map { |value| build_node(value:, parent_index:) }
       end
 
       def print_node(io, node, indent)

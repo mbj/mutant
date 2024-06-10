@@ -30,7 +30,7 @@ RSpec.describe Mutant::Transform::Boolean do
       let(:error) do
         Mutant::Transform::Error.new(
           cause:     nil,
-          input:     input,
+          input:,
           message:   'Expected: boolean but got: nil',
           transform: subject
         )
@@ -47,7 +47,7 @@ RSpec.describe Mutant::Transform::Boolean do
       let(:error) do
         Mutant::Transform::Error.new(
           cause:     nil,
-          input:     input,
+          input:,
           message:   'Expected: boolean but got: ""',
           transform: subject
         )

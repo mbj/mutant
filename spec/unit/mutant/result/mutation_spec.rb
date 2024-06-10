@@ -3,8 +3,8 @@
 RSpec.describe Mutant::Result::Mutation do
   let(:object) do
     described_class.new(
-      isolation_result: isolation_result,
-      mutation:         mutation,
+      isolation_result:,
+      mutation:,
       runtime:          2.0
     )
   end
@@ -30,7 +30,7 @@ RSpec.describe Mutant::Result::Mutation do
     Mutant::Isolation::Result.new(
       exception:      nil,
       log:            '',
-      process_status: process_status,
+      process_status:,
       timeout:        nil,
       value:          test_result
     )

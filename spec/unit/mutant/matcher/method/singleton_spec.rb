@@ -3,7 +3,7 @@
 RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
   subject { object.call(env) }
 
-  let(:object)       { described_class.new(scope: scope, target_method: method) }
+  let(:object)       { described_class.new(scope:, target_method: method) }
   let(:method)       { scope.raw.method(method_name)                            }
   let(:type)         { :defs                                                    }
   let(:method_name)  { :foo                                                     }
@@ -23,7 +23,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
       Mutant::Env,
       config: Mutant::Config::DEFAULT,
       parser: Fixtures::TEST_ENV.parser,
-      world:  world
+      world:
     )
   end
 
@@ -70,7 +70,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
           end
 
           it 'returns expected subjects' do
-            expect(subject).to eql([mutation_subject.with(visibility: visibility)])
+            expect(subject).to eql([mutation_subject.with(visibility:)])
           end
         end
       end

@@ -20,7 +20,7 @@ module Mutant
         # @return [Result::Env]
         def status
           Result::TestEnv.new(
-            env:          env,
+            env:,
             runtime:      env.world.timer.now - @start,
             test_results: @test_results.sort_by!(&:job_index)
           )

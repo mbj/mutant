@@ -4,7 +4,7 @@ RSpec.describe Mutant::Result::Subject do
   let(:object) do
     described_class.new(
       subject:          mutation_subject,
-      coverage_results: coverage_results,
+      coverage_results:,
       tests:            []
     )
   end

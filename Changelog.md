@@ -1,6 +1,14 @@
+# v0.12.3 2024-06-10
+
+* [#1452](https://github.com/mbj/mutant/pull/1451)
+
+  Remove support for EOL Ruby-3.0.
+  Remove another invalid mutation to super().
+
+
 # v0.12.2 2024-06-09
 
-+ [#1450](https://github.com/mbj/mutant/pull/1450)
+* [#1450](https://github.com/mbj/mutant/pull/1450)
 
   Remove invalid mutation operator.
 

@@ -28,9 +28,9 @@ module Mutant
         end
 
         self::REGISTRY.lookup(node.type).call(
-          config: config,
+          config:,
           input:  node,
-          parent: parent
+          parent:
         )
       end
 
@@ -67,7 +67,7 @@ module Mutant
       alias_method :dup_node, :dup_input
 
       def mutate(node:, parent: nil)
-        self.class.mutate(config: config, node: node, parent: parent)
+        self.class.mutate(config:, node:, parent:)
       end
 
       def mutate_child(index, &block)
@@ -131,8 +131,8 @@ module Mutant
 
       def run(mutator)
         mutator.call(
-          config: config,
-          input:  input,
+          config:,
+          input:,
           parent: nil
         ).each(&method(:emit))
       end

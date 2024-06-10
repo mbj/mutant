@@ -82,8 +82,8 @@ RSpec.describe Mutant::Mutator::Node do
   describe '.mutate', mutant_expression: 'Mutant::Mutator::Node*' do
     def apply
       described_class.mutate(
-        config: config,
-        node:   node
+        config:,
+        node:
       )
     end
 

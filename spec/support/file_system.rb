@@ -24,7 +24,7 @@ module MutantSpec
 
     def join(*arguments)
       self.class.new(
-        file_system: file_system,
+        file_system:,
         pathname:    pathname.join(*arguments)
       )
     end

@@ -35,7 +35,7 @@ module Mutant
       #
       # @return [String]
       def compact_message
-        COMPACT % { path: path, message: trace.last.message }
+        COMPACT % { path:, message: trace.last.message }
       end
       memoize :compact_message
 
@@ -77,7 +77,7 @@ module Mutant
       include Anima.new(:block, :name)
 
       def self.capture(name, &block)
-        new(block: block, name: name)
+        new(block:, name:)
       end
 
       def call(input)
@@ -86,8 +86,8 @@ module Mutant
           .lmap do |message|
             Error.new(
               cause:     nil,
-              input:     input,
-              message:   message,
+              input:,
+              message:,
               transform: self
             )
           end
@@ -102,9 +102,9 @@ module Mutant
 
     def error(cause: nil, input:, message: nil)
       Error.new(
-        cause:     cause,
-        input:     input,
-        message:   message,
+        cause:,
+        input:,
+        message:,
         transform: self
       )
     end
@@ -139,10 +139,10 @@ module Mutant
       # @return [Error]
       def self.wrap(cause, index)
         Error.new(
-          cause:     cause,
+          cause:,
           input:     cause.input,
           message:   nil,
-          transform: new(index: index, transform: cause.transform)
+          transform: new(index:, transform: cause.transform)
         )
       end
 
@@ -159,7 +159,7 @@ module Mutant
       #
       # @return [Array<String>]
       def slug
-        '%<index>d' % { index: index }
+        '%<index>d' % { index: }
       end
       memoize :slug
     end # Index
@@ -183,7 +183,7 @@ module Mutant
         else
           failure(
             error(
-              input:   input,
+              input:,
               message: MESSAGE % { actual: input.class, expected: primitive }
             )
           )
@@ -219,7 +219,7 @@ module Mutant
           failure(
             error(
               message: MESSAGE % { actual: input.inspect },
-              input:   input
+              input:
             )
           )
         end
@@ -258,8 +258,8 @@ module Mutant
             return failure(
               error(
                 cause:   Index.wrap(error, index),
-                message: MESSAGE % { index: index },
-                input:   input
+                message: MESSAGE % { index: },
+                input:
               )
             )
           end.from_right
@@ -310,7 +310,7 @@ module Mutant
         # @return [Either<Error, Object>]
         def call(input)
           transform.call(input).lmap do |error|
-            error(cause: error, input: input)
+            error(cause: error, input:)
           end
         end
       end # Key
@@ -365,7 +365,7 @@ module Mutant
 
       def coerce_key(key, input)
         key.call(input.fetch(key.value)).lmap do |error|
-          error(input: input, cause: error)
+          error(input:, cause: error)
         end
       end
 
@@ -380,8 +380,8 @@ module Mutant
         else
           failure(
             error(
-              input:   input,
-              message: KEY_MESSAGE % { missing: missing, unexpected: unexpected }
+              input:,
+              message: KEY_MESSAGE % { missing:, unexpected: }
             )
           )
         end
@@ -413,7 +413,7 @@ module Mutant
 
         steps.each_with_index do |step, index|
           current = step.call(current).from_right do |error|
-            return failure(error(cause: Index.wrap(error, index), input: input))
+            return failure(error(cause: Index.wrap(error, index), input:))
           end
         end
 
@@ -447,7 +447,7 @@ module Mutant
       def call(input)
         Either
           .wrap_error(error_class) { block.call(input) }
-          .lmap { |exception| error(input: input, message: exception.to_s) }
+          .lmap { |exception| error(input:, message: exception.to_s) }
       end
     end # Exception
 

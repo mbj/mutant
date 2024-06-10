@@ -25,13 +25,13 @@ RSpec.describe Mutant::Parallel::Driver, mutant_expression: 'Mutant::Parallel::D
 
   subject do
     described_class.new(
-      threads:         threads,
-      var_active_jobs: var_active_jobs,
-      var_final:       var_final,
-      var_running:     var_running,
-      var_sink:        var_sink,
-      var_source:      var_source,
-      workers:         workers
+      threads:,
+      var_active_jobs:,
+      var_final:,
+      var_running:,
+      var_sink:,
+      var_source:,
+      workers:
     )
   end
 
@@ -122,7 +122,7 @@ RSpec.describe Mutant::Parallel::Driver, mutant_expression: 'Mutant::Parallel::D
 
         let(:expected_status) do
           Mutant::Parallel::Status.new(
-            active_jobs: active_jobs,
+            active_jobs:,
             done:        true,
             payload:     sink_status
           )
@@ -135,7 +135,7 @@ RSpec.describe Mutant::Parallel::Driver, mutant_expression: 'Mutant::Parallel::D
     context 'when stopped' do
       def apply
         subject.stop
-        super()
+        super
       end
 
       let(:raw_expectations) do
@@ -189,7 +189,7 @@ RSpec.describe Mutant::Parallel::Driver, mutant_expression: 'Mutant::Parallel::D
       context 'when not done' do
         let(:expected_status) do
           Mutant::Parallel::Status.new(
-            active_jobs: active_jobs,
+            active_jobs:,
             done:        false,
             payload:     sink_status
           )

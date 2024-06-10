@@ -3,9 +3,9 @@
 RSpec.describe Mutant::Context do
   let(:object) do
     described_class.new(
-      constant_scope: constant_scope,
-      scope:          scope,
-      source_path:    source_path
+      constant_scope:,
+      scope:,
+      source_path:
     )
   end
 

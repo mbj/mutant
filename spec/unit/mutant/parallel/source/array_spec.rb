@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Parallel::Source::Array do
-  subject { described_class.new(jobs: jobs) }
+  subject { described_class.new(jobs:) }
 
   let(:jobs) { %i[a b c] }
 

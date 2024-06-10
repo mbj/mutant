@@ -291,22 +291,22 @@ module Mutant
   boot_segments = boot_events.map do |name, timestamp_start, timestamp_end|
     Segment.new(
       id:              gen_id.call,
-      name:            name,
+      name:,
       parent_id:       library_segment.id,
-      timestamp_end:   timestamp_end,
-      timestamp_start: timestamp_start
+      timestamp_end:,
+      timestamp_start:
     )
   end
 
   timer = Timer.new(process: Process)
 
   recorder = Segment::Recorder.new(
-    gen_id:          gen_id,
+    gen_id:,
     root_id:         (executable_segment || library_segment).id,
     parent_id:       library_segment.id,
-    recording_start: recording_start,
+    recording_start:,
     segments:        [*executable_segment, library_segment, *boot_segments],
-    timer:           timer
+    timer:
   )
 
   WORLD = World.new(
@@ -325,13 +325,13 @@ module Mutant
     pathname:              Pathname,
     process:               Process,
     random:                Random,
-    recorder:              recorder,
+    recorder:,
     stderr:                $stderr,
     stdout:                $stdout,
     tempfile:              Tempfile,
     thread:                Thread,
     time:                  Time,
-    timer:                 timer
+    timer:
   )
 
   # Reopen class to initialize constant to avoid dep circle

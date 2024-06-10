@@ -13,7 +13,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
 
       with(:mutation_a_result) do
         {
-          isolation_result: mutation_a_isolation_result.with(process_status: process_status)
+          isolation_result: mutation_a_isolation_result.with(process_status:)
         }
       end
 

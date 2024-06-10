@@ -76,7 +76,7 @@ module Mutant
         private
 
           def dispatch
-            super()
+            super
 
             return if left_op_assignment?
 

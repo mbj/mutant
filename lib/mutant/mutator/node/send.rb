@@ -48,7 +48,7 @@ module Mutant
         end
 
         def meta
-          AST::Meta::Send.new(node: node)
+          AST::Meta::Send.new(node:)
         end
         memoize :meta
 

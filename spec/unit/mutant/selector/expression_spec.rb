@@ -2,7 +2,7 @@
 
 RSpec.describe Mutant::Selector::Expression do
   describe '#call' do
-    let(:object) { described_class.new(integration: integration) }
+    let(:object) { described_class.new(integration:) }
 
     let(:context)  { instance_double(Mutant::Context)   }
     let(:node)     { instance_double(Parser::AST::Node) }
@@ -14,15 +14,15 @@ RSpec.describe Mutant::Selector::Expression do
     let(:integration) do
       instance_double(
         Mutant::Integration,
-        available_tests: available_tests
+        available_tests:
       )
     end
 
     let(:mutation_subject) do
       subject_class.new(
         config:  Mutant::Subject::Config::DEFAULT,
-        context: context,
-        node:    node
+        context:,
+        node:
       )
     end
 

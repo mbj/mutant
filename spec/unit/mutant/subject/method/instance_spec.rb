@@ -4,8 +4,8 @@ RSpec.describe Mutant::Subject::Method::Instance do
   let(:object) do
     described_class.new(
       config:     Mutant::Subject::Config::DEFAULT,
-      context:    context,
-      node:       node,
+      context:,
+      node:,
       visibility: :private
     )
   end
@@ -18,8 +18,8 @@ RSpec.describe Mutant::Subject::Method::Instance do
 
   let(:context) do
     Mutant::Context.new(
-      constant_scope: constant_scope,
-      scope:          scope,
+      constant_scope:,
+      scope:,
       source_path:    instance_double(Pathname)
     )
   end
@@ -96,8 +96,8 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
   let(:object) do
     described_class.new(
       config:     Mutant::Subject::Config::DEFAULT,
-      context:    context,
-      node:       node,
+      context:,
+      node:,
       visibility: :public
     )
   end
@@ -108,8 +108,8 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
 
   let(:context) do
     Mutant::Context.new(
-      constant_scope: constant_scope,
-      scope:          scope,
+      constant_scope:,
+      scope:,
       source_path:    instance_double(Pathname)
     )
   end

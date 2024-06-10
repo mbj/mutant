@@ -3,9 +3,9 @@
 RSpec.describe Mutant::Loader, '.call' do
   def apply
     described_class.call(
-      binding: binding,
-      kernel:  kernel,
-      source:  source,
+      binding:,
+      kernel:,
+      source:,
       subject: mutation_subject
     )
   end

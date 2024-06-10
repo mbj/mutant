@@ -58,7 +58,7 @@ module Mutant
             puts('Log messages (combined stderr and stdout):')
 
             log.each_line do |line|
-              puts('[killfork] %<line>s' % { line: line })
+              puts('[killfork] %<line>s' % { line: })
             end
           end
 
@@ -74,7 +74,7 @@ module Mutant
 
           def print_timeout
             timeout = object.timeout or return
-            puts(TIMEOUT_ERROR_MESSAGE % { timeout: timeout })
+            puts(TIMEOUT_ERROR_MESSAGE % { timeout: })
           end
 
           def print_exception

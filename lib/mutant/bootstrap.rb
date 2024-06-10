@@ -38,7 +38,7 @@ module Mutant
           .with(matchable_scopes: matchable_scopes(env))
 
         matched_subjects = env.record(:subject_match) do
-          Matcher.expand(env: env).call(env)
+          Matcher.expand(env:).call(env)
         end
 
         selected_subjects = subject_select(env, matched_subjects)
@@ -48,9 +48,9 @@ module Mutant
         end
 
         setup_integration(
-          env:               env,
-          mutations:         mutations,
-          selected_subjects: selected_subjects
+          env:,
+          mutations:,
+          selected_subjects:
         )
       end
     end
@@ -79,9 +79,9 @@ module Mutant
         hooks.run(:setup_integration_pre)
         Integration.setup(env).fmap do |integration|
           env.with(
-            integration: integration,
-            mutations:   mutations,
-            selector:    Selector::Expression.new(integration: integration),
+            integration:,
+            mutations:,
+            selector:    Selector::Expression.new(integration:),
             subjects:    selected_subjects
           )
         end.tap { hooks.run(:setup_integration_post) }
@@ -120,7 +120,7 @@ module Mutant
         config, hooks, world = env.config, env.hooks, env.world
 
         env.record(:hooks_env_infection_pre) do
-          hooks.run(:env_infection_pre, env: env)
+          hooks.run(:env_infection_pre, env:)
         end
 
         env.record(:require_target) do
@@ -133,7 +133,7 @@ module Mutant
         end
 
         env.record(:hooks_env_infection_post) do
-          hooks.run(:env_infection_post, env: env)
+          hooks.run(:env_infection_post, env:)
         end
       end
     end
@@ -147,7 +147,7 @@ module Mutant
 
         scopes = env.world.object_space.each_object(Module).with_object([]) do |raw_scope, aggregate|
           expression = expression(config.reporter, config.expression_parser, raw_scope) || next
-          aggregate << Scope.new(raw: raw_scope, expression: expression)
+          aggregate << Scope.new(raw: raw_scope, expression:)
         end
 
         scopes.sort_by { |scope| scope.expression.syntax }
@@ -177,9 +177,9 @@ module Mutant
         semantics_warning(
           reporter,
           CLASS_NAME_TYPE_MISMATCH_FORMAT,
-          name:        name,
+          name:,
           scope_class: raw_scope.class,
-          raw_scope:   raw_scope
+          raw_scope:
         )
         return
       end

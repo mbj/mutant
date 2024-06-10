@@ -5,7 +5,7 @@ RSpec.describe Mutant::Parallel::Pipe do
   let(:reader) { instance_double(IO, :a) }
   let(:writer) { instance_double(IO, :a) }
 
-  subject { described_class.new(reader: reader, writer: writer) }
+  subject { described_class.new(reader:, writer:) }
 
   describe '.from_io' do
     def apply
@@ -25,7 +25,7 @@ RSpec.describe Mutant::Parallel::Pipe do
 
     it 'returns expected pipe' do
       verify_events do
-        expect(apply).to eql(described_class.new(reader: reader, writer: writer))
+        expect(apply).to eql(described_class.new(reader:, writer:))
       end
     end
   end

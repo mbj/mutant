@@ -7,7 +7,7 @@ module Mutant
     #
     # @return [Command]
     def self.parse(arguments:, world:)
-      Command::Root.parse(arguments: arguments, world: world)
+      Command::Root.parse(arguments:, world:)
     end
   end # CLI
 end # Mutant

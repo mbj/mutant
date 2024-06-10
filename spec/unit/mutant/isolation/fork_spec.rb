@@ -168,7 +168,7 @@ RSpec.describe Mutant::Isolation::Fork do
   end
 
   describe '#call' do
-    subject { described_class.new(world: world) }
+    subject { described_class.new(world:) }
 
     def apply
       subject.call(timeout, &isolated_block)
@@ -488,7 +488,7 @@ RSpec.describe Mutant::Isolation::Fork do
             selector:  :load,
             arguments: [result_fragment],
             reaction:  {
-              exception: exception
+              exception:
             }
           },
           child_nowait(child_status_success)

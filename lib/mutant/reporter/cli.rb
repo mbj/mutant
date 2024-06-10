@@ -15,7 +15,7 @@ module Mutant
         new(
           format:         Format::Progressive.new(tty: output.respond_to?(:tty?) && output.tty?),
           print_warnings: false,
-          output:         output
+          output:
         )
       end
 
@@ -80,7 +80,7 @@ module Mutant
       #
       # @return [self]
       def report(env)
-        Printer::EnvResult.call(output: output, object: env)
+        Printer::EnvResult.call(output:, object: env)
         self
       end
 
@@ -90,7 +90,7 @@ module Mutant
       #
       # @return [self]
       def test_report(env)
-        Printer::Test::EnvResult.call(output: output, object: env)
+        Printer::Test::EnvResult.call(output:, object: env)
         self
       end
 

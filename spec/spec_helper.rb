@@ -51,7 +51,7 @@ module Fixtures
   )
 
   recorder = Mutant::Segment::Recorder.new(
-    gen_id:          gen_id,
+    gen_id:,
     root_id:         root_segment.id,
     parent_id:       root_segment.id,
     recording_start: 0,
@@ -60,7 +60,7 @@ module Fixtures
   )
 
   TEST_ENV = Mutant::Bootstrap
-    .call(Mutant::Env.empty(Mutant::WORLD.with(recorder: recorder), test_config))
+    .call(Mutant::Env.empty(Mutant::WORLD.with(recorder:), test_config))
     .from_right
 end # Fixtures
 
@@ -89,11 +89,11 @@ module ParserHelper
 end # ParserHelper
 
 module XSpecHelper
-  def verify_events(&block)
+  def verify_events(&)
     expectations = raw_expectations
       .map { |attributes| XSpec::MessageExpectation.parse(**attributes) }
 
-    XSpec::ExpectationVerifier.verify(self, expectations, &block)
+    XSpec::ExpectationVerifier.verify(self, expectations, &)
   end
 
   def undefined

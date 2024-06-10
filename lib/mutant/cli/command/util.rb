@@ -62,7 +62,7 @@ module Mutant
 
           def add_target_options(parser)
             parser.on('-e', '--evaluate SOURCE') do |source|
-              @targets << Target::Source.new(source: source)
+              @targets << Target::Source.new(source:)
             end
 
             parser.on('-i', '--ignore-pattern AST_PATTERN') do |pattern|
@@ -97,7 +97,7 @@ module Mutant
           end
 
           def read_file(pathname)
-            Either::Right.new(Target::File.new(pathname: pathname, source: pathname.read))
+            Either::Right.new(Target::File.new(pathname:, source: pathname.read))
           rescue StandardError => exception
             Either::Left.new("Cannot read file: #{exception}")
           end

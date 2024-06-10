@@ -4,7 +4,7 @@ RSpec.describe Mutant::Subject::Config do
   describe '.parse' do
     def apply
       described_class.parse(
-        comments: comments,
+        comments:,
         mutation: mutation_config
       )
     end

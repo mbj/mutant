@@ -9,7 +9,7 @@ module Mutant
     #
     # @return [undefined]
     def initialize(default)
-      super(contents: {}, default: default)
+      super(contents: {}, default:)
     end
 
     # Raised when the type is an invalid type

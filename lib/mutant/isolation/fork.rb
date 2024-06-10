@@ -43,7 +43,7 @@ module Mutant
         # @return [undefined]
         def self.with(io)
           io.pipe(binmode: true) do |(reader, writer)|
-            yield new(reader: reader, writer: writer)
+            yield new(reader:, writer:)
           end
         end
 
@@ -236,11 +236,11 @@ module Mutant
         Pipe.with(io) do |result|
           Pipe.with(io) do |log|
             Parent.call(
-              block:       block,
-              deadline:    deadline,
+              block:,
+              deadline:,
               log_pipe:    log,
               result_pipe: result,
-              world:       world
+              world:
             )
           end
         end

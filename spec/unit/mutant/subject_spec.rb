@@ -19,8 +19,8 @@ RSpec.describe Mutant::Subject do
   let(:object) do
     class_under_test.new(
       config:  Mutant::Subject::Config::DEFAULT,
-      context: context,
-      node:    node
+      context:,
+      node:
     )
   end
 
@@ -90,7 +90,7 @@ RSpec.describe Mutant::Subject do
         .to receive(:mutate)
         .with(
           config: Mutant::Mutation::Config::DEFAULT,
-          node:   node
+          node:
         )
         .and_return([mutation_a, mutation_b])
     end
@@ -100,7 +100,7 @@ RSpec.describe Mutant::Subject do
 
     it 'generates neutral and evil mutations' do
       should eql([
-        Mutant::Mutation::Neutral.new(subject: object, node: node),
+        Mutant::Mutation::Neutral.new(subject: object, node:),
         Mutant::Mutation::Evil.new(subject: object, node: mutation_a),
         Mutant::Mutation::Evil.new(subject: object, node: mutation_b)
       ])

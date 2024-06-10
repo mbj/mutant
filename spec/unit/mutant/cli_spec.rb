@@ -13,11 +13,11 @@ RSpec.describe Mutant::CLI do
     let(:world) do
       instance_double(
         Mutant::World,
-        kernel:   kernel,
+        kernel:,
         recorder: instance_double(Mutant::Segment::Recorder),
-        stderr:   stderr,
-        stdout:   stdout,
-        timer:    timer
+        stderr:,
+        stdout:,
+        timer:
       )
     end
 
@@ -35,7 +35,7 @@ RSpec.describe Mutant::CLI do
     def apply
       described_class.parse(
         arguments: Marshal.load(Marshal.dump(arguments)),
-        world:     world
+        world:
       )
     end
 
@@ -683,9 +683,9 @@ RSpec.describe Mutant::CLI do
             integration: instance_double(
               Mutant::Integration,
               all_tests:       [test_a, test_b, test_c],
-              available_tests: available_tests
+              available_tests:
             ),
-            subjects:    subjects
+            subjects:
           )
       end
 
@@ -703,7 +703,7 @@ RSpec.describe Mutant::CLI do
       let(:subject_a) do
         Mutant::Subject::Method::Instance.new(
           config:     Mutant::Subject::Config::DEFAULT,
-          context:    Mutant::Context.new(constant_scope: constant_scope, scope: scope, source_path: 'subject.rb'),
+          context:    Mutant::Context.new(constant_scope:, scope:, source_path: 'subject.rb'),
           node:       s(:def, :send, s(:args), nil),
           visibility: :public
         )
@@ -774,7 +774,7 @@ RSpec.describe Mutant::CLI do
             ],
             [
               :load_config,
-              { cli_config: expected_cli_config, world: world }.inspect
+              { cli_config: expected_cli_config, world: }.inspect
             ],
             [
               :bootstrap,
@@ -815,7 +815,7 @@ RSpec.describe Mutant::CLI do
           ],
           [
             :load_config,
-            { cli_config: expected_cli_config, world: world }.inspect
+            { cli_config: expected_cli_config, world: }.inspect
           ],
           [
             :test_bootstrap,
@@ -866,7 +866,7 @@ RSpec.describe Mutant::CLI do
           ],
           [
             :load_config,
-            { cli_config: expected_cli_config, world: world }.inspect
+            { cli_config: expected_cli_config, world: }.inspect
           ],
           [
             :test_bootstrap,
@@ -924,7 +924,7 @@ RSpec.describe Mutant::CLI do
               cli_config: expected_cli_config.with(
                 reporter: expected_cli_config.reporter.with(print_warnings: true)
               ),
-              world:      world
+              world:
             }.inspect
           ],
           [
@@ -963,7 +963,7 @@ RSpec.describe Mutant::CLI do
             ],
             [
               :load_config,
-              { cli_config: expected_cli_config, world: world }.inspect
+              { cli_config: expected_cli_config, world: }.inspect
             ],
             [
               :bootstrap,
@@ -1021,7 +1021,7 @@ RSpec.describe Mutant::CLI do
             ],
             [
               :load_config,
-              { cli_config: expected_cli_config, world: world }.inspect
+              { cli_config: expected_cli_config, world: }.inspect
             ],
             [
               :bootstrap,
@@ -1049,7 +1049,7 @@ RSpec.describe Mutant::CLI do
           ],
           [
             :load_config,
-            { cli_config: expected_cli_config, world: world }.inspect
+            { cli_config: expected_cli_config, world: }.inspect
           ],
           [
             :bootstrap,
@@ -1227,7 +1227,7 @@ RSpec.describe Mutant::CLI do
             ],
             [
               :load_config,
-              { cli_config: expected_cli_config, world: world }.inspect
+              { cli_config: expected_cli_config, world: }.inspect
             ],
             [
               :bootstrap,
@@ -1400,7 +1400,7 @@ RSpec.describe Mutant::CLI do
         let(:arguments) { super() + ['--since', 'reference'] }
 
         let(:expected_cli_config) do
-          diff = Mutant::Repository::Diff.new(to: 'reference', world: world)
+          diff = Mutant::Repository::Diff.new(to: 'reference', world:)
 
           super().with(matcher: super().matcher.with(diffs: [diff]))
         end

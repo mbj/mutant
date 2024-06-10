@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Timer do
-  let(:events)  { []                                    }
-  let(:object)  { described_class.new(process: process) }
+  let(:events)  { [] }
+  let(:object)  { described_class.new(process:) }
   let(:process) { class_double(Process)                 }
   let(:times)   { [0.5, 2.0]                            }
 

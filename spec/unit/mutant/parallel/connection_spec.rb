@@ -25,7 +25,7 @@ RSpec.describe Mutant::Parallel::Connection do
 
   let(:object) do
     described_class.from_pipes(
-      marshal: marshal,
+      marshal:,
       reader:  pipe_a,
       writer:  pipe_b
     )
@@ -195,7 +195,7 @@ RSpec.describe Mutant::Parallel::Connection do
     it 'returns expected connection' do
       expect(object).to eql(
         described_class.new(
-          marshal: marshal,
+          marshal:,
           reader:  described_class::Frame.new(io: pipe_a.to_reader),
           writer:  described_class::Frame.new(io: pipe_b.to_writer)
         )

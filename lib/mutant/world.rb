@@ -53,9 +53,9 @@ module Mutant
 
       (process_status.success? ? Either::Right : Either::Left).new(
         CommandStatus.new(
-          process_status: process_status,
-          stderr:         stderr,
-          stdout:         stdout
+          process_status:,
+          stderr:,
+          stdout:
         )
       )
     end
@@ -79,16 +79,16 @@ module Mutant
     def deadline(allowed_time)
       if allowed_time
         Timer::Deadline.new(
-          allowed_time: allowed_time,
-          timer:        timer
+          allowed_time:,
+          timer:
         )
       else
         Timer::Deadline::None.new
       end
     end
 
-    def record(name, &block)
-      recorder.record(name, &block)
+    def record(name, &)
+      recorder.record(name, &)
     end
 
     def process_warmup

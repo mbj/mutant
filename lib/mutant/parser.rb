@@ -27,7 +27,7 @@ module Mutant
       node, comments = Unparser.parse_with_comments(source)
 
       AST.new(
-        node:                 node,
+        node:,
         comment_associations: ::Parser::Source::Comment.associate_by_identity(node, comments)
       )
     end

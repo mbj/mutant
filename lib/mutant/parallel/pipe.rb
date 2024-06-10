@@ -10,13 +10,13 @@ module Mutant
       # @return [undefined]
       def self.with(io)
         io.pipe(binmode: true) do |(reader, writer)|
-          yield new(reader: reader, writer: writer)
+          yield new(reader:, writer:)
         end
       end
 
       def self.from_io(io)
         reader, writer = io.pipe(binmode: true)
-        new(reader: reader, writer: writer)
+        new(reader:, writer:)
       end
 
       # Writer end of the pipe

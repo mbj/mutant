@@ -14,7 +14,7 @@ module Mutant
       [neutral_mutation].concat(
         Mutator::Node.mutate(
           config: config.mutation,
-          node:   node
+          node:
         ).map do |mutant|
           Mutation::Evil.new(subject: self, node: wrap_node(mutant))
         end

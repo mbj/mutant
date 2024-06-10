@@ -14,6 +14,6 @@ RSpec.describe Mutant::Procto do
   it 'creates a .call that proxies to #call' do
     argument = +'foo'
 
-    expect(klass.call(argument: argument)).to be(argument)
+    expect(klass.call(argument:)).to be(argument)
   end
 end

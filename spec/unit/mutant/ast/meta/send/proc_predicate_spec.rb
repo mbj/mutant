@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::AST::Meta::Send, '#proc?' do
-  subject { described_class.new(node: node).proc? }
+  subject { described_class.new(node:).proc? }
 
   shared_context 'proc send' do |source|
     let(:node) { Unparser.parse(source).children.first }

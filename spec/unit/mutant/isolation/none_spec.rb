@@ -26,7 +26,7 @@ RSpec.describe Mutant::Isolation::None do
       it 'returns error result' do
         expect(object.call(timeout) { fail exception }).to eql(
           Mutant::Isolation::Result.new(
-            exception:      exception,
+            exception:,
             log:            '',
             process_status: nil,
             timeout:        nil,

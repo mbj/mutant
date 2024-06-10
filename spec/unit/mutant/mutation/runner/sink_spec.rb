@@ -34,7 +34,7 @@ describe Mutant::Mutation::Runner::Sink do
     end
   end
 
-  let(:object) { described_class.new(env: env) }
+  let(:object) { described_class.new(env:) }
 
   describe '#response' do
     subject { object.response(mutation_a_index_response) }
@@ -45,7 +45,7 @@ describe Mutant::Mutation::Runner::Sink do
         object.response(mutation_b_index_response)
         expect(object.status).to eql(
           Mutant::Result::Env.new(
-            env:             env,
+            env:,
             runtime:         0.0,
             subject_results: [subject_a_result]
           )
@@ -70,7 +70,7 @@ describe Mutant::Mutation::Runner::Sink do
     context 'no results' do
       let(:expected_status) do
         Mutant::Result::Env.new(
-          env:             env,
+          env:,
           runtime:         0.0,
           subject_results: []
         )
@@ -86,7 +86,7 @@ describe Mutant::Mutation::Runner::Sink do
 
       let(:expected_status) do
         Mutant::Result::Env.new(
-          env:             env,
+          env:,
           runtime:         0.0,
           subject_results: [subject_a_result]
         )
@@ -100,7 +100,7 @@ describe Mutant::Mutation::Runner::Sink do
 
       let(:expected_status) do
         Mutant::Result::Env.new(
-          env:             env,
+          env:,
           runtime:         0.0,
           subject_results: [subject_a_result]
         )

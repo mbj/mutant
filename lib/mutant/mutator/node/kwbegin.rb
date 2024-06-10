@@ -12,7 +12,7 @@ module Mutant
       private
 
         def dispatch
-          super()
+          super
           emit_singletons
         end
 

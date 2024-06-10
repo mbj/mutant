@@ -24,7 +24,7 @@ module Mutant
       include Anima.new(:timer, :allowed_time)
 
       def initialize(*arguments)
-        super(*arguments)
+        super
         @start_at = timer.now
       end
 
@@ -49,7 +49,7 @@ module Mutant
       #
       # @return [Status]
       def status
-        Status.new(time_left: time_left)
+        Status.new(time_left:)
       end
 
       # Probe the time left

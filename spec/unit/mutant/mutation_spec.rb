@@ -14,14 +14,14 @@ RSpec.describe Mutant::Mutation do
   let(:root_node) { s(:int, 1)                       }
 
   let(:object) do
-    mutation_class.new(subject: mutation_subject, node: node)
+    mutation_class.new(subject: mutation_subject, node:)
   end
 
   let(:mutation_subject) do
     instance_double(
       Mutant::Subject,
       identification: 'subject',
-      context:        context,
+      context:,
       source:         'original'
     )
   end
@@ -76,7 +76,7 @@ RSpec.describe Mutant::Mutation do
           .ordered
           .with(
             binding: TOPLEVEL_BINDING,
-            kernel:  kernel,
+            kernel:,
             source:  expected_source,
             subject: mutation_subject
           )
@@ -101,7 +101,7 @@ RSpec.describe Mutant::Mutation do
           .ordered
           .with(
             binding: TOPLEVEL_BINDING,
-            kernel:  kernel,
+            kernel:,
             source:  expected_source,
             subject: mutation_subject
           )
@@ -145,7 +145,7 @@ RSpec.describe Mutant::Mutation do
     let(:test_result) do
       instance_double(
         Mutant::Result::Test,
-        passed: passed
+        passed:
       )
     end
 

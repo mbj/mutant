@@ -3,12 +3,12 @@
 RSpec.describe Mutant::Segment::Recorder do
   subject do
     described_class.new(
-      gen_id:          gen_id,
+      gen_id:,
       parent_id:       root_segment.id,
       recording_start: 0.5,
       root_id:         root_segment.id,
       segments:        [root_segment],
-      timer:           timer
+      timer:
     )
   end
 

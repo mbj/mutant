@@ -98,7 +98,7 @@ module Mutant
 
         def self.fixed(values)
           values.each_with_index.map do |(klass, name), index|
-            klass.new(index: index, name: name)
+            klass.new(index:, name:)
           end
         end
 

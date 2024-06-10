@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Matcher::Scope, '#call' do
-  let(:object)    { described_class.new(scope: scope) }
+  let(:object)    { described_class.new(scope:) }
   let(:env)       { instance_double(Mutant::Env)      }
   let(:matcher_a) { instance_double(Mutant::Matcher)  }
   let(:matcher_b) { instance_double(Mutant::Matcher)  }
@@ -21,15 +21,15 @@ RSpec.describe Mutant::Matcher::Scope, '#call' do
 
   before do
     expect(Mutant::Matcher::Methods::Singleton).to receive(:new)
-      .with(scope: scope)
+      .with(scope:)
       .and_return(matcher_a)
 
     expect(Mutant::Matcher::Methods::Instance).to receive(:new)
-      .with(scope: scope)
+      .with(scope:)
       .and_return(matcher_b)
 
     expect(Mutant::Matcher::Methods::Metaclass).to receive(:new)
-      .with(scope: scope)
+      .with(scope:)
       .and_return(matcher_c)
 
     expect(matcher_a).to receive(:call)

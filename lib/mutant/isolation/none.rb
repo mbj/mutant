@@ -22,11 +22,11 @@ module Mutant
         end
 
         Result.new(
-          exception:      exception,
+          exception:,
           log:            '',
           process_status: nil,
           timeout:        nil,
-          value:          value
+          value:
         )
       end
       # rubocop:enable Lint/SuppressedException

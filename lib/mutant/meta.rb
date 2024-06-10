@@ -18,7 +18,7 @@ module Mutant
       # @return [undefined]
       def self.add(*types, operators: :full, &block)
         ALL << DSL.call(
-          block:     block,
+          block:,
           location:  caller_locations(1).first,
           operators: Mutation::Operators.parse(operators.to_s).from_right,
           types:     Set.new(types)

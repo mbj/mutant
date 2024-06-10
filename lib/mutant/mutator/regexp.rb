@@ -59,7 +59,7 @@ module Mutant
 
       def emit_expression(klass:, text:)
         emit(
-          klass.construct(text: text).tap do |new|
+          klass.construct(text:).tap do |new|
             subexpressions.each do |expression|
               new << Marshal.load(Marshal.dump(expression))
             end
@@ -140,7 +140,7 @@ module Mutant
         def dispatch
           klass, text = MAP.fetch(input.class)
 
-          emit(klass.construct(text: text).tap { |new| new.quantifier = input.quantifier })
+          emit(klass.construct(text:).tap { |new| new.quantifier = input.quantifier })
         end
       end
 

@@ -61,7 +61,7 @@ module Mutant
         end
 
         def visit(printer, object)
-          printer.call(output: output, object: object)
+          printer.call(output:, object:)
         end
 
         def info(string, *arguments)

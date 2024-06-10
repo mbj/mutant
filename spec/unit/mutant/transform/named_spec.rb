@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Transform::Named do
-  subject { described_class.new(name: name, transform: transform) }
+  subject { described_class.new(name:, transform:) }
 
   let(:name)      { 'transform-name'               }
   let(:transform) { Mutant::Transform::Boolean.new }
@@ -35,7 +35,7 @@ RSpec.describe Mutant::Transform::Named do
       let(:error) do
         Mutant::Transform::Error.new(
           cause:     transform.call(input).from_left,
-          input:     input,
+          input:,
           message:   nil,
           transform: subject
         )

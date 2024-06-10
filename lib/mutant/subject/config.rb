@@ -13,7 +13,7 @@ module Mutant
       def self.parse(comments:, mutation:)
         new(
           inline_disable: comments.any? { |comment| DISABLE_REGEXP.match?(comment_body(comment)) },
-          mutation:       mutation
+          mutation:
         )
       end
 

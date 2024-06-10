@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Mutant::Repository::Diff do
-  subject { described_class.new(world: world, to: 'to_rev') }
+  subject { described_class.new(world:, to: 'to_rev') }
 
   let(:kernel)     { class_double(Kernel)        }
   let(:line_range) { 4..5                        }
@@ -11,8 +11,8 @@ describe Mutant::Repository::Diff do
   let(:world) do
     instance_double(
       Mutant::World,
-      kernel:   kernel,
-      pathname: pathname
+      kernel:,
+      pathname:
     )
   end
 
@@ -20,7 +20,7 @@ describe Mutant::Repository::Diff do
     right(
       instance_double(
         Mutant::World::CommandStatus,
-        stdout: stdout
+        stdout:
       )
     )
   end

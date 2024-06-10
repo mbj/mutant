@@ -145,7 +145,7 @@ module Mutant
           private
 
             def object
-              super().payload
+              super.payload
             end
 
             def tests_per_second

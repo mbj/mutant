@@ -46,7 +46,7 @@ module Mutant
 
           Response.new(
             error:  reader.error,
-            job:    job,
+            job:,
             log:    reader.log,
             result: reader.result
           )
@@ -168,7 +168,7 @@ module Mutant
 
       def self.from_pipes(marshal:, reader:, writer:)
         new(
-          marshal: marshal,
+          marshal:,
           reader:  Frame.new(io: reader.to_reader),
           writer:  Frame.new(io: writer.to_writer)
         )

@@ -43,7 +43,7 @@ module Mutant
           @line_index    = 0
           @line_start    = 0
           @next_position = 0
-          @source        = Source.new(string: string)
+          @source        = Source.new(string:)
           @string        = string
           @tokens        = []
         end
@@ -77,13 +77,13 @@ module Mutant
 
           advance_position
 
-          @tokens << token(type: type, start_position: start_position)
+          @tokens << token(type:, start_position:)
         end
 
         def token(type:, start_position:, value: nil)
           Token.new(
-            type:     type,
-            value:    value,
+            type:,
+            value:,
             location: Source::Location.new(
               source:     @source,
               line_index: @line_index,
@@ -101,7 +101,7 @@ module Mutant
           if valid_string?(token.value)
             @tokens << token
           else
-            @error = Error::InvalidToken.new(token: token)
+            @error = Error::InvalidToken.new(token:)
           end
         end
 
@@ -123,7 +123,7 @@ module Mutant
           token(
             type:           :string,
             value:          string,
-            start_position: start_position
+            start_position:
           )
         end
 
