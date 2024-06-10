@@ -20,7 +20,7 @@ module Mutant
 
       private
 
-        def initialize(attributes)
+        def initialize(_attributes)
           super
           @config = Config::DEFAULT.with(
             coverage_criteria: Config::CoverageCriteria::EMPTY

@@ -13,7 +13,6 @@ module Mutant
 
         def dispatch
           emit_singletons
-          emit(N_EMPTY_SUPER)
         end
 
       end # ZSuper
