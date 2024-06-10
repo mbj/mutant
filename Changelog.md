@@ -1,6 +1,6 @@
-# v0.12.1 2024-06-09
+# v0.12.2 2024-06-09
 
-+ [#1445](https://github.com/mbj/mutant/pull/1444)
++ [#1450](https://github.com/mbj/mutant/pull/1450)
 
   Remove invalid mutation operator.
 
