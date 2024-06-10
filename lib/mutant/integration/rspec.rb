@@ -31,7 +31,7 @@ module Mutant
       private_constant(*constants(false))
 
       def freeze
-        super() if @setup_elapsed
+        super if @setup_elapsed
         self
       end
 

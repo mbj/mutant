@@ -35,7 +35,7 @@ module Mutant
         private
 
           def object
-            super().payload
+            super.payload
           end
 
           def mutations_per_second

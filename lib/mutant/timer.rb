@@ -24,7 +24,7 @@ module Mutant
       include Anima.new(:timer, :allowed_time)
 
       def initialize(*arguments)
-        super(*arguments)
+        super
         @start_at = timer.now
       end
 

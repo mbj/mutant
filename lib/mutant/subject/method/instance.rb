@@ -35,7 +35,7 @@ module Mutant
               .instance_variable_get(:@memoized_methods)
               .delete(name)
 
-            super()
+            super
           end
 
         private

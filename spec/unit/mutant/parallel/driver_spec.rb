@@ -135,7 +135,7 @@ RSpec.describe Mutant::Parallel::Driver, mutant_expression: 'Mutant::Parallel::D
     context 'when stopped' do
       def apply
         subject.stop
-        super()
+        super
       end
 
       let(:raw_expectations) do

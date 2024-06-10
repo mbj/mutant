@@ -21,7 +21,7 @@ module Mutant
       private
 
         def initialize(attributes)
-          super(attributes)
+          super
           @config = Config::DEFAULT.with(
             coverage_criteria: Config::CoverageCriteria::EMPTY
           )
@@ -60,7 +60,7 @@ module Mutant
         end
 
         def effective_options
-          instance_of?(Environment) ? EMPTY_ARRAY : super()
+          instance_of?(Environment) ? EMPTY_ARRAY : super
         end
 
         # rubocop:disable Metrics/MethodLength

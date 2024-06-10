@@ -11,7 +11,7 @@ module Mutant
         private
 
           def dispatch
-            super()
+            super
             emit(s(:send, *children))
           end
 

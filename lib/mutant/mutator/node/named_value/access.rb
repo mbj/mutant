@@ -28,7 +28,7 @@ module Mutant
 
             def dispatch
               emit_attribute_read
-              super()
+              super
             end
 
             def emit_attribute_read
