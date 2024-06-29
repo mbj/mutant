@@ -4,7 +4,7 @@ module Mutant
   # Represent a mutated node with its subject
   class Mutation
     include AbstractType, Adamantium
-    include Anima.new(:subject, :node)
+    include Anima.new(:subject, :node, :source)
 
     CODE_DELIMITER = "\0"
     CODE_RANGE     = (..4)
@@ -16,14 +16,6 @@ module Mutant
       sha1[CODE_RANGE]
     end
     memoize :code
-
-    # Normalized mutation source
-    #
-    # @return [String]
-    def source
-      Unparser.unparse(node)
-    end
-    memoize :source
 
     # Identification string
     #
@@ -83,6 +75,11 @@ module Mutant
       Unparser::Diff.build(original_source, source)
     end
     memoize :diff
+
+    def self.build(node:, subject:)
+      Unparser.unparse_either(node)
+        .fmap { |source| new(node:, subject:, source:) }
+    end
 
   private
 

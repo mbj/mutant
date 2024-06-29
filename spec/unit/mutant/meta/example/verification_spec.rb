@@ -26,7 +26,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
 
   let(:mutations) do
     generated_nodes.map do |node|
-      Mutant::Mutation::Evil.new(subject: example, node:)
+      Mutant::Mutation::Evil.build(subject: example, node:).from_right
     end
   end
 

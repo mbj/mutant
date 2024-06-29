@@ -84,7 +84,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
         with(:mutation_a_test_result) { { passed: false } }
 
         let(:mutation_a) do
-          Mutant::Mutation::Neutral.new(subject: subject_a, node: s(:true))
+          Mutant::Mutation::Neutral.build(subject: subject_a, node: s(:true)).from_right
         end
 
         it_reports(<<~REPORT)
@@ -106,7 +106,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
         with(:mutation_a_test_result) { { passed: false } }
 
         let(:mutation_a) do
-          Mutant::Mutation::Noop.new(subject: subject_a, node: s(:true))
+          Mutant::Mutation::Noop.build(subject: subject_a, node: s(:true)).from_right
         end
 
         it_reports(<<~REPORT)

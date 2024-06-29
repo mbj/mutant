@@ -61,7 +61,7 @@ module Mutant
           config: Mutation::Config::DEFAULT.with(operators:),
           node:
         ).map do |node|
-          Mutation::Evil.new(subject: self, node:)
+          Mutation::Evil.build(subject: self, node:).from_right
         end
       end
       memoize :generated

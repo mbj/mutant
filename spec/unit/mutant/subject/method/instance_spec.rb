@@ -155,18 +155,18 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
 
     let(:expected) do
       [
-        Mutant::Mutation::Neutral.new(
+        Mutant::Mutation::Neutral.build(
           subject: object,
           node:    s(:begin, s(:def, :foo, s(:args), nil), memoize_node)
-        ),
-        Mutant::Mutation::Evil.new(
+        ).from_right,
+        Mutant::Mutation::Evil.build(
           subject: object,
           node:    s(:begin, s(:def, :foo, s(:args), s(:send, nil, :raise)), memoize_node)
-        ),
-        Mutant::Mutation::Evil.new(
+        ).from_right,
+        Mutant::Mutation::Evil.build(
           subject: object,
           node:    s(:begin, s(:def, :foo, s(:args), s(:zsuper)), memoize_node)
-        )
+        ).from_right
       ]
     end
 

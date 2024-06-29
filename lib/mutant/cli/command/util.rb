@@ -78,7 +78,7 @@ module Mutant
               node:   target.node
             ).each do |mutation|
               Reporter::CLI::Printer::Mutation.call(
-                object: Mutant::Mutation::Evil.new(subject: target, node: mutation),
+                object: Mutant::Mutation::Evil.build(subject: target, node: mutation).from_right,
                 output: world.stdout
               )
             end
