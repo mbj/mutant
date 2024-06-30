@@ -167,7 +167,7 @@ module Mutant
 
           expressions.map(&method(:parse_expression))
         else
-          match = EXPRESSION_CANDIDATE.match(metadata.fetch(:full_description))
+          match = EXPRESSION_CANDIDATE.match(metadata.fetch(:full_description)) or return [ALL_EXPRESSION]
           [parse_expression(Util.one(match.captures)) { ALL_EXPRESSION }]
         end
       end

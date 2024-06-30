@@ -1,10 +1,15 @@
+# v0.12.4 2024-06-30
+
+* [#1455](https://github.com/mbj/mutant/pull/1454)
+
+  Fix parsing of empty rspec descriptions
+
 # v0.12.3 2024-06-10
 
 * [#1452](https://github.com/mbj/mutant/pull/1451)
 
   Remove support for EOL Ruby-3.0.
   Remove another invalid mutation to super().
-
 
 # v0.12.2 2024-06-09
 

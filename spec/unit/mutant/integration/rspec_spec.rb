@@ -83,11 +83,21 @@ RSpec.describe Mutant::Integration::Rspec do
     )
   end
 
+  let(:example_g) do
+    double(
+      'Example G',
+      metadata: {
+        location:         'example-g-location',
+        full_description: ''
+      }
+    )
+  end
+
   let(:leaf_example_group) do
     class_double(
       RSpec::Core::ExampleGroup,
       'leaf example group',
-      examples: [example_a, example_b, example_c, example_d, example_e, example_f]
+      examples: [example_a, example_b, example_c, example_d, example_e, example_f, example_g]
     )
   end
 
@@ -147,6 +157,10 @@ RSpec.describe Mutant::Integration::Rspec do
       Mutant::Test.new(
         id:          'rspec:5:example-f-location/Example::F',
         expressions: [parse_expression('Foo'), parse_expression('Bar')]
+      ),
+      Mutant::Test.new(
+        id:          'rspec:6:example-g-location/',
+        expressions: [parse_expression('*')]
       )
     ]
   end
