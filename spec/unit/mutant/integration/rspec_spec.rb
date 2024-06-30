@@ -74,7 +74,7 @@ RSpec.describe Mutant::Integration::Rspec do
 
   let(:example_f) do
     double(
-      'Example E',
+      'Example F',
       metadata: {
         location:          'example-f-location',
         full_description:  'Example::F',
