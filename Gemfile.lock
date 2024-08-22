@@ -22,7 +22,7 @@ GEM
     racc (1.8.0)
     rainbow (3.1.1)
     regexp_parser (2.9.2)
-    rexml (3.2.9)
+    rexml (3.3.6)
       strscan
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
