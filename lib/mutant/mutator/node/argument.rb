@@ -14,14 +14,7 @@ module Mutant
 
       private
 
-        def dispatch
-          emit_name_mutation
-        end
-
-        def emit_name_mutation
-          return if skip?
-          emit_name(:"#{UNDERSCORE}#{name}")
-        end
+        def dispatch; end
 
         def skip?
           name.start_with?(UNDERSCORE)
@@ -42,7 +35,6 @@ module Mutant
         private
 
           def dispatch
-            emit_name_mutation
             emit_required_mutation
             emit_default_mutations
           end

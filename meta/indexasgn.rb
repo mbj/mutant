@@ -20,7 +20,6 @@ end
 Mutant::Meta::Example.add :indexasgn, :op_asgn do
   source 'self[foo] += bar'
 
-  singleton_mutations
   mutation 'self[] += bar'
   mutation 'self[nil] += bar'
   mutation 'self[foo] += nil'

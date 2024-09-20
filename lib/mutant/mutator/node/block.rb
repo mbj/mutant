@@ -25,7 +25,9 @@ module Mutant
           emit_body(N_RAISE)
 
           return unless body
-          emit(body) unless body_has_control?
+
+          emit_body_promotion
+
           emit_body_mutations do |node|
             !(n_nil?(node) && unconditional_loop?)
           end
@@ -45,8 +47,23 @@ module Mutant
           false
         end
 
+        def emit_body_promotion
+          emit(body) if empty_block_argument? && !body_has_control?
+        end
+
+        def empty_block_argument?
+          node = arguments.children.at(0)
+
+          if node
+            node.children.empty?
+          else
+            true
+          end
+        end
+
         def mutate_body_receiver
           return if n_lambda?(send) || !n_send?(body)
+          return unless empty_block_argument?
 
           body_meta = AST::Meta::Send.new(node: body)
 

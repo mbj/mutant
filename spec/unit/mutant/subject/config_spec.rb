@@ -12,9 +12,9 @@ RSpec.describe Mutant::Subject::Config do
     let(:mutation_config) { Mutant::Mutation::Config::DEFAULT }
 
     let(:comments) do
-      node, comments = Unparser.parse_with_comments(source)
+      ast = Unparser.parse_ast(source)
 
-      Parser::Source::Comment.associate_by_identity(node, comments).fetch(node, [])
+      Parser::Source::Comment.associate_by_identity(ast.node, ast.comments).fetch(ast.node, [])
     end
 
     shared_examples 'returns default config' do

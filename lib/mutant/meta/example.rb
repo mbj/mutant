@@ -23,7 +23,7 @@ module Mutant
       #
       # @return [Verification]
       def verification
-        Verification.new(example: self, mutations: generated)
+        Verification.from_mutations(example: self, mutations: generated)
       end
       memoize :verification
 
@@ -61,7 +61,7 @@ module Mutant
           config: Mutation::Config::DEFAULT.with(operators:),
           node:
         ).map do |node|
-          Mutation::Evil.new(subject: self, node:)
+          Mutation::Evil.from_node(subject: self, node:)
         end
       end
       memoize :generated

@@ -20,26 +20,16 @@ Mutant::Meta::Example.add :block do
   singleton_mutations
   mutation 'foo'
   mutation 'foo { |a, b| raise }'
-  mutation 'foo { |a, _b| }'
-  mutation 'foo { |_a, b| }'
-  mutation 'foo { |a, | }'
-  mutation 'foo { |b, | }'
-  mutation 'foo { || }'
 end
 
 Mutant::Meta::Example.add :block do
   source 'foo { |(a, b), c| }'
 
   singleton_mutations
-  mutation 'foo { || }'
   mutation 'foo { |a, b, c| }'
   mutation 'foo { |(a, b), c| raise }'
   mutation 'foo { |(a), c| }'
   mutation 'foo { |(b), c| }'
-  mutation 'foo { |c, | }'
-  mutation 'foo { |(_a, b), c| }'
-  mutation 'foo { |(a, _b), c| }'
-  mutation 'foo { |(a, b), _c| }'
   mutation 'foo'
 end
 
@@ -57,21 +47,10 @@ Mutant::Meta::Example.add :block do
 end
 
 Mutant::Meta::Example.add :block do
-  source 'foo { |_a| }'
-
-  singleton_mutations
-  mutation 'foo { || }'
-  mutation 'foo { |_a| raise }'
-  mutation 'foo'
-end
-
-Mutant::Meta::Example.add :block do
   source 'foo { |a| }'
 
   singleton_mutations
-  mutation 'foo { || }'
   mutation 'foo { |a| raise }'
-  mutation 'foo { |_a| }'
   mutation 'foo'
 end
 
@@ -114,7 +93,6 @@ Mutant::Meta::Example.add :block do
   mutation 'foo { raise }'
   mutation 'foo { nil if true }'
   mutation 'foo { break if true }'
-  mutation 'foo { next if !true }'
   mutation 'foo { next if false }'
   mutation 'foo { next }'
 end
@@ -139,7 +117,6 @@ Mutant::Meta::Example.add :block do
   mutation 'foo { nil }'
   mutation 'foo { raise }'
   mutation 'foo { nil if true }'
-  mutation 'foo { break if !true }'
   mutation 'foo { break if false }'
   mutation 'foo { break }'
 end

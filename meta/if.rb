@@ -6,7 +6,6 @@ Mutant::Meta::Example.add :if do
   singleton_mutations
 
   # mutation of condition
-  mutation 'if !condition; true; else false; end'
   mutation 'if nil;        true; else false; end'
   mutation 'if true;       true; else false; end'
   mutation 'if false;      true; else false; end'
@@ -37,7 +36,6 @@ Mutant::Meta::Example.add :if do
   source 'if condition; true; end'
 
   singleton_mutations
-  mutation 'if !condition; true;  end'
   mutation 'if condition;  false; end'
   mutation 'if true;       true;  end'
   mutation 'if false;      true;  end'
@@ -49,7 +47,6 @@ Mutant::Meta::Example.add :if do
   source 'unless condition; true; end'
 
   singleton_mutations
-  mutation 'unless !condition; true;  end'
   mutation 'unless nil;        true;  end'
   mutation 'unless true;       true;  end'
   mutation 'unless false;      true;  end'
@@ -78,7 +75,6 @@ Mutant::Meta::Example.add :if do
 
   singleton_mutations
   mutation 'return false'
-  mutation 'return !true ? true : false'
   mutation 'return true'
   mutation 'return false ? true : false'
   mutation 'return true ? false : false'

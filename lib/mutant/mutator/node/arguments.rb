@@ -13,22 +13,9 @@ module Mutant
       private
 
         def dispatch
-          emit_argument_presence
           emit_argument_mutations
           emit_mlhs_expansion
           emit_procarg0_removal
-        end
-
-        def emit_argument_presence
-          emit_type unless removed_block_arg?(EMPTY_ARRAY) || forward_arg?
-
-          children.each_with_index do |removed, index|
-            new_arguments = children.dup
-            new_arguments.delete_at(index)
-            unless forward_type?(removed) || removed_block_arg?(new_arguments) || only_mlhs?(new_arguments)
-              emit_type(*new_arguments)
-            end
-          end
         end
 
         def forward_type?(removed)

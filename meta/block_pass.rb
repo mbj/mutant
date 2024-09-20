@@ -44,8 +44,6 @@ if RUBY_VERSION >= '3.1'
   Mutant::Meta::Example.add :block_pass do
     source 'def foo(a, &); foo(&); end'
 
-    mutation 'def foo(&); foo(&); end'
-    mutation 'def foo(_a, &); foo(&); end'
     mutation 'def foo(a, &); end'
     mutation 'def foo(a, &); foo; end'
     mutation 'def foo(a, &); nil; end'

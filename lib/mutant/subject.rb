@@ -15,8 +15,13 @@ module Mutant
         Mutator::Node.mutate(
           config: config.mutation,
           node:
-        ).map do |mutant|
-          Mutation::Evil.new(subject: self, node: wrap_node(mutant))
+        ).each_with_object([]) do |mutant, aggregate|
+          Mutation::Evil
+            .from_node(subject: self, node: wrap_node(mutant))
+            .either(
+              ->(validation) { puts validation.report; fail },
+              aggregate.method(:<<)
+            )
         end
       )
     end
@@ -92,7 +97,9 @@ module Mutant
   private
 
     def neutral_mutation
-      Mutation::Neutral.new(subject: self, node: wrap_node(node))
+      Mutation::Neutral
+        .from_node(subject: self, node: wrap_node(node))
+        .from_right
     end
 
     def wrap_node(node)

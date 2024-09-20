@@ -14,8 +14,6 @@ module Mutant
       private
 
         def dispatch
-          emit_singletons
-
           left_mutations
 
           emit_right_mutations

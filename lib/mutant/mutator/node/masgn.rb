@@ -3,9 +3,8 @@
 module Mutant
   class Mutator
     class Node
-
       # Mutation emitter to handle multiple assignment nodes
-      class MultipleAssignment < self
+      class Masgn < self
 
         handle(:masgn)
 
@@ -14,11 +13,10 @@ module Mutant
       private
 
         def dispatch
-          emit_singletons
           emit_right_mutations
         end
 
-      end # MultipleAssignment
+      end # Masgn
     end # Node
   end # Mutator
 end # Mutant

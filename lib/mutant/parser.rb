@@ -24,11 +24,11 @@ module Mutant
   private
 
     def parse(source)
-      node, comments = Unparser.parse_with_comments(source)
+      ast = Unparser.parse_ast_either(source).from_right
 
       AST.new(
-        node:,
-        comment_associations: ::Parser::Source::Comment.associate_by_identity(node, comments)
+        comment_associations: ::Parser::Source::Comment.associate_by_identity(ast.node, ast.comments),
+        node:                 ast.node
       )
     end
 
