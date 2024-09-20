@@ -2,20 +2,31 @@
 
 module Mutant
   module Meta
+    # rubocop:disable Metrics/ClassLength
     class Example
       # Example verification
       class Verification
-        include Adamantium, Anima.new(:example, :mutations)
+        include Adamantium, Anima.new(:example, :invalid, :valid)
+
+        def self.from_mutations(example:, mutations:)
+          valid, invalid = [], []
+
+          mutations.each do |mutation|
+            mutation.either(invalid.public_method(:<<), valid.public_method(:<<))
+          end
+
+          new(example:, invalid:, valid:)
+        end
 
         # Test if mutation was verified successfully
         #
         # @return [Boolean]
         def success?
           [
-            original_verification,
-            invalid,
+            invalid_report,
             missing,
             no_diffs,
+            original_verification_report,
             unexpected
           ].all?(&:empty?)
         end
@@ -29,12 +40,12 @@ module Mutant
 
         def reports
           reports = [example.location]
-          reports.concat(original)
-          reports.concat(original_verification)
+          reports.concat(original_report)
+          reports.concat(original_verification_report)
           reports.concat(make_report('Missing mutations:', missing))
           reports.concat(make_report('Unexpected mutations:', unexpected))
           reports.concat(make_report('No-Diff mutations:', no_diffs))
-          reports.concat(invalid)
+          reports.concat(invalid_report)
         end
 
         def make_report(label, mutations)
@@ -52,7 +63,7 @@ module Mutant
           ]
         end
 
-        def original
+        def original_report
           [
             "Original: (operators: #{example.operators.class.operators_name})",
             example.node,
@@ -60,7 +71,7 @@ module Mutant
           ]
         end
 
-        def original_verification
+        def original_verification_report
           validation = Unparser::Validation.from_string(example.original_source)
           if validation.success?
             []
@@ -77,30 +88,34 @@ module Mutant
           end.join
         end
 
-        def invalid
-          mutations.each_with_object([]) do |mutation, aggregate|
-            validation = Unparser::Validation.from_node(mutation.node)
-            aggregate << prefix('[invalid-mutation]', validation.report) unless validation.success?
+        def invalid_report
+          invalid.map do |validation|
+            prefix('[invalid-mutation]', validation.report)
           end
         end
-        memoize :invalid
+        memoize :invalid_report
 
         def unexpected
-          mutations.reject do |mutation|
+          valid.reject do |mutation|
             example.expected.any? { |expected| expected.node.eql?(mutation.node) }
           end
         end
         memoize :unexpected
 
         def missing
-          (example.expected.map(&:node) - mutations.map(&:node)).map do |node|
-            Mutation::Evil.new(subject: example, node:)
+          example.expected.each_with_object([]) do |expected, aggregate|
+            next if valid.any? { |mutation| expected.node.eql?(mutation.node) }
+            aggregate << Mutation::Evil.new(
+              node:    expected.node,
+              source:  expected.original_source,
+              subject: example
+            )
           end
         end
         memoize :missing
 
         def no_diffs
-          mutations.select { |mutation| mutation.source.eql?(example.original_source_generated) }
+          valid.select { |mutation| mutation.source.eql?(example.source) }
         end
         memoize :no_diffs
 

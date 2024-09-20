@@ -6,7 +6,6 @@ Mutant::Meta::Example.add :and do
   singleton_mutations
   mutation 'true'
   mutation 'false'
-  mutation 'true or false'
   mutation 'false and false'
   mutation 'true and true'
 end

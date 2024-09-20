@@ -1,3 +1,26 @@
+# v0.13.0 unreleased
+
+  Significant unparser upgrade. Mutant now:
+
+  Avoids emitting mutations that do not round trip against unparsers API.
+
+  This change generates less mutations, and currently slightly increases boot time.
+  But the number of mutations that are hitting the test suite is much lower so it
+  should balance.
+
+  Also its a good step towards parallel mutation generation reducing boot times.
+
+  Also mutations that are currently not creating round trippable ASTS are removed:
+
+  * Negation of `if` conditions, as negating these needs operator precendence sensitive AST
+    mutations mutant does not have the infrastructure for right now. The mutation to `unless` is
+    still present so there is no real reduction of semantic coverage.
+
+  * All mutations that modify the local variable scope are removed. These generated ASTs that would
+    not round trip and are thus likely to be covered, execution wise these would move lvar reads to
+    implicit self receivers in the past. But this was not intended by these mutations, at least not
+    without explicitly changing the reads to send nodes explicitly.
+
 # v0.12.5 unreleased
 
 * [#1458](https://github.com/mbj/mutant/pull/1458)

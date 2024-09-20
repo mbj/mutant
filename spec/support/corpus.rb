@@ -264,7 +264,8 @@ module MutantSpec
       #
       # @param [Array<String>] arguments
       #
-      # rubocop:disable Style/GuardClause - guard clause without else does not make sense
+      # rubocop:disable Style/GuardClause
+      # ^^ guard clause without else does not make sense
       def system(arguments)
         return if Kernel.system(*arguments)
 

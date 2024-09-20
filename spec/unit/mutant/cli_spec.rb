@@ -752,6 +752,155 @@ RSpec.describe Mutant::CLI do
       end
     end
 
+    context 'util mutation invalid round trip, all failures' do
+      include_context 'environment'
+
+      let(:arguments) { %w[util mutation -e true -e true] }
+
+      let(:expected_exit) { false }
+
+      let(:expected_events) do
+        [
+          [
+            :stdout,
+            :puts,
+            '<cli-source>'
+          ],
+          [
+            :stdout,
+            :puts,
+            '<generation-error-report>'
+
+          ],
+          [
+            :stdout,
+            :puts,
+            '<cli-source>'
+          ],
+          [
+            :stdout,
+            :puts,
+            '<generation-error-report>'
+
+          ],
+          [
+            :stderr,
+            :puts,
+            'Invalid mutation detected!'
+          ]
+        ]
+      end
+
+      before do
+        # rubocop:disable Lint/UnusedBlockArgument
+        allow(Mutant::Mutation::Evil).to receive(:from_node) do |subject:, node:|
+          {
+            s(:false) => left(
+              instance_double(
+                Mutant::Mutation::GenerationError,
+                report: '<generation-error-report>'
+              )
+            )
+          }.fetch(node)
+        end
+      end
+
+      include_examples 'CLI run'
+    end
+
+    context 'util mutation opn invalid round trip, some failures' do
+      include_context 'environment'
+
+      let(:arguments) { %w[util mutation -e 1 -e true] }
+
+      let(:expected_exit) { false }
+
+      let(:expected_events) do
+        [
+          [
+            :stdout,
+            :puts,
+            '<cli-source>'
+          ],
+          [
+            :stdout,
+            :puts,
+            '<generation-error-report>'
+          ],
+          [
+            :write,
+            <<~'MESSAGE'
+              @@ -1 +1 @@
+              -1
+              +0
+            MESSAGE
+          ],
+          [
+            :write,
+            <<~'MESSAGE'
+              @@ -1 +1 @@
+              -1
+              +2
+            MESSAGE
+          ],
+          [
+            :stdout,
+            :puts,
+            '<cli-source>'
+          ],
+          [
+            :write,
+            <<~'MESSAGE'
+              @@ -1 +1 @@
+              -true
+              +false
+            MESSAGE
+          ],
+          [
+            :stderr,
+            :puts,
+            'Invalid mutation detected!'
+          ]
+        ]
+      end
+
+      before do
+        allow(Mutant::Mutation::Evil).to receive(:from_node) do |subject:, node:|
+          {
+            s(:false)  => right(
+              Mutant::Mutation::Evil.new(
+                node:    s(:false),
+                source:  'false',
+                subject: subject
+              )
+            ),
+            s(:int, 0) => right(
+              Mutant::Mutation::Evil.new(
+                node:    s(:int, 0),
+                source:  '0',
+                subject: subject
+              )
+            ),
+            s(:int, 2) => right(
+              Mutant::Mutation::Evil.new(
+                node:    s(:int, 0),
+                source:  '2',
+                subject: subject
+              )
+            ),
+            s(:nil)    => left(
+              instance_double(
+                Mutant::Mutation::GenerationError,
+                report: '<generation-error-report>'
+              )
+            )
+          }.fetch(node)
+        end
+      end
+
+      include_examples 'CLI run'
+    end
+
     context 'environment irb' do
       include_context 'environment'
 

@@ -20,6 +20,6 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 3.1'
 
-  gem.add_runtime_dependency('mutant', "= #{gem.version}")
-  gem.add_runtime_dependency('rspec-core', '>= 3.8.0', '< 4.0.0')
+  gem.add_dependency('mutant', "= #{gem.version}")
+  gem.add_dependency('rspec-core', '>= 3.8.0', '< 4.0.0')
 end

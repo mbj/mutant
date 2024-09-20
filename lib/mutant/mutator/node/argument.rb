@@ -8,24 +8,11 @@ module Mutant
       class Argument < self
         handle(:arg, :kwarg)
 
-        UNDERSCORE = '_'
-
         children :name
 
       private
 
-        def dispatch
-          emit_name_mutation
-        end
-
-        def emit_name_mutation
-          return if skip?
-          emit_name(:"#{UNDERSCORE}#{name}")
-        end
-
-        def skip?
-          name.start_with?(UNDERSCORE)
-        end
+        def dispatch; end
 
         # Mutator for optional arguments
         class Optional < self
@@ -42,7 +29,6 @@ module Mutant
         private
 
           def dispatch
-            emit_name_mutation
             emit_required_mutation
             emit_default_mutations
           end

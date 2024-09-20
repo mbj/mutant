@@ -20,8 +20,11 @@ module Mutant
               end
             end
 
-            @targets.each(&method(:print_mutations))
-            Either::Right.new(nil)
+            if @targets.map(&method(:print_mutations)).all?
+              Either::Right.new(nil)
+            else
+              Either::Left.new('Invalid mutation detected!')
+            end
           end
 
         private
@@ -70,18 +73,28 @@ module Mutant
             end
           end
 
+          # rubocop:disable Metrics/MethodLength
           def print_mutations(target)
             world.stdout.puts(target.identification)
+
+            success = true
 
             Mutator::Node.mutate(
               config: Mutant::Mutation::Config::DEFAULT.with(ignore_patterns: @ignore_patterns),
               node:   target.node
             ).each do |mutation|
-              Reporter::CLI::Printer::Mutation.call(
-                object: Mutant::Mutation::Evil.new(subject: target, node: mutation),
-                output: world.stdout
+              Mutant::Mutation::Evil.from_node(subject: target, node: mutation).either(
+                ->(violation) { world.stdout.puts(violation.report); success = false },
+                lambda { |object|
+                  Reporter::CLI::Printer::Mutation.call(
+                    object:,
+                    output: world.stdout
+                  )
+                }
               )
             end
+
+            success
           end
 
           def parse_remaining_arguments(arguments)

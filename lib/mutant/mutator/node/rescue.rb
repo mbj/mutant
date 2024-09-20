@@ -25,8 +25,10 @@ module Mutant
         def mutate_rescue_bodies
           children_indices(RESCUE_INDICES).each do |index|
             mutate_child(index)
-            resbody_body = AST::Meta::Resbody.new(node: children.fetch(index)).body
-            emit_concat(resbody_body) if resbody_body
+            resbody = AST::Meta::Resbody.new(node: children.fetch(index))
+            if resbody.body && !resbody.assignment
+              emit_concat(resbody.body)
+            end
           end
         end
 

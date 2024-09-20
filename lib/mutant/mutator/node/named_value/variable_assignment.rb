@@ -26,18 +26,7 @@ module Mutant
         private
 
           def dispatch
-            emit_singletons
-            mutate_name
             emit_value_mutations if value # op asgn!
-          end
-
-          def mutate_name
-            prefix, regexp = MAP.fetch(node.type)
-            stripped = name.to_s.sub(regexp, EMPTY_STRING)
-
-            Util::Symbol.call(input: stripped, parent: nil).each do |name|
-              emit_name(:"#{prefix}#{name}")
-            end
           end
         end # VariableAssignment
       end # NamedValue

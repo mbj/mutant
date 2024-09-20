@@ -259,9 +259,7 @@ RSpec.describe Mutant::Integration::Rspec do
           it 'queries support' do
             begin
               subject
-            # rubocop:disable
-            rescue
-              # rubocop:enable
+            rescue # rubocop:disable Lint/SuppressedException
             end
 
             expect(rspec_world).to have_received(:respond_to?).with(:rspec_is_quitting)

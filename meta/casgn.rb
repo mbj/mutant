@@ -19,7 +19,6 @@ end
 Mutant::Meta::Example.add :casgn do
   source 'A &&= true'
 
-  singleton_mutations
   mutation 'A__MUTANT__ &&= true'
   mutation 'A &&= false'
 end
