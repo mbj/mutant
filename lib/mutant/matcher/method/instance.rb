@@ -30,8 +30,12 @@ module Mutant
         end
         # rubocop:enable Metrics/MethodLength
 
+        TARGET_MEMOIZER = ::Mutant::Adamantium
+
+        private_constant(*constants(false))
+
         def self.memoized_method?(scope, method_name)
-          scope.raw < Adamantium && scope.raw.memoized?(method_name)
+          scope.raw < TARGET_MEMOIZER && scope.raw.memoized?(method_name)
         end
         private_class_method :memoized_method?
 

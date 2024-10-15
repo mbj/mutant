@@ -1,14 +1,22 @@
+# v0.12.5 unreleased
+
+* [#1458](https://github.com/mbj/mutant/pull/1458)
+
+  Fix zombifier on memoized methods (only relevant for mutant developers).
+
 # v0.12.4 2024-06-30
 
-* [#1455](https://github.com/mbj/mutant/pull/1454)
+* [#1455](https://github.com/mbj/mutant/pull/1455)
 
   Fix parsing of empty rspec descriptions
 
 # v0.12.3 2024-06-10
 
-* [#1452](https://github.com/mbj/mutant/pull/1451)
+* [#1453](https://github.com/mbj/mutant/pull/1453)
 
   Remove support for EOL Ruby-3.0.
+
+* [#1450](https://github.com/mbj/mutant/pull/1450)
   Remove another invalid mutation to super().
 
 # v0.12.2 2024-06-09
