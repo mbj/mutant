@@ -1,3 +1,9 @@
+# v0.12.5 unreleased
+
+* [#1458](https://github.com/mbj/mutant/pull/1458)
+
+  Fix zombifier on memoized methods (only relevant for mutant developers).
+
 # v0.12.4 2024-06-30
 
 * [#1455](https://github.com/mbj/mutant/pull/1455)
