@@ -54,6 +54,17 @@ module Mutant
             environment.config.usage.verify.fmap { environment }
           end
         end # Run
+
+        class RunML < Run
+          NAME              = 'run_ml'
+          SHORT_DESCRIPTION = 'Run code analysis with ML integration'
+
+          def from_result(result)
+            super(result)
+
+            # overwrite this method with a monkeypatch and do your own stuff with `result` now.
+          end
+        end
       end # Environment
     end # Command
   end # CLI
