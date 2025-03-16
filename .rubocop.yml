@@ -193,3 +193,6 @@ Style/RedundantHeredocDelimiterQuotes:
 # Bad advice, as rubygems.org cannot see dev dependencies anymore
 Gemspec/DevelopmentDependencies:
   Enabled: false
+# Useful for code structure
+Lint/UselessConstantScoping:
+  Enabled: false

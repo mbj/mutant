@@ -14,8 +14,6 @@ module Mutant
       private
 
         def dispatch
-          emit_singletons
-
           left_mutations
 
           emit_right_mutations
@@ -25,7 +23,6 @@ module Mutant
           emit_left_mutations do |node|
             !n_self?(node)
           end
-
           emit_left_promotion if n_send?(left)
         end
 

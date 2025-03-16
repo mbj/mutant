@@ -104,6 +104,38 @@ RSpec.describe Mutant::Mutator::Node do
         end
       end
 
+      context 'on begin match' do
+        let(:node) do
+          s(:begin, s(:true), s(:int, 1))
+        end
+
+        it 'returns expected mutations' do
+          expect(apply).to eql(
+            [
+              s(:begin, s(:true), s(:nil)),
+              s(:begin, s(:true), s(:int, 0)),
+              s(:begin, s(:true), s(:int, 2))
+            ].to_set
+          )
+        end
+      end
+
+      context 'on begin match' do
+        let(:node) do
+          s(:begin, s(:int, 1), s(:true))
+        end
+
+        it 'returns expected mutations' do
+          expect(apply).to eql(
+            [
+              s(:begin, s(:nil), s(:true)),
+              s(:begin, s(:int, 0), s(:true)),
+              s(:begin, s(:int, 2), s(:true))
+            ].to_set
+          )
+        end
+      end
+
       context 'on indirect single child match' do
         let(:node) do
           s(:def, :foo, s(:args), s(:true))
@@ -156,11 +188,11 @@ RSpec.describe Mutant::Mutator::Node do
     end
 
     context 'ignore pattern not matching node' do
-       let(:ignore_pattern) { Mutant::AST::Pattern.parse('false').from_right }
+      let(:ignore_pattern) { Mutant::AST::Pattern.parse('false').from_right }
 
-       it 'returns no mutations' do
-         expect(apply).to eql([s(:false)].to_set)
-       end
+      it 'returns no mutations' do
+        expect(apply).to eql([s(:false)].to_set)
+      end
     end
   end
 end

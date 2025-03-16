@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Meta::Example::Verification do
-  let(:object)          { described_class.new(example:, mutations:) }
+  let(:object)          { described_class.from_mutations(example:, mutations:) }
   let(:original_source) { 'true' }
 
   let(:location) do
@@ -26,7 +26,7 @@ RSpec.describe Mutant::Meta::Example::Verification do
 
   let(:mutations) do
     generated_nodes.map do |node|
-      Mutant::Mutation::Evil.new(subject: example, node:)
+      Mutant::Mutation::Evil.from_node(subject: example, node:)
     end
   end
 
@@ -105,6 +105,14 @@ RSpec.describe Mutant::Meta::Example::Verification do
     end
 
     include_examples 'failure'
+
+    it 'records correct missing' do
+      expect(object.__send__(:missing)).to eql(
+        [
+          Mutant::Mutation::Evil.new(node: s(:nil), subject: example, source: 'nil')
+        ]
+      )
+    end
   end
 
   context 'when there is unexpected generated node' do
@@ -145,21 +153,13 @@ RSpec.describe Mutant::Meta::Example::Verification do
     include_examples 'failure'
   end
 
-  context 'when the mutation is invalid' do
+  context 'when the generated mutation is invalid' do
     let(:invalid_node) do
       s(:op_asgn, s(:send, s(:self), :at, s(:int, 1)), :+, s(:int, 1))
     end
 
     let(:generated_nodes) { [invalid_node] }
-
-    let(:expected) do
-      [
-        Mutant::Meta::Example::Expected.new(
-          node:            invalid_node,
-          original_source: 'self.at(1) += 1'
-        )
-      ]
-    end
+    let(:expected)        { []             }
 
     let(:expected_report) do
       <<~REPORT.chomp
@@ -177,15 +177,18 @@ RSpec.describe Mutant::Meta::Example::Verification do
     end
 
     before do
-      allow(Unparser::Validation).to receive_messages(from_node: validation)
+      allow(Mutant::Mutation).to receive_messages(from_node: left(validation))
     end
 
     include_examples 'failure'
 
-    it 'genrates validation with expected node' do
-      object.success?
+    it 'generates validation with expected node' do
+      expect(object.success?).to be(false)
 
-      expect(Unparser::Validation).to have_received(:from_node).with(invalid_node)
+      expect(Mutant::Mutation).to have_received(:from_node).with(
+        node:    invalid_node,
+        subject: example
+      )
     end
   end
 end

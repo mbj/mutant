@@ -4,9 +4,7 @@ Mutant::Meta::Example.add :rescue do
   source 'begin; rescue ExceptionA, ExceptionB => error; true; end'
 
   singleton_mutations
-  mutation 'begin; rescue ExceptionA, ExceptionB; true; end'
   mutation 'begin; rescue ExceptionA, ExceptionB => error; false; end'
-  mutation 'begin; true; end'
 
 end
 
@@ -14,9 +12,7 @@ Mutant::Meta::Example.add :rescue do
   source 'begin; rescue SomeException => error; true; end'
 
   singleton_mutations
-  mutation 'begin; rescue SomeException; true; end'
   mutation 'begin; rescue SomeException => error; false; end'
-  mutation 'begin; true; end'
 end
 
 Mutant::Meta::Example.add :rescue do
@@ -24,8 +20,6 @@ Mutant::Meta::Example.add :rescue do
 
   singleton_mutations
   mutation 'begin; rescue => error; false; end'
-  mutation 'begin; rescue; true; end'
-  mutation 'begin; true; end'
 end
 
 Mutant::Meta::Example.add :rescue do

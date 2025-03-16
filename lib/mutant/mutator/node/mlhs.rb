@@ -10,11 +10,7 @@ module Mutant
 
       private
 
-        def dispatch
-          mutate_single_child do |_child, index|
-            delete_child(index)
-          end
-        end
+        def dispatch; end
 
       end # MLHS
     end # Node

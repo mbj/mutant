@@ -68,17 +68,6 @@ end
 Mutant::Meta::Example.add :def do
   source 'def foo(a, b); end'
 
-  # Deletion of each argument
-  mutation 'def foo(a); end'
-  mutation 'def foo(b); end'
-
-  # Deletion of all arguments
-  mutation 'def foo; end'
-
-  # Rename each argument
-  mutation 'def foo(_a, b); end'
-  mutation 'def foo(a, _b); end'
-
   # Mutation of body
   mutation 'def foo(a, b); raise; end'
   mutation 'def foo(a, b); super; end'
@@ -87,51 +76,23 @@ end
 Mutant::Meta::Example.add :def do
   source 'def foo(a, b = nil); true; end'
 
-  mutation 'def foo(_a, b = nil); true; end'
   mutation 'def foo(a, b = nil); end'
-  mutation 'def foo; true; end'
   mutation 'def foo(a, b = nil); raise; end'
   mutation 'def foo(a, b = nil); false; end'
-  mutation 'def foo(a); true; end'
   mutation 'def foo(a, b = nil); b = nil; true; end'
-  mutation 'def foo(b = nil); true; end'
-  mutation 'def foo(a, _b = nil); true; end'
   mutation 'def foo(a, b); true; end'
   mutation 'def foo(a, b = nil); super; end'
 end
 
-Mutant::Meta::Example.add :def, :arg do
-  source 'def foo(_unused); end'
-
-  mutation 'def foo(_unused); raise; end'
-  mutation 'def foo; end'
-  mutation 'def foo(_unused); super; end'
-end
-
-Mutant::Meta::Example.add :def do
-  source 'def foo(_unused = true); end'
-
-  mutation 'def foo(_unused = false); end'
-  mutation 'def foo(_unused = true); raise; end'
-  mutation 'def foo(_unused); end'
-  mutation 'def foo; end'
-  mutation 'def foo(_unused = true); super; end'
-end
-
 Mutant::Meta::Example.add :def do
   source 'def foo(a = 0, b = 0); end'
-  mutation 'def foo(a = 0, _b = 0); end'
-  mutation 'def foo(_a = 0, b = 0); end'
   mutation 'def foo(a = 0, b = 1); end'
   mutation 'def foo(a = 0, b = -1); end'
   mutation 'def foo(a = 0, b = nil); end'
   mutation 'def foo(a = -1, b = 0); end'
   mutation 'def foo(a = nil, b = 0); end'
   mutation 'def foo(a = 1, b = 0); end'
-  mutation 'def foo(a = 0); end'
-  mutation 'def foo(b = 0); end'
   mutation 'def foo(a, b = 0); end'
-  mutation 'def foo; end'
   mutation 'def foo(a = 0, b = 0); a = 0; end'
   mutation 'def foo(a = 0, b = 0); b = 0; end'
   mutation 'def foo(a = 0, b = 0); raise; end'
@@ -142,9 +103,7 @@ Mutant::Meta::Example.add :def do
   source 'def foo(a = true); end'
 
   mutation 'def foo(a); end'
-  mutation 'def foo(); end'
   mutation 'def foo(a = false); end'
-  mutation 'def foo(_a = true); end'
   mutation 'def foo(a = true); raise; end'
   mutation 'def foo(a = true); a = true; end'
   mutation 'def foo(a = true); super; end'
@@ -171,17 +130,6 @@ end
 
 Mutant::Meta::Example.add :def do
   source 'def self.foo(a, b); end'
-
-  # Deletion of each argument
-  mutation 'def self.foo(a); end'
-  mutation 'def self.foo(b); end'
-
-  # Deletion of all arguments
-  mutation 'def self.foo; end'
-
-  # Rename each argument
-  mutation 'def self.foo(_a, b); end'
-  mutation 'def self.foo(a, _b); end'
 
   # Mutation of body
   mutation 'def self.foo(a, b); raise; end'
@@ -278,10 +226,8 @@ end
 Mutant::Meta::Example.add :def do
   source 'def foo(a, ...); end'
 
-  mutation 'def foo(_a, ...); end'
   mutation 'def foo(a, ...); raise; end'
   mutation 'def foo(a, ...); super; end'
-  mutation 'def foo(...); end'
 end
 
 Mutant::Meta::Example.add :def, :send do

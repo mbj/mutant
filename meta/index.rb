@@ -16,7 +16,6 @@ Mutant::Meta::Example.add :index do
   source 'foo[1]'
 
   singleton_mutations
-  mutation '1'
   mutation 'foo'
   mutation 'foo[]'
   mutation 'foo.at(1)'
@@ -32,7 +31,6 @@ Mutant::Meta::Example.add :index do
   source 'foo[n..-2]'
 
   singleton_mutations
-  mutation 'n..-2'
   mutation 'foo'
   mutation 'foo[]'
   mutation 'foo.at(n..-2)'
@@ -53,7 +51,6 @@ Mutant::Meta::Example.add :index do
   source 'foo[n...-1]'
 
   singleton_mutations
-  mutation 'n...-1'
   mutation 'foo'
   mutation 'foo[]'
   mutation 'foo.at(n...-1)'
@@ -73,7 +70,6 @@ Mutant::Meta::Example.add :index do
   source 'foo[n..-1]'
 
   singleton_mutations
-  mutation 'n..-1'
   mutation 'foo'
   mutation 'foo[]'
   mutation 'foo.at(n..-1)'
@@ -100,7 +96,6 @@ Mutant::Meta::Example.add :index do
   mutation 'self.at(foo)'
   mutation 'self.fetch(foo)'
   mutation 'self.key?(foo)'
-  mutation 'foo'
 end
 
 Mutant::Meta::Example.add :index do

@@ -14,7 +14,7 @@ RSpec.describe Mutant::Mutation do
   let(:root_node) { s(:int, 1)                       }
 
   let(:object) do
-    mutation_class.new(subject: mutation_subject, node:)
+    mutation_class.from_node(subject: mutation_subject, node:).from_right
   end
 
   let(:mutation_subject) do
@@ -30,6 +30,66 @@ RSpec.describe Mutant::Mutation do
     allow(context).to receive(:root)
       .with(node)
       .and_return(root_node)
+  end
+
+  describe '.from_node' do
+    def apply
+      mutation_class.from_node(subject: mutation_subject, node:)
+    end
+
+    before do
+      allow(Unparser).to receive(:unparse_validate_ast_either).and_return(result)
+    end
+
+    context 'on passing validation' do
+      let(:result) { right('nil') }
+
+      it 'validates correct ast' do
+        apply
+
+        expect(Unparser)
+          .to have_received(:unparse_validate_ast_either)
+          .with(ast: Unparser::AST.from_node(node:))
+      end
+
+      it 'returns expected mutation' do
+        expect(apply).to eql(
+          right(
+            mutation_class.new(
+              subject: mutation_subject,
+              node:    s(:nil),
+              source:  'nil'
+            )
+          )
+        )
+      end
+    end
+
+    context 'on failing validation' do
+      let(:result) { left(unparser_validation) }
+
+      let(:unparser_validation) { instance_double(Unparser::Validation) }
+
+      it 'validates correct ast' do
+        apply
+
+        expect(Unparser)
+          .to have_received(:unparse_validate_ast_either)
+          .with(ast: Unparser::AST.from_node(node:))
+      end
+
+      it 'returns expected mutation' do
+        expect(apply).to eql(
+          left(
+            described_class::GenerationError.new(
+              node:,
+              subject:             mutation_subject,
+              unparser_validation:
+            )
+          )
+        )
+      end
+    end
   end
 
   describe '#subject' do

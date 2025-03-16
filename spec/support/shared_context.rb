@@ -38,11 +38,11 @@ module SharedContext
     let(:subjects)        { [subject_a]                                              }
 
     let(:mutation_a) do
-      Mutant::Mutation::Evil.new(subject: subject_a, node: mutation_a_node)
+      Mutant::Mutation::Evil.from_node(subject: subject_a, node: mutation_a_node).from_right
     end
 
     let(:mutation_b) do
-      Mutant::Mutation::Evil.new(subject: subject_a, node: mutation_b_node)
+      Mutant::Mutation::Evil.from_node(subject: subject_a, node: mutation_b_node).from_right
     end
 
     let(:job_a) do

@@ -5,6 +5,5 @@ Mutant::Meta::Example.add :blockarg do
 
   singleton_mutations
   mutation 'foo { |&bar| raise }'
-  mutation 'foo {}'
   mutation 'foo'
 end

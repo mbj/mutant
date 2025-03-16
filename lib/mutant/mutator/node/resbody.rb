@@ -13,7 +13,6 @@ module Mutant
       private
 
         def dispatch
-          emit_assignment(nil)
           emit_body_mutations if body
         end
       end # Resbody

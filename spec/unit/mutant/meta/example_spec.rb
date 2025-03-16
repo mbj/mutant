@@ -7,10 +7,14 @@ RSpec.describe Mutant::Meta::Example do
       location:,
       lvars:           [],
       node:,
-      operators:       Mutant::Mutation::Operators::Full.new,
+      operators:,
       original_source: 'true',
       types:           [node.type]
     )
+  end
+
+  let(:operators) do
+    Mutant::Mutation::Operators::Full.new
   end
 
   let(:location) do
@@ -26,7 +30,7 @@ RSpec.describe Mutant::Meta::Example do
 
   let(:mutations) do
     mutation_nodes.map do |node|
-      Mutant::Mutation::Evil.new(subject: object, node:)
+      Mutant::Mutation::Evil.from_node(subject: object, node:)
     end
   end
 
@@ -38,8 +42,8 @@ RSpec.describe Mutant::Meta::Example do
     expect(source_counts.select { |_source, count| count > 1 }.keys).to eql([])
   end
 
-  describe '#original_source_generated' do
-    subject { object.original_source_generated }
+  describe '#source' do
+    subject { object.source }
 
     it { should eql('true') }
   end
@@ -47,7 +51,7 @@ RSpec.describe Mutant::Meta::Example do
   describe '#verification' do
     subject { object.verification }
 
-    it { should eql(Mutant::Meta::Example::Verification.new(example: object, mutations:)) }
+    it { should eql(Mutant::Meta::Example::Verification.from_mutations(example: object, mutations:)) }
   end
 
   let(:constant_scope) do
@@ -71,5 +75,42 @@ RSpec.describe Mutant::Meta::Example do
     subject { object.identification }
 
     it { should eql('<location>') }
+  end
+
+  describe '#generated' do
+    subject { object.generated }
+
+    let(:node) { s(:send, s(:nil), :==, s(:nil)) }
+
+    shared_examples 'expected mutations' do
+      it 'generates expected mutations' do
+        expect(subject).to eql(
+          expected.map do |node|
+            Mutant::Mutation::Evil.from_node(node:, subject: object)
+          end
+        )
+      end
+    end
+
+    context 'on light operator set' do
+      let(:expected)  { [s(:nil)]                              }
+      let(:operators) { Mutant::Mutation::Operators::Light.new }
+
+      include_examples 'expected mutations'
+    end
+
+    context 'on full operator set' do
+      let(:operators) { Mutant::Mutation::Operators::Full.new }
+
+      let(:expected) do
+        [
+          s(:nil),
+          s(:send, s(:nil), :eql?, s(:nil)),
+          s(:send, s(:nil), :equal?, s(:nil))
+        ]
+      end
+
+      include_examples 'expected mutations'
+    end
   end
 end

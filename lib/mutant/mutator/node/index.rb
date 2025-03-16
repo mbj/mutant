@@ -44,7 +44,6 @@ module Mutant
 
         def mutate_indices
           children_indices(index_range).each do |index|
-            emit_propagation(children.fetch(index)) unless left_op_assignment?
             delete_child(index)
             mutate_child(index)
           end
