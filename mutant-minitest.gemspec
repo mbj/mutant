@@ -17,10 +17,11 @@ Gem::Specification.new do |gem|
 
   gem.extra_rdoc_files = %w[LICENSE]
 
-  gem.required_ruby_version = '>= 3.1'
+  gem.required_ruby_version = '>= 3.2'
 
   gem.metadata['rubygems_mfa_required'] = 'true'
 
   gem.add_dependency('minitest', '~> 5.11')
   gem.add_dependency('mutant',   "= #{gem.version}")
+  gem.add_dependency('mutex_m', '~> 0.2')
 end

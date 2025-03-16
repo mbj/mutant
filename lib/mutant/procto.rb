@@ -15,8 +15,8 @@ module Mutant
     end
 
     module ClassMethods
-      def call(*arguments)
-        new(*arguments).call
+      def call(*)
+        new(*).call
       end
     end
   end # Procto
