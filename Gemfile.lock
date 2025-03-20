@@ -50,10 +50,10 @@ GEM
       rubocop-ast (>= 1.38.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.39.0)
+    rubocop-ast (1.40.0)
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
-    sorbet-runtime (0.5.11934)
+    sorbet-runtime (0.5.11945)
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
@@ -73,4 +73,4 @@ DEPENDENCIES
   rubocop (~> 1.7)
 
 BUNDLED WITH
-   2.5.22
+   2.6.2
