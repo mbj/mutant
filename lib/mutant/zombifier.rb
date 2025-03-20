@@ -32,8 +32,8 @@ module Mutant
     # Call zombifier
     #
     # @return [self]
-    def self.call(*args)
-      new(*args).__send__(:call)
+    def self.call(*)
+      new(*).__send__(:call)
       self
     end
 

@@ -1,1 +1,0 @@
-gem 'unparser', git: 'https://github.com/mbj/unparser', ref: '5751efd6e791952890e8a23b90538cc0367f4069'

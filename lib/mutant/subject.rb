@@ -22,7 +22,7 @@ module Mutant
           Mutation::Evil
             .from_node(subject: self, node: wrap_node(mutant))
             .either(
-              ->(validation) { $stderr.puts(validation.report) },
+              ->(validation) {},
               aggregate.public_method(:<<)
             )
         end
