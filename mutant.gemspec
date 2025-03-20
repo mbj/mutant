@@ -23,7 +23,7 @@ Gem::Specification.new do |gem|
   gem.metadata['rubygems_mfa_required'] = 'true'
   gem.metadata['source_code_uri'] = 'https://github.com/mbj/mutant'
 
-  gem.required_ruby_version = '>= 3.1'
+  gem.required_ruby_version = '>= 3.2'
 
   gem.add_dependency('diff-lcs',       '~> 1.3')
   gem.add_dependency('parser',         '~> 3.3.0')

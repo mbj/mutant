@@ -22,10 +22,10 @@ module MutantSpec
   class FakePathname
     include Adamantium, Anima.new(:file_system, :pathname)
 
-    def join(*arguments)
+    def join(*)
       self.class.new(
         file_system:,
-        pathname:    pathname.join(*arguments)
+        pathname:    pathname.join(*)
       )
     end
 

@@ -17,13 +17,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.1.2, ruby-3.1, ruby-3.2, ruby-3.3]
-        os: [ubuntu-latest]
-        include:
-        - os: macos-latest
-          ruby: ruby-3.2
-        - os: macos-latest
-          ruby: ruby-3.1
+        ruby: [ruby-3.2, ruby-3.3]
+        os: [ubuntu-latest, macos-latest]
         execution:
         - bundle exec rspec spec/unit
         - bundle exec mutant environment test run spec/unit
@@ -41,13 +36,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.1.2, ruby-3.1, ruby-3.2, ruby-3.3]
-        os: [ubuntu-latest]
-        include:
-        - os: macos-latest
-          ruby: ruby-3.2
-        - os: macos-latest
-          ruby: ruby-3.1
+        ruby: [ruby-3.2, ruby-3.3]
+        os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
       with:
@@ -64,13 +54,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.1.2, ruby-3.1, ruby-3.2, ruby-3.3]
-        os: [ubuntu-latest]
-        include:
-        - os: macos-latest
-          ruby: ruby-3.2
-        - os: macos-latest
-          ruby: ruby-3.1
+        ruby: [ruby-3.2, ruby-3.3]
+        os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
@@ -90,8 +75,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.1.2, ruby-3.1, ruby-3.2, ruby-3.3]
-        os: [ubuntu-latest]
+        ruby: [ruby-3.2, ruby-3.3]
+        os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
@@ -106,8 +91,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.1.2, ruby-3.1, ruby-3.2, ruby-3.3]
-        os: [ubuntu-latest]
+        ruby: [ruby-3.2, ruby-3.3]
+        os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
@@ -122,8 +107,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.1.2, ruby-3.1, ruby-3.2, ruby-3.3]
-        os: [ubuntu-latest]
+        ruby: [ruby-3.2, ruby-3.3]
+        os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
@@ -138,8 +123,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.1.2, ruby-3.1, ruby-3.2, ruby-3.3]
-        os: [ubuntu-latest]
+        ruby: [ruby-3.2, ruby-3.3]
+        os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
