@@ -11,7 +11,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    ast (2.4.2)
+    ast (2.4.3)
     diff-lcs (1.6.0)
     json (2.10.2)
     language_server-protocol (3.17.0.4)
