@@ -15,8 +15,8 @@ module Mutant
     # Call loader
     #
     # @return [Result]
-    def self.call(*arguments)
-      new(*arguments).call
+    def self.call(*)
+      new(*).call
     end
 
     # Call loader

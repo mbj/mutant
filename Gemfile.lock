@@ -1,16 +1,7 @@
-GIT
-  remote: https://github.com/mbj/unparser
-  revision: 5751efd6e791952890e8a23b90538cc0367f4069
-  ref: 5751efd6e791952890e8a23b90538cc0367f4069
-  specs:
-    unparser (0.7.0)
-      diff-lcs (~> 1.6)
-      parser (>= 3.3.0)
-
 PATH
   remote: .
   specs:
-    mutant (0.12.4)
+    mutant (0.13.0)
       diff-lcs (~> 1.3)
       parser (~> 3.3.0)
       regexp_parser (~> 2.9.0)
@@ -20,7 +11,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    ast (2.4.2)
+    ast (2.4.3)
     diff-lcs (1.6.0)
     json (2.10.2)
     language_server-protocol (3.17.0.4)
@@ -59,13 +50,16 @@ GEM
       rubocop-ast (>= 1.38.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.38.1)
+    rubocop-ast (1.40.0)
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
-    sorbet-runtime (0.5.11934)
+    sorbet-runtime (0.5.11945)
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
+    unparser (0.7.0)
+      diff-lcs (~> 1.6)
+      parser (>= 3.3.0)
 
 PLATFORMS
   ruby
@@ -77,7 +71,6 @@ DEPENDENCIES
   rspec-core (~> 3.10)
   rspec-its (~> 1.3.0)
   rubocop (~> 1.7)
-  unparser!
 
 BUNDLED WITH
-   2.5.22
+   2.6.2
