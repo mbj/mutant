@@ -16,7 +16,7 @@ module Mutant
         # rubocop:disable Metrics/MethodLength
         def self.new(scope:, target_method:)
           evaluator =
-            if memoized_method?(scope, target_method.name)
+            if memoized_method?(scope.raw, target_method.name)
               Evaluator::Memoized
             else
               Evaluator
@@ -35,9 +35,10 @@ module Mutant
         private_constant(*constants(false))
 
         def self.memoized_method?(scope, method_name)
-          scope.raw < TARGET_MEMOIZER && scope.raw.memoized?(method_name)
+          if scope.singleton_class < ::Memosa && scope.const_defined?(:MemosaMethods)
+            ::Memosa::Internal.method_defined?(scope.const_get(:MemosaMethods), method_name)
+          end
         end
-        private_class_method :memoized_method?
 
         # Instance method specific evaluator
         class Evaluator < Evaluator
@@ -70,7 +71,8 @@ module Mutant
             def source_location
               scope
                 .raw
-                .unmemoized_instance_method(method_name)
+                .instance_method(method_name)
+                .super_method
                 .source_location
             end
 

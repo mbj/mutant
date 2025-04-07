@@ -36,6 +36,7 @@ module Mutant
       def methods(env)
         candidate_names.each_with_object([]) do |name, methods|
           method = access(env, name)
+          method = method.super_method if Method::Instance.memoized_method?(candidate_scope, name)
           methods << method if method
         end
       end
