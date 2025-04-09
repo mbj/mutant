@@ -63,6 +63,12 @@ module Mutant
                 Either::Left.new('Test failures, exiting nonzero!')
               end
             end
+
+            # Alias to root mount
+            class Root < self
+              NAME        = 'test'
+              SUBCOMMANDS = EMPTY_ARRAY
+            end
           end
 
           SUBCOMMANDS = [List, Run].freeze
