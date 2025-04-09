@@ -1,4 +1,4 @@
-# v0.13.0 unreleased
+# v0.13.0 2025-03-23
 
   Significant unparser upgrade. Mutant now:
 
@@ -21,7 +21,7 @@
     implicit self receivers in the past. But this was not intended by these mutations, at least not
     without explicitly changing the reads to send nodes explicitly.
 
-# v0.12.5 unreleased
+# v0.12.5 2024-06-30
 
 * [#1458](https://github.com/mbj/mutant/pull/1458)
 
