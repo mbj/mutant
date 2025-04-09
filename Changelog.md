@@ -1,3 +1,11 @@
+# v0.13.1 2025-03-23
+
+  Add new `mutant test` primary subcommand. This subcommand allows
+  to run rspec (or minitest) tests via mutants *parallel* test runner.
+
+  Standard precautions to correctly synchronize or isolate global resources
+  (fileystems / database) apply.
+
 # v0.13.0 2025-03-23
 
   Significant unparser upgrade. Mutant now:

@@ -104,7 +104,7 @@ RSpec.describe Mutant::CLI do
     # rubocop:disable Metrics/MethodLength
     def self.main_body
       <<~MESSAGE.strip
-        usage: mutant <run|environment|util> [options]
+        usage: mutant <run|test|environment|util> [options]
 
         Summary: mutation testing engine main command
 
@@ -120,6 +120,7 @@ RSpec.describe Mutant::CLI do
         Available subcommands:
 
         run         - Run code analysis
+        test        - Run tests
         environment - Environment subcommands
         util        - Utility subcommands
       MESSAGE
