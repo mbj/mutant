@@ -1,3 +1,15 @@
+# v0.13.2 2025-06-19
+
+  Change to unparser 0.8.0 release. Which improves 3.4 support.
+
+  On ruby-3.4 this release uses the prism parser which results in faster mutant
+  boot times on especially larger code bases.
+
+  No changes for <=ruby-3.3 still uses the whitequark parser there.
+
+  Also add the explicit irb dependency as its no longer a default gem for 3.5 to avoid a 
+  load time warning.
+
 # v0.13.1 2025-03-23
 
   Add new `mutant test` primary subcommand. This subcommand allows

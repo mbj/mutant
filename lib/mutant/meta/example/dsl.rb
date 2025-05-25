@@ -99,7 +99,7 @@ module Mutant
 
         def parser
           Unparser.parser.tap do |parser|
-            @lvars.each(&parser.static_env.public_method(:declare))
+            @lvars.each(&parser.public_method(:declare_local_variable))
           end
         end
       end # DSL

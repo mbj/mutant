@@ -26,10 +26,11 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 3.2'
 
   gem.add_dependency('diff-lcs',       '~> 1.3')
+  gem.add_dependency('irb',            '~> 1.15.2')
   gem.add_dependency('parser',         '~> 3.3.0')
   gem.add_dependency('regexp_parser',  '~> 2.10')
   gem.add_dependency('sorbet-runtime', '~> 0.5.0')
-  gem.add_dependency('unparser',       '~> 0.7.0')
+  gem.add_dependency('unparser',       '~> 0.8.0')
 
   gem.add_development_dependency('rspec',      '~> 3.10')
   gem.add_development_dependency('rspec-core', '~> 3.10')
