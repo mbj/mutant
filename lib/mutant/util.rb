@@ -3,7 +3,7 @@
 module Mutant
   # Utility methods
   module Util
-    # Error raised by `Util.one` if size is less than zero or greater than one
+    # Error raised by `Util.one` if size is not exactly one
     SizeError = Class.new(IndexError)
 
     # Return only element in array if it contains exactly one member
