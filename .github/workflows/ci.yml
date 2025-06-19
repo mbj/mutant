@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.2, ruby-3.3]
+        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
         os: [ubuntu-latest, macos-latest]
         execution:
         - bundle exec rspec spec/unit
@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.2, ruby-3.3]
+        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
         os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.2, ruby-3.3]
+        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
         os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
@@ -75,7 +75,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.2, ruby-3.3]
+        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
         os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
@@ -91,7 +91,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.2, ruby-3.3]
+        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
         os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
@@ -107,7 +107,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.2, ruby-3.3]
+        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
         os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
@@ -123,7 +123,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.2, ruby-3.3]
+        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
         os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
