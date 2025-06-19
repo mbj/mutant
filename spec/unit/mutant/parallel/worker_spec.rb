@@ -119,6 +119,7 @@ RSpec.describe Mutant::Parallel::Worker do
       }
     end
 
+    # rubocop:disable Naming/PredicateMethod
     def sink_stop?(value)
       {
         receiver: sink,
