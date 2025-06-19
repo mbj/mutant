@@ -6,7 +6,7 @@ PATH
       parser (~> 3.3.0)
       regexp_parser (~> 2.10)
       sorbet-runtime (~> 0.5.0)
-      unparser (~> 0.7.0)
+      unparser (~> 0.8.0)
     mutant-minitest (0.13.1)
       minitest (~> 5.11)
       mutant (= 0.13.1)
@@ -22,12 +22,14 @@ GEM
     parser (3.3.7.2)
       ast (~> 2.4.1)
       racc
+    prism (1.4.0)
     racc (1.8.1)
     regexp_parser (2.10.0)
     sorbet-runtime (0.5.11953)
-    unparser (0.7.0)
+    unparser (0.8.0)
       diff-lcs (~> 1.6)
       parser (>= 3.3.0)
+      prism (>= 1.4)
 
 PLATFORMS
   x86_64-linux
