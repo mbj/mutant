@@ -60,7 +60,7 @@ module Mutant
         end
 
         def emit_procarg0_removal
-          return unless children.one? && n_procarg0?((procarg0 = Mutant::Util.one(children)))
+          return unless children.one? && n_procarg0?(procarg0 = Mutant::Util.one(children))
 
           arguments = procarg0.children
           emit_type(*arguments) if arguments.count > 1
