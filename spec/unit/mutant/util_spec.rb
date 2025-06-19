@@ -38,7 +38,7 @@ RSpec.describe Mutant::Util, '.one' do
 
     it 'raises expected error' do
       expect { apply }
-        .to raise_error(described_class::SizeError)
+        .to raise_error(Unparser::Util::SizeError)
         .with_message('expected size to be exactly 1 but size was 0')
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe Mutant::Util, '.one' do
 
     it 'raises expected error' do
       expect { apply }
-        .to raise_error(described_class::SizeError)
+        .to raise_error(Unparser::Util::SizeError)
         .with_message('expected size to be exactly 1 but size was 2')
     end
   end
@@ -100,7 +100,7 @@ RSpec.describe Mutant::Util, '.max_one' do
 
     it 'raises expected error' do
       expect { apply }
-        .to raise_error(described_class::SizeError)
+        .to raise_error(Unparser::Util::SizeError)
         .with_message('expected size to be max 1 but size was 2')
     end
   end
