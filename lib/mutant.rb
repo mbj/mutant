@@ -346,7 +346,7 @@ module Mutant
           Expression::Namespace::Exact,
           Expression::Namespace::Recursive,
           Expression::Source
-        ]
+        ].freeze
       ),
       environment_variables: EMPTY_HASH,
       fail_fast:             false,
