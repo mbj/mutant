@@ -1151,6 +1151,7 @@ RSpec.describe Mutant::CLI do
            Includes:        []
            Requires:        []
            Operators:       light
+           MutationTimeout: 5
            Subjects:        1
            All-Tests:       3
            Available-Tests: 2

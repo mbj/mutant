@@ -1,3 +1,28 @@
+# v0.13.3 2025-08-06
+
+* [#1472](https://github.com/mbj/mutant/pull/1472)
+
+  Change coverage criteria defaults:
+
+  * Default mutation timeout of 5s, previous: none.
+  * Coverage triteria timeout switched on, default off.
+
+  This means mutant will stop evaluation of mutations after 5s and consider
+  these as covered from now on.
+
+  The previous behavior can be restored via:
+
+  ```
+  # mutant.yaml
+  coverage_criteria:
+    timeout: false
+  mutation:
+    timeout: 3600.0 # 1 hour
+  ```
+
+  This is not exactly equivalent as before mutant supported to be configured with unbounded mutation
+  runtime, but its functionally equivalent.
+
 # v0.13.2 2025-06-19
 
   Change to unparser 0.8.0 release. Which improves 3.4 support.
@@ -7,7 +32,7 @@
 
   No changes for <=ruby-3.3 still uses the whitequark parser there.
 
-  Also add the explicit irb dependency as its no longer a default gem for 3.5 to avoid a 
+  Also add the explicit irb dependency as its no longer a default gem for 3.5 to avoid a
   load time warning.
 
 # v0.13.1 2025-03-23
