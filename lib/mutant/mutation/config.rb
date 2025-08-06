@@ -18,7 +18,7 @@ module Mutant
       DEFAULT = new(
         ignore_patterns: [],
         operators:       Mutation::Operators::Light.new,
-        timeout:         nil
+        timeout:         5.0
       )
 
       ignore_pattern = Transform::Block.capture('ignore pattern', &AST::Pattern.method(:parse))

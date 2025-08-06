@@ -15,7 +15,7 @@ module Mutant
       DEFAULT = new(
         process_abort: false,
         test_result:   true,
-        timeout:       false
+        timeout:       true
       )
 
       TRANSFORM =

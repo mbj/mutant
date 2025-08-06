@@ -10,6 +10,9 @@ requires:
 - mutant/meta
 mutation:
   operators: full
+  timeout: 3600.0
+coverage_criteria:
+  timeout: false
 matcher:
   subjects:
   - Mutant*

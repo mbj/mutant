@@ -15,6 +15,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
         Includes:        []
         Requires:        []
         Operators:       light
+        MutationTimeout: 5
       REPORT
     end
   end
@@ -31,6 +32,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
         Includes:        []
         Requires:        []
         Operators:       light
+        MutationTimeout: 5
       REPORT
     end
   end
@@ -47,6 +49,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
         Includes:        []
         Requires:        []
         Operators:       light
+        MutationTimeout: 5
       REPORT
     end
   end
@@ -63,6 +66,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
         Includes:        []
         Requires:        []
         Operators:       light
+        MutationTimeout: 5
       REPORT
     end
   end

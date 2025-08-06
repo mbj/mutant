@@ -62,7 +62,7 @@ RSpec.describe Mutant::Result::Mutation do
     end
 
     let(:coverage_criteria) do
-      Mutant::Config::CoverageCriteria::DEFAULT
+      Mutant::Config::CoverageCriteria::DEFAULT.with(timeout: false)
     end
 
     before do
