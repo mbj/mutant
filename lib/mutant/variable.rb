@@ -16,6 +16,7 @@ module Mutant
     # Result of operation that may time out
     class Result
       include Equalizer.new(:value)
+
       attr_reader :value
 
       # Initialize result

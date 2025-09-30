@@ -5,6 +5,7 @@ module Mutant
     # Abstract base class for expressions matching namespaces
     class Namespace < self
       include AbstractType, Anima.new(:scope_name)
+
       private(*anima.attribute_names)
 
       # Recursive namespace expression
