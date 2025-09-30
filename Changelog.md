@@ -1,3 +1,12 @@
+# v0.13.4 2025-08-06
+
+  [#1473](https://github.com/mbj/mutant/pull/1473)
+
+  Fix parallel test runner to correctly setup global environment.
+
+  Before environment customizations such as requires and includes where not run at all when
+  using the parallel test runner.
+
 # v0.13.3 2025-08-06
 
 * [#1472](https://github.com/mbj/mutant/pull/1472)
