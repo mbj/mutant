@@ -84,7 +84,6 @@ module Mutant
         )
       end
 
-      # rubocop:disable Naming/PredicateMethod
       def fail_message(message)
         world.stderr.puts(message)
         false

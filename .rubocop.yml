@@ -196,3 +196,6 @@ Gemspec/DevelopmentDependencies:
 # Useful for code structure
 Lint/UselessConstantScoping:
   Enabled: false
+# False positives
+Naming/PredicateMethod:
+  Enabled: false
