@@ -63,8 +63,9 @@ module Mutant
     # @return [Either<String, Env>]
     def self.call_test(env)
       env.record(:bootstrap) do
+        env = load_hooks(env).tap(&method(:infect))
         setup_integration(
-          env:               load_hooks(env),
+          env:               env,
           mutations:         [],
           selected_subjects: []
         )

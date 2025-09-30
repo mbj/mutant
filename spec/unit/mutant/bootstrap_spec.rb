@@ -398,6 +398,65 @@ RSpec.describe Mutant::Bootstrap do
         {
           receiver:  world,
           selector:  :record,
+          arguments: [:infect],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:hooks_env_infection_pre],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  hooks,
+          selector:  :run,
+          arguments: [:env_infection_pre, { env: env_initial }]
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:require_target],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  world.environment_variables,
+          selector:  :[]=,
+          arguments: %w[foo bar]
+        },
+        {
+          receiver:  load_path,
+          selector:  :<<,
+          arguments: %w[include-a]
+        },
+        {
+          receiver:  load_path,
+          selector:  :<<,
+          arguments: %w[include-b]
+        },
+        {
+          receiver:  kernel,
+          selector:  :require,
+          arguments: %w[require-a]
+        },
+        {
+          receiver:  kernel,
+          selector:  :require,
+          arguments: %w[require-b]
+        },
+        {
+          receiver:  world,
+          selector:  :record,
+          arguments: [:hooks_env_infection_post],
+          reaction:  { yields: [] }
+        },
+        {
+          receiver:  hooks,
+          selector:  :run,
+          arguments: [:env_infection_post, { env: env_initial }]
+        },
+        {
+          receiver:  world,
+          selector:  :record,
           arguments: [:setup_integration],
           reaction:  { yields: [] }
         },
