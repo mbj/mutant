@@ -14,6 +14,9 @@ jobs:
     name: Unit Specs
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ruby
     strategy:
       fail-fast: false
       matrix:
@@ -28,29 +31,40 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        working-directory: ./ruby
     - run: ${{ matrix.execution }}
-  ruby-mutant:
-    name: Mutation coverage
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
-        os: [ubuntu-latest, macos-latest]
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - run: bundle exec mutant run --zombie --since HEAD~1
+  # Temporarily disabled: We use incremental mutation coverage (as recommended by the author).
+  # Since this commit moves all files to the ruby/ subdirectory, mutation coverage would
+  # take a long time. This will be re-enabled in the next commit.
+  # ruby-mutant:
+  #   name: Mutation coverage
+  #   runs-on: ${{ matrix.os }}
+  #   timeout-minutes: 30
+  #   defaults:
+  #     run:
+  #       working-directory: ruby
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
+  #       os: [ubuntu-latest, macos-latest]
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #     with:
+  #       fetch-depth: 0
+  #   - uses: ruby/setup-ruby@v1
+  #     with:
+  #       ruby-version: ${{ matrix.ruby }}
+  #       bundler-cache: true
+  #       working-directory: ./ruby
+  #   - run: bundle exec mutant run --zombie --since HEAD~1
   ruby-integration-misc:
     name: Integration Misc
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ruby
     strategy:
       fail-fast: false
       matrix:
@@ -62,6 +76,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        working-directory: ./ruby
     - run: |
         bundle exec rspec                                            \
           spec/integration/mutant/null_spec.rb                       \
@@ -72,6 +87,9 @@ jobs:
     name: Integration Minitest
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ruby
     strategy:
       fail-fast: false
       matrix:
@@ -83,11 +101,15 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        working-directory: ./ruby
     - run: bundle exec rspec spec/integration -e minitest
   ruby-integration-rspec:
     name: Integration RSpec
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ruby
     strategy:
       fail-fast: false
       matrix:
@@ -99,11 +121,15 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        working-directory: ./ruby
     - run: bundle exec rspec spec/integration -e rspec
   ruby-integration-generation:
     name: Integration Mutation Generation
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ruby
     strategy:
       fail-fast: false
       matrix:
@@ -115,11 +141,15 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        working-directory: ./ruby
     - run: bundle exec rspec spec/integration -e generation
   ruby-rubocop:
     name: Rubocop
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ruby
     strategy:
       fail-fast: false
       matrix:
@@ -131,4 +161,5 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        working-directory: ./ruby
     - run: bundle exec rubocop
