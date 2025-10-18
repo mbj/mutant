@@ -20,14 +20,15 @@ jobs:
         ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
         os: [ubuntu-latest, macos-latest]
         execution:
-        - bundle exec rspec spec/unit
-        - bundle exec mutant environment test run spec/unit
+        - cd ruby && bundle exec rspec spec/unit
+        - cd ruby && bundle exec mutant environment test run spec/unit
     steps:
     - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        working-directory: ./ruby
     - run: ${{ matrix.execution }}
   ruby-mutant:
     name: Mutation coverage
@@ -46,7 +47,8 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle exec mutant run --zombie --since HEAD~1
+        working-directory: ./ruby
+    - run: cd ruby && bundle exec mutant run --zombie --since HEAD~1
   ruby-integration-misc:
     name: Integration Misc
     runs-on: ${{ matrix.os }}
@@ -62,8 +64,9 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        working-directory: ./ruby
     - run: |
-        bundle exec rspec                                            \
+        cd ruby && bundle exec rspec                                 \
           spec/integration/mutant/null_spec.rb                       \
           spec/integration/mutant/isolation/fork_spec.rb             \
           spec/integration/mutant/test_mutator_handles_types_spec.rb \
@@ -83,7 +86,8 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle exec rspec spec/integration -e minitest
+        working-directory: ./ruby
+    - run: cd ruby && bundle exec rspec spec/integration -e minitest
   ruby-integration-rspec:
     name: Integration RSpec
     runs-on: ${{ matrix.os }}
@@ -99,7 +103,8 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle exec rspec spec/integration -e rspec
+        working-directory: ./ruby
+    - run: cd ruby && bundle exec rspec spec/integration -e rspec
   ruby-integration-generation:
     name: Integration Mutation Generation
     runs-on: ${{ matrix.os }}
@@ -115,7 +120,8 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle exec rspec spec/integration -e generation
+        working-directory: ./ruby
+    - run: cd ruby && bundle exec rspec spec/integration -e generation
   ruby-rubocop:
     name: Rubocop
     runs-on: ${{ matrix.os }}
@@ -131,4 +137,5 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle exec rubocop
+        working-directory: ./ruby
+    - run: cd ruby && bundle exec rubocop
