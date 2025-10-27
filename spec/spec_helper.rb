@@ -121,6 +121,7 @@ module XSpecHelper
       random:                class_double(Random),
       recorder:              instance_double(Mutant::Segment::Recorder),
       stderr:                instance_double(IO, :stderr),
+      stdin:                 instance_double(IO, :stdin),
       stdout:                instance_double(IO, :stdout),
       tempfile:              class_double(Tempfile),
       thread:                class_double(Thread),

@@ -29,6 +29,7 @@ module Mutant
       etc
       irb
       json
+      mcp
       open3
       optparse
       parser
@@ -229,6 +230,12 @@ module Mutant
     require 'mutant/cli/command/environment/subject'
     require 'mutant/cli/command/environment/test'
     require 'mutant/cli/command/util'
+    require 'mutant/mcp'
+    require 'mutant/mcp/resources'
+    require 'mutant/mcp/server'
+    require 'mutant/cli/command/mcp'
+    require 'mutant/cli/command/mcp/server'
+    require 'mutant/cli/command/mcp/info'
     require 'mutant/cli/command/root'
     require 'mutant/mutation/runner'
     require 'mutant/mutation/runner/sink'
@@ -327,6 +334,7 @@ module Mutant
     random:                Random,
     recorder:,
     stderr:                $stderr,
+    stdin:                 $stdin,
     stdout:                $stdout,
     tempfile:              Tempfile,
     thread:                Thread,

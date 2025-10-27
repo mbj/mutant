@@ -21,6 +21,7 @@ module Mutant
       :random,
       :recorder,
       :stderr,
+      :stdin,
       :stdout,
       :tempfile,
       :thread,

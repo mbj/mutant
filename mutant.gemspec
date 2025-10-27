@@ -27,6 +27,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency('diff-lcs',       '~> 1.3')
   gem.add_dependency('irb',            '~> 1.15.2')
+  gem.add_dependency('mcp',            '~> 0.1.0')
   gem.add_dependency('parser',         '~> 3.3.0')
   gem.add_dependency('regexp_parser',  '~> 2.10')
   gem.add_dependency('sorbet-runtime', '~> 0.5.0')
