@@ -1,3 +1,25 @@
+# v0.13.5 2025-10-28
+
+* [#1478](https://github.com/mbj/mutant/pull/1478)
+
+  Add support for `MUTANT_JOBS` environment variable
+
+  The `jobs` configuration can now be set via the `MUTANT_JOBS` environment variable.
+  This provides an additional configuration method with the following precedence:
+
+  1. CLI option: `-j` or `--jobs` (highest priority)
+  2. Environment variable: `MUTANT_JOBS`
+  3. Configuration file: `jobs:` in YAML
+  4. Default: system processor count (lowest priority)
+
+  Example usage:
+  ```sh
+  MUTANT_JOBS=4 bundle exec mutant run
+  ```
+
+  The environment variable value must be a valid base-10 integer. Invalid values
+  (including octal or hexadecimal notation) will result in a clear error message.
+
 # v0.13.4 2025-09-30
 
   [#1473](https://github.com/mbj/mutant/pull/1473)

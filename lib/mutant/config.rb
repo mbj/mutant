@@ -97,13 +97,33 @@ module Mutant
 
     # Load the configuration
     def self.load(cli_config:, world:)
-      load_config_file(reporter: cli_config.reporter, world:).fmap do |file_config|
-        DEFAULT.with(
-          jobs:     Etc.nprocessors,
-          mutation: Mutation::Config::DEFAULT
-        ).merge(file_config.merge(cli_config))
+      load_config_file(reporter: cli_config.reporter, world:).bind do |file_config|
+        load_env_config(world:).fmap do |env_config|
+          DEFAULT.with(
+            jobs:     Etc.nprocessors,
+            mutation: Mutation::Config::DEFAULT
+          ).merge(file_config).merge(env_config).merge(cli_config)
+        end
       end
     end
+
+    # Load configuration from environment variables
+    #
+    # @param [World] world
+    #
+    # @return [Either<String,Config>]
+    def self.load_env_config(world:)
+      jobs = world.environment_variables['MUTANT_JOBS']
+
+      if jobs
+        Either.wrap_error(ArgumentError) { Integer(jobs, 10) }
+          .lmap { |exception| "MUTANT_JOBS environment variable has invalid value: #{jobs.inspect} - #{exception}" }
+          .fmap { |jobs_value| DEFAULT.with(jobs: jobs_value) }
+      else
+        Either::Right.new(DEFAULT)
+      end
+    end
+    private_class_method :load_env_config
 
     # Load config file
     #
