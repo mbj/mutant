@@ -258,9 +258,13 @@ RSpec.describe Mutant::Config do
       described_class.load(cli_config:, world:)
     end
 
-    let(:cli_config)  { Mutant::Config::DEFAULT                            }
-    let(:nprocessors) { instance_double(Integer, :nprocessors)             }
-    let(:world)       { instance_double(Mutant::World, pathname:) }
+    let(:cli_config)            { Mutant::Config::DEFAULT                }
+    let(:environment_variables) { {}                                     }
+    let(:nprocessors)           { instance_double(Integer, :nprocessors) }
+
+    let(:world) do
+      instance_double(Mutant::World, environment_variables:, pathname:)
+    end
 
     let(:pathname) do
       paths = paths()
@@ -304,6 +308,84 @@ RSpec.describe Mutant::Config do
             )
           )
         )
+      end
+
+      context 'with MUTANT_JOBS environment variable' do
+        context 'with valid integer value' do
+          let(:environment_variables) { { 'MUTANT_JOBS' => '4' } }
+
+          it 'uses environment variable value for jobs' do
+            expect(apply).to eql(
+              Mutant::Either::Right.new(
+                cli_config.with(
+                  jobs:     4,
+                  mutation: Mutant::Mutation::Config::DEFAULT
+                )
+              )
+            )
+          end
+        end
+
+        context 'with octal-looking value' do
+          let(:environment_variables) { { 'MUTANT_JOBS' => '010' } }
+
+          it 'parses as base-10, not octal' do
+            expect(apply).to eql(
+              Mutant::Either::Right.new(
+                cli_config.with(
+                  jobs:     10,
+                  mutation: Mutant::Mutation::Config::DEFAULT
+                )
+              )
+            )
+          end
+        end
+
+        context 'with hex-looking value' do
+          let(:environment_variables) { { 'MUTANT_JOBS' => '0x10' } }
+
+          it 'rejects hex notation' do
+            expect(apply.from_left).to eql(
+              'MUTANT_JOBS environment variable has invalid value: "0x10" - invalid value for Integer(): "0x10"'
+            )
+          end
+        end
+
+        context 'with invalid value' do
+          let(:environment_variables) { { 'MUTANT_JOBS' => 'invalid' } }
+
+          it 'returns error with expected message' do
+            expect(apply.from_left).to eql(
+              'MUTANT_JOBS environment variable has invalid value: "invalid" - invalid value for Integer(): "invalid"'
+            )
+          end
+        end
+
+        context 'with empty string value' do
+          let(:environment_variables) { { 'MUTANT_JOBS' => '' } }
+
+          it 'returns error with expected message' do
+            expect(apply.from_left).to eql(
+              'MUTANT_JOBS environment variable has invalid value: "" - invalid value for Integer(): ""'
+            )
+          end
+        end
+
+        context 'with CLI override' do
+          let(:environment_variables) { { 'MUTANT_JOBS' => '4' } }
+          let(:cli_config)            { Mutant::Config::DEFAULT.with(jobs: 8) }
+
+          it 'CLI config takes precedence over environment variable' do
+            expect(apply).to eql(
+              Mutant::Either::Right.new(
+                cli_config.with(
+                  jobs:     8,
+                  mutation: Mutant::Mutation::Config::DEFAULT
+                )
+              )
+            )
+          end
+        end
       end
     end
 
@@ -354,6 +436,31 @@ RSpec.describe Mutant::Config do
                 )
               )
             )
+          end
+
+          context 'with MUTANT_JOBS environment variable and file config jobs' do
+            let(:path_contents) do
+              <<~'YAML'
+                ---
+                integration:
+                  name: rspec
+                jobs: 2
+              YAML
+            end
+
+            let(:environment_variables) { { 'MUTANT_JOBS' => '4' } }
+
+            it 'environment variable takes precedence over file config' do
+              expect(apply).to eql(
+                Mutant::Either::Right.new(
+                  cli_config.with(
+                    integration: Mutant::Integration::Config::DEFAULT.with(name: 'rspec'),
+                    jobs:        4,
+                    mutation:    Mutant::Mutation::Config::DEFAULT
+                  )
+                )
+              )
+            end
           end
         end
 

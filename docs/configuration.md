@@ -161,7 +161,19 @@ Specify how many processes mutant uses to kill mutations. Defaults to the number
 jobs: 8
 ```
 
-The number of jobs can be overridden by the `-j` or `--jobs` option in the CLI.
+The number of jobs can be configured through multiple methods with the following precedence (highest to lowest):
+
+1. CLI option: `-j` or `--jobs`
+2. Environment variable: `MUTANT_JOBS`
+3. Configuration file: `jobs:` in YAML
+4. Default: number of processors on your system
+
+For example, to set jobs via environment variable:
+
+```sh
+MUTANT_JOBS=4 bundle exec mutant run
+```
+
 See mutant's configuration file, [mutant.yml](/mutant.yml), for a complete example.
 
 #### `mutation`
