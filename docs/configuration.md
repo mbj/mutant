@@ -234,3 +234,16 @@ coverage_criteria:
 ```
 
 At this point there is no CLI equivalent for these settings.
+
+#### `hooks`
+
+Allows to specify Ruby files that register hooks for injecting custom behavior at various points in the mutation testing execution pipeline.
+
+```yml
+---
+hooks:
+  - path/to/hooks_file_1.rb
+  - path/to/hooks_file_2.rb
+```
+
+For complete documentation on available hooks and usage examples, see the [Hooks documentation](/docs/hooks.md).

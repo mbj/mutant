@@ -137,6 +137,7 @@ Also checkout the [commercial FAQ](/docs/commercial.md).
 * [Rspec Integration](/docs/mutant-rspec.md)
 * [Minitest Integration](/docs/mutant-minitest.md)
 * [Configuration](/docs/configuration.md)
+* [Hooks](/docs/hooks.md)
 * [Sorbet](/docs/sorbet.md)
 
 ## Communication
