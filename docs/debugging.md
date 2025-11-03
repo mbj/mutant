@@ -272,6 +272,90 @@ bundle exec mutant util mutation -e 'log.debug("foo")' -i 'send{selector=debug}'
 bundle exec mutant util mutation -e 'log.debug("foo"); calculate()' -i 'send{selector=debug}'
 ```
 
+## Performance Profiling
+
+### `--profile` Flag
+
+The `--profile` flag enables execution profiling to help identify performance bottlenecks in mutant runs.
+
+```sh
+bundle exec mutant run --profile
+```
+
+This flag:
+- Records timing information for each phase of execution
+- Prints a hierarchical breakdown of where time is spent
+- Helps differentiate mutant overhead from application loading time
+- Useful for optimizing slow mutation testing runs
+
+**Output format:**
+
+The profile output shows timing information in the format:
+```
+LEFT_COLUMN: (RIGHT_COLUMN) INDENTATION operation_name
+```
+
+Where:
+- **Left column**: Time elapsed since mutant started (in seconds)
+- **Right column**: Duration this specific step took (in seconds)
+- **Indentation**: Shows hierarchical nesting of operations
+- **Operation name**: Description of what executed
+
+**Example output:**
+
+```
+0.0000: (5.6510s)  executable
+0.0008: (5.6501s)    library
+0.0008: (0.2878s)      require_dependencies
+0.2887: (0.0664s)      require_mutant_lib
+0.3554: (0.0015s)      cli_parse
+0.3569: (1.9687s)      zombify
+2.3256: (3.3253s)      execute
+2.3258: (0.0032s)        config
+2.3290: (0.9045s)        bootstrap
+2.3290: (0.0000s)          load_hooks
+2.3291: (0.3361s)          infect
+2.3291: (0.0000s)            hooks_env_infection_pre
+2.3291: (0.3360s)            require_target
+2.6651: (0.0000s)            hooks_env_infection_post
+2.6652: (0.3361s)          infect
+2.6652: (0.0586s)          matchable_scopes
+2.7239: (0.0033s)          subject_match
+2.7272: (0.0761s)          mutation_generate
+2.8034: (0.4302s)          setup_integration
+3.2335: (0.9045s)        bootstrap
+3.5233: (2.1266s)        analysis
+5.6500: (0.0008s)        report
+5.6509: (3.3253s)      execute
+5.6510: (5.6501s)    library
+5.6510: (5.6510s)  executable
+```
+
+For example, the line `0.2887: (0.0664s)      require_mutant_lib` means:
+- At 0.29 seconds after start, mutant finished loading its own library
+- This step took 0.066 seconds to complete
+
+**Reading the profile:**
+
+- `require_dependencies` (0.38s) - Loading Ruby dependencies
+- `zombify` (2.01s) - Mutant's code transformation (only in `--zombie` mode)
+- `infect` / `require_target` (0.36s) - Loading the application code
+- `setup_integration` (0.45s) - Setting up RSpec/Minitest
+- `analysis` (2.23s) - Running mutations and tests
+
+**Use cases:**
+
+1. **Slow application loading**: If `require_target` is slow, optimize requires or use lazy loading
+2. **Slow integration setup**: If `setup_integration` is slow, check test helper performance
+3. **Slow mutation generation**: If `mutation_generate` is slow, consider reducing scope
+4. **Overall performance**: Compare bootstrap time vs analysis time to understand overhead
+
+**Notes:**
+
+- The output format is not guaranteed to be stable across versions
+- Primarily useful for performance investigation and optimization
+- Added in v0.11.17
+
 ## Command Line Options
 
 ### Common Options
@@ -290,6 +374,9 @@ bundle exec mutant environment show --require my_app
 
 # Add includes
 bundle exec mutant environment show --include lib
+
+# Enable performance profiling
+bundle exec mutant run --profile
 ```
 
 ## Troubleshooting Tips
