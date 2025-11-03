@@ -18,12 +18,12 @@ Before running mutation testing with mutant, it is recommended to first verify t
 
 ## Commands
 
-### `mutant test run`
+### `mutant test`
 
 Runs all tests in parallel using mutant's test runner.
 
 ```sh
-bundle exec mutant test run
+bundle exec mutant test
 ```
 
 This command:
@@ -37,12 +37,12 @@ This command:
 - Returns `0` if all tests pass
 - Returns non-zero if any tests fail
 
-### `mutant test list`
+### `mutant environment test list`
 
 Lists all tests detected in the environment without running them.
 
 ```sh
-bundle exec mutant test list
+bundle exec mutant environment test list
 ```
 
 This command:
@@ -90,7 +90,7 @@ The number of parallel jobs can be configured through:
 
 For example:
 ```sh
-MUTANT_JOBS=4 bundle exec mutant test run
+MUTANT_JOBS=4 bundle exec mutant test
 ```
 
 ### Integration Arguments
@@ -110,7 +110,7 @@ integration:
 
 **Via Command Line:**
 ```sh
-bundle exec mutant test run --integration-argument --seed --integration-argument 0
+bundle exec mutant test --integration-argument --seed --integration-argument 0
 ```
 
 Note: Each argument must be specified separately with its own `--integration-argument` flag.
@@ -147,13 +147,13 @@ First, ensure the test runner works correctly:
 
 ```sh
 # Run tests in parallel to verify configuration
-bundle exec mutant test run
+bundle exec mutant test
 
 # If failures occur, debug with fewer workers
-bundle exec mutant test run -j 1
+bundle exec mutant test -j 1
 
 # List tests to verify discovery
-bundle exec mutant test list
+bundle exec mutant environment test list
 ```
 
 ### 2. Add Mutation Testing
@@ -175,7 +175,7 @@ Use the test runner in CI before running mutation testing:
 ```sh
 # .github/workflows/ci.yml or similar
 - name: Run tests in parallel
-  run: bundle exec mutant test run
+  run: bundle exec mutant test
 
 - name: Run mutation testing (incremental)
   run: bundle exec mutant run --fail-fast --since HEAD~1
@@ -244,7 +244,7 @@ bundle exec mutant test run -j 1
 
 ### Tests Not Discovered
 
-If `mutant test list` shows no tests or fewer than expected:
+If `mutant environment test list` shows no tests or fewer than expected:
 
 1. Verify integration configuration (`integration.name` is set correctly)
 2. Check `requires` loads the test framework and application
