@@ -134,6 +134,71 @@ description prefixes in `Foo::Bar#baz`, `Foo::Bar` and `Foo`. The order is
 important, so if mutant finds example groups in the current prefix level,
 these example groups *must* kill the mutation.
 
+### RSpec Metadata for Test Control
+
+RSpec tests can use metadata to control how mutant interacts with them.
+
+#### Excluding Tests: `:mutant` Metadata
+
+Use `mutant: false` to exclude specific tests from mutation testing:
+
+```ruby
+# This test will not be used to kill mutations
+it 'performs slow external API call', mutant: false do
+  result = ExternalAPI.call
+  expect(result).to be_success
+end
+```
+
+**Use cases:**
+- Exclude slow integration tests that don't test business logic
+- Exclude tests for external service interactions
+- Exclude flaky tests temporarily while debugging
+- Speed up mutation testing by focusing on unit tests
+
+**Important:** Excluded tests still run normally with RSpec, they just won't be selected by mutant to kill mutations.
+
+#### Explicit Subject Mapping: `:mutant_expression` Metadata
+
+Use `mutant_expression` to explicitly specify which subjects a test covers, overriding the default prefix matching:
+
+```ruby
+# Single expression
+it 'validates user input', mutant_expression: 'UserValidator#validate' do
+  # Test code
+end
+
+# Multiple expressions
+it 'orchestrates user creation', mutant_expression: ['UserCreator#create', 'UserMailer#welcome'] do
+  # Test code that exercises multiple subjects
+end
+```
+
+**Use cases:**
+- Integration tests that cover multiple subjects
+- Tests where the example group name doesn't match the subject naming convention
+- Explicit mapping when automatic prefix matching is insufficient
+- Cross-cutting concerns where one test covers multiple classes
+
+**Example:**
+
+```ruby
+RSpec.describe 'User Registration Flow' do
+  # This test covers multiple subjects explicitly
+  it 'creates user and sends email',
+     mutant_expression: ['UserService#register', 'EmailService#send_welcome'] do
+    UserService.register(email: 'user@example.com')
+    expect(User.count).to eq(1)
+    expect(email_sent?).to be true
+  end
+
+  # This test is excluded from mutation testing
+  it 'integrates with external payment system', mutant: false do
+    # Slow external API call
+  end
+end
+```
+
 ```sh
 RAILS_ENV=test bundle exec mutant run -r ./config/environment --integration rspec User
 ```

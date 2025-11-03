@@ -105,6 +105,18 @@ When `fail_fast` is enabled, mutant will stop as soon as it encounters an alive 
 fail_fast: true
 ```
 
+The fail-fast behavior can also be enabled via the `--fail-fast` CLI flag:
+
+```sh
+bundle exec mutant run --fail-fast
+```
+
+**Use cases:**
+- Incremental development: Get immediate feedback on the first uncovered mutation
+- CI pipelines: Fail fast to save build time when mutations are found
+- Debugging: Focus on one mutation at a time
+- Code review: Quickly identify if new code has mutation coverage issues
+
 #### `matcher`
 
 Allows to set subject matchers in the configration file.
