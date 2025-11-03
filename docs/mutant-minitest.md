@@ -158,3 +158,150 @@ Coverage:        99.90%
 This shows mutant detected the alive mutation. Which shows the conditional we deliberately added above is redundant.
 
 Feel free to also remove some tests. Or do other modifications to either test or code.
+
+## Coverage API
+
+The `.cover` method tells mutant which subjects a test class should cover. This is required for mutant to know which tests to run for each mutation.
+
+### Basic Usage
+
+```ruby
+require 'mutant/minitest/coverage'
+
+class MyClassTest < Minitest::Test
+  cover MyClass
+
+  def test_some_method
+    assert_equal 42, MyClass.new.some_method
+  end
+end
+```
+
+### Coverage Expressions
+
+The `.cover` method accepts multiple formats:
+
+#### Class or Module Constants
+
+Pass the class or module constant directly:
+
+```ruby
+class UserServiceTest < Minitest::Test
+  cover UserService  # Covers all methods in UserService
+end
+```
+
+When a constant is passed, mutant automatically expands it to `ClassName*` (recursive coverage).
+
+#### Expression Strings
+
+Use expression strings for fine-grained control:
+
+```ruby
+class UserServiceTest < Minitest::Test
+  # Cover specific instance method
+  cover 'UserService#create'
+
+  # Cover specific class method
+  cover 'UserService.find_by_email'
+
+  # Cover all instance methods
+  cover 'UserService#'
+
+  # Cover all class methods
+  cover 'UserService.'
+
+  # Cover entire namespace recursively
+  cover 'UserService*'
+end
+```
+
+See the [Configuration documentation](/docs/configuration.md) for all available expression formats.
+
+#### Multiple Coverage Declarations
+
+A test class can declare coverage for multiple subjects:
+
+```ruby
+class IntegrationTest < Minitest::Test
+  cover UserCreator
+  cover EmailService
+  cover 'NotificationQueue#enqueue'
+
+  def test_user_registration_flow
+    # This test covers mutations in all three subjects
+    UserCreator.create(email: 'test@example.com')
+    assert_equal 1, EmailService.sent_count
+  end
+end
+```
+
+### Coverage Inheritance
+
+Coverage declarations inherit to subclasses:
+
+```ruby
+class BaseServiceTest < Minitest::Test
+  cover BaseService
+end
+
+class UserServiceTest < BaseServiceTest
+  cover UserService
+  # This test class covers both UserService and BaseService
+end
+```
+
+### Best Practices
+
+**Do:**
+- Use class constants for simple cases: `cover MyClass`
+- Use expression strings for specific methods: `cover 'MyClass#specific_method'`
+- Declare coverage at the test class level, not in individual test methods
+- Use multiple `cover` declarations for integration tests that exercise multiple subjects
+
+**Don't:**
+- Don't call `cover` inside test methods (it won't work)
+- Don't use overly broad coverage (like `cover 'MyApp*'`) in individual test files
+- Don't forget to add coverage declarations - tests without them won't be used by mutant
+
+### Example: Comprehensive Coverage
+
+```ruby
+require 'minitest/autorun'
+require 'mutant/minitest/coverage'
+
+class UserTest < Minitest::Test
+  # Cover the entire User class
+  cover User
+
+  def test_full_name
+    user = User.new(first_name: 'John', last_name: 'Doe')
+    assert_equal 'John Doe', user.full_name
+  end
+end
+
+class UserValidatorTest < Minitest::Test
+  # Cover only the validate method
+  cover 'UserValidator#validate'
+
+  def test_validates_email_format
+    validator = UserValidator.new
+    refute validator.validate(email: 'invalid')
+    assert validator.validate(email: 'valid@example.com')
+  end
+end
+
+class UserRegistrationFlowTest < Minitest::Test
+  # Integration test covering multiple subjects
+  cover UserCreator
+  cover EmailService
+  cover 'AuditLog#record'
+
+  def test_successful_registration
+    result = UserCreator.register(email: 'new@example.com')
+    assert result.success?
+    assert_equal 1, EmailService.welcome_emails_sent
+    assert_equal 1, AuditLog.count
+  end
+end
+```
