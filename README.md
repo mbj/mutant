@@ -35,6 +35,8 @@ would be.
 * Start with reading the [nomenclature](/docs/nomenclature.md). No way around that one, sorry.
 * Then select and setup your [integration](/docs/nomenclature.md#integration), also make sure
   you can reproduce the examples in the integration specific documentation.
+* Before running mutation testing, verify the configuration works with the [test runner](/docs/test-runner.md).
+  This ensures tests pass in mutant's environment and parallel execution works correctly.
 * Use mutant during code reviews and on CI in [incremental](/docs/incremental.md) mode.
 * Do not merge code with new alive mutations. If you really must bypass:
   Add the subjects with open problems to the ignored subjects.
@@ -129,6 +131,7 @@ Also checkout the [commercial FAQ](/docs/commercial.md).
 
 ## Topics
 
+* [Test Runner](/docs/test-runner.md)
 * [Commercial use / private repositories](/docs/commercial.md)
 * [Nomenclature](/docs/nomenclature.md)
 * [Reading Reports](/docs/reading-reports.md)

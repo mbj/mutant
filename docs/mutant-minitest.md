@@ -42,9 +42,18 @@ To add mutant to your minitest code base you need to:
 
 4. Run mutant against the minitest integration
 
+   First verify tests work with mutant's test runner:
+   ```sh
+   bundle exec mutant test run --include lib --require 'your_library.rb' --integration minitest
+   ```
+
+   Then run mutation testing:
    ```sh
    bundle exec mutant run --include lib --require 'your_library.rb' --integration minitest -- 'YourLibrary*'
    ```
+
+   **Note:** It is recommended to first verify the test suite works with `mutant test run` before
+   running mutation testing. See the [test runner documentation](/docs/test-runner.md) for details.
 
 ## Run through example
 
