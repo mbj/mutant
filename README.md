@@ -132,6 +132,7 @@ Also checkout the [commercial FAQ](/docs/commercial.md).
 ## Topics
 
 * [Test Runner](/docs/test-runner.md)
+* [Debugging and Utilities](/docs/debugging.md)
 * [Commercial use / private repositories](/docs/commercial.md)
 * [Nomenclature](/docs/nomenclature.md)
 * [Reading Reports](/docs/reading-reports.md)

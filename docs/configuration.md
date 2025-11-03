@@ -125,6 +125,8 @@ matcher:
   - Your::App::Namespace* # select all subjects on a specific constant, recursively
   - Your::App::Namespace#some_method # select a specific instance method
   - Your::App::Namespace.some_method # select a specific class method
+  - Your::App::Namespace# # select all instance methods on a specific constant
+  - Your::App::Namespace. # select all class methods on a specific constant
   - descendants:ApplicationController # select all descendands of application controller (and itself)
   - source:lib/**/*.rb # select all subjects that are defined in toplevel constants (modules and classes), recursively
   # Expressions of subjects to ignore during mutation testing.
