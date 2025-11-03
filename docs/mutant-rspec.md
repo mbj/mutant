@@ -31,8 +31,16 @@ All the setup described above is already done.
 git clone https://github.com/mbj/auom
 cd auom
 bundle install # gemfile references mutant-rspec already
+
+# First verify tests work with mutant's test runner
+bundle exec mutant test run --include lib --require auom --integration rspec
+
+# Then run mutation testing
 bundle exec mutant run --include lib --require auom --integration rspec -- 'AUOM*'
 ```
+
+**Note:** It is recommended to first verify the test suite works with `mutant test run` before
+running mutation testing. See the [test runner documentation](/docs/test-runner.md) for details.
 
 This prints a report like:
 
