@@ -1,0 +1,21 @@
+[package]
+name = "mutant"
+version = "0.13.9"
+edition = "2021"
+authors = ["Markus Schirp <mbj@schirp-dso.com>"]
+license = "Nonstandard"
+description = "Mutation Testing"
+homepage = "https://github.com/mbj/mutant"
+repository = "https://github.com/mbj/mutant"
+readme = "../README.md"
+
+[[bin]]
+name = "mutant"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+log = "0.4"
+env_logger = "0.11"
+
+[dev-dependencies]
