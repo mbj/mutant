@@ -10,6 +10,36 @@ jobs:
     - uses: actions/checkout@v4
     - name: Check Whitespace
       run: git diff --check -- HEAD~1
+  rust-build:
+    strategy:
+      matrix:
+        os:
+          - runner: ubuntu-latest
+            arch: x86_64
+          - runner: ubuntu-24.04-arm
+            arch: aarch64
+          - runner: macos-15
+            arch: aarch64
+    name: Rust Build (${{ matrix.os.runner }}-${{ matrix.os.arch }})
+    runs-on: ${{ matrix.os.runner }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/cache@v4
+      with:
+        path: |
+          target/
+          ~/.cargo/bin/
+          ~/.cargo/git/db/
+          ~/.cargo/registry/cache/
+          ~/.cargo/registry/index/
+          ~/.rustup
+        key: ${{ matrix.os.runner }}-${{ matrix.os.arch }}-rust-${{ hashFiles('.github/workflows/ci.yml', 'Cargo.lock', 'rust-toolchain.yaml') }}
+    - name: Run fmt
+      run: cargo fmt --check
+    - name: Build release
+      run: cargo build --release
+    - name: Run clippy
+      run: cargo clippy --release
   ruby-spec:
     name: Unit Specs
     runs-on: ${{ matrix.os }}

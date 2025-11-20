@@ -1,3 +1,4 @@
 /.bundle
+/Cargo.lock
+/target
 /tmp
-/.bundle
