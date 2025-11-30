@@ -15,6 +15,7 @@ module Mutant
             add_integration_options
             add_matcher_options
             add_reporter_options
+            add_sorbet_options
             add_usage_options
           ].freeze
 
@@ -135,6 +136,26 @@ module Mutant
 
           parser.on('--print-warnings', 'Print warnings') do
             set(reporter: @config.reporter.with(print_warnings: true))
+          end
+        end
+
+        def add_sorbet_options(parser)
+          parser.separator('Sorbet:')
+
+          parser.on('--use-sorbet', 'Enable Sorbet type checking (mutations with type errors will be skipped)') do
+            set(sorbet: @config.sorbet.with(enabled: true))
+          end
+
+          parser.on('--no-sorbet', 'Disable Sorbet type checking') do
+            set(sorbet: @config.sorbet.with(enabled: false))
+          end
+
+          parser.on('--sorbet-timeout SECONDS', 'Timeout for type checking a mutation (float)') do |timeout|
+            set(sorbet: @config.sorbet.with(timeout: Float(timeout)))
+          end
+
+          parser.on('--sorbet-binary PATH', 'Path to Sorbet binary') do |path|
+            set(sorbet: @config.sorbet.with(binary: path))
           end
         end
 

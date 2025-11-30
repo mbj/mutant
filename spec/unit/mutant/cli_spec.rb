@@ -280,6 +280,13 @@ RSpec.describe Mutant::CLI do
                 --print-warnings             Print warnings
 
 
+        Sorbet:
+                --use-sorbet                 Enable Sorbet type checking (mutations with type errors will be skipped)
+                --no-sorbet                  Disable Sorbet type checking
+                --sorbet-timeout SECONDS     Timeout for type checking a mutation (float)
+                --sorbet-binary PATH         Path to Sorbet binary
+
+
         Usage:
                 --usage USAGE_TYPE           License usage: opensource|commercial
       MESSAGE
@@ -336,6 +343,13 @@ RSpec.describe Mutant::CLI do
 
         Reporting:
                 --print-warnings             Print warnings
+
+
+        Sorbet:
+                --use-sorbet                 Enable Sorbet type checking (mutations with type errors will be skipped)
+                --no-sorbet                  Disable Sorbet type checking
+                --sorbet-timeout SECONDS     Timeout for type checking a mutation (float)
+                --sorbet-binary PATH         Path to Sorbet binary
 
 
         Usage:
@@ -396,6 +410,13 @@ RSpec.describe Mutant::CLI do
                 --print-warnings             Print warnings
 
 
+        Sorbet:
+                --use-sorbet                 Enable Sorbet type checking (mutations with type errors will be skipped)
+                --no-sorbet                  Disable Sorbet type checking
+                --sorbet-timeout SECONDS     Timeout for type checking a mutation (float)
+                --sorbet-binary PATH         Path to Sorbet binary
+
+
         Usage:
                 --usage USAGE_TYPE           License usage: opensource|commercial
       MESSAGE
@@ -452,6 +473,13 @@ RSpec.describe Mutant::CLI do
 
         Reporting:
                 --print-warnings             Print warnings
+
+
+        Sorbet:
+                --use-sorbet                 Enable Sorbet type checking (mutations with type errors will be skipped)
+                --no-sorbet                  Disable Sorbet type checking
+                --sorbet-timeout SECONDS     Timeout for type checking a mutation (float)
+                --sorbet-binary PATH         Path to Sorbet binary
 
 
         Usage:
@@ -1341,6 +1369,13 @@ RSpec.describe Mutant::CLI do
 
             Reporting:
                     --print-warnings             Print warnings
+
+
+            Sorbet:
+                    --use-sorbet                 Enable Sorbet type checking (mutations with type errors will be skipped)
+                    --no-sorbet                  Disable Sorbet type checking
+                    --sorbet-timeout SECONDS     Timeout for type checking a mutation (float)
+                    --sorbet-binary PATH         Path to Sorbet binary
 
 
             Usage:

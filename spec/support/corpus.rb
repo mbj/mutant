@@ -33,7 +33,10 @@ module MutantSpec
         :namespace,
         :repo_uri,
         :repo_ref,
-        :exclude
+        :exclude,
+        :extra_flags,
+        :include_path,
+        :require_path
       )
 
       # Verify mutation coverage
@@ -51,11 +54,10 @@ module MutantSpec
               %W[
                 bundle exec mutant run
                 --integration #{integration_name}
-                --include lib
-                --require #{name}
+                --include #{include_path}
+                --require #{require_path}
                 --usage opensource
-                #{namespace}*
-              ] + concurrency_limits
+              ] + concurrency_limits + extra_flags + %W[#{namespace}*]
             )
           end
         end
@@ -281,7 +283,20 @@ module MutantSpec
       integration = Transform::Sequence.new(
         steps: [
           Transform::Hash.new(
-            optional: [],
+            optional: [
+              Transform::Hash::Key.new(
+                transform: Transform::STRING_ARRAY,
+                value:     'extra_flags'
+              ),
+              Transform::Hash::Key.new(
+                transform: Transform::STRING,
+                value:     'include_path'
+              ),
+              Transform::Hash::Key.new(
+                transform: Transform::STRING,
+                value:     'require_path'
+              )
+            ],
             required: [
               Transform::Hash::Key.new(
                 transform: Transform::STRING_ARRAY,
@@ -318,6 +333,14 @@ module MutantSpec
             ]
           ),
           Transform::Hash::Symbolize.new,
+          Transform::Success.new(
+            block: lambda { |attributes|
+              attributes = attributes.merge(extra_flags: []) unless attributes.key?(:extra_flags)
+              attributes = attributes.merge(include_path: 'lib') unless attributes.key?(:include_path)
+              attributes = attributes.merge(require_path: attributes[:name]) unless attributes.key?(:require_path)
+              attributes
+            }
+          ),
           Transform::Exception.new(error_class: RuntimeError, block: Project.public_method(:new))
         ]
       )

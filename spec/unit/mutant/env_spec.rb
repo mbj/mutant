@@ -44,6 +44,10 @@ RSpec.describe Mutant::Env do
     Mutant::Mutation::Config::DEFAULT.with(timeout: 1.0)
   end
 
+  let(:sorbet_config) do
+    instance_double(Mutant::Sorbet::Config, enabled: false, enabled?: false)
+  end
+
   let(:config) do
     instance_double(
       Mutant::Config,
@@ -51,7 +55,8 @@ RSpec.describe Mutant::Env do
       integration:       Mutant::Integration::Config::DEFAULT.with(name: integration_name),
       isolation:,
       mutation:          mutation_config,
-      reporter:
+      reporter:,
+      sorbet:            sorbet_config
     )
   end
 

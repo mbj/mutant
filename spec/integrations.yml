@@ -62,3 +62,13 @@
   mutation_coverage: false
   mutation_generation: true
   exclude: []
+- name: parlour
+  namespace: Parlour
+  repo_uri: 'https://github.com/AaronC81/parlour.git'
+  repo_ref: 'origin/master'
+  integration_name: rspec
+  mutation_coverage: true
+  mutation_generation: true
+  exclude: []
+  extra_flags:
+  - --use-sorbet

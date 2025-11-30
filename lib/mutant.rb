@@ -213,6 +213,9 @@ module Mutant
     require 'mutant/timer'
     require 'mutant/integration'
     require 'mutant/integration/null'
+    require 'mutant/sorbet/config'
+    require 'mutant/sorbet/lsp/client'
+    require 'mutant/sorbet/type_checker'
     require 'mutant/selector'
     require 'mutant/selector/expression'
     require 'mutant/selector/null'
@@ -359,6 +362,7 @@ module Mutant
       mutation:              Mutation::Config::EMPTY,
       reporter:              Reporter::CLI.build(WORLD.stdout),
       requires:              EMPTY_ARRAY,
+      sorbet:                Mutant::Sorbet::Config::DEFAULT,
       usage:                 Usage::Unknown.new
     )
   end # Config

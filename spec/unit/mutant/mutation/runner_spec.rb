@@ -20,11 +20,16 @@ RSpec.describe Mutant::Mutation::Runner do
       )
     end
 
+    let(:sorbet_config) do
+      instance_double(Mutant::Sorbet::Config, enabled: false, enabled?: false)
+    end
+
     let(:config) do
       instance_double(
         Mutant::Config,
         jobs:     1,
-        reporter:
+        reporter:,
+        sorbet:   sorbet_config
       )
     end
 

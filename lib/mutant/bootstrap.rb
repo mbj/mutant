@@ -82,8 +82,8 @@ module Mutant
           env.with(
             integration:,
             mutations:,
-            selector:    Selector::Expression.new(integration:),
-            subjects:    selected_subjects
+            selector: Selector::Expression.new(integration:),
+            subjects: selected_subjects
           )
         end.tap { hooks.run(:setup_integration_post) }
       end

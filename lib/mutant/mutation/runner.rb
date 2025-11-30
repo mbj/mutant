@@ -22,6 +22,9 @@ module Mutant
       private_class_method :run_mutation_analysis
 
       def self.async_driver(env)
+        # Pre-warm Sorbet cache before forking workers if enabled
+        env.warmup_sorbet if env.config.sorbet.enabled?
+
         Parallel.async(world: env.world, config: mutation_test_config(env))
       end
       private_class_method :async_driver

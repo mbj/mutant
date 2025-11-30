@@ -7,6 +7,7 @@ PATH
       parser (~> 3.3.0)
       regexp_parser (~> 2.10)
       sorbet-runtime (~> 0.5.0)
+      sorbet-static (~> 0.6.0)
       unparser (~> 0.8.0)
 
 GEM
@@ -75,6 +76,7 @@ GEM
       prism (~> 1.4)
     ruby-progressbar (1.13.0)
     sorbet-runtime (0.5.12443)
+    sorbet-static (0.6.12666-x86_64-linux)
     stringio (3.1.7)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)

@@ -22,6 +22,7 @@ module Mutant
       :mutation,
       :reporter,
       :requires,
+      :sorbet,
       :usage
     )
 
@@ -89,6 +90,7 @@ module Mutant
         matcher:               matcher.merge(other.matcher),
         mutation:              mutation.merge(other.mutation),
         requires:              requires + other.requires,
+        sorbet:                sorbet.merge(other.sorbet),
         usage:                 other.usage.merge(usage)
       )
     end
@@ -268,6 +270,10 @@ module Mutant
           Transform::Hash::Key.new(
             transform: Transform::STRING_ARRAY,
             value:     'requires'
+          ),
+          Transform::Hash::Key.new(
+            transform: ->(value) { Sorbet::Config::TRANSFORM.call(value) },
+            value:     'sorbet'
           ),
           Transform::Hash::Key.new(
             transform: Usage::TRANSFORM,
