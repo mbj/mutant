@@ -11,17 +11,21 @@ jobs:
     - name: Check Whitespace
       run: git diff --check -- HEAD~1
   rust-build:
+    name: Rust Build (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os:
-          - runner: ubuntu-latest
-            arch: x86_64
-          - runner: ubuntu-24.04-arm
-            arch: aarch64
-          - runner: macos-15
-            arch: aarch64
-    name: Rust Build (${{ matrix.os.runner }}-${{ matrix.os.arch }})
-    runs-on: ${{ matrix.os.runner }}
+        include:
+          - target: aarch64-apple-darwin
+            os: macos-15
+          - target: aarch64-unknown-linux-musl
+            os: ubuntu-24.04-arm
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-24.04-arm
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-24.04
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
     - uses: actions/cache@v4
@@ -33,160 +37,68 @@ jobs:
           ~/.cargo/registry/cache/
           ~/.cargo/registry/index/
           ~/.rustup
-        key: ${{ matrix.os.runner }}-${{ matrix.os.arch }}-rust-${{ hashFiles('.github/workflows/ci.yml', 'Cargo.lock', 'rust-toolchain.yaml') }}
+        key: ${{ matrix.target }}-rust-${{ hashFiles('.github/workflows/ci.yml', 'Cargo.lock', 'rust-toolchain.toml') }}
+    - name: Install musl-tools
+      if: endsWith(matrix.target, '-musl')
+      run: sudo apt-get update && sudo apt-get install -y musl-tools
     - name: Run fmt
       run: cargo fmt --check
     - name: Build release
-      run: cargo build --release
+      run: cargo build --release --target ${{ matrix.target }}
     - name: Run clippy
-      run: cargo clippy --release
-  ruby-spec:
-    name: Unit Specs
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: ruby
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
-        os: [ubuntu-latest, macos-latest]
-        execution:
-        - bundle exec rspec spec/unit
-        - bundle exec mutant environment test run spec/unit
-    steps:
-    - uses: actions/checkout@v4
-    - uses: ruby/setup-ruby@v1
+      run: cargo clippy --release --target ${{ matrix.target }}
+    - uses: actions/upload-artifact@v4
       with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-        working-directory: ./ruby
-    - run: ${{ matrix.execution }}
-  ruby-mutant:
-    name: Mutation coverage
+        name: manager-${{ matrix.target }}
+        path: target/${{ matrix.target }}/release/manager
+  ruby-tests:
+    name: Ruby Tests
+    needs: rust-build
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
-    defaults:
-      run:
-        working-directory: ruby
     strategy:
       fail-fast: false
       matrix:
         ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
-        os: [ubuntu-latest, macos-latest]
+        target:
+          - aarch64-apple-darwin
+          - aarch64-unknown-linux-musl
+          - aarch64-unknown-linux-gnu
+          - x86_64-unknown-linux-musl
+          - x86_64-unknown-linux-gnu
+        execution:
+          - rspec spec-unit
+          - mutant test
+          - mutant run -- --zombie --since HEAD~1
+          - rspec integration-misc
+          - rspec integration-minitest
+          - rspec integration-rspec
+          - rspec integration-generation
+          - rubocop
+        include:
+          - target: aarch64-apple-darwin
+            os: macos-15
+          - target: aarch64-unknown-linux-musl
+            os: ubuntu-24.04-arm
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-24.04-arm
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-24.04
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
+    - uses: actions/download-artifact@v4
+      with:
+        name: manager-${{ matrix.target }}
+        path: ./bin
+    - run: chmod +x ./bin/manager
+    - run: ./bin/manager ruby prepare
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
         working-directory: ./ruby
-    - run: bundle exec mutant run --zombie --since HEAD~1
-  ruby-integration-misc:
-    name: Integration Misc
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: ruby
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
-        os: [ubuntu-latest, macos-latest]
-    steps:
-    - uses: actions/checkout@v4
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-        working-directory: ./ruby
-    - run: |
-        bundle exec rspec                                            \
-          spec/integration/mutant/null_spec.rb                       \
-          spec/integration/mutant/isolation/fork_spec.rb             \
-          spec/integration/mutant/test_mutator_handles_types_spec.rb \
-          spec/integration/mutant/parallel_spec.rb
-  ruby-integration-minitest:
-    name: Integration Minitest
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: ruby
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
-        os: [ubuntu-latest, macos-latest]
-    steps:
-    - uses: actions/checkout@v4
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-        working-directory: ./ruby
-    - run: bundle exec rspec spec/integration -e minitest
-  ruby-integration-rspec:
-    name: Integration RSpec
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: ruby
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
-        os: [ubuntu-latest, macos-latest]
-    steps:
-    - uses: actions/checkout@v4
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-        working-directory: ./ruby
-    - run: bundle exec rspec spec/integration -e rspec
-  ruby-integration-generation:
-    name: Integration Mutation Generation
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: ruby
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
-        os: [ubuntu-latest, macos-latest]
-    steps:
-    - uses: actions/checkout@v4
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-        working-directory: ./ruby
-    - run: bundle exec rspec spec/integration -e generation
-  ruby-rubocop:
-    name: Rubocop
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: ruby
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
-        os: [ubuntu-latest, macos-latest]
-    steps:
-    - uses: actions/checkout@v4
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-        working-directory: ./ruby
-    - run: bundle exec rubocop
+    - run: ./bin/manager ruby ${{ matrix.execution }}

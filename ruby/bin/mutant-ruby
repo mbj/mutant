@@ -1,0 +1,64 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+module Mutant
+  # Record executable timestamp
+  @executable_timestamp = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
+  trap('INT') do |status|
+    effective_status = status ? status + 128 : 128
+    exit! effective_status
+  end
+
+  require 'mutant'
+
+  WORLD.record(:cli_parse) do
+    CLI.parse(
+      arguments: ARGV,
+      world:     Mutant::WORLD
+    )
+  end.either(
+    ->(message) { Mutant::WORLD.stderr.puts(message); Kernel.exit(false) },
+    # rubocop:disable Metrics/BlockLength
+    lambda do |command|
+      if command.zombie?
+        command = WORLD.record(:zombify) do
+          $stderr.puts('Running mutant zombified!')
+          Zombifier.call(
+            namespace:        :Zombie,
+            load_path:        $LOAD_PATH,
+            kernel:           Kernel,
+            pathname:         Pathname,
+            require_highjack: RequireHighjack
+              .public_method(:call)
+              .to_proc
+              .curry
+              .call(Kernel),
+            root_require:     'mutant',
+            includes:         %w[
+              adamantium
+              anima
+              concord
+              equalizer
+              mprelude
+              mutant
+              unparser
+              variable
+            ]
+          )
+
+          Zombie::Mutant::CLI.parse(
+            arguments: ARGV,
+            world:     Mutant::WORLD
+          ).from_right
+        end
+      end
+
+      WORLD.record(:execute) { command.call }.tap do |status|
+        WORLD.recorder.print_profile(WORLD.stderr) if command.print_profile?
+        WORLD.kernel.exit(status)
+      end
+    end
+    # rubocop:enable Metrics/BlockLength
+  )
+end

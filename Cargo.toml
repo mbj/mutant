@@ -1,3 +1,7 @@
 [workspace]
 resolver = "2"
-members = ["mutant"]
+members = ["mutant", "manager"]
+
+[workspace.package]
+version = "0.13.5"
+edition = "2024"

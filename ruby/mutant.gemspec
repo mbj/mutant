@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
 
   gem.files            = Dir.glob('lib/**/*') - exclusion
   gem.extra_rdoc_files = %w[LICENSE]
-  gem.executables      = %w[mutant]
+  gem.executables      = %w[mutant mutant-ruby]
 
   gem.metadata['rubygems_mfa_required'] = 'true'
   gem.metadata['source_code_uri'] = 'https://github.com/mbj/mutant'
