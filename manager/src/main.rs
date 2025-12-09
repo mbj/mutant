@@ -3,6 +3,9 @@ use std::fs;
 use std::os::unix::process::CommandExt;
 use std::process::Command;
 
+mod check;
+mod tasks;
+
 #[derive(Parser)]
 #[command(name = "manager")]
 #[command(about = "Mutant development manager")]
@@ -13,6 +16,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    /// Run all checks in parallel with TUI
+    Check,
     /// Execute commands in Ruby environment
     Ruby {
         #[command(subcommand)]
@@ -94,53 +99,38 @@ fn main() {
     let cli = Cli::parse();
 
     match cli.command {
+        Commands::Check => check::run(),
         Commands::Ruby { action } => {
             prepare();
             match action {
                 Ruby::Prepare => {}
                 Ruby::Exec { arguments } => bundle_exec(&arguments),
                 Ruby::Rspec { action } => match action {
-                    Rspec::SpecUnit { arguments } => {
-                        bundle_exec_with_args(&["rspec", "spec/unit"], &arguments)
+                    Rspec::SpecUnit { arguments } => run_task(&tasks::RSPEC_SPEC_UNIT, &arguments),
+                    Rspec::IntegrationMisc { arguments } => {
+                        run_task(&tasks::RSPEC_INTEGRATION_MISC, &arguments)
                     }
-                    Rspec::IntegrationMisc { arguments } => bundle_exec_with_args(
-                        &[
-                            "rspec",
-                            "spec/integration/mutant/null_spec.rb",
-                            "spec/integration/mutant/isolation/fork_spec.rb",
-                            "spec/integration/mutant/test_mutator_handles_types_spec.rb",
-                            "spec/integration/mutant/parallel_spec.rb",
-                        ],
-                        &arguments,
-                    ),
-                    Rspec::IntegrationMinitest { arguments } => bundle_exec_with_args(
-                        &["rspec", "spec/integration", "-e", "minitest"],
-                        &arguments,
-                    ),
-                    Rspec::IntegrationRspec { arguments } => bundle_exec_with_args(
-                        &["rspec", "spec/integration", "-e", "rspec"],
-                        &arguments,
-                    ),
-                    Rspec::IntegrationGeneration { arguments } => bundle_exec_with_args(
-                        &["rspec", "spec/integration", "-e", "generation"],
-                        &arguments,
-                    ),
+                    Rspec::IntegrationMinitest { arguments } => {
+                        run_task(&tasks::RSPEC_INTEGRATION_MINITEST, &arguments)
+                    }
+                    Rspec::IntegrationRspec { arguments } => {
+                        run_task(&tasks::RSPEC_INTEGRATION_RSPEC, &arguments)
+                    }
+                    Rspec::IntegrationGeneration { arguments } => {
+                        run_task(&tasks::RSPEC_INTEGRATION_GENERATION, &arguments)
+                    }
                 },
                 Ruby::Mutant { action } => match action {
-                    Mutant::Test { arguments } => {
-                        bundle_exec_with_args(&["mutant", "test", "spec/unit"], &arguments)
-                    }
-                    Mutant::Run { arguments } => {
-                        bundle_exec_with_args(&["mutant", "run"], &arguments)
-                    }
+                    Mutant::Test { arguments } => run_task(&tasks::MUTANT_TEST, &arguments),
+                    Mutant::Run { arguments } => run_task(&tasks::MUTANT_RUN, &arguments),
                 },
-                Ruby::Rubocop { arguments } => bundle_exec_with_args(&["rubocop"], &arguments),
+                Ruby::Rubocop { arguments } => run_task(&tasks::RUBOCOP, &arguments),
             }
         }
     }
 }
 
-fn prepare() {
+pub fn prepare() {
     fs::write("ruby/VERSION", format!("{}\n", env!("CARGO_PKG_VERSION"))).unwrap_or_else(|error| {
         panic!("Failed to write ruby/VERSION: {}", error);
     });
@@ -150,8 +140,8 @@ fn prepare() {
     });
 }
 
-fn bundle_exec_with_args(base_args: &[&str], extra_args: &[String]) {
-    let mut args: Vec<&str> = base_args.to_vec();
+fn run_task(task: &tasks::Task, extra_args: &[String]) {
+    let mut args: Vec<&str> = task.args.to_vec();
     args.extend(extra_args.iter().map(|s| s.as_str()));
     bundle_exec(&args)
 }
