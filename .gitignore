@@ -1,6 +1,6 @@
 /.bundle
 /Cargo.lock
 /target
-/tmp
+/ruby/tmp
 /ruby/LICENSE
 /ruby/VERSION
