@@ -51,6 +51,29 @@ for details.
 
 Mutant is supported and tested under Linux and Mac OS X.
 
+## CI Test Matrix
+
+Mutant is tested on CI across the following dimensions:
+
+* Ruby versions: 3.2, 3.3, 3.4
+* Targets:
+  * aarch64-apple-darwin
+  * aarch64-unknown-linux-gnu
+  * aarch64-unknown-linux-musl
+  * x86_64-unknown-linux-gnu
+  * x86_64-unknown-linux-musl
+* Test suites:
+  * rspec spec-unit: Unit tests for mutant internals
+  * mutant test: Verify mutant can run its own test suite
+  * mutant run: Incremental mutation coverage on changed code
+  * rspec integration-misc: Integration tests for isolation and parallelism
+  * rspec integration-minitest: Integration tests for minitest support
+  * rspec integration-rspec: Integration tests for rspec support
+  * rspec integration-generation: Tests for mutation generation
+  * rubocop: Style and lint checks
+
+This results in 120 test jobs per commit (3 Ruby versions x 5 targets x 8 test suites).
+
 ## Ruby Versions
 
 Mutant supports multiple ruby versions at different levels:
