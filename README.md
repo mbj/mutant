@@ -30,6 +30,12 @@ BTW: Mutant is a mutation testing tool, which is a form of code coverage.
 But each reported uncovered mutation is actually a call to action, just like a flag in a code review
 would be.
 
+## Rust Implementation
+
+Parts of Mutant are being incrementally rewritten in Rust for improved performance.
+This is currently **opt-in** and requires no changes for existing users. See [RUST.md](RUST.md)
+for details.
+
 ## Getting started:
 
 * Start with reading the [nomenclature](/docs/nomenclature.md). No way around that one, sorry.

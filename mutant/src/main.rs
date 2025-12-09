@@ -8,15 +8,15 @@ fn main() {
         .filter_level(log::LevelFilter::Warn)
         .init();
 
-    let args: Vec<String> = env::args().collect();
+    let arguments: Vec<String> = env::args().collect();
 
     // For now, always delegate to Ruby with a warning
     warn!("Rust wrapper did not handle this command yet, delegating to Ruby implementation");
 
-    exec_ruby_mutant(&args[1..]);
+    exec_ruby_mutant(&arguments[1..]);
 }
 
-fn exec_ruby_mutant(args: &[String]) {
+fn exec_ruby_mutant(arguments: &[String]) {
     env::set_current_dir("ruby").unwrap_or_else(|error| {
         panic!("Failed to change to ruby directory: {}", error);
     });
@@ -24,7 +24,9 @@ fn exec_ruby_mutant(args: &[String]) {
     let error = Command::new("bundle")
         .arg("exec")
         .arg("mutant")
-        .args(args)
+        .args(arguments)
+        .env("MUTANT_RUST", "1")
+        .env("MUTANT_VERSION", env!("CARGO_PKG_VERSION"))
         .exec();
 
     panic!("Failed to execute Ruby mutant: {}", error);

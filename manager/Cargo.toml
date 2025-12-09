@@ -1,21 +1,15 @@
 [package]
-name = "mutant"
+name = "manager"
 version.workspace = true
 edition.workspace = true
 authors = ["Markus Schirp <mbj@schirp-dso.com>"]
 license = "Nonstandard"
-description = "Mutation Testing"
-homepage = "https://github.com/mbj/mutant"
-repository = "https://github.com/mbj/mutant"
-readme = "../README.md"
+description = "Mutant development manager"
 
 [[bin]]
-name = "mutant"
+name = "manager"
 path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4.5", features = ["derive"] }
-log = "0.4"
-env_logger = "0.11"
-
-[dev-dependencies]
+toml = "0.8"
