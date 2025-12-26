@@ -64,7 +64,7 @@ RSpec.describe Mutant::Subject::Method::Instance do
 
     it 'undefines method on scope' do
       expect { subject }
-        .to change { scope.raw.instance_methods.include?(:foo) }
+        .to change { scope.raw.method_defined?(:foo) }
         .from(true)
         .to(false)
     end
@@ -144,7 +144,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     end
 
     it 'undefines method on scope' do
-      expect { subject }.to change { scope.raw.instance_methods.include?(:foo) }.from(true).to(false)
+      expect { subject }.to change { scope.raw.method_defined?(:foo) }.from(true).to(false)
     end
 
     it_should_behave_like 'a command method'
