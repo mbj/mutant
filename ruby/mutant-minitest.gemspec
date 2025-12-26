@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
 
   gem.metadata['rubygems_mfa_required'] = 'true'
 
-  gem.add_dependency('minitest', '~> 5.11')
+  gem.add_dependency('minitest', '>= 5.11', '< 7')
   gem.add_dependency('mutant',   "= #{gem.version}")
   gem.add_dependency('mutex_m', '~> 0.2')
 end
