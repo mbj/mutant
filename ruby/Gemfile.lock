@@ -6,7 +6,7 @@ PATH
       irb (~> 1.15)
       parser (~> 3.3.0)
       regexp_parser (~> 2.10)
-      sorbet-runtime (~> 0.5.0)
+      sorbet-runtime (~> 0.6.0)
       unparser (~> 0.8.0)
 
 GEM
@@ -75,7 +75,7 @@ GEM
       parser (>= 3.3.7.2)
       prism (~> 1.4)
     ruby-progressbar (1.13.0)
-    sorbet-runtime (0.5.12443)
+    sorbet-runtime (0.6.12872)
     stringio (3.2.0)
     tsort (0.2.0)
     unicode-display_width (3.2.0)
