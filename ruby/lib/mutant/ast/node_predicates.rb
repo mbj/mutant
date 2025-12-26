@@ -6,7 +6,7 @@ module Mutant
     module NodePredicates
 
       Types::ALL.each do |type|
-        fail "method: #{type} is already defined" if instance_methods(true).include?(type)
+        fail "method: #{type} is already defined" if method_defined?(type)
 
         name = "n_#{type.to_s.chomp('?')}?"
 
