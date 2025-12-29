@@ -59,7 +59,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ruby-3.2, ruby-3.3, ruby-3.4]
+        ruby: [ruby-3.2, ruby-3.3, ruby-3.4, ruby-4.0]
         target:
           - aarch64-apple-darwin
           - aarch64-unknown-linux-musl
