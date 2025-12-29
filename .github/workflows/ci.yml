@@ -67,13 +67,13 @@ jobs:
           - x86_64-unknown-linux-musl
           - x86_64-unknown-linux-gnu
         execution:
-          - rspec spec-unit
-          - mutant test
           - mutant run -- --zombie --since HEAD~1
-          - rspec integration-misc
-          - rspec integration-minitest
-          - rspec integration-rspec
-          - rspec integration-generation
+          - mutant test
+          - rspec integration generation
+          - rspec integration minitest
+          - rspec integration misc
+          - rspec integration rspec
+          - rspec unit
           - rubocop
         include:
           - target: aarch64-apple-darwin
