@@ -17,39 +17,42 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.3)
-    date (3.4.1)
+    date (3.5.1)
     diff-lcs (1.6.2)
-    erb (5.0.2)
-    io-console (0.8.1)
-    irb (1.15.2)
+    erb (6.0.1)
+    io-console (0.8.2)
+    irb (1.16.0)
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    minitest (5.25.5)
+    minitest (6.0.1)
+      prism (~> 1.5)
     mutex_m (0.3.0)
-    parser (3.3.9.0)
+    parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
-    pp (0.6.2)
+    pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
-    prism (1.5.1)
-    psych (5.2.6)
+    prism (1.7.0)
+    psych (5.3.1)
       date
       stringio
     racc (1.8.1)
-    rdoc (6.14.2)
+    rdoc (7.0.3)
       erb
       psych (>= 4.0.0)
+      tsort
     regexp_parser (2.11.3)
-    reline (0.6.2)
+    reline (0.6.3)
       io-console (~> 0.5)
     sorbet-runtime (0.6.12872)
-    stringio (3.1.7)
-    unparser (0.8.0)
+    stringio (3.2.0)
+    tsort (0.2.0)
+    unparser (0.8.1)
       diff-lcs (~> 1.6)
       parser (>= 3.3.0)
-      prism (>= 1.4)
+      prism (>= 1.5.1)
 
 PLATFORMS
   ruby
