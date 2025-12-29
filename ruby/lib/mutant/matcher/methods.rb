@@ -50,10 +50,8 @@ module Mutant
       abstract_method :candidate_scope
       private :candidate_scope
 
-      # Matcher for singleton methods
-      class Singleton < self
-        MATCHER = Matcher::Method::Singleton
-
+      # Matcher for eigenclass methods
+      class Eigenclass < self
       private
 
         def access(_env, method_name)
@@ -63,22 +61,16 @@ module Mutant
         def candidate_scope
           scope.raw.singleton_class
         end
+      end # Eigenclass
 
+      # Matcher for singleton methods
+      class Singleton < Eigenclass
+        MATCHER = Matcher::Method::Singleton
       end # Singleton
 
       # Matcher for metaclass methods
-      class Metaclass < self
+      class Metaclass < Eigenclass
         MATCHER = Matcher::Method::Metaclass
-
-      private
-
-        def access(_env, method_name)
-          scope.raw.method(method_name)
-        end
-
-        def candidate_scope
-          scope.raw.singleton_class
-        end
       end # Metaclass
 
       # Matcher for instance methods
