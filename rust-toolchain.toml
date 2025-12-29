@@ -1,5 +1,5 @@
 [toolchain]
-channel = "1.91.1"
+channel = "1.92"
 targets = [
   "aarch64-unknown-linux-musl",
   "aarch64-unknown-linux-gnu",

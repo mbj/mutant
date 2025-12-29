@@ -12,4 +12,6 @@ path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4.5", features = ["derive"] }
+log = "0.4"
+ociman = { git = "https://github.com/mbj/mrs" }
 toml = "0.8"
