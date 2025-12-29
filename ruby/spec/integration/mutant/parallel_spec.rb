@@ -160,11 +160,12 @@ RSpec.describe 'parallel', mutant: false do
 
   specify 'chatty' do
     sink = sink_class.new
+    ready = Queue.new
 
     config = Mutant::Parallel::Config.new(
-      block:            ->(value) { value },
+      block:            ->(value) { ready.pop; value },
       jobs:             1,
-      on_process_start: ->(_) { Thread.start { i = 0; loop { puts("<iteration #{i += 1}>"); } } },
+      on_process_start: ->(_) { Thread.start { i = 0; loop { puts("<iteration #{i += 1}>"); ready << true } } },
       process_name:     'test-parallel-process',
       sink:,
       source:           Mutant::Parallel::Source::Array.new(jobs: [1, 2, 3]),
