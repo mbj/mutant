@@ -148,4 +148,5 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
       MESSAGE
     end
   end
+
 end

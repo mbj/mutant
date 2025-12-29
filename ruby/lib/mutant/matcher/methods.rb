@@ -36,7 +36,7 @@ module Mutant
       def methods(env)
         candidate_names.each_with_object([]) do |name, methods|
           method = access(env, name)
-          methods << method if method&.owner.equal?(candidate_scope)
+          methods << method if method
         end
       end
 
@@ -104,17 +104,14 @@ module Mutant
 
       private
 
-        # rubocop:disable Lint/RescueException
-        # mutant:disable - unstable source locations under < ruby-3.2
         def access(env, method_name)
           candidate_scope.instance_method(method_name)
-        rescue Exception => exception
+        rescue => exception
           env.warn(
             MESSAGE % { scope:, method_name:, exception: exception.inspect }
           )
           nil
         end
-        # rubocop:enable Lint/RescueException
 
         def candidate_scope
           scope.raw
