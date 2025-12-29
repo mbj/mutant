@@ -104,17 +104,14 @@ module Mutant
 
       private
 
-        # rubocop:disable Lint/RescueException
-        # mutant:disable - unstable source locations under < ruby-3.2
         def access(env, method_name)
           candidate_scope.instance_method(method_name)
-        rescue Exception => exception
+        rescue => exception
           env.warn(
             MESSAGE % { scope:, method_name:, exception: exception.inspect }
           )
           nil
         end
-        # rubocop:enable Lint/RescueException
 
         def candidate_scope
           scope.raw
