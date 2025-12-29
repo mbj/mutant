@@ -36,7 +36,7 @@ module Mutant
       def methods(env)
         candidate_names.each_with_object([]) do |name, methods|
           method = access(env, name)
-          methods << method if method&.owner.equal?(candidate_scope)
+          methods << method if method
         end
       end
 
