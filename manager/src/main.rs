@@ -24,9 +24,14 @@ enum Commands {
 enum Ruby {
     /// Prepare ruby directory (VERSION and LICENSE files)
     Prepare,
-    /// Execute a command
+    /// Execute ruby binary
     Exec {
-        /// Command and arguments to execute
+        /// Arguments to pass to ruby
+        arguments: Vec<String>,
+    },
+    /// Execute bundle command
+    Bundle {
+        /// Arguments to pass to bundle
         arguments: Vec<String>,
     },
     /// Run rspec commands
@@ -47,30 +52,41 @@ enum Ruby {
 }
 
 #[derive(Subcommand)]
-#[allow(clippy::enum_variant_names)]
 enum Rspec {
     /// Run unit specs
-    SpecUnit {
+    Unit {
         /// Additional arguments
         arguments: Vec<String>,
     },
-    /// Run integration misc specs
-    IntegrationMisc {
+    /// Run integration specs
+    Integration {
+        #[command(subcommand)]
+        action: Option<Integration>,
+        /// Additional arguments (only when running all integration tests)
+        #[arg(trailing_var_arg = true)]
+        arguments: Vec<String>,
+    },
+}
+
+#[derive(Subcommand)]
+enum Integration {
+    /// Run misc integration specs
+    Misc {
         /// Additional arguments
         arguments: Vec<String>,
     },
-    /// Run integration minitest specs
-    IntegrationMinitest {
+    /// Run minitest integration specs
+    Minitest {
         /// Additional arguments
         arguments: Vec<String>,
     },
-    /// Run integration rspec specs
-    IntegrationRspec {
+    /// Run rspec integration specs
+    Rspec {
         /// Additional arguments
         arguments: Vec<String>,
     },
-    /// Run integration generation specs
-    IntegrationGeneration {
+    /// Run generation integration specs
+    Generation {
         /// Additional arguments
         arguments: Vec<String>,
     },
@@ -98,33 +114,37 @@ fn main() {
             prepare();
             match action {
                 Ruby::Prepare => {}
-                Ruby::Exec { arguments } => bundle_exec(&arguments),
+                Ruby::Exec { arguments } => ruby_exec(&arguments),
+                Ruby::Bundle { arguments } => bundle_run(&arguments),
                 Ruby::Rspec { action } => match action {
-                    Rspec::SpecUnit { arguments } => {
+                    Rspec::Unit { arguments } => {
                         bundle_exec_with_args(&["rspec", "spec/unit"], &arguments)
                     }
-                    Rspec::IntegrationMisc { arguments } => bundle_exec_with_args(
-                        &[
-                            "rspec",
-                            "spec/integration/mutant/null_spec.rb",
-                            "spec/integration/mutant/isolation/fork_spec.rb",
-                            "spec/integration/mutant/test_mutator_handles_types_spec.rb",
-                            "spec/integration/mutant/parallel_spec.rb",
-                        ],
-                        &arguments,
-                    ),
-                    Rspec::IntegrationMinitest { arguments } => bundle_exec_with_args(
-                        &["rspec", "spec/integration", "-e", "minitest"],
-                        &arguments,
-                    ),
-                    Rspec::IntegrationRspec { arguments } => bundle_exec_with_args(
-                        &["rspec", "spec/integration", "-e", "rspec"],
-                        &arguments,
-                    ),
-                    Rspec::IntegrationGeneration { arguments } => bundle_exec_with_args(
-                        &["rspec", "spec/integration", "-e", "generation"],
-                        &arguments,
-                    ),
+                    Rspec::Integration { action, arguments } => match action {
+                        None => bundle_exec_with_args(&["rspec", "spec/integration"], &arguments),
+                        Some(Integration::Misc { arguments }) => bundle_exec_with_args(
+                            &[
+                                "rspec",
+                                "spec/integration/mutant/null_spec.rb",
+                                "spec/integration/mutant/isolation/fork_spec.rb",
+                                "spec/integration/mutant/test_mutator_handles_types_spec.rb",
+                                "spec/integration/mutant/parallel_spec.rb",
+                            ],
+                            &arguments,
+                        ),
+                        Some(Integration::Minitest { arguments }) => bundle_exec_with_args(
+                            &["rspec", "spec/integration", "-e", "minitest"],
+                            &arguments,
+                        ),
+                        Some(Integration::Rspec { arguments }) => bundle_exec_with_args(
+                            &["rspec", "spec/integration", "-e", "rspec"],
+                            &arguments,
+                        ),
+                        Some(Integration::Generation { arguments }) => bundle_exec_with_args(
+                            &["rspec", "spec/integration", "-e", "generation"],
+                            &arguments,
+                        ),
+                    },
                 },
                 Ruby::Mutant { action } => match action {
                     Mutant::Test { arguments } => {
@@ -148,6 +168,24 @@ fn prepare() {
     fs::copy("LICENSE", "ruby/LICENSE").unwrap_or_else(|error| {
         panic!("Failed to copy LICENSE to ruby/LICENSE: {}", error);
     });
+}
+
+fn ruby_exec(arguments: &[String]) {
+    let error = Command::new("ruby")
+        .args(arguments)
+        .current_dir("ruby")
+        .exec();
+
+    panic!("Failed to execute ruby: {}", error);
+}
+
+fn bundle_run(arguments: &[String]) {
+    let error = Command::new("bundle")
+        .args(arguments)
+        .current_dir("ruby")
+        .exec();
+
+    panic!("Failed to execute bundle: {}", error);
 }
 
 fn bundle_exec_with_args(base_args: &[&str], extra_args: &[String]) {
