@@ -368,6 +368,116 @@ RSpec.describe Mutant::Bootstrap do
       described_class.call_test(env_initial)
     end
 
+    context 'when integration setup fails' do
+      let(:integration_result) { Mutant::Either::Left.new('integration setup failed') }
+
+      let(:raw_expectations) do
+        [
+          {
+            receiver:  world,
+            selector:  :record,
+            arguments: [:bootstrap],
+            reaction:  { yields: [] }
+          },
+          {
+            receiver:  world,
+            selector:  :record,
+            arguments: [:load_hooks],
+            reaction:  { yields: [] }
+          },
+          {
+            receiver:  Mutant::Hooks,
+            selector:  :load_config,
+            arguments: [config],
+            reaction:  { return: hooks }
+          },
+          {
+            receiver:  world,
+            selector:  :record,
+            arguments: [:infect],
+            reaction:  { yields: [] }
+          },
+          {
+            receiver:  world,
+            selector:  :record,
+            arguments: [:hooks_env_infection_pre],
+            reaction:  { yields: [] }
+          },
+          {
+            receiver:  hooks,
+            selector:  :run,
+            arguments: [:env_infection_pre, { env: env_initial }]
+          },
+          {
+            receiver:  world,
+            selector:  :record,
+            arguments: [:require_target],
+            reaction:  { yields: [] }
+          },
+          {
+            receiver:  world.environment_variables,
+            selector:  :[]=,
+            arguments: %w[foo bar]
+          },
+          {
+            receiver:  load_path,
+            selector:  :<<,
+            arguments: %w[include-a]
+          },
+          {
+            receiver:  load_path,
+            selector:  :<<,
+            arguments: %w[include-b]
+          },
+          {
+            receiver:  kernel,
+            selector:  :require,
+            arguments: %w[require-a]
+          },
+          {
+            receiver:  kernel,
+            selector:  :require,
+            arguments: %w[require-b]
+          },
+          {
+            receiver:  world,
+            selector:  :record,
+            arguments: [:hooks_env_infection_post],
+            reaction:  { yields: [] }
+          },
+          {
+            receiver:  hooks,
+            selector:  :run,
+            arguments: [:env_infection_post, { env: env_initial }]
+          },
+          {
+            receiver:  world,
+            selector:  :record,
+            arguments: [:setup_integration],
+            reaction:  { yields: [] }
+          },
+          {
+            receiver:  hooks,
+            selector:  :run,
+            arguments: [:setup_integration_pre]
+          },
+          {
+            receiver:  Mutant::Integration,
+            selector:  :setup,
+            arguments: [env_initial],
+            reaction:  { return: integration_result }
+          }
+          # NOTE: setup_integration_post should NOT be called on failure
+        ]
+      end
+
+      it 'does not call setup_integration_post hook' do
+        verify_events do
+          expect(apply).to eql(Mutant::Either::Left.new('integration setup failed'))
+        end
+      end
+    end
+
     let(:expected_env) do
       env_initial.with(
         integration:,
