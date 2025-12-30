@@ -12,4 +12,4 @@ module Mutant
       left.end >= right.begin && right.end >= left.begin
     end
   end # Range
-end # end
+end # Mutant
