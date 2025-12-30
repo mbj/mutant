@@ -1,5 +1,4 @@
 /.bundle
-/Cargo.lock
 /target
 /ruby/tmp
 /ruby/LICENSE
