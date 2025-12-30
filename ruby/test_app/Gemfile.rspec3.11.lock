@@ -69,6 +69,7 @@ GEM
       prism (>= 1.4)
 
 PLATFORMS
+  aarch64-linux
   ruby
   x86_64-linux
 
