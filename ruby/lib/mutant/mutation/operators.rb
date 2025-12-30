@@ -46,7 +46,7 @@ module Mutant
           to_i:          %i[to_int],
           to_s:          %i[to_str],
           values_at:     %i[fetch_values]
-        }.freeze.tap { |hash| hash.values(&:freeze) }
+        }.freeze.tap { |hash| hash.each_value(&:freeze) }
       end
 
       class Light < self
