@@ -45,7 +45,12 @@ module Mutant
         #
         # @return [Boolean]
         def call(reporter)
-          ::Minitest::Runnable.run_one_method(klass, test_method, reporter)
+          # Minitest 6.0+ renamed run_one_method to run
+          if ::Minitest::Runnable.respond_to?(:run_one_method)
+            ::Minitest::Runnable.run_one_method(klass, test_method, reporter)
+          else
+            ::Minitest::Runnable.run(klass, test_method, reporter)
+          end
           reporter.passed?
         end
 

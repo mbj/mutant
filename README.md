@@ -55,7 +55,7 @@ Mutant is supported and tested under Linux and Mac OS X.
 
 Mutant is tested on CI across the following dimensions:
 
-* Ruby versions: 3.2, 3.3, 3.4
+* Ruby versions: 3.2, 3.3, 3.4, 4.0
 * Targets:
   * aarch64-apple-darwin
   * aarch64-unknown-linux-gnu
@@ -72,7 +72,7 @@ Mutant is tested on CI across the following dimensions:
   * rspec integration-generation: Tests for mutation generation
   * rubocop: Style and lint checks
 
-This results in 120 test jobs per commit (3 Ruby versions x 5 targets x 8 test suites).
+This results in 160 test jobs per commit (4 Ruby versions x 5 targets x 8 test suites).
 
 ## Ruby Versions
 
@@ -92,6 +92,7 @@ Supported indicates if a specific Ruby version / Implementation is actively supp
 | cRUBY/MRI      | 3.2            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | cRUBY/MRI      | 3.3            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | cRUBY/MRI      | 3.4            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| cRUBY/MRI      | 4.0            | :heavy_check_mark: | :heavy_check_mark: | TBD                | TBD                |
 | jruby          | TBD            | :email:            | :email:            | :email:            | :email:            |
 | mruby          | TBD            | :email:            | :email:            | :email:            | :email:            |
 | cRUBY/MRI      | < 3.2          | :no_entry:         | :no_entry:         | :no_entry:         | :no_entry:         |
