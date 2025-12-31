@@ -39,11 +39,11 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
       }
     end
 
-    def select(ready)
+    def select(ready, readers: [response_reader, log_reader])
       {
         receiver:  io,
         selector:  :select,
-        arguments: [[response_reader, log_reader], nil, nil, 1.0],
+        arguments: [readers, nil, nil, 1.0],
         reaction:  { return: [ready] }
       }
     end
@@ -201,7 +201,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
       end
     end
 
-    context 'on worker crash (eof)' do
+    context 'on worker crash (eof) during header read' do
       let(:raw_expectations) do
         [
           deadline_status,
@@ -209,6 +209,38 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
           binmode(response_reader),
           read(
             bytes: 4,
+            io:    response_reader,
+            chunk: nil
+          )
+        ]
+      end
+
+      it 'returns parallel result' do
+        verify_events do
+          expect(apply).to eql(
+            Mutant::Parallel::Response.new(
+              error:  EOFError,
+              job:,
+              log:    '',
+              result: nil
+            )
+          )
+        end
+      end
+    end
+
+    context 'on worker crash (eof) during body read' do
+      let(:raw_expectations) do
+        [
+          deadline_status,
+          select([response_reader]),
+          binmode(response_reader),
+          read(io: response_reader, bytes: 4, chunk: header_segment),
+          deadline_status,
+          select([response_reader]),
+          binmode(response_reader),
+          read(
+            bytes: result_segment.bytesize,
             io:    response_reader,
             chunk: nil
           )
@@ -272,7 +304,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
       end
     end
 
-    context 'with future partial IO API changes' do
+    context 'when read_nonblock returns :wait_readable then succeeds' do
       let(:raw_expectations) do
         [
           deadline_status,
@@ -283,13 +315,140 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             selector:  :read_nonblock,
             arguments: [4, { exception: false }],
             reaction:  { return: :wait_readable }
+          },
+          # After :wait_readable, loop continues and retries
+          deadline_status,
+          select([response_reader]),
+          binmode(response_reader),
+          read(io: response_reader, bytes: 4, chunk: header_segment),
+          deadline_status,
+          select([response_reader]),
+          binmode(response_reader),
+          read(
+            bytes: result_segment.bytesize,
+            chunk: result_segment,
+            io:    response_reader
+          ),
+          marshal_load
+        ]
+      end
+
+      it 'retries and returns parallel result' do
+        verify_events do
+          expect(apply).to eql(
+            Mutant::Parallel::Response.new(
+              error:  nil,
+              job:,
+              log:    '',
+              result:
+            )
+          )
+        end
+      end
+    end
+
+    context 'when read_nonblock returns :wait_writable then succeeds' do
+      let(:raw_expectations) do
+        [
+          deadline_status,
+          select([response_reader]),
+          binmode(response_reader),
+          {
+            receiver:  response_reader,
+            selector:  :read_nonblock,
+            arguments: [4, { exception: false }],
+            reaction:  { return: :wait_writable }
+          },
+          # After :wait_writable, loop continues and retries
+          deadline_status,
+          select([response_reader]),
+          binmode(response_reader),
+          read(io: response_reader, bytes: 4, chunk: header_segment),
+          deadline_status,
+          select([response_reader]),
+          binmode(response_reader),
+          read(
+            bytes: result_segment.bytesize,
+            chunk: result_segment,
+            io:    response_reader
+          ),
+          marshal_load
+        ]
+      end
+
+      it 'retries and returns parallel result' do
+        verify_events do
+          expect(apply).to eql(
+            Mutant::Parallel::Response.new(
+              error:  nil,
+              job:,
+              log:    '',
+              result:
+            )
+          )
+        end
+      end
+    end
+
+    context 'when read_nonblock returns unexpected value' do
+      let(:raw_expectations) do
+        [
+          deadline_status,
+          select([response_reader]),
+          binmode(response_reader),
+          {
+            receiver:  response_reader,
+            selector:  :read_nonblock,
+            arguments: [4, { exception: false }],
+            reaction:  { return: :unexpected_symbol }
           }
         ]
       end
 
-      it 'returns parallel result' do
+      it 'raises an error with the unexpected value' do
         verify_events do
-          expect { apply }.to raise_error(RuntimeError, 'Unexpected nonblocking read return: :wait_readable')
+          expect { apply }.to raise_error(
+            RuntimeError,
+            'Unexpected nonblocking read return: :unexpected_symbol'
+          )
+        end
+      end
+    end
+
+    context 'when log reader hits EOF then response succeeds' do
+      let(:raw_expectations) do
+        [
+          deadline_status,
+          select([log_reader]),
+          binmode(log_reader),
+          read(io: log_reader, bytes: 4096, chunk: nil),
+          # After log EOF, log_reader is removed from readers
+          deadline_status,
+          select([response_reader], readers: [response_reader]),
+          binmode(response_reader),
+          read(io: response_reader, bytes: 4, chunk: header_segment),
+          deadline_status,
+          select([response_reader], readers: [response_reader]),
+          binmode(response_reader),
+          read(
+            bytes: result_segment.bytesize,
+            chunk: result_segment,
+            io:    response_reader
+          ),
+          marshal_load
+        ]
+      end
+
+      it 'removes log reader and returns parallel result' do
+        verify_events do
+          expect(apply).to eql(
+            Mutant::Parallel::Response.new(
+              error:  nil,
+              job:,
+              log:    '',
+              result:
+            )
+          )
         end
       end
     end
