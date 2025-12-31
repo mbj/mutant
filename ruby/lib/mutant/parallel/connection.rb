@@ -52,7 +52,6 @@ module Mutant
           )
         end
 
-        # rubocop:disable Metrics/MethodLength
         def read_till_final
           readers = [response_reader, log_reader]
 
@@ -65,20 +64,23 @@ module Mutant
 
             break timeout unless reads
 
-            reads.each do |ready|
-              if ready.equal?(response_reader)
-                advance_result
-              else
-                advance_log
-              end
-            end
+            process_ready(readers:, reads:)
           end
 
           self
         end
-      # rubocop:enable Metrics/MethodLength
 
       private
+
+        def process_ready(readers:, reads:)
+          reads.each do |ready|
+            if ready.equal?(response_reader)
+              advance_result
+            elsif advance_log.nil?
+              readers.delete(log_reader)
+            end
+          end
+        end
 
         def timeout
           @errors << Timeout::Error
@@ -104,13 +106,17 @@ module Mutant
         end
 
         def read_buffer(max_bytes)
-          with_nonblock_read(
+          result = with_nonblock_read(
             io:        response_reader,
             max_bytes: max_bytes - @buffer.bytesize
           ) do |chunk|
             @buffer << chunk
             @buffer.bytesize.equal?(max_bytes)
           end
+          return result unless result.nil?
+
+          @errors << EOFError
+          false
         end
 
         # rubocop:disable Metrics/MethodLength
@@ -121,10 +127,12 @@ module Mutant
 
           case chunk
           when nil
-            @errors << EOFError
-            false
+            nil
           when String
             yield chunk
+          when :wait_readable, :wait_writable
+            # Can occur even after select indicates readability (spurious wakeup)
+            false
           else
             fail "Unexpected nonblocking read return: #{chunk.inspect}"
           end

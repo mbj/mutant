@@ -626,8 +626,17 @@ RSpec.describe Mutant::CLI do
     context 'pathname with null bytes' do
       let(:arguments) { %w[util mutation] + ["\0"] }
 
+      # Ruby 4.0 changed the error message from "pathname" to "path name"
+      let(:expected_message) do
+        if RUBY_VERSION >= '4.0'
+          'path name contains null byte'
+        else
+          'pathname contains null byte'
+        end
+      end
+
       it 'returns expected message' do
-        expect(apply).to eql(left('pathname contains null byte'))
+        expect(apply).to eql(left(expected_message))
       end
     end
 
