@@ -23,7 +23,7 @@ RSpec.describe Mutant::Transform::Hash do
       context 'empty' do
         let(:input) { {} }
 
-        it 'returns sucess' do
+        it 'returns success' do
           expect(apply).to eql(Mutant::Either::Right.new(input))
         end
       end

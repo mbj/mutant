@@ -11,7 +11,7 @@ RSpec.describe Mutant::Transform::Index do
       subject.slug
     end
 
-    it 'retursn expected value' do
+    it 'returns expected value' do
       expect(apply).to eql('1')
     end
 
@@ -32,12 +32,12 @@ RSpec.describe Mutant::Transform::Index do
     context 'on valid input' do
       let(:input) { true }
 
-      it 'returns sucess' do
+      it 'returns success' do
         expect(apply).to eql(Mutant::Either::Right.new(input))
       end
     end
 
-    context 'on nvalid input' do
+    context 'on invalid input' do
       let(:input) { 1 }
 
       let(:boolean_error) do

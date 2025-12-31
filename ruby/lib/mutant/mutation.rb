@@ -136,7 +136,7 @@ module Mutant
       Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
     end
 
-    # Evil mutation that should case mutations to fail tests
+    # Evil mutation that should cause mutations to fail tests
     class Evil < self
       SYMBOL            = 'evil'
       TEST_PASS_SUCCESS = false

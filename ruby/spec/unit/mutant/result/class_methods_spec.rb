@@ -2,12 +2,12 @@
 
 # The effect of this private module is done at boot time.
 # Hence there is no way to kill the mutations at runtime
-# so we have to directly hook into the private moduel via
+# so we have to directly hook into the private module via
 # reflection to redo a runtime observable interaction with
 # it.
 #
 # Until mutant gets boot time mutation support there is no
-# way to to avoid this.
+# way to avoid this.
 RSpec.describe 'Mutant::Result::ClassMethods' do
   let(:infected_class) do
     Class.new do

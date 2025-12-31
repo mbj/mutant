@@ -122,7 +122,7 @@ RSpec.describe Mutant::Parallel::Connection do
 
       it 'expected events' do
         verify_events do
-          expect { apply }.to raise_error(described_class::Error, 'message to big')
+          expect { apply }.to raise_error(described_class::Error, 'message too big')
         end
       end
     end

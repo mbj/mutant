@@ -11,7 +11,7 @@ RSpec.describe Mutant::Transform::Boolean do
     context 'on true' do
       let(:input) { true }
 
-      it 'returns sucess' do
+      it 'returns success' do
         expect(apply).to eql(Mutant::Either::Right.new(input))
       end
     end
@@ -19,7 +19,7 @@ RSpec.describe Mutant::Transform::Boolean do
     context 'on false' do
       let(:input) { false }
 
-      it 'returns sucess' do
+      it 'returns success' do
         expect(apply).to eql(Mutant::Either::Right.new(input))
       end
     end

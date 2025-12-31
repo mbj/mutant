@@ -50,7 +50,7 @@ module Mutant
         Under that usage mutant does not require any kind of sign up or payment.
         Set this usage type exclusively on public opensource projects. Any other
         scenario requires payment.
-        Using the `opensource` usage type on private repotiories and or on commercial
+        Using the `opensource` usage type on private repositories and or on commercial
         code bases is not valid.
 
         To use `opensource` usage type either specify `--usage opensource` on the command
@@ -77,7 +77,7 @@ module Mutant
         #{Commercial::MESSAGE}
         #{Opensource::MESSAGE}
         This is a breaking change for users of the 0.11.x / 0.10.x mutant releases.
-        Sorry for that but its going to make future adoption much easier.
+        Sorry for that but it's going to make future adoption much easier.
         License gem is gone entirely.
       MESSAGE
 

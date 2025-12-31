@@ -111,7 +111,7 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
       expect(apply).to eql([])
     end
 
-    it 'warns about degnerate interfacew' do
+    it 'warns about degenerate interface' do
       apply
 
       method_name = :foo

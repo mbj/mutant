@@ -13,7 +13,7 @@ RSpec.describe Mutant::Expression::Parser do
     context 'on a valid expression' do
       let(:input) { 'Foo' }
 
-      it 'returns sucess' do
+      it 'returns success' do
         expect(apply).to eql(
           Mutant::Either::Right.new(
             Mutant::Expression::Namespace::Exact.new(scope_name: 'Foo')

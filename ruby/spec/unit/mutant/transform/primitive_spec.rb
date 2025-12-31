@@ -10,7 +10,7 @@ RSpec.describe Mutant::Transform::Primitive do
       subject.slug
     end
 
-    it 'returns strigified primitive' do
+    it 'returns stringified primitive' do
       expect(apply).to eql('String')
     end
 
@@ -31,7 +31,7 @@ RSpec.describe Mutant::Transform::Primitive do
     context 'on string input' do
       let(:input) { 'some-string' }
 
-      it 'returns sucess' do
+      it 'returns success' do
         expect(apply).to eql(Mutant::Either::Right.new(input))
       end
     end

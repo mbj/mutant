@@ -5,7 +5,7 @@ module Mutant
     # Matcher expanding Mutant::Scope objects into method matches
     # at singleton or instance level
     #
-    # If we *ever* get other subjects than methods, its likely the place
+    # If we *ever* get other subjects than methods, it's likely the place
     # to hook in custom matchers. In that case the scope matchers to expand
     # should be passed as arguments to the constructor.
     class Scope < self

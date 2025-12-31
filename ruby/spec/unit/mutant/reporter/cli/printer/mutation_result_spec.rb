@@ -6,7 +6,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::MutationResult do
   let(:reportable) { mutation_a_result }
 
   describe '.call' do
-    context 'unsucessful result' do
+    context 'unsuccessful result' do
       let(:process_status) do
         instance_double(Process::Status, success?: true)
       end

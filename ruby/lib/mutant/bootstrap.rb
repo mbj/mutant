@@ -3,7 +3,7 @@
 module Mutant
   # Bootstrap process
   #
-  # The role of the boostrap is to take the pure config and apply it against
+  # The role of the bootstrap is to take the pure config and apply it against
   # the impure world to produce an environment.
   #
   # env = config interpreted against the world

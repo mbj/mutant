@@ -145,7 +145,7 @@ module Mutant
         def send_value(body)
           bytesize = body.bytesize
 
-          fail Error, 'message to big' if bytesize > MAX_BYTES
+          fail Error, 'message too big' if bytesize > MAX_BYTES
 
           io.binmode
           io.write([bytesize].pack(HEADER_FORMAT))

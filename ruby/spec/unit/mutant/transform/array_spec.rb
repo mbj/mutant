@@ -14,7 +14,7 @@ RSpec.describe Mutant::Transform::Array do
       context 'empty' do
         let(:input) { [] }
 
-        it 'returns sucess' do
+        it 'returns success' do
           expect(apply).to eql(Mutant::Either::Right.new(input))
         end
       end
@@ -22,7 +22,7 @@ RSpec.describe Mutant::Transform::Array do
       context 'valid elements' do
         let(:input) { [true, true] }
 
-        it 'returns sucess' do
+        it 'returns success' do
           expect(apply).to eql(Mutant::Either::Right.new(input))
         end
       end

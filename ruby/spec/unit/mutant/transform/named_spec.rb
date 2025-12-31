@@ -24,7 +24,7 @@ RSpec.describe Mutant::Transform::Named do
     context 'on valid input' do
       let(:input) { true }
 
-      it 'returns sucess' do
+      it 'returns success' do
         expect(apply).to eql(Mutant::Either::Right.new(input))
       end
     end

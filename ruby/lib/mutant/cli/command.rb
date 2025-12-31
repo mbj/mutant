@@ -18,7 +18,7 @@ module Mutant
       # Local opt out of option parser defaults
       class OptionParser < ::OptionParser
         # Kill defaults added by option parser that
-        # inference with ours under mutation testing.
+        # interfere with ours under mutation testing.
         define_method(:add_officious) {}
       end # OptionParser
 

@@ -12,7 +12,7 @@ module Mutant
     # waitpid2 with Process::WNOHANG set.
     #
     # Handling timeouts this way is not the conceptually most
-    # efficient solution. But its cross platform.
+    # efficient solution. But it's cross platform.
     #
     # Design constraints:
     #

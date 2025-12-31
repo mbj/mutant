@@ -18,7 +18,7 @@ module Mutant
         end
       end
 
-      # Methods mixed int ot instance level
+      # Methods mixed into instance level
       module InstanceMethods
 
       private

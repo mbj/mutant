@@ -291,7 +291,7 @@ module Mutant
 
       # Create mutation criteria results
       #
-      # @praam [Result::CoverageCriteria]
+      # @param [Result::CoverageCriteria]
       def criteria_result(coverage_criteria)
         CoverageCriteria.new(
           process_abort: coverage_criteria.process_abort && process_abort?,
