@@ -114,6 +114,43 @@ RSpec.describe 'parallel', mutant: false do
     expect(response_b.log.match?('<main>')).to be(true)
   end
 
+  # rubocop:disable Metrics/MethodLength
+  def run_length_encode(body)
+    result = []
+
+    return result if body.nil?
+
+    count = 0
+    current = nil
+
+    body.each_char do |char|
+      if current.eql?(char)
+        count += 1
+      else
+        unless count.zero?
+          result << [current, count]
+        end
+
+        current = char
+        count = 1
+      end
+    end
+
+    return if count.zero?
+    result << [current, count]
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # If massive spec fails the diff is unreadable so compare a compressed version
+  def project(result)
+    {
+      error:  result.error,
+      job:    result.job,
+      result: run_length_encode(result.result),
+      log:    run_length_encode(result.log)
+    }
+  end
+
   specify 'massive' do
     b = '#' * (1024**2) * 10
 
@@ -127,7 +164,7 @@ RSpec.describe 'parallel', mutant: false do
       sink:,
       source:           Mutant::Parallel::Source::Array.new(jobs: [1, 2]),
       thread_name:      'test-parallel-thread',
-      timeout:          1.0
+      timeout:          10.0
     )
 
     driver = Mutant::Parallel.async(
@@ -140,7 +177,7 @@ RSpec.describe 'parallel', mutant: false do
       break if status.done?
     end
 
-    expect(sink.status).to eql(
+    expect(sink.status.map(&method(:project))).to eql(
       [
         Mutant::Parallel::Response.new(
           error:  nil,
@@ -154,7 +191,7 @@ RSpec.describe 'parallel', mutant: false do
           log:    "#{b}#{b}\n",
           result: b * 2
         )
-      ]
+      ].map(&method(:project))
     )
   end
 

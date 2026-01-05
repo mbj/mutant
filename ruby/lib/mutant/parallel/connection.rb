@@ -10,6 +10,7 @@ module Mutant
       HEADER_FORMAT = 'N'
       HEADER_SIZE   = 4
       MAX_BYTES     = (2**32).pred
+      MAX_LOG_CHUNK = 4096
 
       class Reader
         include Anima.new(:deadline, :io, :marshal, :response_reader, :log_reader)
@@ -86,10 +87,10 @@ module Mutant
 
         def advance_result
           if length
-            if read_buffer(length)
+            if read_result_buffer(length)
               @results << marshal.load(@buffer)
             end
-          elsif read_buffer(HEADER_SIZE)
+          elsif read_result_buffer(HEADER_SIZE)
             @lengths << Util.one(@buffer.unpack(HEADER_FORMAT))
             @buffer = +''
           end
@@ -100,17 +101,16 @@ module Mutant
         end
 
         def advance_log
-          with_nonblock_read(io: log_reader, max_bytes: 4096, &log.public_method(:<<))
+          while with_nonblock_read(io: log_reader, max_bytes: MAX_LOG_CHUNK, &@log.public_method(:<<))
+          end
         end
 
-        def read_buffer(max_bytes)
+        def read_result_buffer(max_bytes)
           with_nonblock_read(
             io:        response_reader,
-            max_bytes: max_bytes - @buffer.bytesize
-          ) do |chunk|
-            @buffer << chunk
-            @buffer.bytesize.equal?(max_bytes)
-          end
+            max_bytes: max_bytes - @buffer.bytesize,
+            &@buffer.public_method(:<<)
+          )
         end
 
         # rubocop:disable Metrics/MethodLength
@@ -123,8 +123,11 @@ module Mutant
           when nil
             @errors << EOFError
             false
+          when :wait_readable
+            false
           when String
             yield chunk
+            chunk.bytesize.equal?(max_bytes)
           else
             fail "Unexpected nonblocking read return: #{chunk.inspect}"
           end

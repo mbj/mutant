@@ -30,12 +30,12 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
       }
     end
 
-    def read(io:, bytes:, chunk:)
+    def read(io:, bytes:, return_value:)
       {
         receiver:  io,
         selector:  :read_nonblock,
         arguments: [bytes, { exception: false }],
-        reaction:  { return: chunk }
+        reaction:  { return: return_value }
       }
     end
 
@@ -74,14 +74,14 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             deadline_status,
             select([response_reader]),
             binmode(response_reader),
-            read(io: response_reader, bytes: 4, chunk: header_segment),
+            read(io: response_reader, bytes: 4, return_value: header_segment),
             deadline_status,
             select([response_reader]),
             binmode(response_reader),
             read(
-              bytes: result_segment.bytesize,
-              chunk: result_segment,
-              io:    response_reader
+              bytes:        result_segment.bytesize,
+              return_value: result_segment,
+              io:           response_reader
             ),
             marshal_load
           ]
@@ -106,14 +106,14 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             deadline_status,
             select([response_reader]),
             binmode(response_reader),
-            read(io: response_reader, bytes: 4, chunk: header_segment),
+            read(io: response_reader, bytes: 4, return_value: header_segment),
             deadline_status,
             select([response_reader]),
             binmode(response_reader),
             read(
-              bytes: result_segment.bytesize,
-              chunk: result_segment,
-              io:    response_reader
+              bytes:        result_segment.bytesize,
+              return_value: result_segment,
+              io:           response_reader
             ),
             marshal_load
           ]
@@ -139,18 +139,59 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             deadline_status,
             select([response_reader]),
             binmode(response_reader),
-            read(io: response_reader, bytes: 4, chunk: header_segment[0..1]),
+            read(io: response_reader, bytes: 4, return_value: header_segment[0..1]),
             deadline_status,
             select([response_reader]),
             binmode(response_reader),
-            read(io: response_reader, bytes: 2, chunk: header_segment[2..]),
+            read(io: response_reader, bytes: 2, return_value: header_segment[2..]),
             deadline_status,
             select([response_reader]),
             binmode(response_reader),
             read(
-              bytes: result_segment.bytesize,
-              chunk: result_segment,
-              io:    response_reader
+              bytes:        result_segment.bytesize,
+              return_value: result_segment,
+              io:           response_reader
+            ),
+            marshal_load
+          ]
+        end
+
+        it 'returns parallel result' do
+          verify_events do
+            expect(apply).to eql(
+              Mutant::Parallel::Response.new(
+                error:  nil,
+                job:,
+                log:    '',
+                result:
+              )
+            )
+          end
+        end
+      end
+
+      # this is a behavior observed on ruby-4 the FD signals being ready via
+      # select but read attempts still return :wait_readable, mutant will simply
+      # circle around and consider the interaction a partial (but 0 byte) read
+      # waiting again on select
+      context 'with ready signal on FD that is not actually ready' do
+        let(:raw_expectations) do
+          [
+            deadline_status,
+            select([response_reader]),
+            binmode(response_reader),
+            read(io: response_reader, bytes: 4, return_value: :wait_readable),
+            deadline_status,
+            select([response_reader]),
+            binmode(response_reader),
+            read(io: response_reader, bytes: 4, return_value: header_segment),
+            deadline_status,
+            select([response_reader]),
+            binmode(response_reader),
+            read(
+              bytes:        result_segment.bytesize,
+              return_value: result_segment,
+              io:           response_reader
             ),
             marshal_load
           ]
@@ -171,6 +212,68 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
       end
     end
 
+    context 'on error reading logs' do
+      let(:raw_expectations) do
+        [
+          deadline_status,
+          select([log_reader]),
+          binmode(log_reader),
+          read(
+            io:           log_reader,
+            bytes:        4096,
+            return_value: nil
+          )
+        ]
+      end
+
+      it 'returns parallel result' do
+        verify_events do
+          expect(apply).to eql(
+            Mutant::Parallel::Response.new(
+              error:  EOFError,
+              job:,
+              log:    '',
+              result: nil
+            )
+          )
+        end
+      end
+    end
+
+    context 'on error reading lots of logs' do
+      let(:raw_expectations) do
+        [
+          deadline_status,
+          select([log_reader]),
+          binmode(log_reader),
+          read(
+            io:           log_reader,
+            bytes:        4096,
+            return_value: 'a' * 4096
+          ),
+          binmode(log_reader),
+          read(
+            io:           log_reader,
+            bytes:        4096,
+            return_value: nil
+          )
+        ]
+      end
+
+      it 'returns parallel result' do
+        verify_events do
+          expect(apply).to eql(
+            Mutant::Parallel::Response.new(
+              error:  EOFError,
+              job:,
+              log:    'a' * 4096,
+              result: nil
+            )
+          )
+        end
+      end
+    end
+
     context 'on IO timeout with log' do
       let(:raw_expectations) do
         [
@@ -178,9 +281,9 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
           select([log_reader]),
           binmode(log_reader),
           read(
-            io:    log_reader,
-            bytes: 4096,
-            chunk: '<log>'
+            io:           log_reader,
+            bytes:        4096,
+            return_value: '<log>'
           ),
           deadline_status,
           select(nil)
@@ -208,9 +311,9 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
           select([response_reader]),
           binmode(response_reader),
           read(
-            bytes: 4,
-            io:    response_reader,
-            chunk: nil
+            bytes:        4,
+            io:           response_reader,
+            return_value: nil
           )
         ]
       end
@@ -282,14 +385,14 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             receiver:  response_reader,
             selector:  :read_nonblock,
             arguments: [4, { exception: false }],
-            reaction:  { return: :wait_readable }
+            reaction:  { return: :unknown_future }
           }
         ]
       end
 
       it 'returns parallel result' do
         verify_events do
-          expect { apply }.to raise_error(RuntimeError, 'Unexpected nonblocking read return: :wait_readable')
+          expect { apply }.to raise_error(RuntimeError, 'Unexpected nonblocking read return: :unknown_future')
         end
       end
     end
