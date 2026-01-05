@@ -1,5 +1,7 @@
 /.bundle
-/target
-/ruby/tmp
+/Cargo.lock
 /ruby/LICENSE
 /ruby/VERSION
+/ruby/tmp
+/ruby/vendor
+/target
