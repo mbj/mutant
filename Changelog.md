@@ -1,3 +1,47 @@
+# v0.14.0 2026-01-05
+
+* Add Ruby 4.0 support.
+
+  Mutant now supports Ruby 4.0. This includes:
+
+  * [#1504](https://github.com/mbj/mutant/pull/1504)
+    Fix IO loop compatibility with Ruby 4.0.
+
+  * [#1490](https://github.com/mbj/mutant/pull/1490)
+    Fix Minitest 6+ integration (default test framework on Ruby 4.0).
+
+  * Update CI to test against Ruby 4.0.
+
+  Note: Ruby 3.1 support has been removed. Minimum supported version is now Ruby 3.2.
+
+* [#1503](https://github.com/mbj/mutant/pull/1503)
+
+  Remove uncanonical mutation from `@foo` to `foo`. This mutation was generating
+  semantically different code that changed instance variable reads to method calls.
+
+* [#1497](https://github.com/mbj/mutant/pull/1497)
+
+  Fix post hooks to only run after successful integration setup.
+
+* [#1496](https://github.com/mbj/mutant/pull/1496)
+
+  Fix frozen constant handling.
+
+* [#1494](https://github.com/mbj/mutant/pull/1494)
+
+  Fix eigenclass duplication issue.
+
+* [#1493](https://github.com/mbj/mutant/pull/1493)
+
+  Fix interrupt handling bug.
+
+* Dependency updates:
+
+  * Allow minitest 6.x in mutant-minitest
+  * Allow irb 1.16
+  * Update rspec-its to ~> 2.0
+  * Update sorbet-runtime to ~> 0.6
+
 # v0.13.5 2025-10-28
 
 * [#1478](https://github.com/mbj/mutant/pull/1478)
