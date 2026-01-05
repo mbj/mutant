@@ -1,6 +1,9 @@
 use clap::{Subcommand, ValueEnum};
 use std::env;
 use std::process;
+use std::sync::Arc;
+use std::sync::atomic::Ordering;
+use std::thread;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum RunResult {
@@ -13,6 +16,185 @@ impl std::process::Termination for RunResult {
         match self {
             Self::Success => std::process::ExitCode::SUCCESS,
             Self::Failure => std::process::ExitCode::FAILURE,
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct RerunConfig {
+    pub runs: u32,
+    pub jobs: u32,
+}
+
+struct CapturedOutput {
+    stdout: Vec<u8>,
+    stderr: Vec<u8>,
+}
+
+impl RerunConfig {
+    pub fn execute<F>(&self, spawn_function: F) -> RunResult
+    where
+        F: Fn(bool) -> process::Child + Send + Sync + 'static,
+    {
+        if self.runs == 1 {
+            self.execute_single(&spawn_function)
+        } else if self.jobs == 1 {
+            self.execute_sequential(&spawn_function)
+        } else {
+            self.execute_concurrent(spawn_function)
+        }
+    }
+
+    fn execute_single<F>(&self, spawn_function: &F) -> RunResult
+    where
+        F: Fn(bool) -> process::Child,
+    {
+        let mut child = spawn_function(false);
+        let status = child.wait().expect("Failed to wait for child process");
+
+        if status.success() {
+            RunResult::Success
+        } else {
+            RunResult::Failure
+        }
+    }
+
+    fn execute_sequential<F>(&self, spawn_function: &F) -> RunResult
+    where
+        F: Fn(bool) -> process::Child,
+    {
+        let mut exit_counts: std::collections::BTreeMap<i32, u32> =
+            std::collections::BTreeMap::new();
+
+        for run_number in 1..=self.runs {
+            log::info!("Run {}/{}", run_number, self.runs);
+            let (status, output) = Self::run_with_capture(spawn_function);
+            let exit_code = status.code().unwrap_or(-1);
+
+            *exit_counts.entry(exit_code).or_insert(0) += 1;
+
+            if !status.success() {
+                Self::print_failure_output(run_number, &output);
+            }
+        }
+
+        Self::print_summary(&exit_counts);
+        Self::result_from_exit_counts(&exit_counts)
+    }
+
+    fn run_with_capture<F>(spawn_function: &F) -> (process::ExitStatus, CapturedOutput)
+    where
+        F: Fn(bool) -> process::Child,
+    {
+        use std::io::Read;
+
+        let mut child = spawn_function(true);
+
+        let mut stdout_handle = child.stdout.take();
+        let mut stderr_handle = child.stderr.take();
+
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        if let Some(ref mut handle) = stdout_handle {
+            let _ = handle.read_to_end(&mut stdout);
+        }
+        if let Some(ref mut handle) = stderr_handle {
+            let _ = handle.read_to_end(&mut stderr);
+        }
+
+        let status = child.wait().expect("Failed to wait for child process");
+
+        (status, CapturedOutput { stdout, stderr })
+    }
+
+    fn print_failure_output(run_number: u32, output: &CapturedOutput) {
+        use std::io::Write;
+
+        eprintln!("--- Run {} failed ---", run_number);
+        if !output.stdout.is_empty() {
+            let _ = std::io::stderr().write_all(&output.stdout);
+        }
+        if !output.stderr.is_empty() {
+            let _ = std::io::stderr().write_all(&output.stderr);
+        }
+        eprintln!("--- End run {} ---", run_number);
+    }
+
+    fn result_from_exit_counts(exit_counts: &std::collections::BTreeMap<i32, u32>) -> RunResult {
+        if exit_counts.keys().all(|&code| code == 0) {
+            RunResult::Success
+        } else {
+            RunResult::Failure
+        }
+    }
+
+    fn print_summary(exit_counts: &std::collections::BTreeMap<i32, u32>) {
+        eprintln!("ExitStatuses:");
+        for (exit_code, count) in exit_counts {
+            eprintln!("  {}: {}", exit_code, count);
+        }
+    }
+
+    fn execute_concurrent<F>(&self, spawn_function: F) -> RunResult
+    where
+        F: Fn(bool) -> process::Child + Send + Sync + 'static,
+    {
+        let completed = Arc::new(std::sync::atomic::AtomicU32::new(0));
+        let exit_counts: Arc<std::sync::Mutex<std::collections::BTreeMap<i32, u32>>> =
+            Arc::new(std::sync::Mutex::new(std::collections::BTreeMap::new()));
+        let total_runs = self.runs;
+        let spawn_function = Arc::new(spawn_function);
+
+        let mut handles = vec![];
+
+        for _ in 0..self.jobs {
+            let completed = Arc::clone(&completed);
+            let exit_counts = Arc::clone(&exit_counts);
+            let spawn_function = Arc::clone(&spawn_function);
+
+            let handle = thread::spawn(move || {
+                Self::worker_thread(completed, exit_counts, spawn_function, total_runs);
+            });
+            handles.push(handle);
+        }
+
+        for handle in handles {
+            handle.join().unwrap();
+        }
+
+        let exit_counts = exit_counts.lock().unwrap();
+        Self::print_summary(&exit_counts);
+        Self::result_from_exit_counts(&exit_counts)
+    }
+
+    fn worker_thread<F>(
+        completed: Arc<std::sync::atomic::AtomicU32>,
+        exit_counts: Arc<std::sync::Mutex<std::collections::BTreeMap<i32, u32>>>,
+        spawn_function: Arc<F>,
+        total_runs: u32,
+    ) where
+        F: Fn(bool) -> process::Child,
+    {
+        loop {
+            let run_number = completed.fetch_add(1, Ordering::SeqCst) + 1;
+            if run_number > total_runs {
+                break;
+            }
+
+            log::info!("Run {}/{}", run_number, total_runs);
+
+            let (status, output) = Self::run_with_capture(spawn_function.as_ref());
+            let exit_code = status.code().unwrap_or(-1);
+
+            {
+                let mut counts = exit_counts.lock().unwrap();
+                *counts.entry(exit_code).or_insert(0) += 1;
+            }
+
+            if !status.success() {
+                Self::print_failure_output(run_number, &output);
+            }
         }
     }
 }
@@ -129,15 +311,15 @@ pub mod mutant {
 }
 
 impl Command {
-    pub fn run(self, runtime: Runtime) -> RunResult {
-        runtime.run(self)
+    pub fn run(self, runtime: Runtime, rerun_config: RerunConfig) -> RunResult {
+        runtime.run(self, rerun_config)
     }
 }
 
 impl Runtime {
-    pub fn run(self, command: Command) -> RunResult {
+    pub fn run(self, command: Command, rerun_config: RerunConfig) -> RunResult {
         match self {
-            Self::Host => self.run_host(command),
+            Self::Host => self.run_host(command, rerun_config),
             Self::Ruby32 => self.run_container("docker.io/library/ruby:3.2-alpine", command),
             Self::Ruby33 => self.run_container("docker.io/library/ruby:3.3-alpine", command),
             Self::Ruby34 => self.run_container("docker.io/library/ruby:3.4-alpine", command),
@@ -145,23 +327,26 @@ impl Runtime {
         }
     }
 
-    fn run_host(self, command: Command) -> RunResult {
+    fn run_host(self, command: Command, rerun_config: RerunConfig) -> RunResult {
         let arguments = Self::build_arguments(command);
         if arguments.is_empty() {
             return RunResult::Success;
         }
 
-        let status = process::Command::new(&arguments[0])
-            .args(&arguments[1..])
-            .current_dir("ruby")
-            .status()
-            .expect("Failed to execute process");
+        rerun_config.execute(move |capture| Self::spawn_host_process(&arguments, capture))
+    }
 
-        if status.success() {
-            RunResult::Success
-        } else {
-            RunResult::Failure
+    fn spawn_host_process(arguments: &[String], capture: bool) -> process::Child {
+        let mut command = process::Command::new(&arguments[0]);
+        command.args(&arguments[1..]).current_dir("ruby");
+
+        if capture {
+            command
+                .stdout(process::Stdio::piped())
+                .stderr(process::Stdio::piped());
         }
+
+        command.spawn().expect("Failed to spawn process")
     }
 
     fn run_container(self, base_image: &'static str, command: Command) -> RunResult {
