@@ -211,16 +211,14 @@ if RUBY_VERSION >= '3.2'
   end
 end
 
-if RUBY_VERSION >= '3.1'
-  Mutant::Meta::Example.add :def do
-    source 'def foo(&); bar(&); end'
+Mutant::Meta::Example.add :def do
+  source 'def foo(&); bar(&); end'
 
-    mutation 'def foo(&); raise; end'
-    mutation 'def foo(&); super; end'
-    mutation 'def foo(&); end'
-    mutation 'def foo(&); nil; end'
-    mutation 'def foo(&); bar; end'
-  end
+  mutation 'def foo(&); raise; end'
+  mutation 'def foo(&); super; end'
+  mutation 'def foo(&); end'
+  mutation 'def foo(&); nil; end'
+  mutation 'def foo(&); bar; end'
 end
 
 Mutant::Meta::Example.add :def do
