@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
 
   exclusion = Dir.glob('lib/mutant/{integration/{minitest,rspec}.rb,minitest/**.rb}')
 
-  gem.files            = Dir.glob('lib/**/*') - exclusion
+  gem.files            = Dir.glob('{VERSION,lib/**/*}') - exclusion
   gem.extra_rdoc_files = %w[LICENSE]
   gem.executables      = %w[mutant mutant-ruby]
 
