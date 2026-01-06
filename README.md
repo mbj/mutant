@@ -92,11 +92,12 @@ Supported indicates if a specific Ruby version / Implementation is actively supp
 | cRUBY/MRI      | 3.2            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | cRUBY/MRI      | 3.3            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | cRUBY/MRI      | 3.4            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| cRUBY/MRI      | 4.0            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| cRUBY/MRI      | 4.0            | :heavy_check_mark: | :heavy_check_mark: | TBD*               | :heavy_check_mark: |
 | jruby          | TBD            | :email:            | :email:            | :email:            | :email:            |
 | mruby          | TBD            | :email:            | :email:            | :email:            | :email:            |
 | cRUBY/MRI      | < 3.2          | :no_entry:         | :no_entry:         | :no_entry:         | :no_entry:         |
 
+*TBD: The parser gem does not support 4.0 syntax yet and for this reason mutant cannot process 4.0 specific syntax, runtime of 4.0 is fine. This means also no 4.0 specific mutations.
 
 Labels:
 
