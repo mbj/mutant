@@ -38,6 +38,7 @@ module Mutant
       securerandom
       set
       singleton
+      socket
       sorbet-runtime
       stringio
       unparser
@@ -220,6 +221,7 @@ module Mutant
     require 'mutant/hooks'
     require 'mutant/config'
     require 'mutant/config/coverage_criteria'
+    require 'mutant/ipc'
     require 'mutant/cli'
     require 'mutant/cli/command'
     require 'mutant/cli/command/environment'
@@ -229,6 +231,7 @@ module Mutant
     require 'mutant/cli/command/environment/subject'
     require 'mutant/cli/command/environment/test'
     require 'mutant/cli/command/util'
+    require 'mutant/cli/command/ipc'
     require 'mutant/cli/command/root'
     require 'mutant/mutation/runner'
     require 'mutant/mutation/runner/sink'
@@ -331,7 +334,8 @@ module Mutant
     tempfile:              Tempfile,
     thread:                Thread,
     time:                  Time,
-    timer:
+    timer:,
+    unix_socket:           UNIXSocket
   )
 
   # Reopen class to initialize constant to avoid dep circle
