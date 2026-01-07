@@ -25,7 +25,8 @@ module Mutant
       :tempfile,
       :thread,
       :time,
-      :timer
+      :timer,
+      :unix_socket
     )
 
     INSPECT = '#<Mutant::World>'

@@ -125,7 +125,8 @@ module XSpecHelper
       tempfile:              class_double(Tempfile),
       thread:                class_double(Thread),
       time:                  class_double(Time),
-      timer:                 instance_double(Mutant::Timer)
+      timer:                 instance_double(Mutant::Timer),
+      unix_socket:           class_double(UNIXSocket)
     )
   end
   # rubocop:enable Metrics/AbcSize
