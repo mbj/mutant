@@ -115,13 +115,8 @@ module Mutant
 
           end # Result
 
-          # Reporter for progressive output format on scheduler Status objects
+          # Base class for progressive test status output
           class StatusProgressive < self
-            PIPE_FORMAT        = 'progress: %02d/%02d failed: %d runtime: %0.02fs testtime: %0.02fs tests/s: %0.02f'
-            TTY_FORMAT         = '%s %d/%d (%5.1f%%) %s failed: %d %0.1fs %0.2f/s'
-            TTY_MIN_BAR_WIDTH  = 10
-            TTY_MAX_BAR_WIDTH  = 40
-
             delegate(
               :amount_test_results,
               :amount_tests,
@@ -129,17 +124,6 @@ module Mutant
               :testtime,
               :runtime
             )
-
-            # Run printer
-            #
-            # @return [undefined]
-            def run
-              if tty?
-                render_tty
-              else
-                render_pipe
-              end
-            end
 
           private
 
@@ -151,65 +135,45 @@ module Mutant
               amount_test_results / runtime
             end
 
-            def render_pipe
-              status(
-                PIPE_FORMAT,
-                amount_test_results,
-                amount_tests,
-                amount_tests_failed,
-                runtime,
-                testtime,
-                tests_per_second
-              )
-            end
+            # Pipe output format (non-TTY)
+            class Pipe < StatusProgressive
+              FORMAT = 'progress: %02d/%02d failed: %d runtime: %0.02fs testtime: %0.02fs tests/s: %0.02f'
 
-            def render_tty
-              bar = ProgressBar.build(
-                current: amount_test_results,
-                total:   amount_tests,
-                width:   tty_bar_width
-              )
+              def run
+                status(
+                  FORMAT,
+                  amount_test_results,
+                  amount_tests,
+                  amount_tests_failed,
+                  runtime,
+                  testtime,
+                  tests_per_second
+                )
+              end
+            end # Pipe
 
-              line = format_progress_line(bar)
-              output.write(colorize(status_color, line))
-            end
+            # TTY output format with progress bar
+            class Tty < StatusProgressive
+              FORMAT         = '%s %d/%d (%5.1f%%) %s failed: %d %0.1fs %0.2f/s'
+              MIN_BAR_WIDTH  = 10
+              MAX_BAR_WIDTH  = 40
+              PREFIX         = 'TESTING'
 
-            def format_progress_line(bar)
-              format(
-                TTY_FORMAT,
-                progress_prefix,
-                amount_test_results,
-                amount_tests,
-                bar.percentage,
-                bar.render,
-                amount_tests_failed,
-                runtime,
-                tests_per_second
-              )
-            end
+              def run
+                bar  = ProgressBar.build(current: amount_test_results, total: amount_tests, width: bar_width)
+                line = format(FORMAT, PREFIX, amount_test_results, amount_tests, bar.percentage, bar.render, amount_tests_failed, runtime, tests_per_second)
+                output.write(colorize(status_color, line))
+              end
 
-            def progress_prefix
-              'TESTING'
-            end
+            private
 
-            def tty_bar_width
-              # Calculate width of non-bar content using placeholder bar
-              placeholder_bar  = ''
-              non_bar_content  = format(
-                TTY_FORMAT,
-                progress_prefix,
-                amount_test_results,
-                amount_tests,
-                99.9,
-                placeholder_bar,
-                amount_tests_failed,
-                runtime,
-                tests_per_second
-              )
-              available_width  = output.terminal_width - non_bar_content.length
+              def bar_width
+                non_bar_content = format(FORMAT, PREFIX, amount_test_results, amount_tests, 99.9, '', amount_tests_failed, runtime, tests_per_second)
+                available_width = output.terminal_width - non_bar_content.length
 
-              available_width.clamp(TTY_MIN_BAR_WIDTH, TTY_MAX_BAR_WIDTH)
-            end
+                available_width.clamp(MIN_BAR_WIDTH, MAX_BAR_WIDTH)
+              end
+            end # Tty
           end # StatusProgressive
         end # Test
       end # Printer

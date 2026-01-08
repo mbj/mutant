@@ -88,20 +88,28 @@ module Mutant
           #
           # @return [String]
           def progress(status)
-            wrap_progress { format(Printer::StatusProgressive, status) }
+            wrap_progress { format(status_progressive_printer, status) }
           end
 
           # Progress representation
           #
           # @return [String]
           def test_progress(status)
-            wrap_progress { format(Printer::Test::StatusProgressive, status) }
+            wrap_progress { format(test_status_progressive_printer, status) }
           end
 
         private
 
           def new_buffer
             StringIO.new
+          end
+
+          def status_progressive_printer
+            tty ? Printer::StatusProgressive::Tty : Printer::StatusProgressive::Pipe
+          end
+
+          def test_status_progressive_printer
+            tty ? Printer::Test::StatusProgressive::Tty : Printer::Test::StatusProgressive::Pipe
           end
 
           # Wrap progress output with TTY-specific line handling
