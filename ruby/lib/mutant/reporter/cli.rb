@@ -15,20 +15,17 @@ module Mutant
       # @return [Reporter::CLI]
       def self.build(output)
         tty = output.respond_to?(:tty?) && output.tty?
+        terminal_width = tty ? detect_terminal_width(output) : DEFAULT_TERMINAL_WIDTH
 
         new(
-          format:         Format::Progressive.new(tty:, terminal_width: detect_terminal_width(output)),
+          format:         Format::Progressive.new(tty:, terminal_width:),
           print_warnings: false,
           output:
         )
       end
 
       def self.detect_terminal_width(output)
-        if output.respond_to?(:winsize)
-          output.winsize.last
-        else
-          DEFAULT_TERMINAL_WIDTH
-        end
+        output.winsize.last
       rescue Errno::ENOTTY, Errno::EOPNOTSUPP
         DEFAULT_TERMINAL_WIDTH
       end

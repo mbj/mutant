@@ -24,8 +24,8 @@ RSpec.describe Mutant::Reporter::CLI do
     subject { described_class.build(output) }
 
     context 'when output is a tty' do
-      let(:tty?)   { true                            }
-      let(:output) { instance_double(IO, tty?: true) }
+      let(:tty?)   { true }
+      let(:output) { instance_double(IO, tty?: true, winsize: [24, 80]) }
 
       it { should eql(described_class.new(format:, output:, print_warnings: false)) }
     end
@@ -52,27 +52,11 @@ RSpec.describe Mutant::Reporter::CLI do
         end
       end
 
-      context 'when output does not respond to winsize' do
-        let(:output) { instance_double(IO, tty?: true) }
-        let(:terminal_width) { 80 }
-
-        before do
-          allow(output).to receive(:respond_to?).with(:tty?).and_return(true)
-          allow(output).to receive(:respond_to?).with(:winsize).and_return(false)
-        end
-
-        it 'uses the default terminal width' do
-          expect(subject.format.terminal_width).to eql(80)
-        end
-      end
-
       context 'when winsize raises Errno::ENOTTY' do
-        let(:output) { instance_double(IO, tty?: true) }
+        let(:output) { instance_double(IO, tty?: true, winsize: nil) }
         let(:terminal_width) { 80 }
 
         before do
-          allow(output).to receive(:respond_to?).with(:tty?).and_return(true)
-          allow(output).to receive(:respond_to?).with(:winsize).and_return(true)
           allow(output).to receive(:winsize).and_raise(Errno::ENOTTY)
         end
 
@@ -82,12 +66,10 @@ RSpec.describe Mutant::Reporter::CLI do
       end
 
       context 'when winsize raises Errno::EOPNOTSUPP' do
-        let(:output) { instance_double(IO, tty?: true) }
+        let(:output) { instance_double(IO, tty?: true, winsize: nil) }
         let(:terminal_width) { 80 }
 
         before do
-          allow(output).to receive(:respond_to?).with(:tty?).and_return(true)
-          allow(output).to receive(:respond_to?).with(:winsize).and_return(true)
           allow(output).to receive(:winsize).and_raise(Errno::EOPNOTSUPP)
         end
 
