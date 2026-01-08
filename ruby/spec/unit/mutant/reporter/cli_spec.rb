@@ -3,9 +3,10 @@
 RSpec.describe Mutant::Reporter::CLI do
   setup_shared_context
 
-  let(:format) { described_class::Format::Progressive.new(tty: tty?) }
+  let(:format) { described_class::Format::Progressive.new(tty: tty?, terminal_width:) }
   let(:object) { described_class.new(format:, output:, print_warnings: false) }
-  let(:tty?)   { false }
+  let(:tty?)           { false }
+  let(:terminal_width) { 80 }
 
   def contents
     output.rewind
@@ -138,7 +139,8 @@ RSpec.describe Mutant::Reporter::CLI do
       let(:tty?) { true }
 
       # rubocop:disable Layout/LineLength
-      it_reports "\r\e[K" + Unparser::Color::GREEN.format('RUNNING 0/2 (  0.0%) ░░░░░░░░░░░░░░░░░░░░░░░░ alive: 0 4.0s 0.00/s')
+      # Bar width is dynamically calculated based on terminal_width (80) minus other content
+      it_reports "\r\e[K" + Unparser::Color::GREEN.format('RUNNING 0/2 (  0.0%) ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ alive: 0 4.0s 0.00/s')
       # rubocop:enable Layout/LineLength
     end
 
@@ -179,7 +181,8 @@ RSpec.describe Mutant::Reporter::CLI do
     end
 
     # rubocop:disable Layout/LineLength
-    it_reports "\r\e[K" + Unparser::Color::GREEN.format('TESTING 0/2 (  0.0%) ░░░░░░░░░░░░░░░░░░░░░░░░ failed: 0 1.0s 0.00/s')
+    # Bar width is dynamically calculated based on terminal_width (80) minus other content
+    it_reports "\r\e[K" + Unparser::Color::GREEN.format('TESTING 0/2 (  0.0%) ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ failed: 0 1.0s 0.00/s')
     # rubocop:enable Layout/LineLength
   end
 
