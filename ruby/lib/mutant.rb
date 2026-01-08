@@ -237,6 +237,7 @@ module Mutant
     require 'mutant/reporter/null'
     require 'mutant/reporter/sequence'
     require 'mutant/reporter/cli'
+    require 'mutant/reporter/cli/progress_bar'
     require 'mutant/reporter/cli/printer'
     require 'mutant/reporter/cli/printer/config'
     require 'mutant/reporter/cli/printer/coverage_result'

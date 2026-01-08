@@ -3,9 +3,10 @@
 RSpec.describe Mutant::Reporter::CLI do
   setup_shared_context
 
-  let(:format) { described_class::Format::Progressive.new(tty: tty?) }
+  let(:format) { described_class::Format::Progressive.new(tty: tty?, output_io:) }
   let(:object) { described_class.new(format:, output:, print_warnings: false) }
-  let(:tty?)   { false }
+  let(:tty?)      { false }
+  let(:output_io) { output }
 
   def contents
     output.rewind
@@ -23,8 +24,8 @@ RSpec.describe Mutant::Reporter::CLI do
     subject { described_class.build(output) }
 
     context 'when output is a tty' do
-      let(:tty?)   { true                            }
-      let(:output) { instance_double(IO, tty?: true) }
+      let(:tty?)   { true }
+      let(:output) { instance_double(IO, tty?: true, winsize: [24, 80]) }
 
       it { should eql(described_class.new(format:, output:, print_warnings: false)) }
     end
@@ -38,6 +39,65 @@ RSpec.describe Mutant::Reporter::CLI do
 
       context 'and does respond to #tty?' do
         it { should eql(described_class.new(format:, output:, print_warnings: false)) }
+      end
+    end
+
+    context 'terminal width detection' do
+      context 'when output responds to winsize' do
+        let(:output) { instance_double(IO, tty?: true, winsize: [24, 120]) }
+
+        it 'uses the terminal width from winsize' do
+          expect(subject.format.terminal_width).to eql(120)
+        end
+      end
+
+      context 'when not a tty' do
+        let(:output) { instance_double(IO, tty?: false, winsize: [24, 120]) }
+
+        before do
+          allow(output).to receive(:respond_to?).with(:tty?).and_return(true)
+        end
+
+        it 'uses the default terminal width' do
+          expect(subject.format.terminal_width).to eql(80)
+        end
+      end
+
+      context 'when output does not respond to winsize' do
+        let(:output) { instance_double(IO, tty?: true) }
+
+        before do
+          allow(output).to receive(:respond_to?).with(:tty?).and_return(true)
+          allow(output).to receive(:respond_to?).with(:winsize).and_return(false)
+        end
+
+        it 'uses the default terminal width' do
+          expect(subject.format.terminal_width).to eql(80)
+        end
+      end
+
+      context 'when winsize raises Errno::ENOTTY' do
+        let(:output) { instance_double(IO, tty?: true, winsize: nil) }
+
+        before do
+          allow(output).to receive(:winsize).and_raise(Errno::ENOTTY)
+        end
+
+        it 'uses the default terminal width' do
+          expect(subject.format.terminal_width).to eql(80)
+        end
+      end
+
+      context 'when winsize raises Errno::EOPNOTSUPP' do
+        let(:output) { instance_double(IO, tty?: true, winsize: nil) }
+
+        before do
+          allow(output).to receive(:winsize).and_raise(Errno::EOPNOTSUPP)
+        end
+
+        it 'uses the default terminal width' do
+          expect(subject.format.terminal_width).to eql(80)
+        end
       end
     end
   end
@@ -101,32 +161,70 @@ RSpec.describe Mutant::Reporter::CLI do
   describe '#report' do
     subject { object.report(env_result) }
 
-    it_reports(<<~REPORT)
-      Mutant environment:
-      Usage:           unknown
-      Matcher:         #<Mutant::Matcher::Config empty>
-      Integration:     null
-      Jobs:            auto
-      Includes:        []
-      Requires:        []
-      Operators:       light
-      MutationTimeout: 5
-      Subjects:        1
-      All-Tests:       2
-      Available-Tests: 1
-      Selected-Tests:  1
-      Tests/Subject:   1.00 avg
-      Mutations:       2
-      Results:         2
-      Kills:           2
-      Alive:           0
-      Timeouts:        0
-      Runtime:         4.00s
-      Killtime:        2.00s
-      Efficiency:      50.00%
-      Mutations/s:     0.50
-      Coverage:        100.00%
-    REPORT
+    context 'in non-TTY mode' do
+      it_reports(<<~REPORT)
+        Mutant environment:
+        Usage:           unknown
+        Matcher:         #<Mutant::Matcher::Config empty>
+        Integration:     null
+        Jobs:            auto
+        Includes:        []
+        Requires:        []
+        Operators:       light
+        MutationTimeout: 5
+        Subjects:        1
+        All-Tests:       2
+        Available-Tests: 1
+        Selected-Tests:  1
+        Tests/Subject:   1.00 avg
+        Mutations:       2
+        Results:         2
+        Kills:           2
+        Alive:           0
+        Timeouts:        0
+        Runtime:         4.00s
+        Killtime:        2.00s
+        Efficiency:      50.00%
+        Mutations/s:     0.50
+        Coverage:        100.00%
+      REPORT
+    end
+
+    context 'in TTY mode' do
+      let(:tty?)      { true }
+      let(:output_io) { instance_double(IO, winsize: [24, 80]) }
+
+      # rubocop:disable Layout/LineLength
+      # Bar width is dynamically calculated based on terminal_width (80) minus other content
+      let(:expected_progress_line) do
+        Unparser::Color::GREEN.format('RUNNING 2/2 (100.0%) ██████████████████████████████████████ alive: 0 4.0s 0.50/s')
+      end
+      # rubocop:enable Layout/LineLength
+
+      it 'writes final progress bar before report' do
+        expect(subject).to be(object)
+        expect(contents).to start_with("\r\e[2K#{expected_progress_line}\n")
+      end
+
+      it 'includes the full report after progress bar' do
+        subject
+        expect(contents).to include('Coverage:        100.00%')
+      end
+
+      it 'calls format.progress with correct final status' do
+        expected_status = Mutant::Parallel::Status.new(
+          active_jobs: Set.new,
+          done:        true,
+          payload:     env_result
+        )
+
+        allow(format).to receive(:progress).and_call_original
+
+        subject
+
+        expect(format).to have_received(:progress).with(expected_status)
+      end
+    end
   end
 
   describe '#progress' do
@@ -135,12 +233,12 @@ RSpec.describe Mutant::Reporter::CLI do
     context 'with empty scheduler' do
       with(:env_result) { { subject_results: [] } }
 
-      let(:tty?) { true }
+      let(:tty?)      { true }
+      let(:output_io) { instance_double(IO, winsize: [24, 80]) }
 
       # rubocop:disable Layout/LineLength
-      # rubocop:disable Style/StringConcatenation
-      it_reports Unparser::Color::GREEN.format('progress: 00/02 alive: 0 runtime: 4.00s killtime: 0.00s mutations/s: 0.00') + "\n"
-      # rubocop:enable Style/StringConcatenation
+      # Bar width is dynamically calculated based on terminal_width (80) minus other content
+      it_reports "\r\e[2K#{Unparser::Color::GREEN.format('RUNNING 0/2 (  0.0%) ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ alive: 0 4.0s 0.00/s')}"
       # rubocop:enable Layout/LineLength
     end
 
@@ -162,7 +260,8 @@ RSpec.describe Mutant::Reporter::CLI do
   describe '#test_progress' do
     subject { object.test_progress(test_status) }
 
-    let(:tty?) { true }
+    let(:tty?)      { true }
+    let(:output_io) { instance_double(IO, winsize: [24, 80]) }
 
     let(:test_env) do
       Mutant::Result::TestEnv.new(
@@ -181,9 +280,8 @@ RSpec.describe Mutant::Reporter::CLI do
     end
 
     # rubocop:disable Layout/LineLength
-    # rubocop:disable Style/StringConcatenation
-    it_reports Unparser::Color::GREEN.format('progress: 00/02 failed: 0 runtime: 1.00s testtime: 0.00s tests/s: 0.00') + "\n"
-    # rubocop:enable Style/StringConcatenation
+    # Bar width is dynamically calculated based on terminal_width (80) minus other content
+    it_reports "\r\e[2K#{Unparser::Color::GREEN.format('TESTING 0/2 (  0.0%) ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ failed: 0 1.0s 0.00/s')}"
     # rubocop:enable Layout/LineLength
   end
 
@@ -198,18 +296,55 @@ RSpec.describe Mutant::Reporter::CLI do
       )
     end
 
-    it_reports <<~'STR'
-      Test environment:
-      Fail-Fast:    false
-      Integration:  null
-      Jobs:         auto
-      Tests:        2
-      Test-Results: 0
-      Test-Failed:  0
-      Test-Success: 0
-      Runtime:      1.00s
-      Testtime:     0.00s
-      Efficiency:   0.00%
-    STR
+    context 'in non-TTY mode' do
+      it_reports <<~'STR'
+        Test environment:
+        Fail-Fast:    false
+        Integration:  null
+        Jobs:         auto
+        Tests:        2
+        Test-Results: 0
+        Test-Failed:  0
+        Test-Success: 0
+        Runtime:      1.00s
+        Testtime:     0.00s
+        Efficiency:   0.00%
+      STR
+    end
+
+    context 'in TTY mode' do
+      let(:tty?)      { true }
+      let(:output_io) { instance_double(IO, winsize: [24, 80]) }
+
+      # rubocop:disable Layout/LineLength
+      let(:expected_progress_line) do
+        Unparser::Color::GREEN.format('TESTING 0/2 (  0.0%) ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ failed: 0 1.0s 0.00/s')
+      end
+      # rubocop:enable Layout/LineLength
+
+      it 'writes final progress bar before report' do
+        expect(subject).to be(object)
+        expect(contents).to start_with("\r\e[2K#{expected_progress_line}\n")
+      end
+
+      it 'includes the full report after progress bar' do
+        subject
+        expect(contents).to include('Efficiency:   0.00%')
+      end
+
+      it 'calls format.test_progress with correct final status' do
+        expected_status = Mutant::Parallel::Status.new(
+          active_jobs: Set.new,
+          done:        true,
+          payload:     test_env
+        )
+
+        allow(format).to receive(:test_progress).and_call_original
+
+        subject
+
+        expect(format).to have_received(:test_progress).with(expected_status)
+      end
+    end
   end
 end
