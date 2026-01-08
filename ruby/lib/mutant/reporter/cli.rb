@@ -29,7 +29,7 @@ module Mutant
         else
           DEFAULT_TERMINAL_WIDTH
         end
-      rescue Errno::ENOTTY
+      rescue Errno::ENOTTY, Errno::EOPNOTSUPP
         DEFAULT_TERMINAL_WIDTH
       end
       private_class_method :detect_terminal_width

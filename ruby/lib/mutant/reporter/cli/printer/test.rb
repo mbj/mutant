@@ -154,21 +154,27 @@ module Mutant
 
             # TTY output format with progress bar
             class Tty < StatusProgressive
-              FORMAT         = '%s %d/%d (%5.1f%%) %s failed: %d %0.1fs %0.2f/s'
-              MIN_BAR_WIDTH  = 10
-              MAX_BAR_WIDTH  = 40
-              PREFIX         = 'TESTING'
+              FORMAT              = '%s %d/%d (%5.1f%%) %s failed: %d %0.1fs %0.2f/s'
+              MIN_BAR_WIDTH       = 10
+              MAX_BAR_WIDTH       = 40
+              PREFIX              = 'TESTING'
+              PERCENTAGE_ESTIMATE = 99.9
 
               def run
                 bar  = ProgressBar.build(current: amount_test_results, total: amount_tests, width: bar_width)
-                line = format(FORMAT, PREFIX, amount_test_results, amount_tests, bar.percentage, bar.render, amount_tests_failed, runtime, tests_per_second)
+                line = FORMAT % format_args(bar.percentage, bar.render)
                 output.write(colorize(status_color, line))
               end
 
             private
 
+              def format_args(percentage, bar)
+                [PREFIX, amount_test_results, amount_tests, percentage, bar,
+                 amount_tests_failed, runtime, tests_per_second]
+              end
+
               def bar_width
-                non_bar_content = format(FORMAT, PREFIX, amount_test_results, amount_tests, 99.9, '', amount_tests_failed, runtime, tests_per_second)
+                non_bar_content = FORMAT % format_args(PERCENTAGE_ESTIMATE, nil)
                 available_width = output.terminal_width - non_bar_content.length
 
                 available_width.clamp(MIN_BAR_WIDTH, MAX_BAR_WIDTH)
