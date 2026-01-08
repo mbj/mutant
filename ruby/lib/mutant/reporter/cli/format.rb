@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'io/console'
+
 module Mutant
   class Reporter
     class CLI
@@ -7,7 +9,7 @@ module Mutant
       #
       # rubocop:disable Style/FormatString
       class Format
-        include AbstractType, Anima.new(:tty)
+        include AbstractType, Anima.new(:tty, :terminal_width)
 
         # Start representation
         #
@@ -35,7 +37,7 @@ module Mutant
 
         # Output abstraction to decouple tty? from buffer
         class Output
-          include Anima.new(:tty, :buffer)
+          include Anima.new(:tty, :buffer, :terminal_width)
 
           # Test if output is a tty
           #
@@ -54,7 +56,7 @@ module Mutant
 
         def format(printer, object)
           buffer = new_buffer
-          printer.call(output: Output.new(tty:, buffer:), object:)
+          printer.call(output: Output.new(tty:, buffer:, terminal_width:), object:)
           buffer.rewind
           buffer.read
         end
