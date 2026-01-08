@@ -9,7 +9,20 @@ module Mutant
       #
       # rubocop:disable Style/FormatString
       class Format
-        include AbstractType, Anima.new(:tty, :terminal_width)
+        include AbstractType, Anima.new(:tty, :output_io)
+
+        DEFAULT_TERMINAL_WIDTH = 80
+
+        # Dynamic terminal width - queries current size on each call
+        #
+        # @return [Integer]
+        def terminal_width
+          return DEFAULT_TERMINAL_WIDTH unless tty && output_io.respond_to?(:winsize)
+
+          output_io.winsize.last
+        rescue Errno::ENOTTY, Errno::EOPNOTSUPP
+          DEFAULT_TERMINAL_WIDTH
+        end
 
         # Start representation
         #
@@ -67,8 +80,13 @@ module Mutant
           REPORT_FREQUENCY = 1.0
           REPORT_DELAY     = 1 / REPORT_FREQUENCY
 
-          # ANSI escape sequence to clear from cursor to end of line
-          CLEAR_LINE = "\e[K"
+          # ANSI escape sequences
+          CLEAR_LINE  = "\e[2K"
+          CURSOR_UP   = "\e[A"
+          CURSOR_DOWN = "\e[B"
+
+          # Pattern to strip ANSI escape codes for visual length calculation
+          ANSI_ESCAPE = /\e\[[0-9;]*[A-Za-z]/
 
           # Start representation
           #
@@ -114,17 +132,63 @@ module Mutant
 
           # Wrap progress output with TTY-specific line handling
           #
-          # In TTY mode: use carriage return and clear line for in-place updates
-          # In non-TTY mode: use regular newline-terminated output
+          # Uses indicatif-style multi-line clearing to handle terminal resize:
+          # 1. Calculate how many visual lines previous content spans at current width
+          # 2. Clear all those lines using cursor movement
+          # 3. Write new content
           #
           # @return [String]
           def wrap_progress
             content = yield
-            if tty
-              "\r#{CLEAR_LINE}#{content}"
-            else
-              content
+            return content unless tty
+
+            clear_seq            = clear_last_lines(visual_lines_at_width(@last_content_length, terminal_width))
+            @last_content_length = visual_length(content)
+
+            "#{clear_seq}#{content}"
+          end
+
+          # Calculate visual length of string (excluding ANSI escape sequences)
+          #
+          # @param string [String]
+          # @return [Integer]
+          def visual_length(string)
+            string.gsub(ANSI_ESCAPE, '').length
+          end
+
+          # Calculate visual lines content occupies at given terminal width
+          #
+          # @param content_length [Integer, nil]
+          # @param width [Integer]
+          # @return [Integer]
+          def visual_lines_at_width(content_length, width)
+            return 1 if width < 1
+
+            # nil.to_f = 0.0, and ceil(0.0/w).clamp(1,10) = 1
+            (content_length.to_f / width).ceil.clamp(1, 10)
+          end
+
+          # Build escape sequence to clear n lines (indicatif/console pattern)
+          #
+          # Algorithm from console crate's clear_last_lines:
+          # 1. Move cursor up (n-1) lines to reach top
+          # 2. For each line: clear it, move down (except last)
+          # 3. Move cursor back up (n-1) lines
+          #
+          # For n=1: produces "\r\e[2K" (no cursor movement needed)
+          # For n>1: moves up, clears each line with downs between, moves back up
+          #
+          # @param lines [Integer] number of lines to clear (must be >= 1)
+          # @return [String]
+          def clear_last_lines(lines)
+            buffer = StringIO.new
+            buffer << (CURSOR_UP * (lines - 1))
+            lines.times do |i|
+              buffer << "\r" << CLEAR_LINE
+              buffer << CURSOR_DOWN if i < lines - 1
             end
+            buffer << (CURSOR_UP * (lines - 1))
+            buffer.string
           end
 
         end # Progressive
