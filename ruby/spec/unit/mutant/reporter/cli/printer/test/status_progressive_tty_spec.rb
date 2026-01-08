@@ -67,7 +67,16 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Test::StatusProgressive::Tty do
     context 'with narrow terminal' do
       let(:terminal_width) { 50 }
 
-      it_reports Unparser::Color::GREEN.format('TESTING 0/2 (  0.0%) ░░░░░░░░░░ failed: 0 0.8s 0.00/s')
+      # Bar shrinks to fit available space
+      it_reports Unparser::Color::GREEN.format('TESTING 0/2 (  0.0%) ░░░░░░░ failed: 0 0.8s 0.00/s')
+    end
+
+    context 'with very narrow terminal' do
+      # Terminal so narrow that bar width would be negative, clamped to 0
+      let(:terminal_width) { 40 }
+
+      # Bar width is 0 (clamped from negative available_width)
+      it_reports Unparser::Color::GREEN.format('TESTING 0/2 (  0.0%)  failed: 0 0.8s 0.00/s')
     end
 
     context 'with wide terminal' do

@@ -6,8 +6,6 @@ module Mutant
     class CLI < self
       include Anima.new(:print_warnings, :output, :format)
 
-      DEFAULT_TERMINAL_WIDTH = 80
-
       # Build reporter
       #
       # @param [IO] output
@@ -15,21 +13,13 @@ module Mutant
       # @return [Reporter::CLI]
       def self.build(output)
         tty = output.respond_to?(:tty?) && output.tty?
-        terminal_width = tty ? detect_terminal_width(output) : DEFAULT_TERMINAL_WIDTH
 
         new(
-          format:         Format::Progressive.new(tty:, terminal_width:),
+          format:         Format::Progressive.new(tty:, output_io: output),
           print_warnings: false,
           output:
         )
       end
-
-      def self.detect_terminal_width(output)
-        output.winsize.last
-      rescue Errno::ENOTTY, Errno::EOPNOTSUPP
-        DEFAULT_TERMINAL_WIDTH
-      end
-      private_class_method :detect_terminal_width
 
       # Report start
       #
