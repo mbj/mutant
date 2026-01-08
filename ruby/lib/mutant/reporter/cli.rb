@@ -95,7 +95,7 @@ module Mutant
       #
       # @return [self]
       def report(env)
-        finish_progress_bar
+        write_final_progress(env)
         Printer::EnvResult.call(output:, object: env)
         self
       end
@@ -106,7 +106,7 @@ module Mutant
       #
       # @return [self]
       def test_report(env)
-        finish_progress_bar
+        write_final_test_progress(env)
         Printer::Test::EnvResult.call(output:, object: env)
         self
       end
@@ -117,8 +117,28 @@ module Mutant
         output.write(frame)
       end
 
-      def finish_progress_bar
-        output.puts if format.tty
+      def write_final_progress(env)
+        return unless format.tty
+
+        final_status = Parallel::Status.new(
+          active_jobs: Set.new,
+          done:        true,
+          payload:     env
+        )
+        write(format.progress(final_status))
+        output.puts
+      end
+
+      def write_final_test_progress(env)
+        return unless format.tty
+
+        final_status = Parallel::Status.new(
+          active_jobs: Set.new,
+          done:        true,
+          payload:     env
+        )
+        write(format.test_progress(final_status))
+        output.puts
       end
 
     end # CLI
