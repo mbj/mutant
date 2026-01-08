@@ -80,6 +80,7 @@ module Mutant
       #
       # @return [self]
       def report(env)
+        finish_progress_bar
         Printer::EnvResult.call(output:, object: env)
         self
       end
@@ -90,6 +91,7 @@ module Mutant
       #
       # @return [self]
       def test_report(env)
+        finish_progress_bar
         Printer::Test::EnvResult.call(output:, object: env)
         self
       end
@@ -98,6 +100,10 @@ module Mutant
 
       def write(frame)
         output.write(frame)
+      end
+
+      def finish_progress_bar
+        output.puts if format.tty
       end
 
     end # CLI

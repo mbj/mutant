@@ -65,6 +65,9 @@ module Mutant
           REPORT_FREQUENCY = 1.0
           REPORT_DELAY     = 1 / REPORT_FREQUENCY
 
+          # ANSI escape sequence to clear from cursor to end of line
+          CLEAR_LINE = "\e[K"
+
           # Start representation
           #
           # @return [String]
@@ -83,20 +86,35 @@ module Mutant
           #
           # @return [String]
           def progress(status)
-            format(Printer::StatusProgressive, status)
+            wrap_progress { format(Printer::StatusProgressive, status) }
           end
 
           # Progress representation
           #
           # @return [String]
           def test_progress(status)
-            format(Printer::Test::StatusProgressive, status)
+            wrap_progress { format(Printer::Test::StatusProgressive, status) }
           end
 
         private
 
           def new_buffer
             StringIO.new
+          end
+
+          # Wrap progress output with TTY-specific line handling
+          #
+          # In TTY mode: use carriage return and clear line for in-place updates
+          # In non-TTY mode: use regular newline-terminated output
+          #
+          # @return [String]
+          def wrap_progress
+            content = yield
+            if tty
+              "\r#{CLEAR_LINE}#{content}"
+            else
+              content
+            end
           end
 
         end # Progressive
