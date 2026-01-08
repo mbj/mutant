@@ -117,7 +117,8 @@ module Mutant
 
           # Reporter for progressive output format on scheduler Status objects
           class StatusProgressive < self
-            FORMAT = 'progress: %02d/%02d failed: %d runtime: %0.02fs testtime: %0.02fs tests/s: %0.02f'
+            PIPE_FORMAT    = 'progress: %02d/%02d failed: %d runtime: %0.02fs testtime: %0.02fs tests/s: %0.02f'
+            TTY_BAR_WIDTH  = 24
 
             delegate(
               :amount_test_results,
@@ -131,15 +132,11 @@ module Mutant
             #
             # @return [undefined]
             def run
-              status(
-                FORMAT,
-                amount_test_results,
-                amount_tests,
-                amount_tests_failed,
-                runtime,
-                testtime,
-                tests_per_second
-              )
+              if tty?
+                render_tty
+              else
+                render_pipe
+              end
             end
 
           private
@@ -150,6 +147,47 @@ module Mutant
 
             def tests_per_second
               amount_test_results / runtime
+            end
+
+            def render_pipe
+              status(
+                PIPE_FORMAT,
+                amount_test_results,
+                amount_tests,
+                amount_tests_failed,
+                runtime,
+                testtime,
+                tests_per_second
+              )
+            end
+
+            def render_tty
+              bar = ProgressBar.build(
+                current: amount_test_results,
+                total:   amount_tests,
+                width:   TTY_BAR_WIDTH
+              )
+
+              line = format_progress_line(bar)
+              output.write(colorize(status_color, line))
+            end
+
+            def format_progress_line(bar)
+              format(
+                '%s %d/%d (%5.1f%%) %s failed: %d %0.1fs %0.2f/s',
+                progress_prefix,
+                amount_test_results,
+                amount_tests,
+                bar.percentage,
+                bar.render,
+                amount_tests_failed,
+                runtime,
+                tests_per_second
+              )
+            end
+
+            def progress_prefix
+              'TESTING'
             end
           end # StatusProgressive
         end # Test
