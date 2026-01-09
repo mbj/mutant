@@ -115,10 +115,8 @@ module Mutant
 
           end # Result
 
-          # Reporter for progressive output format on scheduler Status objects
+          # Base class for progressive test status output
           class StatusProgressive < self
-            FORMAT = 'progress: %02d/%02d failed: %d runtime: %0.02fs testtime: %0.02fs tests/s: %0.02f'
-
             delegate(
               :amount_test_results,
               :amount_tests,
@@ -126,21 +124,6 @@ module Mutant
               :testtime,
               :runtime
             )
-
-            # Run printer
-            #
-            # @return [undefined]
-            def run
-              status(
-                FORMAT,
-                amount_test_results,
-                amount_tests,
-                amount_tests_failed,
-                runtime,
-                testtime,
-                tests_per_second
-              )
-            end
 
           private
 
@@ -151,6 +134,50 @@ module Mutant
             def tests_per_second
               amount_test_results / runtime
             end
+
+            # Pipe output format (non-TTY)
+            class Pipe < StatusProgressive
+              FORMAT = 'progress: %02d/%02d failed: %d runtime: %0.02fs testtime: %0.02fs tests/s: %0.02f'
+
+              def run
+                status(
+                  FORMAT,
+                  amount_test_results,
+                  amount_tests,
+                  amount_tests_failed,
+                  runtime,
+                  testtime,
+                  tests_per_second
+                )
+              end
+            end # Pipe
+
+            # TTY output format with progress bar
+            class Tty < StatusProgressive
+              FORMAT              = '%s %d/%d (%5.1f%%) %s failed: %d %0.1fs %0.2f/s'
+              MAX_BAR_WIDTH       = 40
+              PREFIX              = 'TESTING'
+              PERCENTAGE_ESTIMATE = 99.9
+
+              def run
+                bar  = ProgressBar.build(current: amount_test_results, total: amount_tests, width: bar_width)
+                line = FORMAT % format_args(bar.percentage, bar.render)
+                output.write(colorize(status_color, line))
+              end
+
+            private
+
+              def format_args(percentage, bar)
+                [PREFIX, amount_test_results, amount_tests, percentage, bar,
+                 amount_tests_failed, runtime, tests_per_second]
+              end
+
+              def bar_width
+                non_bar_content = FORMAT % format_args(PERCENTAGE_ESTIMATE, nil)
+                available_width = output.terminal_width - non_bar_content.length
+                available_width.clamp(0, MAX_BAR_WIDTH)
+              end
+            end # Tty
           end # StatusProgressive
         end # Test
       end # Printer

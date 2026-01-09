@@ -12,8 +12,10 @@ module Mutant
       #
       # @return [Reporter::CLI]
       def self.build(output)
+        tty = output.respond_to?(:tty?) && output.tty?
+
         new(
-          format:         Format::Progressive.new(tty: output.respond_to?(:tty?) && output.tty?),
+          format:         Format::Progressive.new(tty:, output_io: output),
           print_warnings: false,
           output:
         )
@@ -80,6 +82,7 @@ module Mutant
       #
       # @return [self]
       def report(env)
+        write_final_progress(env)
         Printer::EnvResult.call(output:, object: env)
         self
       end
@@ -90,6 +93,7 @@ module Mutant
       #
       # @return [self]
       def test_report(env)
+        write_final_test_progress(env)
         Printer::Test::EnvResult.call(output:, object: env)
         self
       end
@@ -98,6 +102,30 @@ module Mutant
 
       def write(frame)
         output.write(frame)
+      end
+
+      def write_final_progress(env)
+        return unless format.tty
+
+        final_status = Parallel::Status.new(
+          active_jobs: Set.new,
+          done:        true,
+          payload:     env
+        )
+        write(format.progress(final_status))
+        output.puts
+      end
+
+      def write_final_test_progress(env)
+        return unless format.tty
+
+        final_status = Parallel::Status.new(
+          active_jobs: Set.new,
+          done:        true,
+          payload:     env
+        )
+        write(format.test_progress(final_status))
+        output.puts
       end
 
     end # CLI

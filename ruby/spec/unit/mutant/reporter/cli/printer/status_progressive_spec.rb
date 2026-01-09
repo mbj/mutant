@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Mutant::Reporter::CLI::Printer::StatusProgressive do
+RSpec.describe Mutant::Reporter::CLI::Printer::StatusProgressive::Pipe do
   setup_shared_context
 
   let(:reportable) { status }
