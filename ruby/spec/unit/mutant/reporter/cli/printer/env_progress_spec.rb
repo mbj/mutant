@@ -97,4 +97,61 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
       STR
     end
   end
+
+  describe '#coverage_percent' do
+    let(:mock_env_result) do
+      instance_double(
+        Mutant::Result::Env,
+        coverage: test_coverage
+      )
+    end
+
+    subject(:printer) do
+      described_class.__send__(:new, output: StringIO.new, object: mock_env_result)
+    end
+
+    context 'when coverage is exactly 100%' do
+      let(:test_coverage) { Rational(1) }
+
+      it 'returns exactly 100.0' do
+        expect(printer.__send__(:coverage_percent)).to eq(100.0)
+      end
+    end
+
+    context 'when coverage would round up to 100%' do
+      # 99999/100000 = 99.999% which would round to 100.00% with normal rounding
+      let(:test_coverage) { Rational(99_999, 100_000) }
+
+      it 'floors to 99.99 instead of rounding to 100.0' do
+        result = printer.__send__(:coverage_percent)
+        expect(result).to eq(99.99)
+        expect(result).to be < 100.0
+      end
+    end
+
+    context 'when coverage is close but would not round to 100%' do
+      # 99/100 = 99.0% - should display as 99.0
+      let(:test_coverage) { Rational(99, 100) }
+
+      it 'returns the floored percentage' do
+        expect(printer.__send__(:coverage_percent)).to eq(99.0)
+      end
+    end
+
+    context 'when coverage is 0%' do
+      let(:test_coverage) { Rational(0) }
+
+      it 'returns 0.0' do
+        expect(printer.__send__(:coverage_percent)).to eq(0.0)
+      end
+    end
+
+    context 'when coverage is 50%' do
+      let(:test_coverage) { Rational(1, 2) }
+
+      it 'returns 50.0' do
+        expect(printer.__send__(:coverage_percent)).to eq(50.0)
+      end
+    end
+  end
 end

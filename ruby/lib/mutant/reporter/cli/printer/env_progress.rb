@@ -46,7 +46,9 @@ module Mutant
           end
 
           def coverage_percent
-            coverage * 100
+            # Floor to 2 decimal places to prevent rounding up to 100%
+            # when there are surviving mutations
+            (coverage * 10_000).floor / 100.0
           end
 
           def efficiency_percent
