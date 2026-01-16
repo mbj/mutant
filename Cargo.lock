@@ -262,7 +262,7 @@ checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
 
 [[package]]
 name = "manager"
-version = "0.14.1"
+version = "0.14.2"
 dependencies = [
  "clap",
  "log",
@@ -278,7 +278,7 @@ checksum = "f52b00d39961fc5b2736ea853c9cc86238e165017a493d1d5c8eac6bdc4cc273"
 
 [[package]]
 name = "mutant"
-version = "0.14.1"
+version = "0.14.2"
 dependencies = [
  "clap",
  "env_logger",
