@@ -1,3 +1,29 @@
+# v0.14.2 2026-01-16
+
+* [#1516](https://github.com/mbj/mutant/pull/1516)
+
+  Add bitwise operator mutations.
+
+  Mutant now generates mutations for bitwise operators (`&`, `|`, `^`, `~`, `<<`, `>>`),
+  replacing them with alternative operators to test bitwise logic coverage.
+
+* [#1514](https://github.com/mbj/mutant/pull/1514)
+
+  Add visual progress bar for TTY output.
+
+  When running in a terminal, mutant now displays a progress bar showing mutation
+  testing progress.
+
+* [#1512](https://github.com/mbj/mutant/pull/1512)
+
+  Fix coverage percentage rounding up to 100% when mutations survive.
+
+# v0.14.1 2026-01-11
+
+* [#1508](https://github.com/mbj/mutant/pull/1508)
+
+  Fix VERSION file in gemspec.
+
 # v0.14.0 2026-01-05
 
 * Add Ruby 4.0 support.
