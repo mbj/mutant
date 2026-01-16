@@ -72,6 +72,7 @@ jobs:
         execution:
           - mutant run -- --zombie --since HEAD~1
           - mutant test
+          - quick-start-verify
           - rspec integration generation
           - rspec integration minitest
           - rspec integration misc
