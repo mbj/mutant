@@ -241,6 +241,8 @@ pub enum Command {
         /// Additional arguments
         arguments: Vec<String>,
     },
+    /// Verify quick_start example works correctly
+    QuickStartVerify,
 }
 
 pub mod rspec {
@@ -318,27 +320,94 @@ impl Command {
 
 impl Runtime {
     pub fn run(self, command: Command, rerun_config: RerunConfig) -> RunResult {
-        match self {
-            Self::Host => self.run_host(command, rerun_config),
-            Self::Ruby32 => self.run_container("docker.io/library/ruby:3.2-alpine", command),
-            Self::Ruby33 => self.run_container("docker.io/library/ruby:3.3-alpine", command),
-            Self::Ruby34 => self.run_container("docker.io/library/ruby:3.4-alpine", command),
-            Self::Ruby40 => self.run_container("docker.io/library/ruby:4.0-alpine", command),
+        match command {
+            Command::QuickStartVerify => self.run_quick_start_verify(),
+            _ => match self {
+                Self::Host => self.run_host(command, rerun_config),
+                Self::Ruby32 => self.run_container("docker.io/library/ruby:3.2-alpine", command),
+                Self::Ruby33 => self.run_container("docker.io/library/ruby:3.3-alpine", command),
+                Self::Ruby34 => self.run_container("docker.io/library/ruby:3.4-alpine", command),
+                Self::Ruby40 => self.run_container("docker.io/library/ruby:4.0-alpine", command),
+            },
         }
+    }
+
+    fn run_quick_start_verify(self) -> RunResult {
+        // Run bundle install first
+        log::info!("QuickStartVerify: Running bundle install");
+        let bundle_status = process::Command::new("bundle")
+            .arg("install")
+            .current_dir("quick_start")
+            .status()
+            .expect("Failed to run bundle install");
+
+        if !bundle_status.success() {
+            eprintln!("QuickStartVerify FAILED: bundle install failed");
+            return RunResult::Failure;
+        }
+
+        let mutant_args = &[
+            "mutant",
+            "run",
+            "--use",
+            "rspec",
+            "--usage",
+            "opensource",
+            "--require",
+            "./lib/person",
+            "Person#adult?",
+        ];
+
+        // Run 1: Without covering spec, expect mutations to survive (exit 1)
+        log::info!("QuickStartVerify: Running without covering spec (expecting mutations to survive)");
+        let status_without = self.run_quick_start_command(mutant_args, false);
+        if status_without.success() {
+            eprintln!("QuickStartVerify FAILED: Expected mutations to survive without covering spec");
+            return RunResult::Failure;
+        }
+        log::info!("QuickStartVerify: Mutations survived as expected");
+
+        // Run 2: With covering spec, expect 100% coverage (exit 0)
+        log::info!("QuickStartVerify: Running with covering spec (expecting 100% coverage)");
+        let status_with = self.run_quick_start_command(mutant_args, true);
+        if !status_with.success() {
+            eprintln!("QuickStartVerify FAILED: Expected 100% coverage with covering spec");
+            return RunResult::Failure;
+        }
+        log::info!("QuickStartVerify: 100% coverage achieved as expected");
+
+        RunResult::Success
+    }
+
+    fn run_quick_start_command(&self, args: &[&str], with_covering_spec: bool) -> process::ExitStatus {
+        let mut command = process::Command::new("bundle");
+        command
+            .arg("exec")
+            .args(args)
+            .current_dir("quick_start");
+
+        if with_covering_spec {
+            command.env("WITH_COVERING_SPEC", "1");
+        }
+
+        let mut child = command.spawn().expect("Failed to spawn process");
+        child.wait().expect("Failed to wait for process")
     }
 
     fn run_host(self, command: Command, rerun_config: RerunConfig) -> RunResult {
-        let arguments = Self::build_arguments(command);
-        if arguments.is_empty() {
+        let config = Self::build_command_config(command);
+        if config.arguments.is_empty() {
             return RunResult::Success;
         }
 
-        rerun_config.execute(move |capture| Self::spawn_host_process(&arguments, capture))
+        rerun_config.execute(move |capture| Self::spawn_host_process(&config, capture))
     }
 
-    fn spawn_host_process(arguments: &[String], capture: bool) -> process::Child {
-        let mut command = process::Command::new(&arguments[0]);
-        command.args(&arguments[1..]).current_dir("ruby");
+    fn spawn_host_process(config: &CommandConfig, capture: bool) -> process::Child {
+        let mut command = process::Command::new(&config.arguments[0]);
+        command
+            .args(&config.arguments[1..])
+            .current_dir(config.working_dir);
 
         if capture {
             command
@@ -355,9 +424,9 @@ impl Runtime {
         });
 
         let image = self.ensure_image(&backend, base_image);
-        let arguments = Self::build_arguments(command);
+        let config = Self::build_command_config(command);
 
-        if arguments.is_empty() {
+        if config.arguments.is_empty() {
             return RunResult::Success;
         }
 
@@ -365,15 +434,15 @@ impl Runtime {
             panic!("Failed to get current directory: {}", error);
         });
 
-        let ruby_path = current_directory.join("ruby");
-        let mount_spec = format!("type=bind,source={},target=/app", ruby_path.display());
+        let source_path = current_directory.join(config.working_dir);
+        let mount_spec = format!("type=bind,source={},target=/app", source_path.display());
 
         let result = ociman::Definition::new(backend.clone(), image.clone())
             .mount(mount_spec)
             .workdir("/app")
             .environment_variable("BUNDLE_PATH", "/app/vendor/bundle")
             .remove()
-            .arguments(arguments.iter().cloned())
+            .arguments(config.arguments.iter().cloned())
             .run();
 
         match result {
@@ -399,64 +468,75 @@ impl Runtime {
         build_definition.build_if_absent()
     }
 
-    fn build_arguments(command: Command) -> Vec<String> {
+    fn build_command_config(command: Command) -> CommandConfig {
         match command {
-            Command::Prepare => vec![],
+            Command::Prepare => CommandConfig::ruby(vec![]),
             Command::Exec { arguments } => {
                 let mut result = vec!["ruby".to_string()];
                 result.extend(arguments);
-                result
+                CommandConfig::ruby(result)
             }
             Command::Bundle { arguments } => {
                 let mut result = vec!["bundle".to_string()];
                 result.extend(arguments);
-                result
+                CommandConfig::ruby(result)
             }
             Command::Rspec { action } => match action {
                 rspec::Command::Unit { arguments } => {
-                    bundle_exec_arguments(&["rspec", "spec/unit"], &arguments)
+                    CommandConfig::ruby(bundle_exec_arguments(&["rspec", "spec/unit"], &arguments))
                 }
                 rspec::Command::Integration { action, arguments } => match action {
-                    None => bundle_exec_arguments(&["rspec", "spec/integration"], &arguments),
-                    Some(rspec::integration::Command::Misc { arguments }) => bundle_exec_arguments(
-                        &[
-                            "rspec",
-                            "spec/integration/mutant/null_spec.rb",
-                            "spec/integration/mutant/isolation/fork_spec.rb",
-                            "spec/integration/mutant/test_mutator_handles_types_spec.rb",
-                            "spec/integration/mutant/parallel_spec.rb",
-                        ],
+                    None => CommandConfig::ruby(bundle_exec_arguments(
+                        &["rspec", "spec/integration"],
                         &arguments,
-                    ),
+                    )),
+                    Some(rspec::integration::Command::Misc { arguments }) => {
+                        CommandConfig::ruby(bundle_exec_arguments(
+                            &[
+                                "rspec",
+                                "spec/integration/mutant/null_spec.rb",
+                                "spec/integration/mutant/isolation/fork_spec.rb",
+                                "spec/integration/mutant/test_mutator_handles_types_spec.rb",
+                                "spec/integration/mutant/parallel_spec.rb",
+                            ],
+                            &arguments,
+                        ))
+                    }
                     Some(rspec::integration::Command::Minitest { arguments }) => {
-                        bundle_exec_arguments(
+                        CommandConfig::ruby(bundle_exec_arguments(
                             &["rspec", "spec/integration", "-e", "minitest"],
                             &arguments,
-                        )
+                        ))
                     }
                     Some(rspec::integration::Command::Rspec { arguments }) => {
-                        bundle_exec_arguments(
+                        CommandConfig::ruby(bundle_exec_arguments(
                             &["rspec", "spec/integration", "-e", "rspec"],
                             &arguments,
-                        )
+                        ))
                     }
                     Some(rspec::integration::Command::Generation { arguments }) => {
-                        bundle_exec_arguments(
+                        CommandConfig::ruby(bundle_exec_arguments(
                             &["rspec", "spec/integration", "-e", "generation"],
                             &arguments,
-                        )
+                        ))
                     }
                 },
             },
             Command::Mutant { action } => match action {
-                mutant::Command::Test { arguments } => {
-                    bundle_exec_arguments(&["mutant", "test", "spec/unit"], &arguments)
-                }
+                mutant::Command::Test { arguments } => CommandConfig::ruby(bundle_exec_arguments(
+                    &["mutant", "test", "spec/unit"],
+                    &arguments,
+                )),
                 mutant::Command::Run { arguments } => {
-                    bundle_exec_arguments(&["mutant", "run"], &arguments)
+                    CommandConfig::ruby(bundle_exec_arguments(&["mutant", "run"], &arguments))
                 }
             },
-            Command::Rubocop { arguments } => bundle_exec_arguments(&["rubocop"], &arguments),
+            Command::Rubocop { arguments } => {
+                CommandConfig::ruby(bundle_exec_arguments(&["rubocop"], &arguments))
+            }
+            Command::QuickStartVerify => {
+                unreachable!("QuickStartVerify is handled separately in run()")
+            }
         }
     }
 }
@@ -466,4 +546,18 @@ fn bundle_exec_arguments(base_arguments: &[&str], extra_arguments: &[String]) ->
     arguments.extend(base_arguments.iter().map(|s| s.to_string()));
     arguments.extend(extra_arguments.iter().cloned());
     arguments
+}
+
+struct CommandConfig {
+    working_dir: &'static str,
+    arguments: Vec<String>,
+}
+
+impl CommandConfig {
+    fn ruby(arguments: Vec<String>) -> Self {
+        Self {
+            working_dir: "ruby",
+            arguments,
+        }
+    }
 }

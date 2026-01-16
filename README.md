@@ -7,28 +7,68 @@ mutant
 
 ## What is Mutant?
 
-An automated code review tool, with a side effect of producing semantic code coverage
-metrics.
+**AI writes your code. AI writes your tests. But who tests the tests?**
 
-Think of mutant as an expert developer that simplifies your code while making sure that all tests pass.
+Copilot, Claude, and ChatGPT generate code faster than humans can review it. They'll even
+write tests that pass. But passing tests aren't the same as *meaningful* tests.
 
-That developer never has a bad day and is always ready to jump on your PR.
+Mutant is mutation testing for Ruby. It systematically modifies your code and verifies your
+tests actually catch each change. When a mutation survives, you've found either:
 
-Each reported simplification signifies either:
+- **Dead code** - the AI over-engineered something you can delete
+- **A blind spot** - the AI forgot to test a behavior that matters
 
-A) A piece of code that does more than the tests ask for.
-   You can probably use the simplified version of the code. OR:
+The more code AI writes for you, the more you need verification you can trust.
 
-B) If you have a reason to not take the simplified version as it violates a requirement:
-   There was no test that proves the extra requirement. Likely you are missing an
-   important test for that requirement.
+## Quick Start
 
-On extensive mutant use A) happens more often than B), which leads to overall less code enter
-your repository at higher confidence for both the author and the reviewer.
+```ruby
+# lib/person.rb
+class Person
+  def initialize(age:)
+    @age = age
+  end
 
-BTW: Mutant is a mutation testing tool, which is a form of code coverage.
-But each reported uncovered mutation is actually a call to action, just like a flag in a code review
-would be.
+  def adult?
+    @age >= 18
+  end
+end
+```
+
+```ruby
+# spec/person_spec.rb
+RSpec.describe Person do
+  describe '#adult?' do
+    it 'returns true for age 19' do
+      expect(Person.new(age: 19).adult?).to be(true)
+    end
+
+    it 'returns false for age 17' do
+      expect(Person.new(age: 17).adult?).to be(false)
+    end
+  end
+end
+```
+
+Tests pass. But run mutant:
+
+```bash
+gem install mutant-rspec
+mutant run --use rspec --usage opensource --require ./lib/person 'Person#adult?'
+```
+
+Mutant finds a surviving mutation indicating a shallow test:
+
+```diff
+ def adult?
+-  @age >= 18
++  @age > 18
+ end
+```
+
+Your tests don't cover `age == 18`. The mutation from `>=` to `>` doesn't break them.
+
+A full working example is available in the [quick_start](quick_start/) directory.
 
 ## Rust Implementation
 
