@@ -71,7 +71,7 @@ module Mutant
 
         loop do
           value = config.block.call(connection.receive_value)
-          log_writer.flush
+          world.stdout.flush
           connection.send_value(value)
         end
       end
