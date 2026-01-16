@@ -83,6 +83,7 @@ Mutant::Meta::Example.add :block do
 
   singleton_mutations
   mutation 'foo { self << false }'
+  mutation 'foo { self >> true }'
   mutation 'foo { nil << true }'
   mutation 'foo { nil }'
   mutation 'foo { self }'
