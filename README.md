@@ -1,7 +1,7 @@
 mutant
 ======
 
-![Build Status](https://github.com/mbj/mutant/workflows/CI/badge.svg)
+[![Build Status](https://github.com/mbj/mutant/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mbj/mutant/actions/workflows/ci.yml)
 [![Gem Version](https://img.shields.io/gem/v/mutant.svg)](https://rubygems.org/gems/mutant)
 [![Discord](https://img.shields.io/discord/767914934016802818.svg)](https://discord.gg/BSr62b4RkV)
 
