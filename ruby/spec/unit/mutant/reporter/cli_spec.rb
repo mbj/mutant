@@ -210,6 +210,20 @@ RSpec.describe Mutant::Reporter::CLI do
         subject
         expect(contents).to include('Coverage:        100.00%')
       end
+
+      it 'calls format.progress with correct final status' do
+        expected_status = Mutant::Parallel::Status.new(
+          active_jobs: Set.new,
+          done:        true,
+          payload:     env_result
+        )
+
+        allow(format).to receive(:progress).and_call_original
+
+        subject
+
+        expect(format).to have_received(:progress).with(expected_status)
+      end
     end
   end
 
@@ -316,6 +330,20 @@ RSpec.describe Mutant::Reporter::CLI do
       it 'includes the full report after progress bar' do
         subject
         expect(contents).to include('Efficiency:   0.00%')
+      end
+
+      it 'calls format.test_progress with correct final status' do
+        expected_status = Mutant::Parallel::Status.new(
+          active_jobs: Set.new,
+          done:        true,
+          payload:     test_env
+        )
+
+        allow(format).to receive(:test_progress).and_call_original
+
+        subject
+
+        expect(format).to have_received(:test_progress).with(expected_status)
       end
     end
   end

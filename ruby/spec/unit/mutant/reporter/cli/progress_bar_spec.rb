@@ -10,6 +10,34 @@ RSpec.describe Mutant::Reporter::CLI::ProgressBar do
     it 'creates a progress bar with default settings' do
       expect(subject).to be_a(described_class)
     end
+
+    it 'sets current from parameter' do
+      expect(subject.current).to eql(current)
+    end
+
+    it 'sets total from parameter' do
+      expect(subject.total).to eql(total)
+    end
+
+    it 'uses DEFAULT_WIDTH for width' do
+      expect(subject.width).to eql(described_class::DEFAULT_WIDTH)
+    end
+
+    it 'uses FILLED_CHAR for filled_char' do
+      expect(subject.filled_char).to eql(described_class::FILLED_CHAR)
+    end
+
+    it 'uses EMPTY_CHAR for empty_char' do
+      expect(subject.empty_char).to eql(described_class::EMPTY_CHAR)
+    end
+
+    context 'with custom width' do
+      subject { described_class.build(current:, total:, width: 20) }
+
+      it 'uses provided width' do
+        expect(subject.width).to eql(20)
+      end
+    end
   end
 
   describe '#render' do
@@ -33,6 +61,26 @@ RSpec.describe Mutant::Reporter::CLI::ProgressBar do
 
       it 'renders half-filled bar' do
         expect(subject).to eql('█████░░░░░')
+      end
+    end
+
+    context 'when rounding affects filled_width' do
+      # 46/100 * 10 = 4.6, rounds to 5
+      let(:current) { 46 }
+      let(:total)   { 100 }
+
+      it 'rounds filled width correctly' do
+        expect(subject).to eql('█████░░░░░')
+      end
+    end
+
+    context 'when rounding down affects filled_width' do
+      # 44/100 * 10 = 4.4, rounds to 4
+      let(:current) { 44 }
+      let(:total)   { 100 }
+
+      it 'rounds filled width correctly' do
+        expect(subject).to eql('████░░░░░░')
       end
     end
 

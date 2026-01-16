@@ -63,7 +63,7 @@ module Mutant
         end
 
         def empty_width
-          [width - filled_width, 0].max
+          width - filled_width
         end
 
         def filled
