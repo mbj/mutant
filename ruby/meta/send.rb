@@ -529,7 +529,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo(n..-2)'
 end
 
-(Mutant::AST::Types::BINARY_METHOD_OPERATORS - %i[=~ <= >= < > == === != eql?]).each do |operator|
+(Mutant::AST::Types::BINARY_METHOD_OPERATORS - %i[=~ <= >= < > == === != eql? & | ^ << >>]).each do |operator|
   Mutant::Meta::Example.add :send do
     source "true #{operator} false"
 
@@ -539,6 +539,69 @@ end
     mutation "false #{operator} false"
     mutation "true  #{operator} true"
   end
+end
+
+# Bitwise AND operator
+Mutant::Meta::Example.add :send do
+  source 'a & b'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil & b'
+  mutation 'a & nil'
+  mutation 'a | b'
+  mutation 'a ^ b'
+end
+
+# Bitwise OR operator
+Mutant::Meta::Example.add :send do
+  source 'a | b'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil | b'
+  mutation 'a | nil'
+  mutation 'a & b'
+  mutation 'a ^ b'
+end
+
+# Bitwise XOR operator
+Mutant::Meta::Example.add :send do
+  source 'a ^ b'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil ^ b'
+  mutation 'a ^ nil'
+  mutation 'a & b'
+  mutation 'a | b'
+end
+
+# Left shift operator
+Mutant::Meta::Example.add :send do
+  source 'a << b'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil << b'
+  mutation 'a << nil'
+  mutation 'a >> b'
+end
+
+# Right shift operator
+Mutant::Meta::Example.add :send do
+  source 'a >> b'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil >> b'
+  mutation 'a >> nil'
+  mutation 'a << b'
 end
 
 Mutant::Meta::Example.add :send do
