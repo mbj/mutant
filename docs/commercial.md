@@ -1,6 +1,30 @@
 Commercial
 ==========
 
+Pricing
+-------
+
+**Mutant is free for open source use.**
+
+For commercial use, pricing is subscription based:
+
+| Currency | Duration | Cost    | Payment Methods                                       |
+| -------- | -------  | ------- | ----------------------------------------------------- |
+| USD      | 1 month  | 90$     | Credit Card                                           |
+| USD      | 1 year   | 900$    | Credit Card, ACH transfer                             |
+| EUR      | 1 month  | 90€     | Credit Card, SEPA Direct Debit                        |
+| EUR      | 1 year   | 900€    | Credit Card, SEPA Direct Debit, SEPA Transfer         |
+
+Costs are **per developer using mutant on any number of repositories**.
+
+Volume subscriptions with custom plans are available on request.
+
+To purchase a commercial subscription, [email mbj@schirp-dso.com](mailto:mbj@schirp-dso.com?subject=Mutant%20Commercial%20License) with:
+
+* Your business invoice address
+* A payment email address (if different)
+* For EU customers: A valid VAT-ID (required)
+
 Is there a trial version?
 --------------------------
 
@@ -130,3 +154,29 @@ Where `bundler` sends a HTTP request with your license key to the license server
 
 BTW: As mutant does NOT control the HTTP call side (bundler does instead) there cannot be any
 information leak being caused by mutant. Apart from HTTP logs at the license server.
+
+Legal Entity
+------------
+
+Mutant is maintained by:
+
+```
+Schirp DSO LTD
+Director: Markus Schirp
+Email: info@schirp-dso.com
+Vat-ID: MT24186727
+Registration: C80467
+
+Office address:
+2, Carob Lane,
+Sir Harry Luke Street
+Naxxar NXR 2209,
+Malta
+
+Registered Address:
+Phoenix Business Centre,
+The Penthouse,
+Old Railway Track,
+Santa Venera SVR9022,
+Malta
+```
