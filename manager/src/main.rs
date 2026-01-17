@@ -3,6 +3,7 @@ use std::fs;
 use std::num::NonZeroU32;
 
 mod ruby;
+mod prism;
 
 #[derive(Parser)]
 #[command(name = "manager")]
@@ -16,6 +17,11 @@ struct Cli {
 enum Command {
     /// Build and push all gems to rubygems.org
     Release,
+    /// Manage the vendored Prism configuration
+    Prism {
+        #[command(subcommand)]
+        command: prism::CommandKind,
+    },
     /// Execute commands in Ruby environment
     Ruby {
         #[arg(long, default_value = "host")]
@@ -41,6 +47,10 @@ fn main() -> ruby::RunResult {
         Command::Release => {
             prepare();
             release()
+        }
+        Command::Prism { command } => {
+            prepare();
+            prism::run(command)
         }
         Command::Ruby {
             ruby_runtime,

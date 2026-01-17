@@ -1,0 +1,21 @@
+[package]
+name = "ruby-unparser"
+version.workspace = true
+edition.workspace = true
+authors = ["Markus Schirp <mbj@schirp-dso.com>"]
+license = "Nonstandard"
+description = "Ruby AST to source code converter"
+
+[lib]
+name = "ruby_unparser"
+path = "src/lib.rs"
+
+[[bin]]
+name = "unparse"
+path = "src/main.rs"
+
+[dependencies]
+num-bigint = "0.4"
+ruby-prism = "1.8"
+
+[dev-dependencies]

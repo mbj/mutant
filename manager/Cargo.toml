@@ -14,4 +14,6 @@ path = "src/main.rs"
 clap = { version = "4.5", features = ["derive"] }
 log = "0.4"
 ociman = { git = "https://github.com/mbj/mrs" }
+serde_json = "1.0"
+serde_yaml = "0.9"
 toml = "0.8"
