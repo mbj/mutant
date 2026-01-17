@@ -107,6 +107,7 @@ See [commercial licensing](/docs/commercial.md) for pricing and details.
 * [Incremental Mode](/docs/incremental.md)
 * [Reading Reports](/docs/reading-reports.md)
 * [Concurrency](/docs/concurrency.md)
+* [AST Pattern Matching](/docs/ast-pattern.md)
 * [Hooks](/docs/hooks.md)
 * [Sorbet](/docs/sorbet.md)
 * [Nomenclature](/docs/nomenclature.md)

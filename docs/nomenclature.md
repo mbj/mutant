@@ -7,7 +7,8 @@ It's a good idea to familiarize yourself before moving on.
 ## AST
 
 Acronym for [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
-and the level of abstraction mutant operates on.
+and the level of abstraction mutant operates on. See also [AST Pattern Matching](/docs/ast-pattern.md)
+for the pattern language used in ignore patterns.
 
 ## Subject
 

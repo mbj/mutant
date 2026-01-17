@@ -69,7 +69,7 @@ Additional environment variables can be added by providing the `--env KEY=VALUE`
 
 #### `integration`
 
-Configures the [integration](/docs/integration.md) to use, via the `name` key.
+Configures the [integration](/docs/nomenclature.md#integration) to use, via the `name` key.
 
 If your tests are written in [RSpec](https://rspec.info/), this should be set to `rspec`.
 If your tests are written in [minitest](https://github.com/seattlerb/minitest), this should be set to `minitest`.
