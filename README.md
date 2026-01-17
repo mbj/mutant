@@ -1,7 +1,7 @@
 mutant
 ======
 
-![Build Status](https://github.com/mbj/mutant/workflows/CI/badge.svg)
+[![Build Status](https://github.com/mbj/mutant/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mbj/mutant/actions/workflows/ci.yml)
 [![Gem Version](https://img.shields.io/gem/v/mutant.svg)](https://rubygems.org/gems/mutant)
 [![Discord](https://img.shields.io/discord/767914934016802818.svg)](https://discord.gg/BSr62b4RkV)
 
@@ -67,6 +67,9 @@ Mutant finds a surviving mutation indicating a shallow test:
 ```
 
 Your tests don't cover `age == 18`. The mutation from `>=` to `>` doesn't break them.
+
+This is just one of many mutation operators. Mutant also mutates arithmetic, logical,
+bitwise operators, removes statements, modifies return values, and more.
 
 A full working example is available in the [quick_start](quick_start/) directory.
 
