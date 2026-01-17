@@ -51,3 +51,36 @@ end
 ```
 
 Run mutant again - 100% coverage.
+
+## Compare coverage tools
+
+Run the comparison script to see the difference between line coverage, branch coverage,
+and mutation coverage:
+
+```bash
+./compare_coverage
+```
+
+This runs:
+
+1. **SimpleCov** (line coverage) - reports 100% because the line was executed
+2. **DeepCover** (branch coverage) - reports 100% because both true/false branches were taken
+3. **Mutant** (mutation coverage) - reports ~88% because mutations survive
+
+Only mutation coverage catches that the boundary condition `age == 18` is untested.
+
+## Note on mutation operators
+
+This example demonstrates a simple operator replacement (`>=` to `>`). Mutant supports
+many more mutation operators including:
+
+- Arithmetic operators (`+`, `-`, `*`, `/`)
+- Logical operators (`&&`, `||`)
+- Comparison operators (`==`, `!=`, `<`, `>`, `<=`, `>=`)
+- Bitwise operators (`&`, `|`, `^`)
+- Statement removal
+- Boolean literal replacement
+- Return value modification
+- And many more...
+
+See the [meta](../ruby/meta) directory for the full list of supported mutations.

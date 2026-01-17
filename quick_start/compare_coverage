@@ -1,0 +1,80 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# This script demonstrates the difference between:
+# - Line coverage (SimpleCov)
+# - Branch coverage (DeepCover)
+# - Mutation coverage (Mutant)
+#
+# All three tools are run against the same test suite. Line and branch coverage
+# report 100%, but mutation coverage reveals the tests don't verify the boundary
+# condition `age == 18`.
+
+require 'fileutils'
+
+def run(description, command)
+  puts "\n#{'=' * 60}"
+  puts description
+  puts '=' * 60
+  system(command)
+end
+
+def separator
+  puts "\n#{'=' * 60}"
+end
+
+# Install dependencies
+run('INSTALLING DEPENDENCIES', 'bundle install')
+
+# Clean up previous coverage data
+FileUtils.rm_rf('coverage')
+
+# Run SimpleCov (line coverage)
+run(
+  'LINE COVERAGE (SimpleCov)',
+  'SIMPLECOV=1 bundle exec rspec --format progress'
+)
+
+puts "\nSimpleCov result: Check coverage/index.html"
+puts 'Expected: 100% line coverage (the line was executed)'
+
+# Run DeepCover (branch coverage)
+run(
+  'BRANCH COVERAGE (DeepCover)',
+  'bundle exec deep-cover exec rspec --format progress'
+)
+
+puts "\nDeepCover result: Check coverage/index.html"
+puts 'Expected: 100% branch coverage (both true/false branches taken)'
+
+# Run Mutant (mutation coverage) - without boundary test
+run(
+  'MUTATION COVERAGE (Mutant) - without boundary test',
+  'bundle exec mutant run --use rspec --usage opensource --require ./lib/person "Person#adult?"'
+)
+
+puts "\nExpected: ~88% mutation coverage - mutations survive!"
+
+# Run Mutant (mutation coverage) - with boundary test
+run(
+  'MUTATION COVERAGE (Mutant) - with boundary test',
+  'WITH_COVERING_SPEC=1 bundle exec mutant run --use rspec --usage opensource --require ./lib/person "Person#adult?"'
+)
+
+puts "\nExpected: 100% mutation coverage - all mutations killed"
+
+separator
+puts 'SUMMARY'
+separator
+puts <<~'SUMMARY'
+  Line coverage (SimpleCov):     100% - the line `@age >= 18` was executed
+  Branch coverage (DeepCover):   100% - both true and false branches were taken
+  Mutation coverage (Mutant):    ~88% - mutations survive!
+
+  The mutation `@age >= 18` -> `@age > 18` survives because no test checks
+  the boundary condition `age == 18`.
+
+  Adding a test for the boundary case `age == 18` achieves 100% mutation coverage.
+
+  This is why mutation coverage catches bugs that line and branch coverage miss.
+SUMMARY
