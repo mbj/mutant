@@ -501,17 +501,20 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
-  source '(left - right) / foo'
+  source '(left - right) + foo'
 
   singleton_mutations
   mutation 'foo'
   mutation '(left - right)'
-  mutation '(left) / foo'
-  mutation '(right) / foo'
-  mutation '(left - right) / nil'
-  mutation '(left - nil) / foo'
-  mutation '(nil - right) / foo'
-  mutation '(nil) / foo'
+  mutation '(left) + foo'
+  mutation '(right) + foo'
+  mutation '(left - right) + nil'
+  mutation '(left - nil) + foo'
+  mutation '(nil - right) + foo'
+  mutation '(nil) + foo'
+  # Arithmetic operator mutations
+  mutation '(left - right) - foo'
+  mutation '(left + right) + foo'
 end
 
 Mutant::Meta::Example.add :send do
@@ -529,7 +532,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo(n..-2)'
 end
 
-(Mutant::AST::Types::BINARY_METHOD_OPERATORS - %i[=~ <= >= < > == === != eql? & | ^ << >>]).each do |operator|
+(Mutant::AST::Types::BINARY_METHOD_OPERATORS - %i[=~ <= >= < > == === != eql? & | ^ << >> + - * / %]).each do |operator|
   Mutant::Meta::Example.add :send do
     source "true #{operator} false"
 
@@ -539,6 +542,30 @@ end
     mutation "false #{operator} false"
     mutation "true  #{operator} true"
   end
+end
+
+# Addition operator
+Mutant::Meta::Example.add :send do
+  source 'a + b'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil + b'
+  mutation 'a + nil'
+  mutation 'a - b'
+end
+
+# Subtraction operator
+Mutant::Meta::Example.add :send do
+  source 'a - b'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil - b'
+  mutation 'a - nil'
+  mutation 'a + b'
 end
 
 # Bitwise AND operator
@@ -924,6 +951,8 @@ Mutant::Meta::Example.add :send do
   mutation 'self.reduce(INITIAL, &:+)'
   mutation 'a.reduce(INITIAL, &:"+__mutant__")'
   mutation 'a.sum(INITIAL)'
+  # Arithmetic operator mutations for block_pass symbol
+  mutation 'a.reduce(INITIAL, &:-)'
 end
 
 Mutant::Meta::Example.add :send do

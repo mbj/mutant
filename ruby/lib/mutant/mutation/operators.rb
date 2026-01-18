@@ -11,6 +11,8 @@ module Mutant
 
         SELECTOR_REPLACEMENTS = {
           :& =>          %i[| ^],
+          :+ =>          %i[-],
+          :- =>          %i[+],
           :< =>          %i[== eql? equal?],
           :<< =>         %i[>>],
           :<= =>         %i[< == eql? equal?],
