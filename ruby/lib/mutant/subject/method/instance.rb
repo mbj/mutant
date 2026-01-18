@@ -12,15 +12,9 @@ module Mutant
         # Prepare subject for mutation insertion
         #
         # @return [self]
-        def prepare
-          scope.raw.undef_method(name)
-          self
-        end
+        def prepare = tap { scope.raw.undef_method(name) }
 
-        def post_insert
-          scope.raw.__send__(visibility, name)
-          self
-        end
+        def post_insert = tap { scope.raw.__send__(visibility, name) }
 
         # Mutator for memoizable memoized instance methods
         class Memoized < self

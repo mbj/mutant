@@ -18,9 +18,7 @@ module Mutant
       # Minimum reporter delay
       #
       # @return [Float]
-      def delay
-        reporters.map(&:delay).min
-      end
+      def delay = reporters.map(&:delay).min
 
     end # Sequence
   end # Reporter

@@ -40,9 +40,7 @@ module Mutant
       output << object
     end
 
-    def dup_input
-      input.dup
-    end
+    def dup_input = input.dup
 
   end # Mutator
 end # Mutant

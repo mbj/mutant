@@ -4,21 +4,13 @@ module Mutant
   class Usage
     include Adamantium, Equalizer.new
 
-    def value
-      self.class::VALUE
-    end
+    def value = self.class::VALUE
 
-    def verify
-      Either::Right.new(nil)
-    end
+    def verify = Either::Right.new(nil)
 
-    def message
-      self.class::MESSAGE
-    end
+    def message = self.class::MESSAGE
 
-    def merge(_other)
-      self
-    end
+    def merge(_other) = self
 
     class Commercial < self
       VALUE = 'commercial'
@@ -81,13 +73,9 @@ module Mutant
         License gem is gone entirely.
       MESSAGE
 
-      def merge(other)
-        other
-      end
+      def merge(other) = other
 
-      def verify
-        Either::Left.new(MESSAGE)
-      end
+      def verify = Either::Left.new(MESSAGE)
     end
 
     def self.parse(value)

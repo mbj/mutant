@@ -7,9 +7,7 @@ module Mutant
       # Available tests for integration
       #
       # @return [Enumerable<Test>]
-      def all_tests
-        EMPTY_ARRAY
-      end
+      def all_tests = EMPTY_ARRAY
 
       # Run a collection of tests
       #

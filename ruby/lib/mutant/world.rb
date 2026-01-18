@@ -35,9 +35,7 @@ module Mutant
     # Object inspection
     #
     # @return [String]
-    def inspect
-      INSPECT
-    end
+    def inspect = INSPECT
 
     class CommandStatus
       include Adamantium, Anima.new(:process_status, :stderr, :stdout)

@@ -199,3 +199,8 @@ Lint/UselessConstantScoping:
 # False positives
 Naming/PredicateMethod:
   Enabled: false
+
+# Enforce endless method syntax for simple single-expression methods
+Style/EndlessMethod:
+  Enabled: true
+  EnforcedStyle: allow_single_line

@@ -45,9 +45,7 @@ module Mutant
     end
 
     class Builder
-      def initialize
-        @map = DEFAULTS.transform_values(&:dup)
-      end
+      def initialize = @map = DEFAULTS.transform_values(&:dup)
 
       def register(name, &block)
         Hooks.assert_name(name)
@@ -57,9 +55,7 @@ module Mutant
         self
       end
 
-      def to_hooks
-        Hooks.new(map: @map.transform_values(&:freeze).freeze)
-      end
+      def to_hooks = Hooks.new(map: @map.transform_values(&:freeze).freeze)
     end # Builder
 
     # rubocop:disable Security/Eval

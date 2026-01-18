@@ -10,9 +10,7 @@ module Mutant
       :timestamp_start
     )
 
-    def elapsed
-      timestamp_end - timestamp_start
-    end
+    def elapsed = timestamp_end - timestamp_start
 
     def offset_start(recording_start)
       timestamp_start - recording_start

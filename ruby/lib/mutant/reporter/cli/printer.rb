@@ -14,9 +14,7 @@ module Mutant
 
         private_class_method :new
 
-        def call
-          run
-        end
+        def call = run
 
         # Create delegators to object
         #
@@ -50,9 +48,7 @@ module Mutant
 
       private
 
-        def status_color
-          success? ? Unparser::Color::GREEN : Unparser::Color::RED
-        end
+        def status_color = success? ? Unparser::Color::GREEN : Unparser::Color::RED
 
         def visit_collection(printer, collection)
           collection.each do |object|

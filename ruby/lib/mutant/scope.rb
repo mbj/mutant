@@ -21,9 +21,7 @@ module Mutant
     # Unqualified name of scope
     #
     # @return [String]
-    def unqualified_name
-      name_nesting.last
-    end
+    def unqualified_name = name_nesting.last
 
     # Match expressions for scope
     #
@@ -39,9 +37,7 @@ module Mutant
 
   private
 
-    def name_nesting
-      raw.name.split(NAMESPACE_DELIMITER)
-    end
+    def name_nesting = raw.name.split(NAMESPACE_DELIMITER)
     memoize :name_nesting
 
   end # Scope

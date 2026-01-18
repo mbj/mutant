@@ -9,9 +9,7 @@ module Mutant
       # Method name
       #
       # @return [Expression]
-      def name
-        node.children.fetch(self.class::NAME_INDEX)
-      end
+      def name = node.children.fetch(self.class::NAME_INDEX)
 
       # Match expression
       #
@@ -28,16 +26,12 @@ module Mutant
       # Match expressions
       #
       # @return [Array<Expression>]
-      def match_expressions
-        [expression].concat(context.match_expressions)
-      end
+      def match_expressions = [expression].concat(context.match_expressions)
       memoize :match_expressions
 
     private
 
-      def scope
-        context.scope
-      end
+      def scope = context.scope
 
     end # Method
   end # Subject

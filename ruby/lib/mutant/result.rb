@@ -81,9 +81,7 @@ module Mutant
       # Failed subject results
       #
       # @return [Array<Result::Subject>]
-      def failed_subject_results
-        subject_results.reject(&:success?)
-      end
+      def failed_subject_results = subject_results.reject(&:success?)
 
       sum :amount_mutation_results, :subject_results
       sum :amount_mutations_alive,  :subject_results
@@ -94,9 +92,7 @@ module Mutant
       # Amount of mutations
       #
       # @return [Integer]
-      def amount_mutations
-        env.mutations.length
-      end
+      def amount_mutations = env.mutations.length
 
       # Test if processing needs to stop
       #
@@ -126,34 +122,22 @@ module Mutant
       # Failed subject results
       #
       # @return [Array<Result::Test>]
-      def failed_test_results
-        test_results.reject(&:success?)
-      end
+      def failed_test_results = test_results.reject(&:success?)
       memoize :failed_test_results
 
       def stop?
         env.config.fail_fast && !test_results.all?(&:success?)
       end
 
-      def testtime
-        test_results.map(&:runtime).sum(0.0)
-      end
+      def testtime = test_results.map(&:runtime).sum(0.0)
 
-      def amount_tests
-        env.integration.all_tests.length
-      end
+      def amount_tests = env.integration.all_tests.length
 
-      def amount_test_results
-        test_results.length
-      end
+      def amount_test_results = test_results.length
 
-      def amount_tests_failed
-        failed_test_results.length
-      end
+      def amount_tests_failed = failed_test_results.length
 
-      def amount_tests_success
-        test_results.count(&:passed)
-      end
+      def amount_tests_success = test_results.count(&:passed)
     end # TestEnv
 
     # Test result
@@ -200,51 +184,37 @@ module Mutant
       # Alive mutations
       #
       # @return [Array<Result::Coverage>]
-      def uncovered_results
-        coverage_results.reject(&:success?)
-      end
+      def uncovered_results = coverage_results.reject(&:success?)
       memoize :uncovered_results
 
       # Amount of mutations
       #
       # @return [Integer]
-      def amount_mutation_results
-        coverage_results.length
-      end
+      def amount_mutation_results = coverage_results.length
 
       # Amount of mutations
       #
       # @return [Integer]
-      def amount_timeouts
-        coverage_results.count(&:timeout?)
-      end
+      def amount_timeouts = coverage_results.count(&:timeout?)
 
       # Amount of mutations
       #
       # @return [Integer]
-      def amount_mutations
-        subject.mutations.length
-      end
+      def amount_mutations = subject.mutations.length
 
       # Number of killed mutations
       #
       # @return [Integer]
-      def amount_mutations_killed
-        covered_results.length
-      end
+      def amount_mutations_killed = covered_results.length
 
       # Number of alive mutations
       #
       # @return [Integer]
-      def amount_mutations_alive
-        uncovered_results.length
-      end
+      def amount_mutations_alive = uncovered_results.length
 
     private
 
-      def covered_results
-        coverage_results.select(&:success?)
-      end
+      def covered_results = coverage_results.select(&:success?)
       memoize :covered_results
 
     end # Subject
@@ -303,9 +273,7 @@ module Mutant
       # Time the tests had been running
       #
       # @return [Float]
-      def killtime
-        isolation_result.value&.runtime || 0.0
-      end
+      def killtime = isolation_result.value&.runtime || 0.0
 
       # Test for timeout
       #

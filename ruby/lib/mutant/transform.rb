@@ -7,9 +7,7 @@ module Mutant
     # Default slug
     #
     # @return [String]
-    def slug
-      self.class.to_s
-    end
+    def slug = self.class.to_s
 
     # Apply transformation to input
     #
@@ -34,24 +32,18 @@ module Mutant
       # Compact error message
       #
       # @return [String]
-      def compact_message
-        COMPACT % { path:, message: trace.last.message }
-      end
+      def compact_message = COMPACT % { path:, message: trace.last.message }
       memoize :compact_message
 
       # Error path trace
       #
       # @return [Array<Error>]
-      def trace
-        [self, *cause&.trace]
-      end
+      def trace = [self, *cause&.trace]
       memoize :trace
 
     private
 
-      def path
-        trace.map { |error| error.transform.slug }.reject(&:empty?).join('/')
-      end
+      def path = trace.map { |error| error.transform.slug }.reject(&:empty?).join('/')
     end # Error
 
     # Wrapper adding a name to a transformation
@@ -68,9 +60,7 @@ module Mutant
       # Named slug
       #
       # @return [String]
-      def slug
-        name
-      end
+      def slug = name
     end # Named
 
     class Block < self
@@ -93,9 +83,7 @@ module Mutant
           end
       end
 
-      def slug
-        name
-      end
+      def slug = name
     end
 
   private
@@ -158,9 +146,7 @@ module Mutant
       # Rendering slug
       #
       # @return [Array<String>]
-      def slug
-        '%<index>d' % { index: }
-      end
+      def slug = '%<index>d' % { index: }
       memoize :slug
     end # Index
 
@@ -193,9 +179,7 @@ module Mutant
       # Rendering slug
       #
       # @return [String]
-      def slug
-        primitive.to_s
-      end
+      def slug = primitive.to_s
       memoize :slug
     end # Primitive
 
@@ -298,9 +282,7 @@ module Mutant
         # Rendering slug
         #
         # @return [String]
-        def slug
-          '[%<key>s]' % { key: value.inspect }
-        end
+        def slug = '[%<key>s]' % { key: value.inspect }
         memoize :slug
 
         # Apply transformation to input
@@ -388,14 +370,10 @@ module Mutant
       end
       # rubocop:enable Metrics/MethodLength
 
-      def allowed_keys
-        required_keys + optional.map(&:value)
-      end
+      def allowed_keys = required_keys + optional.map(&:value)
       memoize :allowed_keys
 
-      def required_keys
-        required.map(&:value)
-      end
+      def required_keys = required.map(&:value)
       memoize :required_keys
     end # Hash
 

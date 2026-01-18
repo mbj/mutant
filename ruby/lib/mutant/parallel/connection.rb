@@ -21,13 +21,9 @@ module Mutant
 
         attr_reader :log
 
-        def error
-          Util.max_one(@errors)
-        end
+        def error = Util.max_one(@errors)
 
-        def result
-          Util.max_one(@results)
-        end
+        def result = Util.max_one(@results)
 
         def initialize(*)
           super
@@ -81,9 +77,7 @@ module Mutant
 
       private
 
-        def timeout
-          @errors << Timeout::Error
-        end
+        def timeout = @errors << Timeout::Error
 
         def advance_result
           if length
@@ -96,9 +90,7 @@ module Mutant
           end
         end
 
-        def length
-          Util.max_one(@lengths)
-        end
+        def length = Util.max_one(@lengths)
 
         def advance_log
           while with_nonblock_read(io: log_reader, max_bytes: MAX_LOG_CHUNK, &@log.public_method(:<<))
@@ -138,9 +130,7 @@ module Mutant
       class Frame
         include Anima.new(:io)
 
-        def receive_value
-          read(Util.one(read(HEADER_SIZE).unpack(HEADER_FORMAT)))
-        end
+        def receive_value = read(Util.one(read(HEADER_SIZE).unpack(HEADER_FORMAT)))
 
         def send_value(body)
           bytesize = body.bytesize
@@ -160,14 +150,9 @@ module Mutant
         end
       end
 
-      def receive_value
-        marshal.load(reader.receive_value)
-      end
+      def receive_value = marshal.load(reader.receive_value)
 
-      def send_value(value)
-        writer.send_value(marshal.dump(value))
-        self
-      end
+      def send_value(value) = tap { writer.send_value(marshal.dump(value)) }
 
       def self.from_pipes(marshal:, reader:, writer:)
         new(

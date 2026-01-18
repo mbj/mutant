@@ -48,16 +48,12 @@ module Mutant
       # Capture a deadline status
       #
       # @return [Status]
-      def status
-        Status.new(time_left:)
-      end
+      def status = Status.new(time_left:)
 
       # Probe the time left
       #
       # @return [Float, nil]
-      def time_left
-        allowed_time - (timer.now - @start_at)
-      end
+      def time_left = allowed_time - (timer.now - @start_at)
 
       # Deadline that never expires
       class None < self
