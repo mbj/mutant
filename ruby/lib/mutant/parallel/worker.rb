@@ -40,6 +40,10 @@ module Mutant
           world.stderr.reopen(log_writer)
           world.stdout.reopen(log_writer)
 
+          # Ensure output from background threads is immediately flushed
+          world.stderr.sync = true
+          world.stdout.sync = true
+
           run_child(
             config:,
             connection: Connection.from_pipes(marshal:, reader: request, writer: response),

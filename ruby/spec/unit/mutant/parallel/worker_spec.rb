@@ -472,6 +472,16 @@ RSpec.describe Mutant::Parallel::Worker do
           arguments: [log_pipe.to_writer]
         },
         {
+          receiver:  world.stderr,
+          selector:  :sync=,
+          arguments: [true]
+        },
+        {
+          receiver:  world.stdout,
+          selector:  :sync=,
+          arguments: [true]
+        },
+        {
           receiver:  Mutant::Parallel::Connection,
           selector:  :from_pipes,
           arguments: [{ marshal: world.marshal, reader: request_pipe, writer: response_pipe }],
