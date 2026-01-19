@@ -131,6 +131,7 @@ Mutant::Meta::Example.add :block do
   mutation 'foo { nil if true }'
   mutation 'foo { break if false }'
   mutation 'foo { break }'
+  mutation 'foo { next if true }'
 end
 
 Mutant::Meta::Example.add :block do
@@ -139,6 +140,7 @@ Mutant::Meta::Example.add :block do
   singleton_mutations
   mutation 'foo { nil }'
   mutation 'foo { raise }'
+  mutation 'foo { next }'
   mutation 'foo { }'
   mutation 'foo'
 end

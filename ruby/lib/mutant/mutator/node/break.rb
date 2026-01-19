@@ -15,6 +15,7 @@ module Mutant
           super
           emit_singletons
           children.each_index(&method(:delete_child))
+          emit(s(:next, *children))
         end
 
       end # Break
