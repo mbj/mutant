@@ -27,6 +27,21 @@ Mutant::Meta::Example.add :send do
 end
 
 Mutant::Meta::Example.add :send do
+  source 'A.const_get(:B, false)'
+
+  singleton_mutations
+  mutation 'A::B'
+  mutation 'A.const_get(:B)'
+  mutation 'A.const_get(false)'
+  mutation 'A.const_get'
+  mutation 'A'
+  mutation 'A.const_get(nil, false)'
+  mutation 'A.const_get(:B__mutant__, false)'
+  mutation 'A.const_get(:B, true)'
+  mutation 'self.const_get(:B, false)'
+end
+
+Mutant::Meta::Example.add :send do
   source 'A.const_get(bar)'
 
   singleton_mutations
@@ -149,6 +164,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'self.to_s'
   mutation 'foo.to_str'
+  mutation '""'
 end
 
 Mutant::Meta::Example.add :send do
@@ -158,6 +174,7 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'self.to_a'
   mutation 'foo.to_ary'
+  mutation '[]'
 end
 
 Mutant::Meta::Example.add :send do
@@ -177,6 +194,34 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'self.to_h'
   mutation 'foo.to_hash'
+  mutation '{}'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.to_ary'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'self.to_ary'
+  mutation '[]'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.to_hash'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'self.to_hash'
+  mutation '{}'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.to_str'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'self.to_str'
+  mutation '""'
 end
 
 Mutant::Meta::Example.add :send, operators: :full do

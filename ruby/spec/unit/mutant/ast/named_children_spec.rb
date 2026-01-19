@@ -14,7 +14,7 @@ RSpec.describe Mutant::AST::NamedChildren do
       klass.class_eval do
         public :foo, :bar
 
-        public :remaining_children, :remaining_children_indices, :remaining_children_with_index
+        public :remaining_children, :remaining_children_indices
       end
     end
 
@@ -33,7 +33,6 @@ RSpec.describe Mutant::AST::NamedChildren do
           bar
           remaining_children
           remaining_children_indices
-          remaining_children_with_index
         ].each do |name|
           expect(klass.private_method_defined?(name)).to be(true)
         end
@@ -50,13 +49,6 @@ RSpec.describe Mutant::AST::NamedChildren do
         it 'returns remaining unnamed children indices' do
           publish
           expect(instance.remaining_children_indices).to eql([2])
-        end
-      end
-
-      describe '#remaining_children_with_index' do
-        it 'returns remaining unnamed children indices' do
-          publish
-          expect(instance.remaining_children_with_index).to eql([[node_baz, 2]])
         end
       end
 
