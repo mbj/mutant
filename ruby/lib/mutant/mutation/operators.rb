@@ -10,13 +10,14 @@ module Mutant
         NAME = :full
 
         SELECTOR_REPLACEMENTS = {
+          :!= =>         %i[==],
           :& =>          %i[| ^],
           :+ =>          %i[-],
           :- =>          %i[+],
           :< =>          %i[== eql? equal?],
           :<< =>         %i[>>],
           :<= =>         %i[< == eql? equal?],
-          :== =>         %i[eql? equal?],
+          :== =>         %i[!= eql? equal?],
           :=== =>        %i[is_a?],
           :=~ =>         %i[match?],
           :> =>          %i[== eql? equal?],
