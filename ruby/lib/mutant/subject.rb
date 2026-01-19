@@ -37,23 +37,17 @@ module Mutant
     # Source path
     #
     # @return [Pathname]
-    def source_path
-      context.source_path
-    end
+    def source_path = context.source_path
 
     # Prepare subject for insertion of mutation
     #
     # @return [self]
-    def prepare
-      self
-    end
+    def prepare = self
 
     # Perform post insert cleanup
     #
     # @return [self]
-    def post_insert
-      self
-    end
+    def post_insert = self
 
     # Source line range
     #
@@ -67,24 +61,18 @@ module Mutant
     # First source line
     #
     # @return [Integer]
-    def source_line
-      source_lines.begin
-    end
+    def source_line = source_lines.begin
 
     # Identification string
     #
     # @return [String]
-    def identification
-      "#{expression.syntax}:#{source_path}:#{source_line}"
-    end
+    def identification = "#{expression.syntax}:#{source_path}:#{source_line}"
     memoize :identification
 
     # Source representation of AST
     #
     # @return [String]
-    def source
-      Unparser.unparse(wrap_node(node))
-    end
+    def source = Unparser.unparse(wrap_node(node))
     memoize :source
 
     # Match expression

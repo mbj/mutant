@@ -75,9 +75,7 @@ module Mutant
         self::NAME
       end
 
-      def selector_replacements
-        self.class::SELECTOR_REPLACEMENTS
-      end
+      def selector_replacements = self.class::SELECTOR_REPLACEMENTS
 
       def self.parse(value)
         klass = [Light, Full].detect { |candidate| candidate.operators_name.to_s.eql?(value) }

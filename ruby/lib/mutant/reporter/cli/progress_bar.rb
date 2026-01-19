@@ -24,9 +24,7 @@ module Mutant
         # Render the progress bar string
         #
         # @return [String]
-        def render
-          "#{filled}#{empty}"
-        end
+        def render = "#{filled}#{empty}"
 
         # Calculate percentage completion
         #
@@ -62,17 +60,11 @@ module Mutant
           [((current.to_f / total) * width).round, width].min
         end
 
-        def empty_width
-          width - filled_width
-        end
+        def empty_width = width - filled_width
 
-        def filled
-          filled_char * filled_width
-        end
+        def filled = filled_char * filled_width
 
-        def empty
-          empty_char * empty_width
-        end
+        def empty = empty_char * empty_width
       end # ProgressBar
     end # CLI
   end # Reporter

@@ -33,9 +33,7 @@ module Mutant
       end
     end
 
-    def match_expressions
-      scope.match_expressions
-    end
+    def match_expressions = scope.match_expressions
 
     # Return root node for mutation
     #
@@ -47,9 +45,7 @@ module Mutant
     # Identification string
     #
     # @return [String]
-    def identification
-      scope.raw.name
-    end
+    def identification = scope.raw.name
 
   end # Context
 end # Mutant

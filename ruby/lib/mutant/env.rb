@@ -2,7 +2,6 @@
 
 module Mutant
   # Mutation testing execution environment
-  # rubocop:disable Metrics/ClassLength
   class Env
     include Adamantium, Anima.new(
       :config,
@@ -93,57 +92,42 @@ module Mutant
     # @param [String] warning
     #
     # @return [self]
-    def warn(message)
-      config.reporter.warn(message)
-      self
-    end
+    def warn(message) = tap { config.reporter.warn(message) }
 
     # Selected tests
     #
     # @return [Set<Test>]
-    def selected_tests
-      selections.values.flatten.to_set
-    end
+    def selected_tests = selections.values.flatten.to_set
     memoize :selected_tests
 
     # Amount of mutations
     #
     # @return [Integer]
-    def amount_mutations
-      mutations.length
-    end
+    def amount_mutations = mutations.length
     memoize :amount_mutations
 
     # Amount of all tests the integration provides
     #
     # @return [Integer]
-    def amount_all_tests
-      integration.all_tests.length
-    end
+    def amount_all_tests = integration.all_tests.length
     memoize :amount_all_tests
 
     # Amount of tests available for mutation testing
     #
     # @return [Integer]
-    def amount_available_tests
-      integration.available_tests.length
-    end
+    def amount_available_tests = integration.available_tests.length
     memoize :amount_available_tests
 
     # Amount of selected subjects
     #
     # @return [Integer]
-    def amount_subjects
-      subjects.length
-    end
+    def amount_subjects = subjects.length
     memoize :amount_subjects
 
     # Amount of selected tests
     #
     # @return [Integer]
-    def amount_selected_tests
-      selected_tests.length
-    end
+    def amount_selected_tests = selected_tests.length
     memoize :amount_selected_tests
 
     # Ratio between selected tests and subjects
@@ -180,9 +164,6 @@ module Mutant
       end
     end
 
-    def timer
-      world.timer
-    end
+    def timer = world.timer
   end # Env
-  # rubocop:enable Metrics/ClassLength
 end # Mutant

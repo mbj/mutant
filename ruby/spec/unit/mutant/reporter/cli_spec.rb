@@ -124,6 +124,12 @@ RSpec.describe Mutant::Reporter::CLI do
     it { should eql(1.0) }
   end
 
+  describe 'Format::Progressive#delay', mutant_expression: 'Mutant::Reporter::CLI::Format#delay' do
+    subject { format.delay }
+
+    it { should eql(1.0) }
+  end
+
   describe '#start' do
     subject { object.start(env) }
 

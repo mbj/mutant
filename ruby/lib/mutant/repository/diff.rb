@@ -44,9 +44,7 @@ module Mutant
         touched_paths.from_right { |message| fail Error, message }.fetch(path, &)
       end
 
-      def touched_paths
-        repository_root.bind(&method(:diff_index))
-      end
+      def touched_paths = repository_root.bind(&method(:diff_index))
       memoize :touched_paths
 
       def diff_index(root)

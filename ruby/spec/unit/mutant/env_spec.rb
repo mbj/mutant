@@ -269,6 +269,20 @@ RSpec.describe Mutant::Env do
     end
   end
 
+  describe '#amount_available_tests' do
+    def apply
+      subject.amount_available_tests
+    end
+
+    before do
+      allow(integration).to receive(:available_tests).and_return([test_a, test_b])
+    end
+
+    it 'returns expected value' do
+      expect(apply).to be(2)
+    end
+  end
+
   describe '#test_subject_ratio' do
     def apply
       subject.test_subject_ratio

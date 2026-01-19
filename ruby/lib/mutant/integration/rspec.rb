@@ -20,7 +20,6 @@ module Mutant
     #   Is NOT enough. It would not be unique. So we add an "example index"
     #   for unique reference.
     #
-    # rubocop:disable Metrics/ClassLength
     class Rspec < self
       ALL_EXPRESSION       = Expression::Namespace::Recursive.new(scope_name: nil)
       EXPRESSION_CANDIDATE = /\A([^ ]+)(?: )?/
@@ -30,10 +29,7 @@ module Mutant
 
       private_constant(*constants(false))
 
-      def freeze
-        super if @setup_elapsed
-        self
-      end
+      def freeze = tap { super if @setup_elapsed }
 
       # Initialize rspec integration
       #
@@ -89,17 +85,13 @@ module Mutant
       # All tests
       #
       # @return [Enumerable<Test>]
-      def all_tests
-        all_tests_index.keys
-      end
+      def all_tests = all_tests_index.keys
       memoize :all_tests
 
       # Available tests
       #
       # @return [Enumerable<Test>]
-      def available_tests
-        all_tests_index.select { |_test, example| example.metadata.fetch(:mutant, true) }.keys
-      end
+      def available_tests = all_tests_index.select { |_test, example| example.metadata.fetch(:mutant, true) }.keys
       memoize :available_tests
 
     private
@@ -112,13 +104,9 @@ module Mutant
         @rspec_world.respond_to?(:rspec_is_quitting) && @rspec_world.rspec_is_quitting
       end
 
-      def effective_arguments
-        arguments.empty? ? DEFAULT_CLI_OPTIONS : arguments
-      end
+      def effective_arguments = arguments.empty? ? DEFAULT_CLI_OPTIONS : arguments
 
-      def reset_examples
-        @rspec_world.filtered_examples.each_value(&:clear)
-      end
+      def reset_examples = @rspec_world.filtered_examples.each_value(&:clear)
 
       def setup_examples(examples)
         examples.each do |example|
@@ -176,10 +164,7 @@ module Mutant
         expression_parser.call(input).from_right(&)
       end
 
-      def all_examples
-        @rspec_world.example_groups.flat_map(&:descendants).flat_map(&:examples)
-      end
+      def all_examples = @rspec_world.example_groups.flat_map(&:descendants).flat_map(&:examples)
     end # Rspec
-    # rubocop:enable Metrics/ClassLength
   end # Integration
 end # Mutant

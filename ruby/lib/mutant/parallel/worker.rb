@@ -40,6 +40,10 @@ module Mutant
           world.stderr.reopen(log_writer)
           world.stdout.reopen(log_writer)
 
+          # Ensure output from background threads is immediately flushed
+          world.stderr.sync = true
+          world.stdout.sync = true
+
           run_child(
             config:,
             connection: Connection.from_pipes(marshal:, reader: request, writer: response),
@@ -77,9 +81,7 @@ module Mutant
       end
       private_class_method :run_child
 
-      def index
-        config.index
-      end
+      def index = config.index
 
       # Run worker loop
       #
@@ -116,21 +118,13 @@ module Mutant
       # rubocop:enable Metrics/AbcSize
       # rubocop:enable Metrics/MethodLength
 
-      def signal
-        process.kill('TERM', pid)
-        self
-      end
+      def signal = tap { process.kill('TERM', pid) }
 
-      def join
-        process.wait(pid)
-        self
-      end
+      def join = tap { process.wait(pid) }
 
     private
 
-      def process
-        config.world.process
-      end
+      def process = config.world.process
 
       def next_job
         config.var_source.with do |source|

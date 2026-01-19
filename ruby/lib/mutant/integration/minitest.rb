@@ -34,9 +34,7 @@ module Mutant
         # Identification string
         #
         # @return [String]
-        def identification
-          IDENTIFICATION_FORMAT % [klass, test_method]
-        end
+        def identification = IDENTIFICATION_FORMAT % [klass, test_method]
         memoize :identification
 
         # Run test case
@@ -124,9 +122,7 @@ module Mutant
       # All tests exposed by this integration
       #
       # @return [Array<Test>]
-      def all_tests
-        all_tests_index.keys
-      end
+      def all_tests = all_tests_index.keys
       memoize :all_tests
 
       alias_method :available_tests, :all_tests

@@ -197,9 +197,7 @@ module Mutant
     # Wait till mvar is full
     #
     # @return [undefined]
-    def wait_full
-      wait(@full, &method(:full?))
-    end
+    def wait_full = wait(@full, &method(:full?))
 
     # Test if state is full
     #
@@ -262,9 +260,7 @@ module Mutant
       # Perform take operation
       #
       # @return [Object]
-      def perform_take
-        @value
-      end
+      def perform_take = @value
     end # IVar
 
     # Shared variable that can be written multiple times

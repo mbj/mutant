@@ -110,9 +110,7 @@ module Mutant
     # Perform integration setup
     #
     # @return [self]
-    def setup
-      self
-    end
+    def setup = self
 
     # Run a collection of tests
     #
@@ -138,8 +136,6 @@ module Mutant
 
   private
 
-    def timer
-      world.timer
-    end
+    def timer = world.timer
   end # Integration
 end # Mutant

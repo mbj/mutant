@@ -38,11 +38,7 @@ module Mutant
       # This will cause all work to be immediately stopped.
       #
       # @return [self]
-      def stop
-        @alive = false
-        threads.each(&:kill)
-        self
-      end
+      def stop = tap { @alive = false; threads.each(&:kill) }
 
     private
 

@@ -98,21 +98,15 @@ module Mutant
         emit(node) unless AST::Types::NOT_STANDALONE.include?(node.type)
       end
 
-      def emit_singletons
-        emit_nil
-      end
+      def emit_singletons = emit_nil
 
       def emit_nil
         emit(N_NIL) unless left_op_assignment?
       end
 
-      def parent_node
-        parent&.node
-      end
+      def parent_node = parent&.node
 
-      def parent_type
-        parent_node&.type
-      end
+      def parent_type = parent_node&.type
 
       def left_op_assignment?
         AST::Types::OP_ASSIGN.include?(parent_type) && parent.node.children.first.equal?(node)

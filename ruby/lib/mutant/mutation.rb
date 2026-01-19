@@ -70,33 +70,25 @@ module Mutant
     # Mutation identification code
     #
     # @return [String]
-    def code
-      sha1[CODE_RANGE]
-    end
+    def code = sha1[CODE_RANGE]
     memoize :code
 
     # Identification string
     #
     # @return [String]
-    def identification
-      "#{self.class::SYMBOL}:#{subject.identification}:#{code}"
-    end
+    def identification = "#{self.class::SYMBOL}:#{subject.identification}:#{code}"
     memoize :identification
 
     # The monkeypatch to insert the mutation
     #
     # @return [String]
-    def monkeypatch
-      Unparser.unparse(subject.context.root(node))
-    end
+    def monkeypatch = Unparser.unparse(subject.context.root(node))
     memoize :monkeypatch
 
     # Normalized original source
     #
     # @return [String]
-    def original_source
-      subject.source
-    end
+    def original_source = subject.source
 
     # Test if mutation is killed by test reports
     #
@@ -125,16 +117,12 @@ module Mutant
       end
     end
 
-    def diff
-      Unparser::Diff.build(original_source, source)
-    end
+    def diff = Unparser::Diff.build(original_source, source)
     memoize :diff
 
   private
 
-    def sha1
-      Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
-    end
+    def sha1 = Digest::SHA1.hexdigest(subject.identification + CODE_DELIMITER + source)
 
     # Evil mutation that should case mutations to fail tests
     class Evil < self

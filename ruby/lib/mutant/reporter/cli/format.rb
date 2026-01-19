@@ -44,9 +44,7 @@ module Mutant
         # Report delay in seconds
         #
         # @return [Float]
-        def delay
-          self.class::REPORT_DELAY
-        end
+        def delay = self.class::REPORT_DELAY
 
         # Output abstraction to decouple tty? from buffer
         class Output
@@ -118,17 +116,11 @@ module Mutant
 
         private
 
-          def new_buffer
-            StringIO.new
-          end
+          def new_buffer = StringIO.new
 
-          def status_progressive_printer
-            tty ? Printer::StatusProgressive::Tty : Printer::StatusProgressive::Pipe
-          end
+          def status_progressive_printer = tty ? Printer::StatusProgressive::Tty : Printer::StatusProgressive::Pipe
 
-          def test_status_progressive_printer
-            tty ? Printer::Test::StatusProgressive::Tty : Printer::Test::StatusProgressive::Pipe
-          end
+          def test_status_progressive_printer = tty ? Printer::Test::StatusProgressive::Tty : Printer::Test::StatusProgressive::Pipe
 
           # Wrap progress output with TTY-specific line handling
           #

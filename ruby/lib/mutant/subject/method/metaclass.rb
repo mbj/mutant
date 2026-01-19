@@ -14,10 +14,7 @@ module Mutant
         # Prepare subject for mutation insertion
         #
         # @return [self]
-        def prepare
-          scope.raw.singleton_class.undef_method(name)
-          self
-        end
+        def prepare = tap { scope.raw.singleton_class.undef_method(name) }
 
       private
 

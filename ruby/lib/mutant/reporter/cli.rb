@@ -26,55 +26,38 @@ module Mutant
       # @param [Env] env
       #
       # @return [self]
-      def start(env)
-        write(format.start(env))
-        self
-      end
+      def start(env) = tap { write(format.start(env)) }
 
       # Report test start
       #
       # @param [Env] env
       #
       # @return [self]
-      def test_start(env)
-        write(format.test_start(env))
-        self
-      end
+      def test_start(env) = tap { write(format.test_start(env)) }
 
       # Report progress object
       #
       # @param [Parallel::Status] status
       #
       # @return [self]
-      def progress(status)
-        write(format.progress(status))
-        self
-      end
+      def progress(status) = tap { write(format.progress(status)) }
 
       # Report progress object
       #
       # @return [self]
-      def test_progress(status)
-        write(format.test_progress(status))
-        self
-      end
+      def test_progress(status) = tap { write(format.test_progress(status)) }
 
       # Report delay in seconds
       #
       # @return [Float]
-      def delay
-        format.delay
-      end
+      def delay = format.delay
 
       # Report warning
       #
       # @param [String] message
       #
       # @return [self]
-      def warn(message)
-        output.puts(message) if print_warnings
-        self
-      end
+      def warn(message) = tap { output.puts(message) if print_warnings }
 
       # Report env
       #
