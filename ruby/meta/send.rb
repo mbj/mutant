@@ -187,6 +187,7 @@ Mutant::Meta::Example.add :send, operators: :full do
   mutation 'bar'
   mutation 'nil == bar'
   mutation 'foo == nil'
+  mutation 'foo != bar'
   mutation 'foo.eql?(bar)'
   mutation 'foo.equal?(bar)'
 end
@@ -639,6 +640,7 @@ Mutant::Meta::Example.add :send do
   mutation 'a'
   mutation 'b'
   mutation 'a != nil'
+  mutation 'a == b'
   mutation '!a.eql?(b)'
   mutation '!a.equal?(b)'
 end

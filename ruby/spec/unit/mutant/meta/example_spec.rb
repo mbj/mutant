@@ -105,6 +105,7 @@ RSpec.describe Mutant::Meta::Example do
       let(:expected) do
         [
           s(:nil),
+          s(:send, s(:nil), :!=, s(:nil)),
           s(:send, s(:nil), :eql?, s(:nil)),
           s(:send, s(:nil), :equal?, s(:nil))
         ]
