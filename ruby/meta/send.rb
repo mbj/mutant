@@ -4,6 +4,7 @@ Mutant::Meta::Example.add :send do
   source 'a > b'
 
   singleton_mutations
+  mutation 'a >= b'
   mutation 'a == b'
   mutation 'a.eql?(b)'
   mutation 'a.equal?(b)'
@@ -79,6 +80,7 @@ Mutant::Meta::Example.add :send do
   source 'a < b'
 
   singleton_mutations
+  mutation 'a <= b'
   mutation 'a == b'
   mutation 'a.eql?(b)'
   mutation 'a.equal?(b)'
