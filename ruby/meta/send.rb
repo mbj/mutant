@@ -660,6 +660,22 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
 end
 
+# Unary minus (negation removal)
+Mutant::Meta::Example.add :send do
+  source '-foo'
+
+  singleton_mutations
+  mutation 'foo'
+end
+
+# Unary plus (removal)
+Mutant::Meta::Example.add :send do
+  source '+foo'
+
+  singleton_mutations
+  mutation 'foo'
+end
+
 Mutant::Meta::Example.add :send do
   source '!foo&.!'
 
