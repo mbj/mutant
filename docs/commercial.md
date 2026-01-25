@@ -168,15 +168,15 @@ Vat-ID: MT24186727
 Registration: C80467
 
 Office address:
-2, Carob Lane,
-Sir Harry Luke Street
+Villa 2, Carob Lane,
+Sir H. Luke Street,
 Naxxar NXR 2209,
 Malta
 
 Registered Address:
-Phoenix Business Centre,
-The Penthouse,
-Old Railway Track,
-Santa Venera SVR9022,
+Centris Business Gateway,
+Level 2M, Triq Is-Salib Tal-Imriehel,
+Zone 3, Central Business District,
+Birkirkara CBD 3020,
 Malta
 ```
