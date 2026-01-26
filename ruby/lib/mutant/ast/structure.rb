@@ -464,6 +464,11 @@ module Mutant
           variable: nil
         ),
         Node.new(
+          type:     :if_guard,
+          fixed:    Node.fixed([[Node::Fixed::Descendant, :condition]]),
+          variable: nil
+        ),
+        Node.new(
           type:     :in_pattern,
           fixed:    Node.fixed(
             [
@@ -847,6 +852,11 @@ module Mutant
               [Node::Fixed::Descendant, :body]
             ]
           ),
+          variable: nil
+        ),
+        Node.new(
+          type:     :unless_guard,
+          fixed:    Node.fixed([[Node::Fixed::Descendant, :condition]]),
           variable: nil
         ),
         Node.new(
