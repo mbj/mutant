@@ -34,6 +34,7 @@ Mutant::Meta::Example.add :erange do
   source '1...'
 
   singleton_mutations
+  mutation '1..'
   mutation '0...'
   mutation '2...'
   mutation 'nil...'
@@ -43,6 +44,7 @@ Mutant::Meta::Example.add :irange do
   source '1..'
 
   singleton_mutations
+  mutation '1...'
   mutation '0..'
   mutation '2..'
   mutation 'nil..'
