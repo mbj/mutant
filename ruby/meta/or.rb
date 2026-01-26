@@ -8,6 +8,7 @@ Mutant::Meta::Example.add :or do
   mutation 'false'
   mutation 'false or false'
   mutation 'true or true'
+  mutation 'true and false'
 end
 
 Mutant::Meta::Example.add :or do
@@ -16,6 +17,7 @@ Mutant::Meta::Example.add :or do
   mutation 'a = true'
   mutation 'a = false or false'
   mutation 'a = true or true'
+  mutation 'a = true and false'
 end
 
 Mutant::Meta::Example.add :or do
@@ -31,6 +33,7 @@ Mutant::Meta::Example.add :or do
   mutation 'foo(0..) || bar'
   mutation 'foo(nil..) || bar'
   mutation 'foo || bar'
+  mutation 'foo(1..) && bar'
 end
 
 Mutant::Meta::Example.add :or do
@@ -52,6 +55,7 @@ Mutant::Meta::Example.add :or do
   mutation 'foo(1..1) || bar'
   mutation 'foo(1..0) || bar'
   mutation 'foo || bar'
+  mutation 'foo(1..2) && bar'
 end
 
 Mutant::Meta::Example.add :or do
@@ -67,4 +71,5 @@ Mutant::Meta::Example.add :or do
   mutation 'foo(0...) || bar'
   mutation 'foo(nil...) || bar'
   mutation 'foo || bar'
+  mutation 'foo(1...) && bar'
 end

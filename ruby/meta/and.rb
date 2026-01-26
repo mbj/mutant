@@ -8,4 +8,5 @@ Mutant::Meta::Example.add :and do
   mutation 'false'
   mutation 'false and false'
   mutation 'true and true'
+  mutation 'true or false'
 end
