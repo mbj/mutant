@@ -11,12 +11,32 @@ module Mutant
 
         children :left, :operation, :right
 
+        OPERATOR_SWAPS = {
+          :+  => %i[-],
+          :-  => %i[+],
+          :*  => %i[/],
+          :/  => %i[*],
+          :%  => %i[/],
+          :** => %i[*],
+          :&  => %i[|],
+          :|  => %i[&],
+          :^  => %i[&],
+          :<< => %i[>>],
+          :>> => %i[<<]
+        }.each_value(&:freeze).freeze
+
       private
 
         def dispatch
           left_mutations
-
+          emit_operator_replacements
           emit_right_mutations
+        end
+
+        def emit_operator_replacements
+          OPERATOR_SWAPS.fetch(operation).each do |replacement|
+            emit_operation(replacement)
+          end
         end
 
         def left_mutations
