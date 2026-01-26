@@ -20,12 +20,17 @@ module Mutant
         def dispatch
           emit_singletons unless left_lvasgn?
           emit_promotions
+          emit_operator_swap
 
           emit_left_mutations do |mutation|
             !(n_irange?(mutation) || n_erange?(mutation)) || !mutation.children.fetch(1).nil?
           end
 
           emit_right_mutations
+        end
+
+        def emit_operator_swap
+          emit(s(INVERSE.fetch(node.type), left, right))
         end
 
         def emit_promotions
