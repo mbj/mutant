@@ -22,4 +22,5 @@ Mutant::Meta::Example.add :indexasgn, :op_asgn do
   mutation 'self[] += bar'
   mutation 'self[nil] += bar'
   mutation 'self[foo] += nil'
+  mutation 'self[foo] -= bar'
 end
