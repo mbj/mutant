@@ -1029,3 +1029,30 @@ end
     mutation selector
   end
 end
+
+# Keyword argument removal mutations - tests that explicit values aren't just relying on defaults
+Mutant::Meta::Example.add :send do
+  source 'foo(bar: 1, baz: 2)'
+
+  singleton_mutations
+
+  # Key mutations
+  mutation 'foo(bar__mutant__: 1, baz: 2)'
+  mutation 'foo(bar: 1, baz__mutant__: 2)'
+
+  # Value mutations
+  mutation 'foo(bar: nil, baz: 2)'
+  mutation 'foo(bar: 0, baz: 2)'
+  mutation 'foo(bar: 2, baz: 2)'
+  mutation 'foo(bar: 1, baz: nil)'
+  mutation 'foo(bar: 1, baz: 0)'
+  mutation 'foo(bar: 1, baz: 1)'
+  mutation 'foo(bar: 1, baz: 3)'
+
+  # Keyword argument removal - tests defaults are properly handled
+  mutation 'foo(baz: 2)'
+  mutation 'foo(bar: 1)'
+
+  # Remove all keyword arguments
+  mutation 'foo'
+end
