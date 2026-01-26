@@ -11,6 +11,7 @@ module Mutant
 
         SELECTOR_REPLACEMENTS = {
           :!= =>         %i[==],
+          :** =>         %i[*],
           :& =>          %i[| ^],
           :+ =>          %i[-],
           :- =>          %i[+],

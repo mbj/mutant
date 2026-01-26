@@ -533,7 +533,8 @@ Mutant::Meta::Example.add :send do
   mutation 'foo(n..-2)'
 end
 
-(Mutant::AST::Types::BINARY_METHOD_OPERATORS - %i[=~ <= >= < > == === != eql? & | ^ << >> + - * / %]).each do |operator|
+excluded_operators = %i[=~ <= >= < > == === != eql? & | ^ << >> + - * / % **]
+(Mutant::AST::Types::BINARY_METHOD_OPERATORS - excluded_operators).each do |operator|
   Mutant::Meta::Example.add :send do
     source "true #{operator} false"
 
@@ -630,6 +631,18 @@ Mutant::Meta::Example.add :send do
   mutation 'nil >> b'
   mutation 'a >> nil'
   mutation 'a << b'
+end
+
+# Exponentiation operator
+Mutant::Meta::Example.add :send do
+  source 'a ** b'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil ** b'
+  mutation 'a ** nil'
+  mutation 'a * b'
 end
 
 Mutant::Meta::Example.add :send do
