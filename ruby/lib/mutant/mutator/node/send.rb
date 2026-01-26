@@ -65,6 +65,7 @@ module Mutant
           mutate_arguments
         end
 
+        # rubocop:disable Metrics/MethodLength
         def emit_selector_specific_mutations
           emit_reduce_to_sum_mutation
           emit_start_end_with_mutations
@@ -76,7 +77,9 @@ module Mutant
           emit_dig_mutation
           emit_double_negation_mutation
           emit_lambda_mutation
+          emit_empty_collection_mutation
         end
+        # rubocop:enable Metrics/MethodLength
 
         def emit_reduce_to_sum_mutation
           return unless selector.equal?(:reduce)
@@ -169,6 +172,17 @@ module Mutant
 
         def emit_lambda_mutation
           emit(s(:send, nil, :lambda)) if meta.proc?
+        end
+
+        def emit_empty_collection_mutation
+          case selector
+          when :to_a, :to_ary
+            emit(s(:array))
+          when :to_h, :to_hash
+            emit(s(:hash))
+          when :to_s, :to_str
+            emit(s(:str, ''))
+          end
         end
 
         def emit_dig_mutation
