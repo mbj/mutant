@@ -117,6 +117,7 @@ module Mutant
     require 'mutant/mutator/util/symbol'
     require 'mutant/mutator/node'
     require 'mutant/mutator/node/generic'
+    require 'mutant/mutator/node/guard'
     require 'mutant/mutator/node/literal'
     require 'mutant/mutator/node/literal/boolean'
     require 'mutant/mutator/node/literal/range'
