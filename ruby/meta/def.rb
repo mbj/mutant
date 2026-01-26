@@ -237,3 +237,86 @@ Mutant::Meta::Example.add :def, :send do
   mutation 'def foo(...); nil; end'
   mutation 'def foo(...); end'
 end
+
+# Type-aware default return mutations: arrays
+Mutant::Meta::Example.add :def do
+  source 'def foo; [true]; end'
+
+  mutation 'def foo; raise; end'
+  mutation 'def foo; super; end'
+  mutation 'def foo; []; end'
+  mutation 'def foo; end'
+  mutation 'def foo; nil; end'
+  mutation 'def foo; [false]; end'
+  mutation 'def foo; true; end'
+end
+
+# Type-aware default return mutations: hashes
+Mutant::Meta::Example.add :def do
+  source 'def foo; { a: true }; end'
+
+  mutation 'def foo; raise; end'
+  mutation 'def foo; super; end'
+  mutation 'def foo; {}; end'
+  mutation 'def foo; end'
+  mutation 'def foo; nil; end'
+  mutation 'def foo; { a: false }; end'
+  mutation 'def foo; { a__mutant__: true }; end'
+end
+
+# Type-aware default return mutations: strings
+Mutant::Meta::Example.add :def do
+  source 'def foo; "hello"; end'
+
+  mutation 'def foo; raise; end'
+  mutation 'def foo; super; end'
+  mutation 'def foo; ""; end'
+  mutation 'def foo; end'
+  mutation 'def foo; nil; end'
+end
+
+# Type-aware default return mutations: integers
+Mutant::Meta::Example.add :def do
+  source 'def foo; 42; end'
+
+  mutation 'def foo; raise; end'
+  mutation 'def foo; super; end'
+  mutation 'def foo; 0; end'
+  mutation 'def foo; end'
+  mutation 'def foo; nil; end'
+  mutation 'def foo; 1; end'
+  mutation 'def foo; 43; end'
+  mutation 'def foo; 41; end'
+end
+
+# Type-aware default return mutations: floats
+Mutant::Meta::Example.add :def do
+  source 'def foo; 3.14; end'
+
+  mutation 'def foo; raise; end'
+  mutation 'def foo; super; end'
+  mutation 'def foo; 0.0; end'
+  mutation 'def foo; end'
+  mutation 'def foo; nil; end'
+  mutation 'def foo; 0.0 / 0.0; end'
+  mutation 'def foo; 1.0 / 0.0; end'
+  mutation 'def foo; -1.0 / 0.0; end'
+  mutation 'def foo; 1.0; end'
+end
+
+# Type-aware defaults with multi-statement body (last statement determines type)
+Mutant::Meta::Example.add :def do
+  source 'def foo; bar; [true]; end'
+
+  mutation 'def foo; raise; end'
+  mutation 'def foo; super; end'
+  mutation 'def foo; []; end'
+  mutation 'def foo; end'
+  mutation 'def foo; bar; end'
+  mutation 'def foo; [true]; end'
+  mutation 'def foo; nil; [true]; end'
+  mutation 'def foo; bar; nil; end'
+  mutation 'def foo; bar; []; end'
+  mutation 'def foo; bar; [false]; end'
+  mutation 'def foo; bar; true; end'
+end
