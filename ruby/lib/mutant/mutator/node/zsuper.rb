@@ -9,10 +9,13 @@ module Mutant
 
         handle(:zsuper)
 
+        include AST::Nodes
+
       private
 
         def dispatch
           emit_singletons
+          emit(N_EMPTY_SUPER)
         end
 
       end # ZSuper
