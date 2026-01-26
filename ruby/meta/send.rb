@@ -570,6 +570,245 @@ Mutant::Meta::Example.add :send do
   mutation 'a + b'
 end
 
+# Multiplication operator
+Mutant::Meta::Example.add :send do
+  source 'a * b'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil * b'
+  mutation 'a * nil'
+  mutation 'a / b'
+end
+
+# Division operator
+Mutant::Meta::Example.add :send do
+  source 'a / b'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil / b'
+  mutation 'a / nil'
+  mutation 'a * b'
+end
+
+# Multiplication by non-identity: DO generate a / 2
+# (proves we only skip for identity values 1/-1)
+Mutant::Meta::Example.add :send do
+  source 'a * 2'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '2'
+  mutation 'nil * 2'
+  mutation 'a * nil'
+  mutation 'a * 0'
+  mutation 'a * 1'
+  mutation 'a * 3'
+  mutation 'a / 2'
+end
+
+# Division by non-identity: DO generate a * 2
+Mutant::Meta::Example.add :send do
+  source 'a / 2'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '2'
+  mutation 'nil / 2'
+  mutation 'a / nil'
+  mutation 'a / 0'
+  mutation 'a / 1'
+  mutation 'a / 3'
+  mutation 'a * 2'
+end
+
+# Addition by 1: still generates a - 1
+# (proves * / filtering doesn't affect other operators)
+Mutant::Meta::Example.add :send do
+  source 'a + 1'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '1'
+  mutation 'nil + 1'
+  mutation 'a + nil'
+  mutation 'a + 0'
+  mutation 'a + 2'
+  mutation 'a - 1'
+end
+
+# Subtraction by 1: still generates a + 1
+Mutant::Meta::Example.add :send do
+  source 'a - 1'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '1'
+  mutation 'nil - 1'
+  mutation 'a - nil'
+  mutation 'a - 0'
+  mutation 'a - 2'
+  mutation 'a + 1'
+end
+
+# Multiplication by 1: skip equivalent a / 1 mutation
+# (a * 1 == a / 1, both equal a)
+Mutant::Meta::Example.add :send do
+  source 'a * 1'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '1'
+  mutation 'nil * 1'
+  mutation 'a * nil'
+  mutation 'a * 0'
+  mutation 'a * 2'
+  # NOTE: 'a / 1' is intentionally NOT generated (equivalent mutant)
+end
+
+# Division by 1: skip equivalent a * 1 mutation
+Mutant::Meta::Example.add :send do
+  source 'a / 1'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '1'
+  mutation 'nil / 1'
+  mutation 'a / nil'
+  mutation 'a / 0'
+  mutation 'a / 2'
+  # NOTE: 'a * 1' is intentionally NOT generated (equivalent mutant)
+end
+
+# Multiplication by -1: skip equivalent a / -1 mutation
+# (a * -1 == a / -1, both equal -a)
+Mutant::Meta::Example.add :send do
+  source 'a * -1'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '-1'
+  mutation 'nil * -1'
+  mutation 'a * nil'
+  mutation 'a * 0'
+  mutation 'a * 1'
+  mutation 'a * -2'
+  # NOTE: 'a / -1' is intentionally NOT generated (equivalent mutant)
+end
+
+# Division by -1: skip equivalent a * -1 mutation
+Mutant::Meta::Example.add :send do
+  source 'a / -1'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '-1'
+  mutation 'nil / -1'
+  mutation 'a / nil'
+  mutation 'a / 0'
+  mutation 'a / 1'
+  mutation 'a / -2'
+  # NOTE: 'a * -1' is intentionally NOT generated (equivalent mutant)
+end
+
+# Left operand 1: DO generate 1 / a (not equivalent: a vs 1/a)
+Mutant::Meta::Example.add :send do
+  source '1 * a'
+
+  singleton_mutations
+  mutation '1'
+  mutation 'a'
+  mutation 'nil * a'
+  mutation '1 * nil'
+  mutation '0 * a'
+  mutation '2 * a'
+  mutation '1 / a'
+end
+
+# Left operand 1: DO generate 1 * a (not equivalent)
+Mutant::Meta::Example.add :send do
+  source '1 / a'
+
+  singleton_mutations
+  mutation '1'
+  mutation 'a'
+  mutation 'nil / a'
+  mutation '1 / nil'
+  mutation '0 / a'
+  mutation '2 / a'
+  mutation '1 * a'
+end
+
+# Float identity: skip equivalent mutations for 1.0
+Mutant::Meta::Example.add :send do
+  source 'a * 1.0'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '1.0'
+  mutation 'nil * 1.0'
+  mutation 'a * nil'
+  mutation 'a * 0.0'
+  mutation 'a * 0.0./(0.0)'
+  mutation 'a * 1.0./(0.0)'
+  mutation 'a * -1.0./(0.0)'
+  # NOTE: 'a / 1.0' is intentionally NOT generated (equivalent mutant)
+end
+
+# Float identity: skip equivalent mutations for -1.0
+Mutant::Meta::Example.add :send do
+  source 'a * -1.0'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '-1.0'
+  mutation 'nil * -1.0'
+  mutation 'a * nil'
+  mutation 'a * 0.0'
+  mutation 'a * 1.0'
+  mutation 'a * 0.0./(0.0)'
+  mutation 'a * 1.0./(0.0)'
+  mutation 'a * -1.0./(0.0)'
+  # NOTE: 'a / -1.0' is intentionally NOT generated (equivalent mutant)
+end
+
+# Float non-identity: DO generate a / 2.0 mutation
+Mutant::Meta::Example.add :send do
+  source 'a * 2.0'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '2.0'
+  mutation 'nil * 2.0'
+  mutation 'a * nil'
+  mutation 'a * 0.0'
+  mutation 'a * 1.0'
+  mutation 'a * 0.0./(0.0)'
+  mutation 'a * 1.0./(0.0)'
+  mutation 'a * -1.0./(0.0)'
+  mutation 'a / 2.0'
+end
+
+# Float non-identity: DO generate a * 2.0 mutation
+Mutant::Meta::Example.add :send do
+  source 'a / 2.0'
+
+  singleton_mutations
+  mutation 'a'
+  mutation '2.0'
+  mutation 'nil / 2.0'
+  mutation 'a / nil'
+  mutation 'a / 0.0'
+  mutation 'a / 1.0'
+  mutation 'a / 0.0./(0.0)'
+  mutation 'a / 1.0./(0.0)'
+  mutation 'a / -1.0./(0.0)'
+  mutation 'a * 2.0'
+end
+
 # Bitwise AND operator
 Mutant::Meta::Example.add :send do
   source 'a & b'
