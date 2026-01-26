@@ -645,6 +645,18 @@ Mutant::Meta::Example.add :send do
   mutation 'a * b'
 end
 
+# Modulo operator
+Mutant::Meta::Example.add :send do
+  source 'a % b'
+
+  singleton_mutations
+  mutation 'a'
+  mutation 'b'
+  mutation 'nil % b'
+  mutation 'a % nil'
+  mutation 'a / b'
+end
+
 Mutant::Meta::Example.add :send do
   source 'a != b'
 
