@@ -70,3 +70,35 @@ Mutant::Meta::Example.add :rescue do
   singleton_mutations
   mutation 'begin; rescue; ensure; false; end'
 end
+
+# Multiple rescue clauses with assignment - test individual clause removal
+Mutant::Meta::Example.add :rescue do
+  source 'def a; foo; rescue ErrorA => e; bar; rescue ErrorB => e; baz; end'
+
+  # Mutate try body
+  mutation 'def a; nil; rescue ErrorA => e; bar; rescue ErrorB => e; baz; end'
+
+  # Mutate first rescue body
+  mutation 'def a; foo; rescue ErrorA => e; nil; rescue ErrorB => e; baz; end'
+
+  # Mutate second rescue body
+  mutation 'def a; foo; rescue ErrorA => e; bar; rescue ErrorB => e; nil; end'
+
+  # Promote try body (remove all rescues)
+  mutation 'def a; foo; end'
+
+  # Empty body
+  mutation 'def a; end'
+
+  # Failing body
+  mutation 'def a; raise; end'
+
+  # Superclass implementation
+  mutation 'def a; super; end'
+
+  # Remove first rescue clause (keep second)
+  mutation 'def a; foo; rescue ErrorB => e; baz; end'
+
+  # Remove second rescue clause (keep first)
+  mutation 'def a; foo; rescue ErrorA => e; bar; end'
+end

@@ -30,6 +30,18 @@ module Mutant
               emit_concat(resbody.body)
             end
           end
+          emit_rescue_clause_removals
+        end
+
+        def emit_rescue_clause_removals
+          rescue_indices = children_indices(RESCUE_INDICES).to_a
+          return unless rescue_indices.length > 1
+
+          rescue_indices.each do |index|
+            dup_children = children.dup
+            dup_children.delete_at(index)
+            emit_type(*dup_children)
+          end
         end
 
         def emit_concat(child)
