@@ -6,6 +6,7 @@ module Mutant
 
       # Mutator for super with parentheses
       class Super < self
+        include AST::Nodes
 
         handle(:super)
 
@@ -13,6 +14,7 @@ module Mutant
 
         def dispatch
           emit_singletons
+          emit(N_ZSUPER) unless children.empty?
           children.each_index do |index|
             mutate_child(index)
             delete_child(index)
