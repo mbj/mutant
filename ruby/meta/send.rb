@@ -1097,3 +1097,135 @@ Mutant::Meta::Example.add :send do
   # Remove all keyword arguments
   mutation 'foo'
 end
+
+# Bang to non-bang mutations - simple sends without blocks
+Mutant::Meta::Example.add :send do
+  source 'array.sort!'
+
+  singleton_mutations
+  mutation 'array.sort'
+  mutation 'array'
+  mutation 'self.sort!'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'array.reverse!'
+
+  singleton_mutations
+  mutation 'array.reverse'
+  mutation 'array'
+  mutation 'self.reverse!'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'array.flatten!'
+
+  singleton_mutations
+  mutation 'array.flatten'
+  mutation 'array'
+  mutation 'self.flatten!'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'array.compact!'
+
+  singleton_mutations
+  mutation 'array.compact'
+  mutation 'array'
+  mutation 'self.compact!'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'array.uniq!'
+
+  singleton_mutations
+  mutation 'array.uniq'
+  mutation 'array'
+  mutation 'self.uniq!'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'array.shuffle!'
+
+  singleton_mutations
+  mutation 'array.shuffle'
+  mutation 'array'
+  mutation 'self.shuffle!'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'str.strip!'
+
+  singleton_mutations
+  mutation 'str.strip'
+  mutation 'str'
+  mutation 'self.strip!'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'str.chomp!'
+
+  singleton_mutations
+  mutation 'str.chomp'
+  mutation 'str'
+  mutation 'self.chomp!'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'str.upcase!'
+
+  singleton_mutations
+  mutation 'str.upcase'
+  mutation 'str'
+  mutation 'self.upcase!'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'str.downcase!'
+
+  singleton_mutations
+  mutation 'str.downcase'
+  mutation 'str'
+  mutation 'self.downcase!'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'hash.merge!(other)'
+
+  singleton_mutations
+  mutation 'hash.merge(other)'
+  mutation 'hash.merge!'
+  mutation 'hash.merge!(nil)'
+  mutation 'other'
+  mutation 'hash'
+  mutation 'self.merge!(other)'
+end
+
+# Bang to non-bang mutations with arguments
+Mutant::Meta::Example.add :send do
+  source 'str.gsub!(pattern, replacement)'
+
+  singleton_mutations
+  mutation 'str.gsub(pattern, replacement)'
+  mutation 'str.gsub!(pattern)'
+  mutation 'str.gsub!(replacement)'
+  mutation 'str.gsub!'
+  mutation 'str.gsub!(nil, replacement)'
+  mutation 'str.gsub!(pattern, nil)'
+  mutation 'str'
+  mutation 'self.gsub!(pattern, replacement)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'str.sub!(pattern, replacement)'
+
+  singleton_mutations
+  mutation 'str.sub(pattern, replacement)'
+  mutation 'str.sub!(pattern)'
+  mutation 'str.sub!(replacement)'
+  mutation 'str.sub!'
+  mutation 'str.sub!(nil, replacement)'
+  mutation 'str.sub!(pattern, nil)'
+  mutation 'str'
+  mutation 'self.sub!(pattern, replacement)'
+end
