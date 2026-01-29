@@ -90,7 +90,11 @@ module Mutant
           unicode_normalize!: %i[unicode_normalize],
           uniq!:         %i[uniq],
           upcase!:       %i[upcase],
-          values_at:     %i[fetch_values]
+          values_at:     %i[fetch_values],
+          # Visibility modifier mutations
+          private:       %i[protected public],
+          protected:     %i[private public],
+          public:        %i[private protected]
         }.freeze.tap { |hash| hash.each_value(&:freeze) }
       end
 

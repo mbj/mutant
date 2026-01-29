@@ -1229,3 +1229,40 @@ Mutant::Meta::Example.add :send do
   mutation 'str'
   mutation 'self.sub!(pattern, replacement)'
 end
+
+# Visibility modifier mutations
+Mutant::Meta::Example.add :send do
+  source 'private :foo'
+
+  singleton_mutations
+  mutation 'protected(:foo)'
+  mutation 'public(:foo)'
+  mutation ':foo'
+  mutation 'private'
+  mutation 'private(nil)'
+  mutation 'private(:foo__mutant__)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'protected :foo'
+
+  singleton_mutations
+  mutation 'private(:foo)'
+  mutation 'public(:foo)'
+  mutation ':foo'
+  mutation 'protected'
+  mutation 'protected(nil)'
+  mutation 'protected(:foo__mutant__)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'public :foo'
+
+  singleton_mutations
+  mutation 'private(:foo)'
+  mutation 'protected(:foo)'
+  mutation ':foo'
+  mutation 'public'
+  mutation 'public(nil)'
+  mutation 'public(:foo__mutant__)'
+end
