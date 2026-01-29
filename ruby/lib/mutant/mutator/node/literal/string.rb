@@ -13,6 +13,7 @@ module Mutant
 
           def dispatch
             emit_singletons
+            emit(N_EMPTY_STRING)
           end
 
         end # String
