@@ -715,6 +715,7 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'custom.proc'
+  mutation 'custom'             # receiver promotion
   mutation 'custom { }'
   mutation 'self.proc { }'
   mutation 'custom.proc { raise }'
@@ -734,6 +735,7 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'Proc.new'
+  mutation 'Proc'               # receiver promotion
   mutation 'self.new { }'
   mutation 'Proc.new { raise }'
   mutation 'lambda { }'
