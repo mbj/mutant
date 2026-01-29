@@ -20,6 +20,11 @@ module Mutant
           mutate_body
           mutate_rescue_bodies
           mutate_else_body
+          emit_singletons if standalone?
+        end
+
+        def standalone?
+          parent_type.nil?
         end
 
         def mutate_rescue_bodies
@@ -31,6 +36,13 @@ module Mutant
             end
           end
           emit_rescue_clause_removals
+          emit_handler_promotion
+        end
+
+        def emit_handler_promotion
+          return unless standalone?
+
+          emit(children.fetch(RESCUE_INDICES.begin).children.last)
         end
 
         def emit_rescue_clause_removals
