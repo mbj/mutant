@@ -1229,3 +1229,50 @@ Mutant::Meta::Example.add :send do
   mutation 'str'
   mutation 'self.sub!(pattern, replacement)'
 end
+
+# attr_* mutations - test if accessor provides unnecessary access
+Mutant::Meta::Example.add :send do
+  source 'attr_accessor :foo'
+
+  singleton_mutations
+
+  # Reduce accessor to reader or writer
+  mutation 'attr_reader(:foo)'
+  mutation 'attr_writer(:foo)'
+
+  # Standard mutations
+  mutation ':foo'
+  mutation 'attr_accessor'
+  mutation 'attr_accessor(nil)'
+  mutation 'attr_accessor(:foo__mutant__)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'attr_reader :foo'
+
+  singleton_mutations
+
+  # Swap reader to writer
+  mutation 'attr_writer(:foo)'
+
+  # Standard mutations
+  mutation ':foo'
+  mutation 'attr_reader'
+  mutation 'attr_reader(nil)'
+  mutation 'attr_reader(:foo__mutant__)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'attr_writer :foo'
+
+  singleton_mutations
+
+  # Swap writer to reader
+  mutation 'attr_reader(:foo)'
+
+  # Standard mutations
+  mutation ':foo'
+  mutation 'attr_writer'
+  mutation 'attr_writer(nil)'
+  mutation 'attr_writer(:foo__mutant__)'
+end

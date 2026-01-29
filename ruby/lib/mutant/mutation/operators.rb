@@ -31,6 +31,9 @@ module Mutant
           all?:          %i[any?],
           any?:          %i[all?],
           at:            %i[fetch key?],
+          attr_accessor: %i[attr_reader attr_writer],
+          attr_reader:   %i[attr_writer],
+          attr_writer:   %i[attr_reader],
           # Bang to non-bang mutations (Array methods)
           capitalize!:   %i[capitalize],
           chomp!:        %i[chomp],
