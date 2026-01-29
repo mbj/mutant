@@ -1229,3 +1229,37 @@ Mutant::Meta::Example.add :send do
   mutation 'str'
   mutation 'self.sub!(pattern, replacement)'
 end
+
+# Module inclusion mutations
+Mutant::Meta::Example.add :send do
+  source 'include Foo'
+
+  singleton_mutations
+  mutation 'extend(Foo)'
+  mutation 'prepend(Foo)'
+  mutation 'Foo'
+  mutation 'include'
+  mutation 'include(nil)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'extend Foo'
+
+  singleton_mutations
+  mutation 'include(Foo)'
+  mutation 'prepend(Foo)'
+  mutation 'Foo'
+  mutation 'extend'
+  mutation 'extend(nil)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'prepend Foo'
+
+  singleton_mutations
+  mutation 'include(Foo)'
+  mutation 'extend(Foo)'
+  mutation 'Foo'
+  mutation 'prepend'
+  mutation 'prepend(nil)'
+end
