@@ -232,6 +232,11 @@ module MutantSpec
         end
         lockfile = repo_path.join('Gemfile.lock')
         lockfile.delete if lockfile.exist?
+        # Set BUNDLE_PATH to avoid installing to system gems.
+        # This is needed because Bundler.with_unbundled_env clears environment
+        # variables, and without BUNDLE_PATH, Bundler 4.x may fail on GitHub
+        # Actions runners due to world-writable gem directory security checks.
+        ENV['BUNDLE_PATH'] = 'vendor/bundle'
         system(%w[bundle])
       end
 

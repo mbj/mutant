@@ -59,6 +59,12 @@ jobs:
     needs: rust-build
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
+    # Workaround for Bundler 4.x failing when attempting to install gems to the
+    # system path on GitHub Actions Ubuntu runners. The runner's gem directory is
+    # world-writable without the sticky bit, triggering Bundler's security check.
+    # See: https://github.com/ruby/rubygems/issues/7983
+    env:
+      BUNDLE_PATH: vendor/ruby
     strategy:
       fail-fast: false
       matrix:
