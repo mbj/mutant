@@ -3,6 +3,8 @@ mutant
 
 [![Build Status](https://github.com/mbj/mutant/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mbj/mutant/actions/workflows/ci.yml)
 [![Gem Version](https://img.shields.io/gem/v/mutant.svg)](https://rubygems.org/gems/mutant)
+[![Gem Downloads](https://img.shields.io/gem/dt/mutant.svg)](https://rubygems.org/gems/mutant)
+[![GitHub Stars](https://img.shields.io/github/stars/mbj/mutant.svg)](https://github.com/mbj/mutant)
 [![Discord](https://img.shields.io/discord/767914934016802818.svg)](https://discord.gg/BSr62b4RkV)
 
 ## What is Mutant?
@@ -19,6 +21,12 @@ tests actually catch each change. When a mutation survives, you've found either:
 - **A blind spot** - the AI forgot to test a behavior that matters
 
 The more code AI writes for you, the more you need verification you can trust.
+
+## Author
+
+Mutant is created and maintained by [Markus Schirp](https://schirp-dso.com).
+Subject of [IEEE-published research](https://ieeexplore.ieee.org/document/7107453/)
+and included in the [Trail of Bits Ruby Security Field Guide](https://trailofbits.github.io/rubysec/mutant/index.html).
 
 ## Quick Start
 
@@ -112,6 +120,7 @@ See [commercial licensing](/docs/commercial.md) for pricing and details.
 * [Sorbet](/docs/sorbet.md)
 * [Nomenclature](/docs/nomenclature.md)
 * [Limitations](/docs/limitations.md)
+* [Mutant in the Wild](/docs/in-the-wild.md)
 
 ## Communication
 
@@ -123,17 +132,10 @@ See [commercial licensing](/docs/commercial.md) for pricing and details.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 
-## Sponsoring
+## Acknowledgments
 
-Mutant, as published in the opensource version, would not exist without the help
-of [contributors](https://github.com/mbj/mutant/graphs/contributors) spending lots
-of their private time.
-
-Additionally, the following features where sponsored by organizations:
-
+* [Contributors](https://github.com/mbj/mutant/graphs/contributors)
 * The `mutant-minitest` integration was sponsored by [Arkency](https://arkency.com/)
-* Mutant's initial concurrency support was sponsored by an undisclosed company that does
-  currently not wish to be listed here.
 
 ## Rust Implementation
 
