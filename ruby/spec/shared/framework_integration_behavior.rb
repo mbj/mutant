@@ -5,7 +5,8 @@ RSpec.shared_examples_for 'framework integration' do
     Kernel.system(
       {
         'CI'             => '1',
-        'BUNDLE_GEMFILE' => gemfile
+        'BUNDLE_GEMFILE' => gemfile,
+        'BUNDLE_PATH'    => 'vendor/bundle'
       },
       *command
     )
@@ -14,7 +15,10 @@ RSpec.shared_examples_for 'framework integration' do
   around do |example|
     Bundler.with_unbundled_env do
       Dir.chdir(TestApp.root) do
-        Kernel.system('bundle', 'install', '--gemfile', gemfile) || fail('Bundle install failed!')
+        Kernel.system(
+          { 'BUNDLE_PATH' => 'vendor/bundle' },
+          'bundle', 'install', '--gemfile', gemfile
+        ) || fail('Bundle install failed!')
         example.run
       end
     end
