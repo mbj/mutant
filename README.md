@@ -24,9 +24,9 @@ The more code AI writes for you, the more you need verification you can trust.
 
 ## Author
 
-Mutant is created and maintained by [Markus Schirp](https://schirp-dso.com).
-Subject of [IEEE-published research](https://ieeexplore.ieee.org/document/7107453/)
-and included in the [Trail of Bits Ruby Security Field Guide](https://trailofbits.github.io/rubysec/mutant/index.html).
+Mutant was created and is developed by [Markus Schirp](https://schirp-dso.com).
+It is the subject of [IEEE-published research](https://ieeexplore.ieee.org/document/7107453/)
+and is included in the [Trail of Bits Ruby Security Field Guide](https://trailofbits.github.io/rubysec/mutant/index.html).
 
 ## Quick Start
 
