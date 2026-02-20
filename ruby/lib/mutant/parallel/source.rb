@@ -10,7 +10,8 @@ module Mutant
         include Adamantium, Anima.new(:index, :payload)
       end
 
-      NoJobError = Class.new(RuntimeError)
+      class NoJobError < RuntimeError
+      end
 
       # Next job
       #

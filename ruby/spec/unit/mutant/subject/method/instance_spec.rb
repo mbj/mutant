@@ -77,7 +77,7 @@ RSpec.describe Mutant::Subject::Method::Instance do
 
     it 'sets method visibility' do
       expect { subject }
-        .to change { scope.raw.private_instance_methods.include?(:foo) }
+        .to change { scope.raw.private_method_defined?(:foo) }
         .from(false)
         .to(true)
     end

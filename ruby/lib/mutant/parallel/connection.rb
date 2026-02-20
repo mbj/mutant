@@ -5,7 +5,8 @@ module Mutant
     class Connection
       include Anima.new(:marshal, :reader, :writer)
 
-      Error = Class.new(RuntimeError)
+      class Error < RuntimeError
+      end
 
       HEADER_FORMAT = 'N'
       HEADER_SIZE   = 4
