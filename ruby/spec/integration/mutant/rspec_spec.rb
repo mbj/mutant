@@ -11,7 +11,7 @@ RSpec.describe 'rspec integration', mutant: false do
     ]
   end
 
-  %w[3.8 3.9 3.10 3.11 3.12 3.13].each do |version|
+  %w[3.8 3.9 3.10 3.11 3.12 3.13 4.0].each do |version|
     context "RSpec #{version}" do
       let(:gemfile) { "Gemfile.rspec#{version}" }
 
