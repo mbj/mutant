@@ -17,18 +17,18 @@ RSpec.describe Mutant::Expression::Namespace::Exact do
     context 'when constant does not exist' do
       let(:input) { 'TestApp::DoesNotExist' }
 
-      it { should eql(Mutant::Matcher::Null.new) }
+      it { is_expected.to eql(Mutant::Matcher::Null.new) }
     end
 
     context 'when constant exists' do
-      it { should eql(Mutant::Matcher::Scope.new(scope:)) }
+      it { is_expected.to eql(Mutant::Matcher::Scope.new(scope:)) }
     end
   end
 
   describe '#syntax' do
     subject { object.syntax }
 
-    it { should eql(input) }
+    it { is_expected.to eql(input) }
   end
 
   describe '#match_length' do
@@ -37,13 +37,13 @@ RSpec.describe Mutant::Expression::Namespace::Exact do
     context 'when other is an equivalent expression' do
       let(:other) { parse_expression(object.syntax) }
 
-      it { should be(object.syntax.length) }
+      it { is_expected.to be(object.syntax.length) }
     end
 
     context 'when other is an unequivalent expression' do
       let(:other) { parse_expression('Foo*') }
 
-      it { should be(0) }
+      it { is_expected.to be(0) }
     end
   end
 end

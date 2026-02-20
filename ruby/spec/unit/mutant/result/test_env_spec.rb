@@ -52,13 +52,13 @@ RSpec.describe Mutant::Result::TestEnv do
     subject { object.success? }
 
     context 'when no test failed' do
-      it { should be(true) }
+      it { is_expected.to be(true) }
     end
 
     context 'when a test failed' do
       let(:test_result) { super().with(passed: false) }
 
-      it { should be(false) }
+      it { is_expected.to be(false) }
     end
   end
 
@@ -69,17 +69,17 @@ RSpec.describe Mutant::Result::TestEnv do
       context 'on empty test results' do
         let(:test_results) { [] }
 
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
 
       context 'on failed test' do
         let(:test_result) { super().with(passed: false) }
 
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
 
       context 'on successful subject' do
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
     end
 
@@ -89,17 +89,17 @@ RSpec.describe Mutant::Result::TestEnv do
       context 'on empty tests results' do
         let(:test_results) { [] }
 
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
 
       context 'on failed subject' do
         let(:test_result) { super().with(passed: false) }
 
-        it { should be(true) }
+        it { is_expected.to be(true) }
       end
 
       context 'on successful tests' do
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
     end
   end

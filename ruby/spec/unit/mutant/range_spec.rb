@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Mutant::Range do
+RSpec.describe Mutant::Range do
   describe '.overlap?' do
     def apply
       described_class.overlap?(left, right)

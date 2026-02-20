@@ -14,13 +14,13 @@ RSpec.describe Mutant::Expression::Method do
     context 'when other is an equivalent expression' do
       let(:other) { parse_expression(object.syntax) }
 
-      it { should be(object.syntax.length) }
+      it { is_expected.to be(object.syntax.length) }
     end
 
     context 'when other is an unequivalent expression' do
       let(:other) { parse_expression('Foo*') }
 
-      it { should be(0) }
+      it { is_expected.to be(0) }
     end
   end
 
@@ -61,17 +61,17 @@ RSpec.describe Mutant::Expression::Method do
     context 'on instance method' do
       let(:input) { instance_method }
 
-      it { should eql(instance_method) }
+      it { is_expected.to eql(instance_method) }
 
-      its(:frozen?) { should be(true) }
+      its(:frozen?) { is_expected.to be(true) }
     end
 
     context 'on singleton method' do
       let(:input) { singleton_method }
 
-      it { should eql(singleton_method) }
+      it { is_expected.to eql(singleton_method) }
 
-      its(:frozen?) { should be(true) }
+      its(:frozen?) { is_expected.to be(true) }
     end
   end
 

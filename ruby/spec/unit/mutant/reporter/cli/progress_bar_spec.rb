@@ -121,28 +121,28 @@ RSpec.describe Mutant::Reporter::CLI::ProgressBar do
       let(:current) { 0 }
       let(:total)   { 100 }
 
-      it { should eql(0.0) }
+      it { is_expected.to eql(0.0) }
     end
 
     context 'when progress is 50%' do
       let(:current) { 50 }
       let(:total)   { 100 }
 
-      it { should eql(50.0) }
+      it { is_expected.to eql(50.0) }
     end
 
     context 'when progress is 100%' do
       let(:current) { 100 }
       let(:total)   { 100 }
 
-      it { should eql(100.0) }
+      it { is_expected.to eql(100.0) }
     end
 
     context 'when total is 0' do
       let(:current) { 0 }
       let(:total)   { 0 }
 
-      it { should eql(0.0) }
+      it { is_expected.to eql(0.0) }
     end
   end
 end

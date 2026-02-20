@@ -196,19 +196,19 @@ RSpec.describe Mutant::Integration::Rspec do
 
     subject { object.all_tests }
 
-    it { should eql(all_tests) }
+    it { is_expected.to eql(all_tests) }
   end
 
   describe '#all_tests' do
     subject { object.all_tests }
 
-    it { should eql(all_tests) }
+    it { is_expected.to eql(all_tests) }
   end
 
   describe '#available_tests' do
     subject { object.available_tests }
 
-    it { should eql(all_tests.take(1) + all_tests.drop(2)) }
+    it { is_expected.to eql(all_tests.take(1) + all_tests.drop(2)) }
   end
 
   describe '#setup' do
@@ -222,7 +222,7 @@ RSpec.describe Mutant::Integration::Rspec do
     end
 
     shared_examples 'success' do
-      it { should be(object) }
+      it { is_expected.to be(object) }
 
       it 'freezes object' do
         expect { subject }.to change { object.frozen? }.from(false).to(true)

@@ -7,17 +7,17 @@ RSpec.describe Mutant::AST::Meta::Optarg do
   let(:name)  { :foo                    }
   let(:value) { s(:sym, :bar)           }
 
-  its(:name) { should be(:foo) }
-  its(:default_value) { should eql(s(:sym, :bar)) }
+  its(:name) { is_expected.to be(:foo) }
+  its(:default_value) { is_expected.to eql(s(:sym, :bar)) }
 
   describe '#used?' do
     subject { object.used? }
 
-    it { should be true }
+    it { is_expected.to be true }
 
     context 'when name is prefixed with an underscore' do
       let(:name) { :_foo }
-      it { should be false }
+      it { is_expected.to be false }
     end
   end
 

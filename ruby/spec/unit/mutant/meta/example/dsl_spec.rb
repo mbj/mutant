@@ -33,7 +33,7 @@ RSpec.describe Mutant::Meta::Example::DSL do
     def self.expect_example(&block)
       let(:block) { block }
 
-      specify { should eql(expected_example) }
+      specify { is_expected.to eql(expected_example) }
     end
 
     def self.expect_error(message, &block)

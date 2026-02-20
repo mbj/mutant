@@ -32,8 +32,8 @@ Gem::Specification.new do |gem|
   gem.add_dependency('sorbet-runtime', '~> 0.6.0')
   gem.add_dependency('unparser',       '~> 0.8.0')
 
-  gem.add_development_dependency('rspec',      '~> 3.10')
-  gem.add_development_dependency('rspec-core', '~> 3.10')
+  gem.add_development_dependency('rspec',      '>= 3.10', '< 5')
+  gem.add_development_dependency('rspec-core', '>= 3.10', '< 5')
   gem.add_development_dependency('rspec-its',  '~> 2.0')
   gem.add_development_dependency('rubocop',    '~> 1.7')
 end

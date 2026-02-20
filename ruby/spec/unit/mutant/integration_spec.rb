@@ -144,9 +144,9 @@ RSpec.describe Mutant::Integration::Null do
   describe '#all_tests' do
     subject { object.all_tests }
 
-    it { should eql([]) }
+    it { is_expected.to eql([]) }
 
-    it_should_behave_like 'an idempotent method'
+    it_behaves_like 'an idempotent method'
   end
 
   describe '#call' do
@@ -155,7 +155,7 @@ RSpec.describe Mutant::Integration::Null do
     subject { object.call(tests) }
 
     it 'returns test result' do
-      should eql(
+      is_expected.to eql(
         Mutant::Result::Test.new(
           job_index: nil,
           output:    '',

@@ -138,7 +138,7 @@ end
 
 RSpec.shared_examples_for 'a command method' do
   it 'returns self' do
-    should equal(object)
+    is_expected.to equal(object)
   end
 end
 
@@ -150,7 +150,7 @@ RSpec.shared_examples_for 'an idempotent method' do
     memoized = __memoized.instance_variable_get(:@memoized)
 
     mutex.synchronize { memoized.delete(:subject) }
-    should equal(first)
+    is_expected.to equal(first)
   end
 end
 

@@ -47,39 +47,39 @@ RSpec.describe Mutant::Subject do
   describe '#identification' do
     subject { object.identification }
 
-    it { should eql('SubjectA:source_path:1') }
+    it { is_expected.to eql('SubjectA:source_path:1') }
   end
 
   describe '#source_line' do
     subject { object.source_line }
 
-    it { should be(1) }
+    it { is_expected.to be(1) }
   end
 
   describe '#source_lines' do
     subject { object.source_lines }
 
-    it { should eql(1..2) }
+    it { is_expected.to eql(1..2) }
   end
 
   describe '#prepare' do
     subject { object.prepare }
 
-    it_should_behave_like 'a command method'
+    it_behaves_like 'a command method'
   end
 
   describe '#post_insert' do
     subject { object.post_insert }
 
-    it_should_behave_like 'a command method'
+    it_behaves_like 'a command method'
   end
 
   describe '#node' do
     subject { object.node }
 
-    it { should be(node) }
+    it { is_expected.to be(node) }
 
-    it_should_behave_like 'an idempotent method'
+    it_behaves_like 'an idempotent method'
   end
 
   describe '#mutations' do
@@ -99,7 +99,7 @@ RSpec.describe Mutant::Subject do
     let(:mutation_b) { s(:false) }
 
     it 'generates neutral and evil mutations' do
-      should eql([
+      is_expected.to eql([
         Mutant::Mutation::Neutral.from_node(subject: object, node:),
         Mutant::Mutation::Evil.from_node(subject: object, node: mutation_a),
         Mutant::Mutation::Evil.from_node(subject: object, node: mutation_b)
@@ -111,7 +111,7 @@ RSpec.describe Mutant::Subject do
     subject { object.inline_disabled? }
 
     context 'on default config' do
-      it { should be(false) }
+      it { is_expected.to be(false) }
     end
 
     context 'when config has an inline disable' do
@@ -119,7 +119,7 @@ RSpec.describe Mutant::Subject do
         super().with(config: super().config.with(inline_disable: true))
       end
 
-      it { should be(true) }
+      it { is_expected.to be(true) }
     end
   end
 end

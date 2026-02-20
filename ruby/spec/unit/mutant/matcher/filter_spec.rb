@@ -17,6 +17,6 @@ RSpec.describe Mutant::Matcher::Filter, '#call' do
   end
 
   it 'returns subjects after filtering' do
-    should eql([subject_a])
+    is_expected.to eql([subject_a])
   end
 end

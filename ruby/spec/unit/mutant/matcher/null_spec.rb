@@ -7,6 +7,6 @@ RSpec.describe Mutant::Matcher::Null, '#call' do
   subject { object.call(env) }
 
   it 'returns no subjects' do
-    should eql([])
+    is_expected.to eql([])
   end
 end

@@ -64,7 +64,7 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
       )
     end
 
-    it_should_behave_like 'a method matcher'
+    it_behaves_like 'a method matcher'
 
     context 'when scope is a metaclass' do
       let(:method_line) { 28 }
@@ -76,7 +76,7 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
         )
       end
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
   end
 
@@ -91,7 +91,7 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
         )
       end
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
 
     context 'outside namespace' do
@@ -104,7 +104,7 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
         )
       end
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
   end
 
@@ -120,7 +120,7 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
         )
       end
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
 
     context 'with different name' do
@@ -133,7 +133,7 @@ RSpec.describe Mutant::Matcher::Method::Metaclass, '#call' do
         )
       end
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
   end
 

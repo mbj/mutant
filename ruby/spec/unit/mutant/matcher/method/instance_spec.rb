@@ -215,7 +215,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
 
     let(:method_line) { 13 }
 
-    it_should_behave_like 'a method matcher'
+    it_behaves_like 'a method matcher'
 
     let(:constant_scope) do
       Mutant::Context::ConstantScope::Module.new(
@@ -272,7 +272,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
 
     let(:method_line) { 15 }
 
-    it_should_behave_like 'a method matcher'
+    it_behaves_like 'a method matcher'
   end
 
   context 'when method is defined multiple times' do
@@ -287,7 +287,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
       let(:method_line)  { 24                                         }
       let(:method_arity) { 1                                          }
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
 
     context 'on the same line' do
@@ -301,7 +301,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
       let(:method_line)  { 29                                            }
       let(:method_arity) { 1                                             }
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
 
     context 'on the same line with different scope' do
@@ -315,7 +315,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
       let(:method_line)  { 33                                                 }
       let(:method_arity) { 1                                                  }
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
   end
 
@@ -330,7 +330,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     let(:method_line)  { 116                 }
     let(:method_arity) { 0                   }
 
-    it_should_behave_like 'a method matcher'
+    it_behaves_like 'a method matcher'
   end
 
   context 'on delegate class' do
@@ -344,7 +344,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     let(:method_line)  { 134                   }
     let(:method_arity) { 0                     }
 
-    it_should_behave_like 'a method matcher'
+    it_behaves_like 'a method matcher'
   end
 
   context 'on inline disabled method' do
@@ -358,7 +358,7 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     let(:method_line)  { 148                     }
     let(:method_arity) { 0                       }
 
-    it_should_behave_like 'a method matcher' do
+    it_behaves_like 'a method matcher' do
       it 'returns disabled inline config' do
         expect(mutation_subject.config.inline_disable).to be(true)
       end

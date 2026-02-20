@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Mutant::Mutation::Runner::Sink do
+RSpec.describe Mutant::Mutation::Runner::Sink do
   setup_shared_context
 
   let(:mutation_a_index_response) do
@@ -52,7 +52,7 @@ describe Mutant::Mutation::Runner::Sink do
         )
       end
 
-      it_should_behave_like 'a command method'
+      it_behaves_like 'a command method'
     end
 
     context 'on error' do
@@ -76,7 +76,7 @@ describe Mutant::Mutation::Runner::Sink do
         )
       end
 
-      it { should eql(expected_status) }
+      it { is_expected.to eql(expected_status) }
     end
 
     context 'one result' do
@@ -92,7 +92,7 @@ describe Mutant::Mutation::Runner::Sink do
         )
       end
 
-      it { should eql(expected_status) }
+      it { is_expected.to eql(expected_status) }
     end
 
     context 'two results' do
@@ -106,7 +106,7 @@ describe Mutant::Mutation::Runner::Sink do
         )
       end
 
-      it { should eql(expected_status) }
+      it { is_expected.to eql(expected_status) }
     end
   end
 
@@ -115,20 +115,20 @@ describe Mutant::Mutation::Runner::Sink do
 
     context 'without fail fast' do
       context 'no results' do
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
 
       context 'one result' do
         include_context 'one result'
 
         context 'when result is successful' do
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context 'when result failed' do
           with(:mutation_a_test_result) { { passed: true } }
 
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
       end
 
@@ -136,19 +136,19 @@ describe Mutant::Mutation::Runner::Sink do
         include_context 'two results'
 
         context 'when results are successful' do
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context 'when first result is unsuccessful' do
           with(:mutation_a_test_result) { { passed: true } }
 
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context 'when second result is unsuccessful' do
           with(:mutation_b_test_result) { { passed: true } }
 
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
       end
     end
@@ -157,20 +157,20 @@ describe Mutant::Mutation::Runner::Sink do
       with(:config) { { fail_fast: true } }
 
       context 'no results' do
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
 
       context 'one result' do
         include_context 'one result'
 
         context 'when result is successful' do
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context 'when result failed' do
           with(:mutation_a_test_result) { { passed: true } }
 
-          it { should be(true) }
+          it { is_expected.to be(true) }
         end
       end
 
@@ -178,19 +178,19 @@ describe Mutant::Mutation::Runner::Sink do
         include_context 'two results'
 
         context 'when results are successful' do
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context 'when first result is unsuccessful' do
           with(:mutation_a_test_result) { { passed: true } }
 
-          it { should be(true) }
+          it { is_expected.to be(true) }
         end
 
         context 'when second result is unsuccessful' do
           with(:mutation_b_test_result) { { passed: true } }
 
-          it { should be(true) }
+          it { is_expected.to be(true) }
         end
       end
     end

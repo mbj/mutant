@@ -40,7 +40,7 @@ RSpec.describe Mutant::AST::Meta::Send do
         context "on #{expectation.name}" do
           let(:node) { public_send(expectation.name) }
 
-          it { should be(expectation.public_send(name)) }
+          it { is_expected.to be(expectation.public_send(name)) }
         end
       end
     end

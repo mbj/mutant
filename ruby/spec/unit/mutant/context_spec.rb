@@ -31,7 +31,7 @@ RSpec.describe Mutant::Context do
   describe '#identification' do
     subject { object.identification }
 
-    it { should eql(scope.raw.name) }
+    it { is_expected.to eql(scope.raw.name) }
   end
 
   describe '#root' do
@@ -118,12 +118,12 @@ RSpec.describe Mutant::Context do
         )
       end
 
-      it { should eql([parse_expression('TestApp*')]) }
+      it { is_expected.to eql([parse_expression('TestApp*')]) }
     end
 
     context 'on nested scope' do
       specify do
-        should eql(
+        is_expected.to eql(
           [
             parse_expression('TestApp::Literal*'),
             parse_expression('TestApp*')
