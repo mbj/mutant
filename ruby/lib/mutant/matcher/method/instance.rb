@@ -52,9 +52,9 @@ module Mutant
           end
 
           def visibility
-            if scope.raw.private_instance_methods.include?(method_name)
+            if scope.raw.private_method_defined?(method_name)
               :private
-            elsif scope.raw.protected_instance_methods.include?(method_name)
+            elsif scope.raw.protected_method_defined?(method_name)
               :protected
             else
               :public

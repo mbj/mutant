@@ -64,12 +64,12 @@ RSpec.describe Mutant::Matcher::Config do
     context 'on default config' do
       let(:object) { described_class::DEFAULT }
 
-      it { should eql('#<Mutant::Matcher::Config empty>') }
+      it { is_expected.to eql('#<Mutant::Matcher::Config empty>') }
     end
 
     context 'with one expression' do
       let(:object) { described_class::DEFAULT.add(:subjects, parse_expression('Foo')) }
-      it { should eql('#<Mutant::Matcher::Config subjects: [Foo]>') }
+      it { is_expected.to eql('#<Mutant::Matcher::Config subjects: [Foo]>') }
     end
 
     context 'with many expressions' do
@@ -79,7 +79,7 @@ RSpec.describe Mutant::Matcher::Config do
           .add(:subjects, parse_expression('Bar'))
       end
 
-      it { should eql('#<Mutant::Matcher::Config subjects: [Foo,Bar]>') }
+      it { is_expected.to eql('#<Mutant::Matcher::Config subjects: [Foo,Bar]>') }
     end
 
     context 'with match and ignore expression' do
@@ -89,7 +89,7 @@ RSpec.describe Mutant::Matcher::Config do
           .add(:ignore,   parse_expression('Bar'))
       end
 
-      it { should eql('#<Mutant::Matcher::Config ignore: [Bar] subjects: [Foo]>') }
+      it { is_expected.to eql('#<Mutant::Matcher::Config ignore: [Bar] subjects: [Foo]>') }
     end
   end
 end

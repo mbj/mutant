@@ -52,31 +52,31 @@ RSpec.describe Mutant::Selector::Expression do
     context 'without available tests' do
       let(:available_tests) { [] }
 
-      it { should eql([]) }
+      it { is_expected.to eql([]) }
     end
 
     context 'without qualifying tests' do
       let(:available_tests) { [test_c] }
 
-      it { should eql([]) }
+      it { is_expected.to eql([]) }
     end
 
     context 'with qualifying tests for first match expression' do
       let(:available_tests) { [test_a] }
 
-      it { should eql([test_a]) }
+      it { is_expected.to eql([test_a]) }
     end
 
     context 'with qualifying tests for second match expression' do
       let(:available_tests) { [test_b] }
 
-      it { should eql([test_b]) }
+      it { is_expected.to eql([test_b]) }
     end
 
     context 'with qualifying tests for the first and second match expression' do
       let(:available_tests) { [test_a, test_b] }
 
-      it { should eql([test_a]) }
+      it { is_expected.to eql([test_a]) }
     end
   end
 end

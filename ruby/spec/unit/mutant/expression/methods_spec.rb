@@ -11,19 +11,19 @@ RSpec.describe Mutant::Expression::Methods do
     context 'when other is an equivalent expression' do
       let(:other) { parse_expression(object.syntax) }
 
-      it { should be(object.syntax.length) }
+      it { is_expected.to be(object.syntax.length) }
     end
 
     context 'when other is matched' do
       let(:other) { parse_expression('TestApp::Literal#foo') }
 
-      it { should be(object.syntax.length) }
+      it { is_expected.to be(object.syntax.length) }
     end
 
     context 'when other is an not matched expression' do
       let(:other) { parse_expression('Foo*') }
 
-      it { should be(0) }
+      it { is_expected.to be(0) }
     end
   end
 
@@ -33,17 +33,17 @@ RSpec.describe Mutant::Expression::Methods do
     context 'with an instance method' do
       let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '#' } }
 
-      it { should eql('TestApp::Literal#') }
+      it { is_expected.to eql('TestApp::Literal#') }
 
-      its(:frozen?) { should be(true) }
+      its(:frozen?) { is_expected.to be(true) }
     end
 
     context 'with a singleton method' do
       let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '.' } }
 
-      it { should eql('TestApp::Literal.') }
+      it { is_expected.to eql('TestApp::Literal.') }
 
-      its(:frozen?) { should be(true) }
+      its(:frozen?) { is_expected.to be(true) }
     end
   end
 
@@ -61,7 +61,7 @@ RSpec.describe Mutant::Expression::Methods do
       let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '#' } }
 
       specify do
-        should eql(
+        is_expected.to eql(
           Mutant::Matcher::Chain.new(
             matchers: [Mutant::Matcher::Methods::Instance.new(scope:)]
           )
@@ -73,7 +73,7 @@ RSpec.describe Mutant::Expression::Methods do
       let(:attributes) { { scope_name: 'TestApp::Literal', scope_symbol: '.' } }
 
       it do
-        should eql(
+        is_expected.to eql(
           Mutant::Matcher::Chain.new(
             matchers: [
               Mutant::Matcher::Methods::Singleton.new(scope:),

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Mutant::Repository::Diff do
+RSpec.describe Mutant::Repository::Diff do
   subject { described_class.new(world:, to: 'to_rev') }
 
   let(:kernel)     { class_double(Kernel)        }

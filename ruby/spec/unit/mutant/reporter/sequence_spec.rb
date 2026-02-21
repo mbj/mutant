@@ -20,7 +20,7 @@ RSpec.describe Mutant::Reporter::Sequence do
         end
       end
 
-      it_should_behave_like 'a command method'
+      it_behaves_like 'a command method'
     end
   end
 

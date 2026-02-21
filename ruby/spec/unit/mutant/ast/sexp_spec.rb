@@ -26,13 +26,13 @@ RSpec.describe Mutant::AST::Sexp do
     context 'with single argument' do
       let(:arguments) { %i[foo] }
 
-      it { should eql(Parser::AST::Node.new(:foo)) }
+      it { is_expected.to eql(Parser::AST::Node.new(:foo)) }
     end
 
     context 'with single multiple arguments' do
       let(:arguments) { %i[foo bar baz] }
 
-      it { should eql(Parser::AST::Node.new(:foo, %i[bar baz])) }
+      it { is_expected.to eql(Parser::AST::Node.new(:foo, %i[bar baz])) }
     end
   end
 end

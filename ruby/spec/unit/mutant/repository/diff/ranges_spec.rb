@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Mutant::Repository::Diff::Ranges do
+RSpec.describe Mutant::Repository::Diff::Ranges do
   describe '.parse' do
     def apply
       described_class.parse(diff)

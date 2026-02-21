@@ -46,17 +46,17 @@ RSpec.describe Mutant::Subject::Method::Instance do
   describe '#expression' do
     subject { object.expression }
 
-    it { should eql(parse_expression('Test#foo')) }
+    it { is_expected.to eql(parse_expression('Test#foo')) }
 
-    it_should_behave_like 'an idempotent method'
+    it_behaves_like 'an idempotent method'
   end
 
   describe '#match_expression' do
     subject { object.match_expressions }
 
-    it { should eql(%w[Test#foo Test*].map(&method(:parse_expression))) }
+    it { is_expected.to eql(%w[Test#foo Test*].map(&method(:parse_expression))) }
 
-    it_should_behave_like 'an idempotent method'
+    it_behaves_like 'an idempotent method'
   end
 
   describe '#prepare' do
@@ -69,7 +69,7 @@ RSpec.describe Mutant::Subject::Method::Instance do
         .to(false)
     end
 
-    it_should_behave_like 'a command method'
+    it_behaves_like 'a command method'
   end
 
   describe '#post_insert' do
@@ -77,18 +77,18 @@ RSpec.describe Mutant::Subject::Method::Instance do
 
     it 'sets method visibility' do
       expect { subject }
-        .to change { scope.raw.private_instance_methods.include?(:foo) }
+        .to change { scope.raw.private_method_defined?(:foo) }
         .from(false)
         .to(true)
     end
 
-    it_should_behave_like 'a command method'
+    it_behaves_like 'a command method'
   end
 
   describe '#source' do
     subject { object.source }
 
-    it { should eql("def foo\nend") }
+    it { is_expected.to eql("def foo\nend") }
   end
 end
 
@@ -147,7 +147,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
       expect { subject }.to change { scope.raw.method_defined?(:foo) }.from(true).to(false)
     end
 
-    it_should_behave_like 'a command method'
+    it_behaves_like 'a command method'
   end
 
   describe '#mutations' do
@@ -177,7 +177,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     context 'when Memoizable is included in scope' do
       include_context 'memoizable scope setup'
 
-      it { should eql(expected) }
+      it { is_expected.to eql(expected) }
     end
   end
 
@@ -189,7 +189,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
 
       let(:source) { "def foo\nend\nmemoize(:foo)\n" }
 
-      it { should eql(source) }
+      it { is_expected.to eql(source) }
     end
   end
 end

@@ -9,20 +9,20 @@ RSpec.describe Mutant::Expression do
     context 'when object is a prefix of other' do
       let(:other) { parse_expression('Foo::Bar') }
 
-      it { should be(true) }
+      it { is_expected.to be(true) }
     end
 
     context 'when other is not a prefix of other' do
       let(:other) { parse_expression('Bar') }
 
-      it { should be(false) }
+      it { is_expected.to be(false) }
     end
   end
 
   describe '#frozen?' do
     subject { parse_expression('Foo').frozen? }
 
-    it { should be(true) }
+    it { is_expected.to be(true) }
   end
 
   describe '.try_parse' do
@@ -39,13 +39,13 @@ RSpec.describe Mutant::Expression do
     context 'good input' do
       let(:input) { 'foo' }
 
-      it { should eql(object.new(foo: 'foo')) }
+      it { is_expected.to eql(object.new(foo: 'foo')) }
     end
 
     context 'bad input' do
       let(:input) { 'bar' }
 
-      it { should be(nil) }
+      it { is_expected.to be(nil) }
     end
   end
 end

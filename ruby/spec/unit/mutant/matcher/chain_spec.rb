@@ -21,6 +21,6 @@ RSpec.describe Mutant::Matcher::Chain, '#call' do
   end
 
   it 'returns concatenated unique matches' do
-    should eql([subject_a, subject_b])
+    is_expected.to eql([subject_a, subject_b])
   end
 end

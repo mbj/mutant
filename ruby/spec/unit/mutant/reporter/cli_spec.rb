@@ -27,18 +27,18 @@ RSpec.describe Mutant::Reporter::CLI do
       let(:tty?)   { true }
       let(:output) { instance_double(IO, tty?: true, winsize: [24, 80]) }
 
-      it { should eql(described_class.new(format:, output:, print_warnings: false)) }
+      it { is_expected.to eql(described_class.new(format:, output:, print_warnings: false)) }
     end
 
     context 'when output is not a tty' do
       context 'and does not respond to #tty?' do
         let(:output) { nil }
 
-        it { should eql(described_class.new(format:, output:, print_warnings: false)) }
+        it { is_expected.to eql(described_class.new(format:, output:, print_warnings: false)) }
       end
 
       context 'and does respond to #tty?' do
-        it { should eql(described_class.new(format:, output:, print_warnings: false)) }
+        it { is_expected.to eql(described_class.new(format:, output:, print_warnings: false)) }
       end
     end
 
@@ -121,13 +121,13 @@ RSpec.describe Mutant::Reporter::CLI do
   describe '#delay' do
     subject { object.delay }
 
-    it { should eql(1.0) }
+    it { is_expected.to eql(1.0) }
   end
 
   describe 'Format::Progressive#delay', mutant_expression: 'Mutant::Reporter::CLI::Format#delay' do
     subject { format.delay }
 
-    it { should eql(1.0) }
+    it { is_expected.to eql(1.0) }
   end
 
   describe '#start' do

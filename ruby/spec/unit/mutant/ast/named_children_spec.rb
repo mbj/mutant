@@ -35,7 +35,7 @@ RSpec.describe Mutant::AST::NamedChildren do
           remaining_children_indices
           remaining_children_with_index
         ].each do |name|
-          expect(klass.private_instance_methods.include?(name)).to be(true)
+          expect(klass.private_method_defined?(name)).to be(true)
         end
       end
 

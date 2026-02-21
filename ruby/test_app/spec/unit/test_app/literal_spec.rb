@@ -7,7 +7,7 @@ RSpec.describe TestApp::Literal do
 
     let(:object) { described_class.new }
 
-    it { should be(object) }
+    it { is_expected.to be(object) }
   end
 
   describe '#string' do
@@ -15,6 +15,6 @@ RSpec.describe TestApp::Literal do
 
     let(:object) { described_class.new }
 
-    it { should eql('string') }
+    it { is_expected.to eql('string') }
   end
 end

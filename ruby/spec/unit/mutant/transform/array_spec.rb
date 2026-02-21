@@ -67,7 +67,7 @@ RSpec.describe Mutant::Transform::Array do
         let(:transform) { Mutant::Transform::Hash::Symbolize.new }
 
         it 'returns transformed elements' do
-          expect(apply).to eql(Mutant::Either::Right.new([foo: 'bar']))
+          expect(apply).to eql(Mutant::Either::Right.new([{ foo: 'bar' }]))
         end
       end
     end

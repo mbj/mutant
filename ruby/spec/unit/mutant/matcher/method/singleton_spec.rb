@@ -62,7 +62,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
 
     let(:method_line) { 61 }
 
-    it_should_behave_like 'a method matcher' do
+    it_behaves_like 'a method matcher' do
       %i[public protected private].each do |visibility|
         context 'with %s visibility' % visibility do
           before do
@@ -88,7 +88,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
 
       let(:method_line) { 71 }
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
 
     context 'outside namespace' do
@@ -101,7 +101,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
         )
       end
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
   end
 
@@ -117,7 +117,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
         )
       end
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
 
     context 'with different name' do
@@ -130,7 +130,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
         )
       end
 
-      it_should_behave_like 'a method matcher'
+      it_behaves_like 'a method matcher'
     end
   end
 
@@ -145,7 +145,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
       )
     end
 
-    it_should_behave_like 'a method matcher'
+    it_behaves_like 'a method matcher'
   end
 
   context 'on inline disabled method' do
@@ -159,7 +159,7 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
       )
     end
 
-    it_should_behave_like 'a method matcher' do
+    it_behaves_like 'a method matcher' do
       it 'returns disabled inline config' do
         expect(mutation_subject.config.inline_disable).to be(true)
       end

@@ -41,13 +41,13 @@ RSpec.describe 'Mutant::Result::ClassMethods' do
     context 'empty collection' do
       let(:collection) { [] }
 
-      it { should be(0) }
+      it { is_expected.to be(0) }
     end
 
     context 'non-empty collection' do
       let(:collection) { [[1], [2, 3]] }
 
-      it { should be(3) }
+      it { is_expected.to be(3) }
     end
   end
 
@@ -56,6 +56,6 @@ RSpec.describe 'Mutant::Result::ClassMethods' do
 
     subject { object.to_set }
 
-    it { should eql(Set.new([1, 2])) }
+    it { is_expected.to eql(Set.new([1, 2])) }
   end
 end

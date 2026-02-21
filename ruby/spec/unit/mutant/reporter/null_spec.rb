@@ -8,7 +8,7 @@ RSpec.describe Mutant::Reporter::Null do
     describe "##{name}" do
       subject { object.public_send(name, value) }
 
-      it_should_behave_like 'a command method'
+      it_behaves_like 'a command method'
     end
   end
 end

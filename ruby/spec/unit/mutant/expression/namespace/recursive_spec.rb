@@ -7,15 +7,15 @@ RSpec.describe Mutant::Expression::Namespace::Recursive do
   describe '#matcher' do
     subject { object.matcher(env: instance_double(Mutant::Env)) }
 
-    it { should eql(Mutant::Matcher::Namespace.new(expression: object)) }
+    it { is_expected.to eql(Mutant::Matcher::Namespace.new(expression: object)) }
   end
 
   describe '#syntax' do
     subject { object.syntax }
 
-    it { should eql(input) }
+    it { is_expected.to eql(input) }
 
-    its(:frozen?) { should be(true) }
+    its(:frozen?) { is_expected.to be(true) }
   end
 
   describe '#match_length' do
@@ -24,44 +24,44 @@ RSpec.describe Mutant::Expression::Namespace::Recursive do
     context 'when other is an equivalent expression' do
       let(:other) { parse_expression(object.syntax) }
 
-      it { should be(object.syntax.length) }
+      it { is_expected.to be(object.syntax.length) }
     end
 
     context 'when other expression describes a shorter prefix' do
       let(:other) { parse_expression('TestApp') }
 
-      it { should be(0) }
+      it { is_expected.to be(0) }
     end
 
     context 'when other expression describes adjacent namespace' do
       let(:other) { parse_expression('TestApp::LiteralFoo') }
 
-      it { should be(0) }
+      it { is_expected.to be(0) }
     end
 
     context 'when other expression describes root namespace' do
       let(:other) { parse_expression('TestApp::Literal') }
 
-      it { should be(16) }
+      it { is_expected.to be(16) }
     end
 
     context 'when other expression describes a longer prefix' do
       context 'on constants' do
         let(:other) { parse_expression('TestApp::Literal::Deep') }
 
-        it { should be(input[..-2].length) }
+        it { is_expected.to be(input[..-2].length) }
       end
 
       context 'on singleton method' do
         let(:other) { parse_expression('TestApp::Literal.foo') }
 
-        it { should be(input[..-2].length) }
+        it { is_expected.to be(input[..-2].length) }
       end
 
       context 'on instance method' do
         let(:other) { parse_expression('TestApp::Literal#foo') }
 
-        it { should be(input[..-2].length) }
+        it { is_expected.to be(input[..-2].length) }
       end
     end
   end

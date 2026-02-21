@@ -45,13 +45,13 @@ RSpec.describe Mutant::Meta::Example do
   describe '#source' do
     subject { object.source }
 
-    it { should eql('true') }
+    it { is_expected.to eql('true') }
   end
 
   describe '#verification' do
     subject { object.verification }
 
-    it { should eql(Mutant::Meta::Example::Verification.from_mutations(example: object, mutations:)) }
+    it { is_expected.to eql(Mutant::Meta::Example::Verification.from_mutations(example: object, mutations:)) }
   end
 
   let(:constant_scope) do
@@ -68,13 +68,13 @@ RSpec.describe Mutant::Meta::Example do
       )
     end
 
-    it { should eql(Mutant::Context.new(constant_scope:, scope:, source_path: location.path)) }
+    it { is_expected.to eql(Mutant::Context.new(constant_scope:, scope:, source_path: location.path)) }
   end
 
   describe '#identification' do
     subject { object.identification }
 
-    it { should eql('<location>') }
+    it { is_expected.to eql('<location>') }
   end
 
   describe '#generated' do

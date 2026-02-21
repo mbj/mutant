@@ -10,13 +10,13 @@ RSpec.describe Mutant::AST::Meta::Send, '#proc?' do
   shared_examples 'proc definition' do |*args|
     include_context 'proc send', *args
 
-    it { should be(true) }
+    it { is_expected.to be(true) }
   end
 
   shared_examples 'not a proc definition' do |*args|
     include_context 'proc send', *args
 
-    it { should be_falsey }
+    it { is_expected.to be_falsey }
   end
 
   it_behaves_like 'proc definition', 'proc { }'

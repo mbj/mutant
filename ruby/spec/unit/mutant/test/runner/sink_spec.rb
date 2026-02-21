@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Mutant::Test::Runner::Sink do
+RSpec.describe Mutant::Test::Runner::Sink do
   let(:object)    { described_class.new(env:) }
   let(:fail_fast) { false }
 
@@ -114,7 +114,7 @@ describe Mutant::Test::Runner::Sink do
         )
       end
 
-      it_should_behave_like 'a command method'
+      it_behaves_like 'a command method'
     end
 
     context 'on error' do
@@ -139,7 +139,7 @@ describe Mutant::Test::Runner::Sink do
         expect(stderr).to have_received(:puts).with('some log')
       end
 
-      it_should_behave_like 'a command method'
+      it_behaves_like 'a command method'
     end
   end
 
@@ -155,7 +155,7 @@ describe Mutant::Test::Runner::Sink do
         )
       end
 
-      it { should eql(expected_status) }
+      it { is_expected.to eql(expected_status) }
     end
 
     context 'one result' do
@@ -169,7 +169,7 @@ describe Mutant::Test::Runner::Sink do
         )
       end
 
-      it { should eql(expected_status) }
+      it { is_expected.to eql(expected_status) }
     end
 
     context 'two results, in job index order' do
@@ -183,7 +183,7 @@ describe Mutant::Test::Runner::Sink do
         )
       end
 
-      it { should eql(expected_status) }
+      it { is_expected.to eql(expected_status) }
     end
 
     context 'two results, not in job index order' do
@@ -200,7 +200,7 @@ describe Mutant::Test::Runner::Sink do
         )
       end
 
-      it { should eql(expected_status) }
+      it { is_expected.to eql(expected_status) }
     end
   end
 
@@ -209,18 +209,18 @@ describe Mutant::Test::Runner::Sink do
 
     context 'without fail fast' do
       context 'no results' do
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
 
       context 'one result' do
         include_context 'one result'
 
         context 'when result is successful' do
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context 'when result failed' do
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
       end
 
@@ -228,15 +228,15 @@ describe Mutant::Test::Runner::Sink do
         include_context 'two results, in job index order'
 
         context 'when results are successful' do
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context 'when first result is unsuccessful' do
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context 'when second result is unsuccessful' do
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
       end
     end
@@ -245,20 +245,20 @@ describe Mutant::Test::Runner::Sink do
       let(:fail_fast) { true }
 
       context 'no results' do
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
 
       context 'one result' do
         include_context 'one result'
 
         context 'when result is successful' do
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context 'when result failed' do
           let(:test_result_a_raw) { super().with(passed: false) }
 
-          it { should be(true) }
+          it { is_expected.to be(true) }
         end
       end
 
@@ -266,19 +266,19 @@ describe Mutant::Test::Runner::Sink do
         include_context 'two results, in job index order'
 
         context 'when results are successful' do
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context 'when first result is unsuccessful' do
           let(:test_result_a_raw) { super().with(passed: false) }
 
-          it { should be(true) }
+          it { is_expected.to be(true) }
         end
 
         context 'when second result is unsuccessful' do
           let(:test_result_b_raw) { super().with(passed: false) }
 
-          it { should be(true) }
+          it { is_expected.to be(true) }
         end
       end
     end

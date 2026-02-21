@@ -17,7 +17,9 @@ module Mutant
 
     include AST::Sexp
 
-    LoadError = Class.new(::LoadError)
+    class LoadError < ::LoadError
+    end
+
     # Initialize object
     #
     # @param [Symbol] namespace

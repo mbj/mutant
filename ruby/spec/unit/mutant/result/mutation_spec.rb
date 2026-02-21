@@ -9,7 +9,8 @@ RSpec.describe Mutant::Result::Mutation do
     )
   end
 
-  let(:mutation)                { instance_double(Mutant::Mutation) }
+  let(:mutation)                { instance_double(Mutant::Mutation, class: mutation_class) }
+  let(:mutation_class)          { class_double(Mutant::Mutation)    }
   let(:process_status_success?) { true                              }
 
   let(:test_result) do
@@ -40,20 +41,20 @@ RSpec.describe Mutant::Result::Mutation do
     subject { object.killtime }
 
     context 'if isolation reports runtime' do
-      it { should eql(1.0) }
+      it { is_expected.to eql(1.0) }
     end
 
     context 'if isolation does not report runtime' do
       let(:test_result) { nil }
 
-      it { should eql(0.0) }
+      it { is_expected.to eql(0.0) }
     end
   end
 
   describe '#runtime' do
     subject { object.runtime }
 
-    it { should eql(2.0) }
+    it { is_expected.to eql(2.0) }
   end
 
   describe '#criteria_result' do
@@ -66,7 +67,7 @@ RSpec.describe Mutant::Result::Mutation do
     end
 
     before do
-      allow(mutation.class).to receive_messages(success?: true)
+      allow(mutation_class).to receive_messages(success?: true)
     end
 
     context 'when process aborts cover mutations' do
@@ -160,7 +161,7 @@ RSpec.describe Mutant::Result::Mutation do
         it 'calculates mutation class speific pass state' do
           apply
 
-          expect(mutation.class).to have_received(:success?).with(test_result)
+          expect(mutation_class).to have_received(:success?).with(test_result)
         end
       end
 

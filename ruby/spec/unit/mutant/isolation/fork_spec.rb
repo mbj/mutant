@@ -179,7 +179,7 @@ RSpec.describe Mutant::Isolation::Fork do
         {
           receiver:  world.io,
           selector:  :pipe,
-          arguments: [binmode: true],
+          arguments: [{ binmode: true }],
           reaction:  {
             yields: [[result_reader, result_writer]]
           }
@@ -187,7 +187,7 @@ RSpec.describe Mutant::Isolation::Fork do
         {
           receiver:  world.io,
           selector:  :pipe,
-          arguments: [binmode: true],
+          arguments: [{ binmode: true }],
           reaction:  {
             yields: [[log_reader, log_writer]]
           }

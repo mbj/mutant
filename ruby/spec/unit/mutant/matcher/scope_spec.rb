@@ -46,6 +46,6 @@ RSpec.describe Mutant::Matcher::Scope, '#call' do
   end
 
   it 'concatenates subjects from matched singleton and instance methods' do
-    should eql([subject_a, subject_b, subject_c])
+    is_expected.to eql([subject_a, subject_b, subject_c])
   end
 end

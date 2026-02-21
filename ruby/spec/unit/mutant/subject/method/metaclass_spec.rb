@@ -42,17 +42,17 @@ RSpec.describe Mutant::Subject::Method::Metaclass do
   describe '#expression' do
     subject { object.expression }
 
-    it { should eql(parse_expression('Test.foo')) }
+    it { is_expected.to eql(parse_expression('Test.foo')) }
 
-    it_should_behave_like 'an idempotent method'
+    it_behaves_like 'an idempotent method'
   end
 
   describe '#match_expression' do
     subject { object.match_expressions }
 
-    it { should eql(%w[Test.foo Test*].map(&method(:parse_expression))) }
+    it { is_expected.to eql(%w[Test.foo Test*].map(&method(:parse_expression))) }
 
-    it_should_behave_like 'an idempotent method'
+    it_behaves_like 'an idempotent method'
   end
 
   describe '#prepare' do
@@ -63,12 +63,12 @@ RSpec.describe Mutant::Subject::Method::Metaclass do
       expect { subject }.to change { scope.raw.public_methods.include?(:foo) }.from(true).to(false)
     end
 
-    it_should_behave_like 'a command method'
+    it_behaves_like 'a command method'
   end
 
   describe '#source' do
     subject { object.source }
 
-    it { should eql("class << self\n  def foo\n  end\nend\n") }
+    it { is_expected.to eql("class << self\n  def foo\n  end\nend\n") }
   end
 end

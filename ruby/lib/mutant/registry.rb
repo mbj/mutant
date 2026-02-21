@@ -13,7 +13,8 @@ module Mutant
     end
 
     # Raised when the type is an invalid type
-    RegistryError = Class.new(TypeError)
+    class RegistryError < TypeError
+    end
 
     # Register class for AST node class
     #
