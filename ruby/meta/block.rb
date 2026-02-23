@@ -151,6 +151,7 @@ Mutant::Meta::Example.add :block do
   mutation 'foo(&:bar).baz { raise }'
   mutation 'foo.baz { }'
   mutation 'foo(&:bar).baz'
+  mutation 'foo(&:bar)'           # receiver promotion
   mutation 'self.baz {}'
   mutation 'foo(&nil).baz {}'
   mutation 'foo(&:bar__mutant__).baz {}'
@@ -166,6 +167,7 @@ Mutant::Meta::Example.add :block do
   mutation 'foo.baz { }'
   mutation 'self.baz { }'
   mutation 'foo(nil, &:bar).baz'
+  mutation 'foo(nil, &:bar)'      # receiver promotion
 
   mutation 'foo(nil, &nil).baz {}'
   mutation 'foo(nil, &:bar__mutant__).baz {}'
@@ -180,4 +182,69 @@ Mutant::Meta::Example.add :block do
   mutation 'loop { 2 }'
   mutation 'loop { raise }'
   mutation 'loop'
+end
+
+# Block with explicit receiver - should emit receiver promotion
+Mutant::Meta::Example.add :block do
+  source 'obj.foo { |x| x.bar }'
+
+  singleton_mutations
+
+  # Promote receiver - tests if block and method matter
+  mutation 'obj'
+
+  # Remove block
+  mutation 'obj.foo'
+
+  # Standard block mutations
+  mutation 'obj { |x| x.bar }'
+  mutation 'self.foo { |x| x.bar }'
+  mutation 'obj.foo { |x| }'
+  mutation 'obj.foo { |x| raise }'
+  mutation 'obj.foo { |x| nil }'
+  mutation 'obj.foo { |x| x }'
+  mutation 'obj.foo { |x| self.bar }'
+end
+
+# Block WITHOUT a receiver - should NOT emit receiver promotion
+# This tests the `return unless send_meta.receiver` guard
+Mutant::Meta::Example.add :block do
+  source 'foo { |x| x.bar }'
+
+  singleton_mutations
+
+  # NO receiver promotion mutation here - there's no receiver to promote to!
+
+  # Remove block
+  mutation 'foo'
+
+  # Standard block mutations
+  mutation 'foo { |x| }'
+  mutation 'foo { |x| raise }'
+  mutation 'foo { |x| nil }'
+  mutation 'foo { |x| x }'
+  mutation 'foo { |x| self.bar }'
+end
+
+# Safe navigation (csend) - should NOT emit receiver promotion
+# This tests the `return unless n_send?(send)` guard (csend is not send)
+Mutant::Meta::Example.add :block do
+  source 'obj&.foo { |x| x.bar }'
+
+  singleton_mutations
+
+  # NO receiver promotion mutation here - csend is not a regular send!
+
+  # Remove block
+  mutation 'obj&.foo'
+
+  # Standard block mutations
+  mutation 'obj.foo { |x| x.bar }'   # csend to send
+  mutation 'obj { |x| x.bar }'       # emit(send) - removes method call
+  # Note: no self&.foo mutation - csend doesn't generate receiver-to-self mutations
+  mutation 'obj&.foo { |x| }'
+  mutation 'obj&.foo { |x| raise }'
+  mutation 'obj&.foo { |x| nil }'
+  mutation 'obj&.foo { |x| x }'
+  mutation 'obj&.foo { |x| self.bar }'
 end
