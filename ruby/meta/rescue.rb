@@ -1,5 +1,27 @@
 # frozen_string_literal: true
 
+# Inline rescue modifier - promotes handler body when no captures/assignment
+Mutant::Meta::Example.add :rescue do
+  source 'foo rescue bar'
+
+  singleton_mutations
+
+  # Mutate body to nil
+  mutation 'nil rescue bar'
+
+  # Promote body (remove rescue)
+  mutation 'foo'
+
+  # Mutate handler to nil
+  mutation 'foo rescue nil'
+
+  # Concat body and handler
+  mutation 'foo; bar'
+
+  # Promote handler (use fallback directly)
+  mutation 'bar'
+end
+
 Mutant::Meta::Example.add :rescue do
   source 'begin; rescue ExceptionA, ExceptionB => error; true; end'
 
