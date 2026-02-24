@@ -171,6 +171,7 @@ module Mutant
     require 'mutant/mutator/node/regopt'
     require 'mutant/mutator/node/resbody'
     require 'mutant/mutator/node/rescue'
+    require 'mutant/mutator/node/ensure'
     require 'mutant/mutator/node/match_current_line'
     require 'mutant/mutator/node/index'
     require 'mutant/mutator/node/procarg_zero'
