@@ -1573,3 +1573,22 @@ Mutant::Meta::Example.add :send do
   mutation 'false'
   mutation 'true'
 end
+
+# keys <-> values orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.keys'
+
+  singleton_mutations
+  mutation 'foo.values'
+  mutation 'foo'
+  mutation 'self.keys'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.values'
+
+  singleton_mutations
+  mutation 'foo.keys'
+  mutation 'foo'
+  mutation 'self.values'
+end
