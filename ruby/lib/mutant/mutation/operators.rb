@@ -32,6 +32,7 @@ module Mutant
           __send__:      %i[public_send],
           all?:          %i[any?],
           any?:          %i[all? none?],
+          append:        %i[prepend],
           at:            %i[fetch key?],
           # Bang to non-bang mutations (Array methods)
           capitalize!:   %i[capitalize],
@@ -64,6 +65,8 @@ module Mutant
           max:           %i[first last],
           max_by:        %i[first last],
           merge!:        %i[merge],
+          prepend:       %i[append],
+          push:          %i[unshift],
           method:        %i[public_method],
           min:           %i[first last],
           min_by:        %i[first last],
@@ -100,6 +103,7 @@ module Mutant
           transform_values!: %i[transform_values],
           unicode_normalize!: %i[unicode_normalize],
           uniq!:         %i[uniq],
+          unshift:       %i[push],
           upcase!:       %i[upcase],
           values:        %i[keys],
           values_at:     %i[fetch_values]

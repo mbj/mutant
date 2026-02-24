@@ -1629,3 +1629,52 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'self.reject(&:bar)'
 end
+
+# push/append <-> unshift/prepend orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.push(bar)'
+
+  singleton_mutations
+  mutation 'foo.unshift(bar)'
+  mutation 'foo.push'
+  mutation 'foo.push(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.push(bar)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.unshift(bar)'
+
+  singleton_mutations
+  mutation 'foo.push(bar)'
+  mutation 'foo.unshift'
+  mutation 'foo.unshift(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.unshift(bar)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.append(bar)'
+
+  singleton_mutations
+  mutation 'foo.prepend(bar)'
+  mutation 'foo.append'
+  mutation 'foo.append(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.append(bar)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.prepend(bar)'
+
+  singleton_mutations
+  mutation 'foo.append(bar)'
+  mutation 'foo.prepend'
+  mutation 'foo.prepend(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.prepend(bar)'
+end
