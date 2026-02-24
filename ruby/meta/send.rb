@@ -1550,3 +1550,26 @@ Mutant::Meta::Example.add :send do
   mutation 'n'
   mutation 'self.drop(n)'
 end
+
+# positive? <-> negative? orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.positive?'
+
+  singleton_mutations
+  mutation 'foo.negative?'
+  mutation 'foo'
+  mutation 'self.positive?'
+  mutation 'false'
+  mutation 'true'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.negative?'
+
+  singleton_mutations
+  mutation 'foo.positive?'
+  mutation 'foo'
+  mutation 'self.negative?'
+  mutation 'false'
+  mutation 'true'
+end
