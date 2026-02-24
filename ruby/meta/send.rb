@@ -1525,3 +1525,28 @@ Mutant::Meta::Example.add :send do
   mutation 'str'
   mutation 'self.sub!(pattern, replacement)'
 end
+
+# take <-> drop orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.take(n)'
+
+  singleton_mutations
+  mutation 'foo.drop(n)'
+  mutation 'foo.take'
+  mutation 'foo.take(nil)'
+  mutation 'foo'
+  mutation 'n'
+  mutation 'self.take(n)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.drop(n)'
+
+  singleton_mutations
+  mutation 'foo.take(n)'
+  mutation 'foo.drop'
+  mutation 'foo.drop(nil)'
+  mutation 'foo'
+  mutation 'n'
+  mutation 'self.drop(n)'
+end
