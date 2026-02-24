@@ -125,6 +125,8 @@ module Mutant
     require 'mutant/mutator/node/literal/string'
     require 'mutant/mutator/node/literal/integer'
     require 'mutant/mutator/node/literal/float'
+    require 'mutant/mutator/node/literal/rational'
+    require 'mutant/mutator/node/literal/complex'
     require 'mutant/mutator/node/literal/array'
     require 'mutant/mutator/node/literal/hash'
     require 'mutant/mutator/node/literal/regex'
