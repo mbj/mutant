@@ -117,6 +117,16 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'all?'
+  mutation 'none?'
+  mutation 'false'
+  mutation 'true'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'none?'
+
+  singleton_mutations
+  mutation 'any?'
   mutation 'false'
   mutation 'true'
 end

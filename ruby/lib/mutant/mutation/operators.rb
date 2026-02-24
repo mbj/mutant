@@ -31,7 +31,7 @@ module Mutant
           :| =>          %i[& ^],
           __send__:      %i[public_send],
           all?:          %i[any?],
-          any?:          %i[all?],
+          any?:          %i[all? none?],
           at:            %i[fetch key?],
           # Bang to non-bang mutations (Array methods)
           capitalize!:   %i[capitalize],
@@ -64,6 +64,7 @@ module Mutant
           method:        %i[public_method],
           min:           %i[first last],
           min_by:        %i[first last],
+          none?:         %i[any?],
           reject!:       %i[reject],
           reverse!:      %i[reverse],
           reverse_each:  %i[each],
