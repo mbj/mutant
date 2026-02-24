@@ -69,13 +69,18 @@ module Mutant
           emit_reduce_to_sum_mutation
           emit_start_end_with_mutations
           emit_predicate_mutations
-          emit_array_mutation
+          emit_type_coercion_mutations
           emit_static_send
           emit_const_get_mutation
-          emit_integer_mutation
           emit_dig_mutation
           emit_double_negation_mutation
           emit_lambda_mutation
+        end
+
+        def emit_type_coercion_mutations
+          emit_array_mutation
+          emit_integer_mutation
+          emit_empty_collection_mutation
         end
 
         def emit_reduce_to_sum_mutation
@@ -93,8 +98,6 @@ module Mutant
           end
         end
 
-        # rubocop:disable Metrics/CyclomaticComplexity
-        # rubocop:disable Metrics/MethodLength
         def emit_start_end_with_mutations
           return unless REGEXP_MATCH_METHODS.include?(selector) && arguments.one?
 
@@ -102,6 +105,10 @@ module Mutant
 
           return unless argument.type.equal?(:regexp)
 
+          emit_regexp_to_prefix_suffix(argument)
+        end
+
+        def emit_regexp_to_prefix_suffix(argument)
           string = Regexp.regexp_body(argument) or return
 
           expressions = ::Regexp::Parser.parse(string)
@@ -171,6 +178,17 @@ module Mutant
           emit(s(:send, nil, :lambda)) if meta.proc?
         end
 
+        def emit_empty_collection_mutation
+          case selector
+          when :to_a, :to_ary
+            emit(s(:array))
+          when :to_h, :to_hash
+            emit(s(:hash))
+          when :to_s, :to_str
+            emit(s(:str, ''))
+          end
+        end
+
         def emit_dig_mutation
           return if !selector.equal?(:dig) || arguments.none?
 
@@ -206,11 +224,9 @@ module Mutant
           emit(receiver) if receiver && !left_op_assignment?
         end
 
-        # rubocop:disable Style/HashEachMethods
-        # - its not a hash ;)
         def mutate_arguments
           emit_type(receiver, selector)
-          remaining_children_with_index.each do |_node, index|
+          remaining_children_indices.each do |index|
             mutate_argument_index(index)
             delete_child(index)
           end

@@ -55,10 +55,6 @@ module Mutant
         #
         # @return [undefined]
         def define_remaining_children(names)
-          define_private_method(:remaining_children_with_index) do
-            children.each_with_index.drop(names.length)
-          end
-
           define_private_method(:remaining_children_indices) do
             children.each_index.drop(names.length)
           end
