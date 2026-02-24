@@ -194,5 +194,39 @@ RSpec.describe Mutant::Mutator::Node do
         expect(apply).to eql([s(:false)].to_set)
       end
     end
+
+    context 'on while_post node' do
+      let(:ignore_pattern) { Mutant::AST::Pattern.parse('false').from_right }
+
+      let(:node) do
+        s(:while_post, s(:true), s(:kwbegin, s(:send, nil, :foo)))
+      end
+
+      it 'emits conditional loop mutations' do
+        expect(apply).to include(
+          s(:nil),
+          s(:while_post, s(:false), s(:kwbegin, s(:send, nil, :foo))),
+          s(:while_post, s(:true), nil),
+          s(:while_post, s(:true), s(:send, nil, :raise))
+        )
+      end
+    end
+
+    context 'on until_post node' do
+      let(:ignore_pattern) { Mutant::AST::Pattern.parse('false').from_right }
+
+      let(:node) do
+        s(:until_post, s(:true), s(:kwbegin, s(:send, nil, :foo)))
+      end
+
+      it 'emits conditional loop mutations' do
+        expect(apply).to include(
+          s(:nil),
+          s(:until_post, s(:false), s(:kwbegin, s(:send, nil, :foo))),
+          s(:until_post, s(:true), nil),
+          s(:until_post, s(:true), s(:send, nil, :raise))
+        )
+      end
+    end
   end
 end

@@ -8,8 +8,10 @@ module Mutant
       class ConditionalLoop < self
 
         INVERSE = {
-          while: :until,
-          until: :while
+          until:      :while,
+          until_post: :while_post,
+          while:      :until,
+          while_post: :until_post
         }.freeze
 
         handle(*INVERSE.keys)
