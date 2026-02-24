@@ -106,7 +106,8 @@ module Mutant
           unshift:       %i[push],
           upcase!:       %i[upcase],
           values:        %i[keys],
-          values_at:     %i[fetch_values]
+          values_at:     %i[fetch_values],
+          zero?:         %i[nonzero?]
         }.freeze.tap { |hash| hash.each_value(&:freeze) }
       end
 
