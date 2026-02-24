@@ -91,6 +91,7 @@ Mutant::Meta::Example.add :rescue do
 
   singleton_mutations
   mutation 'begin; rescue; ensure; false; end'
+  mutation 'begin; rescue; end'
 end
 
 # Multiple rescue clauses with assignment - test individual clause removal
