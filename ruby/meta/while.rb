@@ -8,6 +8,7 @@ Mutant::Meta::Example.add :while do
   mutation 'while true; foo; end'
   mutation 'while true; end'
   mutation 'while false; foo; bar; end'
+  mutation 'until true; foo; bar; end'
   mutation 'while true;  foo; nil; end'
   mutation 'while true;  nil; bar; end'
   mutation 'while true;  raise; end'
@@ -19,4 +20,5 @@ Mutant::Meta::Example.add :while do
   singleton_mutations
   mutation 'while true; raise; end'
   mutation 'while false; end'
+  mutation 'until true; end'
 end
