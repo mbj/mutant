@@ -1678,3 +1678,15 @@ Mutant::Meta::Example.add :send do
   mutation 'bar'
   mutation 'self.prepend(bar)'
 end
+
+# zero? -> nonzero? orthogonal swap mutation
+Mutant::Meta::Example.add :send do
+  source 'foo.zero?'
+
+  singleton_mutations
+  mutation 'foo.nonzero?'
+  mutation 'foo'
+  mutation 'self.zero?'
+  mutation 'false'
+  mutation 'true'
+end
