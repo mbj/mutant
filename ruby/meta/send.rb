@@ -1592,3 +1592,40 @@ Mutant::Meta::Example.add :send do
   mutation 'foo'
   mutation 'self.values'
 end
+
+# select/filter <-> reject orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.select(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.reject(&:bar)'
+  mutation 'foo.select(&:bar__mutant__)'
+  mutation 'foo.select(&nil)'
+  mutation 'foo.select'
+  mutation 'foo'
+  mutation 'self.select(&:bar)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.filter(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.reject(&:bar)'
+  mutation 'foo.filter(&:bar__mutant__)'
+  mutation 'foo.filter(&nil)'
+  mutation 'foo.filter'
+  mutation 'foo'
+  mutation 'self.filter(&:bar)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.reject(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.select(&:bar)'
+  mutation 'foo.reject(&:bar__mutant__)'
+  mutation 'foo.reject(&nil)'
+  mutation 'foo.reject'
+  mutation 'foo'
+  mutation 'self.reject(&:bar)'
+end
