@@ -7,7 +7,7 @@ PATH
       parser (~> 3.3.0)
       regexp_parser (~> 2.10)
       sorbet-runtime (~> 0.6.0)
-      unparser (~> 0.8.0)
+      unparser (~> 0.8.2)
 
 GEM
   remote: https://rubygems.org/
