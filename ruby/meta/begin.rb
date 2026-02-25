@@ -110,7 +110,6 @@ Mutant::Meta::Example.add :begin do
   mutation 'a; nil'
 end
 
-# rubocop:disable Metrics/BlockLength
 Mutant::Meta::Example.add :begin do
   source <<~'RUBY'
     def foo

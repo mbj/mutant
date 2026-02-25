@@ -2,7 +2,6 @@
 
 module Mutant
   module Meta
-    # rubocop:disable Metrics/ClassLength
     class Example
       # Example verification
       class Verification

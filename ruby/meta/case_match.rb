@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/BlockLength
 Mutant::Meta::Example.add :case_match, :in_pattern do
   source <<~RUBY
     case value
@@ -84,4 +83,3 @@ Mutant::Meta::Example.add :case_match, :in_pattern do
     end
   RUBY
 end
-# rubocop:enable Metrics/BlockLength
