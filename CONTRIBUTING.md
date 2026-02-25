@@ -57,9 +57,9 @@ This results in 180 test jobs per commit (4 Ruby versions x 5 targets x 9 test s
 
 When contributing new mutation operators, there are important design principles to follow.
 
-### Avoid Circular Mutations
+### Mutation Direction Rules
 
-Mutant deliberately avoids creating circular mutation pairs. Many mutation engines get this wrong by including mutations that can cycle back and forth indefinitely. Mutant's design ensures a key invariant: **if you accept a surviving mutation by editing your code to match it, the mutation dies.** If Mutant included circular mutations, this invariant would break: you'd accept a mutation, and Mutant would immediately propose mutating back to the original code.
+Mutant deliberately avoids creating *unjustified* circular mutation pairs. Many mutation engines get this wrong by including mutations that can cycle back and forth indefinitely without reason. Mutant's design ensures a key invariant: **if you accept a surviving mutation by editing your code to match it, the mutation dies.** If Mutant included unjustified circular mutations, this invariant would break: you'd accept a mutation, and Mutant would immediately propose mutating back to the original code.
 
 Mutant can only *replace* semantics with orthogonal behavior or *reduce* semantics, not *add* semantics.
 
@@ -97,9 +97,11 @@ The `a == b` column changes from `F` to `T` — this is a **semantic expansion**
 
 The reverse direction (`a <= b` → `a < b`) is valid because it *removes* that behavior (semantic reduction).
 
-#### When circular mutations are acceptable
+#### Orthogonal replacements must be circular
 
-Orthogonal replacements *can* be circular if the change affects a significant portion of the truth table. As a rule of thumb, circular mutations are acceptable when they flip at least 25% of the truth table cells.
+Orthogonal replacements are inherently bidirectional — if `a` → `b` is valid as an orthogonal replacement, then `b` → `a` must also be valid, because swapping truth table cell values works in both directions. If you can only justify mutating in one direction, it is not an orthogonal replacement; it is either a semantic reduction (one direction removes behavior) or the mutation should not be included at all.
+
+As a rule of thumb, the circular mutation is worth including when it flips at least 25% of the truth table cells.
 
 **Example — Acceptable circular mutation:** `a + b` ↔ `a - b`
 
