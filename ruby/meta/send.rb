@@ -1714,3 +1714,16 @@ Mutant::Meta::Example.add :send do
   mutation 'bar'
   mutation 'self.count(bar)'
 end
+
+# each_with_object -> each semantic reduction mutation
+Mutant::Meta::Example.add :send do
+  source 'foo.each_with_object(bar)'
+
+  singleton_mutations
+  mutation 'foo.each(bar)'
+  mutation 'foo.each_with_object'
+  mutation 'foo.each_with_object(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.each_with_object(bar)'
+end
