@@ -194,5 +194,6 @@ RSpec.describe Mutant::Mutator::Node do
         expect(apply).to eql([s(:false)].to_set)
       end
     end
+
   end
 end

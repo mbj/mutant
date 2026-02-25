@@ -95,6 +95,10 @@ Style/RedundantPercentQ:
 Metrics/AbcSize:
   Max: 21.02
 
+Metrics/ClassLength:
+  CountAsOne:
+    - hash
+
 Metrics/BlockLength:
   Exclude:
   - 'spec/**/*.rb'
