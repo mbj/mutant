@@ -53,6 +53,7 @@ module Mutant
           gsub:          %i[sub],
           gsub!:         %i[gsub],
           is_a?:         %i[instance_of?],
+          keys:          %i[values],
           kind_of?:      %i[instance_of?],
           last:          %i[first],
           lstrip!:       %i[lstrip],
@@ -97,6 +98,7 @@ module Mutant
           unicode_normalize!: %i[unicode_normalize],
           uniq!:         %i[uniq],
           upcase!:       %i[upcase],
+          values:        %i[keys],
           values_at:     %i[fetch_values]
         }.freeze.tap { |hash| hash.each_value(&:freeze) }
       end
