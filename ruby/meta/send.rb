@@ -1344,7 +1344,7 @@ Mutant::Meta::Example.add :send, operators: :full do
   mutation 'first'
 end
 
-%w[detect find max max_by min min_by].each do |selector|
+%w[detect find].each do |selector|
   Mutant::Meta::Example.add :send do
     source selector
 
@@ -1363,6 +1363,36 @@ end
     mutation "#{selector}(&nil)"
     mutation 'first(&:block)'
     mutation 'last(&:block)'
+    mutation selector
+  end
+end
+
+{
+  'max'    => 'min',
+  'max_by' => 'min_by',
+  'min'    => 'max',
+  'min_by' => 'max_by'
+}.each do |selector, counterpart|
+  Mutant::Meta::Example.add :send do
+    source selector
+
+    singleton_mutations
+
+    mutation 'first'
+    mutation 'last'
+    mutation counterpart
+  end
+
+  Mutant::Meta::Example.add :send do
+    source "#{selector}(&:block)"
+
+    singleton_mutations
+
+    mutation "#{selector}(&:block__mutant__)"
+    mutation "#{selector}(&nil)"
+    mutation 'first(&:block)'
+    mutation 'last(&:block)'
+    mutation "#{counterpart}(&:block)"
     mutation selector
   end
 end
@@ -1570,6 +1600,29 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.positive?'
   mutation 'foo'
   mutation 'self.negative?'
+  mutation 'false'
+  mutation 'true'
+end
+
+# even? <-> odd? orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.even?'
+
+  singleton_mutations
+  mutation 'foo.odd?'
+  mutation 'foo'
+  mutation 'self.even?'
+  mutation 'false'
+  mutation 'true'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.odd?'
+
+  singleton_mutations
+  mutation 'foo.even?'
+  mutation 'foo'
+  mutation 'self.odd?'
   mutation 'false'
   mutation 'true'
 end
