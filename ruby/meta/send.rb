@@ -1727,3 +1727,76 @@ Mutant::Meta::Example.add :send do
   mutation 'bar'
   mutation 'self.each_with_object(bar)'
 end
+
+# collect -> each semantic reduction mutation (mirrors map -> each)
+Mutant::Meta::Example.add :send do
+  source 'foo.collect(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.each(&:bar)'
+  mutation 'foo.collect(&:bar__mutant__)'
+  mutation 'foo.collect(&nil)'
+  mutation 'foo.collect'
+  mutation 'foo'
+  mutation 'self.collect(&:bar)'
+end
+
+# each_with_index -> each semantic reduction mutation
+Mutant::Meta::Example.add :send do
+  source 'foo.each_with_index'
+
+  singleton_mutations
+  mutation 'foo.each'
+  mutation 'foo'
+  mutation 'self.each_with_index'
+end
+
+# each_cons -> each semantic reduction mutation
+Mutant::Meta::Example.add :send do
+  source 'foo.each_cons(n)'
+
+  singleton_mutations
+  mutation 'foo.each(n)'
+  mutation 'foo.each_cons'
+  mutation 'foo.each_cons(nil)'
+  mutation 'foo'
+  mutation 'n'
+  mutation 'self.each_cons(n)'
+end
+
+# each_slice -> each semantic reduction mutation
+Mutant::Meta::Example.add :send do
+  source 'foo.each_slice(n)'
+
+  singleton_mutations
+  mutation 'foo.each(n)'
+  mutation 'foo.each_slice'
+  mutation 'foo.each_slice(nil)'
+  mutation 'foo'
+  mutation 'n'
+  mutation 'self.each_slice(n)'
+end
+
+# sample -> first/last semantic reduction mutation
+Mutant::Meta::Example.add :send do
+  source 'foo.sample'
+
+  singleton_mutations
+  mutation 'foo.first'
+  mutation 'foo.last'
+  mutation 'foo'
+  mutation 'self.sample'
+end
+
+# sort_by -> sort semantic reduction mutation (drop custom comparator)
+Mutant::Meta::Example.add :send do
+  source 'foo.sort_by(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.sort(&:bar)'
+  mutation 'foo.sort_by(&:bar__mutant__)'
+  mutation 'foo.sort_by(&nil)'
+  mutation 'foo.sort_by'
+  mutation 'foo'
+  mutation 'self.sort_by(&:bar)'
+end
