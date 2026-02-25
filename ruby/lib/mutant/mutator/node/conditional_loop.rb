@@ -25,17 +25,25 @@ module Mutant
           emit_condition_mutations
           emit_type_swap
           if post?
-            emit_body_mutations { |node| node.type.equal?(:kwbegin) } if body
-            emit_body(s(:kwbegin, N_RAISE))
+            dispatch_post
           else
-            emit_body_mutations if body
-            emit_body(nil)
-            emit_body(N_RAISE)
+            dispatch_regular
           end
         end
 
+        def dispatch_post
+          emit_body_mutations { |node| node.type.equal?(:kwbegin) }
+          emit_body(s(:kwbegin, N_RAISE))
+        end
+
+        def dispatch_regular
+          emit_body_mutations if body
+          emit_body(nil)
+          emit_body(N_RAISE)
+        end
+
         def post?
-          node.type.to_s.end_with?('_post')
+          node.type.end_with?('_post')
         end
 
         def emit_type_swap

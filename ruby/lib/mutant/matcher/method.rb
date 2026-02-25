@@ -34,7 +34,6 @@ module Mutant
       # logic would be implemented directly on the Matcher::Method
       # instance
       #
-      # rubocop:disable Metrics/ClassLength
       class Evaluator
         include(
           AbstractType,

@@ -130,8 +130,8 @@ module Mutant
     private
 
       def all_tests_index
-        all_test_cases.each_with_object({}) do |test_case, index|
-          index[construct_test(test_case)] = test_case
+        all_test_cases.to_h do |test_case|
+          [construct_test(test_case), test_case]
         end
       end
       memoize :all_tests_index

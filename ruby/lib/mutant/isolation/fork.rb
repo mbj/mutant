@@ -64,7 +64,6 @@ module Mutant
         end
       end # Pipe
 
-      # rubocop:disable Metrics/ClassLength
       class Parent
         include(Anima.new(*ATTRIBUTES), Procto)
 
@@ -206,7 +205,6 @@ module Mutant
           status
         end
       end # Parent
-      # rubocop:enable Metrics/ClassLength
 
       class Child
         include(Adamantium, Anima.new(*ATTRIBUTES), Procto)

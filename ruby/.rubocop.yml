@@ -93,7 +93,7 @@ Style/RedundantPercentQ:
 
 # Allow a maximum ABC score
 Metrics/AbcSize:
-  Max: 21.02
+  Max: 19.72
 
 Metrics/ClassLength:
   CountAsOne:
@@ -103,6 +103,8 @@ Metrics/BlockLength:
   Exclude:
   - 'spec/**/*.rb'
   - 'mutant.gemspec'
+  CountAsOne:
+  - heredoc
 
 # Buggy cop, returns false positive for our code base
 Lint/NonLocalExitFromIterator:
