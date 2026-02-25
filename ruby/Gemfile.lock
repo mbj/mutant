@@ -4,10 +4,10 @@ PATH
     mutant (0.14.2)
       diff-lcs (>= 1.6, < 3)
       irb (~> 1.15)
-      parser (~> 3.3.0)
+      parser (~> 3.3.10)
       regexp_parser (~> 2.10)
       sorbet-runtime (~> 0.6.0)
-      unparser (~> 0.8.0)
+      unparser (~> 0.8.2)
 
 GEM
   remote: https://rubygems.org/

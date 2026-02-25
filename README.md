@@ -96,9 +96,7 @@ Mutant is supported on Linux and macOS.
 | 3.2     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | 3.3     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | 3.4     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| 4.0     | :heavy_check_mark: | :heavy_check_mark: | :construction:* |
-
-*Mutations specific to Ruby 4.0 syntax pending [parser](https://github.com/whitequark/parser) gem support.
+| 4.0     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 
 ## Licensing
 
