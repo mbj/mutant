@@ -40,6 +40,7 @@ module Mutant
           chop!:         %i[chop],
           collect!:      %i[collect],
           compact!:      %i[compact],
+          count:         %i[size length],
           delete!:       %i[delete],
           detect:        %i[first last],
           downcase!:     %i[downcase],

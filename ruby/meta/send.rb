@@ -1690,3 +1690,27 @@ Mutant::Meta::Example.add :send do
   mutation 'false'
   mutation 'true'
 end
+
+# count -> size/length semantic reduction mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.count'
+
+  singleton_mutations
+  mutation 'foo.size'
+  mutation 'foo.length'
+  mutation 'foo'
+  mutation 'self.count'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.count(bar)'
+
+  singleton_mutations
+  mutation 'foo.size(bar)'
+  mutation 'foo.length(bar)'
+  mutation 'foo.count'
+  mutation 'foo.count(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.count(bar)'
+end
