@@ -108,6 +108,7 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'any?'
+  mutation 'none?'
   mutation 'false'
   mutation 'true'
 end
@@ -127,6 +128,7 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'any?'
+  mutation 'all?'
   mutation 'false'
   mutation 'true'
 end
@@ -1852,4 +1854,96 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.sort_by'
   mutation 'foo'
   mutation 'self.sort_by(&:bar)'
+end
+
+# start_with? <-> end_with? orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.start_with?(bar)'
+
+  singleton_mutations
+  mutation 'foo.end_with?(bar)'
+  mutation 'foo.start_with?'
+  mutation 'foo.start_with?(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.start_with?(bar)'
+  mutation 'false'
+  mutation 'true'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.end_with?(bar)'
+
+  singleton_mutations
+  mutation 'foo.start_with?(bar)'
+  mutation 'foo.end_with?'
+  mutation 'foo.end_with?(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.end_with?(bar)'
+  mutation 'false'
+  mutation 'true'
+end
+
+# upcase <-> downcase orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.upcase'
+
+  singleton_mutations
+  mutation 'foo.downcase'
+  mutation 'foo'
+  mutation 'self.upcase'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.downcase'
+
+  singleton_mutations
+  mutation 'foo.upcase'
+  mutation 'foo'
+  mutation 'self.downcase'
+end
+
+# floor <-> ceil orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.floor'
+
+  singleton_mutations
+  mutation 'foo.ceil'
+  mutation 'foo'
+  mutation 'self.floor'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.ceil'
+
+  singleton_mutations
+  mutation 'foo.floor'
+  mutation 'foo'
+  mutation 'self.ceil'
+end
+
+# transform_keys <-> transform_values orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.transform_keys(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.transform_values(&:bar)'
+  mutation 'foo.transform_keys(&:bar__mutant__)'
+  mutation 'foo.transform_keys(&nil)'
+  mutation 'foo.transform_keys'
+  mutation 'foo'
+  mutation 'self.transform_keys(&:bar)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.transform_values(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.transform_keys(&:bar)'
+  mutation 'foo.transform_values(&:bar__mutant__)'
+  mutation 'foo.transform_values(&nil)'
+  mutation 'foo.transform_values'
+  mutation 'foo'
+  mutation 'self.transform_values(&:bar)'
 end
