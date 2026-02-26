@@ -1,15 +1,15 @@
 PATH
   remote: ..
   specs:
-    mutant (0.14.2)
+    mutant (0.15.0)
       diff-lcs (>= 1.6, < 3)
       irb (~> 1.15)
       parser (~> 3.3.10)
       regexp_parser (~> 2.10)
       sorbet-runtime (~> 0.6.0)
       unparser (~> 0.8.2)
-    mutant-rspec (0.14.2)
-      mutant (= 0.14.2)
+    mutant-rspec (0.15.0)
+      mutant (= 0.15.0)
       rspec-core (>= 3.8.0, < 5.0.0)
 
 GEM
@@ -93,8 +93,8 @@ CHECKSUMS
   io-console (0.8.2) sha256=d6e3ae7a7cc7574f4b8893b4fca2162e57a825b223a177b7afa236c5ef9814cc
   irb (1.17.0) sha256=168c4ddb93d8a361a045c41d92b2952c7a118fa73f23fe14e55609eb7a863aae
   memoizable (0.4.2) sha256=acf4d2280fea019318e61cfc5e69077dcb3c2126817ee596ffd76d0ddf5e826c
-  mutant (0.14.2)
-  mutant-rspec (0.14.2)
+  mutant (0.15.0)
+  mutant-rspec (0.15.0)
   parser (3.3.10.2) sha256=6f60c84aa4bdcedb6d1a2434b738fe8a8136807b6adc8f7f53b97da9bc4e9357
   pp (0.6.3) sha256=2951d514450b93ccfeb1df7d021cae0da16e0a7f95ee1e2273719669d0ab9df6
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
