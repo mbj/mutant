@@ -1,3 +1,129 @@
+# v0.15.0 2026-02-26
+
+* Add operator mutations.
+
+  * [#1523](https://github.com/mbj/mutant/pull/1523)
+    [#1530](https://github.com/mbj/mutant/pull/1530)
+    Add arithmetic operator swap mutations (`+` ↔ `-`, `*` ↔ `/`).
+    Multiplication/division skips multiplicative identity operands.
+
+  * [#1532](https://github.com/mbj/mutant/pull/1532)
+    [#1533](https://github.com/mbj/mutant/pull/1533)
+    Add `%` → `/` and `**` → `*` mutations.
+
+  * [#1527](https://github.com/mbj/mutant/pull/1527)
+    Add `==` ↔ `!=` swap mutation.
+
+  * [#1534](https://github.com/mbj/mutant/pull/1534)
+    Add logical operator swap mutations (`and` ↔ `or`, `&&` ↔ `||`).
+
+  * [#1535](https://github.com/mbj/mutant/pull/1535)
+    [#1576](https://github.com/mbj/mutant/pull/1576)
+    Add compound assignment operator swap mutations
+    (`+=` ↔ `-=`, `*=` ↔ `/=`, `%=` → `/=`, `**=` → `*=`,
+    `&=` ↔ `|=` ↔ `^=`, `<<=` ↔ `>>=`, `&&=` ↔ `||=`).
+
+* Add selector replacement mutations.
+
+  Orthogonal replacements (circular swaps):
+
+  * [#1559](https://github.com/mbj/mutant/pull/1559) `select`/`filter` ↔ `reject`
+  * [#1560](https://github.com/mbj/mutant/pull/1560) `any?` ↔ `none?`
+  * [#1561](https://github.com/mbj/mutant/pull/1561) `take` ↔ `drop`
+  * [#1562](https://github.com/mbj/mutant/pull/1562) `append`/`push` ↔ `prepend`/`unshift`
+  * [#1563](https://github.com/mbj/mutant/pull/1563) `positive?` ↔ `negative?`
+  * [#1564](https://github.com/mbj/mutant/pull/1564) `zero?` ↔ `nonzero?`
+  * [#1565](https://github.com/mbj/mutant/pull/1565) `count` ↔ `size`/`length`
+  * [#1568](https://github.com/mbj/mutant/pull/1568) `keys` ↔ `values`
+  * [#1571](https://github.com/mbj/mutant/pull/1571) `even?` ↔ `odd?`, `min` ↔ `max`, `min_by` ↔ `max_by`
+  * [#1573](https://github.com/mbj/mutant/pull/1573) `all?` ↔ `none?`, `floor` ↔ `ceil`,
+    `start_with?` ↔ `end_with?`, `transform_keys` ↔ `transform_values`, `upcase` ↔ `downcase`
+  * [#1576](https://github.com/mbj/mutant/pull/1576) `pop` ↔ `shift`, `each_key` ↔ `each_value`,
+    `assoc` ↔ `rassoc`, `succ` ↔ `pred`, `chars` ↔ `bytes`, `empty?` ↔ `any?`,
+    `grep` ↔ `grep_v`
+
+  Semantic reductions:
+
+  * [#1542](https://github.com/mbj/mutant/pull/1542) Bang → non-bang methods
+    (e.g. `map!` → `map`, `sort!` → `sort`, `compact!` → `compact`).
+  * [#1567](https://github.com/mbj/mutant/pull/1567)
+    [#1572](https://github.com/mbj/mutant/pull/1572) Enumerable reductions
+    (`collect` → `each`, `each_with_object` → `each`, `each_with_index` → `each`,
+    `each_cons` → `each`, `each_slice` → `each`, `sample` → `first`/`last`,
+    `sort_by` → `sort`).
+  * [#1574](https://github.com/mbj/mutant/pull/1574) `filter_map` → `map`,
+    `delete_if` → `reject`, `keep_if` → `select`, `collect_concat` → `collect`,
+    `chunk`/`chunk_while`/`slice_before`/`slice_after`/`slice_when` → `each`,
+    `strip` → `lstrip`/`rstrip`, `to_f` → `to_i`,
+    `defined?` → `true`, strip regexp `m` (multiline) flag.
+
+* [#1558](https://github.com/mbj/mutant/pull/1558)
+  [#1537](https://github.com/mbj/mutant/pull/1537)
+
+  Add pattern-matching mutation support. Dedicated mutators for `case`/`in` expressions,
+  `in` patterns, match alternatives (`A | B`), and pattern match predicates
+  (`x in pattern` → `false`). Guard clauses in pattern matches are now mutated.
+
+* [#1555](https://github.com/mbj/mutant/pull/1555)
+  [#1566](https://github.com/mbj/mutant/pull/1566)
+
+  Add control flow mutations. `while` ↔ `until` orthogonal swap mutations.
+  `while_post` and `until_post` support for `begin...end while`/`begin...end until`
+  constructs.
+
+* [#1539](https://github.com/mbj/mutant/pull/1539)
+
+  Add `super` ↔ `super()` mutation operators to test implicit vs explicit
+  argument forwarding.
+
+* [#1536](https://github.com/mbj/mutant/pull/1536)
+
+  Add rescue clause removal mutations. When multiple rescue clauses exist,
+  emit mutations that remove each clause individually.
+
+* [#1543](https://github.com/mbj/mutant/pull/1543)
+
+  Add inline rescue modifier mutations (`foo rescue bar` → `bar`).
+
+* [#1556](https://github.com/mbj/mutant/pull/1556)
+
+  Add explicit ensure mutator with ensure-clause reduction.
+
+* [#1526](https://github.com/mbj/mutant/pull/1526)
+
+  Add empty collection return value mutations (`to_a` → `[]`, `to_h` → `{}`,
+  `to_s` → `""`).
+
+* [#1540](https://github.com/mbj/mutant/pull/1540)
+
+  Add type-aware default return mutations for method bodies
+  (`Array` → `[]`, `Hash` → `{}`, `String` → `""`, `Integer` → `0`, `Float` → `0.0`).
+
+* [#1544](https://github.com/mbj/mutant/pull/1544)
+
+  Add generic receiver promotion mutations for blocks (`a.b { }` → `a`).
+
+* [#1547](https://github.com/mbj/mutant/pull/1547)
+
+  Add non-empty string to empty string mutation.
+
+* [#1557](https://github.com/mbj/mutant/pull/1557)
+
+  Add literal mutators for complex and rational numeric nodes.
+
+* [#1553](https://github.com/mbj/mutant/pull/1553)
+
+  Add RSpec 4 support.
+
+* Dependency updates:
+
+  * [#1570](https://github.com/mbj/mutant/pull/1570)
+    Bump parser dependency to ~> 3.3.10 and unparser dependency to ~> 0.8.2.
+
+* [#1550](https://github.com/mbj/mutant/pull/1550)
+
+  Fix bundler stability issue.
+
 # v0.14.2 2026-01-16
 
 * [#1516](https://github.com/mbj/mutant/pull/1516)
