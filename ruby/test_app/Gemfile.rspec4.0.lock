@@ -4,10 +4,10 @@ PATH
     mutant (0.14.2)
       diff-lcs (>= 1.6, < 3)
       irb (~> 1.15)
-      parser (~> 3.3.0)
+      parser (~> 3.3.10)
       regexp_parser (~> 2.10)
       sorbet-runtime (~> 0.6.0)
-      unparser (~> 0.8.0)
+      unparser (~> 0.8.2)
     mutant-rspec (0.14.2)
       mutant (= 0.14.2)
       rspec-core (>= 3.8.0, < 5.0.0)
@@ -66,8 +66,8 @@ GEM
     stringio (3.2.0)
     thread_safe (0.3.6)
     tsort (0.2.0)
-    unparser (0.8.1)
-      diff-lcs (~> 1.6)
+    unparser (0.8.2)
+      diff-lcs (>= 1.6, < 3)
       parser (>= 3.3.0)
       prism (>= 1.5.1)
 
@@ -113,7 +113,7 @@ CHECKSUMS
   stringio (3.2.0) sha256=c37cb2e58b4ffbd33fe5cd948c05934af997b36e0b6ca6fdf43afa234cf222e1
   thread_safe (0.3.6) sha256=9ed7072821b51c57e8d6b7011a8e282e25aeea3a4065eab326e43f66f063b05a
   tsort (0.2.0) sha256=9650a793f6859a43b6641671278f79cfead60ac714148aabe4e3f0060480089f
-  unparser (0.8.1) sha256=a0139c9bfc4fa12132278632ebb2bc202abf9a1f630f51710905efcb46698428
+  unparser (0.8.2) sha256=654af48a6cfa25baf145563e01f40c60ca7d5c7520ff506912d0bb2f1240fd00
 
 BUNDLED WITH
   4.0.6
