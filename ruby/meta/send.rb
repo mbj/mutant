@@ -118,6 +118,7 @@ Mutant::Meta::Example.add :send do
 
   singleton_mutations
   mutation 'all?'
+  mutation 'empty?'
   mutation 'none?'
   mutation 'false'
   mutation 'true'
@@ -2085,4 +2086,142 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.slice_when'
   mutation 'foo'
   mutation 'self.slice_when(&:bar)'
+end
+
+# pop <-> shift orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.pop'
+
+  singleton_mutations
+  mutation 'foo.shift'
+  mutation 'foo'
+  mutation 'self.pop'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.shift'
+
+  singleton_mutations
+  mutation 'foo.pop'
+  mutation 'foo'
+  mutation 'self.shift'
+end
+
+# each_key <-> each_value orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.each_key'
+
+  singleton_mutations
+  mutation 'foo.each_value'
+  mutation 'foo'
+  mutation 'self.each_key'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.each_value'
+
+  singleton_mutations
+  mutation 'foo.each_key'
+  mutation 'foo'
+  mutation 'self.each_value'
+end
+
+# assoc <-> rassoc orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.assoc(bar)'
+
+  singleton_mutations
+  mutation 'foo.rassoc(bar)'
+  mutation 'foo.assoc'
+  mutation 'foo.assoc(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.assoc(bar)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.rassoc(bar)'
+
+  singleton_mutations
+  mutation 'foo.assoc(bar)'
+  mutation 'foo.rassoc'
+  mutation 'foo.rassoc(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.rassoc(bar)'
+end
+
+# succ <-> pred orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.succ'
+
+  singleton_mutations
+  mutation 'foo.pred'
+  mutation 'foo'
+  mutation 'self.succ'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.pred'
+
+  singleton_mutations
+  mutation 'foo.succ'
+  mutation 'foo'
+  mutation 'self.pred'
+end
+
+# chars <-> bytes orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.chars'
+
+  singleton_mutations
+  mutation 'foo.bytes'
+  mutation 'foo'
+  mutation 'self.chars'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.bytes'
+
+  singleton_mutations
+  mutation 'foo.chars'
+  mutation 'foo'
+  mutation 'self.bytes'
+end
+
+# empty? <-> any? orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.empty?'
+
+  singleton_mutations
+  mutation 'foo.any?'
+  mutation 'foo'
+  mutation 'self.empty?'
+  mutation 'false'
+  mutation 'true'
+end
+
+# grep <-> grep_v orthogonal swap mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.grep(bar)'
+
+  singleton_mutations
+  mutation 'foo.grep_v(bar)'
+  mutation 'foo.grep'
+  mutation 'foo.grep(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.grep(bar)'
+end
+
+Mutant::Meta::Example.add :send do
+  source 'foo.grep_v(bar)'
+
+  singleton_mutations
+  mutation 'foo.grep(bar)'
+  mutation 'foo.grep_v'
+  mutation 'foo.grep_v(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.grep_v(bar)'
 end

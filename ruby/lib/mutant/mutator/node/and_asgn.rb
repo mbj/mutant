@@ -16,6 +16,7 @@ module Mutant
         def dispatch
           emit_left_mutations
           emit_right_mutations
+          emit(s(:or_asgn, *children))
         end
 
       end # AndAsgn

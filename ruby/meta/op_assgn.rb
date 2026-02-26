@@ -98,6 +98,7 @@ Mutant::Meta::Example.add :op_asgn do
 
   mutation 'a |= nil'
   mutation 'a &= b'
+  mutation 'a ^= b'
 end
 
 # Bitwise XOR operator swap
@@ -106,6 +107,7 @@ Mutant::Meta::Example.add :op_asgn do
 
   mutation 'a ^= nil'
   mutation 'a &= b'
+  mutation 'a |= b'
 end
 
 # Left shift operator swap
