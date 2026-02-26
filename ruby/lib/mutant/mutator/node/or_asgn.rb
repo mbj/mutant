@@ -16,10 +16,7 @@ module Mutant
         def dispatch
           emit_singletons
           emit_right_mutations
-          return if n_ivasgn?(left)
-          emit_left_mutations do |node|
-            AST::Types::ASSIGNABLE_VARIABLES.include?(node.type)
-          end
+          emit(s(:and_asgn, *children))
         end
 
       end # OrAsgn

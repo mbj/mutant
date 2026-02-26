@@ -12,4 +12,5 @@ Mutant::Meta::Example.add :ivasgn do
   mutation '@a &&= nil'
   mutation '@a &&= 0'
   mutation '@a &&= 2'
+  mutation '@a ||= 1'
 end

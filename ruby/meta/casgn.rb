@@ -21,4 +21,5 @@ Mutant::Meta::Example.add :casgn do
 
   mutation 'A__MUTANT__ &&= true'
   mutation 'A &&= false'
+  mutation 'A ||= true'
 end
