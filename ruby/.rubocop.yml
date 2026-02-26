@@ -210,3 +210,8 @@ Naming/PredicateMethod:
 Style/EndlessMethod:
   Enabled: true
   EnforcedStyle: allow_single_line
+# Multiple modules/classes per file is intentional in these files
+Style/OneClassPerFile:
+  Exclude:
+    - 'lib/mutant/integration/minitest.rb'
+    - 'spec/spec_helper.rb'
