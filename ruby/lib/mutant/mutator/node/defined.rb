@@ -14,6 +14,7 @@ module Mutant
 
         def dispatch
           emit(N_NIL)
+          emit(N_TRUE)
           emit_instance_variable_mutation
         end
 
