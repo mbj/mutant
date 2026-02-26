@@ -7,4 +7,5 @@ Mutant::Meta::Example.add :regopt do
   mutation '//ixom'
   mutation '/nomatch\\A/ixom'
   mutation '/foo/xom'
+  mutation '/foo/ixo'
 end

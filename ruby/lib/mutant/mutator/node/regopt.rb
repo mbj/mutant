@@ -7,18 +7,16 @@ module Mutant
       # Regular expression options mutation
       class Regopt < self
 
-        MUTATED_FLAGS = %i[i].freeze
+        MUTATED_FLAGS = %i[i m].freeze
 
         handle(:regopt)
 
       private
 
         def dispatch
-          emit_type(*mutated_flags)
-        end
-
-        def mutated_flags
-          (children - MUTATED_FLAGS)
+          MUTATED_FLAGS.each do |flag|
+            emit_type(*(children - [flag]))
+          end
         end
 
       end # Regopt

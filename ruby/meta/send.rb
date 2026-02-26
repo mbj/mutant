@@ -1262,6 +1262,7 @@ Mutant::Meta::Example.add :send do
   source 'nil.to_f'
 
   mutation 'nil'
+  mutation 'nil.to_i'
 end
 
 Mutant::Meta::Example.add :send do
@@ -1946,4 +1947,142 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.transform_values'
   mutation 'foo'
   mutation 'self.transform_values(&:bar)'
+end
+
+# strip -> lstrip/rstrip semantic reduction mutations
+Mutant::Meta::Example.add :send do
+  source 'foo.strip'
+
+  singleton_mutations
+  mutation 'foo.lstrip'
+  mutation 'foo.rstrip'
+  mutation 'foo'
+  mutation 'self.strip'
+end
+
+# to_f -> to_i semantic reduction mutation (loses fractional precision)
+Mutant::Meta::Example.add :send do
+  source 'foo.to_f'
+
+  singleton_mutations
+  mutation 'foo.to_i'
+  mutation 'foo'
+  mutation 'self.to_f'
+end
+
+# filter_map -> map semantic reduction mutation (removes nil-filtering)
+Mutant::Meta::Example.add :send do
+  source 'foo.filter_map(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.map(&:bar)'
+  mutation 'foo.filter_map(&:bar__mutant__)'
+  mutation 'foo.filter_map(&nil)'
+  mutation 'foo.filter_map'
+  mutation 'foo'
+  mutation 'self.filter_map(&:bar)'
+end
+
+# delete_if -> reject semantic reduction mutation (in-place to non-mutating)
+Mutant::Meta::Example.add :send do
+  source 'foo.delete_if(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.reject(&:bar)'
+  mutation 'foo.delete_if(&:bar__mutant__)'
+  mutation 'foo.delete_if(&nil)'
+  mutation 'foo.delete_if'
+  mutation 'foo'
+  mutation 'self.delete_if(&:bar)'
+end
+
+# keep_if -> select semantic reduction mutation (in-place to non-mutating)
+Mutant::Meta::Example.add :send do
+  source 'foo.keep_if(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.select(&:bar)'
+  mutation 'foo.keep_if(&:bar__mutant__)'
+  mutation 'foo.keep_if(&nil)'
+  mutation 'foo.keep_if'
+  mutation 'foo'
+  mutation 'self.keep_if(&:bar)'
+end
+
+# collect_concat -> collect semantic reduction mutation (removes flattening)
+Mutant::Meta::Example.add :send do
+  source 'foo.collect_concat(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.collect(&:bar)'
+  mutation 'foo.collect_concat(&:bar__mutant__)'
+  mutation 'foo.collect_concat(&nil)'
+  mutation 'foo.collect_concat'
+  mutation 'foo'
+  mutation 'self.collect_concat(&:bar)'
+end
+
+# chunk -> each semantic reduction mutation (removes chunking logic)
+Mutant::Meta::Example.add :send do
+  source 'foo.chunk(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.each(&:bar)'
+  mutation 'foo.chunk(&:bar__mutant__)'
+  mutation 'foo.chunk(&nil)'
+  mutation 'foo.chunk'
+  mutation 'foo'
+  mutation 'self.chunk(&:bar)'
+end
+
+# chunk_while -> each semantic reduction mutation (removes chunk-while grouping)
+Mutant::Meta::Example.add :send do
+  source 'foo.chunk_while(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.each(&:bar)'
+  mutation 'foo.chunk_while(&:bar__mutant__)'
+  mutation 'foo.chunk_while(&nil)'
+  mutation 'foo.chunk_while'
+  mutation 'foo'
+  mutation 'self.chunk_while(&:bar)'
+end
+
+# slice_after -> each semantic reduction mutation (removes slicing logic)
+Mutant::Meta::Example.add :send do
+  source 'foo.slice_after(bar)'
+
+  singleton_mutations
+  mutation 'foo.each(bar)'
+  mutation 'foo.slice_after'
+  mutation 'foo.slice_after(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.slice_after(bar)'
+end
+
+# slice_before -> each semantic reduction mutation (removes slicing logic)
+Mutant::Meta::Example.add :send do
+  source 'foo.slice_before(bar)'
+
+  singleton_mutations
+  mutation 'foo.each(bar)'
+  mutation 'foo.slice_before'
+  mutation 'foo.slice_before(nil)'
+  mutation 'foo'
+  mutation 'bar'
+  mutation 'self.slice_before(bar)'
+end
+
+# slice_when -> each semantic reduction mutation (removes slicing logic)
+Mutant::Meta::Example.add :send do
+  source 'foo.slice_when(&:bar)'
+
+  singleton_mutations
+  mutation 'foo.each(&:bar)'
+  mutation 'foo.slice_when(&:bar__mutant__)'
+  mutation 'foo.slice_when(&nil)'
+  mutation 'foo.slice_when'
+  mutation 'foo'
+  mutation 'self.slice_when(&:bar)'
 end
