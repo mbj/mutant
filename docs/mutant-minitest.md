@@ -1,7 +1,7 @@
 mutant-minitest
 ===============
 
-Before starting with mutant its recommended to understand the
+Before starting with mutant it's recommended to understand the
 [nomenclature](/docs/nomenclature.md).
 
 ## Setup
@@ -29,7 +29,7 @@ To add mutant to your minitest code base you need to:
      # ...
    ```
 
-3. Add `.cover` call sides to your test suite to mark them as eligible for killing mutations in subjects.
+3. Add `.cover` call sites to your test suite to mark them as eligible for killing mutations in subjects.
 
    Example:
 

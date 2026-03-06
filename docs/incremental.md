@@ -63,7 +63,7 @@ Good selectors for reference points are `HEAD~1` (the previous commit) or
 ## Limitations
 
 Mutant only triggers incremental subject selection for *direct* code changes.
-It'll currently not select subjects that where indirectly changed.
+It'll currently not select subjects that were indirectly changed.
 
 Counter examples:
 
