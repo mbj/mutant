@@ -10,10 +10,10 @@ For commercial use, pricing is subscription based:
 
 | Currency | Duration | Cost    | Payment Methods                                       |
 | -------- | -------  | ------- | ----------------------------------------------------- |
-| USD      | 1 month  | 90$     | Credit Card                                           |
-| USD      | 1 year   | 900$    | Credit Card, ACH transfer                             |
-| EUR      | 1 month  | 90€     | Credit Card, SEPA Direct Debit                        |
-| EUR      | 1 year   | 900€    | Credit Card, SEPA Direct Debit, SEPA Transfer         |
+| USD      | 1 month  | 30$     | Credit Card                                           |
+| USD      | 1 year   | 250$    | Credit Card, ACH transfer                             |
+| EUR      | 1 month  | 30€     | Credit Card, SEPA Direct Debit                        |
+| EUR      | 1 year   | 250€    | Credit Card, SEPA Direct Debit, SEPA Transfer         |
 
 Costs are **per developer using mutant on any number of repositories**.
 
