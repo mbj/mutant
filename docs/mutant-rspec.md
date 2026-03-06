@@ -1,7 +1,7 @@
 mutant-rspec
 ============
 
-Before starting with mutant its recommended to understand the
+Before starting with mutant it's recommended to understand the
 [nomenclature](/docs/nomenclature.md).
 
 ## Setup

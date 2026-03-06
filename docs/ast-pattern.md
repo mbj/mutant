@@ -38,7 +38,7 @@ This adds an additional descendant constraint on the receiver.
 
 ### Structure
 
-The pattern langauge is structured around AST nodes of the
+The pattern language is structured around AST nodes of the
 [parser gem](https://github.com/whitequark/parser/blob/master/doc/AST_FORMAT.md).
 
 Syntax (currently) always begins with a valid node type and than

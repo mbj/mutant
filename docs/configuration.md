@@ -119,7 +119,7 @@ bundle exec mutant run --fail-fast
 
 #### `matcher`
 
-Allows to set subject matchers in the configration file.
+Allows to set subject matchers in the configuration file.
 
 ```yml
 matcher:
@@ -151,7 +151,7 @@ matcher:
   # Note that subject ignores from the command line are added to the subject ignores
   # configured on the command line!
   #
-  # Also matcher ignores generally shold be used for entire namespaces, and individual
+  # Also matcher ignores generally should be used for entire namespaces, and individual
   # methods be disabled directly in source code via `mutant:disable` directives.
   ignore:
   - Your::App::Namespace::Dirty # ignore all subjects on a specific constant

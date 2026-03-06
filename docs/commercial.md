@@ -17,6 +17,10 @@ For commercial use, pricing is subscription based:
 
 Costs are **per developer using mutant on any number of repositories**.
 
+Running mutant on CI does not require additional subscriptions. But developers
+interpreting CI failures count as users, as they will also have to reproduce
+and iterate locally.
+
 Volume subscriptions with custom plans are available on request.
 
 To purchase a commercial subscription, [email mbj@schirp-dso.com](mailto:mbj@schirp-dso.com?subject=Mutant%20Commercial%20License) with:
@@ -37,7 +41,7 @@ Yearly and custom plans do not offer any refunds but come with discounts.
 
 Hint: Start out with monthly, and upgrade once you like it.
 
-Also mutants *full* feature set is available for free on open source use.
+Also mutant's *full* feature set is available for free on open source use.
 
 Can I get a discount?
 ---------------------
@@ -54,8 +58,9 @@ How does commercial licensing work?
 -----------------------------------
 
 Every organization running mutant on commercial code needs to purchase
-a subscription per developer (identified by their unique git author emails).
+a subscription per developer.
 This subscription is valid for any number of private repositories.
+For large organizations volume deals are available.
 
 Depending on your plan subscriptions renew monthly or yearly.
 
@@ -65,8 +70,7 @@ and are ready to go.
 How do I determine the number of required subscriptions?
 --------------------------------------------------------
 
-Collect the git author email from each of your developers that need to use mutant.
-Use `git config --get user.email`. Count that list.
+Count the developers that need to use mutant.
 
 So a designer, who contributes to your repository, but never touches Ruby/Mutant:
 Will not be forced to get a mutant subscription.
@@ -74,7 +78,7 @@ Will not be forced to get a mutant subscription.
 What happens if my subscription lapses?
 --------------------------------------
 
-If your credit card cannot be charged, even after retries: The subscription will be
+If your automated payment fails, even after retries: The subscription will be
 considered inactive and you lose the right to run mutant.
 
 **Please note that pricing can change**. Once you purchase a subscription, you get that price
@@ -128,7 +132,7 @@ Schirp DSO LTD only collects enough customer information to provide its services
   * Tax-ID
   * Contact email address (if different from billing address)
 
-Mutant runs exclusively on your developers machines. Or your CI.
+Mutant runs exclusively on your developers' machines. Or your CI.
 
 
 Should mutant gain more features that would enable features such as distributed
@@ -141,7 +145,7 @@ Customer information is never shared or sold to anyone.
 * Stripe for subscription, credit card and SEPA direct debits.
 * Transferwise for receiving SEPA and ACH transfers.
 
-At no point in time Schirp DSO LTD gets access to your source code, your customers data
+At no point in time Schirp DSO LTD gets access to your source code, your customers' data
 or other sensitive material.
 
 Legal Entity

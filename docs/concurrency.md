@@ -6,7 +6,7 @@ to one process for each core on your system. You can control the
 number of processes created using the `-j/--jobs` argument.
 
 Mutant forks a new process for each mutation to be tested to prevent side
-affects in your specs and the lack of thread safety in integrations from
+effects in your specs and the lack of thread safety in integrations from
 impacting the results.
 
 Database
