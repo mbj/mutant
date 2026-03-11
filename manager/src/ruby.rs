@@ -424,11 +424,22 @@ impl Runtime {
     }
 
     fn run_container(self, base_image: &'static str, command: Command) -> RunResult {
-        let backend = ociman::backend::resolve::auto().unwrap_or_else(|error| {
-            panic!("Failed to resolve container backend: {}", error);
-        });
+        let runtime = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .expect("Failed to create tokio runtime");
 
-        let image = self.ensure_image(&backend, base_image);
+        runtime.block_on(self.run_container_async(base_image, command))
+    }
+
+    async fn run_container_async(self, base_image: &str, command: Command) -> RunResult {
+        let backend = ociman::backend::resolve::auto()
+            .await
+            .unwrap_or_else(|error| {
+                panic!("Failed to resolve container backend: {}", error);
+            });
+
+        let image = self.ensure_image(&backend, base_image).await;
         let config = Self::build_command_config(command);
 
         if config.arguments.is_empty() {
@@ -442,13 +453,16 @@ impl Runtime {
         let source_path = current_directory.join(config.working_dir);
         let mount_spec = format!("type=bind,source={},target=/app", source_path.display());
 
+        let bundle_path: cmd_proc::EnvVariableName = "BUNDLE_PATH".parse().unwrap();
+
         let result = ociman::Definition::new(backend.clone(), image.clone())
             .mount(mount_spec)
             .workdir("/app")
-            .environment_variable("BUNDLE_PATH", "/app/vendor/bundle")
+            .environment_variable(bundle_path, "/app/vendor/bundle")
             .remove()
             .arguments(config.arguments.iter().cloned())
-            .run();
+            .run()
+            .await;
 
         match result {
             Ok(()) => RunResult::Success,
@@ -459,7 +473,7 @@ impl Runtime {
         }
     }
 
-    fn ensure_image(&self, backend: &ociman::Backend, base_image: &str) -> ociman::Reference {
+    async fn ensure_image(&self, backend: &ociman::Backend, base_image: &str) -> ociman::Reference {
         let dockerfile = format!(
             "FROM {}\nRUN apk add --no-cache git build-base yaml-dev\n",
             base_image
@@ -470,7 +484,7 @@ impl Runtime {
         let build_definition =
             ociman::BuildDefinition::from_instructions_hash(backend, name, &dockerfile);
 
-        build_definition.build_if_absent()
+        build_definition.build_if_absent().await
     }
 
     fn build_command_config(command: Command) -> CommandConfig {
