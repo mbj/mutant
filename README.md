@@ -15,12 +15,18 @@ Copilot, Claude, and ChatGPT generate code faster than humans can review it. The
 write tests that pass. But passing tests aren't the same as *meaningful* tests.
 
 Mutant is mutation testing for Ruby. It systematically modifies your code and verifies your
-tests actually catch each change. When a mutation survives, you've found either:
-
-- **Dead code** - the AI over-engineered something you can delete
-- **A blind spot** - the AI forgot to test a behavior that matters
+tests actually catch each change.
 
 The more code AI writes for you, the more you need verification you can trust.
+
+## What is an Alive Mutation?
+
+Each surviving (alive) mutation is a call to action with exactly one of two options:
+
+- **Keep the mutated code** - your tests already specify the correct semantics, and the
+  original code is redundant. Accept the mutation as a simplification.
+- **Add the missing test** - the original code is correct, but the tests don't verify the
+  behavior the mutation removed.
 
 ## Author
 

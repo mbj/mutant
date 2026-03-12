@@ -39,6 +39,11 @@ subdirectory of the source.
 The result of applying a mutation operator to the AST of a subject. A mutation represents a
 hypothesis that ideally gets falsified by the tests.
 
+## Alive Mutation
+
+A mutation that was not killed by the test suite. See [What is an Alive Mutation?](/README.md#what-is-an-alive-mutation)
+for how to act on alive mutations.
+
 ## Insertion
 
 The process of inserting a mutation into the runtime environment.

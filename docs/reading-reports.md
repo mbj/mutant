@@ -71,4 +71,7 @@ Mutation output is grouped by selection groups. Each group contains three sectio
    -----------------------
    ```
 
+See [What is an Alive Mutation?](/README.md#what-is-an-alive-mutation) for how to act on each
+surviving mutation in the report.
+
 At this time no machine readable output exists in the opensourced versions of mutant.

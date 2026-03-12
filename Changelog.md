@@ -1,3 +1,15 @@
+# v0.15.1 2026-03-12
+
+* Add alive mutation explanation to CLI report output.
+  When alive mutations are present, the report now prints guidance
+  explaining the two actions: keep the mutated code or add the missing test.
+  This is helpful to improve agent behavior when processing mutant reports.
+
+* Add alive mutation explanation to README and documentation.
+
+* Remove mutant rust wrapper stub. The rust wrapper is canceled in favor
+  of a spiritual successor to mutant.
+
 # v0.15.0 2026-02-26
 
 * Add operator mutations.
