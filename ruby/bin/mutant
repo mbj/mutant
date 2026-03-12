@@ -1,11 +1,4 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Dispatcher that selects between mutant-ruby and mutant-rust
-# based on MUTANT_RUST environment variable.
-#
-# See RUST.md for documentation.
-
-fail 'MUTANT_RUST=1 is not yet supported via gem installation' if ENV['MUTANT_RUST']
-
 exec('mutant-ruby', *ARGV)
