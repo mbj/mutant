@@ -5,7 +5,7 @@ module Mutant
     class Sequence < self
       include Anima.new(:reporters)
 
-      %i[warn progress report start].each do |name|
+      %i[warn progress report start test_start test_report test_progress].each do |name|
         define_method(name) do |value|
           reporters.each do |reporter|
             reporter.public_send(name, value)

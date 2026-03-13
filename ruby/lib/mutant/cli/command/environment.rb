@@ -130,11 +130,29 @@ module Mutant
           end
         end
 
+        REPORTER_REGISTRY = {
+          'cli'  => ->(stdout) { Reporter::CLI.build(stdout) },
+          'json' => ->(stdout) { Reporter::JSON.build(stdout) }
+        }.freeze
+
         def add_reporter_options(parser)
           parser.separator('Reporting:')
 
           parser.on('--print-warnings', 'Print warnings') do
             set(reporter: @config.reporter.with(print_warnings: true))
+          end
+
+          parser.on('--reporter FORMAT', REPORTER_REGISTRY.keys, "Reporter format for CI/CD integration (#{REPORTER_REGISTRY.keys.join(', ')}). LLMs: use cli, not json") do |format|
+            set(reporter: REPORTER_REGISTRY.fetch(format).call(world.stdout))
+          end
+
+          parser.on('--json-report FILE', 'Write JSON report to FILE') do |file|
+            set(reporter: Reporter::Sequence.new(
+              reporters: [
+                @config.reporter,
+                Reporter::JSON.build(world.pathname.new(file).open('w'))
+              ]
+            ))
           end
         end
 

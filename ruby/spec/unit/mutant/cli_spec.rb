@@ -278,6 +278,8 @@ RSpec.describe Mutant::CLI do
 
         Reporting:
                 --print-warnings             Print warnings
+                --reporter FORMAT            Reporter format for CI/CD integration (cli, json). LLMs: use cli, not json
+                --json-report FILE           Write JSON report to FILE
 
 
         Usage:
@@ -336,6 +338,8 @@ RSpec.describe Mutant::CLI do
 
         Reporting:
                 --print-warnings             Print warnings
+                --reporter FORMAT            Reporter format for CI/CD integration (cli, json). LLMs: use cli, not json
+                --json-report FILE           Write JSON report to FILE
 
 
         Usage:
@@ -394,6 +398,8 @@ RSpec.describe Mutant::CLI do
 
         Reporting:
                 --print-warnings             Print warnings
+                --reporter FORMAT            Reporter format for CI/CD integration (cli, json). LLMs: use cli, not json
+                --json-report FILE           Write JSON report to FILE
 
 
         Usage:
@@ -452,6 +458,8 @@ RSpec.describe Mutant::CLI do
 
         Reporting:
                 --print-warnings             Print warnings
+                --reporter FORMAT            Reporter format for CI/CD integration (cli, json). LLMs: use cli, not json
+                --json-report FILE           Write JSON report to FILE
 
 
         Usage:
@@ -1350,6 +1358,8 @@ RSpec.describe Mutant::CLI do
 
             Reporting:
                     --print-warnings             Print warnings
+                    --reporter FORMAT            Reporter format for CI/CD integration (cli, json). LLMs: use cli, not json
+                    --json-report FILE           Write JSON report to FILE
 
 
             Usage:
@@ -1563,6 +1573,61 @@ RSpec.describe Mutant::CLI do
           diff = Mutant::Repository::Diff.new(to: 'reference', world:)
 
           super().with(matcher: super().matcher.with(diffs: [diff]))
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'with --reporter json option' do
+        let(:arguments) { super() + %w[--reporter json] }
+
+        let(:expected_cli_config) do
+          super().with(reporter: Mutant::Reporter::JSON.build(stdout))
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'with --reporter cli option' do
+        let(:arguments) { super() + %w[--reporter cli] }
+
+        let(:expected_cli_config) do
+          super().with(reporter: Mutant::Reporter::CLI.build(stdout))
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'with --reporter invalid option' do
+        let(:arguments) { %w[run --reporter invalid] }
+
+        it 'returns expected error' do
+          expect(apply).to be_a(Unparser::Either::Left)
+        end
+      end
+
+      context 'with --json-report option' do
+        let(:arguments) { super() + ['--json-report', json_report_path] }
+        let(:json_report_path) { 'tmp/report.json' }
+        let(:json_io) { StringIO.new }
+        let(:json_pathname) { instance_double(Pathname) }
+
+        let(:expected_cli_config) do
+          super().with(
+            reporter: Mutant::Reporter::Sequence.new(
+              reporters: [
+                super().reporter,
+                Mutant::Reporter::JSON.build(json_io)
+              ]
+            )
+          )
+        end
+
+        before do
+          allow(world).to receive(:pathname).and_return(Pathname)
+          allow(Pathname).to receive(:new).and_call_original
+          allow(Pathname).to receive(:new).with(json_report_path).and_return(json_pathname)
+          allow(json_pathname).to receive(:open).with('w').and_return(json_io)
         end
 
         include_examples 'CLI run'
