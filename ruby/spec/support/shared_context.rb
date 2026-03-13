@@ -140,6 +140,9 @@ module SharedContext
         context:        subject_a_context,
         node:           subject_a_node,
         source:         Unparser.unparse(subject_a_node),
+        source_path:    Pathname.new('subject-a.rb'),
+        source_line:    1,
+        source_lines:   1..1,
         identification: 'subject-a'
       )
     end
