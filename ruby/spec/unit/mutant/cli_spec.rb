@@ -685,7 +685,7 @@ RSpec.describe Mutant::CLI do
       let(:env) do
         config = bootstrap_config.with(
           jobs:     nil,
-          reporter: Mutant::Reporter::CLI.build(stdout)
+          reporter: Mutant::Reporter::CLI.build(stderr)
         )
 
         Mutant::Env.empty(world, config)
@@ -1188,6 +1188,7 @@ RSpec.describe Mutant::CLI do
               Mutant::Env.empty(world, bootstrap_config).inspect
             ],
             [
+              :stderr,
               :write,
               expected_message
             ]

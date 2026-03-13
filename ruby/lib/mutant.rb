@@ -366,7 +366,7 @@ module Mutant
       jobs:                  nil,
       matcher:               Matcher::Config::DEFAULT,
       mutation:              Mutation::Config::EMPTY,
-      reporter:              Reporter::CLI.build(WORLD.stdout),
+      reporter:              Reporter::CLI.build(WORLD.stderr),
       requires:              EMPTY_ARRAY,
       usage:                 Usage::Unknown.new
     )
