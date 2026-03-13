@@ -108,7 +108,7 @@ Mutant is supported on Linux and macOS.
 
 **Free for open source.** Use `--usage opensource` for public repositories.
 
-**Commercial use** requires a subscription ($90/month per developer).
+**Commercial use** requires a subscription ($30/month or $250/year per developer).
 **Enterprise** — [reach out directly](mailto:info@schirp-dso.com?subject=Mutant%20Enterprise).
 See [commercial licensing](/docs/commercial.md) for pricing and details.
 
