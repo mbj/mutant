@@ -141,9 +141,3 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 
 * [Contributors](https://github.com/mbj/mutant/graphs/contributors)
 * The `mutant-minitest` integration was sponsored by [Arkency](https://arkency.com/)
-
-## Rust Implementation
-
-Parts of Mutant are being incrementally rewritten in Rust for improved performance.
-This is currently **opt-in** and requires no changes for existing users. See [RUST.md](RUST.md)
-for details.
