@@ -1,5 +1,4 @@
 use clap::{Parser, Subcommand};
-use std::fs;
 use std::num::NonZeroU32;
 
 mod ruby;
@@ -38,18 +37,13 @@ fn main() -> ruby::RunResult {
     let cli = Cli::parse();
 
     match cli.command {
-        Command::Release => {
-            prepare();
-            release()
-        }
+        Command::Release => release(),
         Command::Ruby {
             ruby_runtime,
             rerun,
             jobs,
             command,
         } => {
-            prepare();
-
             let runs = rerun.map(|n| n.get()).unwrap_or(1);
 
             let jobs = jobs.map(|n| n.get()).unwrap_or_else(|| {
@@ -68,6 +62,11 @@ fn main() -> ruby::RunResult {
 }
 
 fn release() -> ruby::RunResult {
+    let version = std::fs::read_to_string("ruby/VERSION")
+        .expect("Failed to read ruby/VERSION")
+        .trim()
+        .to_string();
+
     const GEMSPECS: &[&str] = &[
         "mutant.gemspec",
         "mutant-rspec.gemspec",
@@ -78,7 +77,7 @@ fn release() -> ruby::RunResult {
         if !gem_build(gemspec) {
             return ruby::RunResult::Failure;
         }
-        if !gem_push(gemspec) {
+        if !gem_push(gemspec, &version) {
             return ruby::RunResult::Failure;
         }
     }
@@ -96,8 +95,8 @@ fn gem_build(gemspec: &str) -> bool {
         .success()
 }
 
-fn gem_push(gemspec: &str) -> bool {
-    let gem_file = gemspec.replace(".gemspec", &format!("-{}.gem", env!("CARGO_PKG_VERSION")));
+fn gem_push(gemspec: &str, version: &str) -> bool {
+    let gem_file = gemspec.replace(".gemspec", &format!("-{}.gem", version));
     log::info!("Pushing {}", gem_file);
     std::process::Command::new("gem")
         .args(["push", &gem_file])
@@ -105,14 +104,4 @@ fn gem_push(gemspec: &str) -> bool {
         .status()
         .expect("Failed to run gem push")
         .success()
-}
-
-fn prepare() {
-    fs::write("ruby/VERSION", format!("{}\n", env!("CARGO_PKG_VERSION"))).unwrap_or_else(|error| {
-        panic!("Failed to write ruby/VERSION: {}", error);
-    });
-
-    fs::copy("LICENSE", "ruby/LICENSE").unwrap_or_else(|error| {
-        panic!("Failed to copy LICENSE to ruby/LICENSE: {}", error);
-    });
 }

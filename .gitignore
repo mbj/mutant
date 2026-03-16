@@ -1,5 +1,4 @@
 /.bundle
 /Cargo.lock
 /ruby/tmp
-/ruby/vendor
 /target

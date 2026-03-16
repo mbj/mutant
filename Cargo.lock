@@ -242,7 +242,7 @@ checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
 
 [[package]]
 name = "manager"
-version = "0.15.0"
+version = "0.0.1"
 dependencies = [
  "clap",
  "cmd-proc",
