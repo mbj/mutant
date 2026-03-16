@@ -60,14 +60,13 @@ module Mutant
       end
 
       # rubocop:disable Metrics/MethodLength
-      # mutant:disable (3.2 specific mutation)
       def parse_line(root, line)
         match = FORMAT.match(line)
 
         if match
           Either::Right.new(
             Path.new(
-              path:  root.join(Util.one(match.captures)),
+              path:  root.join(Util.one(match)),
               to:,
               world:
             )
