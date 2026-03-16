@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
 
   gem.metadata['rubygems_mfa_required'] = 'true'
 
-  gem.required_ruby_version = '>= 3.2'
+  gem.required_ruby_version = '>= 3.3'
 
   gem.add_dependency('mutant', "= #{gem.version}")
   gem.add_dependency('rspec-core', '>= 3.8.0', '< 5.0.0')

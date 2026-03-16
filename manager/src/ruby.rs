@@ -202,8 +202,6 @@ impl RerunConfig {
 #[derive(Clone, ValueEnum)]
 pub enum Runtime {
     Host,
-    #[value(name = "container-3.2")]
-    Ruby32,
     #[value(name = "container-3.3")]
     Ruby33,
     #[value(name = "container-3.4")]
@@ -324,7 +322,6 @@ impl Runtime {
             Command::QuickStartVerify => self.run_quick_start_verify(),
             _ => match self {
                 Self::Host => self.run_host(command, rerun_config),
-                Self::Ruby32 => self.run_container("docker.io/library/ruby:3.2-alpine", command),
                 Self::Ruby33 => self.run_container("docker.io/library/ruby:3.3-alpine", command),
                 Self::Ruby34 => self.run_container("docker.io/library/ruby:3.4-alpine", command),
                 Self::Ruby40 => self.run_container("docker.io/library/ruby:4.0-alpine", command),
