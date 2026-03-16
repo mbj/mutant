@@ -10,7 +10,7 @@ jobs:
     name: Base steps
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Check Whitespace
       run: git diff --check -- HEAD~1
   rust-build:
@@ -30,8 +30,8 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/cache@v4
+    - uses: actions/checkout@v6
+    - uses: actions/cache@v5
       with:
         path: |
           target/
@@ -50,7 +50,7 @@ jobs:
       run: cargo build --release --target ${{ matrix.target }}
     - name: Run clippy
       run: cargo clippy --release --target ${{ matrix.target }}
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: manager-${{ matrix.target }}
         path: target/${{ matrix.target }}/release/manager
@@ -59,12 +59,6 @@ jobs:
     needs: rust-build
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
-    # Workaround for Bundler 4.x failing when attempting to install gems to the
-    # system path on GitHub Actions Ubuntu runners. The runner's gem directory is
-    # world-writable without the sticky bit, triggering Bundler's security check.
-    # See: https://github.com/ruby/rubygems/issues/7983
-    env:
-      BUNDLE_PATH: vendor/ruby
     strategy:
       fail-fast: false
       matrix:
@@ -97,18 +91,22 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v8
       with:
         name: manager-${{ matrix.target }}
         path: ./bin
     - run: chmod +x ./bin/manager
-    - run: ./bin/manager ruby prepare
+    # Workaround for Bundler 4.x security check on world-writable GHA runner directories.
+    # See: https://github.com/ruby/rubygems/issues/7983
+    - if: startsWith(matrix.os, 'ubuntu')
+      run: mkdir -p /opt/hostedtoolcache/Ruby && chmod -R o-w /opt/hostedtoolcache/Ruby
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        cache-version: ${{ hashFiles('ruby/*.gemspec') }}
         working-directory: ./ruby
     - run: ./bin/manager ruby ${{ matrix.execution }}
