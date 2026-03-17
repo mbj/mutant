@@ -36,7 +36,6 @@ matcher:
   - Mutant::Mutator::Node::Kwargs#emit_argument_mutations  # 3 alive
   - Mutant::Mutator::Node::Kwargs#forbid_argument?  # 9 alive
   - Mutant::Mutator::Node::ProcargZero#dispatch  # 5 alive
-  - Mutant::Mutator::Node::Send#emit_receiver_selector_mutations  # 1 alive
   - Mutant::Mutator::Node#mutate_single_child  # 30 alive
   - Mutant::Parallel::Driver#status  # 1 alive
   - Mutant::Reporter::CLI::Format::Progressive#start  # 10 alive
