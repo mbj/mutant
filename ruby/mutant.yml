@@ -37,7 +37,6 @@ matcher:
   - Mutant::Mutator::Node::Kwargs#forbid_argument?  # 9 alive
   - Mutant::Mutator::Node::ProcargZero#dispatch  # 5 alive
   - Mutant::Mutator::Node#mutate_single_child  # 30 alive
-  - Mutant::Parallel::Driver#status  # 1 alive
   - Mutant::Reporter::CLI::Format::Progressive#start  # 10 alive
   - Mutant::Reporter::CLI::Format::Progressive#test_start  # 11 alive
   - Mutant::Reporter::CLI::Printer::Config#run  # 3 alive
