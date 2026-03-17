@@ -38,8 +38,6 @@ matcher:
   # thin wrappers delegating to format(); tests verify output not control flow
   - Mutant::Reporter::CLI::Format::Progressive#start  # 10 alive
   - Mutant::Reporter::CLI::Format::Progressive#test_start  # 11 alive
-  # undef_method before define_method is redundant; define_method replaces
-  - Mutant::RequireHighjack.call  # 8 alive
   # tests only cover 1-2 level nesting; deeper nesting needed to kill index/take mutations
   - Mutant::Scope#match_expressions  # 38 alive
   # test doesn't exercise re-inclusion; zombify is idempotent so @zombified check is redundant
