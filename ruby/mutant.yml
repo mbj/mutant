@@ -40,5 +40,5 @@ matcher:
   - Mutant::Reporter::CLI::Format::Progressive#test_start  # 11 alive
   # tests only cover 1-2 level nesting; deeper nesting needed to kill index/take mutations
   - Mutant::Scope#match_expressions  # 38 alive
-  # test doesn't exercise re-inclusion; zombify is idempotent so @zombified check is redundant
+  # unkillable: Zombifier is mutant infrastructure in zombie mode; mutations corrupt zombification, crashing the killfork
   - Mutant::Zombifier#include?  # 9 alive
