@@ -108,7 +108,8 @@ module Mutant
               case line[0]
               when '+' then Unparser::Color::GREEN.format(line)
               when '-' then Unparser::Color::RED.format(line)
-              else          line
+              else
+                line
               end
             end.join
           end
