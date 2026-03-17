@@ -37,7 +37,6 @@ matcher:
   - Mutant::Mutator::Node#mutate_single_child  # 30 alive
   - Mutant::Reporter::CLI::Format::Progressive#start  # 10 alive
   - Mutant::Reporter::CLI::Format::Progressive#test_start  # 11 alive
-  - Mutant::Reporter::CLI::Printer::Config#run  # 3 alive
   - Mutant::RequireHighjack.call  # 8 alive
   - Mutant::Scope#match_expressions  # 38 alive
   - Mutant::Scope#nesting  # 18 alive
