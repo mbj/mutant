@@ -188,4 +188,48 @@ RSpec.describe Mutant::World do
       end
     end
   end
+
+  describe '#parse_json' do
+    let(:recorder) { instance_double(Mutant::Segment::Recorder) }
+    let(:recorded_names) { [] }
+
+    subject { super().with(json: JSON, recorder:) }
+
+    before do
+      allow(recorder).to receive(:record) do |name, &block|
+        recorded_names << name
+        block.call
+      end
+    end
+
+    def apply
+      subject.parse_json(input)
+    end
+
+    context 'with valid JSON' do
+      let(:input) { '{"key":"value"}' }
+
+      it 'returns parsed hash' do
+        expect(apply).to eql(right('key' => 'value'))
+      end
+
+      it 'records with :json_parse segment name' do
+        apply
+        expect(recorded_names).to eql([:json_parse])
+      end
+    end
+
+    context 'with invalid JSON' do
+      let(:input) { 'not json' }
+
+      it 'returns left with error' do
+        expect(apply).to be_a(Mutant::Either::Left)
+      end
+
+      it 'records with :json_parse segment name' do
+        apply
+        expect(recorded_names).to eql([:json_parse])
+      end
+    end
+  end
 end

@@ -1,4 +1,4 @@
-# v1.0.0 2026-03-16
+# v1.0.0 2026-03-18
 
 * Add machine-readable session recording.
 
@@ -7,13 +7,18 @@
 
 * Add `mutant session` CLI subcommands.
 
-  * `mutant session list` — list past sessions with timestamp, version, and
-    subject count.
-  * `mutant session show [<session-id>]` — reprint the full report from a
-    stored session. Defaults to the most recent session when no ID is given.
+  * `mutant session list` — list past sessions sorted by most recent first.
+    Shows alive count, mutations, subjects, runtime, and killtime.
+  * `mutant session show` — reprint the full report from a stored session.
+    Defaults to the most recent session. Use `--session-id` to select a
+    specific session.
+  * `mutant session subject` — list subjects with alive/total mutation counts.
+    Pass a subject expression (e.g. `Foo::Bar#baz`) to show alive mutation
+    details for that specific subject.
   * `mutant session gc [--keep=N]` — remove incompatible and old sessions.
+  * All session commands accept `--session-id UUID` to operate on a specific
+    session instead of the latest.
 
-* Add `securerandom` (>= 0.3) as a dependency.
 
 # v0.15.1 2026-03-12
 

@@ -50,7 +50,8 @@ module Mutant
             This is typically a problem of your specs not passing unmutated.
           MESSAGE
 
-          SEPARATOR = '-----------------------'
+          SEPARATOR    = '-----------------------'
+          STATS_FORMAT = 'tests: %d, runtime: %.2fs, killtime: %.2fs'
 
           private_constant(*constants(false))
 
@@ -59,22 +60,36 @@ module Mutant
           # @return [undefined]
           def run
             status(object.identification)
-            tests.each do |test|
-              puts("- #{test.identification}")
-            end
+            puts(STATS_FORMAT % [tests.length, object.runtime, object.killtime])
             uncovered_results.each do |coverage_result|
               print_mutation_result(coverage_result.mutation_result)
             end
+            print_selected_tests
           end
 
         private
 
+          def print_selected_tests
+            if tests.empty?
+              puts('no selected tests')
+            else
+              puts("selected tests (#{tests.length}):")
+              tests.each do |test|
+                puts("- #{test.identification}")
+              end
+            end
+          end
+
           def print_mutation_result(mutation_result)
             puts(mutation_result.mutation_identification)
             puts(SEPARATOR)
-            visit(IsolationResult, mutation_result.isolation_result)
+            visit(IsolationResult, mutation_result.isolation_result) if show_isolation_logs?(mutation_result)
             __send__(MAP.fetch(mutation_result.mutation_type), mutation_result)
             puts(SEPARATOR)
+          end
+
+          def show_isolation_logs?(mutation_result)
+            display_config.isolation_logs || !mutation_result.mutation_type.eql?('evil')
           end
 
           # rubocop:disable Metrics/MethodLength
@@ -101,17 +116,6 @@ module Mutant
 
           def neutral_details(mutation_result)
             info(NEUTRAL_MESSAGE, object.node.inspect, mutation_result.mutation_source)
-          end
-
-          def colorize_diff(raw_diff)
-            raw_diff.lines.map do |line|
-              case line[0]
-              when '+' then Unparser::Color::GREEN.format(line)
-              when '-' then Unparser::Color::RED.format(line)
-              else
-                line
-              end
-            end.join
           end
 
         end # SubjectResult
