@@ -26,9 +26,6 @@ matcher:
   - Mutant::Mutator::Node::BlockPass#dispatch
   # mutation crashes killfork in zombie mode; Timer#now is used by mutant infrastructure
   - Mutant::Timer#now
-  # no meta spec exercises :kwargs node type; forbid_argument? never returns true in tests
-  - Mutant::Mutator::Node::Kwargs#emit_argument_mutations  # 3 alive
-  - Mutant::Mutator::Node::Kwargs#forbid_argument?  # 9 alive
   # unkillable: mutate_child on arg nodes within procarg0 produces no observable mutations
   - Mutant::Mutator::Node::ProcargZero#dispatch  # 5 alive
   # unkillable: Zombifier is mutant infrastructure in zombie mode; mutations corrupt zombification, crashing the killfork
