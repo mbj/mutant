@@ -1,3 +1,20 @@
+# v1.0.0 2026-03-16
+
+* Add machine-readable session recording.
+
+  Mutant now writes a JSON result file to `.mutant/results/` after every run.
+  Past sessions can be recalled without re-running mutant.
+
+* Add `mutant session` CLI subcommands.
+
+  * `mutant session list` — list past sessions with timestamp, version, and
+    subject count.
+  * `mutant session show [<session-id>]` — reprint the full report from a
+    stored session. Defaults to the most recent session when no ID is given.
+  * `mutant session gc [--keep=N]` — remove incompatible and old sessions.
+
+* Add `securerandom` (>= 0.3) as a dependency.
+
 # v0.15.1 2026-03-12
 
 * Add alive mutation explanation to CLI report output.

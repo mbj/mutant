@@ -26,10 +26,10 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
 
     context 'on exception isolation error' do
       let(:exception) do
-        Mutant::Isolation::Exception.new(
+        Mutant::Result::Exception.new(
           backtrace:      %w[first last],
           message:        'Some Exception Message',
-          original_class: ArgumentError
+          original_class: 'ArgumentError'
         )
       end
 
@@ -66,36 +66,36 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
 
     context 'on unsuccessful process status' do
       let(:process_status) do
-        instance_double(Process::Status, 'unsuccessful status', success?: false)
+        Mutant::Result::ProcessStatus.new(exitstatus: 1)
       end
 
       it_reports <<~'STR'
         Killfork exited nonzero. Its result (if any) was ignored.
         Process status:
-        #<InstanceDouble(Process::Status) "unsuccessful status">
+        #<Mutant::Result::ProcessStatus exitstatus=1>
       STR
     end
 
     context 'on successful process status' do
       let(:process_status) do
-        instance_double(Process::Status, 'successful status', success?: true)
+        Mutant::Result::ProcessStatus.new(exitstatus: 0)
       end
 
       it_reports <<~'STR'
-        Killfork: #<InstanceDouble(Process::Status) "successful status">
+        Killfork: #<Mutant::Result::ProcessStatus exitstatus=0>
       STR
     end
 
     context 'on timeout while process exits successful' do
       let(:process_status) do
-        instance_double(Process::Status, 'successful status', success?: true)
+        Mutant::Result::ProcessStatus.new(exitstatus: 0)
       end
 
       let(:timeout) { 2.0 }
 
       it_reports <<~'STR'
         Mutation analysis ran into the configured timeout of 2 seconds.
-        Killfork: #<InstanceDouble(Process::Status) "successful status">
+        Killfork: #<Mutant::Result::ProcessStatus exitstatus=0>
       STR
     end
 

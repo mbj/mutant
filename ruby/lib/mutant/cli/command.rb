@@ -220,8 +220,22 @@ module Mutant
         "#{full_name}: #{message}\n\n#{parser}"
       end
 
-      def print(message)
-        world.stdout.puts(message)
+      def output
+        world.stdout
+      end
+
+      def puts(message)
+        output.puts(message)
+      end
+
+      alias_method :print, :puts
+
+      def parse_remaining_arguments(arguments)
+        if arguments.empty?
+          Either::Right.new(self)
+        else
+          Either::Left.new("unexpected arguments: #{arguments.join(' ')}")
+        end
       end
     end # Command
     # rubocop:enable Metrics/ClassLength

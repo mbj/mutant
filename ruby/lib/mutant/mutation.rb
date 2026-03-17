@@ -90,15 +90,6 @@ module Mutant
     # @return [String]
     def original_source = subject.source
 
-    # Test if mutation is killed by test reports
-    #
-    # @param [Result::Test] test_result
-    #
-    # @return [Boolean]
-    def self.success?(test_result)
-      self::TEST_PASS_SUCCESS.equal?(test_result.passed)
-    end
-
     # Insert mutated node
     #
     # @param kernel [Kernel]
@@ -126,25 +117,17 @@ module Mutant
 
     # Evil mutation that should case mutations to fail tests
     class Evil < self
-      SYMBOL            = 'evil'
-      TEST_PASS_SUCCESS = false
-
+      SYMBOL = 'evil'
     end # Evil
 
     # Neutral mutation that should not cause mutations to fail tests
     class Neutral < self
-
-      SYMBOL            = 'neutral'
-      TEST_PASS_SUCCESS = true
-
+      SYMBOL = 'neutral'
     end # Neutral
 
     # Noop mutation, special case of neutral
     class Noop < Neutral
-
-      SYMBOL            = 'noop'
-      TEST_PASS_SUCCESS = true
-
+      SYMBOL = 'noop'
     end # Noop
 
   end # Mutation

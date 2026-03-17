@@ -18,6 +18,7 @@ module Mutant
         env
           .record(:analysis) { run_driver(reporter, async_driver(env)) }
           .tap { |result| env.record(:report) { reporter.report(result) } }
+          .tap { |result| Result::JSONWriter.new(env:, result:).call }
       end
       private_class_method :run_mutation_analysis
 

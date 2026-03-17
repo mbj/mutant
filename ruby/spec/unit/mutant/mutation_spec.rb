@@ -199,51 +199,6 @@ RSpec.describe Mutant::Mutation do
     it_behaves_like 'an idempotent method'
   end
 
-  describe '.success?' do
-    subject { mutation_class.success?(test_result) }
-
-    let(:test_result) do
-      instance_double(
-        Mutant::Result::Test,
-        passed:
-      )
-    end
-
-    context 'on mutation with positive pass expectation' do
-      context 'when Result::Test#passed equals expectation' do
-        let(:passed) { true }
-
-        it { is_expected.to be(true) }
-      end
-
-      context 'when Result::Test#passed NOT equals expectation' do
-        let(:passed) { false }
-
-        it { is_expected.to be(false) }
-      end
-    end
-
-    context 'on mutation with negative pass expectation' do
-      let(:mutation_class) do
-        Class.new(super()) do
-          const_set(:TEST_PASS_SUCCESS, false)
-        end
-      end
-
-      context 'when Result::Test#passed equals expectation' do
-        let(:passed) { true }
-
-        it { is_expected.to be(false) }
-      end
-
-      context 'when Result::Test#passed NOT equals expectation' do
-        let(:passed) { false }
-
-        it { is_expected.to be(true) }
-      end
-    end
-  end
-
   describe '#diff' do
     def apply
       object.diff

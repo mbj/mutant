@@ -1,15 +1,16 @@
 PATH
   remote: ..
   specs:
-    mutant (0.15.1)
+    mutant (1.0.0)
       diff-lcs (>= 1.6, < 3)
       irb (~> 1.15)
       parser (~> 3.3.10)
       regexp_parser (~> 2.10)
+      securerandom (>= 0.3)
       sorbet-runtime (~> 0.6.0)
       unparser (~> 0.8.2)
-    mutant-rspec (0.15.1)
-      mutant (= 0.15.1)
+    mutant-rspec (1.0.0)
+      mutant (= 1.0.0)
       rspec-core (>= 3.8.0, < 5.0.0)
 
 GEM
@@ -62,6 +63,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.7)
+    securerandom (0.4.1)
     sorbet-runtime (0.6.12956)
     stringio (3.2.0)
     thread_safe (0.3.6)

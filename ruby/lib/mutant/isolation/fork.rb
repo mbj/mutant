@@ -132,11 +132,7 @@ module Mutant
         def load_result(result_fragments)
           @value = world.marshal.load(result_fragments.join)
         rescue ArgumentError => exception
-          @exception = Exception.new(
-            backtrace:      exception.backtrace,
-            message:        exception.message,
-            original_class: exception.class
-          )
+          @exception = Mutant::Result::Exception.from_exception(exception)
         end
 
         # rubocop:disable Metrics/MethodLength
@@ -197,7 +193,7 @@ module Mutant
         end
 
         def handle_status(status)
-          @process_status = status
+          @process_status = Mutant::Result::ProcessStatus.from_process_status(status)
         end
 
         def peek_child

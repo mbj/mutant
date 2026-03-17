@@ -22,12 +22,20 @@ RSpec.describe Mutant::Isolation::Fork do
   let(:result_writer)     { instance_double(IO, :result_writer)         }
   let(:timeout)           { nil                                         }
 
+  let(:raw_child_status_success) do
+    instance_double(Process::Status, :success, exitstatus: 0)
+  end
+
+  let(:raw_child_status_error) do
+    instance_double(Process::Status, :error, exitstatus: 1)
+  end
+
   let(:child_status_success) do
-    instance_double(Process::Status, :success, success?: true)
+    Mutant::Result::ProcessStatus.new(exitstatus: 0)
   end
 
   let(:child_status_error) do
-    instance_double(Process::Status, :error, success?: false)
+    Mutant::Result::ProcessStatus.new(exitstatus: 1)
   end
 
   let(:world) { fake_world }
@@ -204,7 +212,7 @@ RSpec.describe Mutant::Isolation::Fork do
           close(result_writer),
           *read_fragments,
           load_success,
-          child_nowait(child_status_success)
+          child_nowait(raw_child_status_success)
         ]
       end
 
@@ -330,7 +338,7 @@ RSpec.describe Mutant::Isolation::Fork do
         end
 
         context 'when child terminates immediately' do
-          let(:post_reads) { [child_nowait(child_status_success)] }
+          let(:post_reads) { [child_nowait(raw_child_status_success)] }
 
           it 'returns success result' do
             verify_events do
@@ -357,7 +365,7 @@ RSpec.describe Mutant::Isolation::Fork do
                 child_nowait(nil),
                 timer(3.1),
                 sleep,
-                child_nowait(child_status_success)
+                child_nowait(raw_child_status_success)
               ]
             end
 
@@ -382,7 +390,7 @@ RSpec.describe Mutant::Isolation::Fork do
                 child_nowait(nil),
                 timer(4.0),
                 kill,
-                child_wait(child_status_error)
+                child_wait(raw_child_status_error)
               ]
             end
 
@@ -419,7 +427,7 @@ RSpec.describe Mutant::Isolation::Fork do
             close(result_writer),
             *read_fragments,
             kill,
-            child_wait(child_status_success)
+            child_wait(raw_child_status_success)
           ]
         end
 
@@ -453,7 +461,7 @@ RSpec.describe Mutant::Isolation::Fork do
             close(result_writer),
             *read_fragments,
             kill,
-            child_wait(child_status_success)
+            child_wait(raw_child_status_success)
           ]
         end
 
@@ -491,7 +499,7 @@ RSpec.describe Mutant::Isolation::Fork do
               exception:
             }
           },
-          child_nowait(child_status_success)
+          child_nowait(raw_child_status_success)
         ]
       end
 
@@ -500,10 +508,10 @@ RSpec.describe Mutant::Isolation::Fork do
           expect(apply).to eql(
             described_class::Result.new(
               log:            log_fragment,
-              exception:      Mutant::Isolation::Exception.new(
+              exception:      Mutant::Result::Exception.new(
                 backtrace:      exception.backtrace,
                 message:        exception.message,
-                original_class: exception.class
+                original_class: exception.class.name
               ),
               process_status: child_status_success,
               timeout:        nil,
@@ -526,7 +534,7 @@ RSpec.describe Mutant::Isolation::Fork do
             load_success,
             child_nowait(nil),
             sleep,
-            child_nowait(child_status_success)
+            child_nowait(raw_child_status_success)
           ]
         end
 
@@ -555,7 +563,7 @@ RSpec.describe Mutant::Isolation::Fork do
           close(result_writer),
           *read_fragments,
           load_success,
-          child_nowait(child_status_error)
+          child_nowait(raw_child_status_error)
         ]
       end
 

@@ -3,16 +3,13 @@
 RSpec.describe Mutant::Result::Subject do
   let(:object) do
     described_class.new(
-      subject:          mutation_subject,
+      amount_mutations: coverage_results.length,
       coverage_results:,
+      identification:   'Test::Subject',
+      node:             s(:true),
+      source:           'true',
+      source_path:      'test.rb',
       tests:            []
-    )
-  end
-
-  let(:mutation_subject) do
-    instance_double(
-      Mutant::Subject,
-      mutations: coverage_results.map { instance_double(Mutant::Mutation) }
     )
   end
 

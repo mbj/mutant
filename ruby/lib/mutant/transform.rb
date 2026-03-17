@@ -429,10 +429,17 @@ module Mutant
       end
     end # Exception
 
-    BOOLEAN      = Transform::Boolean.new
-    FLOAT        = Transform::Primitive.new(primitive: Float)
-    INTEGER      = Transform::Primitive.new(primitive: Integer)
-    STRING       = Transform::Primitive.new(primitive: String)
+    BOOLEAN         = Transform::Boolean.new
+    FLOAT           = Transform::Primitive.new(primitive: Float)
+    INTEGER         = Transform::Primitive.new(primitive: Integer)
+    STRING          = Transform::Primitive.new(primitive: String)
+    OPTIONAL_STRING = Transform::Block.capture(:optional_string) do |input|
+      if input.nil? || input.instance_of?(String)
+        Either::Right.new(input)
+      else
+        Either::Left.new("Expected: nil or String but got: #{input.class}")
+      end
+    end
     STRING_ARRAY = Transform::Array.new(transform: STRING)
   end # Transform
 end # Mutant

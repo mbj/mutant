@@ -4,26 +4,29 @@ RSpec.describe Mutant::Result::Mutation do
   let(:object) do
     described_class.new(
       isolation_result:,
-      mutation:,
-      runtime:          2.0
+      mutation_diff:           "@@ -1 +1 @@\n-true\n+false\n",
+      mutation_identification: 'evil:subject-a:d27d2',
+      mutation_node:           s(:false),
+      mutation_source:         'false',
+      mutation_type:           'evil',
+      runtime:                 2.0
     )
   end
 
-  let(:mutation)                { instance_double(Mutant::Mutation, class: mutation_class) }
-  let(:mutation_class)          { class_double(Mutant::Mutation)    }
-  let(:process_status_success?) { true                              }
+  let(:process_status_success?) { true }
 
   let(:test_result) do
-    instance_double(
-      Mutant::Result::Test,
-      runtime: 1.0
+    Mutant::Result::Test.new(
+      job_index: 0,
+      output:    '',
+      passed:    false,
+      runtime:   1.0
     )
   end
 
   let(:process_status) do
-    instance_double(
-      Process::Status,
-      success?: process_status_success?
+    Mutant::Result::ProcessStatus.new(
+      exitstatus: process_status_success? ? 0 : 1
     )
   end
 
@@ -64,10 +67,6 @@ RSpec.describe Mutant::Result::Mutation do
 
     let(:coverage_criteria) do
       Mutant::Config::CoverageCriteria::DEFAULT.with(timeout: false)
-    end
-
-    before do
-      allow(mutation_class).to receive_messages(success?: true)
     end
 
     context 'when process aborts cover mutations' do
@@ -157,16 +156,26 @@ RSpec.describe Mutant::Result::Mutation do
         it 'passes test_results criteria' do
           expect(apply.test_result).to be(true)
         end
+      end
 
-        it 'calculates mutation class speific pass state' do
-          apply
+      context 'on valid isolation result with neutral mutation and failing test' do
+        let(:object) { super().with(mutation_type: 'neutral') }
 
-          expect(mutation_class).to have_received(:success?).with(test_result)
+        it 'does not pass test_results criteria' do
+          expect(apply.test_result).to be(false)
         end
       end
 
       context 'on invalid isolation results' do
-        let(:isolation_result) { super().with(exception: RuntimeError.new) }
+        let(:isolation_result) do
+          super().with(
+            exception: Mutant::Result::Exception.new(
+              backtrace:      [],
+              message:        'err',
+              original_class: 'RuntimeError'
+            )
+          )
+        end
 
         it 'does not pass test_results criteria' do
           expect(apply.test_result).to be(false)
