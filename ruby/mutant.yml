@@ -47,5 +47,4 @@ matcher:
   - Mutant::RequireHighjack.call  # 8 alive
   - Mutant::Scope#match_expressions  # 38 alive
   - Mutant::Scope#nesting  # 18 alive
-  - Mutant::Test::Runner::Sink#status  # 1 alive
   - Mutant::Zombifier#include?  # 9 alive
