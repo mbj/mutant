@@ -31,7 +31,6 @@ matcher:
   - Mutant::Matcher::Method::Evaluator#matched_view  # 6 alive
   - Mutant::Meta::Example::Verification#format_mutations  # 24 alive
   - Mutant::Meta::Example::Verification#no_diff_report  # 25 alive
-  - Mutant::Mutator::Node::Define#emit_optarg_body_assignments  # 3 alive
   - Mutant::Mutator::Node::Kwargs#emit_argument_mutations  # 3 alive
   - Mutant::Mutator::Node::Kwargs#forbid_argument?  # 9 alive
   - Mutant::Mutator::Node::ProcargZero#dispatch  # 5 alive
