@@ -87,6 +87,31 @@ bitwise operators, removes statements, modifies return values, and more.
 
 A full working example is available in the [quick_start](quick_start/) directory.
 
+## Session History
+
+Mutant records every run to `.mutant/results/`. You can recall past results
+without re-running mutation testing:
+
+```bash
+# List past sessions (most recent first)
+mutant session list
+
+# Show full report from the latest session
+mutant session show
+
+# Show full report from a specific session
+mutant session show --session-id 019cf6f1-77e8-74b6-82db-f8b5faf570cd
+
+# List subjects with alive/total mutation counts
+mutant session subject
+
+# Show alive mutations for a specific subject
+mutant session subject 'Foo::Bar#baz'
+
+# Remove old or incompatible session files
+mutant session gc --keep 50
+```
+
 ## Next Steps
 
 1. Learn the [nomenclature](/docs/nomenclature.md) (subjects, mutations, operators)
@@ -121,6 +146,7 @@ See [commercial licensing](/docs/commercial.md) for pricing and details.
 * [Reading Reports](/docs/reading-reports.md)
 * [Concurrency](/docs/concurrency.md)
 * [AST Pattern Matching](/docs/ast-pattern.md)
+* [Session JSON Schema](/docs/session-json-schema.yml)
 * [Hooks](/docs/hooks.md)
 * [Sorbet](/docs/sorbet.md)
 * [Nomenclature](/docs/nomenclature.md)

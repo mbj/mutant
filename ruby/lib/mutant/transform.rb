@@ -258,8 +258,8 @@ module Mutant
     class Hash < self
       include Anima.new(:optional, :required)
 
-      KEY_MESSAGE = 'Missing keys: %<missing>s, Unexpected keys: %<unexpected>s'
-      PRIMITIVE   = Primitive.new(primitive: ::Hash)
+      KEY_MESSAGE     = 'Missing keys: %<missing>s, Unexpected keys: %<unexpected>s'
+      PRIMITIVE       = Primitive.new(primitive: ::Hash)
 
       private_constant(*constants(false))
 
@@ -295,6 +295,7 @@ module Mutant
             error(cause: error, input:)
           end
         end
+        end
       end # Key
 
       # Apply transformation to input
@@ -313,24 +314,16 @@ module Mutant
     private
 
       def transform(input)
-        transform_required(input).bind do |required|
-          transform_optional(input).fmap(&required.public_method(:merge))
+        coerce_keys(required, input).bind do |required|
+          coerce_keys(
+            optional.select { |key| input.key?(key.value) },
+            input
+          ).fmap(&required.public_method(:merge))
         end
       end
 
-      def transform_required(input)
-        transform_keys(required, input)
-      end
-
-      def transform_optional(input)
-        transform_keys(
-          optional.select { |key| input.key?(key.value) },
-          input
-        )
-      end
-
       # rubocop:disable Metrics/MethodLength
-      def transform_keys(keys, input)
+      def coerce_keys(keys, input)
         success(
           keys
             .to_h do |key|
@@ -375,6 +368,7 @@ module Mutant
 
       def required_keys = required.map(&:value)
       memoize :required_keys
+
     end # Hash
 
     # Sequence of transformations
