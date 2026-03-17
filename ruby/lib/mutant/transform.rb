@@ -411,7 +411,23 @@ module Mutant
       def call(input)
         success(block.call(input))
       end
-    end # Sequence
+    end # Success
+
+    # Nullable wrapper: passes nil through, delegates non-nil to inner transform
+    class Nullable < self
+      include Anima.new(:transform)
+
+      # Apply transformation to input
+      #
+      # @param [Object]
+      #
+      # @return [Either<Error, Object>]
+      def call(input)
+        input.nil? ? success(nil) : transform.call(input)
+      end
+
+      def slug = "nullable(#{transform.slug})"
+    end # Nullable
 
     # Generic exception transformer
     class Exception < self
@@ -433,13 +449,7 @@ module Mutant
     FLOAT           = Transform::Primitive.new(primitive: Float)
     INTEGER         = Transform::Primitive.new(primitive: Integer)
     STRING          = Transform::Primitive.new(primitive: String)
-    OPTIONAL_STRING = Transform::Block.capture(:optional_string) do |input|
-      if input.nil? || input.instance_of?(String)
-        Either::Right.new(input)
-      else
-        Either::Left.new("Expected: nil or String but got: #{input.class}")
-      end
-    end
-    STRING_ARRAY = Transform::Array.new(transform: STRING)
+    OPTIONAL_STRING = Nullable.new(transform: STRING)
+    STRING_ARRAY    = Transform::Array.new(transform: STRING)
   end # Transform
 end # Mutant

@@ -48,7 +48,7 @@ module Mutant
       end
     end # ClassMethods
 
-    private_constant(*constants(false))
+    private_constant(:CoverageMetric, :ClassMethods)
 
     # Hook called when module gets included
     #
@@ -139,31 +139,6 @@ module Mutant
 
       def amount_tests_success = test_results.count(&:passed)
     end # TestEnv
-
-    # Test result
-    class Test
-      include Anima.new(:job_index, :passed, :runtime, :output)
-
-      alias_method :success?, :passed
-
-      class VoidValue < self
-        include Singleton
-
-        # Initialize object
-        #
-        # @return [undefined]
-        def initialize
-          super(
-            job_index: nil,
-            output:    '',
-            passed:    false,
-            runtime:   0.0
-          )
-        end
-      end # VoidValue
-
-      JSON = Transform::JSON.for_anima(self)
-    end # Test
 
     class CoverageCriteria
       include Result, Anima.new(*Config::CoverageCriteria.anima.attribute_names)
