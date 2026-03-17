@@ -46,7 +46,6 @@ matcher:
   - Mutant::Reporter::CLI::Format::Progressive#test_start  # 11 alive
   - Mutant::Reporter::CLI::Printer::Config#run  # 3 alive
   - Mutant::RequireHighjack.call  # 8 alive
-  - Mutant::Result::ClassMethods#sum  # 2 alive
   - Mutant::Scope#match_expressions  # 38 alive
   - Mutant::Scope#nesting  # 18 alive
   - Mutant::Test::Runner::Sink#status  # 1 alive
