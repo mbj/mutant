@@ -33,7 +33,6 @@ matcher:
   - Mutant::Meta::Example::Verification#no_diff_report  # 25 alive
   - Mutant::Mutator::Node::Arguments#emit_procarg0_removal  # 2 alive
   - Mutant::Mutator::Node::Define#emit_optarg_body_assignments  # 3 alive
-  - Mutant::Mutator::Node::Index#emit_drop_mutation  # 1 alive
   - Mutant::Mutator::Node::Kwargs#emit_argument_mutations  # 3 alive
   - Mutant::Mutator::Node::Kwargs#forbid_argument?  # 9 alive
   - Mutant::Mutator::Node::ProcargZero#dispatch  # 5 alive
