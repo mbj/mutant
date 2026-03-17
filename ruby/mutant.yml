@@ -31,9 +31,6 @@ matcher:
   - Mutant::Mutator::Node::Kwargs#forbid_argument?  # 9 alive
   # unkillable: mutate_child on arg nodes within procarg0 produces no observable mutations
   - Mutant::Mutator::Node::ProcargZero#dispatch  # 5 alive
-  # thin wrappers delegating to format(); tests verify output not control flow
-  - Mutant::Reporter::CLI::Format::Progressive#start  # 10 alive
-  - Mutant::Reporter::CLI::Format::Progressive#test_start  # 11 alive
   # tests only cover 1-2 level nesting; deeper nesting needed to kill index/take mutations
   - Mutant::Scope#match_expressions  # 38 alive
   # unkillable: Zombifier is mutant infrastructure in zombie mode; mutations corrupt zombification, crashing the killfork
