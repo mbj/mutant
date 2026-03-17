@@ -26,8 +26,6 @@ matcher:
   - Mutant::Mutator::Node::BlockPass#dispatch
   # mutation crashes killfork in zombie mode; Timer#now is used by mutant infrastructure
   - Mutant::Timer#now
-  # no test exercises nil source_location (C-defined methods)
-  - Mutant::Matcher::Method::Evaluator#matched_view  # 6 alive
   # no meta spec exercises :kwargs node type; forbid_argument? never returns true in tests
   - Mutant::Mutator::Node::Kwargs#emit_argument_mutations  # 3 alive
   - Mutant::Mutator::Node::Kwargs#forbid_argument?  # 9 alive
