@@ -144,7 +144,6 @@ module Mutant
           return unless token&.type.equal?(type)
 
           advance_position
-          token
         end
 
         def parse_node_type
