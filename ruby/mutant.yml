@@ -24,3 +24,31 @@ matcher:
   - Mutant::Mutator::Node::Arguments#emit_argument_presence
   - Mutant::Mutator::Node::Arguments#removed_block_arg?
   - Mutant::Mutator::Node::BlockPass#dispatch
+  # mutation crashes killfork in zombie mode; Timer#now is used by mutant infrastructure
+  - Mutant::Timer#now
+  # burn-down baseline
+  - Mutant::AST::Pattern::Parser#optional  # 1 alive
+  - Mutant::Integration::Rspec#setup  # 14 alive
+  - Mutant::Matcher::Method::Evaluator#matched_view  # 6 alive
+  - Mutant::Meta::Example::Verification#format_mutations  # 24 alive
+  - Mutant::Meta::Example::Verification#no_diff_report  # 25 alive
+  - Mutant::Mutator::Node::Arguments#emit_procarg0_removal  # 2 alive
+  - Mutant::Mutator::Node::Case#emit_else_mutations  # 1 alive
+  - Mutant::Mutator::Node::Define#emit_optarg_body_assignments  # 3 alive
+  - Mutant::Mutator::Node::Index#emit_drop_mutation  # 1 alive
+  - Mutant::Mutator::Node::Kwargs#emit_argument_mutations  # 3 alive
+  - Mutant::Mutator::Node::Kwargs#forbid_argument?  # 9 alive
+  - Mutant::Mutator::Node::ProcargZero#dispatch  # 5 alive
+  - Mutant::Mutator::Node::Send#emit_receiver_selector_mutations  # 1 alive
+  - Mutant::Mutator::Node#mutate_single_child  # 30 alive
+  - Mutant::Parallel::Driver#status  # 1 alive
+  - Mutant::Reporter::CLI::Format::Progressive#start  # 10 alive
+  - Mutant::Reporter::CLI::Format::Progressive#test_start  # 11 alive
+  - Mutant::Reporter::CLI::Printer::Config#run  # 3 alive
+  - Mutant::RequireHighjack.call  # 8 alive
+  - Mutant::Result::ClassMethods#sum  # 2 alive
+  - Mutant::Scope#match_expressions  # 38 alive
+  - Mutant::Scope#nesting  # 18 alive
+  - Mutant::Test::Runner::Sink#status  # 1 alive
+  - Mutant::World#capture_command  # 7 alive
+  - Mutant::Zombifier#include?  # 9 alive
