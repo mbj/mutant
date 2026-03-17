@@ -26,7 +26,7 @@ module Mutant
 
           class InvalidToken < self
             def display_message
-              <<~MESSAGE.strip
+              <<~MESSAGE.rstrip
                 Invalid #{token.type} token:
                 #{token.display_location}
               MESSAGE
