@@ -40,21 +40,29 @@ module Mutant
         # @param [Parallel::Response] response
         #
         # @return [self]
+        # rubocop:disable Metrics/AbcSize
+        # rubocop:disable Metrics/MethodLength
         def response(response)
           fail response.error if response.error
 
-          mutation_result = mutation_result(response.result)
-
-          subject = mutation_result.mutation.subject
+          mutation        = env.mutations.fetch(response.result.mutation_index)
+          subject         = mutation.subject
+          mutation_result = mutation_result(mutation, response.result)
 
           @subject_results[subject] = Result::Subject.new(
-            subject:,
+            amount_mutations: subject.mutations.length,
             coverage_results: previous_coverage_results(subject).dup << coverage_result(mutation_result),
+            identification:   subject.identification,
+            node:             subject.node,
+            source:           subject.source,
+            source_path:      subject.source_path.to_s,
             tests:            env.selections.fetch(subject)
           )
 
           self
         end
+      # rubocop:enable Metrics/AbcSize
+      # rubocop:enable Metrics/MethodLength
 
       private
 
@@ -65,11 +73,15 @@ module Mutant
           )
         end
 
-        def mutation_result(mutation_index_result)
+        def mutation_result(mutation, mutation_index_result)
           Result::Mutation.new(
-            isolation_result: mutation_index_result.isolation_result,
-            mutation:         env.mutations.fetch(mutation_index_result.mutation_index),
-            runtime:          mutation_index_result.runtime
+            isolation_result:        mutation_index_result.isolation_result,
+            mutation_diff:           mutation.diff.diff,
+            mutation_identification: mutation.identification,
+            mutation_node:           mutation.node,
+            mutation_source:         mutation.source,
+            mutation_type:           mutation.class::SYMBOL,
+            runtime:                 mutation_index_result.runtime
           )
         end
 

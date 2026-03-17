@@ -70,6 +70,7 @@ module Mutant
   record.call(:require_mutant_lib) do
     require 'mutant/procto'
     require 'mutant/transform'
+    require 'mutant/transform/json'
     require 'mutant/variable'
     require 'mutant/bootstrap'
     require 'mutant/version'
@@ -237,10 +238,13 @@ module Mutant
     require 'mutant/cli/command/environment/subject'
     require 'mutant/cli/command/environment/test'
     require 'mutant/cli/command/util'
-    require 'mutant/cli/command/root'
     require 'mutant/mutation/runner'
     require 'mutant/mutation/runner/sink'
     require 'mutant/result'
+    require 'mutant/result/process_status'
+    require 'mutant/result/exception'
+    require 'mutant/result/session'
+    require 'mutant/result/json_writer'
     require 'mutant/reporter'
     require 'mutant/reporter/null'
     require 'mutant/reporter/sequence'
@@ -248,17 +252,18 @@ module Mutant
     require 'mutant/reporter/cli/progress_bar'
     require 'mutant/reporter/cli/printer'
     require 'mutant/reporter/cli/printer/config'
-    require 'mutant/reporter/cli/printer/coverage_result'
     require 'mutant/reporter/cli/printer/env'
     require 'mutant/reporter/cli/printer/env_progress'
+    require 'mutant/reporter/cli/printer/alive_results'
     require 'mutant/reporter/cli/printer/env_result'
     require 'mutant/reporter/cli/printer/isolation_result'
     require 'mutant/reporter/cli/printer/mutation'
-    require 'mutant/reporter/cli/printer/mutation_result'
     require 'mutant/reporter/cli/printer/status_progressive'
     require 'mutant/reporter/cli/printer/subject_result'
     require 'mutant/reporter/cli/printer/test'
     require 'mutant/reporter/cli/format'
+    require 'mutant/cli/command/session'
+    require 'mutant/cli/command/root'
     require 'mutant/repository'
     require 'mutant/repository/diff'
     require 'mutant/repository/diff/ranges'
@@ -342,6 +347,10 @@ module Mutant
     time:                  Time,
     timer:
   )
+
+  # UUIDv7 identifying this mutant process invocation.
+  # Used as the JSON result filename and session identifier.
+  SESSION_ID = SecureRandom.uuid_v7
 
   # Reopen class to initialize constant to avoid dep circle
   class Config

@@ -1,4 +1,6 @@
 /.bundle
 /Cargo.lock
 /ruby/tmp
+/ruby/.mutant
+/ruby/test_app/.mutant
 /target

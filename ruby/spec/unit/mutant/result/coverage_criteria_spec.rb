@@ -48,4 +48,14 @@ RSpec.describe Mutant::Result::CoverageCriteria do
       end
     end
   end
+
+  describe 'JSON round trip' do
+    it 'round trips' do
+      object = described_class.new(process_abort: true, test_result: false, timeout: true)
+      dumped = described_class::JSON.dump(object).from_right
+      loaded = described_class::JSON.load(dumped).from_right
+
+      expect(loaded).to eql(object)
+    end
+  end
 end

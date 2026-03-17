@@ -133,12 +133,22 @@ RSpec.describe Mutant::Mutation::Runner do
         ]
       end
 
+      let(:json_writer) { instance_double(Mutant::Result::JSONWriter, call: nil) }
+
       before do
         allow(driver).to receive_messages(stop: driver)
+        allow(Mutant::Result::JSONWriter).to receive(:new).and_return(json_writer)
       end
 
       it 'returns env result' do
         verify_events { expect(apply).to eql(Mutant::Either::Right.new(env_result)) }
+      end
+
+      it 'writes JSON result' do
+        verify_events { apply }
+
+        expect(Mutant::Result::JSONWriter).to have_received(:new).with(env:, result: env_result)
+        expect(json_writer).to have_received(:call)
       end
     end
 
@@ -215,8 +225,21 @@ RSpec.describe Mutant::Mutation::Runner do
         ]
       end
 
+      let(:json_writer) { instance_double(Mutant::Result::JSONWriter, call: nil) }
+
+      before do
+        allow(Mutant::Result::JSONWriter).to receive(:new).and_return(json_writer)
+      end
+
       it 'returns env result' do
         verify_events { expect(apply).to eql(Mutant::Either::Right.new(env_result)) }
+      end
+
+      it 'writes JSON result' do
+        verify_events { apply }
+
+        expect(Mutant::Result::JSONWriter).to have_received(:new).with(env:, result: env_result)
+        expect(json_writer).to have_received(:call)
       end
     end
   end

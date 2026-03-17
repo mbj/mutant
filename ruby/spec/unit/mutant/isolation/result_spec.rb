@@ -17,9 +17,8 @@ RSpec.describe Mutant::Isolation::Result do
     let(:process_success) { true }
 
     let(:process_status) do
-      instance_double(
-        Process::Status,
-        success?: process_success
+      Mutant::Result::ProcessStatus.new(
+        exitstatus: process_success ? 0 : 1
       )
     end
 
@@ -63,6 +62,99 @@ RSpec.describe Mutant::Isolation::Result do
       it 'returns true' do
         expect(apply).to be(false)
       end
+    end
+  end
+
+  describe 'JSON round trip' do
+    it 'round trips with all fields present' do
+      object = described_class.new(
+        exception:      Mutant::Result::Exception.new(backtrace: %w[a.rb:1], message: 'boom',
+                                                      original_class: 'RuntimeError'),
+        log:            'some log',
+        process_status: Mutant::Result::ProcessStatus.new(exitstatus: 1),
+        timeout:        2.5,
+        value:          Mutant::Result::Test.new(job_index: 0, output: 'ok', passed: true, runtime: 1.0)
+      )
+
+      dumped = described_class::JSON.dump(object).from_right
+      loaded = described_class::JSON.load(dumped).from_right
+
+      expect(loaded).to eql(object)
+    end
+
+    it 'round trips with nil fields' do
+      object = described_class.new(
+        exception:      nil,
+        log:            '',
+        process_status: nil,
+        timeout:        nil,
+        value:          nil
+      )
+
+      dumped = described_class::JSON.dump(object).from_right
+      loaded = described_class::JSON.load(dumped).from_right
+
+      expect(loaded).to eql(object)
+    end
+
+    it 'round trips with only exception present' do
+      object = described_class.new(
+        exception:      Mutant::Result::Exception.new(backtrace: [], message: 'err', original_class: 'StandardError'),
+        log:            '',
+        process_status: nil,
+        timeout:        nil,
+        value:          nil
+      )
+
+      dumped = described_class::JSON.dump(object).from_right
+      loaded = described_class::JSON.load(dumped).from_right
+
+      expect(loaded).to eql(object)
+    end
+
+    it 'round trips with only process_status present' do
+      object = described_class.new(
+        exception:      nil,
+        log:            '',
+        process_status: Mutant::Result::ProcessStatus.new(exitstatus: 0),
+        timeout:        nil,
+        value:          nil
+      )
+
+      dumped = described_class::JSON.dump(object).from_right
+      loaded = described_class::JSON.load(dumped).from_right
+
+      expect(loaded).to eql(object)
+    end
+
+    it 'round trips with only timeout present' do
+      object = described_class.new(
+        exception:      nil,
+        log:            '',
+        process_status: nil,
+        timeout:        5.0,
+        value:          nil
+      )
+
+      dumped = described_class::JSON.dump(object).from_right
+      loaded = described_class::JSON.load(dumped).from_right
+
+      expect(loaded).to eql(object)
+    end
+
+    it 'round trips with only value present' do
+      object = described_class.new(
+        exception:      nil,
+        log:            '',
+        process_status: nil,
+        timeout:        nil,
+        value:          Mutant::Result::Test.new(job_index: nil, output: '', passed: false, runtime: 0.0)
+      )
+
+      dumped = described_class::JSON.dump(object).from_right
+      loaded = described_class::JSON.load(dumped).from_right
+
+      expect(loaded).to eql(object)
     end
   end
 end

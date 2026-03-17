@@ -18,7 +18,7 @@ RSpec.describe Mutant::Env do
   let(:hooks)             { instance_double(Mutant::Hooks)       }
   let(:integration_name)  { instance_double(String)              }
   let(:isolation)         { Mutant::Isolation::None.new          }
-  let(:process_status)    { instance_double(Process::Status)     }
+  let(:process_status)    { nil                                  }
   let(:reporter)          { instance_double(Mutant::Reporter)    }
   let(:selector)          { instance_double(Mutant::Selector)    }
   let(:subject_a)         { instance_double(Mutant::Subject, :a) }

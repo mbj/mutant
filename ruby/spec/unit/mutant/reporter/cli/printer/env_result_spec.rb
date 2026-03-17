@@ -10,6 +10,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
 
     describe '.call' do
       it_reports <<~'STR'
+        Uncovered mutations detected, exiting nonzero!
         Alive mutations require one of two actions:
         A) Keep the mutated code: Your tests specify the correct semantics,
            and the original code is redundant. Accept the mutation.

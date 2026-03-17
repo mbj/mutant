@@ -230,9 +230,18 @@ module MutantSpec
           file << "gem 'mutant-minitest', path: '#{relative}'\n"
           file << "eval_gemfile File.expand_path('#{relative.join('Gemfile.shared')}')\n"
         end
+        remove_mutant_gemspec_constraints
         lockfile = repo_path.join('Gemfile.lock')
         lockfile.delete if lockfile.exist?
         system(%w[bundle])
+      end
+
+      def remove_mutant_gemspec_constraints
+        repo_path.glob('*.gemspec').each do |gemspec|
+          content = gemspec.read
+          modified = content.gsub(/gem\.add_development_dependency\(['"]mutant.*\n/, '')
+          gemspec.write(modified) if content != modified
+        end
       end
 
       # The effective ruby file paths

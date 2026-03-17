@@ -161,76 +161,9 @@ module Mutant
           )
         end
       end # VoidValue
+
+      JSON = Transform::JSON.for_anima(self)
     end # Test
-
-    # Subject result
-    class Subject
-      include CoverageMetric, Result, Anima.new(
-        :coverage_results,
-        :subject,
-        :tests
-      )
-
-      sum :killtime, :coverage_results
-      sum :runtime,  :coverage_results
-
-      # Test if subject was processed successful
-      #
-      # @return [Boolean]
-      def success?
-        uncovered_results.empty?
-      end
-
-      # Alive mutations
-      #
-      # @return [Array<Result::Coverage>]
-      def uncovered_results = coverage_results.reject(&:success?)
-      memoize :uncovered_results
-
-      # Amount of mutations
-      #
-      # @return [Integer]
-      def amount_mutation_results = coverage_results.length
-
-      # Amount of mutations
-      #
-      # @return [Integer]
-      def amount_timeouts = coverage_results.count(&:timeout?)
-
-      # Amount of mutations
-      #
-      # @return [Integer]
-      def amount_mutations = subject.mutations.length
-
-      # Number of killed mutations
-      #
-      # @return [Integer]
-      def amount_mutations_killed = covered_results.length
-
-      # Number of alive mutations
-      #
-      # @return [Integer]
-      def amount_mutations_alive = uncovered_results.length
-
-    private
-
-      def covered_results = coverage_results.select(&:success?)
-      memoize :covered_results
-
-    end # Subject
-
-    # Coverage of a mutation against criteria
-    class Coverage
-      include Result, Anima.new(
-        :mutation_result,
-        :criteria_result
-      )
-
-      delegate :killtime, :mutation_result
-      delegate :runtime,  :mutation_result
-      delegate :success?, :criteria_result
-      delegate :timeout?, :mutation_result
-    end # Coverage
 
     class CoverageCriteria
       include Result, Anima.new(*Config::CoverageCriteria.anima.attribute_names)
@@ -241,6 +174,8 @@ module Mutant
       def success?
         process_abort || test_result || timeout
       end
+
+      JSON = Transform::JSON.for_anima(self)
     end
 
     class MutationIndex
@@ -255,13 +190,25 @@ module Mutant
     class Mutation
       include Result, Anima.new(
         :isolation_result,
-        :mutation,
+        :mutation_diff,
+        :mutation_identification,
+        :mutation_node,
+        :mutation_source,
+        :mutation_type,
         :runtime
       )
 
+      TEST_PASS_SUCCESS = {
+        'evil'    => false,
+        'neutral' => true,
+        'noop'    => true
+      }.freeze
+
+      private_constant(:TEST_PASS_SUCCESS)
+
       # Create mutation criteria results
       #
-      # @praam [Result::CoverageCriteria]
+      # @param [Result::CoverageCriteria]
       def criteria_result(coverage_criteria)
         CoverageCriteria.new(
           process_abort: coverage_criteria.process_abort && process_abort?,
@@ -297,10 +244,185 @@ module Mutant
       #
       # @return [Boolean]
       def test_result_success?
-        isolation_result.valid_value? && mutation.class.success?(isolation_result.value)
+        isolation_result.valid_value? && TEST_PASS_SUCCESS.fetch(mutation_type).equal?(isolation_result.value.passed)
       end
       memoize :test_result_success?
 
+      dump = Transform::Success.new(
+        block: lambda do |object|
+          {
+            'isolation_result'        => Isolation::Result::JSON.dump(object.isolation_result).from_right,
+            'mutation_diff'           => object.mutation_diff,
+            'mutation_identification' => object.mutation_identification,
+            'mutation_node'           => object.mutation_source,
+            'mutation_source'         => object.mutation_source,
+            'mutation_type'           => object.mutation_type,
+            'runtime'                 => object.runtime
+          }
+        end
+      )
+
+      parse_node = Transform::Block.capture(:parse_node) do |source|
+        Either.wrap_error(::Parser::SyntaxError) { Unparser.parse(source) }
+          .lmap(&:message)
+      end
+
+      load = Transform::Sequence.new(
+        steps: [
+          Transform::Hash.new(
+            required: [
+              Transform::Hash::Key.new(value: 'isolation_result', transform: Isolation::Result::JSON.load_transform),
+              Transform::Hash::Key.new(value: 'mutation_diff',    transform: Transform::OPTIONAL_STRING),
+              Transform::Hash::Key.new(value: 'mutation_identification', transform: Transform::STRING),
+              Transform::Hash::Key.new(value: 'mutation_node',    transform: parse_node),
+              Transform::Hash::Key.new(value: 'mutation_source',  transform: Transform::STRING),
+              Transform::Hash::Key.new(value: 'mutation_type',    transform: Transform::STRING),
+              Transform::Hash::Key.new(value: 'runtime',          transform: Transform::FLOAT)
+            ],
+            optional: []
+          ),
+          Transform::Hash::Symbolize.new,
+          Transform::Success.new(block: method(:new).to_proc)
+        ]
+      )
+
+      JSON = Transform::JSON.new(dump_transform: dump, load_transform: load)
     end # Mutation
+
+    # Coverage of a mutation against criteria
+    class Coverage
+      include Result, Anima.new(
+        :mutation_result,
+        :criteria_result
+      )
+
+      delegate :killtime, :mutation_result
+      delegate :runtime,  :mutation_result
+      delegate :success?, :criteria_result
+      delegate :timeout?, :mutation_result
+
+      dump = Transform::Success.new(
+        block: lambda do |object|
+          {
+            'mutation_result' => Mutation::JSON.dump(object.mutation_result).from_right,
+            'criteria_result' => CoverageCriteria::JSON.dump(object.criteria_result).from_right
+          }
+        end
+      )
+
+      load = Transform::Sequence.new(
+        steps: [
+          Transform::Hash.new(
+            required: [
+              Transform::Hash::Key.new(value: 'mutation_result', transform: Mutation::JSON.load_transform),
+              Transform::Hash::Key.new(value: 'criteria_result', transform: CoverageCriteria::JSON.load_transform)
+            ],
+            optional: []
+          ),
+          Transform::Hash::Symbolize.new,
+          Transform::Success.new(block: method(:new).to_proc)
+        ]
+      )
+
+      JSON = Transform::JSON.new(dump_transform: dump, load_transform: load)
+    end # Coverage
+
+    # Subject result
+    class Subject
+      include CoverageMetric, Result, Anima.new(
+        :amount_mutations,
+        :coverage_results,
+        :identification,
+        :node,
+        :source,
+        :source_path,
+        :tests
+      )
+
+      sum :killtime, :coverage_results
+      sum :runtime,  :coverage_results
+
+      # Test if subject was processed successful
+      #
+      # @return [Boolean]
+      def success?
+        uncovered_results.empty?
+      end
+
+      # Alive mutations
+      #
+      # @return [Array<Result::Coverage>]
+      def uncovered_results = coverage_results.reject(&:success?)
+      memoize :uncovered_results
+
+      # Amount of mutations
+      #
+      # @return [Integer]
+      def amount_mutation_results = coverage_results.length
+
+      # Amount of mutations
+      #
+      # @return [Integer]
+      def amount_timeouts = coverage_results.count(&:timeout?)
+
+      # Number of killed mutations
+      #
+      # @return [Integer]
+      def amount_mutations_killed = covered_results.length
+
+      # Number of alive mutations
+      #
+      # @return [Integer]
+      def amount_mutations_alive = uncovered_results.length
+
+    private
+
+      def covered_results = coverage_results.select(&:success?)
+      memoize :covered_results
+
+      dump = Transform::Success.new(
+        block: lambda do |object|
+          {
+            'amount_mutations' => object.amount_mutations,
+            'coverage_results' => object.coverage_results.map { |cr| Coverage::JSON.dump(cr).from_right },
+            'identification'   => object.identification,
+            'node'             => object.source,
+            'source'           => object.source,
+            'source_path'      => object.source_path,
+            'tests'            => object.tests.map(&:identification)
+          }
+        end
+      )
+
+      parse_node = Transform::Block.capture(:parse_node) do |source|
+        Either.wrap_error(::Parser::SyntaxError) { Unparser.parse(source) }
+          .lmap(&:message)
+      end
+
+      load_test = Transform::Success.new(
+        block: ->(id) { Mutant::Test.new(expressions: EMPTY_ARRAY, id:) }
+      )
+
+      load = Transform::Sequence.new(
+        steps: [
+          Transform::Hash.new(
+            required: [
+              Transform::Hash::Key.new(value: 'amount_mutations', transform: Transform::INTEGER),
+              Transform::Hash::Key.new(value: 'coverage_results', transform: Transform::Array.new(transform: Coverage::JSON.load_transform)),
+              Transform::Hash::Key.new(value: 'identification',   transform: Transform::STRING),
+              Transform::Hash::Key.new(value: 'node',             transform: parse_node),
+              Transform::Hash::Key.new(value: 'source',           transform: Transform::STRING),
+              Transform::Hash::Key.new(value: 'source_path',      transform: Transform::STRING),
+              Transform::Hash::Key.new(value: 'tests',            transform: Transform::Array.new(transform: load_test))
+            ],
+            optional: []
+          ),
+          Transform::Hash::Symbolize.new,
+          Transform::Success.new(block: method(:new).to_proc)
+        ]
+      )
+
+      JSON = Transform::JSON.new(dump_transform: dump, load_transform: load)
+    end # Subject
   end # Result
 end # Mutant

@@ -140,6 +140,7 @@ module SharedContext
         context:        subject_a_context,
         node:           subject_a_node,
         source:         Unparser.unparse(subject_a_node),
+        source_path:    Pathname.new('subject-a.rb'),
         identification: 'subject-a'
       )
     end
@@ -158,9 +159,13 @@ module SharedContext
 
     let(:mutation_a_result) do
       Mutant::Result::Mutation.new(
-        mutation:         mutation_a,
-        isolation_result: mutation_a_isolation_result,
-        runtime:          1.0
+        isolation_result:        mutation_a_isolation_result,
+        mutation_diff:           mutation_a.diff.diff,
+        mutation_identification: mutation_a.identification,
+        mutation_node:           mutation_a.node,
+        mutation_source:         mutation_a.source,
+        mutation_type:           mutation_a.class::SYMBOL,
+        runtime:                 1.0
       )
     end
 
@@ -174,9 +179,13 @@ module SharedContext
 
     let(:mutation_b_result) do
       Mutant::Result::Mutation.new(
-        isolation_result: mutation_b_isolation_result,
-        mutation:         mutation_b,
-        runtime:          1.0
+        isolation_result:        mutation_b_isolation_result,
+        mutation_diff:           mutation_b.diff.diff,
+        mutation_identification: mutation_b.identification,
+        mutation_node:           mutation_b.node,
+        mutation_source:         mutation_b.source,
+        mutation_type:           mutation_b.class::SYMBOL,
+        runtime:                 1.0
       )
     end
 
@@ -258,9 +267,13 @@ module SharedContext
 
     let(:subject_a_result) do
       Mutant::Result::Subject.new(
-        subject:          subject_a,
-        tests:            [test_a],
-        coverage_results: [mutation_a_coverage_result, mutation_b_coverage_result]
+        amount_mutations: 2,
+        coverage_results: [mutation_a_coverage_result, mutation_b_coverage_result],
+        identification:   subject_a.identification,
+        node:             subject_a.node,
+        source:           subject_a.source,
+        source_path:      subject_a.source_path.to_s,
+        tests:            [test_a]
       )
     end
   end
