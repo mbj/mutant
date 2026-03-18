@@ -4,7 +4,7 @@ description: Run mutant, read mutation reports, fix alive mutations, and verify 
 compatibility: Unified agent skills CLI
 metadata:
   author: dkubb
-  version: "2026-03-v22"
+  version: "2026-03-v23"
 triggers:
   - "mutation testing"
   - "mutant"
@@ -35,7 +35,19 @@ triggers:
 
 ## Reading Output
 
-An alive mutation looks like:
+Every `mutant run` automatically records results as JSON in
+`.mutant/results/`. Use the session commands to review results
+without re-parsing terminal output:
+
+```sh
+bundle exec mutant session subjects   # list subjects with alive counts
+bundle exec mutant session show       # show alive mutation diffs
+```
+
+Both default to the most recent session. Pass a session ID to
+inspect a specific run (`mutant session list` shows all sessions).
+
+In the terminal output, an alive mutation looks like:
 
 ```text
 evil:YourClass#method:YourClass#method:lib/your_class.rb:42:abc12
@@ -171,7 +183,14 @@ Every ignored subject must have a comment. No uncommented entries.
    ```
 
    If the command succeeds, coverage is 100% — done.
-   If it fails, find the `evil:` line in the output — it has the
+   If it fails, use the session commands to review results:
+
+   ```sh
+   bundle exec mutant session subjects   # which subjects have alive mutations?
+   bundle exec mutant session show       # show diffs for each alive mutation
+   ```
+
+   Or find the `evil:` line in the terminal output — it has the
    subject name, file path, and line number. The diff block
    immediately after shows the original and mutated code.
 
@@ -201,25 +220,24 @@ run mutant once to find all alive subjects, then seed the ignore
 list so the burn-down process can start from a passing baseline:
 
 ```sh
-bundle exec mutant run 2>&1 \
-  | sed -n 's/^evil:\([A-Za-z][A-Za-z0-9_:]*[#.][^:]*\):.*/\1/p' \
-  | LC_ALL=C sort -u \
-  || true
+bundle exec mutant run
+bundle exec mutant session subjects
 ```
 
-The `sed` pattern extracts the subject expression (e.g.
-`Axiom::Foo#bar`) from each `evil:` line, handling `::` in
-namespaced constants. The evil line format is:
+`session subjects` lists each subject with its alive and total
+mutation counts, sorted by alive count descending:
 
 ```text
-evil:SUBJECT:SOURCE_LOC:FILE:LINENO:ID
+ALIVE   TOTAL   SUBJECT
+38      53      MyApp::Foo#bar
+12      20      MyApp::Baz.qux
 ```
 
 Add each subject to the `ignore` list in the mutant config with an
-inline comment (e.g. `# legacy baseline`) and commit as a baseline. Then remove one subject at a time from
-the ignore list and follow the Usage instructions above to kill
-its alive mutations. Commit each subject's fix with the ignore
-list removal included.
+inline comment (e.g. `# 38 alive`) and commit as a baseline.
+Then remove one subject at a time from the ignore list and follow
+the Usage instructions above to kill its alive mutations. Commit
+each subject's fix with the ignore list removal included.
 
 ## Checklist
 
