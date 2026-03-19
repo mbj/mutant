@@ -11,7 +11,7 @@
 RSpec.describe 'Mutant::Result::ClassMethods' do
   let(:infected_class) do
     Class.new do
-      include Mutant::Adamantium, Mutant::Concord::Public.new(:collection)
+      include Mutant::Adamantium, Mutant::Anima.new(:collection)
       extend Mutant::Result.const_get(:ClassMethods)
 
       sum :length, :collection
@@ -20,7 +20,7 @@ RSpec.describe 'Mutant::Result::ClassMethods' do
     end
   end
 
-  let(:object) { infected_class.new(collection) }
+  let(:object) { infected_class.new(collection:) }
 
   describe '#sum' do
     def apply

@@ -120,7 +120,7 @@ module Mutant
           .lmap { |exception| "MUTANT_JOBS environment variable has invalid value: #{jobs.inspect} - #{exception}" }
           .fmap { |jobs_value| DEFAULT.with(jobs: jobs_value) }
       else
-        Either::Right.new(DEFAULT)
+        Either::Right.new(DEFAULT.with(coverage_criteria: CoverageCriteria::EMPTY))
       end
     end
     private_class_method :load_env_config

@@ -5,11 +5,11 @@ module MutantSpec
   # require semantics Zombifier relies on in a way we can avoid having to
   # mock around everywhere to test every detail.
   class RubyVM
-    include Concord::Public.new(:expected_events)
+    include Anima.new(:expected_events)
 
     # An event being observed by the VM handlers
     class EventObservation
-      include Concord::Public.new(:type, :payload)
+      include Anima.new(:type, :payload)
     end # EventObservation
 
     # An event being expected, can advance the VM
@@ -53,17 +53,19 @@ module MutantSpec
 
     # A fake implementation of Kernel#require
     def require(logical_name)
-      handle_event(EventObservation.new(EventExpectation::Require, logical_name:))
+      handle_event(EventObservation.new(type: EventExpectation::Require, payload: { logical_name: }))
     end
 
     # A fake implementation of Kernel#eval
     def eval(source, binding, location)
       handle_event(
         EventObservation.new(
-          EventExpectation::Eval,
-          binding:,
-          source:,
-          source_location: location
+          type:    EventExpectation::Eval,
+          payload: {
+            binding:,
+            source:,
+            source_location: location
+          }
         )
       )
     end

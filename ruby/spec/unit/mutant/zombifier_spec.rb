@@ -29,7 +29,7 @@ RSpec.describe Mutant::Zombifier do
 
   let(:ruby_vm) do
     MutantSpec::RubyVM.new(
-      [
+      expected_events: [
         MutantSpec::RubyVM::EventExpectation::Require.new(
           expected_payload: {
             logical_name: 'project'

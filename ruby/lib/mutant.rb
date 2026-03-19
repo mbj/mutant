@@ -52,7 +52,6 @@ module Mutant
   AbstractType = Unparser::AbstractType
   Adamantium   = Unparser::Adamantium
   Anima        = Unparser::Anima
-  Concord      = Unparser::Concord
   Either       = Unparser::Either
   Equalizer    = Unparser::Equalizer
 

@@ -438,6 +438,30 @@ RSpec.describe Mutant::Config do
             )
           end
 
+          context 'with file coverage_criteria and no MUTANT_JOBS' do
+            let(:path_contents) do
+              <<~'YAML'
+                ---
+                integration:
+                  name: rspec
+                coverage_criteria:
+                  timeout: false
+              YAML
+            end
+
+            let(:cli_config) do
+              Mutant::Config::DEFAULT.with(
+                coverage_criteria: Mutant::Config::CoverageCriteria::EMPTY
+              )
+            end
+
+            it 'preserves file coverage_criteria through env config merge' do
+              expect(apply.from_right.coverage_criteria).to eql(
+                Mutant::Config::CoverageCriteria::DEFAULT.with(timeout: false)
+              )
+            end
+          end
+
           context 'with MUTANT_JOBS environment variable and file config jobs' do
             let(:path_contents) do
               <<~'YAML'
