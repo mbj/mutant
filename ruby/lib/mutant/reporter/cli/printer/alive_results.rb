@@ -16,11 +16,8 @@ module Mutant
           MESSAGE
 
           def print_alive_results(failed_subject_results)
-            return if failed_subject_results.empty?
-
-            puts(ALIVE_EXPLANATION)
             failed_subject_results.each do |subject_result|
-              SubjectResult.call(output:, object: subject_result)
+              SubjectResult.call(display_config:, output:, object: subject_result)
             end
           end
         end # AliveResults

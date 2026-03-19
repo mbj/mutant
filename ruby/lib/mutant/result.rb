@@ -48,7 +48,7 @@ module Mutant
       end
     end # ClassMethods
 
-    private_constant(*constants(false))
+    private_constant(:CoverageMetric, :ClassMethods)
 
     # Hook called when module gets included
     #
@@ -140,31 +140,6 @@ module Mutant
       def amount_tests_success = test_results.count(&:passed)
     end # TestEnv
 
-    # Test result
-    class Test
-      include Anima.new(:job_index, :passed, :runtime, :output)
-
-      alias_method :success?, :passed
-
-      class VoidValue < self
-        include Singleton
-
-        # Initialize object
-        #
-        # @return [undefined]
-        def initialize
-          super(
-            job_index: nil,
-            output:    '',
-            passed:    false,
-            runtime:   0.0
-          )
-        end
-      end # VoidValue
-
-      JSON = Transform::JSON.for_anima(self)
-    end # Test
-
     class CoverageCriteria
       include Result, Anima.new(*Config::CoverageCriteria.anima.attribute_names)
 
@@ -254,7 +229,6 @@ module Mutant
             'isolation_result'        => Isolation::Result::JSON.dump(object.isolation_result).from_right,
             'mutation_diff'           => object.mutation_diff,
             'mutation_identification' => object.mutation_identification,
-            'mutation_node'           => object.mutation_source,
             'mutation_source'         => object.mutation_source,
             'mutation_type'           => object.mutation_type,
             'runtime'                 => object.runtime
@@ -262,10 +236,9 @@ module Mutant
         end
       )
 
-      parse_node = Transform::Block.capture(:parse_node) do |source|
-        Either.wrap_error(::Parser::SyntaxError) { Unparser.parse(source) }
-          .lmap(&:message)
-      end
+      derive_mutation_node = Transform::Success.new(
+        block: ->(hash) { hash.merge('mutation_node' => Unparser.parse(hash.fetch('mutation_source'))) }
+      )
 
       load = Transform::Sequence.new(
         steps: [
@@ -274,13 +247,13 @@ module Mutant
               Transform::Hash::Key.new(value: 'isolation_result', transform: Isolation::Result::JSON.load_transform),
               Transform::Hash::Key.new(value: 'mutation_diff',    transform: Transform::OPTIONAL_STRING),
               Transform::Hash::Key.new(value: 'mutation_identification', transform: Transform::STRING),
-              Transform::Hash::Key.new(value: 'mutation_node',    transform: parse_node),
               Transform::Hash::Key.new(value: 'mutation_source',  transform: Transform::STRING),
               Transform::Hash::Key.new(value: 'mutation_type',    transform: Transform::STRING),
               Transform::Hash::Key.new(value: 'runtime',          transform: Transform::FLOAT)
             ],
             optional: []
           ),
+          derive_mutation_node,
           Transform::Hash::Symbolize.new,
           Transform::Success.new(block: method(:new).to_proc)
         ]
@@ -332,6 +305,7 @@ module Mutant
       include CoverageMetric, Result, Anima.new(
         :amount_mutations,
         :coverage_results,
+        :expression_syntax,
         :identification,
         :node,
         :source,
@@ -383,18 +357,19 @@ module Mutant
       dump = Transform::Success.new(
         block: lambda do |object|
           {
-            'amount_mutations' => object.amount_mutations,
-            'coverage_results' => object.coverage_results.map { |cr| Coverage::JSON.dump(cr).from_right },
-            'identification'   => object.identification,
-            'node'             => object.source,
-            'source'           => object.source,
-            'source_path'      => object.source_path,
-            'tests'            => object.tests.map(&:identification)
+            'amount_mutations'  => object.amount_mutations,
+            'coverage_results'  => object.coverage_results
+              .map { |coverage_result| Coverage::JSON.dump(coverage_result).from_right },
+            'expression_syntax' => object.expression_syntax,
+            'identification'    => object.identification,
+            'source'            => object.source,
+            'source_path'       => object.source_path,
+            'tests'             => object.tests.map(&:identification)
           }
         end
       )
 
-      parse_node = Transform::Block.capture(:parse_node) do |source|
+      Transform::Block.capture(:parse_node) do |source|
         Either.wrap_error(::Parser::SyntaxError) { Unparser.parse(source) }
           .lmap(&:message)
       end
@@ -403,20 +378,28 @@ module Mutant
         block: ->(id) { Mutant::Test.new(expressions: EMPTY_ARRAY, id:) }
       )
 
+      derive_node = Transform::Success.new(
+        block: ->(hash) { hash.merge('node' => Unparser.parse(hash.fetch('source'))) }
+      )
+
       load = Transform::Sequence.new(
         steps: [
           Transform::Hash.new(
             required: [
-              Transform::Hash::Key.new(value: 'amount_mutations', transform: Transform::INTEGER),
-              Transform::Hash::Key.new(value: 'coverage_results', transform: Transform::Array.new(transform: Coverage::JSON.load_transform)),
-              Transform::Hash::Key.new(value: 'identification',   transform: Transform::STRING),
-              Transform::Hash::Key.new(value: 'node',             transform: parse_node),
-              Transform::Hash::Key.new(value: 'source',           transform: Transform::STRING),
-              Transform::Hash::Key.new(value: 'source_path',      transform: Transform::STRING),
-              Transform::Hash::Key.new(value: 'tests',            transform: Transform::Array.new(transform: load_test))
+              Transform::Hash::Key.new(value: 'amount_mutations',  transform: Transform::INTEGER),
+              Transform::Hash::Key.new(value: 'coverage_results',  transform: Transform::Array.new(transform: Coverage::JSON.load_transform)),
+              Transform::Hash::Key.new(value: 'expression_syntax', transform: Transform::STRING),
+              Transform::Hash::Key.new(value: 'identification',    transform: Transform::STRING),
+              Transform::Hash::Key.new(value: 'source',            transform: Transform::STRING),
+              Transform::Hash::Key.new(value: 'source_path',       transform: Transform::STRING),
+              Transform::Hash::Key.new(
+                value:     'tests',
+                transform: Transform::Array.new(transform: load_test)
+              )
             ],
             optional: []
           ),
+          derive_node,
           Transform::Hash::Symbolize.new,
           Transform::Success.new(block: method(:new).to_proc)
         ]

@@ -5,12 +5,24 @@ module Mutant
     class CLI
       # CLI runner status printer base class
       class Printer
+        # Printer display options
+        class DisplayConfig
+          include Anima.new(:isolation_logs)
+
+          DEFAULT = new(isolation_logs: false)
+          VERBOSE = new(isolation_logs: true)
+        end
+
         include(
           AbstractType,
           Adamantium,
-          Anima.new(:output, :object),
+          Anima.new(:display_config, :output, :object),
           Procto
         )
+
+        def self.call(output:, object:, display_config: DisplayConfig::DEFAULT)
+          super
+        end
 
         private_class_method :new
 
@@ -82,6 +94,17 @@ module Mutant
         end
 
         alias_method :color?, :tty?
+
+        def colorize_diff(raw_diff)
+          raw_diff.lines.map do |line|
+            case line[0]
+            when '+' then Unparser::Color::GREEN.format(line)
+            when '-' then Unparser::Color::RED.format(line)
+            else
+              line
+            end
+          end.join
+        end
       end # Printer
     end # CLI
   end # Reporter
