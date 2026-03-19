@@ -14,8 +14,6 @@ module Mutant
         :workers
       )
 
-      private(*anima.attribute_names)
-
       def initialize(**attributes)
         @alive = true
         super

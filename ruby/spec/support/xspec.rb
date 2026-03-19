@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module XSpec
-  Anima   = Unparser::Anima
-  Concord = Unparser::Concord
+  Anima = Unparser::Anima
 
   class MessageReaction
     include Anima.new(:event_list)

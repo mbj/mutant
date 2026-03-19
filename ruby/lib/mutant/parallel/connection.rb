@@ -16,8 +16,6 @@ module Mutant
       class Reader
         include Anima.new(:deadline, :io, :marshal, :response_reader, :log_reader)
 
-        private(*anima.attribute_names)
-
         private_class_method :new
 
         attr_reader :log

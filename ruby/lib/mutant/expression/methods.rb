@@ -10,8 +10,6 @@ module Mutant
         :scope_symbol
       )
 
-      private(*anima.attribute_names)
-
       MATCHERS = {
         '.' => [Matcher::Methods::Singleton, Matcher::Methods::Metaclass].freeze,
         '#' => [Matcher::Methods::Instance].freeze

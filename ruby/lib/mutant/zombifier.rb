@@ -13,8 +13,6 @@ module Mutant
       :root_require
     )
 
-    private(*anima.attribute_names)
-
     include AST::Sexp
 
     class LoadError < ::LoadError

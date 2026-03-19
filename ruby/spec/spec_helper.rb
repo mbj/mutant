@@ -11,7 +11,6 @@ module MutantSpec
   AbstractType = Mutant::AbstractType
   Adamantium   = Mutant::Adamantium
   Anima        = Mutant::Anima
-  Concord      = Mutant::Concord
   Either       = Mutant::Either
   Equalizer    = Mutant::Equalizer
 end

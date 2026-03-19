@@ -12,8 +12,6 @@ module Mutant
         :timer
       )
 
-      private(*anima.attribute_names)
-
       # rubocop:disable Metrics/MethodLength
       def record(name)
         start     = timer.now

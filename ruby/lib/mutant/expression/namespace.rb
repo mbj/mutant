@@ -6,8 +6,6 @@ module Mutant
     class Namespace < self
       include AbstractType, Anima.new(:scope_name)
 
-      private(*anima.attribute_names)
-
       # Recursive namespace expression
       class Recursive < self
         REGEXP = /\A#{SCOPE_NAME_PATTERN}?\*\z/

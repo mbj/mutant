@@ -57,7 +57,9 @@ module Mutant
 
       # Deadline that never expires
       class None < self
-        include Concord.new
+        include Equalizer.new
+
+        def initialize; end # rubocop:disable Lint/MissingSuper
 
         # The time left
         #

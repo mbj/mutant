@@ -117,8 +117,6 @@ module Mutant
     class Index < self
       include Anima.new(:index, :transform)
 
-      private(*anima.attribute_names)
-
       # Create error at specified index
       #
       # @param [Error] cause
@@ -185,7 +183,7 @@ module Mutant
 
     # Transform guarding boolean primitives
     class Boolean < self
-      include Concord.new
+      include Equalizer.new
 
       MESSAGE = 'Expected: boolean but got: %<actual>s'
 
