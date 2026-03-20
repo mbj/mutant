@@ -8,7 +8,7 @@ PATH
       regexp_parser (~> 2.10)
       securerandom (>= 0.3)
       sorbet-runtime (~> 0.6.0)
-      unparser (~> 0.8.2)
+      unparser (>= 0.8.2, < 0.10)
 
 GEM
   remote: https://rubygems.org/
