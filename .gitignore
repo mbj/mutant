@@ -3,4 +3,5 @@
 /ruby/tmp
 /ruby/.mutant
 /ruby/test_app/.mutant
+/ruby/test_app/**/vendor
 /target

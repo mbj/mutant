@@ -114,7 +114,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     )
   end
 
-  let(:node) { Unparser.parse('def foo; end') }
+  let(:node) { Unparser.parse('def baz; end') }
 
   shared_context 'memoizable scope setup' do
     let(:scope) do
@@ -123,12 +123,10 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
         raw:        Class.new do
           include Unparser::Adamantium
 
-          def self.name
-            'MemoizableClass'
-          end
+          define_singleton_method(:name) { 'MemoizableClass' }
 
-          def foo; end
-          memoize :foo
+          def baz; end
+          memoize :baz
         end
       )
     end
@@ -140,11 +138,11 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     subject { object.prepare }
 
     it 'undefines memoizer' do
-      expect { subject }.to change { scope.raw.memoized?(:foo) }.from(true).to(false)
+      expect { subject }.to change { scope.raw.memoized?(:baz) }.from(true).to(false)
     end
 
     it 'undefines method on scope' do
-      expect { subject }.to change { scope.raw.method_defined?(:foo) }.from(true).to(false)
+      expect { subject }.to change { scope.raw.method_defined?(:baz) }.from(true).to(false)
     end
 
     it_behaves_like 'a command method'
@@ -157,21 +155,21 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
       [
         Mutant::Mutation::Neutral.from_node(
           subject: object,
-          node:    s(:begin, s(:def, :foo, s(:args), nil), memoize_node)
+          node:    s(:begin, s(:def, :baz, s(:args), nil), memoize_node)
         ),
         Mutant::Mutation::Evil.from_node(
           subject: object,
-          node:    s(:begin, s(:def, :foo, s(:args), s(:send, nil, :raise)), memoize_node)
+          node:    s(:begin, s(:def, :baz, s(:args), s(:send, nil, :raise)), memoize_node)
         ),
         Mutant::Mutation::Evil.from_node(
           subject: object,
-          node:    s(:begin, s(:def, :foo, s(:args), s(:zsuper)), memoize_node)
+          node:    s(:begin, s(:def, :baz, s(:args), s(:zsuper)), memoize_node)
         )
       ].map(&:from_right)
     end
 
     let(:memoize_node) do
-      s(:send, nil, :memoize, s(:sym, :foo))
+      s(:send, nil, :memoize, s(:sym, :baz))
     end
 
     context 'when Memoizable is included in scope' do
@@ -187,7 +185,7 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     context 'when Memoizable is included in scope' do
       include_context 'memoizable scope setup'
 
-      let(:source) { "def foo\nend\nmemoize(:foo)\n" }
+      let(:source) { "def baz\nend\nmemoize(:baz)\n" }
 
       it { is_expected.to eql(source) }
     end
