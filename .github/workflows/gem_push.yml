@@ -1,0 +1,45 @@
+name: Push gems to RubyGems
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  push:
+    if: github.repository == 'mbj/mutant'
+    runs-on: ubuntu-latest
+    environment:
+      name: rubygems.org
+      url: https://rubygems.org/gems/mutant
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+      - uses: rubygems/configure-rubygems-credentials@v1.0.0
+      - name: Update RubyGems
+        run: gem update --system
+      - name: Build gems
+        run: |
+          for gemspec in ruby/*.gemspec; do
+            gem build "$gemspec"
+          done
+      - name: Sign gems with Sigstore
+        run: |
+          for gem in *.gem; do
+            gem exec sigstore-cli sign "$gem" --bundle "${gem}.sigstore.json"
+          done
+      - name: Push gems
+        run: |
+          for gem in *.gem; do
+            gem push "$gem" --attestation "${gem}.sigstore.json"
+          done
+      - name: Wait for releases
+        run: gem exec rubygems-await *.gem
