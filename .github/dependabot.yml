@@ -1,0 +1,126 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+  - package-ecosystem: bundler
+    directory: /ruby
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+  - package-ecosystem: bundler
+    directory: /quick_start
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+  - package-ecosystem: bundler
+    directory: /ruby/test_app/minitest
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      test-app-dependencies:
+        update-types:
+          - minor
+          - patch
+          - major
+  - package-ecosystem: bundler
+    directory: /ruby/test_app/rspec3.8
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      test-app-dependencies:
+        update-types:
+          - minor
+          - patch
+          - major
+  - package-ecosystem: bundler
+    directory: /ruby/test_app/rspec3.9
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      test-app-dependencies:
+        update-types:
+          - minor
+          - patch
+          - major
+  - package-ecosystem: bundler
+    directory: /ruby/test_app/rspec3.10
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      test-app-dependencies:
+        update-types:
+          - minor
+          - patch
+          - major
+  - package-ecosystem: bundler
+    directory: /ruby/test_app/rspec3.11
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      test-app-dependencies:
+        update-types:
+          - minor
+          - patch
+          - major
+  - package-ecosystem: bundler
+    directory: /ruby/test_app/rspec3.12
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      test-app-dependencies:
+        update-types:
+          - minor
+          - patch
+          - major
+  - package-ecosystem: bundler
+    directory: /ruby/test_app/rspec3.13
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      test-app-dependencies:
+        update-types:
+          - minor
+          - patch
+          - major
+  - package-ecosystem: bundler
+    directory: /ruby/test_app/rspec4.0
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      test-app-dependencies:
+        update-types:
+          - minor
+          - patch
+          - major
