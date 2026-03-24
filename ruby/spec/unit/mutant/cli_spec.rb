@@ -57,7 +57,7 @@ RSpec.describe Mutant::CLI do
       it 'performs expected events' do
         apply.from_right.call
 
-        expect(YAML.dump(events)).to eql(YAML.dump(expected_events))
+        expect(events).to eql(expected_events)
       end
 
       it 'exits with expected value' do
@@ -79,7 +79,7 @@ RSpec.describe Mutant::CLI do
         it 'uses the modified config for bootstrappin' do
           apply.from_right.call
 
-          expect(YAML.dump(events)).to eql(YAML.dump(expected_events))
+          expect(events).to eql(expected_events)
         end
       end
     end
@@ -722,7 +722,7 @@ RSpec.describe Mutant::CLI do
 
       before do
         allow(Mutant::Config).to receive(:load) do |**attributes|
-          events << [:load_config, attributes.inspect]
+          events << [:load_config, attributes]
           load_config_result
         end
 
@@ -732,22 +732,22 @@ RSpec.describe Mutant::CLI do
         end
 
         allow(Mutant::Bootstrap).to receive(:call) do |env|
-          events << [:bootstrap, env.inspect]
+          events << [:bootstrap, env]
           bootstrap_result
         end
 
         allow(Mutant::Bootstrap).to receive(:call_test) do |env|
-          events << [:test_bootstrap, env.inspect]
+          events << [:test_bootstrap, env]
           bootstrap_result
         end
 
         allow(Mutant::Mutation::Runner).to receive(:call) do |env|
-          events << [:runner, env.inspect]
+          events << [:runner, env]
           runner_result
         end
 
         allow(Mutant::Test::Runner).to receive(:call) do |env|
-          events << [:test_runner, env.inspect]
+          events << [:test_runner, env]
           runner_result
         end
 
@@ -934,11 +934,11 @@ RSpec.describe Mutant::CLI do
             ],
             [
               :load_config,
-              { cli_config: expected_cli_config, world: }.inspect
+              { cli_config: expected_cli_config, world: }
             ],
             [
               :bootstrap,
-              Mutant::Env.empty(world, bootstrap_config).inspect
+              Mutant::Env.empty(world, bootstrap_config)
             ],
             :irb_execution
           ]
@@ -975,11 +975,11 @@ RSpec.describe Mutant::CLI do
           ],
           [
             :load_config,
-            { cli_config: expected_cli_config, world: }.inspect
+            { cli_config: expected_cli_config, world: }
           ],
           [
             :test_bootstrap,
-            Mutant::Env.empty(world, bootstrap_config).inspect
+            Mutant::Env.empty(world, bootstrap_config)
           ],
           [
             :stdout,
@@ -1026,15 +1026,15 @@ RSpec.describe Mutant::CLI do
           ],
           [
             :load_config,
-            { cli_config: expected_cli_config, world: }.inspect
+            { cli_config: expected_cli_config, world: }
           ],
           [
             :test_bootstrap,
-            Mutant::Env.empty(world, bootstrap_config).inspect
+            Mutant::Env.empty(world, bootstrap_config)
           ],
           [
             :test_runner,
-            env.inspect
+            env
           ]
         ]
       end
@@ -1085,11 +1085,11 @@ RSpec.describe Mutant::CLI do
                 reporter: expected_cli_config.reporter.with(print_warnings: true)
               ),
               world:
-            }.inspect
+            }
           ],
           [
             :bootstrap,
-            Mutant::Env.empty(world, bootstrap_config).inspect
+            Mutant::Env.empty(world, bootstrap_config)
           ],
           [
             :stdout,
@@ -1123,11 +1123,11 @@ RSpec.describe Mutant::CLI do
             ],
             [
               :load_config,
-              { cli_config: expected_cli_config, world: }.inspect
+              { cli_config: expected_cli_config, world: }
             ],
             [
               :bootstrap,
-              Mutant::Env.empty(world, bootstrap_config).inspect
+              Mutant::Env.empty(world, bootstrap_config)
             ],
             [
               :stdout,
@@ -1182,11 +1182,11 @@ RSpec.describe Mutant::CLI do
             ],
             [
               :load_config,
-              { cli_config: expected_cli_config, world: }.inspect
+              { cli_config: expected_cli_config, world: }
             ],
             [
               :bootstrap,
-              Mutant::Env.empty(world, bootstrap_config).inspect
+              Mutant::Env.empty(world, bootstrap_config)
             ],
             [
               :write,
@@ -1210,15 +1210,15 @@ RSpec.describe Mutant::CLI do
           ],
           [
             :load_config,
-            { cli_config: expected_cli_config, world: }.inspect
+            { cli_config: expected_cli_config, world: }
           ],
           [
             :bootstrap,
-            Mutant::Env.empty(world, bootstrap_config).inspect
+            Mutant::Env.empty(world, bootstrap_config)
           ],
           [
             :runner,
-            env.inspect
+            env
           ]
         ]
       end
@@ -1388,11 +1388,11 @@ RSpec.describe Mutant::CLI do
             ],
             [
               :load_config,
-              { cli_config: expected_cli_config, world: }.inspect
+              { cli_config: expected_cli_config, world: }
             ],
             [
               :bootstrap,
-              Mutant::Env.empty(world, bootstrap_config).inspect
+              Mutant::Env.empty(world, bootstrap_config)
             ],
             [
               :stderr,

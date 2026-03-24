@@ -18,6 +18,13 @@ module Mutant
         new(exitstatus: process_status.exitstatus)
       end
 
+      # Stable inspect without memory address for use in user-facing output
+      #
+      # @return [String]
+      def inspect
+        "#<#{self.class.name} exitstatus=#{exitstatus}>"
+      end
+
       # Test for successful exit
       #
       # @return [Boolean]

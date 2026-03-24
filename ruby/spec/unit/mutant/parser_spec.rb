@@ -38,13 +38,17 @@ RSpec.describe Mutant::Parser do
       allow(path).to receive(:read).and_return(buffer.source)
     end
 
+    def normalize_inspect(string)
+      string.sub(/:0x\h+/, '')
+    end
+
     it 'returns parsed source' do
-      expect(subject.inspect).to eql(
-        Mutant::AST.new(
-          comment_associations: expected_associations,
-          node:                 s(:begin, expected_node, expected_node)
-        ).inspect
+      expected = Mutant::AST.new(
+        comment_associations: expected_associations,
+        node:                 s(:begin, expected_node, expected_node)
       )
+
+      expect(normalize_inspect(subject.inspect)).to eql(normalize_inspect(expected.inspect))
     end
 
     it 'is idempotent' do

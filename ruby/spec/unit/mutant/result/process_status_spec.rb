@@ -41,6 +41,23 @@ RSpec.describe Mutant::Result::ProcessStatus do
     end
   end
 
+  describe '#inspect' do
+    it 'returns stable representation without memory address' do
+      expect(described_class.new(exitstatus: 0).inspect)
+        .to eql('#<Mutant::Result::ProcessStatus exitstatus=0>')
+    end
+
+    it 'includes exitstatus value' do
+      expect(described_class.new(exitstatus: 1).inspect)
+        .to eql('#<Mutant::Result::ProcessStatus exitstatus=1>')
+    end
+
+    it 'uses class name not class itself' do
+      expect(Class.new(described_class).new(exitstatus: 0).inspect)
+        .to eql('#< exitstatus=0>')
+    end
+  end
+
   describe 'JSON round trip' do
     it 'round trips with zero exitstatus' do
       object = described_class.new(exitstatus: 0)
