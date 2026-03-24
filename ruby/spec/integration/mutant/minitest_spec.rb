@@ -12,7 +12,7 @@ RSpec.describe 'minitest integration', mutant: false do
     ]
   end
 
-  let(:gemfile) { 'Gemfile.minitest' }
+  let(:gemfile) { 'minitest/Gemfile' }
 
   it_behaves_like 'framework integration'
 end
