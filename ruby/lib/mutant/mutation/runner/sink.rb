@@ -50,13 +50,14 @@ module Mutant
           mutation_result = mutation_result(mutation, response.result)
 
           @subject_results[subject] = Result::Subject.new(
-            amount_mutations: subject.mutations.length,
-            coverage_results: previous_coverage_results(subject).dup << coverage_result(mutation_result),
-            identification:   subject.identification,
-            node:             subject.node,
-            source:           subject.source,
-            source_path:      subject.source_path.to_s,
-            tests:            env.selections.fetch(subject)
+            amount_mutations:  subject.mutations.length,
+            coverage_results:  previous_coverage_results(subject).dup << coverage_result(mutation_result),
+            expression_syntax: subject.expression.syntax,
+            identification:    subject.identification,
+            node:              subject.node,
+            source:            subject.source,
+            source_path:       subject.source_path.to_s,
+            tests:             env.selections.fetch(subject)
           )
 
           self

@@ -9,6 +9,8 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
     context 'on full coverage' do
       it_reports <<~'STR'
         subject-a
+        tests: 1, runtime: 2.00s, killtime: 2.00s
+        selected tests (1):
         - test-a
       STR
     end
@@ -18,13 +20,15 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
 
       it_reports <<~'STR'
         subject-a
-        - test-a
+        tests: 1, runtime: 2.00s, killtime: 2.00s
         evil:subject-a:d27d2
         -----------------------
         @@ -1 +1 @@
         -true
         +false
         -----------------------
+        selected tests (1):
+        - test-a
       STR
     end
 
@@ -37,12 +41,13 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
 
       it_reports(
         [
-          [Unparser::Color::RED,   'subject-a'],
-          [Unparser::Color::NONE,  "\n- test-a\nevil:subject-a:d27d2\n-----------------------\n"],
+          [Unparser::Color::RED, 'subject-a'],
+          [Unparser::Color::NONE,
+           "\ntests: 1, runtime: 2.00s, killtime: 2.00s\nevil:subject-a:d27d2\n-----------------------\n"],
           [Unparser::Color::NONE,  "@@ -1 +1 @@\n"],
           [Unparser::Color::RED,   "-true\n"],
           [Unparser::Color::GREEN, "+false\n"],
-          [Unparser::Color::NONE,  "-----------------------\n"]
+          [Unparser::Color::NONE,  "-----------------------\nselected tests (1):\n- test-a\n"]
         ].map { |color, text| color.format(text) }.join
       )
     end
@@ -58,14 +63,15 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
 
       it_reports <<~'STR'
         subject-a
-        - test-a
+        tests: 1, runtime: 2.00s, killtime: 2.00s
         evil:subject-a:d27d2
         -----------------------
-        Killfork: #<Mutant::Result::ProcessStatus exitstatus=0>
         @@ -1 +1 @@
         -true
         +false
         -----------------------
+        selected tests (1):
+        - test-a
       STR
     end
 
@@ -80,7 +86,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
 
       it_reports(<<~REPORT)
         subject-a
-        - test-a
+        tests: 1, runtime: 2.00s, killtime: 2.00s
         evil:subject-a:a5bc7
         -----------------------
         --- Internal failure ---
@@ -96,6 +102,8 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
         Mutated AST:
         s(:zsuper)
         -----------------------
+        selected tests (1):
+        - test-a
       REPORT
     end
 
@@ -109,7 +117,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
 
       it_reports(<<~REPORT)
         subject-a
-        - test-a
+        tests: 1, runtime: 2.00s, killtime: 2.00s
         neutral:subject-a:d5318
         -----------------------
         --- Neutral failure ---
@@ -120,6 +128,8 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
         Unparsed Source:
         true
         -----------------------
+        selected tests (1):
+        - test-a
       REPORT
     end
 
@@ -127,19 +137,30 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
       with(:mutation_a_test_result) { { passed: false } }
       with(:mutation_a_criteria_result) { { test_result: false } }
 
+      with(:mutation_a_isolation_result) do
+        {
+          process_status: Mutant::Result::ProcessStatus.new(exitstatus: 1)
+        }
+      end
+
       let(:mutation_a) do
         Mutant::Mutation::Noop.from_node(subject: subject_a, node: s(:true)).from_right
       end
 
       it_reports(<<~REPORT)
         subject-a
-        - test-a
+        tests: 1, runtime: 2.00s, killtime: 2.00s
         noop:subject-a:d5318
         -----------------------
+        Killfork exited nonzero. Its result (if any) was ignored.
+        Process status:
+        #<Mutant::Result::ProcessStatus exitstatus=1>
         ---- Noop failure -----
         No code was inserted. And the test did NOT PASS.
         This is typically a problem of your specs not passing unmutated.
         -----------------------
+        selected tests (1):
+        - test-a
       REPORT
     end
 
@@ -148,8 +169,66 @@ RSpec.describe Mutant::Reporter::CLI::Printer::SubjectResult do
 
       it_reports <<~'STR'
         subject-a
+        tests: 1, runtime: 0.00s, killtime: 0.00s
+        selected tests (1):
         - test-a
       STR
+    end
+
+    context 'without selected tests' do
+      with(:subject_a_result) { { coverage_results: [], tests: [] } }
+
+      it_reports <<~'STR'
+        subject-a
+        tests: 0, runtime: 0.00s, killtime: 0.00s
+        no selected tests
+      STR
+    end
+
+    context 'on partial coverage with verbose display config' do
+      with(:mutation_a_criteria_result) { { test_result: false } }
+
+      with(:mutation_a_isolation_result) do
+        {
+          process_status: Mutant::Result::ProcessStatus.new(exitstatus: 0)
+        }
+      end
+
+      let(:reportable) { subject_a_result }
+
+      it 'includes isolation logs when verbose' do
+        described_class.call(
+          display_config: Mutant::Reporter::CLI::Printer::DisplayConfig::VERBOSE,
+          output:,
+          object:         reportable
+        )
+        output.rewind
+
+        expect(output.read).to include('Killfork: #<Mutant::Result::ProcessStatus exitstatus=0>')
+      end
+    end
+
+    context 'on partial coverage without verbose hides isolation logs' do
+      with(:mutation_a_criteria_result) { { test_result: false } }
+
+      with(:mutation_a_isolation_result) do
+        {
+          process_status: Mutant::Result::ProcessStatus.new(exitstatus: 0)
+        }
+      end
+
+      let(:reportable) { subject_a_result }
+
+      it 'omits isolation logs' do
+        described_class.call(
+          display_config: Mutant::Reporter::CLI::Printer::DisplayConfig::DEFAULT,
+          output:,
+          object:         reportable
+        )
+        output.rewind
+
+        expect(output.read).not_to include('Killfork')
+      end
     end
   end
 end

@@ -25,25 +25,30 @@ module Mutant
       dump = Transform::Success.new(
         block: lambda do |object|
           {
-            'exception'      => object.exception&.to_h&.transform_keys(&:to_s),
+            'exception'      => object.exception && Mutant::Result::Exception::JSON.dump(object.exception).from_right,
             'log'            => object.log,
-            'process_status' => object.process_status&.to_h&.transform_keys(&:to_s),
+            'process_status' => object.process_status && Mutant::Result::ProcessStatus::JSON.dump(object.process_status).from_right,
             'timeout'        => object.timeout,
-            'value'          => object.value&.to_h&.transform_keys(&:to_s)
+            'value'          => object.value && Mutant::Result::Test::JSON.dump(object.value).from_right
           }
         end
       )
 
-      load = Transform::Success.new(
-        block: lambda do |hash|
-          new(
-            exception:      hash['exception'] && Mutant::Result::Exception.new(**hash['exception'].transform_keys(&:to_sym)),
-            log:            hash['log'],
-            process_status: hash['process_status'] && Mutant::Result::ProcessStatus.new(**hash['process_status'].transform_keys(&:to_sym)),
-            timeout:        hash['timeout'],
-            value:          hash['value'] && Mutant::Result::Test.new(**hash['value'].transform_keys(&:to_sym))
-          )
-        end
+      load = Transform::Sequence.new(
+        steps: [
+          Transform::Hash.new(
+            required: [
+              Transform::Hash::Key.new(value: 'exception',      transform: Transform::Nullable.new(transform: Mutant::Result::Exception::JSON.load_transform)),
+              Transform::Hash::Key.new(value: 'log',            transform: Transform::STRING),
+              Transform::Hash::Key.new(value: 'process_status', transform: Transform::Nullable.new(transform: Mutant::Result::ProcessStatus::JSON.load_transform)),
+              Transform::Hash::Key.new(value: 'timeout',        transform: Transform::Nullable.new(transform: Transform::FLOAT)),
+              Transform::Hash::Key.new(value: 'value',          transform: Transform::Nullable.new(transform: Mutant::Result::Test::JSON.load_transform))
+            ],
+            optional: []
+          ),
+          Transform::Hash::Symbolize.new,
+          Transform::Success.new(block: method(:new).to_proc)
+        ]
       )
 
       JSON = Transform::JSON.new(dump_transform: dump, load_transform: load)
