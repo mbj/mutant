@@ -13,6 +13,10 @@ Mutant::Meta::Example.add :irange do
   mutation '1..1'
   mutation '1..99'
   mutation '1..101'
+
+  # overflow boundary probes (int8 zone)
+  mutation '167..100'
+  mutation '1..167'
 end
 
 Mutant::Meta::Example.add :erange do
@@ -28,6 +32,10 @@ Mutant::Meta::Example.add :erange do
   mutation '1...1'
   mutation '1...99'
   mutation '1...101'
+
+  # overflow boundary probes (int8 zone)
+  mutation '167...100'
+  mutation '1...167'
 end
 
 Mutant::Meta::Example.add :erange do
@@ -37,6 +45,9 @@ Mutant::Meta::Example.add :erange do
   mutation '0...'
   mutation '2...'
   mutation 'nil...'
+
+  # overflow boundary probe (int8 zone)
+  mutation '167...'
 end
 
 Mutant::Meta::Example.add :irange do
@@ -46,6 +57,9 @@ Mutant::Meta::Example.add :irange do
   mutation '0..'
   mutation '2..'
   mutation 'nil..'
+
+  # overflow boundary probe (int8 zone)
+  mutation '167..'
 end
 
 Mutant::Meta::Example.add :erange do
@@ -56,6 +70,9 @@ Mutant::Meta::Example.add :erange do
   mutation '..1'
   mutation '...2'
   mutation '...nil'
+
+  # overflow boundary probe (int8 zone)
+  mutation '...167'
 end
 
 Mutant::Meta::Example.add :irange do
@@ -66,4 +83,7 @@ Mutant::Meta::Example.add :irange do
   mutation '...1'
   mutation '..2'
   mutation '..nil'
+
+  # overflow boundary probe (int8 zone)
+  mutation '..167'
 end

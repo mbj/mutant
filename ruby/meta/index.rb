@@ -25,6 +25,9 @@ Mutant::Meta::Example.add :index do
   mutation 'foo[0]'
   mutation 'foo[2]'
   mutation 'foo[nil]'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'foo[167]'
 end
 
 Mutant::Meta::Example.add :index do
@@ -45,6 +48,9 @@ Mutant::Meta::Example.add :index do
   mutation 'foo[n..-3]'
   mutation 'foo[n...-2]'
   mutation 'foo[nil..-2]'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'foo[n..167]'
 end
 
 Mutant::Meta::Example.add :index do
@@ -64,6 +70,9 @@ Mutant::Meta::Example.add :index do
   mutation 'foo[n...1]'
   mutation 'foo[n...-2]'
   mutation 'foo[nil...-1]'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'foo[n...167]'
 end
 
 Mutant::Meta::Example.add :index do
@@ -84,6 +93,9 @@ Mutant::Meta::Example.add :index do
   mutation 'foo[n...-1]'
   mutation 'foo[nil..-1]'
   mutation 'foo.drop(n)'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'foo[n..167]'
 end
 
 Mutant::Meta::Example.add :index do

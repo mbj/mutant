@@ -34,6 +34,9 @@ Mutant::Meta::Example.add :or do
   mutation 'foo(nil..) || bar'
   mutation 'foo || bar'
   mutation 'foo(1..) && bar'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'foo(167..) || bar'
 end
 
 Mutant::Meta::Example.add :or do
@@ -56,6 +59,10 @@ Mutant::Meta::Example.add :or do
   mutation 'foo(1..0) || bar'
   mutation 'foo || bar'
   mutation 'foo(1..2) && bar'
+
+  # overflow boundary probes (int8 zone)
+  mutation 'foo(167..2) || bar'
+  mutation 'foo(1..167) || bar'
 end
 
 Mutant::Meta::Example.add :or do
@@ -72,4 +79,7 @@ Mutant::Meta::Example.add :or do
   mutation 'foo(nil...) || bar'
   mutation 'foo || bar'
   mutation 'foo(1...) && bar'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'foo(167...) || bar'
 end

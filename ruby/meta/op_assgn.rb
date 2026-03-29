@@ -9,6 +9,9 @@ Mutant::Meta::Example.add :op_asgn, :send do
   mutation '@a.b += nil'
   mutation '@a.b -= 1'
   mutation 'self.b += 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation '@a.b += 167'
 end
 
 Mutant::Meta::Example.add :op_asgn, :send do
@@ -19,6 +22,9 @@ Mutant::Meta::Example.add :op_asgn, :send do
   mutation 'a.b += nil'
   mutation 'a.b -= 1'
   mutation 'self.b += 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a.b += 167'
 end
 
 Mutant::Meta::Example.add :op_asgn, :send do
@@ -28,6 +34,9 @@ Mutant::Meta::Example.add :op_asgn, :send do
   mutation 'b += 2'
   mutation 'b += nil'
   mutation 'b -= 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'b += 167'
 end
 
 # Subtraction operator swap
@@ -38,6 +47,9 @@ Mutant::Meta::Example.add :op_asgn do
   mutation 'a -= 2'
   mutation 'a -= nil'
   mutation 'a += 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a -= 167'
 end
 
 # Multiplication operator swap
@@ -49,6 +61,9 @@ Mutant::Meta::Example.add :op_asgn do
   mutation 'a *= 1'
   mutation 'a *= 3'
   mutation 'a /= 2'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a *= 167'
 end
 
 # Division operator swap
@@ -60,6 +75,9 @@ Mutant::Meta::Example.add :op_asgn do
   mutation 'a /= 1'
   mutation 'a /= 3'
   mutation 'a *= 2'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a /= 167'
 end
 
 # Modulo operator swap
@@ -71,6 +89,9 @@ Mutant::Meta::Example.add :op_asgn do
   mutation 'a %= 1'
   mutation 'a %= 3'
   mutation 'a /= 2'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a %= 167'
 end
 
 # Exponentiation operator swap
@@ -82,6 +103,9 @@ Mutant::Meta::Example.add :op_asgn do
   mutation 'a **= 1'
   mutation 'a **= 3'
   mutation 'a *= 2'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a **= 167'
 end
 
 # Bitwise AND operator swap
@@ -118,6 +142,9 @@ Mutant::Meta::Example.add :op_asgn do
   mutation 'a <<= 0'
   mutation 'a <<= 2'
   mutation 'a >>= 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a <<= 167'
 end
 
 # Right shift operator swap
@@ -128,4 +155,7 @@ Mutant::Meta::Example.add :op_asgn do
   mutation 'a >>= 0'
   mutation 'a >>= 2'
   mutation 'a <<= 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a >>= 167'
 end

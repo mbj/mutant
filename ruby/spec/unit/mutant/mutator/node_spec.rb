@@ -114,7 +114,8 @@ RSpec.describe Mutant::Mutator::Node do
             [
               s(:begin, s(:true), s(:nil)),
               s(:begin, s(:true), s(:int, 0)),
-              s(:begin, s(:true), s(:int, 2))
+              s(:begin, s(:true), s(:int, 2)),
+              s(:begin, s(:true), s(:int, 167))
             ].to_set
           )
         end
@@ -130,7 +131,8 @@ RSpec.describe Mutant::Mutator::Node do
             [
               s(:begin, s(:nil), s(:true)),
               s(:begin, s(:int, 0), s(:true)),
-              s(:begin, s(:int, 2), s(:true))
+              s(:begin, s(:int, 2), s(:true)),
+              s(:begin, s(:int, 167), s(:true))
             ].to_set
           )
         end

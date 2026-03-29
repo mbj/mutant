@@ -421,6 +421,9 @@ Mutant::Meta::Example.add :send do
   mutation 'foo.public_send(:bar, 1, two: true, &block)'
   mutation 'foo.public_send(:bar, 1, &block)'
   mutation 'foo.public_send(:bar, 1, two: true, **kwargs)'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'foo.public_send(:bar, 167, two: true, **kwargs, &block)'
 end
 
 Mutant::Meta::Example.add :send do
@@ -589,6 +592,9 @@ Mutant::Meta::Example.add :send do
   mutation 'foo(n..0)'
   mutation 'foo(n..1)'
   mutation 'foo(n..-2)'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'foo(n..167)'
 end
 
 excluded_operators = %i[=~ <= >= < > == === != eql? & | ^ << >> + - * / % **]
@@ -666,6 +672,9 @@ Mutant::Meta::Example.add :send do
   mutation 'a * 1'
   mutation 'a * 3'
   mutation 'a / 2'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a * 167'
 end
 
 # Division by non-identity: DO generate a * 2
@@ -681,6 +690,9 @@ Mutant::Meta::Example.add :send do
   mutation 'a / 1'
   mutation 'a / 3'
   mutation 'a * 2'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a / 167'
 end
 
 # Addition by 1: still generates a - 1
@@ -696,6 +708,9 @@ Mutant::Meta::Example.add :send do
   mutation 'a + 0'
   mutation 'a + 2'
   mutation 'a - 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a + 167'
 end
 
 # Subtraction by 1: still generates a + 1
@@ -710,6 +725,9 @@ Mutant::Meta::Example.add :send do
   mutation 'a - 0'
   mutation 'a - 2'
   mutation 'a + 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a - 167'
 end
 
 # Multiplication by 1: skip equivalent a / 1 mutation
@@ -725,6 +743,9 @@ Mutant::Meta::Example.add :send do
   mutation 'a * 0'
   mutation 'a * 2'
   # NOTE: 'a / 1' is intentionally NOT generated (equivalent mutant)
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a * 167'
 end
 
 # Division by 1: skip equivalent a * 1 mutation
@@ -739,6 +760,9 @@ Mutant::Meta::Example.add :send do
   mutation 'a / 0'
   mutation 'a / 2'
   # NOTE: 'a * 1' is intentionally NOT generated (equivalent mutant)
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a / 167'
 end
 
 # Multiplication by -1: skip equivalent a / -1 mutation
@@ -755,6 +779,9 @@ Mutant::Meta::Example.add :send do
   mutation 'a * 1'
   mutation 'a * -2'
   # NOTE: 'a / -1' is intentionally NOT generated (equivalent mutant)
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a * 167'
 end
 
 # Division by -1: skip equivalent a * -1 mutation
@@ -770,6 +797,9 @@ Mutant::Meta::Example.add :send do
   mutation 'a / 1'
   mutation 'a / -2'
   # NOTE: 'a * -1' is intentionally NOT generated (equivalent mutant)
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a / 167'
 end
 
 # Left operand 1: DO generate 1 / a (not equivalent: a vs 1/a)
@@ -784,6 +814,9 @@ Mutant::Meta::Example.add :send do
   mutation '0 * a'
   mutation '2 * a'
   mutation '1 / a'
+
+  # overflow boundary probe (int8 zone)
+  mutation '167 * a'
 end
 
 # Left operand 1: DO generate 1 * a (not equivalent)
@@ -798,6 +831,9 @@ Mutant::Meta::Example.add :send do
   mutation '0 / a'
   mutation '2 / a'
   mutation '1 * a'
+
+  # overflow boundary probe (int8 zone)
+  mutation '167 / a'
 end
 
 # Float identity: skip equivalent mutations for 1.0
@@ -1201,6 +1237,9 @@ Mutant::Meta::Example.add :send do
   mutation 'match?(/nomatch\A/, 1)'
   mutation 'false'
   mutation 'true'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'match?(/\Afoo/, 167)'
 end
 
 Mutant::Meta::Example.add :send do
@@ -1426,6 +1465,10 @@ Mutant::Meta::Example.add :send do
 
   # Remove all keyword arguments
   mutation 'foo'
+
+  # overflow boundary probes (int8 zone)
+  mutation 'foo(bar: 167, baz: 2)'
+  mutation 'foo(bar: 1, baz: 167)'
 end
 
 # Bang to non-bang mutations - simple sends without blocks

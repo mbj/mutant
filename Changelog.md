@@ -1,5 +1,71 @@
 # v1.0.0 2026-03-18
 
+* Add integer overflow boundary probe mutations.
+
+  Integer literals are now mutated to safe prime sentinel values that fall
+  within integer width overflow zones. Each literal snaps to the next
+  overflow zone above its absolute value, emitting exactly one additional
+  mutation per integer literal.
+
+  This targets a class of bugs that prior mutation operators could not
+  detect: code that assumes fixed-width integer semantics. Ruby
+  transparently promotes integers across width boundaries, but code that
+  interfaces with systems that do not — databases, FFI bindings, binary
+  protocols, serialization formats — can silently produce incorrect
+  results when values cross these thresholds.
+
+  Common examples of bugs this operator catches:
+
+  - FFI bindings declaring `int` parameters where Ruby happily passes
+    Bignum values that get silently truncated at the C boundary.
+  - MessagePack serialization assuming signed 32-bit representation,
+    silently wrapping unsigned values to negative numbers.
+  - `pack`/`unpack` format strings assuming specific integer widths,
+    silently truncating or wrapping values that exceed the format width.
+  - Missing error handling for libraries and databases that do raise
+    on overflow (e.g. PostgreSQL `integer out of range`, Protocol
+    Buffers `RangeError`). Tests using small values never exercise
+    these error paths, leaving them untested.
+
+  The overflow zones and their sentinel values:
+
+  | Zone   | Boundary | Sentinel                     |
+  |--------|----------|------------------------------|
+  | int8   | 128      | `167`                        |
+  | uint8  | 256      | `467`                        |
+  | int16  | 32768    | `55_487`                     |
+  | uint16 | 65536    | `108_503`                    |
+  | int32  | 2^31     | `2_667_278_543`              |
+  | uint32 | 2^32     | `7_980_081_959`              |
+  | int64  | 2^63     | `15_508_464_536_481_899_903` |
+
+  Sentinel values are safe primes (p = 2q + 1 where both p and q are
+  prime). Safe primes cannot arise from simple arithmetic, bit shifts,
+  or masking, which provides strong guarantees against coincidental
+  mutation kills. A mutation surviving against a safe prime is a strong
+  signal of missing boundary validation for that integer width.
+
+  Each integer literal snaps to the next zone above its absolute value.
+  For example, a literal `port = 80` (below 128) receives the int8
+  sentinel `167`. A literal `timeout = 500` (between 256 and 32768)
+  receives the int16 sentinel `55_487`. Values at or above 2^63 receive
+  no sentinel as there is no higher zone to probe.
+
+  This keeps the mutation count to exactly one additional mutation per
+  integer literal while providing maximum diagnostic value. When an
+  overflow sentinel survives, it tells you exactly which width boundary
+  your tests do not cover.
+
+  Most surviving overflow sentinels indicate that the integer literal
+  should be extracted to a named constant with explicit range validation
+  at the system boundary.
+
+  Future versions of mutant will add infrastructure to explain alive
+  overflow sentinel mutations, including which zone a surviving sentinel
+  belongs to and what class of bug it indicates.
+
+* Add machine-readable session recording.
+
 * Add machine-readable session recording.
 
   Mutant now writes a JSON result file to `.mutant/results/` after every run.
