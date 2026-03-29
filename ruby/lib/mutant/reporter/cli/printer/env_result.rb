@@ -8,9 +8,10 @@ module Mutant
         class EnvResult < self
           delegate(:failed_subject_results)
 
-          SEPARATOR    = '-----------------------'
-          MORE_MESSAGE = '(%d more alive mutation(s), use `mutant session subject %s` to see all details)'
-          STATS_FORMAT = 'tests: %d, runtime: %.2fs, killtime: %.2fs'
+          SEPARATOR       = '-----------------------'
+          MORE_MESSAGE    = '(%d more alive mutation(s), use `mutant session subject %s` to see all details)'
+          STATS_FORMAT    = 'tests: %d, runtime: %.2fs, killtime: %.2fs'
+          NO_DIFF_MESSAGE = 'BUG: No diff generated, please report circumstances to https://github.com/mbj/mutant'
 
           private_constant(*constants(false))
 
@@ -58,7 +59,12 @@ module Mutant
             puts(mutation_result.mutation_identification)
             puts(SEPARATOR)
             diff = mutation_result.mutation_diff
-            output.write(color? ? colorize_diff(diff) : diff)
+
+            if diff
+              output.write(color? ? colorize_diff(diff) : diff)
+            else
+              puts(NO_DIFF_MESSAGE)
+            end
             puts(SEPARATOR)
           end
         end # EnvResult

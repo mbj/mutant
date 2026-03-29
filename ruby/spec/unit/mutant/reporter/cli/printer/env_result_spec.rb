@@ -164,6 +164,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
         tests: 1, runtime: 2.00s, killtime: 2.00s
         evil:subject-a:d27d2
         -----------------------
+        BUG: No diff generated, please report circumstances to https://github.com/mbj/mutant
         -----------------------
         Mutant environment:
         Usage:           unknown
