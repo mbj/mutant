@@ -8,6 +8,9 @@ Mutant::Meta::Example.add :or_asgn do
   mutation 'a ||= 0'
   mutation 'a ||= 2'
   mutation 'a &&= 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'a ||= 167'
 end
 
 Mutant::Meta::Example.add :or_asgn do
@@ -18,6 +21,9 @@ Mutant::Meta::Example.add :or_asgn do
   mutation '@a ||= 0'
   mutation '@a ||= 2'
   mutation '@a &&= 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation '@a ||= 167'
 end
 
 Mutant::Meta::Example.add :or_asgn do
@@ -45,4 +51,7 @@ Mutant::Meta::Example.add :or_asgn do
   mutation 'foo[:bar] ||= 0'
   mutation 'foo[:bar] ||= 2'
   mutation 'foo[:bar] &&= 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'foo[:bar] ||= 167'
 end

@@ -855,6 +855,14 @@ RSpec.describe Mutant::CLI do
             MESSAGE
           ],
           [
+            :write,
+            <<~'MESSAGE'
+              @@ -1 +1 @@
+              -1
+              +167
+            MESSAGE
+          ],
+          [
             :stdout,
             :puts,
             '<cli-source>'
@@ -878,28 +886,35 @@ RSpec.describe Mutant::CLI do
       before do
         allow(Mutant::Mutation::Evil).to receive(:from_node) do |subject:, node:|
           {
-            s(:false)  => right(
+            s(:false)    => right(
               Mutant::Mutation::Evil.new(
                 node:    s(:false),
                 source:  'false',
                 subject: subject
               )
             ),
-            s(:int, 0) => right(
+            s(:int, 0)   => right(
               Mutant::Mutation::Evil.new(
                 node:    s(:int, 0),
                 source:  '0',
                 subject: subject
               )
             ),
-            s(:int, 2) => right(
+            s(:int, 2)   => right(
               Mutant::Mutation::Evil.new(
                 node:    s(:int, 0),
                 source:  '2',
                 subject: subject
               )
             ),
-            s(:nil)    => left(
+            s(:int, 167) => right(
+              Mutant::Mutation::Evil.new(
+                node:    s(:int, 167),
+                source:  '167',
+                subject: subject
+              )
+            ),
+            s(:nil)      => left(
               instance_double(
                 Mutant::Mutation::GenerationError,
                 report: '<generation-error-report>'

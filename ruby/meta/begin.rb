@@ -80,6 +80,9 @@ Mutant::Meta::Example.add :begin do
   mutation 'foo; 2'
   mutation 'foo; nil'
   mutation 'nil; 1'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'foo; 167'
 end
 
 Mutant::Meta::Example.add :begin do
@@ -90,6 +93,9 @@ Mutant::Meta::Example.add :begin do
   mutation '((a = 2)); a'
   mutation '((a = 0)); a'
   mutation '((a = nil)); a'
+
+  # overflow boundary probe (int8 zone)
+  mutation '((a = 167)); a'
 end
 
 Mutant::Meta::Example.add :begin do

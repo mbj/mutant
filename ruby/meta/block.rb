@@ -182,6 +182,9 @@ Mutant::Meta::Example.add :block do
   mutation 'loop { 2 }'
   mutation 'loop { raise }'
   mutation 'loop'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'loop { 167 }'
 end
 
 # Block with explicit receiver - should emit receiver promotion

@@ -97,6 +97,10 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo(a = 0, b = 0); b = 0; end'
   mutation 'def foo(a = 0, b = 0); raise; end'
   mutation 'def foo(a = 0, b = 0); super; end'
+
+  # overflow boundary probes (int8 zone)
+  mutation 'def foo(a = 167, b = 0); end'
+  mutation 'def foo(a = 0, b = 167); end'
 end
 
 Mutant::Meta::Example.add :def do
@@ -285,6 +289,9 @@ Mutant::Meta::Example.add :def do
   mutation 'def foo; 1; end'
   mutation 'def foo; 43; end'
   mutation 'def foo; 41; end'
+
+  # overflow boundary probe (int8 zone)
+  mutation 'def foo; 167; end'
 end
 
 # Type-aware default return mutations: floats
