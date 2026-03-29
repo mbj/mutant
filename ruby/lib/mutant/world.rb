@@ -89,6 +89,12 @@ module Mutant
       recorder.record(name, &)
     end
 
+    def parse_json(string)
+      record(:json_parse) do
+        Either.wrap_error(json::ParserError) { json.parse(string) }
+      end
+    end
+
     def process_warmup
       process.warmup if process.respond_to?(:warmup)
     end

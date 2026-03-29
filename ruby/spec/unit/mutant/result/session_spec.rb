@@ -3,9 +3,11 @@
 RSpec.describe Mutant::Result::Session do
   let(:object) do
     described_class.new(
+      killtime:        0.0,
       mutant_version:  '0.15.1',
       pid:             12_345,
       ruby_version:    '4.0.1',
+      runtime:         0.0,
       session_id:,
       subject_results: []
     )

@@ -29,9 +29,11 @@ module Mutant
 
       def session
         Session.new(
+          killtime:        result.killtime,
           mutant_version:  VERSION,
           pid:             env.world.process.pid,
           ruby_version:    RUBY_VERSION,
+          runtime:         result.runtime,
           session_id:      SESSION_ID,
           subject_results: result.subject_results
         )

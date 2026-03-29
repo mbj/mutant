@@ -134,10 +134,19 @@ module SharedContext
       )
     end
 
+    let(:subject_a_expression) do
+      Mutant::Expression::Method.new(
+        method_name:  'method-a',
+        scope_name:   'SubjectA',
+        scope_symbol: '#'
+      )
+    end
+
     let(:subject_a) do
       instance_double(
         Mutant::Subject,
         context:        subject_a_context,
+        expression:     subject_a_expression,
         node:           subject_a_node,
         source:         Unparser.unparse(subject_a_node),
         source_path:    Pathname.new('subject-a.rb'),
@@ -267,13 +276,14 @@ module SharedContext
 
     let(:subject_a_result) do
       Mutant::Result::Subject.new(
-        amount_mutations: 2,
-        coverage_results: [mutation_a_coverage_result, mutation_b_coverage_result],
-        identification:   subject_a.identification,
-        node:             subject_a.node,
-        source:           subject_a.source,
-        source_path:      subject_a.source_path.to_s,
-        tests:            [test_a]
+        amount_mutations:  2,
+        coverage_results:  [mutation_a_coverage_result, mutation_b_coverage_result],
+        expression_syntax: subject_a.expression.syntax,
+        identification:    subject_a.identification,
+        node:              subject_a.node,
+        source:            subject_a.source,
+        source_path:       subject_a.source_path.to_s,
+        tests:             [test_a]
       )
     end
   end

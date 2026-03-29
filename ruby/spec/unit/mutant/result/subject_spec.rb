@@ -3,13 +3,14 @@
 RSpec.describe Mutant::Result::Subject do
   let(:object) do
     described_class.new(
-      amount_mutations: coverage_results.length,
+      amount_mutations:  coverage_results.length,
       coverage_results:,
-      identification:   'Test::Subject',
-      node:             s(:true),
-      source:           'true',
-      source_path:      'test.rb',
-      tests:            []
+      expression_syntax: 'Test::Subject#method',
+      identification:    'Test::Subject',
+      node:              s(:true),
+      source:            'true',
+      source_path:       'test.rb',
+      tests:             []
     )
   end
 

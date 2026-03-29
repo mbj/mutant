@@ -19,7 +19,7 @@ RSpec.describe Mutant::Result::JSONWriter do
   end
 
   let(:result) do
-    instance_double(Mutant::Result::Env, subject_results: [])
+    instance_double(Mutant::Result::Env, killtime: 10.5, runtime: 2.5, subject_results: [])
   end
 
   let(:object) { described_class.new(env:, result:) }
@@ -49,6 +49,8 @@ RSpec.describe Mutant::Result::JSONWriter do
         expect(data.fetch('mutant_version')).to eql(Mutant::VERSION)
         expect(data.fetch('ruby_version')).to eql(RUBY_VERSION)
         expect(data.fetch('pid')).to eql(42)
+        expect(data.fetch('killtime')).to eql(10.5)
+        expect(data.fetch('runtime')).to eql(2.5)
         expect(data.fetch('subject_results')).to eql([])
       end
     end

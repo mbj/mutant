@@ -107,7 +107,12 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
     end
 
     subject(:printer) do
-      described_class.__send__(:new, output: StringIO.new, object: mock_env_result)
+      described_class.__send__(
+        :new,
+        display_config: Mutant::Reporter::CLI::Printer::DisplayConfig::DEFAULT,
+        output:         StringIO.new,
+        object:         mock_env_result
+      )
     end
 
     context 'when coverage is exactly 100%' do
