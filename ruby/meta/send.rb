@@ -1,5 +1,27 @@
 # frozen_string_literal: true
 
+# Date.parse receiver selector replacements
+Mutant::Meta::Example.add :send do
+  source 'Date.parse(foo)'
+
+  singleton_mutations
+  mutation 'Date.jd(foo)'
+  mutation 'Date.civil(foo)'
+  mutation 'Date.strptime(foo)'
+  mutation 'Date.iso8601(foo)'
+  mutation 'Date.rfc3339(foo)'
+  mutation 'Date.xmlschema(foo)'
+  mutation 'Date.rfc2822(foo)'
+  mutation 'Date.rfc822(foo)'
+  mutation 'Date.httpdate(foo)'
+  mutation 'Date.jisx0301(foo)'
+  mutation 'Date.parse'
+  mutation 'Date.parse(nil)'
+  mutation 'self.parse(foo)'
+  mutation 'Date'
+  mutation 'foo'
+end
+
 Mutant::Meta::Example.add :send do
   source 'a > b'
 
