@@ -15,13 +15,13 @@ RSpec.describe Mutant::AST::Pattern do
     end
 
     context 'invalid string token' do
-      let(:string) { 'foo[' }
+      let(:string) { 'foo@' }
 
       it 'returns expected error' do
         expect(apply).to eql(left(<<~'MESSAGE'.strip))
           Invalid string token:
-          foo[
-          ^^^^
+          foo@
+             ^
         MESSAGE
       end
     end
@@ -51,13 +51,13 @@ RSpec.describe Mutant::AST::Pattern do
     end
 
     context 'premature end of token sequence' do
-      let(:string) { 'send=' }
+      let(:string) { 'send =' }
 
       it 'returns expected error' do
         expect(apply).to eql(left(<<~'MESSAGE'.strip))
           Unexpected token: eq
-          send=
-              ^
+          send =
+               ^
         MESSAGE
       end
     end
@@ -87,13 +87,13 @@ RSpec.describe Mutant::AST::Pattern do
     end
 
     context 'unexpected token alternative' do
-      let(:string) { 'send{selector==' }
+      let(:string) { 'send{selector = =' }
 
       it 'returns expected error' do
         expect(apply).to eql(left(<<~'MESSAGE'.strip))
           Expected one of: group_start,string but got: eq
-          send{selector==
-                        ^
+          send{selector = =
+                          ^
         MESSAGE
       end
     end
@@ -160,6 +160,96 @@ RSpec.describe Mutant::AST::Pattern do
           descendant: Mutant::AST::Pattern::Node::Descendant.new(
             name:    :receiver,
             pattern: Mutant::AST::Pattern::Node.new(type: :const)
+          )
+        )
+      end
+
+      it 'returns expected node' do
+        expect(apply).to eql(right(expected_node))
+      end
+    end
+
+    def self.selector_node(value)
+      Mutant::AST::Pattern::Node.new(
+        type:      :send,
+        attribute: Mutant::AST::Pattern::Node::Attribute.new(
+          name:  :selector,
+          value: Mutant::AST::Pattern::Node::Attribute::Value::Single.new(value: value)
+        )
+      )
+    end
+
+    def self.single_selector_example(description, input, selector_value)
+      context description do
+        let(:string)        { input }
+        let(:expected_node) { single_selector_example_node(selector_value) }
+
+        it 'returns expected node' do
+          expect(apply).to eql(right(expected_node))
+        end
+      end
+    end
+
+    def single_selector_example_node(value)
+      self.class.selector_node(value)
+    end
+
+    single_selector_example('identifier with bang suffix',   'send{selector=assert_type!}', :assert_type!)
+    single_selector_example('identifier with query suffix',  'send{selector=empty?}',       :empty?)
+    single_selector_example('identifier with setter suffix', 'send{selector=name=}',        :name=)
+    single_selector_example('operator method ===',           'send{selector = ===}',        :===)
+    single_selector_example('operator method <=>',           'send{selector = <=>}',        :<=>)
+    single_selector_example('operator method []=',           'send{selector = []=}',        :[]=)
+
+    context 'group with operator methods' do
+      let(:string) { 'send{selector = (==, !=, <=>)}' }
+
+      let(:expected_node) do
+        Mutant::AST::Pattern::Node.new(
+          type:      :send,
+          attribute: Mutant::AST::Pattern::Node::Attribute.new(
+            name:  :selector,
+            value: Mutant::AST::Pattern::Node::Attribute::Value::Group.new(
+              values: [
+                Mutant::AST::Pattern::Node::Attribute::Value::Single.new(value: :==),
+                Mutant::AST::Pattern::Node::Attribute::Value::Single.new(value: :!=),
+                Mutant::AST::Pattern::Node::Attribute::Value::Single.new(value: :<=>)
+              ]
+            )
+          )
+        )
+      end
+
+      it 'returns expected node' do
+        expect(apply).to eql(right(expected_node))
+      end
+    end
+
+    context 'issue 1605 regression' do
+      let(:string) do
+        'send{receiver=const{name=T} selector=(let, cast, must, unsafe, assert_type!, bind)}'
+      end
+
+      let(:expected_node) do
+        Mutant::AST::Pattern::Node.new(
+          type:       :send,
+          attribute:  Mutant::AST::Pattern::Node::Attribute.new(
+            name:  :selector,
+            value: Mutant::AST::Pattern::Node::Attribute::Value::Group.new(
+              values: %i[let cast must unsafe assert_type! bind].map do |value|
+                Mutant::AST::Pattern::Node::Attribute::Value::Single.new(value: value)
+              end
+            )
+          ),
+          descendant: Mutant::AST::Pattern::Node::Descendant.new(
+            name:    :receiver,
+            pattern: Mutant::AST::Pattern::Node.new(
+              type:      :const,
+              attribute: Mutant::AST::Pattern::Node::Attribute.new(
+                name:  :name,
+                value: Mutant::AST::Pattern::Node::Attribute::Value::Single.new(value: :T)
+              )
+            )
           )
         )
       end
