@@ -3,19 +3,42 @@
 module Mutant
   class AST
     class Pattern
+      # rubocop:disable Metrics/ClassLength
       class Lexer
-        WHITESPACE     = [' ', "\t", "\n"].to_set.freeze
-        STRING_PATTERN = /\A[a-zA-Z][_a-zA-Z0-9]*\z/
+        WHITESPACE = [' ', "\t", "\n"].to_set.freeze
 
-        SINGLE_CHAR =
+        STRUCTURAL =
           {
             '(' => :group_start,
             ')' => :group_end,
             ',' => :delimiter,
-            '=' => :eq,
             '{' => :properties_start,
             '}' => :properties_end
           }.freeze
+
+        EQ_OPERATORS = %w[=== == =~].freeze
+
+        OPERATORS_BY_START =
+          {
+            '!' => %w[!= !~ !].freeze,
+            '<' => %w[<=> << <= <].freeze,
+            '>' => %w[>> >= >].freeze,
+            '+' => %w[+@ +].freeze,
+            '-' => %w[-@ -].freeze,
+            '*' => %w[** *].freeze,
+            '[' => ['[]=', '[]'].freeze,
+            '/' => ['/'].freeze,
+            '%' => ['%'].freeze,
+            '&' => ['&'].freeze,
+            '|' => ['|'].freeze,
+            '^' => ['^'].freeze,
+            '~' => ['~'].freeze
+          }.freeze
+
+        IDENTIFIER_START    = /[a-zA-Z]/
+        IDENTIFIER_CONTINUE = /[a-zA-Z0-9_]/
+
+        SETTER_TERMINATORS = (WHITESPACE + [',', ')', '}']).freeze
 
         def self.call(string)
           new(string).__send__(:run)
@@ -31,7 +54,7 @@ module Mutant
                 #{token.display_location}
               MESSAGE
             end
-          end # Token
+          end # InvalidToken
         end # Error
 
         private_class_method :new
@@ -58,25 +81,111 @@ module Mutant
         end
 
         def consume
-          while next? && !instance_variable_defined?(:@error)
+          loop do
             skip_whitespace
+            break unless next? && !instance_variable_defined?(:@error)
 
-            consume_char || consume_string
-
-            skip_whitespace
+            consume_structural \
+              || consume_eq \
+              || consume_operator \
+              || consume_identifier \
+              || consume_invalid
           end
         end
 
-        def consume_char
+        def consume_structural
+          char = peek
+          type = STRUCTURAL.fetch(char) { return }
+          start_position = @next_position
+          advance_position
+          @tokens << token(type:, start_position:)
+        end
+
+        def consume_eq
+          return unless peek.eql?('=')
+
           start_position = @next_position
 
-          char = peek
+          EQ_OPERATORS.each do |op|
+            next unless matches?(op)
 
-          type = SINGLE_CHAR.fetch(char) { return }
+            advance_positions(op.length)
+            @tokens << token(type: :string, start_position:, value: op)
+            return true
+          end
 
           advance_position
+          @tokens << token(type: :eq, start_position:)
+        end
 
-          @tokens << token(type:, start_position:)
+        def consume_operator
+          operators = OPERATORS_BY_START[peek] or return
+          match     = operators.detect { |op| matches?(op) } or return
+
+          start_position = @next_position
+          advance_positions(match.length)
+          @tokens << token(type: :string, start_position:, value: match)
+        end
+
+        def consume_identifier
+          return unless IDENTIFIER_START.match?(peek)
+
+          start_position = @next_position
+          advance_position while IDENTIFIER_CONTINUE.match?(peek)
+          consume_identifier_suffix
+
+          @tokens << token(
+            type:           :string,
+            start_position:,
+            value:          @string[range_from(start_position)]
+          )
+        end
+
+        def consume_identifier_suffix
+          advance_position if suffix_char?(peek)
+        end
+
+        def suffix_char?(char)
+          char.eql?('!') || char.eql?('?') || (char.eql?('=') && setter_suffix_follows?)
+        end
+
+        def setter_suffix_follows?
+          next_char = @string[@next_position.succ]
+
+          next_char.nil? || SETTER_TERMINATORS.include?(next_char)
+        end
+
+        def consume_invalid
+          start_position = @next_position
+          advance_invalid
+          @error = Error::InvalidToken.new(
+            token: token(
+              type:           :string,
+              start_position:,
+              value:          @string[range_from(start_position)]
+            )
+          )
+        end
+
+        def advance_invalid
+          loop do
+            break unless next?
+            break if terminates_invalid?(peek)
+
+            advance_position
+          end
+        end
+
+        def terminates_invalid?(char)
+          STRUCTURAL.key?(char) || whitespace?(char)
+        end
+
+        def matches?(string)
+          @string[@next_position, string.length].eql?(string)
+        end
+
+        def advance_positions(count)
+          count.times { advance_position }
         end
 
         def token(type:, start_position:, value: nil)
@@ -92,46 +201,8 @@ module Mutant
           )
         end
 
-        def consume_string
-          start_position = @next_position
-
-          token = build_string(start_position, read_string_body)
-
-          if valid_string?(token.value)
-            @tokens << token
-          else
-            @error = Error::InvalidToken.new(token:)
-          end
-        end
-
-        def read_string_body
-          string = +''
-
-          while next?
-            char = peek
-            break if SINGLE_CHAR.key?(char) || whitespace?(char)
-
-            string << char
-            advance_position
-          end
-
-          string
-        end
-
-        def build_string(start_position, string)
-          token(
-            type:           :string,
-            value:          string,
-            start_position:
-          )
-        end
-
         def range_from(start_position)
           start_position...@next_position
-        end
-
-        def valid_string?(string)
-          STRING_PATTERN.match?(string)
         end
 
         def advance_position
@@ -165,6 +236,7 @@ module Mutant
           @next_position < @string.length
         end
       end # Lexer
+      # rubocop:enable Metrics/ClassLength
     end # Pattern
   end # AST
 end # Mutant

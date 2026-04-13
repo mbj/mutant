@@ -1,3 +1,10 @@
+# v0.16.1 2026-04-13
+
+* Fix pattern language rejecting Ruby method names with `!`, `?`, or `=`
+  suffixes and operator method names (`==`, `<=>`, `[]=`, etc.) in
+  `ignore_patterns` selector values. Patterns like
+  `send{selector=(let, cast, assert_type!)}` now parse successfully.
+
 # v0.16.0 2026-04-07
 
 * Add integer overflow boundary probe mutations.
