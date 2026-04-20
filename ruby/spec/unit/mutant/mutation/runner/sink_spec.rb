@@ -7,7 +7,7 @@ RSpec.describe Mutant::Mutation::Runner::Sink do
     Mutant::Parallel::Response.new(
       error:  nil,
       job:    0,
-      log:    '',
+      log:    Mutant::LogCapture::String.new(content: ''),
       result: mutation_a_index_result
     )
   end
@@ -16,7 +16,7 @@ RSpec.describe Mutant::Mutation::Runner::Sink do
     Mutant::Parallel::Response.new(
       error:  nil,
       job:    0,
-      log:    '',
+      log:    Mutant::LogCapture::String.new(content: ''),
       result: mutation_b_index_result
     )
   end

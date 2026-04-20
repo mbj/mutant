@@ -23,7 +23,7 @@ module Mutant
 
         Result.new(
           exception:,
-          log:            '',
+          log:            LogCapture::String.new(content: ''),
           process_status: nil,
           timeout:        nil,
           value:

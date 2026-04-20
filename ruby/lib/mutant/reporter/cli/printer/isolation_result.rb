@@ -51,15 +51,12 @@ module Mutant
         private
 
           def print_log_messages
-            log = object.log
+            log = object.log.content
 
             return if log.empty?
 
-            puts('Log messages (combined stderr and stdout):')
-
-            log.each_line do |line|
-              puts('[killfork] %<line>s' % { line: })
-            end
+            puts('Killfork log (combined stderr and stdout):')
+            puts(log)
           end
 
           def print_process_status

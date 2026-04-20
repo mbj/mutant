@@ -18,7 +18,7 @@ RSpec.describe Mutant::Result::Mutation do
   let(:test_result) do
     Mutant::Result::Test.new(
       job_index: 0,
-      output:    '',
+      output:    Mutant::LogCapture::String.new(content: ''),
       passed:    false,
       runtime:   1.0
     )
@@ -33,7 +33,7 @@ RSpec.describe Mutant::Result::Mutation do
   let(:isolation_result) do
     Mutant::Isolation::Result.new(
       exception:      nil,
-      log:            '',
+      log:            Mutant::LogCapture::String.new(content: ''),
       process_status:,
       timeout:        nil,
       value:          test_result

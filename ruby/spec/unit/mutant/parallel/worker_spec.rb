@@ -241,7 +241,7 @@ RSpec.describe Mutant::Parallel::Worker do
       Mutant::Parallel::Response.new(
         error:  nil,
         job:    0,
-        log:    'log-a',
+        log:    Mutant::LogCapture::String.new(content: 'log-a'),
         result: result_a
       )
     end
@@ -250,7 +250,7 @@ RSpec.describe Mutant::Parallel::Worker do
       Mutant::Parallel::Response.new(
         error:  nil,
         job:    0,
-        log:    'log-b',
+        log:    Mutant::LogCapture::String.new(content: 'log-b'),
         result: result_b
       )
     end
@@ -319,7 +319,7 @@ RSpec.describe Mutant::Parallel::Worker do
         Mutant::Parallel::Response.new(
           error:  Timeout::Error,
           job:    0,
-          log:    'log',
+          log:    Mutant::LogCapture::String.new(content: 'log'),
           result: nil
         )
       end

@@ -69,7 +69,8 @@ module Mutant
   record.call(:require_mutant_lib) do
     require 'mutant/procto'
     require 'mutant/transform'
-    require 'mutant/transform/json'
+    require 'mutant/transform/codec'
+    require 'mutant/log_capture'
     require 'mutant/variable'
     require 'mutant/bootstrap'
     require 'mutant/version'

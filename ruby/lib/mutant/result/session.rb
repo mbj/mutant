@@ -32,7 +32,7 @@ module Mutant
             'ruby_version'    => object.ruby_version,
             'runtime'         => object.runtime,
             'session_id'      => object.session_id,
-            'subject_results' => object.subject_results.map { |subject_result| Subject::JSON.dump(subject_result).from_right }
+            'subject_results' => object.subject_results.map { |subject_result| Subject::CODEC.dump(subject_result).from_right }
           }
         end
       )
@@ -47,7 +47,7 @@ module Mutant
               Transform::Hash::Key.new(value: 'ruby_version',    transform: Transform::STRING),
               Transform::Hash::Key.new(value: 'runtime',         transform: Transform::FLOAT),
               Transform::Hash::Key.new(value: 'session_id',      transform: Transform::STRING),
-              Transform::Hash::Key.new(value: 'subject_results', transform: Transform::Array.new(transform: Subject::JSON.load_transform))
+              Transform::Hash::Key.new(value: 'subject_results', transform: Transform::Array.new(transform: Subject::CODEC.load_transform))
             ],
             optional: []
           ),
@@ -56,7 +56,7 @@ module Mutant
         ]
       )
 
-      JSON = Transform::JSON.new(dump_transform: dump, load_transform: load)
+      CODEC = Transform::Codec.new(dump_transform: dump, load_transform: load)
 
     end # Session
   end # Result

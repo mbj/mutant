@@ -27,7 +27,7 @@ RSpec.describe Mutant::Result::TestEnv do
   let(:test_result) do
     Mutant::Result::Test.new(
       job_index: nil,
-      output:    '',
+      output:    Mutant::LogCapture::String.new(content: ''),
       passed:    true,
       runtime:   1.0
     )

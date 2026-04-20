@@ -17,7 +17,7 @@ module Mutant
       def call(_tests)
         Result::Test.new(
           job_index: nil,
-          output:    '',
+          output:    LogCapture::String.new(content: ''),
           passed:    true,
           runtime:   0.0
         )

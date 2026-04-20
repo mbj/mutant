@@ -14,7 +14,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Test::EnvResult do
   let(:test_result_a) do
     Mutant::Result::Test.new(
       job_index: 0,
-      output:    '<test-output-a>',
+      output:    Mutant::LogCapture::String.new(content: '<test-output-a>'),
       passed:    false,
       runtime:   0.1
     )
@@ -23,7 +23,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Test::EnvResult do
   let(:test_result_b) do
     Mutant::Result::Test.new(
       job_index: 1,
-      output:    '<test-output-b>',
+      output:    Mutant::LogCapture::String.new(content: '<test-output-b>'),
       passed:    true,
       runtime:   0.2
     )

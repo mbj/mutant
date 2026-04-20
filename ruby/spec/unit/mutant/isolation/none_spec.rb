@@ -11,7 +11,7 @@ RSpec.describe Mutant::Isolation::None do
         expect(object.call(timeout) { :foo }).to eql(
           Mutant::Isolation::Result.new(
             exception:      nil,
-            log:            '',
+            log:            Mutant::LogCapture::String.new(content: ''),
             process_status: nil,
             timeout:        nil,
             value:          :foo
@@ -27,7 +27,7 @@ RSpec.describe Mutant::Isolation::None do
         expect(object.call(timeout) { fail exception }).to eql(
           Mutant::Isolation::Result.new(
             exception:,
-            log:            '',
+            log:            Mutant::LogCapture::String.new(content: ''),
             process_status: nil,
             timeout:        nil,
             value:          nil

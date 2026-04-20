@@ -3,8 +3,8 @@
 RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
   setup_shared_context
 
-  let(:exception)      { nil                    }
-  let(:log)            { ''                     }
+  let(:exception)      { nil }
+  let(:log)            { Mutant::LogCapture::String.new(content: '') }
   let(:process_status) { nil                    }
   let(:timeout)        { nil                    }
   let(:value)          { mutation_a_test_result }
@@ -55,13 +55,23 @@ RSpec.describe Mutant::Reporter::CLI::Printer::IsolationResult do
       STR
     end
 
-    context 'with present log messages' do
-      let(:log) { 'log message' }
+    context 'with present text log messages' do
+      let(:log) { Mutant::LogCapture::String.new(content: "log message\n") }
 
       it_reports <<~'STR'
-        Log messages (combined stderr and stdout):
-        [killfork] log message
+        Killfork log (combined stderr and stdout):
+        log message
       STR
+    end
+
+    context 'with present binary log messages' do
+      let(:log) { Mutant::LogCapture::Binary.new(content: "binary \xFF\xFElog\n".b) }
+
+      it 'writes raw bytes to output without raising' do
+        described_class.call(output:, object: reportable)
+        output.rewind
+        expect(output.read.b).to eql("Killfork log (combined stderr and stdout):\nbinary \xFF\xFElog\n".b)
+      end
     end
 
     context 'on unsuccessful process status' do

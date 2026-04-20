@@ -24,7 +24,7 @@ module Mutant
     private
 
       def json
-        JSON.generate(Session::JSON.dump(session).from_right)
+        JSON.generate(Session::CODEC.dump(session).from_right)
       end
 
       def session

@@ -18,9 +18,9 @@ module Mutant
 
         private_class_method :new
 
-        attr_reader :log
-
         def error = Util.max_one(@errors)
+
+        def log = LogCapture.from_binary(@log)
 
         def result = Util.max_one(@results)
 

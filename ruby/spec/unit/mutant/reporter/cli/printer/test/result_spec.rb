@@ -6,7 +6,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Test::Result do
   let(:reportable) do
     Mutant::Result::Test.new(
       job_index: 0,
-      output:    '<test-output>',
+      output:    Mutant::LogCapture::String.new(content: '<test-output>'),
       passed:    false,
       runtime:   0.1
     )

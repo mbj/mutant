@@ -150,7 +150,7 @@ module Mutant
         process_abort || test_result || timeout
       end
 
-      JSON = Transform::JSON.for_anima(self)
+      CODEC = Transform::Codec.for_anima(self)
     end
 
     class MutationIndex
@@ -226,7 +226,7 @@ module Mutant
       dump = Transform::Success.new(
         block: lambda do |object|
           {
-            'isolation_result'        => Isolation::Result::JSON.dump(object.isolation_result).from_right,
+            'isolation_result'        => Isolation::Result::CODEC.dump(object.isolation_result).from_right,
             'mutation_diff'           => object.mutation_diff,
             'mutation_identification' => object.mutation_identification,
             'mutation_source'         => object.mutation_source,
@@ -244,7 +244,7 @@ module Mutant
         steps: [
           Transform::Hash.new(
             required: [
-              Transform::Hash::Key.new(value: 'isolation_result', transform: Isolation::Result::JSON.load_transform),
+              Transform::Hash::Key.new(value: 'isolation_result', transform: Isolation::Result::CODEC.load_transform),
               Transform::Hash::Key.new(value: 'mutation_diff',    transform: Transform::OPTIONAL_STRING),
               Transform::Hash::Key.new(value: 'mutation_identification', transform: Transform::STRING),
               Transform::Hash::Key.new(value: 'mutation_source',  transform: Transform::STRING),
@@ -259,7 +259,7 @@ module Mutant
         ]
       )
 
-      JSON = Transform::JSON.new(dump_transform: dump, load_transform: load)
+      CODEC = Transform::Codec.new(dump_transform: dump, load_transform: load)
     end # Mutation
 
     # Coverage of a mutation against criteria
@@ -277,8 +277,8 @@ module Mutant
       dump = Transform::Success.new(
         block: lambda do |object|
           {
-            'mutation_result' => Mutation::JSON.dump(object.mutation_result).from_right,
-            'criteria_result' => CoverageCriteria::JSON.dump(object.criteria_result).from_right
+            'mutation_result' => Mutation::CODEC.dump(object.mutation_result).from_right,
+            'criteria_result' => CoverageCriteria::CODEC.dump(object.criteria_result).from_right
           }
         end
       )
@@ -287,8 +287,8 @@ module Mutant
         steps: [
           Transform::Hash.new(
             required: [
-              Transform::Hash::Key.new(value: 'mutation_result', transform: Mutation::JSON.load_transform),
-              Transform::Hash::Key.new(value: 'criteria_result', transform: CoverageCriteria::JSON.load_transform)
+              Transform::Hash::Key.new(value: 'mutation_result', transform: Mutation::CODEC.load_transform),
+              Transform::Hash::Key.new(value: 'criteria_result', transform: CoverageCriteria::CODEC.load_transform)
             ],
             optional: []
           ),
@@ -297,7 +297,7 @@ module Mutant
         ]
       )
 
-      JSON = Transform::JSON.new(dump_transform: dump, load_transform: load)
+      CODEC = Transform::Codec.new(dump_transform: dump, load_transform: load)
     end # Coverage
 
     # Subject result
@@ -359,7 +359,7 @@ module Mutant
           {
             'amount_mutations'  => object.amount_mutations,
             'coverage_results'  => object.coverage_results
-              .map { |coverage_result| Coverage::JSON.dump(coverage_result).from_right },
+              .map { |coverage_result| Coverage::CODEC.dump(coverage_result).from_right },
             'expression_syntax' => object.expression_syntax,
             'identification'    => object.identification,
             'source'            => object.source,
@@ -387,7 +387,7 @@ module Mutant
           Transform::Hash.new(
             required: [
               Transform::Hash::Key.new(value: 'amount_mutations',  transform: Transform::INTEGER),
-              Transform::Hash::Key.new(value: 'coverage_results',  transform: Transform::Array.new(transform: Coverage::JSON.load_transform)),
+              Transform::Hash::Key.new(value: 'coverage_results',  transform: Transform::Array.new(transform: Coverage::CODEC.load_transform)),
               Transform::Hash::Key.new(value: 'expression_syntax', transform: Transform::STRING),
               Transform::Hash::Key.new(value: 'identification',    transform: Transform::STRING),
               Transform::Hash::Key.new(value: 'source',            transform: Transform::STRING),
@@ -405,7 +405,7 @@ module Mutant
         ]
       )
 
-      JSON = Transform::JSON.new(dump_transform: dump, load_transform: load)
+      CODEC = Transform::Codec.new(dump_transform: dump, load_transform: load)
     end # Subject
   end # Result
 end # Mutant

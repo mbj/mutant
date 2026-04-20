@@ -61,16 +61,16 @@ RSpec.describe Mutant::Result::ProcessStatus do
   describe 'JSON round trip' do
     it 'round trips with zero exitstatus' do
       object = described_class.new(exitstatus: 0)
-      dumped = described_class::JSON.dump(object).from_right
-      loaded = described_class::JSON.load(dumped).from_right
+      dumped = described_class::CODEC.dump(object).from_right
+      loaded = described_class::CODEC.load(dumped).from_right
 
       expect(loaded).to eql(object)
     end
 
     it 'round trips with non-zero exitstatus' do
       object = described_class.new(exitstatus: 1)
-      dumped = described_class::JSON.dump(object).from_right
-      loaded = described_class::JSON.load(dumped).from_right
+      dumped = described_class::CODEC.dump(object).from_right
+      loaded = described_class::CODEC.load(dumped).from_right
 
       expect(loaded).to eql(object)
     end

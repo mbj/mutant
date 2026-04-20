@@ -89,7 +89,7 @@ module Mutant
         def result
           Result.new(
             exception:      @exception,
-            log:            @log_fragments.join,
+            log:            LogCapture.from_binary(@log_fragments.join),
             process_status: @process_status,
             timeout:        @timeout,
             value:          @value

@@ -203,10 +203,18 @@ RSpec.describe Mutant::CLI::Command::Session do
       let(:alive_coverage) do
         {
           'mutation_result' => {
-            'isolation_result'        => { 'exception' => nil, 'log' => '', 'process_status' => nil,
-                                           'timeout' => nil,
-                                           'value' => { 'job_index' => 0, 'passed' => true, 'runtime' => 0.1,
-                                                        'output' => '' } },
+            'isolation_result'        => {
+              'exception'      => nil,
+              'log'            => { 'type' => 'string', 'content' => '' },
+              'process_status' => nil,
+              'timeout'        => nil,
+              'value'          => {
+                'job_index' => 0,
+                'passed'    => true,
+                'runtime'   => 0.1,
+                'output'    => { 'type' => 'string', 'content' => '' }
+              }
+            },
             'mutation_diff'           => "@@ -1 +1 @@\n-true\n+false\n",
             'mutation_identification' => 'evil:Foo#bar:foo.rb:1:abc12',
 
@@ -336,7 +344,7 @@ RSpec.describe Mutant::CLI::Command::Session do
       # 2 subjects: Baz (covered), Foo (2 alive). Tests reject, flat_map, and alive count.
       let(:session_with_alive_json) do
         <<~'JSON'
-          {"killtime":0.3,"mutant_version":"1.0.0","pid":12345,"ruby_version":"4.0.1","runtime":1.0,"session_id":"019cf6f1-77e8-74b6-82db-f8b5faf570cd","subject_results":[{"amount_mutations":1,"coverage_results":[{"mutation_result":{"isolation_result":{"exception":null,"log":"","process_status":null,"timeout":null,"value":{"job_index":0,"passed":false,"runtime":0.1,"output":""}},"mutation_diff":"@@ -1 +1 @@\n-true\n+nil\n","mutation_identification":"evil:Baz#qux:baz.rb:1:ghi56","mutation_source":"nil","mutation_type":"evil","runtime":0.1},"criteria_result":{"process_abort":false,"test_result":true,"timeout":false}}],"expression_syntax":"Baz#qux","identification":"Baz#qux:baz.rb:1","source":"true","source_path":"baz.rb","tests":["test-b"]},{"amount_mutations":2,"coverage_results":[{"mutation_result":{"isolation_result":{"exception":null,"log":"","process_status":null,"timeout":null,"value":{"job_index":0,"passed":true,"runtime":0.1,"output":""}},"mutation_diff":"@@ -1 +1 @@\n-true\n+false\n","mutation_identification":"evil:Foo#bar:foo.rb:1:abc12","mutation_source":"false","mutation_type":"evil","runtime":0.1},"criteria_result":{"process_abort":false,"test_result":false,"timeout":false}},{"mutation_result":{"isolation_result":{"exception":null,"log":"","process_status":null,"timeout":null,"value":{"job_index":0,"passed":true,"runtime":0.1,"output":""}},"mutation_diff":"@@ -1 +1 @@\n-true\n+nil\n","mutation_identification":"evil:Foo#bar:foo.rb:1:def34","mutation_source":"false","mutation_type":"evil","runtime":0.1},"criteria_result":{"process_abort":false,"test_result":false,"timeout":false}}],"expression_syntax":"Foo#bar","identification":"Foo#bar:foo.rb:1","source":"true","source_path":"foo.rb","tests":["test-a"]}]}
+          {"killtime":0.3,"mutant_version":"1.0.0","pid":12345,"ruby_version":"4.0.1","runtime":1.0,"session_id":"019cf6f1-77e8-74b6-82db-f8b5faf570cd","subject_results":[{"amount_mutations":1,"coverage_results":[{"mutation_result":{"isolation_result":{"exception":null,"log":{"type":"string","content":""},"process_status":null,"timeout":null,"value":{"job_index":0,"passed":false,"runtime":0.1,"output":{"type":"string","content":""}}},"mutation_diff":"@@ -1 +1 @@\n-true\n+nil\n","mutation_identification":"evil:Baz#qux:baz.rb:1:ghi56","mutation_source":"nil","mutation_type":"evil","runtime":0.1},"criteria_result":{"process_abort":false,"test_result":true,"timeout":false}}],"expression_syntax":"Baz#qux","identification":"Baz#qux:baz.rb:1","source":"true","source_path":"baz.rb","tests":["test-b"]},{"amount_mutations":2,"coverage_results":[{"mutation_result":{"isolation_result":{"exception":null,"log":{"type":"string","content":""},"process_status":null,"timeout":null,"value":{"job_index":0,"passed":true,"runtime":0.1,"output":{"type":"string","content":""}}},"mutation_diff":"@@ -1 +1 @@\n-true\n+false\n","mutation_identification":"evil:Foo#bar:foo.rb:1:abc12","mutation_source":"false","mutation_type":"evil","runtime":0.1},"criteria_result":{"process_abort":false,"test_result":false,"timeout":false}},{"mutation_result":{"isolation_result":{"exception":null,"log":{"type":"string","content":""},"process_status":null,"timeout":null,"value":{"job_index":0,"passed":true,"runtime":0.1,"output":{"type":"string","content":""}}},"mutation_diff":"@@ -1 +1 @@\n-true\n+nil\n","mutation_identification":"evil:Foo#bar:foo.rb:1:def34","mutation_source":"false","mutation_type":"evil","runtime":0.1},"criteria_result":{"process_abort":false,"test_result":false,"timeout":false}}],"expression_syntax":"Foo#bar","identification":"Foo#bar:foo.rb:1","source":"true","source_path":"foo.rb","tests":["test-a"]}]}
         JSON
       end
 
@@ -534,8 +542,18 @@ RSpec.describe Mutant::CLI::Command::Session do
     let(:alive_coverage) do
       {
         'mutation_result' => {
-          'isolation_result'        => { 'exception' => nil, 'log' => '', 'process_status' => nil, 'timeout' => nil,
-                                  'value' => { 'job_index' => 0, 'passed' => true, 'runtime' => 0.1, 'output' => '' } },
+          'isolation_result'        => {
+            'exception'      => nil,
+            'log'            => { 'type' => 'string', 'content' => '' },
+            'process_status' => nil,
+            'timeout'        => nil,
+            'value'          => {
+              'job_index' => 0,
+              'passed'    => true,
+              'runtime'   => 0.1,
+              'output'    => { 'type' => 'string', 'content' => '' }
+            }
+          },
           'mutation_diff'           => "@@ -1 +1 @@\n-true\n+false\n",
           'mutation_identification' => 'evil:Bar#baz:bar.rb:1:abc12',
           'mutation_source'         => 'false',
@@ -638,9 +656,16 @@ RSpec.describe Mutant::CLI::Command::Session do
         {
           'mutation_result' => {
             'isolation_result'        => {
-              'exception' => nil, 'log' => '', 'timeout' => nil,
+              'exception'      => nil,
+              'log'            => { 'type' => 'string', 'content' => '' },
+              'timeout'        => nil,
               'process_status' => { 'exitstatus' => 0 },
-              'value' => { 'job_index' => 0, 'passed' => true, 'runtime' => 0.1, 'output' => '' }
+              'value'          => {
+                'job_index' => 0,
+                'passed'    => true,
+                'runtime'   => 0.1,
+                'output'    => { 'type' => 'string', 'content' => '' }
+              }
             },
             'mutation_diff'           => "@@ -1 +1 @@\n-true\n+false\n",
             'mutation_identification' => 'evil:Qux#quux:qux.rb:1:abc12',

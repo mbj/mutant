@@ -31,7 +31,7 @@ module Mutant
       def success?
         exitstatus.equal?(0)
       end
-      JSON = Transform::JSON.for_anima(self)
+      CODEC = Transform::Codec.for_anima(self)
     end # ProcessStatus
   end # Result
 end # Mutant

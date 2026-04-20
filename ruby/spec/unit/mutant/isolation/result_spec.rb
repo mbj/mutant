@@ -4,7 +4,7 @@ RSpec.describe Mutant::Isolation::Result do
   let(:object) do
     described_class.new(
       exception:,
-      log:            '',
+      log:            Mutant::LogCapture::String.new(content: ''),
       process_status:,
       timeout:,
       value:          nil
@@ -70,14 +70,19 @@ RSpec.describe Mutant::Isolation::Result do
       object = described_class.new(
         exception:      Mutant::Result::Exception.new(backtrace: %w[a.rb:1], message: 'boom',
                                                       original_class: 'RuntimeError'),
-        log:            'some log',
+        log:            Mutant::LogCapture::String.new(content: 'some log'),
         process_status: Mutant::Result::ProcessStatus.new(exitstatus: 1),
         timeout:        2.5,
-        value:          Mutant::Result::Test.new(job_index: 0, output: 'ok', passed: true, runtime: 1.0)
+        value:          Mutant::Result::Test.new(
+          job_index: 0,
+          output:    Mutant::LogCapture::String.new(content: 'ok'),
+          passed:    true,
+          runtime:   1.0
+        )
       )
 
-      dumped = described_class::JSON.dump(object).from_right
-      loaded = described_class::JSON.load(dumped).from_right
+      dumped = described_class::CODEC.dump(object).from_right
+      loaded = described_class::CODEC.load(dumped).from_right
 
       expect(loaded).to eql(object)
     end
@@ -85,14 +90,14 @@ RSpec.describe Mutant::Isolation::Result do
     it 'round trips with nil fields' do
       object = described_class.new(
         exception:      nil,
-        log:            '',
+        log:            Mutant::LogCapture::String.new(content: ''),
         process_status: nil,
         timeout:        nil,
         value:          nil
       )
 
-      dumped = described_class::JSON.dump(object).from_right
-      loaded = described_class::JSON.load(dumped).from_right
+      dumped = described_class::CODEC.dump(object).from_right
+      loaded = described_class::CODEC.load(dumped).from_right
 
       expect(loaded).to eql(object)
     end
@@ -100,14 +105,14 @@ RSpec.describe Mutant::Isolation::Result do
     it 'round trips with only exception present' do
       object = described_class.new(
         exception:      Mutant::Result::Exception.new(backtrace: [], message: 'err', original_class: 'StandardError'),
-        log:            '',
+        log:            Mutant::LogCapture::String.new(content: ''),
         process_status: nil,
         timeout:        nil,
         value:          nil
       )
 
-      dumped = described_class::JSON.dump(object).from_right
-      loaded = described_class::JSON.load(dumped).from_right
+      dumped = described_class::CODEC.dump(object).from_right
+      loaded = described_class::CODEC.load(dumped).from_right
 
       expect(loaded).to eql(object)
     end
@@ -115,14 +120,14 @@ RSpec.describe Mutant::Isolation::Result do
     it 'round trips with only process_status present' do
       object = described_class.new(
         exception:      nil,
-        log:            '',
+        log:            Mutant::LogCapture::String.new(content: ''),
         process_status: Mutant::Result::ProcessStatus.new(exitstatus: 0),
         timeout:        nil,
         value:          nil
       )
 
-      dumped = described_class::JSON.dump(object).from_right
-      loaded = described_class::JSON.load(dumped).from_right
+      dumped = described_class::CODEC.dump(object).from_right
+      loaded = described_class::CODEC.load(dumped).from_right
 
       expect(loaded).to eql(object)
     end
@@ -130,14 +135,14 @@ RSpec.describe Mutant::Isolation::Result do
     it 'round trips with only timeout present' do
       object = described_class.new(
         exception:      nil,
-        log:            '',
+        log:            Mutant::LogCapture::String.new(content: ''),
         process_status: nil,
         timeout:        5.0,
         value:          nil
       )
 
-      dumped = described_class::JSON.dump(object).from_right
-      loaded = described_class::JSON.load(dumped).from_right
+      dumped = described_class::CODEC.dump(object).from_right
+      loaded = described_class::CODEC.load(dumped).from_right
 
       expect(loaded).to eql(object)
     end
@@ -145,14 +150,19 @@ RSpec.describe Mutant::Isolation::Result do
     it 'round trips with only value present' do
       object = described_class.new(
         exception:      nil,
-        log:            '',
+        log:            Mutant::LogCapture::String.new(content: ''),
         process_status: nil,
         timeout:        nil,
-        value:          Mutant::Result::Test.new(job_index: nil, output: '', passed: false, runtime: 0.0)
+        value:          Mutant::Result::Test.new(
+          job_index: nil,
+          output:    Mutant::LogCapture::String.new(content: ''),
+          passed:    false,
+          runtime:   0.0
+        )
       )
 
-      dumped = described_class::JSON.dump(object).from_right
-      loaded = described_class::JSON.load(dumped).from_right
+      dumped = described_class::CODEC.dump(object).from_right
+      loaded = described_class::CODEC.load(dumped).from_right
 
       expect(loaded).to eql(object)
     end

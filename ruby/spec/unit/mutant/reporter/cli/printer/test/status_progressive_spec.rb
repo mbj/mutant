@@ -34,7 +34,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Test::StatusProgressive::Pipe do
         [
           Mutant::Result::Test.new(
             job_index: 0,
-            output:    '',
+            output:    Mutant::LogCapture::String.new(content: ''),
             passed:    false,
             runtime:   0.5
           )

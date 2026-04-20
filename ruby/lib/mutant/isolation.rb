@@ -25,11 +25,11 @@ module Mutant
       dump = Transform::Success.new(
         block: lambda do |object|
           {
-            'exception'      => object.exception && Mutant::Result::Exception::JSON.dump(object.exception).from_right,
-            'log'            => object.log,
-            'process_status' => object.process_status && Mutant::Result::ProcessStatus::JSON.dump(object.process_status).from_right,
+            'exception'      => object.exception && Mutant::Result::Exception::CODEC.dump(object.exception).from_right,
+            'log'            => LogCapture::CODEC.dump(object.log).from_right,
+            'process_status' => object.process_status && Mutant::Result::ProcessStatus::CODEC.dump(object.process_status).from_right,
             'timeout'        => object.timeout,
-            'value'          => object.value && Mutant::Result::Test::JSON.dump(object.value).from_right
+            'value'          => object.value && Mutant::Result::Test::CODEC.dump(object.value).from_right
           }
         end
       )
@@ -38,11 +38,11 @@ module Mutant
         steps: [
           Transform::Hash.new(
             required: [
-              Transform::Hash::Key.new(value: 'exception',      transform: Transform::Nullable.new(transform: Mutant::Result::Exception::JSON.load_transform)),
-              Transform::Hash::Key.new(value: 'log',            transform: Transform::STRING),
-              Transform::Hash::Key.new(value: 'process_status', transform: Transform::Nullable.new(transform: Mutant::Result::ProcessStatus::JSON.load_transform)),
+              Transform::Hash::Key.new(value: 'exception',      transform: Transform::Nullable.new(transform: Mutant::Result::Exception::CODEC.load_transform)),
+              Transform::Hash::Key.new(value: 'log',            transform: LogCapture::CODEC.load_transform),
+              Transform::Hash::Key.new(value: 'process_status', transform: Transform::Nullable.new(transform: Mutant::Result::ProcessStatus::CODEC.load_transform)),
               Transform::Hash::Key.new(value: 'timeout',        transform: Transform::Nullable.new(transform: Transform::FLOAT)),
-              Transform::Hash::Key.new(value: 'value',          transform: Transform::Nullable.new(transform: Mutant::Result::Test::JSON.load_transform))
+              Transform::Hash::Key.new(value: 'value',          transform: Transform::Nullable.new(transform: Mutant::Result::Test::CODEC.load_transform))
             ],
             optional: []
           ),
@@ -51,7 +51,7 @@ module Mutant
         ]
       )
 
-      JSON = Transform::JSON.new(dump_transform: dump, load_transform: load)
+      CODEC = Transform::Codec.new(dump_transform: dump, load_transform: load)
     end # Result
 
     # Call block in isolation

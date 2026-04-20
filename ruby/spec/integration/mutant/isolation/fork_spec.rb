@@ -19,7 +19,7 @@ RSpec.describe Mutant::Isolation::Fork, mutant: false do
       $stderr.puts('bar')
     end
 
-    expect(result.log).to eql("foo\nbar\n")
+    expect(result.log).to eql(Mutant::LogCapture::String.new(content: "foo\nbar\n"))
   end
 
   it 'allows to read result' do

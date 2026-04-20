@@ -21,7 +21,7 @@ module Mutant
 
         def load_session_file(path)
           world.parse_json(path.read)
-            .bind(&Result::Session::JSON.load_transform.public_method(:call))
+            .bind(&Result::Session::CODEC.load_transform.public_method(:call))
         end
 
         # Shared base for commands that operate on a session
