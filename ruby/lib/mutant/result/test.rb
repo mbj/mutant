@@ -24,7 +24,7 @@ module Mutant
         end
       end # VoidValue
 
-      JSON = Transform::JSON.for_anima(self)
+      CODEC = Transform::Codec.for_anima(self)
     end # Test
   end # Result
 end # Mutant

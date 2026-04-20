@@ -32,8 +32,8 @@ RSpec.describe Mutant::Result::Exception do
         message:        'test error',
         original_class: 'ArgumentError'
       )
-      dumped = described_class::JSON.dump(object).from_right
-      loaded = described_class::JSON.load(dumped).from_right
+      dumped = described_class::CODEC.dump(object).from_right
+      loaded = described_class::CODEC.load(dumped).from_right
 
       expect(loaded).to eql(object)
     end
