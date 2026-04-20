@@ -110,7 +110,7 @@ module Mutant
             #
             # @return [undefined]
             def run
-              puts(object.output)
+              puts(object.output.content)
             end
 
           end # Result

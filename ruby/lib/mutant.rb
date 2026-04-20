@@ -70,6 +70,7 @@ module Mutant
     require 'mutant/procto'
     require 'mutant/transform'
     require 'mutant/transform/codec'
+    require 'mutant/log_capture'
     require 'mutant/variable'
     require 'mutant/bootstrap'
     require 'mutant/version'

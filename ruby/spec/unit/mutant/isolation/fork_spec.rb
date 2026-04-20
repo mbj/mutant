@@ -234,7 +234,7 @@ RSpec.describe Mutant::Isolation::Fork do
           verify_events do
             expect(apply).to eql(
               described_class::Result.new(
-                log:            '',
+                log:            Mutant::LogCapture::String.new(content: ''),
                 exception:      nil,
                 process_status: child_status_success,
                 timeout:        nil,
@@ -266,7 +266,7 @@ RSpec.describe Mutant::Isolation::Fork do
           verify_events do
             expect(apply).to eql(
               described_class::Result.new(
-                log:            full_fragment + log_fragment,
+                log:            Mutant::LogCapture::String.new(content: full_fragment + log_fragment),
                 exception:      nil,
                 process_status: child_status_success,
                 timeout:        nil,
@@ -282,7 +282,7 @@ RSpec.describe Mutant::Isolation::Fork do
           verify_events do
             expect(apply).to eql(
               described_class::Result.new(
-                log:            log_fragment,
+                log:            Mutant::LogCapture::String.new(content: log_fragment),
                 exception:      nil,
                 process_status: child_status_success,
                 timeout:        nil,
@@ -344,7 +344,7 @@ RSpec.describe Mutant::Isolation::Fork do
             verify_events do
               expect(apply).to eql(
                 described_class::Result.new(
-                  log:            log_fragment,
+                  log:            Mutant::LogCapture::String.new(content: log_fragment),
                   exception:      nil,
                   process_status: child_status_success,
                   timeout:        nil,
@@ -373,7 +373,7 @@ RSpec.describe Mutant::Isolation::Fork do
               verify_events do
                 expect(apply).to eql(
                   described_class::Result.new(
-                    log:            log_fragment,
+                    log:            Mutant::LogCapture::String.new(content: log_fragment),
                     exception:      nil,
                     process_status: child_status_success,
                     timeout:        nil,
@@ -398,7 +398,7 @@ RSpec.describe Mutant::Isolation::Fork do
               verify_events do
                 expect(apply).to eql(
                   described_class::Result.new(
-                    log:            log_fragment,
+                    log:            Mutant::LogCapture::String.new(content: log_fragment),
                     exception:      nil,
                     process_status: child_status_error,
                     timeout:        nil,
@@ -435,7 +435,7 @@ RSpec.describe Mutant::Isolation::Fork do
           verify_events do
             expect(apply).to eql(
               described_class::Result.new(
-                log:            '',
+                log:            Mutant::LogCapture::String.new(content: ''),
                 exception:      nil,
                 process_status: child_status_success,
                 timeout:        4.0,
@@ -469,7 +469,7 @@ RSpec.describe Mutant::Isolation::Fork do
           verify_events do
             expect(apply).to eql(
               described_class::Result.new(
-                log:            '',
+                log:            Mutant::LogCapture::String.new(content: ''),
                 exception:      nil,
                 process_status: child_status_success,
                 timeout:        4.0,
@@ -507,7 +507,7 @@ RSpec.describe Mutant::Isolation::Fork do
         verify_events do
           expect(apply).to eql(
             described_class::Result.new(
-              log:            log_fragment,
+              log:            Mutant::LogCapture::String.new(content: log_fragment),
               exception:      Mutant::Result::Exception.new(
                 backtrace:      exception.backtrace,
                 message:        exception.message,
@@ -542,7 +542,7 @@ RSpec.describe Mutant::Isolation::Fork do
           verify_events do
             expect(apply).to eql(
               described_class::Result.new(
-                log:            log_fragment,
+                log:            Mutant::LogCapture::String.new(content: log_fragment),
                 exception:      nil,
                 process_status: child_status_success,
                 timeout:        nil,
@@ -571,7 +571,7 @@ RSpec.describe Mutant::Isolation::Fork do
         verify_events do
           expect(apply).to eql(
             described_class::Result.new(
-              log:            log_fragment,
+              log:            Mutant::LogCapture::String.new(content: log_fragment),
               exception:      nil,
               process_status: child_status_error,
               timeout:        nil,

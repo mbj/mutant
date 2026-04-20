@@ -91,7 +91,7 @@ module MutantSpec
 
         def response(response)
           if response.error
-            Mutant::WORLD.stderr.puts(response.log)
+            Mutant::WORLD.stderr.puts(response.log.content)
             fail response.error
           end
           puts(FINISH_MESSAGE % [response.result, response.job.payload])

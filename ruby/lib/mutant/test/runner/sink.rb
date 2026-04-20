@@ -38,7 +38,7 @@ module Mutant
         # @return [self]
         def response(response)
           if response.error
-            env.world.stderr.puts(response.log)
+            env.world.stderr.puts(response.log.content)
             fail response.error
           end
 

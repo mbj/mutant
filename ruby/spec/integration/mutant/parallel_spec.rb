@@ -52,19 +52,19 @@ RSpec.describe 'parallel', mutant: false do
         Mutant::Parallel::Response.new(
           error:  nil,
           job:    Mutant::Parallel::Source::Job.new(index: 0, payload: 1),
-          log:    "Booting: 0\nPayload: 1\n",
+          log:    Mutant::LogCapture::String.new(content: "Booting: 0\nPayload: 1\n"),
           result: 2
         ),
         Mutant::Parallel::Response.new(
           error:  nil,
           job:    Mutant::Parallel::Source::Job.new(index: 1, payload: 2),
-          log:    "Payload: 2\n",
+          log:    Mutant::LogCapture::String.new(content: "Payload: 2\n"),
           result: 4
         ),
         Mutant::Parallel::Response.new(
           error:  nil,
           job:    Mutant::Parallel::Source::Job.new(index: 2, payload: 3),
-          log:    "Payload: 3\n",
+          log:    Mutant::LogCapture::String.new(content: "Payload: 3\n"),
           result: 6
         )
       ]
@@ -105,13 +105,13 @@ RSpec.describe 'parallel', mutant: false do
       Mutant::Parallel::Response.new(
         error:  nil,
         job:    Mutant::Parallel::Source::Job.new(index: 0, payload: 1),
-        log:    '',
+        log:    Mutant::LogCapture::String.new(content: ''),
         result: nil
       )
     )
     expect(response_b.error).to be(EOFError)
     expect(response_b.result).to be(nil)
-    expect(response_b.log.match?('<main>')).to be(true)
+    expect(response_b.log.content.match?('<main>')).to be(true)
   end
 
   # rubocop:disable Metrics/MethodLength
@@ -147,7 +147,7 @@ RSpec.describe 'parallel', mutant: false do
       error:  result.error,
       job:    result.job,
       result: run_length_encode(result.result),
-      log:    run_length_encode(result.log)
+      log:    run_length_encode(result.log.content)
     }
   end
 
@@ -182,13 +182,13 @@ RSpec.describe 'parallel', mutant: false do
         Mutant::Parallel::Response.new(
           error:  nil,
           job:    Mutant::Parallel::Source::Job.new(index: 0, payload: 1),
-          log:    "#{b}\n#{b}\n",
+          log:    Mutant::LogCapture::String.new(content: "#{b}\n#{b}\n"),
           result: b
         ),
         Mutant::Parallel::Response.new(
           error:  nil,
           job:    Mutant::Parallel::Source::Job.new(index: 1, payload: 2),
-          log:    "#{b}#{b}\n",
+          log:    Mutant::LogCapture::String.new(content: "#{b}#{b}\n"),
           result: b * 2
         )
       ].map(&method(:project))
@@ -228,7 +228,7 @@ RSpec.describe 'parallel', mutant: false do
     expect(responses.length).to be(3)
 
     responses.each do |response|
-      expect(response.log.match?(/<iteration \d+>/)).to be(true)
+      expect(response.log.content.match?(/<iteration \d+>/)).to be(true)
     end
   end
 
@@ -288,7 +288,7 @@ RSpec.describe 'parallel', mutant: false do
         Mutant::Parallel::Response.new(
           error:  Timeout::Error,
           job:    Mutant::Parallel::Source::Job.new(index: 0, payload: 1),
-          log:    '',
+          log:    Mutant::LogCapture::String.new(content: ''),
           result: nil
         )
       ]

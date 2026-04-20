@@ -239,7 +239,7 @@ module SharedContext
     let(:mutation_a_isolation_result) do
       Mutant::Isolation::Result.new(
         exception:      nil,
-        log:            '',
+        log:            Mutant::LogCapture::String.new(content: ''),
         process_status: nil,
         timeout:        nil,
         value:          mutation_a_test_result
@@ -249,7 +249,7 @@ module SharedContext
     let(:mutation_a_test_result) do
       Mutant::Result::Test.new(
         job_index: 0,
-        output:    '',
+        output:    Mutant::LogCapture::String.new(content: ''),
         passed:    false,
         runtime:   1.0
       )
@@ -258,7 +258,7 @@ module SharedContext
     let(:mutation_b_test_result) do
       Mutant::Result::Test.new(
         job_index: 1,
-        output:    '',
+        output:    Mutant::LogCapture::String.new(content: ''),
         passed:    false,
         runtime:   1.0
       )
@@ -267,7 +267,7 @@ module SharedContext
     let(:mutation_b_isolation_result) do
       Mutant::Isolation::Result.new(
         exception:      nil,
-        log:            '',
+        log:            Mutant::LogCapture::String.new(content: ''),
         process_status: nil,
         timeout:        nil,
         value:          mutation_b_test_result

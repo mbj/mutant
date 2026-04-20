@@ -69,7 +69,7 @@ RSpec.describe Mutant::Env do
 
   def isolation_success(value)
     Mutant::Isolation::Result.new(
-      log:            '',
+      log:            Mutant::LogCapture::String.new(content: ''),
       exception:      nil,
       process_status:,
       timeout:        nil,
@@ -87,7 +87,7 @@ RSpec.describe Mutant::Env do
     let(:test_result) do
       Mutant::Result::Test.new(
         job_index: nil,
-        output:    '',
+        output:    Mutant::LogCapture::String.new(content: ''),
         passed:    true,
         runtime:   0.1
       )

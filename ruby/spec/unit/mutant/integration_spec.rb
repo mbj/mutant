@@ -158,7 +158,7 @@ RSpec.describe Mutant::Integration::Null do
       is_expected.to eql(
         Mutant::Result::Test.new(
           job_index: nil,
-          output:    '',
+          output:    Mutant::LogCapture::String.new(content: ''),
           passed:    true,
           runtime:   0.0
         )

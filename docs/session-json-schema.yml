@@ -13,7 +13,8 @@ info:
     - lib/mutant/result/test.rb
     - lib/mutant/result/exception.rb
     - lib/mutant/result/process_status.rb
-  version: 1.0.0
+    - lib/mutant/log_capture.rb
+  version: 1.1.0
 
 paths: {}
 
@@ -152,8 +153,14 @@ components:
           description: Exception raised during isolation, or null.
           $ref: '#/components/schemas/Exception'
         log:
-          type: string
-          description: Combined stderr and stdout from the killfork process.
+          description: |
+            Combined stderr and stdout from the killfork process.
+            New sessions use the LogCapture object form; legacy sessions
+            written before v0.17 stored this as a plain string and are
+            accepted on load for backwards compatibility.
+          oneOf:
+            - $ref: '#/components/schemas/LogCapture'
+            - type: string
         process_status:
           nullable: true
           description: Exit status of the killfork process, or null.
@@ -188,8 +195,14 @@ components:
           format: double
           description: Test execution time (seconds).
         output:
-          type: string
-          description: Test runner output.
+          description: |
+            Test runner output.
+            New sessions use the LogCapture object form; legacy sessions
+            written before v0.17 stored this as a plain string and are
+            accepted on load for backwards compatibility.
+          oneOf:
+            - $ref: '#/components/schemas/LogCapture'
+            - type: string
 
     CoverageCriteria:
       type: object
@@ -235,3 +248,23 @@ components:
         exitstatus:
           type: integer
           description: Exit status code of the killfork process.
+
+    LogCapture:
+      type: object
+      description: |
+        Tagged representation of captured log output that preserves raw
+        bytes. UTF-8 valid captures are stored inline; otherwise the
+        bytes are base64-encoded (RFC 4648, no line breaks, `=` padding).
+      required:
+        - type
+        - content
+      properties:
+        type:
+          type: string
+          enum: [string, binary]
+          description: |
+            - `string`: `content` is the raw UTF-8 text.
+            - `binary`: `content` is base64-encoded raw bytes.
+        content:
+          type: string
+          description: UTF-8 text when `type` is `string`; base64-encoded bytes when `type` is `binary`.

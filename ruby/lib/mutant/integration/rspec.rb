@@ -74,7 +74,7 @@ module Mutant
 
         Result::Test.new(
           job_index: nil,
-          output:    '',
+          output:    LogCapture::String.new(content: ''),
           passed:,
           runtime:   timer.now - start
         )

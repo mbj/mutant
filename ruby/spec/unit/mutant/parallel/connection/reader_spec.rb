@@ -93,7 +93,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
               Mutant::Parallel::Response.new(
                 error:  nil,
                 job:,
-                log:    '',
+                log:    Mutant::LogCapture::String.new(content: ''),
                 result:
               )
             )
@@ -125,7 +125,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
               Mutant::Parallel::Response.new(
                 error:  nil,
                 job:,
-                log:    '',
+                log:    Mutant::LogCapture::String.new(content: ''),
                 result:
               )
             )
@@ -162,7 +162,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
               Mutant::Parallel::Response.new(
                 error:  nil,
                 job:,
-                log:    '',
+                log:    Mutant::LogCapture::String.new(content: ''),
                 result:
               )
             )
@@ -203,7 +203,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
               Mutant::Parallel::Response.new(
                 error:  nil,
                 job:,
-                log:    '',
+                log:    Mutant::LogCapture::String.new(content: ''),
                 result:
               )
             )
@@ -232,7 +232,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             Mutant::Parallel::Response.new(
               error:  EOFError,
               job:,
-              log:    '',
+              log:    Mutant::LogCapture::String.new(content: ''),
               result: nil
             )
           )
@@ -266,7 +266,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             Mutant::Parallel::Response.new(
               error:  EOFError,
               job:,
-              log:    'a' * 4096,
+              log:    Mutant::LogCapture::String.new(content: 'a' * 4096),
               result: nil
             )
           )
@@ -296,7 +296,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             Mutant::Parallel::Response.new(
               error:  Timeout::Error,
               job:,
-              log:    '<log>',
+              log:    Mutant::LogCapture::String.new(content: '<log>'),
               result: nil
             )
           )
@@ -324,7 +324,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             Mutant::Parallel::Response.new(
               error:  EOFError,
               job:,
-              log:    '',
+              log:    Mutant::LogCapture::String.new(content: ''),
               result: nil
             )
           )
@@ -346,7 +346,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             Mutant::Parallel::Response.new(
               error:  Timeout::Error,
               job:,
-              log:    '',
+              log:    Mutant::LogCapture::String.new(content: ''),
               result: nil
             )
           )
@@ -367,7 +367,7 @@ RSpec.describe Mutant::Parallel::Connection::Reader do
             Mutant::Parallel::Response.new(
               error:  Timeout::Error,
               job:,
-              log:    '',
+              log:    Mutant::LogCapture::String.new(content: ''),
               result: nil
             )
           )

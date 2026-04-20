@@ -31,7 +31,7 @@ RSpec.describe Mutant::Test::Runner::Sink do
   let(:test_result_a_raw) do
     Mutant::Result::Test.new(
       job_index: nil,
-      output:    '',
+      output:    Mutant::LogCapture::String.new(content: ''),
       passed:    true,
       runtime:   0.1
     )
@@ -40,7 +40,7 @@ RSpec.describe Mutant::Test::Runner::Sink do
   let(:test_result_b_raw) do
     Mutant::Result::Test.new(
       job_index: nil,
-      output:    '',
+      output:    Mutant::LogCapture::String.new(content: ''),
       passed:    true,
       runtime:   0.2
     )
@@ -68,7 +68,7 @@ RSpec.describe Mutant::Test::Runner::Sink do
       error:  nil,
       job:    job_a,
       result: test_result_a_raw,
-      log:    '<test-a>'
+      log:    Mutant::LogCapture::String.new(content: '<test-a>')
     )
   end
 
@@ -77,7 +77,7 @@ RSpec.describe Mutant::Test::Runner::Sink do
       error:  nil,
       job:    job_b,
       result: test_result_b_raw,
-      log:    '<test-b>'
+      log:    Mutant::LogCapture::String.new(content: '<test-b>')
     )
   end
 
@@ -130,7 +130,7 @@ RSpec.describe Mutant::Test::Runner::Sink do
             Mutant::Parallel::Response.new(
               error:  EOFError,
               job:    0,
-              log:    'some log',
+              log:    Mutant::LogCapture::String.new(content: 'some log'),
               result: nil
             )
           )
