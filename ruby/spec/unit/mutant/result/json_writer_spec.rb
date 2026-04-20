@@ -59,4 +59,57 @@ RSpec.describe Mutant::Result::JSONWriter do
       expect(object.call).to be(path)
     end
   end
+
+  describe '#json' do
+    before { allow(process).to receive(:pid).and_return(42) }
+
+    it 'scrubs encoding of the dumped session before JSON generation' do
+      dumped = { 'ruby_version' => "bad\xF7byte".b }
+      allow(Mutant::Result::Session::JSON)
+        .to receive(:dump)
+        .with(instance_of(Mutant::Result::Session))
+        .and_return(Mutant::Either::Right.new(dumped))
+
+      expect(JSON.parse(object.__send__(:json)))
+        .to eql('ruby_version' => "bad\uFFFDbyte")
+    end
+  end
+
+  describe '#scrub_encoding' do
+    def scrub(value)
+      object.__send__(:scrub_encoding, value)
+    end
+
+    it 'retags ASCII-8BIT strings holding valid UTF-8 bytes as UTF-8' do
+      binary = (+'hellö').force_encoding(Encoding::ASCII_8BIT)
+      result = scrub(binary)
+
+      expect(result.encoding).to be(Encoding::UTF_8)
+      expect(result).to eql('hellö')
+    end
+
+    it 'replaces invalid UTF-8 byte sequences with the replacement character' do
+      expect(scrub("bad\xF7byte".b)).to eql("bad\uFFFDbyte")
+    end
+
+    it 'does not mutate frozen strings' do
+      frozen = 'frozen'.b.freeze
+
+      expect { scrub(frozen) }.not_to raise_error
+      expect(frozen.encoding).to be(Encoding::ASCII_8BIT)
+    end
+
+    it 'recurses into hash values' do
+      expect(scrub('key' => "bad\xF7".b)).to eql('key' => "bad\uFFFD")
+    end
+
+    it 'recurses into array elements' do
+      expect(scrub(["bad\xF7".b, 'ok'])).to eql(["bad\uFFFD", 'ok'])
+    end
+
+    it 'leaves non-string scalars untouched' do
+      expect(scrub(42)).to be(42)
+      expect(scrub(nil)).to be(nil)
+    end
+  end
 end
