@@ -1,3 +1,12 @@
+# v0.16.2 2026-04-20
+
+* Fix `JSON::GeneratorError` crash in `Result::JSONWriter` when test output
+  contains bytes that are not valid UTF-8. Captured log output is now
+  preserved as tagged `{type, content}` objects in the session JSON,
+  distinguishing UTF-8 text from binary bytes (base64-encoded). Session
+  files written by prior versions still load: plain-string `log`/`output`
+  fields are promoted to string-typed captures on read.
+
 # v0.16.1 2026-04-13
 
 * Fix pattern language rejecting Ruby method names with `!`, `?`, or `=`

@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    mutant (0.16.1)
+    mutant (0.16.2)
       diff-lcs (>= 1.6, < 3)
       irb (~> 1.15)
       parser (~> 3.3.10)
@@ -9,9 +9,9 @@ PATH
       securerandom (>= 0.3)
       sorbet-runtime (~> 0.6.0)
       unparser (>= 0.8.2, < 0.10)
-    mutant-minitest (0.16.1)
+    mutant-minitest (0.16.2)
       minitest (>= 5.11, < 7)
-      mutant (= 0.16.1)
+      mutant (= 0.16.2)
       mutex_m (~> 0.2)
 
 GEM
