@@ -1,3 +1,20 @@
+# Unreleased
+
+* Fix `KeyError` crash in `Mutant::AST::Structure.for` on Ruby's
+  parameter-site argument-forwarding syntax (`def foo(...)` and
+  `def foo(a, ...)`). The `forward_args` and `forward_arg` parser nodes
+  were missing from `Structure::ALL`, so any matcher / subject resolution
+  that descended into such a file crashed. Observed first against
+  `ruby/json` during corpus testing.
+
+  Latent since [#1348](https://github.com/mbj/mutant/pull/1348), which
+  switched `FindMetaclassContaining` (and related traversals) to
+  `Structure.for(type).each_node(...)`. The call-site counterparts
+  (`forwarded_args`, `forwarded_restarg`, `forwarded_kwrestarg`) were
+  registered in [#1402](https://github.com/mbj/mutant/pull/1402) /
+  [#1403](https://github.com/mbj/mutant/pull/1403); the parameter-site
+  leaves were missed.
+
 # v0.16.2 2026-04-20
 
 * Fix `JSON::GeneratorError` crash in `Result::JSONWriter` when test output
