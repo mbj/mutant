@@ -47,7 +47,6 @@ module Mutant
         @setup_elapsed = timer.elapsed do
           @runner.setup(world.stderr, world.stdout)
           fail 'RSpec setup failure' if rspec_setup_failure?
-          example_group_map
         end
         @runner.configuration.force(color_mode: :on)
         @runner.configuration.reporter
