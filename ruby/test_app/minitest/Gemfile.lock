@@ -21,7 +21,7 @@ GEM
     date (3.5.1)
     diff-lcs (2.0.0)
     drb (2.2.3)
-    erb (6.0.2)
+    erb (6.0.4)
     io-console (0.8.2)
     irb (1.17.0)
       pp (>= 0.6.0)
