@@ -4,7 +4,7 @@ RSpec.describe 'rspec integration', mutant: false do
   let(:base_cmd) do
     %w[
       bundle exec mutant run
-      --include lib
+      --include ../lib
       --integration rspec
       --require test_app
       --usage opensource
@@ -13,9 +13,9 @@ RSpec.describe 'rspec integration', mutant: false do
 
   %w[3.8 3.9 3.10 3.11 3.12 3.13 4.0].each do |version|
     context "RSpec #{version}" do
-      let(:gemfile) { "rspec/Gemfile.rspec_#{version.tr('.', '_')}" }
+      let(:gemfile) { "Gemfile.rspec_#{version.tr('.', '_')}" }
 
-      it_behaves_like 'framework integration'
+      it_behaves_like 'framework integration', :rspec
 
       it 'handles invalid rspec' do
         Dir.chdir('test_app') do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples_for 'framework integration' do
+RSpec.shared_examples_for 'framework integration' do |integration_name|
   def system_with_gemfile(*command)
     Kernel.system(
       {
@@ -14,7 +14,7 @@ RSpec.shared_examples_for 'framework integration' do
 
   around do |example|
     Bundler.with_unbundled_env do
-      Dir.chdir(TestApp.root) do
+      Dir.chdir(File.join(TestApp.root, integration_name.to_s)) do
         Kernel.system(
           { 'BUNDLE_PATH' => 'vendor/bundle' },
           'bundle', 'install', '--gemfile', gemfile

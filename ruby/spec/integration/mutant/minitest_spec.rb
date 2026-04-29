@@ -5,14 +5,14 @@ RSpec.describe 'minitest integration', mutant: false do
     %w[
       bundle exec mutant run
       --include test
-      --include lib
+      --include ../lib
       --require test_app
       --integration minitest
       --usage opensource
     ]
   end
 
-  let(:gemfile) { 'minitest/Gemfile' }
+  let(:gemfile) { 'Gemfile' }
 
-  it_behaves_like 'framework integration'
+  it_behaves_like 'framework integration', :minitest
 end
