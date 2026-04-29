@@ -278,6 +278,11 @@ pub mod rspec {
                 /// Additional arguments
                 arguments: Vec<String>,
             },
+            /// Run tldr integration specs
+            Tldr {
+                /// Additional arguments
+                arguments: Vec<String>,
+            },
             /// Run rspec integration specs
             Rspec {
                 /// Additional arguments
@@ -521,6 +526,12 @@ impl Runtime {
                     Some(rspec::integration::Command::Minitest { arguments }) => {
                         CommandConfig::ruby(bundle_exec_arguments(
                             &["rspec", "spec/integration", "-e", "minitest"],
+                            &arguments,
+                        ))
+                    }
+                    Some(rspec::integration::Command::Tldr { arguments }) => {
+                        CommandConfig::ruby(bundle_exec_arguments(
+                            &["rspec", "spec/integration", "-e", "tldr"],
                             &arguments,
                         ))
                     }
