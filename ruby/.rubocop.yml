@@ -214,4 +214,5 @@ Style/EndlessMethod:
 Style/OneClassPerFile:
   Exclude:
     - 'lib/mutant/integration/minitest.rb'
+    - 'lib/mutant/integration/tldr.rb'
     - 'spec/spec_helper.rb'

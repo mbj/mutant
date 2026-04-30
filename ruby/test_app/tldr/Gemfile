@@ -1,0 +1,7 @@
+source 'https://rubygems.org'
+
+gem 'mutant',      path: '../../'
+gem 'mutant-tldr', path: '../../'
+gem 'tldr',        '~> 1.0'
+
+eval_gemfile File.expand_path('../../../Gemfile.shared', __FILE__)
