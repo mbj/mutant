@@ -109,6 +109,22 @@ RSpec.describe Mutant::Expression::Source do
           include_examples 'performs glob'
         end
 
+        context 'and files are bare (empty / comment-only, AST node is nil)' do
+          let(:node_a) { nil }
+          let(:node_b) { nil }
+
+          include_examples 'no matchers'
+          include_examples 'performs glob'
+        end
+
+        context 'and files contain only a top-level require' do
+          let(:node_a) { s(:send, nil, :require, s(:str, 'foo')) }
+          let(:node_b) { s(:send, nil, :require, s(:str, 'bar')) }
+
+          include_examples 'no matchers'
+          include_examples 'performs glob'
+        end
+
         context 'and files contain single matchable constants' do
           let(:node_a) { s(:module, s(:const, nil, :Foo)) }
 

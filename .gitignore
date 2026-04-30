@@ -3,5 +3,6 @@
 /ruby/tmp
 /ruby/.mutant
 /ruby/test_app/.mutant
+/quick_start/.mutant
 /ruby/test_app/**/vendor
 /target

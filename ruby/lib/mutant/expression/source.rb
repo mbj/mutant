@@ -30,6 +30,8 @@ module Mutant
       end
 
       def toplevel_consts(node)
+        return EMPTY_ARRAY if node.nil?
+
         children = node.children
 
         case node.type
