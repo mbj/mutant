@@ -1,4 +1,10 @@
-# Unreleased
+# v0.16.3 2026-04-30
+
+* Fix `NoMethodError` crash in `source:<glob>` subject expressions when
+  the glob matched a bare file (empty file or comment-only file, e.g.
+  containing only `# frozen_string_literal: true`). Such files parse to
+  a `nil` AST node, which `Expression::Source#toplevel_consts` did not
+  handle. Bare files now contribute no scopes instead of crashing.
 
 * Fix `KeyError` crash in `Mutant::AST::Structure.for` on Ruby's
   parameter-site argument-forwarding syntax (`def foo(...)` and
