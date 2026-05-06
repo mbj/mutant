@@ -129,7 +129,7 @@ hooks:
   - rails_hooks.rb
 ```
 
-See the [Hooks documentation](/docs/hooks.md) for a complete example of Rails database isolation.
+See [Rails Integration](/docs/rails.md) for the full setup, including the per-worker database isolation example. The [Hooks documentation](/docs/hooks.md) describes the hook events used.
 
 ### Other Resources
 

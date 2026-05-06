@@ -142,6 +142,7 @@ See [commercial licensing](/docs/commercial.md) for pricing and details.
 * [Configuration](/docs/configuration.md)
 * [RSpec Integration](/docs/mutant-rspec.md)
 * [Minitest Integration](/docs/mutant-minitest.md)
+* [Rails Integration](/docs/rails.md)
 * [Incremental Mode](/docs/incremental.md)
 * [Reading Reports](/docs/reading-reports.md)
 * [Concurrency](/docs/concurrency.md)

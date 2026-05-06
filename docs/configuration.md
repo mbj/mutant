@@ -67,6 +67,8 @@ environment_variables:
 
 Additional environment variables can be added by providing the `--env KEY=VALUE` option to the CLI.
 
+For the full Rails setup (eager loading, database isolation), see [Rails Integration](/docs/rails.md).
+
 #### `integration`
 
 Configures the [integration](/docs/nomenclature.md#integration) to use, via the `name` key.
