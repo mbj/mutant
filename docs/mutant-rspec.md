@@ -202,3 +202,5 @@ end
 ```sh
 RAILS_ENV=test bundle exec mutant run -r ./config/environment --integration rspec User
 ```
+
+For the full Rails setup (eager loading, database isolation, parallel workers), see [Rails Integration](/docs/rails.md).

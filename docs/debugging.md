@@ -244,6 +244,8 @@ Check configuration:
 - Verify `includes` paths are correct
 - Check `environment_variables` are set appropriately (e.g., `RAILS_ENV: test`)
 
+For Rails projects, missing or non-firing eager-load hooks are a common cause of empty subject lists — see [Rails Integration](/docs/rails.md).
+
 ### Understand Generated Mutations
 
 Before running full mutation testing, preview what mutations will be generated:
