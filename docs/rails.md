@@ -144,12 +144,81 @@ The actual per-worker database setup happens in the *worker-start* hooks. The ot
 
 The `mutant test` case is worth calling out explicitly: this same hook file lets you run `mutant test` as a drop-in parallel test runner (no mutations), with the same per-worker database isolation — provided you registered `test_worker_process_start`. See [Test Runner](/docs/test-runner.md) for that workflow.
 
-### Other Databases
+## Database Isolation for Parallel Workers (SQLite)
 
-The hook event structure (`setup_integration_post` for the initial disconnect, `test_worker_process_start` / `mutation_worker_process_start` for per-worker setup) applies to any database. What changes is the `isolate_database` and `with_root_connection` implementations:
+> **SQLite-specific.** SQLite database files should not be shared by parallel workers. The example below uses a test database file prepared before mutant starts, then copies that file for each worker process.
+
+Run the Rails test database preparation step before starting mutant:
+
+```sh
+RAILS_ENV=test bin/rails db:test:prepare
+```
+
+Then configure a hook file that copies the prepared database for every worker:
+
+```ruby
+# rails_hooks.rb
+require 'fileutils'
+
+hooks.register(:env_infection_post) do
+  Rails.application.eager_load!
+end
+
+project_root = File.expand_path('.', __dir__)
+template_database = File.join(project_root, 'storage/test.sqlite3')
+worker_database_dir = File.join(project_root, 'tmp/mutant')
+
+disconnect_database = lambda do
+  next unless defined?(ActiveRecord::Base)
+  next unless ActiveRecord::Base.connected?
+
+  ActiveRecord::Base.connection_pool.disconnect!
+end
+
+isolate_database = lambda do |index:|
+  connection_config = ActiveRecord::Base.connection_db_config.configuration_hash
+
+  disconnect_database.call
+
+  unless File.file?(template_database)
+    raise "Missing #{template_database}; run bin/rails db:test:prepare before mutant"
+  end
+
+  FileUtils.mkdir_p(worker_database_dir)
+
+  database = File.join(worker_database_dir, "worker-#{index}-#{Process.pid}.sqlite3")
+  FileUtils.cp(template_database, database)
+
+  ENV['DATABASE_URL'] = "sqlite3:#{database}"
+  ActiveRecord::Base.establish_connection(connection_config.merge(database: database))
+end
+
+hooks.register(:setup_integration_post) do
+  disconnect_database.call
+end
+
+hooks.register(:test_worker_process_start) do |index:|
+  isolate_database.call(index: index)
+end
+
+hooks.register(:mutation_worker_process_start) do |index:|
+  isolate_database.call(index: index)
+end
+```
+
+What this does:
+
+- **`env_infection_post`** — eager-loads the application so subjects are discoverable.
+- **`setup_integration_post`** — disconnects the parent process from the template database after the test integration has loaded.
+- **`test_worker_process_start`** and **`mutation_worker_process_start`** — copy the prepared SQLite database file, then reconnect Active Record to the worker-specific copy. Both registrations are required if you use both `mutant test` and `mutant run`.
+
+This pattern assumes the hook file lives at the Rails root and the test database lives at `storage/test.sqlite3`. Adjust `project_root` and `template_database` if your application uses different paths. Applications with multiple SQLite databases need to copy and reconnect each database separately.
+
+## Other Databases
+
+The hook event structure (`setup_integration_post` for the initial disconnect, `test_worker_process_start` / `mutation_worker_process_start` for per-worker setup) applies to any database. What changes is how the worker-specific database is created and selected:
 
 - **MySQL** — connect as a privileged user, `CREATE DATABASE` per worker, then run your schema-load step (e.g. `db:schema:load`) since MySQL has no `TEMPLATE` clause.
-- **SQLite** — copy the test database file to a per-worker path (`db/test.sqlite3` → `db/test_mutant_worker_<index>.sqlite3`) and update the connection's `database:`.
 - **Multiple databases** — extend `base_records` with each abstract base class (e.g. `[ApplicationRecord, AnalyticsRecord]`); the same hooks run per base.
 
 ## Test Runner Notes

@@ -121,7 +121,7 @@ When running tests in parallel, proper isolation of shared resources is critical
 
 ### Database Isolation with Hooks
 
-For Rails applications with PostgreSQL, use hooks to create isolated databases for each worker:
+For Rails applications, use hooks to create isolated database resources for each worker:
 
 ```yml
 # .mutant.yml
@@ -129,7 +129,7 @@ hooks:
   - rails_hooks.rb
 ```
 
-See [Rails Integration](/docs/rails.md) for the full setup, including the per-worker database isolation example. The [Hooks documentation](/docs/hooks.md) describes the hook events used.
+See [Rails Integration](/docs/rails.md) for the full setup, including PostgreSQL and SQLite per-worker database isolation examples. The [Hooks documentation](/docs/hooks.md) describes the hook events used.
 
 ### Other Resources
 

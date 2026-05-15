@@ -64,7 +64,7 @@ end
 
 ### Rails Application with Database Isolation
 
-Rails projects use these hooks to eager-load the application (so subjects are discoverable) and to give each parallel worker its own database. The full configuration — including the recommended `env_infection_post` eager-load hook and a PostgreSQL per-worker isolation example — lives in [Rails Integration](/docs/rails.md).
+Rails projects use these hooks to eager-load the application (so subjects are discoverable) and to give each parallel worker its own database. The full configuration — including the recommended `env_infection_post` eager-load hook and PostgreSQL and SQLite per-worker isolation examples — lives in [Rails Integration](/docs/rails.md).
 
 ### Mutation Instrumentation
 

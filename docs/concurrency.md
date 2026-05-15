@@ -35,15 +35,16 @@ expect(MyModel.find_by_id(m.id).name).to eql(resource.name)
 An alternative is to try wrapping each test into an enclosing transaction.
 
 For production-grade database isolation, use [hooks](/docs/hooks.md) to create separate
-databases for each worker process. This approach works well with PostgreSQL and other
-databases that support parallel access.
+databases or database files for each worker process. Rails applications can use the
+patterns in [Rails Integration](/docs/rails.md), including PostgreSQL template databases
+and SQLite database-file copies.
 
-Note that some databases, SQLite in particular, are not designed for
-concurrent access and will fail if used in this manner. If you are
-using SQLite, you should set the `--jobs` to 1.
+Do not share one SQLite database file across parallel workers. If you cannot create
+worker-specific database copies, set `--jobs` to 1.
 
 See Also
 --------
 
 * [Test Runner](/docs/test-runner.md) - Verify parallel execution works before mutation testing
+* [Rails Integration](/docs/rails.md) - Rails database isolation examples
 * [Hooks](/docs/hooks.md) - Database isolation examples for parallel workers
