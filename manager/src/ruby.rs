@@ -241,6 +241,55 @@ pub enum Command {
     },
     /// Verify quick_start example works correctly
     QuickStartVerify,
+    /// Verify the rails_example hooks under a Rails version and database
+    RailsVerify {
+        /// Rails version under test
+        #[arg(long)]
+        rails: RailsVersion,
+        /// Database the hooks isolate
+        #[arg(long)]
+        database: Database,
+    },
+    /// Run the rails_example verification steps against an already-provisioned
+    /// database (internal: re-invoked under `pg-ephemeral run-env`).
+    RailsVerifySteps,
+}
+
+#[derive(Clone, Copy, ValueEnum)]
+pub enum RailsVersion {
+    #[value(name = "7.2")]
+    V72,
+    #[value(name = "8.0")]
+    V80,
+    #[value(name = "8.1")]
+    V81,
+}
+
+impl RailsVersion {
+    // Gem requirement passed to the rails_example Gemfile via RAILS_VERSION.
+    fn requirement(self) -> &'static str {
+        match self {
+            Self::V72 => "~> 7.2.0",
+            Self::V80 => "~> 8.0.0",
+            Self::V81 => "~> 8.1.0",
+        }
+    }
+}
+
+#[derive(Clone, Copy, ValueEnum)]
+pub enum Database {
+    Postgresql,
+    Sqlite,
+}
+
+impl Database {
+    // Value of DB_ADAPTER, read by config/database.yml and config/mutant/hooks.rb.
+    fn adapter(self) -> &'static str {
+        match self {
+            Self::Postgresql => "postgresql",
+            Self::Sqlite => "sqlite3",
+        }
+    }
 }
 
 pub mod rspec {
@@ -320,6 +369,8 @@ impl Runtime {
     pub fn run(self, command: Command, rerun_config: RerunConfig) -> RunResult {
         match command {
             Command::QuickStartVerify => self.run_quick_start_verify(),
+            Command::RailsVerify { rails, database } => Self::run_rails_verify(rails, database),
+            Command::RailsVerifySteps => Self::run_rails_verify_steps(&[]),
             _ => match self {
                 Self::Host => self.run_host(command, rerun_config),
                 Self::Ruby33 => self.run_container("docker.io/library/ruby:3.3-alpine", command),
@@ -394,6 +445,160 @@ impl Runtime {
 
         let mut child = command.spawn().expect("Failed to spawn process");
         child.wait().expect("Failed to wait for process")
+    }
+
+    // Verify the documented Rails hooks (docs/rails.md, mirrored in
+    // rails_example/config/mutant/hooks_*.rb) actually isolate parallel workers
+    // for a given Rails version and database. PostgreSQL gets an ephemeral
+    // server via the pg-ephemeral gem's `run-env`; SQLite needs nothing extra.
+    fn run_rails_verify(rails: RailsVersion, database: Database) -> RunResult {
+        // Run everything from inside the example app. The PostgreSQL path
+        // re-invokes this manager under `pg-ephemeral host run-env`, and that
+        // child inherits this working directory, so both parent and child agree
+        // on where the app lives (see rails_command).
+        std::env::set_current_dir("rails_example")
+            .expect("Failed to change into rails_example directory");
+
+        let base_env = vec![
+            ("RAILS_VERSION".to_string(), rails.requirement().to_string()),
+            ("DB_ADAPTER".to_string(), database.adapter().to_string()),
+            ("RAILS_ENV".to_string(), "test".to_string()),
+        ];
+
+        log::info!(
+            "RailsVerify: bundle install (rails {})",
+            rails.requirement()
+        );
+        if !Self::rails_command(&base_env, &["bundle", "install"]).success() {
+            eprintln!("RailsVerify FAILED: bundle install failed");
+            return RunResult::Failure;
+        }
+
+        match database {
+            Database::Sqlite => Self::run_rails_verify_steps(&base_env),
+            Database::Postgresql => Self::run_rails_verify_postgresql(&base_env),
+        }
+    }
+
+    // `pg-ephemeral host run-env` boots a throwaway PostgreSQL and runs a single
+    // host command with PG*/DATABASE_URL pointing at the container's published
+    // port. The whole verification (schema load + two mutant runs) must share
+    // one server, so we re-invoke this manager under run-env via the
+    // `rails-verify-steps` subcommand; every child it spawns inherits the PG*
+    // variables.
+    fn run_rails_verify_postgresql(base_env: &[(String, String)]) -> RunResult {
+        let manager = std::env::current_exe()
+            .expect("Failed to determine manager executable path")
+            .into_os_string()
+            .into_string()
+            .expect("Manager executable path is not valid UTF-8");
+
+        let status = Self::rails_command(
+            base_env,
+            &[
+                "bundle",
+                "exec",
+                "pg-ephemeral",
+                "host",
+                "run-env",
+                "--",
+                &manager,
+                "ruby",
+                "rails-verify-steps",
+            ],
+        );
+
+        if status.success() {
+            RunResult::Success
+        } else {
+            RunResult::Failure
+        }
+    }
+
+    // Prepare the test database, then run mutant twice: once expecting the
+    // boundary mutation to survive (no covering spec), once expecting 100%
+    // coverage with it. Uses --jobs 2 so the worker-isolation hooks fork.
+    fn run_rails_verify_steps(extra_env: &[(String, String)]) -> RunResult {
+        let mut env = extra_env.to_vec();
+
+        // `pg-ephemeral host run-env` exports a DATABASE_URL pointing at the
+        // server's maintenance database. Point the app at a dedicated
+        // `rails_example_test` instead, so the parallel-worker hooks have a
+        // template database to clone. SQLite runs set no DATABASE_URL.
+        if let Ok(url) = std::env::var("DATABASE_URL") {
+            env.push((
+                "DATABASE_URL".to_string(),
+                Self::url_with_database(&url, "rails_example_test"),
+            ));
+        }
+        let env = env.as_slice();
+
+        log::info!("RailsVerify: preparing test database");
+        if !Self::rails_command(env, &["bundle", "exec", "rails", "db:test:prepare"]).success() {
+            eprintln!("RailsVerify FAILED: db:test:prepare failed");
+            return RunResult::Failure;
+        }
+
+        let mutant = &[
+            "bundle",
+            "exec",
+            "mutant",
+            "run",
+            "--jobs",
+            "2",
+            "User#adult?",
+        ];
+
+        log::info!("RailsVerify: running without covering spec (expecting survivors)");
+        if Self::rails_command(env, mutant).success() {
+            eprintln!("RailsVerify FAILED: expected surviving mutations without covering spec");
+            return RunResult::Failure;
+        }
+        log::info!("RailsVerify: mutation survived as expected");
+
+        log::info!("RailsVerify: running with covering spec (expecting 100% coverage)");
+        let mut covering_env = env.to_vec();
+        covering_env.push(("WITH_COVERING_SPEC".to_string(), "1".to_string()));
+        if !Self::rails_command(&covering_env, mutant).success() {
+            eprintln!("RailsVerify FAILED: expected 100% coverage with covering spec");
+            return RunResult::Failure;
+        }
+        log::info!("RailsVerify: 100% coverage achieved as expected");
+
+        RunResult::Success
+    }
+
+    // Runs in the current working directory, which is the rails_example app:
+    // run_rails_verify chdir's into it, and the run-env child inherits that cwd.
+    fn rails_command(env: &[(String, String)], args: &[&str]) -> process::ExitStatus {
+        let mut command = process::Command::new(args[0]);
+        command.args(&args[1..]);
+
+        for (name, value) in env {
+            command.env(name, value);
+        }
+
+        command
+            .spawn()
+            .expect("Failed to spawn process")
+            .wait()
+            .expect("Failed to wait for process")
+    }
+
+    // Replace the database name (the path segment after the last '/', before any
+    // query string) in a `scheme://user:pass@host:port/database[?query]` URL.
+    fn url_with_database(url: &str, database: &str) -> String {
+        let (base, query) = match url.split_once('?') {
+            Some((base, query)) => (base, Some(query)),
+            None => (url, None),
+        };
+
+        let prefix = base.rsplit_once('/').map_or(base, |(prefix, _)| prefix);
+
+        match query {
+            Some(query) => format!("{prefix}/{database}?{query}"),
+            None => format!("{prefix}/{database}"),
+        }
     }
 
     fn run_host(self, command: Command, rerun_config: RerunConfig) -> RunResult {
@@ -552,6 +757,12 @@ impl Runtime {
             }
             Command::QuickStartVerify => {
                 unreachable!("QuickStartVerify is handled separately in run()")
+            }
+            Command::RailsVerify { .. } => {
+                unreachable!("RailsVerify is handled separately in run()")
+            }
+            Command::RailsVerifySteps => {
+                unreachable!("RailsVerifySteps is handled separately in run()")
             }
         }
     }

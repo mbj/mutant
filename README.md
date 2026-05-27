@@ -129,6 +129,22 @@ Mutant is supported on Linux and macOS.
 | 3.4     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | 4.0     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 
+## Rails
+
+Mutant runs against Rails applications, including parallel-worker database
+isolation (PostgreSQL and SQLite). The hook recipes are verified in CI on every
+non-EOL Rails version:
+
+| Version | Status |
+| ------- | ------ |
+| 7.2     | :heavy_check_mark: |
+| 8.0     | :heavy_check_mark: |
+| 8.1     | :heavy_check_mark: |
+
+See the [Rails Integration guide](/docs/rails.md) for setup, eager loading, and
+per-worker database isolation. A runnable, CI-verified example lives in
+[rails_example](rails_example/).
+
 ## Licensing
 
 **Free for open source.** Use `--usage opensource` for public repositories.

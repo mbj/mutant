@@ -1,0 +1,18 @@
+# Test-only database configuration for the mutant Rails example.
+#
+# The adapter is selected by the DB_ADAPTER environment variable so the same
+# application can be verified against both SQLite (default) and PostgreSQL.
+<% adapter = ENV.fetch('DB_ADAPTER', 'sqlite3') %>
+test:
+<% if adapter == 'postgresql' %>
+  # The full connection comes from DATABASE_URL. The manager points it at a
+  # dedicated `rails_example_test` database (rewriting the dbname from the
+  # ephemeral server's maintenance database) so the parallel-worker hooks have a
+  # template database to clone.
+  url: <%= ENV.fetch('DATABASE_URL') %>
+<% else %>
+  adapter: sqlite3
+  database: storage/test.sqlite3
+  pool: 5
+  timeout: 5000
+<% end %>

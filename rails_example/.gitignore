@@ -1,0 +1,6 @@
+/.mutant
+/log
+/storage
+/tmp
+/Gemfile.lock
+*.sqlite3

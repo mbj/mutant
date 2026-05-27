@@ -110,3 +110,39 @@ jobs:
         cache-version: ${{ hashFiles('ruby/*.gemspec') }}
         working-directory: ./ruby
     - run: ./bin/manager ruby ${{ matrix.execution }}
+  rails-tests:
+    name: Rails Tests (rails ${{ matrix.rails }} / ${{ matrix.database }})
+    needs: rust-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        # One representative Ruby per Rails version (Ruby x Rails compatibility),
+        # each against both databases the hooks isolate. PostgreSQL is provided
+        # on demand by the pg-ephemeral gem via the runner's Docker.
+        include:
+          - { rails: "7.2", ruby: ruby-3.3, database: postgresql }
+          - { rails: "7.2", ruby: ruby-3.3, database: sqlite }
+          - { rails: "8.0", ruby: ruby-3.4, database: postgresql }
+          - { rails: "8.0", ruby: ruby-3.4, database: sqlite }
+          - { rails: "8.1", ruby: ruby-4.0, database: postgresql }
+          - { rails: "8.1", ruby: ruby-4.0, database: sqlite }
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/download-artifact@v8
+      with:
+        name: manager-x86_64-unknown-linux-gnu
+        path: ./bin
+    - run: chmod +x ./bin/manager
+    # libpq headers for building the pg gem.
+    - run: sudo apt-get update && sudo apt-get install -y libpq-dev
+    # Workaround for Bundler 4.x security check on world-writable GHA runner directories.
+    # See: https://github.com/ruby/rubygems/issues/7983
+    - run: mkdir -p /opt/hostedtoolcache/Ruby && chmod -R o-w /opt/hostedtoolcache/Ruby
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    # The manager runs `bundle install` itself with RAILS_VERSION set, then
+    # provisions PostgreSQL (when needed) and runs the verification.
+    - run: ./bin/manager ruby rails-verify --rails ${{ matrix.rails }} --database ${{ matrix.database }}
