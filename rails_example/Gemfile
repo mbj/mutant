@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+# The Rails version under test is selected by RAILS_VERSION so a single Gemfile
+# covers every non-EOL Rails version the hooks are verified against. There is no
+# default on purpose: the CI matrix is the single source of truth for the
+# version and must set RAILS_VERSION.
+gem 'rails', ENV.fetch('RAILS_VERSION')
+
+gem 'pg'
+gem 'sqlite3'
+
+# Provides a throwaway PostgreSQL server for the parallel-worker verification
+# via `pg-ephemeral run-env`; backed by Docker/Podman.
+gem 'pg-ephemeral'
+
+gem 'rspec'
+gem 'rspec-rails'
+
+gem 'mutant',       path: '../ruby'
+gem 'mutant-rspec', path: '../ruby'

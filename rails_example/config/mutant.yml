@@ -1,0 +1,14 @@
+---
+usage: opensource
+
+requires:
+  - ./config/environment
+
+environment_variables:
+  RAILS_ENV: test
+
+integration:
+  name: rspec
+
+hooks:
+  - config/mutant/hooks.rb
