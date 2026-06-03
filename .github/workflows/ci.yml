@@ -10,7 +10,7 @@ jobs:
     name: Base steps
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
     - name: Check Whitespace
       run: git diff --check -- HEAD~1
   rust-build:
@@ -30,7 +30,7 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
     - uses: actions/cache@v5.0.5
       with:
         path: |
@@ -91,7 +91,7 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
       with:
         fetch-depth: 0
     - uses: actions/download-artifact@v8
@@ -129,7 +129,7 @@ jobs:
           - { rails: "8.1", ruby: ruby-4.0, database: postgresql }
           - { rails: "8.1", ruby: ruby-4.0, database: sqlite }
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
     - uses: actions/download-artifact@v8
       with:
         name: manager-x86_64-unknown-linux-gnu
