@@ -103,7 +103,7 @@ jobs:
     # See: https://github.com/ruby/rubygems/issues/7983
     - if: startsWith(matrix.os, 'ubuntu')
       run: mkdir -p /opt/hostedtoolcache/Ruby && chmod -R o-w /opt/hostedtoolcache/Ruby
-    - uses: ruby/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1.312.0
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
@@ -140,7 +140,7 @@ jobs:
     # Workaround for Bundler 4.x security check on world-writable GHA runner directories.
     # See: https://github.com/ruby/rubygems/issues/7983
     - run: mkdir -p /opt/hostedtoolcache/Ruby && chmod -R o-w /opt/hostedtoolcache/Ruby
-    - uses: ruby/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1.312.0
       with:
         ruby-version: ${{ matrix.ruby }}
     # The manager runs `bundle install` itself with RAILS_VERSION set, then
