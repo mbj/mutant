@@ -87,4 +87,20 @@ RSpec.describe Mutant::Reporter::CLI::Printer::Config do
       REPORT
     end
   end
+
+  context 'on absent mutation timeout' do
+    let(:reportable) { config.with(mutation: config.mutation.with(timeout: nil)) }
+
+    describe '.call' do
+      it_reports(<<~'REPORT')
+        Usage:           unknown
+        Matcher:         #<Mutant::Matcher::Config empty>
+        Integration:     null
+        Jobs:            auto
+        Includes:        []
+        Requires:        []
+        Operators:       light
+      REPORT
+    end
+  end
 end

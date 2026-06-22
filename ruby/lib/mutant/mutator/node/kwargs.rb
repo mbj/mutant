@@ -6,10 +6,6 @@ module Mutant
       # Mutator for kwargs node
       class Kwargs < self
 
-        DISALLOW = %i[nil self].freeze
-
-        private_constant(*constants(false))
-
         handle(:kwargs)
 
       private
@@ -26,17 +22,9 @@ module Mutant
         end
 
         def emit_argument_mutations
-          children.each_with_index do |child, index|
-            mutate(node: child).each do |mutant|
-              unless forbid_argument?(mutant)
-                emit_child_update(index, mutant)
-              end
-            end
+          children.each_with_index do |_child, index|
+            mutate_child(index)
           end
-        end
-
-        def forbid_argument?(node)
-          n_pair?(node) && DISALLOW.include?(node.children.first.type)
         end
       end # Kwargs
     end # Node

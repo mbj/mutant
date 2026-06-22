@@ -114,6 +114,15 @@ Mutant::Meta::Example.add :def do
 end
 
 Mutant::Meta::Example.add :def do
+  source 'def foo(_a = true); end'
+
+  mutation 'def foo(_a); end'
+  mutation 'def foo(_a = false); end'
+  mutation 'def foo(_a = true); raise; end'
+  mutation 'def foo(_a = true); super; end'
+end
+
+Mutant::Meta::Example.add :def do
   source 'def self.foo; true; false; end'
 
   # Body presence mutation

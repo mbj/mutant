@@ -63,7 +63,10 @@ module Mutant
           return unless children.one? && n_procarg0?(procarg0 = Mutant::Util.one(children))
 
           arguments = procarg0.children
-          emit_type(*arguments) if arguments.count > 1
+
+          return if arguments.one?
+
+          emit_type(*arguments)
         end
 
       end # Arguments
