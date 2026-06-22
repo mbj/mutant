@@ -81,8 +81,3 @@ Mutant::Meta::Example.add :regexp do
   singleton_mutations
   regexp_mutations
 end
-
-Pathname
-  .glob(Pathname.new(__dir__).join('regexp', '*.rb'))
-  .sort
-  .each(&Kernel.public_method(:require))

@@ -25,7 +25,7 @@ module Mutant
         )
       end
 
-      Pathname.glob(Pathname.new(__dir__).parent.parent.join('meta', '*.rb'))
+      Pathname.glob(Pathname.new(__dir__).parent.parent.join('meta', '**', '*.rb'))
         .sort
         .each(&method(:require))
 
