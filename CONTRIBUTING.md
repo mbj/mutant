@@ -31,11 +31,12 @@ Mutant is tested on CI across the following dimensions:
   * quick-start-verify: Verify the quick_start example works
   * rspec integration-misc: Integration tests for isolation and parallelism
   * rspec integration-minitest: Integration tests for minitest support
+  * rspec integration-test-unit: Integration tests for test-unit support
   * rspec integration-rspec: Integration tests for rspec support
   * rspec integration-generation: Tests for mutation generation
   * rubocop: Style and lint checks
 
-This results in 180 test jobs per commit (4 Ruby versions x 5 targets x 9 test suites).
+This results in 200 test jobs per commit (4 Ruby versions x 5 targets x 10 test suites).
 
 ## Running Tests Locally
 

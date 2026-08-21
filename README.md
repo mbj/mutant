@@ -115,7 +115,7 @@ mutant session gc --keep 50
 ## Next Steps
 
 1. Learn the [nomenclature](/docs/nomenclature.md) (subjects, mutations, operators)
-2. Set up your [integration](/docs/nomenclature.md#integration): [RSpec](/docs/mutant-rspec.md) or [Minitest](/docs/mutant-minitest.md)
+2. Set up your [integration](/docs/nomenclature.md#integration): [RSpec](/docs/mutant-rspec.md), [Minitest](/docs/mutant-minitest.md), or [Test::Unit](/docs/mutant-test-unit.md)
 3. Run mutant on CI in [incremental](/docs/incremental.md) mode
 
 ## Ruby Versions
@@ -158,6 +158,7 @@ See [commercial licensing](/docs/commercial.md) for pricing and details.
 * [Configuration](/docs/configuration.md)
 * [RSpec Integration](/docs/mutant-rspec.md)
 * [Minitest Integration](/docs/mutant-minitest.md)
+* [Test::Unit Integration](/docs/mutant-test-unit.md)
 * [Rails Integration](/docs/rails.md)
 * [Incremental Mode](/docs/incremental.md)
 * [Reading Reports](/docs/reading-reports.md)

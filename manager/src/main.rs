@@ -71,6 +71,7 @@ fn release() -> ruby::RunResult {
         "mutant.gemspec",
         "mutant-rspec.gemspec",
         "mutant-minitest.gemspec",
+        "mutant-test-unit.gemspec",
     ];
 
     for gemspec in GEMSPECS {

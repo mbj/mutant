@@ -75,6 +75,7 @@ Configures the [integration](/docs/nomenclature.md#integration) to use, via the 
 
 If your tests are written in [RSpec](https://rspec.info/), this should be set to `rspec`.
 If your tests are written in [minitest](https://github.com/seattlerb/minitest), this should be set to `minitest`.
+If your tests are written in [test-unit](https://github.com/test-unit/test-unit), this should be set to `test-unit`.
 
 ```yml
 ---

@@ -228,6 +228,7 @@ module MutantSpec
           file << "gem 'mutant', path: '#{relative}'\n"
           file << "gem 'mutant-rspec', path: '#{relative}'\n"
           file << "gem 'mutant-minitest', path: '#{relative}'\n"
+          file << "gem 'mutant-test-unit', path: '#{relative}'\n"
           file << "eval_gemfile File.expand_path('#{relative.join('Gemfile.shared')}')\n"
         end
         remove_mutant_gemspec_constraints

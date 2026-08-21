@@ -327,6 +327,12 @@ pub mod rspec {
                 /// Additional arguments
                 arguments: Vec<String>,
             },
+            /// Run test-unit integration specs
+            #[command(name = "test-unit")]
+            TestUnit {
+                /// Additional arguments
+                arguments: Vec<String>,
+            },
             /// Run rspec integration specs
             Rspec {
                 /// Additional arguments
@@ -726,6 +732,12 @@ impl Runtime {
                     Some(rspec::integration::Command::Minitest { arguments }) => {
                         CommandConfig::ruby(bundle_exec_arguments(
                             &["rspec", "spec/integration", "-e", "minitest"],
+                            &arguments,
+                        ))
+                    }
+                    Some(rspec::integration::Command::TestUnit { arguments }) => {
+                        CommandConfig::ruby(bundle_exec_arguments(
+                            &["rspec", "spec/integration", "-e", "test-unit"],
                             &arguments,
                         ))
                     }
