@@ -22,7 +22,7 @@ module Mutant
   class Integration
     # Minitest integration
     class Minitest < self
-      TEST_FILE_PATTERN     = './test/**/{test_*,*_test}.rb'
+      TEST_FILE_PATTERN     = './{test,minitest}/**/{test_*,*_test}.rb'
       IDENTIFICATION_FORMAT = 'minitest:%s#%s'
 
       # Compose a runnable with test method
@@ -83,6 +83,7 @@ module Mutant
       def setup
         Pathname.glob(TEST_FILE_PATTERN)
           .map(&:to_s)
+          .reject { |path| path.include?('/vendor/') }
           .each(&world.kernel.public_method(:require))
 
         ::Minitest.seed ||= world.random.srand if ::Minitest.respond_to?(:seed=)

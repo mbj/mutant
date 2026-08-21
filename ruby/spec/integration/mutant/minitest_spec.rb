@@ -4,7 +4,7 @@ RSpec.describe 'minitest integration', mutant: false do
   let(:base_cmd) do
     %w[
       bundle exec mutant run
-      --include test
+      --include minitest
       --include lib
       --require test_app
       --integration minitest
