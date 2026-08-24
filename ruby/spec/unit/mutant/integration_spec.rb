@@ -98,6 +98,42 @@ RSpec.describe Mutant::Integration do
       end
     end
 
+    context 'when integration name contains hyphens' do
+      let(:integration_name) { 'some-integration' }
+
+      it 'performs actions in expected sequence' do
+        apply
+
+        expect(world.kernel)
+          .to have_received(:require)
+          .with('mutant/integration/some-integration')
+          .ordered
+
+        expect(described_class)
+          .to have_received(:const_get)
+          .with('SomeIntegration')
+          .ordered
+      end
+    end
+
+    context 'when integration name contains underscores' do
+      let(:integration_name) { 'some_integration' }
+
+      it 'performs actions in expected sequence' do
+        apply
+
+        expect(world.kernel)
+          .to have_received(:require)
+          .with('mutant/integration/some_integration')
+          .ordered
+
+        expect(described_class)
+          .to have_received(:const_get)
+          .with('SomeIntegration')
+          .ordered
+      end
+    end
+
     it 'performs actions in expected sequence' do
       apply
 

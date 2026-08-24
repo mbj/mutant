@@ -7,7 +7,7 @@ This document is the canonical reference for setting up mutant against a Rails a
 - [Configuration](/docs/configuration.md) — the configuration file format
 - [Hooks](/docs/hooks.md) — the hooks system used for eager loading and resource isolation
 - [Test Runner](/docs/test-runner.md) — parallel execution and resource isolation
-- [RSpec Integration](/docs/mutant-rspec.md) / [Minitest Integration](/docs/mutant-minitest.md) — test framework integrations
+- [RSpec Integration](/docs/mutant-rspec.md) / [Minitest Integration](/docs/mutant-minitest.md) / [Test::Unit Integration](/docs/mutant-test-unit.md) — test framework integrations
 
 ## Minimal Setup
 

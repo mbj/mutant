@@ -95,7 +95,7 @@ module Mutant
 
     def self.attempt_const_get(env)
       integration_name = env.config.integration.name
-      constant_name    = integration_name.capitalize
+      constant_name    = integration_name.split(/[-_]/).map(&:capitalize).join
 
       Either.wrap_error(NameError) { const_get(constant_name) }.lmap do |exception|
         CONST_MESSAGE % {

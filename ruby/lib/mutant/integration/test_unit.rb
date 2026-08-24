@@ -1,33 +1,19 @@
 # frozen_string_literal: true
 
-# The minitest integration was sponsored by [Arkency](https://arkency.com/).
-# Without their support this integration would not exist.
+require 'test/unit'
+require 'test/unit/ui/console/testrunner'
+require 'mutant/test_unit/coverage'
 
-require 'minitest'
-require 'mutant/minitest/coverage'
-
-module Minitest
-  # Prevent autorun from running tests when the VM closes
-  #
-  # Mutant needs control about the exit status of the VM and
-  # the moment of test execution
-  #
-  # @api private
-  #
-  # @return [nil]
-  def self.autorun; end
-end # Minitest
+Test::Unit::AutoRunner.need_auto_run = false if defined?(Test::Unit::AutoRunner)
 
 module Mutant
   class Integration
-    # Minitest integration
-    class Minitest < self
-      TEST_FILE_PATTERN     = './{test,minitest}/**/{test_*,*_test}.rb'
-      IDENTIFICATION_FORMAT = 'minitest:%s#%s'
+    # Test::Unit integration
+    class TestUnit < self
+      TEST_FILE_PATTERN     = './{test,test_unit}/**/{test_*,*_test}.rb'
+      IDENTIFICATION_FORMAT = 'test-unit:%s#%s'
 
       # Compose a runnable with test method
-      #
-      # This looks actually like a missing object on minitest implementation.
       class TestCase
         include Adamantium, Anima.new(:klass, :test_method)
 
@@ -39,17 +25,15 @@ module Mutant
 
         # Run test case
         #
-        # @param [Object] reporter
-        #
         # @return [Boolean]
-        def call(reporter)
-          # Minitest 6.0+ renamed run_one_method to run
-          if ::Minitest::Runnable.respond_to?(:run_one_method)
-            ::Minitest::Runnable.run_one_method(klass, test_method, reporter)
-          else
-            ::Minitest::Runnable.run(klass, test_method, reporter)
-          end
-          reporter.passed?
+        def call
+          suite = ::Test::Unit::TestSuite.new
+          suite << klass.new(test_method)
+          runner = ::Test::Unit::UI::Console::TestRunner.new(
+            suite,
+            output_level: ::Test::Unit::UI::Console::OutputLevel::SILENT
+          )
+          runner.start.passed?
         end
 
         # Parse expressions
@@ -86,14 +70,12 @@ module Mutant
           .reject { |path| path.include?('/vendor/') }
           .each(&world.kernel.public_method(:require))
 
-        ::Minitest.seed ||= world.random.srand if ::Minitest.respond_to?(:seed=)
-
         self
       end
 
       # Call test integration
       #
-      # @param [Array<Tests>] tests
+      # @param [Array<Test>] tests
       #
       # @return [Result::Test]
       #
@@ -102,20 +84,18 @@ module Mutant
         test_cases = tests.map(&all_tests_index.public_method(:fetch))
         start      = timer.now
 
-        reporter = ::Minitest::SummaryReporter.new($stdout)
-
-        reporter.start
-
-        test_cases.each do |test|
-          break unless test.call(reporter)
+        passed = true
+        test_cases.each do |test_case|
+          unless test_case.call
+            passed = false
+            break
+          end
         end
-
-        reporter.report
 
         Result::Test.new(
           job_index: nil,
           output:    LogCapture::String.new(content: ''),
-          passed:    reporter.passed?,
+          passed:,
           runtime:   timer.now - start
         )
       end
@@ -145,19 +125,20 @@ module Mutant
       end
 
       def all_test_cases
-        ::Minitest::Runnable
-          .runnables
+        ::Test::Unit::TestCase::DESCENDANTS
           .select(&method(:allow_runnable?))
           .flat_map(&method(:test_case))
       end
 
       def allow_runnable?(klass)
-        !klass.equal?(::Minitest::Runnable)
+        !klass.equal?(::Test::Unit::TestCase)
       end
 
       def test_case(runnable)
-        runnable.runnable_methods.map { |method| TestCase.new(klass: runnable, test_method: method) }
+        runnable.suite.tests.map do |test|
+          TestCase.new(klass: runnable, test_method: test.method_name)
+        end
       end
-    end # Minitest
+    end # TestUnit
   end # Integration
 end # Mutant

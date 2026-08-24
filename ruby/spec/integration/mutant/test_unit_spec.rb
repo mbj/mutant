@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-RSpec.describe 'minitest integration', mutant: false do
+RSpec.describe 'test-unit integration', mutant: false do
   let(:base_cmd) do
     %w[
       bundle exec mutant run
-      --include minitest
+      --include test_unit
       --include lib
       --require test_app
-      --integration minitest
+      --integration test-unit
       --usage opensource
     ]
   end
 
-  let(:gemfile) { 'minitest/Gemfile' }
+  let(:gemfile) { 'test_unit/Gemfile' }
 
   it_behaves_like 'framework integration'
 end

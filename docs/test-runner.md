@@ -319,3 +319,4 @@ bundle exec mutant test run --integration-argument spec/integration
 - [Concurrency](/docs/concurrency.md) - Understanding parallel execution
 - [Rspec Integration](/docs/mutant-rspec.md) - RSpec-specific details
 - [Minitest Integration](/docs/mutant-minitest.md) - Minitest-specific details
+- [Test::Unit Integration](/docs/mutant-test-unit.md) - Test::Unit-specific details

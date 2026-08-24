@@ -41,6 +41,18 @@ updates:
           - patch
           - major
   - package-ecosystem: bundler
+    directory: /ruby/test_app/test_unit
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    groups:
+      test-app-dependencies:
+        update-types:
+          - minor
+          - patch
+          - major
+  - package-ecosystem: bundler
     directory: /ruby/test_app/rspec3.8
     schedule:
       interval: daily
