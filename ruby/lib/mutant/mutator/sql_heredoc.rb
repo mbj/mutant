@@ -4,15 +4,19 @@ module Mutant
   class Mutator
     # Detection and mutation of SQL heredoc bodies
     #
-    # Handles both node shapes a heredoc can take:
-    #  * a single-line body parses to a +:str+ node whose sole child is the
-    #    whole SQL text;
-    #  * a multi-line body parses to a +:dstr+ node whose children are one
-    #    +:str+ per line.
+    # A SQL heredoc can parse to either a +:str+ node (single-line body) or a
+    # +:dstr+ node (multi-line body). The body is handed to {Mutant::Mutator::Sql}
+    # — a real pg_query-backed mutator — and each mutated SQL string is wrapped
+    # back into a +:str+ node.
     #
-    # Each mutation flips a single SQL keyword, so the mutated text keeps the
-    # same line boundaries as the original and the node can be rebuilt with the
-    # original shape.
+    # The mutated node is always a plain +:str+, even for a +:dstr+ original:
+    # pg_query's deparser emits a single-line literal string with no Ruby
+    # interpolation, so a +:str+ is the faithful representation and keeps
+    # unparser happy.
+    #
+    # Heredocs that interpolate Ruby (a +:dstr+ with non-+:str+ children) are
+    # skipped: the interpolated values are not part of the SQL the parser
+    # understands, and mutating around them would silently drop them.
     module SqlHeredoc
       # Pattern to extract the heredoc tag name from expressions like
       # +<<~SQL+, +<<-SQL+, or +<<SQL+.
@@ -25,9 +29,10 @@ module Mutant
       # @return [Set<Parser::AST::Node>]
       def self.mutate(node)
         return Set.new unless sql_heredoc?(node)
+        return Set.new if interpolated?(node)
 
         Mutant::Mutator::Sql.mutate(body(node)).each_with_object(Set.new) do |mutated, set|
-          set << rebuild(node, mutated)
+          set << rebuild(mutated)
         end
       end
 
@@ -45,39 +50,43 @@ module Mutant
         end
       end
 
-      # The complete SQL text of a +:str+ or +:dstr+ heredoc
-      #
-      # @param [Parser::AST::Node] node
-      #
-      # @return [String]
-      def self.body(node)
-        return node.children.first if node.type.equal?(:str)
+      class << self
+        private
 
-        node.children
-          .select { |child| child.type.equal?(:str) }
-          .map { |child| child.children.first }
-          .join
+        # The complete SQL text of a +:str+ or +:dstr+ heredoc
+        #
+        # Only called after {interpolated?} has ruled out non-+:str+ children,
+        # so every child of a +:dstr+ is a +:str+ holding one line of the body.
+        #
+        # @param [Parser::AST::Node] node
+        #
+        # @return [String]
+        def body(node)
+          return node.children.first if node.type.equal?(:str)
+
+          node.children.map { |child| child.children.first }.join
+        end
+
+        # Wrap a mutated SQL string into a plain +:str+ node
+        #
+        # @param [String] text
+        #
+        # @return [Parser::AST::Node]
+        def rebuild(text)
+          ::Parser::AST::Node.new(:str, [text])
+        end
+
+        # Whether the heredoc interpolates Ruby (non-+:str+ children)
+        #
+        # @param [Parser::AST::Node] node
+        #
+        # @return [Boolean]
+        def interpolated?(node)
+          return false if node.type.equal?(:str)
+
+          node.children.any? { |child| !child.type.equal?(:str) }
+        end
       end
-      private_class_method :body
-
-      # Rebuild a heredoc node with the same shape as +node+ from mutated text
-      #
-      # Keyword flips never cross line boundaries, so the mutated text splits
-      # into exactly as many lines as the original +:dstr+.
-      #
-      # @param [Parser::AST::Node] node
-      # @param [String] text
-      #
-      # @return [Parser::AST::Node]
-      def self.rebuild(node, text)
-        return ::Parser::AST::Node.new(:str, [text]) if node.type.equal?(:str)
-
-        ::Parser::AST::Node.new(
-          :dstr,
-          text.lines.map { |line| ::Parser::AST::Node.new(:str, [line]) }
-        )
-      end
-      private_class_method :rebuild
     end # SqlHeredoc
   end # Mutator
 end # Mutant

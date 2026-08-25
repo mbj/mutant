@@ -24,3 +24,9 @@ matcher:
   - Mutant::Mutator::Node::Arguments#emit_argument_presence
   - Mutant::Mutator::Node::Arguments#removed_block_arg?
   - Mutant::Mutator::Node::BlockPass#dispatch
+  # NOT-wrap mutator: mutations that strip the wrapped operand (args:[node]→
+  # nil/[], or dropping bool_expr/boolop) yield a NOT with no operand, which
+  # pg_query's native deparser cannot rebuild (it segfaults) or drops to a bare
+  # SELECT. A malformed operand is unreachable via the public mutate(sql) API,
+  # so no test can distinguish these mutations.
+  - Mutant::Mutator::Sql.wrap_exists

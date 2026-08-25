@@ -33,6 +33,7 @@ module Mutant
       optparse
       parser
       parser/current
+      pg_query
       pathname
       regexp_parser
       securerandom
