@@ -60,3 +60,23 @@ Mutant::Meta::Example.add :str do
   singleton_mutations
   mutation '""'
 end
+
+# Multi-line heredoc bodies parse to +:dstr+, not +:str+. The SQL keyword
+# flips must still be generated, one per keyword, and rebuilt into the same
+# line shape so the mutated code stays valid.
+Mutant::Meta::Example.add :dstr do
+  source <<~RUBY
+    <<~SQL
+      SELECT * FROM users
+      WHERE id = 1 AND active = 1
+    SQL
+  RUBY
+
+  singleton_mutations
+  mutation '""'
+
+  mutation <<~'RUBY'
+    "SELECT * FROM users
+    WHERE id = 1 OR active = 1\n"
+  RUBY
+end
