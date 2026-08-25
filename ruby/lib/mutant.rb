@@ -189,6 +189,7 @@ module Mutant
     require 'mutant/mutator/node/numblock'
     require 'mutant/mutator/node/const_pattern'
     require 'mutant/mutator/regexp'
+    require 'mutant/mutator/sql'
     require 'mutant/loader'
     require 'mutant/context'
     require 'mutant/scope'
