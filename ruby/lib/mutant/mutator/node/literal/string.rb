@@ -9,31 +9,43 @@ module Mutant
 
           handle(:str)
 
-          # Pattern to extract the heredoc tag name from expressions like
-          # +<<~SQL+, +<<-SQL+, or +<<SQL+.
-          HEREDOC_TAG = /<<?-?~?(\w+)/
+          # Detection and mutation of SQL heredoc bodies
+          module SqlHeredoc
+            # Pattern to extract the heredoc tag name from expressions like
+            # +<<~SQL+, +<<-SQL+, or +<<SQL+.
+            HEREDOC_TAG = /<<?-?~?(\w+)/
+
+            # Generate mutations for SQL heredoc bodies
+            #
+            # @param [Parser::AST::Node] node
+            #
+            # @return [Set<Parser::AST::Node>]
+            def self.mutate(node)
+              return Set.new unless sql_heredoc?(node)
+
+              Mutant::Mutator::Sql.mutate(node.children.first).each_with_object(Set.new) do |mutated, set|
+                set << ::Parser::AST::Node.new(:str, [mutated])
+              end
+            end
+
+            def self.sql_heredoc?(node)
+              location = node.location or return false
+              return false unless location.kind_of?(::Parser::Source::Map::Heredoc)
+
+              HEREDOC_TAG.match(location.expression.source) do |match|
+                break match[1].upcase.eql?('SQL')
+              end
+            end
+
+            private_class_method :sql_heredoc?
+          end # SqlHeredoc
 
         private
 
           def dispatch
             emit_singletons
             emit(N_EMPTY_STRING)
-            emit_sql_mutations if sql_heredoc?
-          end
-
-          def sql_heredoc?
-            location = input.location or return false
-            return false unless location.kind_of?(::Parser::Source::Map::Heredoc)
-
-            HEREDOC_TAG.match(location.expression.source) do |match|
-              break match[1].upcase.eql?('SQL')
-            end
-          end
-
-          def emit_sql_mutations
-            Sql.mutate(input.children.first).each do |mutated|
-              emit(s(:str, mutated))
-            end
+            SqlHeredoc.mutate(input).each(&method(:emit))
           end
 
         end # String

@@ -5,42 +5,34 @@ module Mutant
     # Mutator for SQL embedded in Ruby heredoc strings
     #
     # Operates on the raw SQL text and emits mutated SQL strings.
-    # All mutations are orthogonal replacements (circular) following
-    # mutant's direction rules — see CONTRIBUTING.md §"Mutation Direction Rules".
-    class Sql < self
+    # All mutations are orthogonal replacements following mutant's
+    # direction rules — see CONTRIBUTING.md §"Mutation Direction Rules".
+    module Sql
+      # Ordered longest-first so multi-word keywords match before their
+      # sub-keywords (e.g. "IS NOT NULL" before "IS NULL", "NOT IN" before "IN").
+      REPLACEMENTS = [
+        ['IS NOT NULL', 'IS NULL'],
+        ['IS NULL',     'IS NOT NULL'],
+        ['NOT EXISTS',  'EXISTS'],
+        ['EXISTS',      'NOT EXISTS'],
+        ['NOT IN',      'IN'],
+        ['IN',          'NOT IN'],
+        ['AND',         'OR'],
+        ['OR',          'AND'],
+        ['ASC',         'DESC'],
+        ['DESC',        'ASC']
+      ].freeze
+
+      MAP = REPLACEMENTS.to_h.freeze
 
       # Combined pattern matching SQL keywords to mutate.
-      # Alternation is ordered so longer patterns match first,
-      # preventing e.g. "IN" from matching inside "NOT IN".
-      PATTERN = /
-        (?:
-          \bIS\s+NOT\s+NULL\b
-        | \bIS\s+NULL\b
-        | \bNOT\s+EXISTS\b
-        | \bEXISTS\b
-        | \bNOT\s+IN\b
-        | \bIN\b
-        | \bAND\b
-        | \bOR\b
-        | \bASC\b
-        | \bDESC\b
-        )
-      /ix
-
-      # Replacement for each matched keyword, keyed by whitespace-normalized
-      # lowercased match text.
-      REPLACEMENTS = {
-        'is not null' => 'IS NULL',
-        'is null'     => 'IS NOT NULL',
-        'not exists'  => 'EXISTS',
-        'exists'      => 'NOT EXISTS',
-        'not in'      => 'IN',
-        'in'          => 'NOT IN',
-        'and'         => 'OR',
-        'or'          => 'AND',
-        'asc'         => 'DESC',
-        'desc'        => 'ASC'
-      }.freeze
+      PATTERN = ::Regexp.new(
+        REPLACEMENTS
+          .map(&:first)
+          .map { |keyword| "\\b#{keyword.gsub(/\s+/, '\\s+')}\\b" }
+          .join('|'),
+        ::Regexp::IGNORECASE
+      ).freeze
 
       # Generate SQL mutations
       #
@@ -48,26 +40,21 @@ module Mutant
       #
       # @return [Set<String>]
       def self.mutate(sql)
-        new(input: sql, parent: nil).output
-      end
+        mutations = Set.new
 
-    private
-
-      def dispatch
-        input.scan(PATTERN) do
+        sql.scan(PATTERN) do
           match = ::Regexp.last_match
-          replacement = REPLACEMENTS.fetch(normalize(match[0]))
-          emit(splice(match.begin(0), match.end(0), replacement))
+          replacement = MAP.fetch(match[0].upcase)
+          mutations << splice(sql, match, replacement)
         end
+
+        mutations
       end
 
-      def normalize(text)
-        text.downcase.gsub(/\s+/, ' ')
+      def self.splice(input, match, replacement)
+        input[0...match.begin(0)] + replacement + input[match.end(0)..]
       end
-
-      def splice(start, stop, replacement)
-        input[0...start] + replacement + input[stop..]
-      end
+      private_class_method :splice
     end # Sql
   end # Mutator
 end # Mutant
