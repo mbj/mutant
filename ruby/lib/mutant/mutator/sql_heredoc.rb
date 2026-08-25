@@ -54,9 +54,9 @@ module Mutant
         return node.children.first if node.type.equal?(:str)
 
         node.children
-            .select { |child| child.type.equal?(:str) }
-            .map { |child| child.children.first }
-            .join
+          .select { |child| child.type.equal?(:str) }
+          .map { |child| child.children.first }
+          .join
       end
       private_class_method :body
 
