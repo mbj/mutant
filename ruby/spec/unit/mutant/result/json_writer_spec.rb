@@ -3,6 +3,7 @@
 RSpec.describe Mutant::Result::JSONWriter do
   let(:dir)       { instance_double(Pathname, :dir) }
   let(:path)      { instance_double(Pathname, :path) }
+  let(:tmp_path)  { instance_double(Pathname, :tmp_path) }
   let(:pathname)  { class_double(Pathname) }
   let(:process)   { class_double(Process) }
 
@@ -29,7 +30,9 @@ RSpec.describe Mutant::Result::JSONWriter do
       allow(pathname).to receive(:new).with('.mutant/results').and_return(dir)
       allow(dir).to receive(:mkpath)
       allow(dir).to receive(:join).with("#{Mutant::SESSION_ID}.json").and_return(path)
-      allow(path).to receive(:write)
+      allow(dir).to receive(:join).with("#{Mutant::SESSION_ID}.json.tmp").and_return(tmp_path)
+      allow(tmp_path).to receive(:write)
+      allow(tmp_path).to receive(:rename)
       allow(process).to receive(:pid).and_return(42)
     end
 
@@ -39,10 +42,18 @@ RSpec.describe Mutant::Result::JSONWriter do
       expect(dir).to have_received(:mkpath)
     end
 
-    it 'writes JSON to the session file' do
+    # Written beside the session file and renamed over it, so a reader
+    # that opens the session mid-write never sees a truncated document.
+    it 'renames the temporary file over the session file' do
       object.call
 
-      expect(path).to have_received(:write) do |json|
+      expect(tmp_path).to have_received(:rename).with(path)
+    end
+
+    it 'writes JSON to the temporary file' do
+      object.call
+
+      expect(tmp_path).to have_received(:write) do |json|
         data = JSON.parse(json)
 
         expect(data.fetch('session_id')).to eql(Mutant::SESSION_ID)

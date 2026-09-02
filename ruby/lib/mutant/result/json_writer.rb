@@ -10,13 +10,19 @@ module Mutant
 
       # Write result JSON file
       #
+      # Written to a temporary file first and renamed into place, so a
+      # concurrent reader of the session file never observes a partial
+      # document. This matters once the file is rewritten during a run.
+      #
       # @return [Pathname]
       def call
         dir = env.world.pathname.new(RESULTS_DIR)
         dir.mkpath
 
         path = dir.join("#{SESSION_ID}.json")
-        path.write(json)
+        tmp_path = dir.join("#{SESSION_ID}.json.tmp")
+        tmp_path.write(json)
+        tmp_path.rename(path)
 
         path
       end
