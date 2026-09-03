@@ -76,6 +76,7 @@ Currently mutant supports integrations for:
 
 * [mutant-rspec](/docs/mutant-rspec.md) for [rspec](https://rspec.info)
 * [mutant-minitest](/docs/mutant-minitest.md) for [minitest](https://github.com/seattlerb/minitest)
+* [mutant-test-unit](/docs/mutant-test-unit.md) for [test-unit](https://github.com/test-unit/test-unit)
 
 ## Report
 

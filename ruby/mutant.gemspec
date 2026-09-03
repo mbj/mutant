@@ -14,7 +14,10 @@ Gem::Specification.new do |gem|
 
   gem.require_paths = %w[lib]
 
-  exclusion = Dir.glob('lib/mutant/{integration/{minitest,rspec}.rb,minitest/**.rb}')
+  exclusion = Dir.glob([
+    'lib/mutant/integration/{minitest,rspec,test_unit,test-unit}.rb',
+    'lib/mutant/{minitest,test_unit}/**.rb'
+  ])
 
   gem.files            = Dir.glob('{VERSION,lib/**/*}') - exclusion
   gem.extra_rdoc_files = %w[LICENSE]

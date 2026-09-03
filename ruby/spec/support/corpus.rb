@@ -224,16 +224,29 @@ module MutantSpec
       def install_mutant
         return if noinstall?
         relative = ROOT.relative_path_from(repo_path)
+        remove_mutant_gemfile_sources
         repo_path.join('Gemfile').open('a') do |file|
           file << "gem 'mutant', path: '#{relative}'\n"
           file << "gem 'mutant-rspec', path: '#{relative}'\n"
           file << "gem 'mutant-minitest', path: '#{relative}'\n"
+          file << "gem 'mutant-test-unit', path: '#{relative}'\n"
           file << "eval_gemfile File.expand_path('#{relative.join('Gemfile.shared')}')\n"
         end
         remove_mutant_gemspec_constraints
         lockfile = repo_path.join('Gemfile.lock')
         lockfile.delete if lockfile.exist?
         system(%w[bundle])
+      end
+
+      # Remove mutant gem declarations the corpus repository carries itself,
+      # as auom does while mutant-test-unit is unreleased. Bundler refuses
+      # the same gem from two sources, so only the path sources appended
+      # above may remain.
+      def remove_mutant_gemfile_sources
+        gemfile = repo_path.join('Gemfile')
+        content = gemfile.read
+        modified = content.gsub(/^gem ['"]mutant.*\n/, '')
+        gemfile.write(modified) if content != modified
       end
 
       def remove_mutant_gemspec_constraints

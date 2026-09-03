@@ -10,7 +10,7 @@ jobs:
     name: Base steps
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Check Whitespace
       run: git diff --check -- HEAD~1
   rust-build:
@@ -30,7 +30,7 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - uses: actions/cache@v6.1.0
       with:
         path: |
@@ -77,6 +77,7 @@ jobs:
           - rspec integration minitest
           - rspec integration misc
           - rspec integration rspec
+          - rspec integration test-unit
           - rspec unit
           - rubocop
         include:
@@ -91,7 +92,7 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
         fetch-depth: 0
     - uses: actions/download-artifact@v8
@@ -103,7 +104,7 @@ jobs:
     # See: https://github.com/ruby/rubygems/issues/7983
     - if: startsWith(matrix.os, 'ubuntu')
       run: mkdir -p /opt/hostedtoolcache/Ruby && chmod -R o-w /opt/hostedtoolcache/Ruby
-    - uses: ruby/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1.321.0
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
@@ -129,7 +130,7 @@ jobs:
           - { rails: "8.1", ruby: ruby-4.0, database: postgresql }
           - { rails: "8.1", ruby: ruby-4.0, database: sqlite }
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - uses: actions/download-artifact@v8
       with:
         name: manager-x86_64-unknown-linux-gnu
@@ -140,7 +141,7 @@ jobs:
     # Workaround for Bundler 4.x security check on world-writable GHA runner directories.
     # See: https://github.com/ruby/rubygems/issues/7983
     - run: mkdir -p /opt/hostedtoolcache/Ruby && chmod -R o-w /opt/hostedtoolcache/Ruby
-    - uses: ruby/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1.321.0
       with:
         ruby-version: ${{ matrix.ruby }}
     # The manager runs `bundle install` itself with RAILS_VERSION set, then
