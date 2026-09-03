@@ -33,9 +33,13 @@ module Mutant
         end
 
         def emit_drop_mutation
-          return unless indices.one? && n_irange?(Mutant::Util.one(indices))
+          return unless indices.one?
 
-          start, ending = *indices.first
+          range = Mutant::Util.one(indices)
+
+          return unless n_irange?(range)
+
+          start, ending = *range
 
           return unless ending.eql?(s(:int, -1))
 

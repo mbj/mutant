@@ -65,5 +65,18 @@ RSpec.describe Mutant::RequireHighjack do
           .not_to change { require_calls }.from([])
       end
     end
+
+    context 'with native-style method definitions' do
+      let(:target_module) do
+        Module.new.tap do |mod|
+          mod.class_eval('def require(x); end', __FILE__, __LINE__)
+          mod.class_eval('def self.require(x); end', __FILE__, __LINE__)
+        end
+      end
+
+      it 'does not emit method redefinition warnings' do
+        expect { apply }.not_to output.to_stderr
+      end
+    end
   end
 end

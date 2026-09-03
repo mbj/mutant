@@ -143,8 +143,6 @@ module Mutant
         end
 
         def matched_view
-          return if source_location.nil?
-
           # This is a performance optimization when using --since to avoid the cost of parsing
           # every source file that could possibly map to a subject. A more fine-grained filtering
           # takes places later in the process.

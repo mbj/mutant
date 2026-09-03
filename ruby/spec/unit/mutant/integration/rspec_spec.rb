@@ -227,6 +227,28 @@ RSpec.describe Mutant::Integration::Rspec do
       it 'freezes object' do
         expect { subject }.to change { object.frozen? }.from(false).to(true)
       end
+
+      it 'measures setup time' do
+        subject
+        expect(world.timer).to have_received(:elapsed)
+      end
+
+      it 'forces color mode on' do
+        subject
+        expect(rspec_configuration).to have_received(:force).with(color_mode: :on)
+      end
+
+      it 'accesses reporter' do
+        subject
+        expect(rspec_configuration).to have_received(:reporter)
+      end
+
+      it 'resets examples' do
+        subject
+        filtered_examples.each_value do |examples|
+          expect(examples).to be_empty
+        end
+      end
     end
 
     context 'on success' do

@@ -118,24 +118,6 @@ module Mutant
         end
         memoize :no_diffs
 
-        def format_mutations(mutations)
-          mutations.map do |mutation|
-            {
-              'node'   => mutation.node.inspect,
-              'source' => mutation.source
-            }
-          end
-        end
-
-        def no_diff_report
-          no_diffs.map do |mutation|
-            {
-              'node'   => mutation.node.inspect,
-              'source' => mutation.source
-            }
-          end
-        end
-
       end # Verification
     end # Example
   end # Meta

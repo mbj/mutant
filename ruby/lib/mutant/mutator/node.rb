@@ -116,13 +116,6 @@ module Mutant
         range.begin.upto(children.length + range.end)
       end
 
-      def mutate_single_child
-        children.each_with_index do |child, index|
-          mutate_child(index)
-          yield child, index unless children.one?
-        end
-      end
-
       def run(mutator)
         mutator.call(
           config:,
