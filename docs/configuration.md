@@ -252,6 +252,32 @@ coverage_criteria:
 
 At this point there is no CLI equivalent for these settings.
 
+#### `selection`
+
+Controls how mutant picks the tests to run against a subject's mutations.
+
+```yml
+---
+selection:
+  # Selection strategy, defaults to `auto`:
+  # * `auto` - use the coverage recording when there is a usable one, and the
+  #   expressions otherwise.
+  # * `expression` - select tests whose expression the subject's expression prefixes.
+  # * `context_map` - select tests a per test coverage recording says executed the
+  #   subject's source lines, and fail the run when the recording cannot be used.
+  strategy: auto
+  # Directory holding the coverage report, defaults to `coverage`.
+  # Not read under the `expression` strategy.
+  path: coverage
+```
+
+The CLI equivalents are `--selection STRATEGY` and `--selection-path PATH`.
+
+The `context_map` strategy reads the per test data simplecov 1.2.0 and newer add
+to `coverage.json` when `track_tests` is enabled. See
+[Test Selection](/docs/test-selection.md) for how to produce one and what the
+strategy costs.
+
 #### `hooks`
 
 Allows to specify Ruby files that register hooks for injecting custom behavior at various points in the mutation testing execution pipeline.

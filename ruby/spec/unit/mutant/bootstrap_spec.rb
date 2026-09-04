@@ -39,6 +39,32 @@ RSpec.describe Mutant::Bootstrap do
     )
   end
 
+  let(:coverage_artifact) do
+    instance_double(Pathname, 'coverage.json', file?: false, to_s: 'coverage/coverage.json')
+  end
+
+  let(:coverage_path) do
+    instance_double(Pathname, 'coverage', file?: false, join: coverage_artifact)
+  end
+
+  let(:pathname) do
+    class_double(Pathname).tap do |double|
+      allow(double).to receive(:new) { |value| Pathname.new(value) }
+      allow(double).to receive(:new).with('coverage').and_return(coverage_path)
+    end
+  end
+
+  let(:selector_events) do
+    [
+      {
+        receiver:  world,
+        selector:  :record,
+        arguments: [:setup_selector],
+        reaction:  { yields: [] }
+      }
+    ]
+  end
+
   let(:world) do
     instance_double(
       Mutant::World,
@@ -46,7 +72,7 @@ RSpec.describe Mutant::Bootstrap do
       kernel:,
       load_path:,
       object_space:,
-      pathname:              Pathname,
+      pathname:,
       recorder:              instance_double(Mutant::Segment::Recorder),
       timer:
     )
@@ -198,6 +224,7 @@ RSpec.describe Mutant::Bootstrap do
           arguments: [env_with_scopes],
           reaction:  { return: integration_result }
         },
+        *selector_events,
         {
           receiver:  hooks,
           selector:  :run,
@@ -361,6 +388,123 @@ RSpec.describe Mutant::Bootstrap do
         end
       end
     end
+
+    context 'with context map test selection' do
+      let(:contents)      { JSON.dump(document)     }
+      let(:root)          { '/project'              }
+      let(:test_location) { 'spec/a_spec.rb:10'     }
+
+      let(:object_space_modules) { [] }
+
+      let(:coverage_artifact) do
+        instance_double(Pathname, 'coverage.json', file?: true, read: contents, to_s: 'coverage/coverage.json')
+      end
+
+      let(:document) do
+        {
+          'meta'     => { 'schema_version' => '1.3', 'root' => root },
+          'contexts' => [test_location],
+          'coverage' => { 'lib/subject.rb' => { 'contexts' => { '0' => '1' } } }
+        }
+      end
+
+      let(:expected_context_map) do
+        Mutant::ContextMap.new(
+          root:,
+          tables: { '/project/lib/subject.rb' => { '/project/spec/a_spec.rb:10' => 1 } }
+        )
+      end
+
+      let(:available_tests) do
+        [Mutant::Test.new(expressions: [], id: 'test-a', location: test_location)]
+      end
+
+      let(:selector_events) do
+        super() + [
+          {
+            receiver:  world,
+            selector:  :parse_json,
+            arguments: [contents],
+            reaction:  { return: Mutant::Either::Right.new(JSON.parse(contents)) }
+          }
+        ]
+      end
+
+      before do
+        allow(integration).to receive(:available_tests).and_return(available_tests)
+      end
+
+      let(:context_map_selector) do
+        Mutant::Selector::ContextMap.new(
+          context_map: expected_context_map,
+          fallback:    Mutant::Selector::Expression.new(integration:),
+          integration:
+        )
+      end
+
+      let(:foreign_tests) do
+        [Mutant::Test.new(expressions: [], id: 'test-a', location: 'spec/elsewhere_spec.rb:1')]
+      end
+
+      context 'when the recording names a test of this suite' do
+        let(:expected_env) { super().with(selector: context_map_selector) }
+
+        include_examples 'bootstrap call'
+      end
+
+      context 'when the recording names no test of this suite' do
+        let(:available_tests) { foreign_tests }
+
+        it 'falls back to expression based selection' do
+          verify_events do
+            expect(apply).to eql(Mutant::Either::Right.new(expected_env))
+          end
+        end
+      end
+
+      context 'when the strategy is named explicitly' do
+        let(:config) do
+          super().with(selection: Mutant::Config::Selection::DEFAULT.with(strategy: 'context_map'))
+        end
+
+        context 'when the recording names a test of this suite' do
+          let(:expected_env) { super().with(selector: context_map_selector) }
+
+          include_examples 'bootstrap call'
+        end
+
+        context 'when the recording names no test of this suite' do
+          let(:available_tests) { foreign_tests }
+
+          let(:raw_expectations) do
+            super().reject { |expectation| expectation.fetch(:arguments).eql?([:setup_integration_post]) }
+          end
+
+          it 'fails with an explanation' do
+            verify_events do
+              expect(apply.from_left).to include(
+                'The coverage recording names no test that this suite runs',
+                'Record it again from the project root'
+              )
+            end
+          end
+        end
+      end
+
+      context 'when the expression strategy is named explicitly' do
+        let(:config) do
+          super().with(selection: Mutant::Config::Selection::DEFAULT.with(strategy: 'expression'))
+        end
+
+        let(:selector_events) { [] }
+
+        it 'never reads the recording' do
+          verify_events do
+            expect(apply).to eql(Mutant::Either::Right.new(expected_env))
+          end
+        end
+      end
+    end
   end
 
   describe '#call_test' do
@@ -467,7 +611,7 @@ RSpec.describe Mutant::Bootstrap do
             arguments: [env_initial],
             reaction:  { return: integration_result }
           }
-          # NOTE: setup_integration_post should NOT be called on failure
+          # NOTE: setup_selector and setup_integration_post should NOT run on failure
         ]
       end
 
@@ -581,6 +725,7 @@ RSpec.describe Mutant::Bootstrap do
           arguments: [env_initial],
           reaction:  { return: integration_result }
         },
+        *selector_events,
         {
           receiver:  hooks,
           selector:  :run,

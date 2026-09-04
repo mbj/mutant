@@ -33,6 +33,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
         Requires:        []
         Operators:       light
         MutationTimeout: 5
+        Selection:       null
         Subjects:        1
         All-Tests:       2
         Available-Tests: 1
@@ -78,6 +79,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
           [Unparser::Color::NONE,  "Requires:        []\n"],
           [Unparser::Color::NONE,  "Operators:       light\n"],
           [Unparser::Color::NONE,  "MutationTimeout: 5\n"],
+          [Unparser::Color::NONE,  "Selection:       null\n"],
           [Unparser::Color::NONE,  "Subjects:        1\n"],
           [Unparser::Color::NONE,  "All-Tests:       2\n"],
           [Unparser::Color::NONE,  "Available-Tests: 1\n"],
@@ -129,6 +131,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
         Requires:        []
         Operators:       light
         MutationTimeout: 5
+        Selection:       null
         Subjects:        1
         All-Tests:       2
         Available-Tests: 1
@@ -175,6 +178,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
         Requires:        []
         Operators:       light
         MutationTimeout: 5
+        Selection:       null
         Subjects:        1
         All-Tests:       2
         Available-Tests: 1
@@ -232,6 +236,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
         Requires:        []
         Operators:       light
         MutationTimeout: 5
+        Selection:       null
         Subjects:        1
         All-Tests:       2
         Available-Tests: 1
@@ -282,6 +287,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
         Requires:        []
         Operators:       light
         MutationTimeout: 5
+        Selection:       null
         Subjects:        1
         All-Tests:       2
         Available-Tests: 1
@@ -313,6 +319,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvResult do
         Requires:        []
         Operators:       light
         MutationTimeout: 5
+        Selection:       null
         Subjects:        1
         All-Tests:       2
         Available-Tests: 1

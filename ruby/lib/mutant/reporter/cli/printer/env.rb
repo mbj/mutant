@@ -13,10 +13,12 @@ module Mutant
             :amount_subjects,
             :amount_all_tests,
             :config,
+            :selector,
             :test_subject_ratio
           )
 
           FORMATS = [
+            [:info,   'Selection:       %s',        :selection_name        ],
             [:info,   'Subjects:        %s',        :amount_subjects       ],
             [:info,   'All-Tests:       %s',        :amount_all_tests      ],
             [:info,   'Available-Tests: %s',        :amount_available_tests],
@@ -35,6 +37,10 @@ module Mutant
               __send__(report, format, __send__(value))
             end
           end
+
+        private
+
+          def selection_name = selector.name
         end # Env
       end # Printer
     end # CLI

@@ -13,6 +13,7 @@ RSpec.describe Mutant::Integration::Rspec do
 
   let(:expected_rspec_cli)    { %w[--fail-fast spec]                               }
   let(:integration_arguments) { []                                                 }
+  let(:ordering_registry)     { instance_double(RSpec::Core::Ordering::Registry)   }
   let(:rspec_configuration)   { instance_double(RSpec::Core::Configuration)        }
   let(:rspec_options)         { instance_double(RSpec::Core::ConfigurationOptions) }
   let(:rspec_runner)          { instance_double(RSpec::Core::Runner)               }
@@ -23,6 +24,7 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:example_a) do
     double(
       'Example A',
+      id:       'example-a',
       metadata: {
         location:         'example-a-location',
         full_description: 'example-a-full-description'
@@ -33,6 +35,7 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:example_b) do
     double(
       'Example B',
+      id:       'example-b',
       metadata: {
         location:         'example-b-location',
         full_description: 'example-b-full-description',
@@ -44,6 +47,7 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:example_c) do
     double(
       'Example C',
+      id:       'example-c',
       metadata: {
         location:         'example-c-location',
         full_description: 'Example::C blah'
@@ -54,6 +58,7 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:example_d) do
     double(
       'Example D',
+      id:       'example-d',
       metadata: {
         location:         'example-d-location',
         full_description: "Example::D\nblah"
@@ -64,6 +69,7 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:example_e) do
     double(
       'Example E',
+      id:       'example-e',
       metadata: {
         location:          'example-e-location',
         full_description:  'Example::E',
@@ -75,6 +81,7 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:example_f) do
     double(
       'Example F',
+      id:       'example-f',
       metadata: {
         location:          'example-f-location',
         full_description:  'Example::F',
@@ -86,6 +93,7 @@ RSpec.describe Mutant::Integration::Rspec do
   let(:example_g) do
     double(
       'Example G',
+      id:       'example-g',
       metadata: {
         location:         'example-g-location',
         full_description: ''
@@ -136,31 +144,38 @@ RSpec.describe Mutant::Integration::Rspec do
     [
       Mutant::Test.new(
         id:          'rspec:0:example-a-location/example-a-full-description',
-        expressions: [parse_expression('*')]
+        expressions: [parse_expression('*')],
+        location:    'example-a-location'
       ),
       Mutant::Test.new(
         id:          'rspec:1:example-b-location/example-b-full-description',
-        expressions: [parse_expression('*')]
+        expressions: [parse_expression('*')],
+        location:    'example-b-location'
       ),
       Mutant::Test.new(
         id:          'rspec:2:example-c-location/Example::C blah',
-        expressions: [parse_expression('Example::C')]
+        expressions: [parse_expression('Example::C')],
+        location:    'example-c-location'
       ),
       Mutant::Test.new(
         id:          "rspec:3:example-d-location/Example::D\nblah",
-        expressions: [parse_expression('*')]
+        expressions: [parse_expression('*')],
+        location:    'example-d-location'
       ),
       Mutant::Test.new(
         id:          'rspec:4:example-e-location/Example::E',
-        expressions: [parse_expression('Foo')]
+        expressions: [parse_expression('Foo')],
+        location:    'example-e-location'
       ),
       Mutant::Test.new(
         id:          'rspec:5:example-f-location/Example::F',
-        expressions: [parse_expression('Foo'), parse_expression('Bar')]
+        expressions: [parse_expression('Foo'), parse_expression('Bar')],
+        location:    'example-f-location'
       ),
       Mutant::Test.new(
         id:          'rspec:6:example-g-location/',
-        expressions: [parse_expression('*')]
+        expressions: [parse_expression('*')],
+        location:    'example-g-location'
       )
     ]
   end
@@ -184,6 +199,19 @@ RSpec.describe Mutant::Integration::Rspec do
     allow(rspec_configuration).to receive(:force)
     allow(rspec_configuration).to receive(:reporter)
     allow(rspec_configuration).to receive(:reset_reporter)
+    allow(rspec_configuration).to receive_messages(ordering_registry:)
+    allow(ordering_registry).to receive(:register)
+
+    allow(leaf_example_group).to receive_messages(
+      id:            'leaf',
+      parent_groups: [leaf_example_group, root_example_group]
+    )
+
+    allow(root_example_group).to receive_messages(id: 'root')
+
+    leaf_example_group.examples.each do |example|
+      allow(example).to receive_messages(example_group: leaf_example_group)
+    end
     allow(rspec_runner).to receive_messages(configuration: rspec_configuration)
     allow(world.time).to receive_messages(now: Time.at(10))
     allow(world.timer).to receive(:elapsed).and_return(2.0).and_yield
@@ -377,8 +405,8 @@ RSpec.describe Mutant::Integration::Rspec do
     context 'on multiple calls' do
       let(:exit_status) { 0 }
 
-      let(:tests_initial)  { all_tests.take(2) }
-      let(:tests_followup) { all_tests.drop(1).take(2) }
+      let(:tests_initial)  { all_tests.take(1)         }
+      let(:tests_followup) { all_tests.drop(1).take(1) }
 
       def apply
         object.setup
@@ -391,8 +419,53 @@ RSpec.describe Mutant::Integration::Rspec do
 
         expect(filtered_examples).to eql(
           root_example_group => [],
-          leaf_example_group => [example_b, example_c]
+          leaf_example_group => [example_b]
         )
+      end
+    end
+
+    context 'on more than one test' do
+      let(:exit_status) { 0                                            }
+      let(:registered)  { []                                           }
+      let(:tests)       { [all_tests.fetch(2), all_tests.fetch(0)]     }
+
+      before do
+        registered = registered()
+
+        allow(ordering_registry).to receive(:register) do |name, strategy|
+          registered << [name, strategy]
+        end
+      end
+
+      it 'installs the ordering rspec runs by' do
+        subject
+
+        expect(registered.map(&:first)).to eql([:global])
+      end
+
+      it 'installs a strategy of its own kind' do
+        subject
+
+        _name, ordering = registered.fetch(0)
+
+        expect(ordering).to be_a(Mutant::Integration::Rspec::Ordering)
+      end
+
+      it 'orders the examples the way the tests were given' do
+        subject
+
+        _name, ordering = registered.fetch(0)
+
+        expect(ordering.order([example_a, example_c])).to eql([example_c, example_a])
+      end
+
+      it 'orders a group holding no selected example last' do
+        subject
+
+        _name, ordering = registered.fetch(0)
+        other           = class_double(RSpec::Core::ExampleGroup, 'other example group', id: 'other')
+
+        expect(ordering.order([other, leaf_example_group])).to eql([leaf_example_group, other])
       end
     end
   end

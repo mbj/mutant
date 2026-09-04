@@ -5,8 +5,9 @@ module Mutant
     class Command
       # rubocop:disable Metrics/ClassLength
       class Environment < self
-        NAME              = 'environment'
-        SHORT_DESCRIPTION = 'Environment subcommands'
+        NAME                  = 'environment'
+        SHORT_DESCRIPTION     = 'Environment subcommands'
+        SELECTION_DESCRIPTION = 'Select tests via STRATEGY: auto|expression|context_map'
 
         OPTIONS =
           %i[
@@ -14,6 +15,7 @@ module Mutant
             add_runner_options
             add_integration_options
             add_matcher_options
+            add_selection_options
             add_reporter_options
             add_usage_options
           ].freeze
@@ -114,6 +116,22 @@ module Mutant
           parser.on('--since REVISION', 'Only select subjects touched since REVISION') do |revision|
             add_matcher(:diffs, Repository::Diff.new(to: revision, world:))
           end
+        end
+
+        def add_selection_options(parser)
+          parser.separator('Selection:')
+
+          parser.on('--selection STRATEGY', Config::Selection::STRATEGIES, SELECTION_DESCRIPTION) do |strategy|
+            selection(strategy:)
+          end
+
+          parser.on('--selection-path PATH', 'Read the coverage report from PATH') do |path|
+            selection(path:)
+          end
+        end
+
+        def selection(**attributes)
+          set(selection: @config.selection.with(attributes))
         end
 
         def add_runner_options(parser)

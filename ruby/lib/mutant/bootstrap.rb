@@ -12,6 +12,15 @@ module Mutant
   module Bootstrap
     include Adamantium, Anima.new(:config, :parser, :world)
 
+    UNMATCHED_CONTEXT_MAP = <<~'MESSAGE'
+      The coverage recording names no test that this suite runs, so it cannot
+      say which tests cover a subject.
+
+      Record it again from the project root, with the suite mutant runs. A suite
+      that starts simplecov unconditionally rewrites the recording every time
+      mutant runs it, so start simplecov only when measuring coverage.
+    MESSAGE
+
     SEMANTICS_MESSAGE_FORMAT =
       "%<message>s. Fix your lib to follow normal ruby semantics!\n" \
       '{Module,Class}#name should return resolvable constant name as String or nil'
@@ -77,17 +86,57 @@ module Mutant
       env.record(__method__) do
         hooks = env.hooks
         hooks.run(:setup_integration_pre)
-        Integration.setup(env).fmap do |integration|
-          env.with(
-            integration:,
-            mutations:,
-            selector:    Selector::Expression.new(integration:),
-            subjects:    selected_subjects
-          ).tap { hooks.run(:setup_integration_post) }
+        Integration.setup(env).bind do |integration|
+          setup_selector(env:, integration:).fmap do |selector|
+            env.with(
+              integration:,
+              mutations:,
+              selector:,
+              subjects:    selected_subjects
+            ).tap { hooks.run(:setup_integration_post) }
+          end
         end
       end
     end
     private_class_method :setup_integration
+
+    # The selector the configured strategy asks for
+    #
+    # The default is to use the coverage recording whenever there is a usable
+    # one and the expressions otherwise, so a project that records per test
+    # coverage gets the better selection without asking for it. Naming
+    # `context_map` explicitly turns every reason the recording cannot be used
+    # into a failed run, rather than a silent downgrade to a selection the user
+    # did not ask for.
+    #
+    # @return [Either<String, Selector>]
+    def self.setup_selector(env:, integration:)
+      selection = env.config.selection
+      fallback  = Selector::Expression.new(integration:)
+
+      return Either::Right.new(fallback) if selection.expression?
+
+      result = env.record(__method__) do
+        ContextMap::Loader
+          .call(path: env.world.pathname.new(selection.effective_path), world: env.world)
+          .bind { |context_map| context_map_selector(context_map:, fallback:, integration:) }
+      end
+
+      selection.context_map? ? result : Either::Right.new(result.from_right { fallback })
+    end
+    private_class_method :setup_selector
+
+    # A recording that names no test of this suite was taken somewhere else, and
+    # answering selection from it would report every mutation alive without ever
+    # running a test that could have killed it.
+    #
+    # @return [Either<String, Selector>]
+    def self.context_map_selector(context_map:, fallback:, integration:)
+      selector = Selector::ContextMap.new(context_map:, fallback:, integration:)
+
+      selector.unmatched? ? Either::Left.new(UNMATCHED_CONTEXT_MAP) : Either::Right.new(selector)
+    end
+    private_class_method :context_map_selector
 
     # rubocop:enable Metrics/MethodLength
     def self.load_hooks(env)
