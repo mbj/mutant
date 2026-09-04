@@ -5,7 +5,8 @@ module Mutant
   class Test
     include Anima.new(
       :expressions,
-      :id
+      :id,
+      :location
     )
 
     # Identification string

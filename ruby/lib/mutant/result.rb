@@ -375,7 +375,7 @@ module Mutant
       end
 
       load_test = Transform::Success.new(
-        block: ->(id) { Mutant::Test.new(expressions: EMPTY_ARRAY, id:) }
+        block: ->(id) { Mutant::Test.new(expressions: EMPTY_ARRAY, id:, location: nil) }
       )
 
       derive_node = Transform::Success.new(

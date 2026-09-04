@@ -29,6 +29,50 @@ module Mutant
 
       private_constant(*constants(false))
 
+      # Rspec ordering strategy driven by the order mutant selected the tests in
+      #
+      # Rspec runs one group at a time, so a group is ranked by the best test it
+      # holds, and the ranking survives as group order plus example order within
+      # a group. Anything rspec asks about that was not selected sorts last.
+      class Ordering
+        UNRANKED = Float::INFINITY
+
+        private_constant(*constants(false))
+
+        def initialize = @rank = {}
+
+        # Rank examples, best first
+        #
+        # @param [Enumerable<RSpec::Core::Example>] examples
+        #
+        # @return [self]
+        def call(examples)
+          @rank.clear
+
+          examples.each_with_index do |example, rank|
+            @rank[example] = rank
+
+            example.example_group.parent_groups.each do |group|
+              @rank[group] = rank if @rank.fetch(group, UNRANKED) > rank
+            end
+          end
+
+          self
+        end
+
+        # Order the groups or the examples rspec is about to run
+        #
+        # Rspec's own id breaks a tie, so the order does not depend on the order
+        # rspec happened to hand the list over in.
+        #
+        # @param [Array<Object>] list
+        #
+        # @return [Array<Object>]
+        def order(list)
+          list.sort_by { |item| [@rank.fetch(item, UNRANKED), item.id] }
+        end
+      end # Ordering
+
       def freeze = tap { super if @setup_elapsed }
 
       # Initialize rspec integration
@@ -36,6 +80,7 @@ module Mutant
       # @return [undefined]
       def initialize(*)
         super
+        @ordering    = Ordering.new
         @runner      = RSpec::Core::Runner.new(RSpec::Core::ConfigurationOptions.new(effective_arguments))
         @rspec_world = RSpec.world
       end
@@ -56,7 +101,7 @@ module Mutant
       end
       memoize :setup
 
-      # Run a collection of tests
+      # Run a collection of tests, likeliest killer first
       #
       # @param [Enumerable<Mutant::Test>] tests
       #
@@ -65,8 +110,12 @@ module Mutant
       # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/MethodLength
       def call(tests)
+        examples = tests.map(&all_tests_index)
+
+        install_ordering
         reset_examples
-        setup_examples(tests.map(&all_tests_index))
+        @ordering.call(examples)
+        setup_examples(examples)
         @runner.configuration.start_time = world.time.now - @setup_elapsed
         start = timer.now
         passed = @runner.run_specs(@rspec_world.ordered_example_groups).equal?(EXIT_SUCCESS)
@@ -96,6 +145,18 @@ module Mutant
 
     private
 
+      # Rspec picks its own order for groups and for the examples inside them,
+      # which would throw away the selector's ranking. Its ordering registry is
+      # the seam for that, but the public `register_ordering(:global)` is a noop
+      # once `--order` was forced from the command line or `.rspec`, which most
+      # suites do. Registering with the registry is the only way in.
+      #
+      # Registered per run rather than at setup: the strategy is the same object
+      # every time, and a run is the moment its ranking is known.
+      def install_ordering
+        @runner.configuration.ordering_registry.register(:global, @ordering)
+      end
+
       def rspec_setup_failure?
         @rspec_world.wants_to_quit || rspec_is_quitting?
       end
@@ -124,16 +185,19 @@ module Mutant
       def parse_example(example, index)
         metadata = example.metadata
 
-        id = TEST_ID_FORMAT % {
+        Test.new(
+          expressions: parse_metadata(metadata),
+          id:          test_id(metadata, index),
+          location:    metadata.fetch(:location)
+        )
+      end
+
+      def test_id(metadata, index)
+        TEST_ID_FORMAT % {
           index:,
           location:    metadata.fetch(:location),
           description: metadata.fetch(:full_description)
         }
-
-        Test.new(
-          expressions: parse_metadata(metadata),
-          id:
-        )
       end
 
       def example_group_map

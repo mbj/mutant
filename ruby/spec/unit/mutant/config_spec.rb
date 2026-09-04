@@ -234,6 +234,24 @@ RSpec.describe Mutant::Config do
       include_examples 'descendant merge'
     end
 
+    context 'merging selection' do
+      let(:key) { :selection }
+
+      let(:original_value) do
+        instance_double(Mutant::Config::Selection, 'config')
+      end
+
+      let(:other_value) do
+        instance_double(Mutant::Config::Selection, 'other')
+      end
+
+      let(:result_value) do
+        instance_double(Mutant::Config::Selection, 'result')
+      end
+
+      include_examples 'descendant merge'
+    end
+
     context 'merging coverage criteria' do
       let(:key) { :coverage_criteria }
 

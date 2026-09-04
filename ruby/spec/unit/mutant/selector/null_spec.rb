@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Selector::Null do
+  describe '#name' do
+    it 'returns the strategy name' do
+      expect(described_class.new.name).to eql('null')
+    end
+  end
+
   describe '#call' do
     subject { described_class.new }
 

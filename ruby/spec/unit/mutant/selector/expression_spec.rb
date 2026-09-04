@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::Selector::Expression do
+  describe '#name' do
+    it 'returns the strategy name' do
+      expect(described_class.new(integration: instance_double(Mutant::Integration)).name).to eql('expression')
+    end
+  end
+
   describe '#call' do
     let(:object) { described_class.new(integration:) }
 

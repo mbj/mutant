@@ -161,6 +161,7 @@ See [commercial licensing](/docs/commercial.md) for pricing and details.
 * [Test::Unit Integration](/docs/mutant-test-unit.md)
 * [Rails Integration](/docs/rails.md)
 * [Incremental Mode](/docs/incremental.md)
+* [Test Selection](/docs/test-selection.md)
 * [Reading Reports](/docs/reading-reports.md)
 * [Concurrency](/docs/concurrency.md)
 * [AST Pattern Matching](/docs/ast-pattern.md)
