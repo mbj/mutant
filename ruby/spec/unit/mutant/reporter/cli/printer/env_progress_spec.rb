@@ -19,6 +19,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Requires:        []
         Operators:       light
         MutationTimeout: 5
+        Selection:       null
         Subjects:        1
         All-Tests:       2
         Available-Tests: 1
@@ -48,6 +49,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Requires:        []
         Operators:       light
         MutationTimeout: 5
+        Selection:       null
         Subjects:        1
         All-Tests:       2
         Available-Tests: 1
@@ -79,6 +81,7 @@ RSpec.describe Mutant::Reporter::CLI::Printer::EnvProgress do
         Requires:        []
         Operators:       light
         MutationTimeout: 5
+        Selection:       null
         Subjects:        1
         All-Tests:       2
         Available-Tests: 1

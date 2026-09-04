@@ -22,6 +22,7 @@ module Mutant
       :mutation,
       :reporter,
       :requires,
+      :selection,
       :usage
     )
 
@@ -89,6 +90,7 @@ module Mutant
         matcher:               matcher.merge(other.matcher),
         mutation:              mutation.merge(other.mutation),
         requires:              requires + other.requires,
+        selection:             selection.merge(other.selection),
         usage:                 other.usage.merge(usage)
       )
     end
@@ -268,6 +270,10 @@ module Mutant
           Transform::Hash::Key.new(
             transform: Transform::STRING_ARRAY,
             value:     'requires'
+          ),
+          Transform::Hash::Key.new(
+            transform: ->(value) { Selection::TRANSFORM.call(value) },
+            value:     'selection'
           ),
           Transform::Hash::Key.new(
             transform: Usage::TRANSFORM,

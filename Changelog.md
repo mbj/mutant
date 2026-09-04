@@ -1,3 +1,39 @@
+# unreleased
+
+* Select tests from a per test coverage recording when there is one. Mutant
+  selects a subject's tests by matching the subject's expression against each
+  test's expression, which RSpec derives from the leading token of an example
+  description. A spec headed `describe 'clamping behaviour'` covers
+  `Calculator#clamp` without saying so, and its mutations report alive even
+  though the suite kills them.
+
+  Mutant now reads the per test data simplecov 1.2.0 and newer add to
+  `coverage/coverage.json` under `track_tests`, and selects the tests that
+  executed the subject's own source lines. It takes on no dependency for this,
+  and reads `coverage.json` rather than the internal resultset, so it consumes
+  simplecov's published schema.
+
+  The default strategy is `auto`: use the recording when there is a usable one,
+  and the expressions otherwise. Every run prints the strategy it settled on.
+  `--selection context_map` turns every reason the recording cannot be used into
+  a failed run, and `--selection expression` never reads it. `--selection-path`
+  reads a report outside `coverage`. The same settings live under a `selection`
+  key in `mutant.yml`.
+
+  Subjects whose lines no test executes, such as a constant body evaluated while
+  the suite loads, fall back to expression based selection.
+
+  The selected tests are ordered likeliest killer first, by whether the
+  expressions name the test, then by the share of the test's own footprint
+  falling inside the subject, then by how much of the subject it reached. A run
+  stops at the first failing test, so the order decides whether one test runs or
+  all of them. Rspec picks its own order for groups and examples, so mutant
+  installs an ordering strategy that follows the ranking. On a suite where thirty
+  tests execute a subject incidentally and one asserts on it, this cut the
+  examples run from 129 to 39.
+
+  See [Test Selection](/docs/test-selection.md).
+
 # v0.16.3 2026-04-30
 
 * Fix `NoMethodError` crash in `source:<glob>` subject expressions when
