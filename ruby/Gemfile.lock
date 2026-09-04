@@ -5,6 +5,7 @@ PATH
       diff-lcs (>= 1.6, < 3)
       irb (~> 1.15)
       parser (~> 3.3.10)
+      pg_query (~> 6.2)
       regexp_parser (~> 2.10)
       securerandom (>= 0.3)
       sorbet-runtime (~> 0.6.0)
@@ -14,9 +15,16 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.3)
+    bigdecimal (4.1.2)
     date (3.5.1)
     diff-lcs (1.6.2)
     erb (6.0.4)
+    google-protobuf (4.36.0)
+      bigdecimal
+      rake (~> 13.3)
+    google-protobuf (4.36.0-arm64-darwin)
+      bigdecimal
+      rake (~> 13.3)
     io-console (0.8.2)
     irb (1.17.0)
       pp (>= 0.6.0)
@@ -30,6 +38,8 @@ GEM
     parser (3.3.10.2)
       ast (~> 2.4.1)
       racc
+    pg_query (6.2.2)
+      google-protobuf (>= 3.25.3)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -39,6 +49,7 @@ GEM
       stringio
     racc (1.8.1)
     rainbow (3.1.1)
+    rake (13.4.2)
     rdoc (7.2.0)
       erb
       psych (>= 4.0.0)
@@ -90,6 +101,7 @@ GEM
       prism (>= 1.5.1)
 
 PLATFORMS
+  arm64-darwin-25
   ruby
 
 DEPENDENCIES
@@ -101,9 +113,12 @@ DEPENDENCIES
 
 CHECKSUMS
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
+  bigdecimal (4.1.2) sha256=53d217666027eab4280346fba98e7d5b66baaae1b9c3c1c0ffe89d48188a3fbd
   date (3.5.1) sha256=750d06384d7b9c15d562c76291407d89e368dda4d4fff957eb94962d325a0dc0
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
   erb (6.0.4) sha256=38e3803694be357fe2bfe312487c74beaf9fb4e5beb3e22498952fe1645b95d9
+  google-protobuf (4.36.0) sha256=2132fb002366b85a57fbb796333e2cb1f969126e05f9af32149709ba3fd397b5
+  google-protobuf (4.36.0-arm64-darwin) sha256=be182aac1cf55ccbbd27ec5a94d5b012069075f5c879d65423d33e6b2dec86f5
   io-console (0.8.2) sha256=d6e3ae7a7cc7574f4b8893b4fca2162e57a825b223a177b7afa236c5ef9814cc
   irb (1.17.0) sha256=168c4ddb93d8a361a045c41d92b2952c7a118fa73f23fe14e55609eb7a863aae
   json (2.19.3) sha256=289b0bb53052a1fa8c34ab33cc750b659ba14a5c45f3fcf4b18762dc67c78646
@@ -112,12 +127,14 @@ CHECKSUMS
   mutant (0.16.3)
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
   parser (3.3.10.2) sha256=6f60c84aa4bdcedb6d1a2434b738fe8a8136807b6adc8f7f53b97da9bc4e9357
+  pg_query (6.2.2) sha256=316c194160ccfac8af9a7aff55cdc5b2d13bdd8bd8734976c6bddc477e779b6f
   pp (0.6.3) sha256=2951d514450b93ccfeb1df7d021cae0da16e0a7f95ee1e2273719669d0ab9df6
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
   psych (5.3.1) sha256=eb7a57cef10c9d70173ff74e739d843ac3b2c019a003de48447b2963d81b1974
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
+  rake (13.4.2) sha256=cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701
   rdoc (7.2.0) sha256=8650f76cd4009c3b54955eb5d7e3a075c60a57276766ebf36f9085e8c9f23192
   regexp_parser (2.11.3) sha256=ca13f381a173b7a93450e53459075c9b76a10433caadcb2f1180f2c741fc55a4
   reline (0.6.3) sha256=1198b04973565b36ec0f11542ab3f5cfeeec34823f4e54cebde90968092b1835
