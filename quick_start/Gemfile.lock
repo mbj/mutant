@@ -83,7 +83,7 @@ GEM
     rspec-support (3.13.7)
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
-    simplecov (1.1.1)
+    simplecov (1.2.0)
     sorbet-runtime (0.6.13198)
     stringio (3.2.0)
     sync (0.5.0)
@@ -155,7 +155,7 @@ CHECKSUMS
   rspec-support (3.13.7) sha256=0640e5570872aafefd79867901deeeeb40b0c9875a36b983d85f54fb7381c47c
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
-  simplecov (1.1.1) sha256=25825ef13f0b2e74694d769817dad6ab8e90131dabdaa666e522fea105521e78
+  simplecov (1.2.0) sha256=ea6acd05eece5a41990e2a5171c57d15700d329326c7666c85ee8c6a0dd0977e
   sorbet-runtime (0.6.13198) sha256=b7f136b709fbc283ef7453d18843efdb1ef90d64e701c457ad975708e22f90e6
   stringio (3.2.0) sha256=c37cb2e58b4ffbd33fe5cd948c05934af997b36e0b6ca6fdf43afa234cf222e1
   sync (0.5.0) sha256=668356cc07c59ac7ed9ecf34fec3929831f179c07adb1f3e1c3b7a1609a638fd
