@@ -1,4 +1,17 @@
-# unreleased
+# v0.17.0 2026-09-17
+
+* Add `mutant-test-unit`, an integration for
+  [test-unit](https://github.com/test-unit/test-unit). Tests declare the
+  subjects they cover with `cover`, the same way `mutant-minitest` does, and
+  run with `--integration test-unit`. See
+  [mutant-test-unit](/docs/mutant-test-unit.md).
+
+* Write the session file each time a mutation is found alive, not only at the
+  end of the run. The session subcommands now see survivors while a long run
+  is still going. Writes happen at most once per second.
+
+* The minitest integration now also loads test files under `minitest/`, and
+  skips any file under a `vendor/` directory.
 
 * Select tests from a per test coverage recording when there is one. Mutant
   selects a subject's tests by matching the subject's expression against each
