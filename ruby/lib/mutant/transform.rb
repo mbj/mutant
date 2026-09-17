@@ -295,6 +295,75 @@ module Mutant
         end
       end # Key
 
+      # Transform reducing a hash to the keys it names
+      #
+      # A document another tool writes carries keys mutant has no use for,
+      # and gains more between versions. Slicing ahead of a Hash transform
+      # lets that transform stay strict about the keys it does know.
+      class Slice < Transform
+        include Anima.new(:keys)
+
+        # Apply transformation to input
+        #
+        # @param [Object] input
+        #
+        # @return [Either<Error, Hash>]
+        def call(input)
+          PRIMITIVE
+            .call(input)
+            .lmap(&method(:lift_error))
+            .fmap { |hash| hash.slice(*keys) }
+        end
+      end # Slice
+
+      # Transform a hash keyed by data via mapping its pairs over key and
+      # value transforms
+      #
+      # Where Hash names the keys it accepts, this accepts every key the key
+      # transform does.
+      class Map < Transform
+        include Anima.new(:key, :value)
+
+        DUPLICATE_MESSAGE = 'Key transform maps distinct keys onto one'
+
+        private_constant(*constants(false))
+
+        # Apply transformation to input
+        #
+        # @param [Object] input
+        #
+        # @return [Either<Error, Hash>]
+        def call(input)
+          PRIMITIVE
+            .call(input)
+            .lmap(&method(:lift_error))
+            .bind(&method(:run))
+        end
+
+      private
+
+        # rubocop:disable Metrics/MethodLength
+        def run(input)
+          output = input.to_h do |key_input, value_input|
+            [
+              coerce(key, key_input, key_input).from_right { |error| return failure(error(cause: error, input:)) },
+              coerce(value, key_input, value_input).from_right { |error| return failure(error(cause: error, input:)) }
+            ]
+          end
+
+          if output.size.equal?(input.size)
+            success(output)
+          else
+            failure(error(input:, message: DUPLICATE_MESSAGE))
+          end
+        end
+        # rubocop:enable Metrics/MethodLength
+
+        def coerce(transform, key, input)
+          Key.new(value: key, transform:).call(input)
+        end
+      end # Map
+
       # Apply transformation to input
       #
       # @param [Object] input

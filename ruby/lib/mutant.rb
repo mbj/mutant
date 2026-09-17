@@ -225,13 +225,17 @@ module Mutant
     require 'mutant/timer'
     require 'mutant/integration'
     require 'mutant/integration/null'
+    require 'mutant/context_map'
+    require 'mutant/context_map/loader'
     require 'mutant/selector'
+    require 'mutant/selector/context_map'
     require 'mutant/selector/expression'
     require 'mutant/selector/null'
     require 'mutant/world'
     require 'mutant/hooks'
     require 'mutant/config'
     require 'mutant/config/coverage_criteria'
+    require 'mutant/config/selection'
     require 'mutant/cli'
     require 'mutant/cli/command'
     require 'mutant/cli/command/environment'
@@ -378,6 +382,7 @@ module Mutant
       mutation:              Mutation::Config::EMPTY,
       reporter:              Reporter::CLI.build(WORLD.stdout),
       requires:              EMPTY_ARRAY,
+      selection:             Config::Selection::DEFAULT,
       usage:                 Usage::Unknown.new
     )
   end # Config
