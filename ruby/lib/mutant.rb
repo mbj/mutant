@@ -33,6 +33,7 @@ module Mutant
       optparse
       parser
       parser/current
+      pg_query
       pathname
       regexp_parser
       securerandom
@@ -189,6 +190,8 @@ module Mutant
     require 'mutant/mutator/node/numblock'
     require 'mutant/mutator/node/const_pattern'
     require 'mutant/mutator/regexp'
+    require 'mutant/mutator/sql'
+    require 'mutant/mutator/sql_heredoc'
     require 'mutant/loader'
     require 'mutant/context'
     require 'mutant/scope'

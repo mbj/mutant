@@ -553,6 +553,7 @@ impl Runtime {
             "--jobs",
             "2",
             "User#adult?",
+            "User.inactive",
         ];
 
         log::info!("RailsVerify: running without covering spec (expecting survivors)");
