@@ -13,8 +13,13 @@ module Mutant
         def dispatch
           emit_singletons
 
-          children.each_index do |index|
-            mutate_child(index, &method(:n_begin?))
+          if SqlHeredoc.sql_heredoc?(input)
+            emit(N_EMPTY_STRING)
+            SqlHeredoc.mutate(input).each(&method(:emit))
+          else
+            children.each_index do |index|
+              mutate_child(index, &method(:n_begin?))
+            end
           end
         end
 
