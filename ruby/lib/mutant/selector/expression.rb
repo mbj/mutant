@@ -6,6 +6,11 @@ module Mutant
     class Expression < self
       include Anima.new(:integration)
 
+      # Name of the strategy this selector implements
+      #
+      # @return [String]
+      def name = 'expression'
+
       # Tests for subject
       #
       # @param [Subject] subject

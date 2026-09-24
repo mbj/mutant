@@ -72,6 +72,7 @@ module SharedContext
         mutations:,
         selected_tests:         [test_a].to_set,
         selections:,
+        selector:               Mutant::Selector::Null.new,
         subjects:,
         test_subject_ratio:     Rational(1),
         world:

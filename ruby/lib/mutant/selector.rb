@@ -12,5 +12,10 @@ module Mutant
     # @return [Enumerable<Test>]
     abstract_method :call
 
+    # Name of the strategy this selector implements
+    #
+    # @return [String]
+    abstract_method :name
+
   end # Selector
 end # Mutant

@@ -6,6 +6,11 @@ module Mutant
     class Null < self
       include Equalizer.new
 
+      # Name of the strategy this selector implements
+      #
+      # @return [String]
+      def name = 'null'
+
       # Tests for subject
       #
       # @param [Subject] subject

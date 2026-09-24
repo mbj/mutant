@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Mutant::CLI do
+
   describe '.parse' do
     let(:events)                 { []                                        }
     let(:expected_print_profile) { false                                     }
@@ -277,6 +278,11 @@ RSpec.describe Mutant::CLI do
                 --since REVISION             Only select subjects touched since REVISION
 
 
+        Selection:
+                --selection STRATEGY         Select tests via STRATEGY: auto|expression|context_map
+                --selection-path PATH        Read the coverage report from PATH
+
+
         Reporting:
                 --print-warnings             Print warnings
 
@@ -333,6 +339,11 @@ RSpec.describe Mutant::CLI do
                 --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
                 --start-subject EXPRESSION   Start mutation testing at a specific subject
                 --since REVISION             Only select subjects touched since REVISION
+
+
+        Selection:
+                --selection STRATEGY         Select tests via STRATEGY: auto|expression|context_map
+                --selection-path PATH        Read the coverage report from PATH
 
 
         Reporting:
@@ -393,6 +404,11 @@ RSpec.describe Mutant::CLI do
                 --since REVISION             Only select subjects touched since REVISION
 
 
+        Selection:
+                --selection STRATEGY         Select tests via STRATEGY: auto|expression|context_map
+                --selection-path PATH        Read the coverage report from PATH
+
+
         Reporting:
                 --print-warnings             Print warnings
 
@@ -449,6 +465,11 @@ RSpec.describe Mutant::CLI do
                 --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
                 --start-subject EXPRESSION   Start mutation testing at a specific subject
                 --since REVISION             Only select subjects touched since REVISION
+
+
+        Selection:
+                --selection STRATEGY         Select tests via STRATEGY: auto|expression|context_map
+                --selection-path PATH        Read the coverage report from PATH
 
 
         Reporting:
@@ -1177,6 +1198,7 @@ RSpec.describe Mutant::CLI do
            Requires:        []
            Operators:       light
            MutationTimeout: 5
+           Selection:       null
            Subjects:        1
            All-Tests:       3
            Available-Tests: 2
@@ -1364,6 +1386,11 @@ RSpec.describe Mutant::CLI do
                     --since REVISION             Only select subjects touched since REVISION
 
 
+            Selection:
+                    --selection STRATEGY         Select tests via STRATEGY: auto|expression|context_map
+                    --selection-path PATH        Read the coverage report from PATH
+
+
             Reporting:
                     --print-warnings             Print warnings
 
@@ -1372,6 +1399,96 @@ RSpec.describe Mutant::CLI do
                     --usage USAGE_TYPE           License usage: opensource|commercial
           MESSAGE
         end
+      end
+
+      context 'on invalid --selection', mutant_expression: %w[
+        Mutant::CLI::Command::Environment#add_selection_options
+        Mutant::CLI::Command::Environment#selection
+      ] do
+        let(:arguments) { %w[run --selection invalid] }
+
+        it 'returns expected error' do
+          expect(apply).to eql(left(<<~"MESSAGE"))
+            mutant run: invalid argument: --selection invalid
+
+            usage: mutant run [options]
+
+            Summary: Run code analysis
+
+            mutant version: #{Mutant::VERSION}
+
+            Global Options:
+
+                    --help                       Print help
+                    --version                    Print mutants version
+                    --profile                    Profile mutant execution
+                    --zombie                     Run mutant zombified
+
+
+            Environment:
+                -I, --include DIRECTORY          Add DIRECTORY to $LOAD_PATH
+                -r, --require NAME               Require file with NAME
+                    --env KEY=VALUE              Set environment variable
+
+
+            Runner:
+                    --fail-fast                  Fail fast
+                -j, --jobs NUMBER                Number of kill jobs. Defaults to number of processors.
+                -t, --mutation-timeout NUMBER    Per mutation analysis timeout
+
+
+            Integration:
+                    --use INTEGRATION            deprecated alias for --integration
+                    --integration NAME           Use test integration with NAME
+                    --integration-argument ARGUMENT
+                                                 Pass ARGUMENT to integration
+
+
+            Matcher:
+                    --ignore-subject EXPRESSION  Ignore subjects that match EXPRESSION as prefix
+                    --start-subject EXPRESSION   Start mutation testing at a specific subject
+                    --since REVISION             Only select subjects touched since REVISION
+
+
+            Selection:
+                    --selection STRATEGY         Select tests via STRATEGY: auto|expression|context_map
+                    --selection-path PATH        Read the coverage report from PATH
+
+
+            Reporting:
+                    --print-warnings             Print warnings
+
+
+            Usage:
+                    --usage USAGE_TYPE           License usage: opensource|commercial
+          MESSAGE
+        end
+      end
+
+      context 'on --selection', mutant_expression: %w[
+        Mutant::CLI::Command::Environment#add_selection_options
+        Mutant::CLI::Command::Environment#selection
+      ] do
+        let(:arguments) { %w[run --selection context_map] }
+
+        let(:expected_cli_config) do
+          super().with(selection: Mutant::Config::Selection::DEFAULT.with(strategy: 'context_map'))
+        end
+
+        include_examples 'CLI run'
+      end
+
+      context 'on --selection-path', mutant_expression: %w[
+        Mutant::CLI::Command::Environment#add_selection_options
+        Mutant::CLI::Command::Environment#selection
+      ] do
+        let(:arguments) { %w[run --selection-path tmp/coverage] }
+
+        let(:expected_cli_config) do
+          super().with(selection: Mutant::Config::Selection::DEFAULT.with(path: 'tmp/coverage'))
+        end
+
+        include_examples 'CLI run'
       end
 
       context 'on --usage commercial' do

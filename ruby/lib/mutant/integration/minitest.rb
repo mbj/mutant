@@ -52,6 +52,16 @@ module Mutant
           reporter.passed?
         end
 
+        # Where the test method is defined
+        #
+        # @return [String, nil]
+        def location
+          path, line = klass.instance_method(test_method).source_location
+
+          "#{path}:#{line}" if path
+        end
+        memoize :location
+
         # Parse expressions
         #
         # @param [ExpressionParser] parser
@@ -139,8 +149,9 @@ module Mutant
 
       def construct_test(test_case)
         Test.new(
+          expressions: test_case.expressions(expression_parser),
           id:          test_case.identification,
-          expressions: test_case.expressions(expression_parser)
+          location:    test_case.location
         )
       end
 

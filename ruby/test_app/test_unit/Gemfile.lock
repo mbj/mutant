@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    mutant (0.16.3)
+    mutant (0.17.0)
       diff-lcs (>= 1.6, < 3)
       irb (~> 1.15)
       parser (~> 3.3.10)
@@ -9,8 +9,8 @@ PATH
       securerandom (>= 0.3)
       sorbet-runtime (~> 0.6.0)
       unparser (>= 0.8.2, < 0.10)
-    mutant-test-unit (0.16.3)
-      mutant (= 0.16.3)
+    mutant-test-unit (0.17.0)
+      mutant (= 0.17.0)
       test-unit (>= 3.0, < 4)
 
 GEM
@@ -73,8 +73,8 @@ CHECKSUMS
   io-console (0.9.2) sha256=efa74f891dd03c0939a931dfc6e74c2813d904763d456ea9762b0525e748db08
   irb (1.18.0) sha256=de9454a0703a54704b9811a5ef31a60c86949fbf4013fcf244fabc7c775248e3
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
-  mutant (0.16.3)
-  mutant-test-unit (0.16.3)
+  mutant (0.17.0)
+  mutant-test-unit (0.17.0)
   parser (3.3.12.0) sha256=21a6d7f755d5a24dfbdc6e6b772e4e879a52e7631a88bc5a3a134606052c9828
   power_assert (3.1.0) sha256=fefe98ed5d3140628138f3f9f9194d6ece01f1320e69700d3c928adca7518251
   pp (0.6.4) sha256=dfcb0fce700c41456265922884f9fe195d7fbb0674a3578e6c0f69588e82b570

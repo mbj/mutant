@@ -36,6 +36,14 @@ RSpec.describe Mutant::Mutation::Runner::Sink do
 
   let(:object) { described_class.new(env:) }
 
+  let(:writer) do
+    instance_double(Mutant::Result::JSONWriter, call: instance_double(Pathname))
+  end
+
+  before do
+    allow(Mutant::Result::JSONWriter).to receive(:new).and_return(writer)
+  end
+
   describe '#response' do
     subject { object.response(mutation_a_index_response) }
 
@@ -60,6 +68,63 @@ RSpec.describe Mutant::Mutation::Runner::Sink do
 
       it 're-raises the error' do
         expect { subject }.to raise_error(EOFError)
+      end
+    end
+
+    context 'session flushing' do
+      context 'on an alive mutation' do
+        with(:mutation_a_test_result) { { passed: true } }
+
+        it 'flushes the session file' do
+          subject
+
+          expect(Mutant::Result::JSONWriter)
+            .to have_received(:new).with(env:, result: object.status)
+          expect(writer).to have_received(:call)
+        end
+
+        context 'followed by another alive mutation' do
+          with(:mutation_b_test_result) { { passed: true } }
+
+          # Serializing the result tree is main-process work, so a burst
+          # of survivors must not turn into a burst of writes.
+          #
+          # Timer reads, in order: sink start, first flush check, the
+          # status snapshot taken by that flush, second flush check.
+          context 'within the flush interval' do
+            before do
+              allow(timer).to receive(:now).and_return(1.0, 1.0, 1.0, 1.999)
+            end
+
+            it 'flushes the session file only once' do
+              subject
+              object.response(mutation_b_index_response)
+
+              expect(writer).to have_received(:call).once
+            end
+          end
+
+          context 'after the flush interval' do
+            before do
+              allow(timer).to receive(:now).and_return(1.0, 1.0, 1.0, 2.0)
+            end
+
+            it 'flushes the session file again' do
+              subject
+              object.response(mutation_b_index_response)
+
+              expect(writer).to have_received(:call).twice
+            end
+          end
+        end
+      end
+
+      context 'on a killed mutation' do
+        it 'does not flush the session file' do
+          subject
+
+          expect(Mutant::Result::JSONWriter).not_to have_received(:new)
+        end
       end
     end
   end
