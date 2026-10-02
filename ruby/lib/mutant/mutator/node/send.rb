@@ -164,7 +164,7 @@ module Mutant
           RECEIVER_SELECTOR_REPLACEMENTS
             .fetch(receiver.children.last, EMPTY_HASH)
             .fetch(selector, EMPTY_ARRAY)
-            .each(&method(:emit_selector))
+            .each(&public_method(:emit_selector))
         end
 
         def emit_double_negation_mutation

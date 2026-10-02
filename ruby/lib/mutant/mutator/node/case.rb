@@ -30,9 +30,8 @@ module Mutant
         end
 
         def emit_else_mutations
-          else_branch = children.last
           else_index = children.length - 1
-          return unless else_branch
+          return unless children.fetch(else_index)
           mutate_child(else_index)
           emit_child_update(else_index, nil)
         end

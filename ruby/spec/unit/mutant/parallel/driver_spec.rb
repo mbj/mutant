@@ -198,6 +198,22 @@ RSpec.describe Mutant::Parallel::Driver, mutant_expression: 'Mutant::Parallel::D
         include_examples 'returns expected status'
       end
 
+      context 'when partially done' do
+        before do
+          allow(thread_a).to receive_messages(alive?: false)
+        end
+
+        let(:expected_status) do
+          Mutant::Parallel::Status.new(
+            active_jobs:,
+            done:        false,
+            payload:     sink_status
+          )
+        end
+
+        include_examples 'returns expected status'
+      end
+
       include_examples 'when done'
     end
   end
