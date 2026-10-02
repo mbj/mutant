@@ -69,5 +69,60 @@ RSpec.describe Mutant::Result::JSONWriter do
     it 'returns the path' do
       expect(object.call).to be(path)
     end
+
+    context 'with a covered and an alive mutation' do
+      setup_shared_context
+
+      let(:world) { instance_double(Mutant::World, pathname:, process:) }
+      let(:env)   { instance_double(Mutant::Env, world:) }
+
+      let(:result) do
+        instance_double(Mutant::Result::Env, killtime: 10.5, runtime: 2.5, subject_results: [subject_a_result])
+      end
+
+      with(:mutation_a_isolation_result) { { log: Mutant::LogCapture::String.new(content: 'killed output') } }
+      with(:mutation_b_isolation_result) { { log: Mutant::LogCapture::String.new(content: 'alive output') } }
+      with(:mutation_b_criteria_result)  { { test_result: false }                                           }
+
+      def written_logs
+        logs = nil
+
+        expect(tmp_path).to have_received(:write) do |json|
+          logs = JSON.parse(json).fetch('subject_results').flat_map do |subject_result|
+            subject_result.fetch('coverage_results').map do |coverage_result|
+              coverage_result.dig('mutation_result', 'isolation_result', 'log')
+            end
+          end
+        end
+
+        logs
+      end
+
+      # The output of the tests that killed a mutation is never read
+      # back, and is often most of the session file.
+      it 'writes the log of the alive mutation alone' do
+        object.call
+
+        expect(written_logs).to eql(
+          [
+            { 'type' => 'string', 'content' => ''             },
+            { 'type' => 'string', 'content' => 'alive output' }
+          ]
+        )
+      end
+
+      it 'keeps the rest of each coverage result' do
+        object.call
+
+        expect(tmp_path).to have_received(:write) do |json|
+          coverage_results = JSON.parse(json).dig('subject_results', 0, 'coverage_results')
+
+          expect(coverage_results.map { |coverage_result| coverage_result.dig('mutation_result', 'mutation_source') })
+            .to eql([mutation_a.source, mutation_b.source])
+          expect(coverage_results.map { |coverage_result| coverage_result.dig('criteria_result', 'test_result') })
+            .to eql([true, false])
+        end
+      end
+    end
   end
 end

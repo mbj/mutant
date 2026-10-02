@@ -1,3 +1,11 @@
+# unreleased
+
+* Leave the log of each killed mutation out of the session file. It holds the
+  output of the tests that killed the mutation, which the session subcommands
+  never show, and on a suite whose failures print large values, such as the
+  request bodies WebMock lists, it is most of the file. Alive mutations keep
+  their log.
+
 # v0.17.0 2026-09-17
 
 * Add `mutant-test-unit`, an integration for
