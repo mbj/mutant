@@ -2,7 +2,7 @@
 
 module Mutant
   module Result
-    # Write result JSON to .mutant/results/
+    # Write result JSON to .mutant/results/, gzip compressed
     class JSONWriter
       include Anima.new(:env, :result)
 
@@ -13,6 +13,9 @@ module Mutant
 
       # Write result JSON file
       #
+      # The JSON repeats the source, diff, and tests of each mutation,
+      # and compresses about twentyfold.
+      #
       # Written to a temporary file first and renamed into place, so a
       # concurrent reader of the session file never observes a partial
       # document. This matters once the file is rewritten during a run.
@@ -22,9 +25,9 @@ module Mutant
         dir = env.world.pathname.new(RESULTS_DIR)
         dir.mkpath
 
-        path = dir.join("#{SESSION_ID}.json")
-        tmp_path = dir.join("#{SESSION_ID}.json.tmp")
-        tmp_path.write(json)
+        path = dir.join("#{SESSION_ID}.json.gz")
+        tmp_path = dir.join("#{SESSION_ID}.json.gz.tmp")
+        tmp_path.binwrite(Zlib.gzip(json))
         tmp_path.rename(path)
 
         path

@@ -42,6 +42,7 @@ module Mutant
       stringio
       unparser
       yaml
+      zlib
     ].each { |name| require(name) }
   end
 

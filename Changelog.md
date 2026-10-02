@@ -6,6 +6,11 @@
   request bodies WebMock lists, it is most of the file. Alive mutations keep
   their log.
 
+* Write the session file gzip compressed, to `<session-id>.json.gz`. It repeats
+  the source, diff, and tests of each mutation, and compresses about twentyfold.
+  The session subcommands read the compressed files and the plain JSON files
+  earlier versions wrote.
+
 # v0.17.0 2026-09-17
 
 * Add `mutant-test-unit`, an integration for

@@ -9,6 +9,16 @@ module Mutant
 
         RESULTS_DIR = '.mutant/results'
 
+        # Sessions this version writes gzip compressed, and those earlier
+        # versions wrote as plain JSON. The plain ones are listed first,
+        # each kind oldest first, as the earlier versions wrote them before
+        # this one wrote any.
+        SESSION_PATTERN = '*.json{,.gz}'
+
+        GZIP_MAGIC = [0x1F, 0x8B].pack('C2')
+
+        private_constant(:GZIP_MAGIC)
+
       private
 
         def session_files
@@ -16,12 +26,18 @@ module Mutant
 
           return [] unless dir.directory?
 
-          dir.glob('*.json')
+          dir.glob(SESSION_PATTERN)
         end
 
         def load_session_file(path)
-          world.parse_json(path.read)
+          world.parse_json(read_session_file(path))
             .bind(&Result::Session::CODEC.load_transform.public_method(:call))
+        end
+
+        def read_session_file(path)
+          content = path.binread
+
+          content.start_with?(GZIP_MAGIC) ? Zlib.gunzip(content) : content
         end
 
         # Shared base for commands that operate on a session
@@ -68,7 +84,9 @@ module Mutant
 
           def resolve_session_path
             if @session_id
-              world.pathname.new("#{RESULTS_DIR}/#{@session_id}.json")
+              compressed = world.pathname.new("#{RESULTS_DIR}/#{@session_id}.json.gz")
+
+              compressed.file? ? compressed : world.pathname.new("#{RESULTS_DIR}/#{@session_id}.json")
             else
               session_files.last
             end
@@ -131,9 +149,9 @@ module Mutant
           end
 
           def colorize_unsupported(path)
-            session_id = path.basename('.json')
+            session_id = path.basename.to_s.delete_suffix('.gz').delete_suffix('.json')
 
-            Unparser::Color::RED.format(INCOMPATIBLE.ljust(54)) + session_id.to_s
+            Unparser::Color::RED.format(INCOMPATIBLE.ljust(54)) + session_id
           end
         end # List
 
