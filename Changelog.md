@@ -1,3 +1,20 @@
+# unreleased
+
+* Leave the log of each killed mutation out of the session file. It holds the
+  output of the tests that killed the mutation, which the session subcommands
+  never show, and on a suite whose failures print large values, such as the
+  request bodies WebMock lists, it is most of the file. Alive mutations keep
+  their log.
+
+* Write the session file gzip compressed, to `<session-id>.json.gz`. It repeats
+  the source, diff, and tests of each mutation, and compresses about twentyfold.
+  The session subcommands read the compressed files and the plain JSON files
+  earlier versions wrote.
+
+* Keep the 100 most recent sessions, deleting older ones once a run has written
+  its own. `.mutant/results/` grew by a session each run, without limit, unless
+  `mutant session gc` was run by hand.
+
 # v0.17.0 2026-09-17
 
 * Add `mutant-test-unit`, an integration for

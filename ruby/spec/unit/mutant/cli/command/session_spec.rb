@@ -90,7 +90,7 @@ RSpec.describe Mutant::CLI::Command::Session do
   def read_file(path, content)
     {
       receiver: path,
-      selector: :read,
+      selector: :binread,
       reaction: { return: content }
     }
   end
@@ -134,7 +134,7 @@ RSpec.describe Mutant::CLI::Command::Session do
           puts_stdout(list_header),
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', [path]),
+          glob(results_dir, '*.json{,.gz}', [path]),
           read_file(path, valid_session_json),
           puts_stdout(list_row)
         ]
@@ -184,7 +184,7 @@ RSpec.describe Mutant::CLI::Command::Session do
           puts_stdout(list_header),
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', [older_path, younger_path]),
+          glob(results_dir, '*.json{,.gz}', [older_path, younger_path]),
           read_file(younger_path, younger_json),
           puts_stdout(younger_row),
           read_file(older_path, older_json),
@@ -268,7 +268,7 @@ RSpec.describe Mutant::CLI::Command::Session do
           puts_stdout(list_header),
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', [path]),
+          glob(results_dir, '*.json{,.gz}', [path]),
           read_file(path, session_with_alive_json),
           puts_stdout(alive_row)
         ]
@@ -291,13 +291,12 @@ RSpec.describe Mutant::CLI::Command::Session do
           puts_stdout(list_header),
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', [path]),
+          glob(results_dir, '*.json{,.gz}', [path]),
           read_file(path, 'not json'),
           {
-            receiver:  path,
-            selector:  :basename,
-            arguments: ['.json'],
-            reaction:  { return: Pathname.new('bad-file') }
+            receiver: path,
+            selector: :basename,
+            reaction: { return: Pathname.new('bad-file.json.gz') }
           },
           puts_stdout(unsupported_row)
         ]
@@ -318,12 +317,57 @@ RSpec.describe Mutant::CLI::Command::Session do
   end
 
   describe 'show' do
-    let(:session_path) { instance_double(Pathname, :session_path, to_s: '.mutant/results/test.json') }
+    let(:session_path)       { instance_double(Pathname, :session_path, to_s: '.mutant/results/test.json.gz') }
+    let(:plain_session_path) { instance_double(Pathname, :plain_session_path, to_s: '.mutant/results/test.json') }
+
+    context 'with explicit session ID of a session an earlier version wrote' do
+      let(:raw_expectations) do
+        [
+          pathname_new(".mutant/results/#{session_id}.json.gz", session_path),
+          { receiver: session_path, selector: :file?, reaction: { return: false } },
+          pathname_new(".mutant/results/#{session_id}.json", plain_session_path),
+          { receiver: plain_session_path, selector: :file?, reaction: { return: true } },
+          read_file(plain_session_path, valid_session_json),
+          puts_stdout("Session:  #{session_id}"),
+          puts_stdout("Time:     #{expected_timestamp}"),
+          puts_stdout('Version:  1.0.0'),
+          puts_stdout('Ruby:     4.0.1'),
+          puts_stdout('Subjects: 0'),
+          puts_stdout('Alive:    0')
+        ]
+      end
+
+      it 'reads the plain JSON file' do
+        verify_events { expect(apply(['show', '--session-id', session_id])).to be(true) }
+      end
+    end
+
+    context 'with explicit session ID and valid compressed file' do
+      let(:raw_expectations) do
+        [
+          pathname_new(".mutant/results/#{session_id}.json.gz", session_path),
+          { receiver: session_path, selector: :file?, reaction: { return: true } },
+          { receiver: session_path, selector: :file?, reaction: { return: true } },
+          read_file(session_path, Zlib.gzip(valid_session_json)),
+          puts_stdout("Session:  #{session_id}"),
+          puts_stdout("Time:     #{expected_timestamp}"),
+          puts_stdout('Version:  1.0.0'),
+          puts_stdout('Ruby:     4.0.1'),
+          puts_stdout('Subjects: 0'),
+          puts_stdout('Alive:    0')
+        ]
+      end
+
+      it 'decompresses the file' do
+        verify_events { expect(apply(['show', '--session-id', session_id])).to be(true) }
+      end
+    end
 
     context 'with explicit session ID and valid file' do
       let(:raw_expectations) do
         [
-          pathname_new(".mutant/results/#{session_id}.json", session_path),
+          pathname_new(".mutant/results/#{session_id}.json.gz", session_path),
+          { receiver: session_path, selector: :file?, reaction: { return: true } },
           { receiver: session_path, selector: :file?, reaction: { return: true } },
           read_file(session_path, valid_session_json),
           puts_stdout("Session:  #{session_id}"),
@@ -350,7 +394,8 @@ RSpec.describe Mutant::CLI::Command::Session do
 
       let(:raw_expectations) do
         [
-          pathname_new(".mutant/results/#{session_id}.json", session_path),
+          pathname_new(".mutant/results/#{session_id}.json.gz", session_path),
+          { receiver: session_path, selector: :file?, reaction: { return: true } },
           { receiver: session_path, selector: :file?, reaction: { return: true } },
           read_file(session_path, session_with_alive_json),
           puts_stdout("Session:  #{session_id}"),
@@ -391,8 +436,10 @@ RSpec.describe Mutant::CLI::Command::Session do
     context 'with explicit session ID and missing file' do
       let(:raw_expectations) do
         [
-          pathname_new(".mutant/results/#{session_id}.json", session_path),
+          pathname_new(".mutant/results/#{session_id}.json.gz", session_path),
           { receiver: session_path, selector: :file?, reaction: { return: false } },
+          pathname_new(".mutant/results/#{session_id}.json", plain_session_path),
+          { receiver: plain_session_path, selector: :file?, reaction: { return: false } },
           puts_stderr('Session file not found: .mutant/results/test.json')
         ]
       end
@@ -405,7 +452,8 @@ RSpec.describe Mutant::CLI::Command::Session do
     context 'with explicit session ID and invalid JSON' do
       let(:raw_expectations) do
         [
-          pathname_new(".mutant/results/#{session_id}.json", session_path),
+          pathname_new(".mutant/results/#{session_id}.json.gz", session_path),
+          { receiver: session_path, selector: :file?, reaction: { return: true } },
           { receiver: session_path, selector: :file?, reaction: { return: true } },
           read_file(session_path, 'not json'),
           puts_stderr(
@@ -428,7 +476,7 @@ RSpec.describe Mutant::CLI::Command::Session do
         [
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', [older_path, latest_path]),
+          glob(results_dir, '*.json{,.gz}', [older_path, latest_path]),
           { receiver: latest_path, selector: :file?, reaction: { return: true } },
           read_file(latest_path, valid_session_json),
           puts_stdout("Session:  #{session_id}"),
@@ -506,7 +554,7 @@ RSpec.describe Mutant::CLI::Command::Session do
         [
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', [latest_path]),
+          glob(results_dir, '*.json{,.gz}', [latest_path]),
           { receiver: latest_path, selector: :file?, reaction: { return: true } },
           read_file(latest_path, 'not json'),
           puts_stderr(
@@ -606,7 +654,7 @@ RSpec.describe Mutant::CLI::Command::Session do
         [
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', [path]),
+          glob(results_dir, '*.json{,.gz}', [path]),
           { receiver: path, selector: :file?, reaction: { return: true } },
           read_file(path, session_with_subjects_json),
           puts_stdout("Session:  #{session_id}"),
@@ -626,7 +674,7 @@ RSpec.describe Mutant::CLI::Command::Session do
         [
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', [path]),
+          glob(results_dir, '*.json{,.gz}', [path]),
           { receiver: path, selector: :file?, reaction: { return: true } },
           read_file(path, session_with_subjects_json),
           puts_stdout("Session:  #{session_id}"),
@@ -705,7 +753,7 @@ RSpec.describe Mutant::CLI::Command::Session do
         [
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', [path]),
+          glob(results_dir, '*.json{,.gz}', [path]),
           { receiver: path, selector: :file?, reaction: { return: true } },
           read_file(path, verbose_session_json),
           puts_stdout("Session:  #{session_id}"),
@@ -736,7 +784,7 @@ RSpec.describe Mutant::CLI::Command::Session do
         [
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', [path]),
+          glob(results_dir, '*.json{,.gz}', [path]),
           { receiver: path, selector: :file?, reaction: { return: true } },
           read_file(path, session_with_subjects_json),
           puts_stdout("Session:  #{session_id}"),
@@ -813,7 +861,7 @@ RSpec.describe Mutant::CLI::Command::Session do
         [
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', [bad_path, good_path]),
+          glob(results_dir, '*.json{,.gz}', [bad_path, good_path]),
           read_file(bad_path, 'not json'),
           read_file(good_path, valid_session_json),
           { receiver: bad_path, selector: :delete },
@@ -835,7 +883,7 @@ RSpec.describe Mutant::CLI::Command::Session do
         [
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', paths),
+          glob(results_dir, '*.json{,.gz}', paths),
           *paths.map { |path| read_file(path, valid_session_json) },
           puts_stdout('Removed 0 session(s)')
         ]
@@ -855,7 +903,7 @@ RSpec.describe Mutant::CLI::Command::Session do
         [
           pathname_new('.mutant/results', results_dir),
           directory_check(results_dir, true),
-          glob(results_dir, '*.json', paths),
+          glob(results_dir, '*.json{,.gz}', paths),
           *paths.map { |path| read_file(path, valid_session_json) },
           { receiver: paths[0], selector: :delete },
           { receiver: paths[1], selector: :delete },

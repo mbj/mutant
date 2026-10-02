@@ -42,6 +42,7 @@ module Mutant
       stringio
       unparser
       yaml
+      zlib
     ].each { |name| require(name) }
   end
 
@@ -249,6 +250,7 @@ module Mutant
     require 'mutant/mutation/runner/sink'
     require 'mutant/result'
     require 'mutant/result/session'
+    require 'mutant/result/session_files'
     require 'mutant/result/json_writer'
     require 'mutant/reporter'
     require 'mutant/reporter/null'

@@ -7,21 +7,27 @@ module Mutant
         NAME              = 'session'
         SHORT_DESCRIPTION = 'Session history subcommands'
 
-        RESULTS_DIR = '.mutant/results'
+        RESULTS_DIR = Result::SessionFiles::DIRECTORY
+
+        GZIP_MAGIC = [0x1F, 0x8B].pack('C2')
+
+        private_constant(:GZIP_MAGIC)
 
       private
 
         def session_files
-          dir = world.pathname.new(RESULTS_DIR)
-
-          return [] unless dir.directory?
-
-          dir.glob('*.json')
+          Result::SessionFiles.new(world:).paths
         end
 
         def load_session_file(path)
-          world.parse_json(path.read)
+          world.parse_json(read_session_file(path))
             .bind(&Result::Session::CODEC.load_transform.public_method(:call))
+        end
+
+        def read_session_file(path)
+          content = path.binread
+
+          content.start_with?(GZIP_MAGIC) ? Zlib.gunzip(content) : content
         end
 
         # Shared base for commands that operate on a session
@@ -68,7 +74,9 @@ module Mutant
 
           def resolve_session_path
             if @session_id
-              world.pathname.new("#{RESULTS_DIR}/#{@session_id}.json")
+              compressed = world.pathname.new("#{RESULTS_DIR}/#{@session_id}.json.gz")
+
+              compressed.file? ? compressed : world.pathname.new("#{RESULTS_DIR}/#{@session_id}.json")
             else
               session_files.last
             end
@@ -131,9 +139,9 @@ module Mutant
           end
 
           def colorize_unsupported(path)
-            session_id = path.basename('.json')
+            session_id = path.basename.to_s.delete_suffix('.gz').delete_suffix('.json')
 
-            Unparser::Color::RED.format(INCOMPATIBLE.ljust(54)) + session_id.to_s
+            Unparser::Color::RED.format(INCOMPATIBLE.ljust(54)) + session_id
           end
         end # List
 
@@ -230,7 +238,7 @@ module Mutant
           SUBCOMMANDS       = [].freeze
           OPTIONS           = %i[add_gc_options].freeze
 
-          DEFAULT_KEEP = 100
+          DEFAULT_KEEP = Result::SessionFiles::KEEP
 
           def initialize(*)
             super
