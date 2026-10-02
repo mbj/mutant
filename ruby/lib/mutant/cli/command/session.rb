@@ -7,13 +7,7 @@ module Mutant
         NAME              = 'session'
         SHORT_DESCRIPTION = 'Session history subcommands'
 
-        RESULTS_DIR = '.mutant/results'
-
-        # Sessions this version writes gzip compressed, and those earlier
-        # versions wrote as plain JSON. The plain ones are listed first,
-        # each kind oldest first, as the earlier versions wrote them before
-        # this one wrote any.
-        SESSION_PATTERN = '*.json{,.gz}'
+        RESULTS_DIR = Result::SessionFiles::DIRECTORY
 
         GZIP_MAGIC = [0x1F, 0x8B].pack('C2')
 
@@ -22,11 +16,7 @@ module Mutant
       private
 
         def session_files
-          dir = world.pathname.new(RESULTS_DIR)
-
-          return [] unless dir.directory?
-
-          dir.glob(SESSION_PATTERN)
+          Result::SessionFiles.new(world:).paths
         end
 
         def load_session_file(path)
@@ -248,7 +238,7 @@ module Mutant
           SUBCOMMANDS       = [].freeze
           OPTIONS           = %i[add_gc_options].freeze
 
-          DEFAULT_KEEP = 100
+          DEFAULT_KEEP = Result::SessionFiles::KEEP
 
           def initialize(*)
             super

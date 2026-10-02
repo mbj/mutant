@@ -6,8 +6,6 @@ module Mutant
     class JSONWriter
       include Anima.new(:env, :result)
 
-      RESULTS_DIR = '.mutant/results'
-
       # Log stored in place of the log of a covered mutation
       EMPTY_LOG = LogCapture::String.new(content: '')
 
@@ -22,7 +20,7 @@ module Mutant
       #
       # @return [Pathname]
       def call
-        dir = env.world.pathname.new(RESULTS_DIR)
+        dir = env.world.pathname.new(SessionFiles::DIRECTORY)
         dir.mkpath
 
         path = dir.join("#{SESSION_ID}.json.gz")

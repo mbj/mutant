@@ -11,6 +11,10 @@
   The session subcommands read the compressed files and the plain JSON files
   earlier versions wrote.
 
+* Keep the 100 most recent sessions, deleting older ones once a run has written
+  its own. `.mutant/results/` grew by a session each run, without limit, unless
+  `mutant session gc` was run by hand.
+
 # v0.17.0 2026-09-17
 
 * Add `mutant-test-unit`, an integration for
