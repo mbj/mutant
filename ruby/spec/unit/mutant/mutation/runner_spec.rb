@@ -56,9 +56,12 @@ RSpec.describe Mutant::Mutation::Runner do
       )
     end
 
+    let(:session_files) { instance_double(Mutant::Result::SessionFiles, prune: []) }
+
     before do
       allow(world).to receive_messages(timer:)
       allow(world.timer).to receive_messages(now: 1.0)
+      allow(Mutant::Result::SessionFiles).to receive(:new).and_return(session_files)
     end
 
     def apply
@@ -150,6 +153,18 @@ RSpec.describe Mutant::Mutation::Runner do
         expect(Mutant::Result::JSONWriter).to have_received(:new).with(env:, result: env_result)
         expect(json_writer).to have_received(:call)
       end
+
+      it 'prunes the sessions of past runs after writing this one' do
+        calls = []
+
+        allow(json_writer).to receive(:call) { calls << :write }
+        allow(session_files).to receive(:prune) { |keep| calls << [:prune, keep] }
+
+        verify_events { apply }
+
+        expect(Mutant::Result::SessionFiles).to have_received(:new).with(world:)
+        expect(calls).to eql([:write, [:prune, 100]])
+      end
     end
 
     context 'when stopped' do
@@ -240,6 +255,18 @@ RSpec.describe Mutant::Mutation::Runner do
 
         expect(Mutant::Result::JSONWriter).to have_received(:new).with(env:, result: env_result)
         expect(json_writer).to have_received(:call)
+      end
+
+      it 'prunes the sessions of past runs after writing this one' do
+        calls = []
+
+        allow(json_writer).to receive(:call) { calls << :write }
+        allow(session_files).to receive(:prune) { |keep| calls << [:prune, keep] }
+
+        verify_events { apply }
+
+        expect(Mutant::Result::SessionFiles).to have_received(:new).with(world:)
+        expect(calls).to eql([:write, [:prune, 100]])
       end
     end
   end

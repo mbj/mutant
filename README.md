@@ -89,8 +89,8 @@ A full working example is available in the [quick_start](quick_start/) directory
 
 ## Session History
 
-Mutant records every run to `.mutant/results/`. You can recall past results
-without re-running mutation testing:
+Mutant records every run to `.mutant/results/`, and keeps the 100 most recent.
+You can recall past results without re-running mutation testing:
 
 ```bash
 # List past sessions (most recent first)
