@@ -29,6 +29,37 @@ RSpec.describe Mutant::Reporter::CLI::Format::Progressive do
     )
   end
 
+  describe '#start' do
+    let(:tty?) { false }
+
+    subject { format.start(env) }
+
+    it 'returns env report using Printer::Env' do
+      expect(subject).to include('Mutant environment:')
+      expect(subject).to include('Subjects:')
+      expect(subject).to include('Mutations:')
+    end
+
+    it 'passes env to the printer' do
+      expect(subject).to include("Subjects:        #{env.subjects.length}")
+    end
+  end
+
+  describe '#test_start' do
+    let(:tty?) { false }
+
+    subject { format.test_start(env) }
+
+    it 'returns test env report using Printer::Test::Env' do
+      expect(subject).to include('Test environment:')
+      expect(subject).to include('Integration:')
+    end
+
+    it 'passes env to the printer' do
+      expect(subject).to include("Tests:        #{env.integration.all_tests.length}")
+    end
+  end
+
   describe '#progress' do
     subject { format.progress(status) }
 

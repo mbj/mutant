@@ -22,7 +22,7 @@ module Mutant
           Result::TestEnv.new(
             env:,
             runtime:      env.world.timer.now - @start,
-            test_results: @test_results.sort_by!(&:job_index)
+            test_results: @test_results.sort_by(&:job_index)
           )
         end
 

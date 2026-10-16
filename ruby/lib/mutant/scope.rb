@@ -7,17 +7,6 @@ module Mutant
 
     NAMESPACE_DELIMITER = '::'
 
-    # Nesting of scope
-    #
-    # @return [Enumerable<Class,Module>]
-    def nesting
-      const = Object
-      name_nesting.map do |name|
-        const = const.const_get(name)
-      end
-    end
-    memoize :nesting
-
     # Unqualified name of scope
     #
     # @return [String]

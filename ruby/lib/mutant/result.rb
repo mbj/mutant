@@ -35,7 +35,7 @@ module Mutant
       # @return [undefined]
       def sum(name, collection)
         define_method(name) do
-          public_send(collection).map(&name).reduce(0, :+)
+          public_send(collection).map(&name).sum
         end
         memoize(name)
       end
