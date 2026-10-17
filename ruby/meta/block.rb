@@ -264,3 +264,41 @@ if RUBY_VERSION > '3.4.0'
     mutation 'bar { it }'
   end
 end
+
+Mutant::Meta::Example.add :block do
+  source 'foo { x in [*, {a: 1, **nil} | [1,] | ^(c) => d, *] }'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'foo {}'
+  mutation 'foo { raise }'
+  mutation 'x in [*, {a: 1, **nil} | [1,] | ^(c) => d, *]'
+  mutation 'foo { false }'
+  mutation 'foo { nil in [*, {a: 1, **nil} | [1,] | ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a: 1, **nil} | [1,] => d, *] }'
+  mutation 'foo { x in [*, ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a: 1, **nil} | ^(c) => d, *] }'
+  mutation 'foo { x in [*, [1,] | ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a__mutant__: 1, **nil} | [1,] | ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a: nil, **nil} | [1,] | ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a: 0, **nil} | [1,] | ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a: 2, **nil} | [1,] | ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a: 167, **nil} | [1,] | ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a: 1, **nil} | [nil,] | ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a: 1, **nil} | [0,] | ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a: 1, **nil} | [2,] | ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a: 1, **nil} | [167,] | ^(c) => d, *] }'
+  mutation 'foo { x in [*, {a: 1, **nil} | [1,] | ^(nil) => d, *] }'
+end
+
+Mutant::Meta::Example.add :block do
+  source 'foo { def bar(**nil); end }'
+
+  singleton_mutations
+  mutation 'foo'
+  mutation 'foo {}'
+  mutation 'foo { raise }'
+  mutation 'def bar(**nil); end'
+  mutation 'foo { def bar(**nil); raise; end }'
+  mutation 'foo { def bar(**nil); super; end }'
+end

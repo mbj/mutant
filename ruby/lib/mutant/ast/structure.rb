@@ -178,6 +178,11 @@ module Mutant
           variable: Node::Variable::Descendants.new(name: :members, range: 0..)
         ),
         Node.new(
+          type:     :array_pattern_with_tail,
+          fixed:    EMPTY_ARRAY,
+          variable: Node::Variable::Descendants.new(name: :members, range: 0..)
+        ),
+        Node.new(
           type:     :back_ref,
           fixed:    Node.fixed([[Node::Fixed::Attribute, :name]]),
           variable: nil
@@ -382,6 +387,11 @@ module Mutant
           variable: nil
         ),
         Node.new(
+          type:     :find_pattern,
+          fixed:    EMPTY_ARRAY,
+          variable: Node::Variable::Descendants.new(name: :members, range: 0..)
+        ),
+        Node.new(
           type:     :float,
           fixed:    Node.fixed([[Node::Fixed::Attribute, :value]]),
           variable: nil
@@ -439,6 +449,11 @@ module Mutant
         ),
         Node.new(
           type:     :hash,
+          fixed:    EMPTY_ARRAY,
+          variable: Node::Variable::Descendants.new(name: :members, range: 0..)
+        ),
+        Node.new(
+          type:     :hash_pattern,
           fixed:    EMPTY_ARRAY,
           variable: Node::Variable::Descendants.new(name: :members, range: 0..)
         ),
@@ -547,6 +562,11 @@ module Mutant
           variable: Node::Variable::Descendants.new(name: :members, range: 0..)
         ),
         Node.new(
+          type:     :kwnilarg,
+          fixed:    EMPTY_ARRAY,
+          variable: nil
+        ),
+        Node.new(
           type:     :kwoptarg,
           fixed:    Node.fixed(
             [
@@ -587,12 +607,47 @@ module Mutant
           variable: nil
         ),
         Node.new(
+          type:     :match_alt,
+          fixed:    Node.fixed(
+            [
+              [Node::Fixed::Descendant, :left],
+              [Node::Fixed::Descendant, :right]
+            ]
+          ),
+          variable: nil
+        ),
+        Node.new(
+          type:     :match_as,
+          fixed:    Node.fixed(
+            [
+              [Node::Fixed::Descendant, :pattern],
+              [Node::Fixed::Descendant, :target]
+            ]
+          ),
+          variable: nil
+        ),
+        Node.new(
           type:     :match_current_line,
           fixed:    Node.fixed([[Node::Fixed::Descendant, :pattern]]),
           variable: nil
         ),
         Node.new(
+          type:     :match_nil_pattern,
+          fixed:    EMPTY_ARRAY,
+          variable: nil
+        ),
+        Node.new(
           type:     :match_pattern,
+          fixed:    Node.fixed(
+            [
+              [Node::Fixed::Descendant, :target],
+              [Node::Fixed::Descendant, :pattern]
+            ]
+          ),
+          variable: nil
+        ),
+        Node.new(
+          type:     :match_pattern_p,
           fixed:    Node.fixed(
             [
               [Node::Fixed::Descendant, :target],
@@ -803,6 +858,11 @@ module Mutant
               [Node::Fixed::Descendant, :value]
             ]
           ),
+          variable: nil
+        ),
+        Node.new(
+          type:     :pin,
+          fixed:    Node.fixed([[Node::Fixed::Descendant, :value]]),
           variable: nil
         ),
         Node.new(

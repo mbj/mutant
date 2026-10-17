@@ -69,6 +69,16 @@ RSpec.describe Mutant::AST::FindMetaclassContaining do
 
         it { expect(subject).to be(nil) }
       end
+
+      context 'after pattern matching' do
+        let(:sclass_node) { s(:sclass, s(:self), method_node) }
+
+        let(:metaclass_node) do
+          s(:begin, s(:match_pattern_p, s(:lvar, :x), s(:hash_pattern, s(:match_nil_pattern))), sclass_node)
+        end
+
+        it { expect(subject).to be(sclass_node) }
+      end
     end
   end
 end
