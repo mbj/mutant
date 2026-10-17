@@ -1,5 +1,11 @@
 # unreleased
 
+* Fix a crash on blocks using the Ruby 3.4 `it` parameter. Mutating a block
+  without parameters whose body holds an `it` block, such as
+  `foo { bar { it } }`, raised `KeyError: key not found: :itblock`. `it` blocks
+  also gain the mutation to `nil`, as numbered parameter blocks have:
+  `items.map { it.price }` now mutates to `nil` too.
+
 * Leave the log of each killed mutation out of the session file. It holds the
   output of the tests that killed the mutation, which the session subcommands
   never show, and on a suite whose failures print large values, such as the
