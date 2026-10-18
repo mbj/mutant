@@ -506,6 +506,17 @@ module Mutant
           variable: nil
         ),
         Node.new(
+          type:     :itblock,
+          fixed:    Node.fixed(
+            [
+              [Node::Fixed::Descendant, :receiver],
+              [Node::Fixed::Attribute, :parameter],
+              [Node::Fixed::Descendant, :body]
+            ]
+          ),
+          variable: nil
+        ),
+        Node.new(
           type:     :ivar,
           fixed:    Node.fixed([[Node::Fixed::Attribute, :name]]),
           variable: nil

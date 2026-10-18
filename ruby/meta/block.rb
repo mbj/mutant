@@ -251,3 +251,16 @@ Mutant::Meta::Example.add :block do
   mutation 'obj&.foo { |x| x }'
   mutation 'obj&.foo { |x| self.bar }'
 end
+
+if RUBY_VERSION > '3.4.0'
+  Mutant::Meta::Example.add :block do
+    source 'foo { bar { it } }'
+
+    singleton_mutations
+    mutation 'foo'
+    mutation 'foo {}'
+    mutation 'foo { raise }'
+    mutation 'foo { nil }'
+    mutation 'bar { it }'
+  end
+end
