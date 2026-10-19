@@ -1,5 +1,11 @@
 # unreleased
 
+* Fix a crash on pattern matching and `**nil` parameters. Mutating a block
+  without parameters whose body used either, such as `foo { x in {a: 1} }`,
+  raised `KeyError: key not found: :match_pattern_p`. The same error stopped
+  mutant from matching a method inside `class << self` when pattern matching
+  came earlier in the file.
+
 * Fix a crash on blocks using the Ruby 3.4 `it` parameter. Mutating a block
   without parameters whose body holds an `it` block, such as
   `foo { bar { it } }`, raised `KeyError: key not found: :itblock`. `it` blocks
