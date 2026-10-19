@@ -177,3 +177,19 @@ Mutant::Meta::Example.add :begin do
 
   mutation 'a'
 end
+
+Mutant::Meta::Example.add :begin do
+  source 'foo => { a: }; a'
+
+  mutation 'nil => { a: }; a'
+  mutation 'foo => { a: }; nil'
+  mutation 'foo => { a: }'
+end
+
+Mutant::Meta::Example.add :begin do
+  source 'foo in { a: }; a'
+
+  mutation 'nil in { a: }; a'
+  mutation 'foo in { a: }; nil'
+  mutation 'foo in { a: }'
+end

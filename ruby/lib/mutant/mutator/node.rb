@@ -136,6 +136,19 @@ module Mutant
           pattern.match?(node)
         end
       end
+
+      def contains_lvar_assignment?(node)
+        case node.type
+        when Unparser::AST::ASSIGN_NODES, :match_var
+          true
+        when *Unparser::AST::RESET_NODES
+          false
+        else
+          node.children.any? do |child|
+            child.instance_of?(::Parser::AST::Node) && contains_lvar_assignment?(child)
+          end
+        end
+      end
     end # Node
   end # Mutator
 end # Mutant

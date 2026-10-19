@@ -10,3 +10,9 @@ Mutant::Meta::Example.add :match_pattern_p, :match_alt do
   mutation 'x in B'
   mutation 'x in nil | B'
 end
+
+Mutant::Meta::Example.add :match_pattern_p do
+  source 'x in { a: }'
+
+  mutation 'nil in { a: }'
+end

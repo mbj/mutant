@@ -273,7 +273,6 @@ Mutant::Meta::Example.add :block do
   mutation 'foo {}'
   mutation 'foo { raise }'
   mutation 'x in [*, {a: 1, **nil} | [1,] | ^(c) => d, *]'
-  mutation 'foo { false }'
   mutation 'foo { nil in [*, {a: 1, **nil} | [1,] | ^(c) => d, *] }'
   mutation 'foo { x in [*, {a: 1, **nil} | [1,] => d, *] }'
   mutation 'foo { x in [*, ^(c) => d, *] }'
