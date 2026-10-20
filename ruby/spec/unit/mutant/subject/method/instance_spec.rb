@@ -191,3 +191,80 @@ RSpec.describe Mutant::Subject::Method::Instance::Memoized do
     end
   end
 end
+
+RSpec.describe Mutant::Subject::Method::Instance::ModuleFunction do
+  let(:object) do
+    described_class.new(
+      config:     Mutant::Subject::Config::DEFAULT,
+      context:,
+      node:,
+      visibility: :private
+    )
+  end
+
+  let(:node) { Unparser.parse('def qux; end') }
+
+  let(:context) do
+    Mutant::Context.new(
+      constant_scope: Mutant::Context::ConstantScope::None.new,
+      scope:,
+      source_path:    instance_double(Pathname)
+    )
+  end
+
+  let(:scope) do
+    Mutant::Scope.new(
+      expression: instance_double(Mutant::Expression),
+      raw:        Module.new do
+        module_function
+
+        def qux = :original
+      end
+    )
+  end
+
+  describe '#prepare' do
+    subject { object.prepare }
+
+    it 'undefines method on scope' do
+      expect { subject }
+        .to change { scope.raw.private_method_defined?(:qux) }
+        .from(true)
+        .to(false)
+    end
+
+    it 'undefines method on singleton class' do
+      expect { subject }
+        .to change { scope.raw.respond_to?(:qux) }
+        .from(true)
+        .to(false)
+    end
+
+    it_behaves_like 'a command method'
+  end
+
+  describe '#post_insert' do
+    subject { object.post_insert }
+
+    before do
+      object.prepare
+      scope.raw.module_eval { def qux = :mutated }
+    end
+
+    it 'copies the inserted method onto the singleton class' do
+      expect { subject }
+        .to change { scope.raw.respond_to?(:qux) && scope.raw.qux }
+        .from(false)
+        .to(:mutated)
+    end
+
+    it 'makes the inserted method private' do
+      expect { subject }
+        .to change { scope.raw.private_method_defined?(:qux) }
+        .from(false)
+        .to(true)
+    end
+
+    it_behaves_like 'a command method'
+  end
+end

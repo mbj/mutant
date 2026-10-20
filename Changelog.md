@@ -1,5 +1,11 @@
 # unreleased
 
+* Mutate methods exposed via `module_function` where callers use them.
+  `module_function` copies a method onto the module's singleton class, and
+  mutant only redefined the private instance method, so calls such as
+  `Utils.camelize` kept running the original and every mutation survived.
+  Mutant now copies each inserted mutation onto the singleton class again.
+
 * Fix a crash on pattern matching and `**nil` parameters. Mutating a block
   without parameters whose body used either, such as `foo { x in {a: 1} }`,
   raised `KeyError: key not found: :match_pattern_p`. The same error stopped
