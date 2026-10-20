@@ -158,4 +158,5 @@ end
 
 require 'test_app/metaclasses'
 require 'test_app/literal'
+require 'test_app/module_function'
 $VERBOSE = original

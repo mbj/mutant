@@ -38,6 +38,28 @@ module Mutant
             s(:begin, mutant, s(:send, nil, :memoize, s(:sym, name)))
           end
         end # Memoized
+
+        # Subject for instance methods exposed via module_function
+        #
+        # module_function copies the method onto the module's singleton
+        # class. Redefining only the instance method would leave that copy,
+        # which callers use, unmutated.
+        class ModuleFunction < self
+
+          # Prepare subject for mutation insertion
+          #
+          # @return [self]
+          def prepare
+            scope.raw.singleton_class.undef_method(name)
+
+            super
+          end
+
+          # Copy the inserted method onto the singleton class again
+          #
+          # @return [self]
+          def post_insert = tap { scope.raw.__send__(:module_function, name) }
+        end # ModuleFunction
       end # Instance
     end # Method
   end # Subject

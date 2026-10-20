@@ -275,6 +275,85 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
     it_behaves_like 'a method matcher'
   end
 
+  context 'when method is exposed via module_function' do
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithModuleFunction
+      )
+    end
+
+    let(:method_line) { 8 }
+    let(:source_path) { MutantSpec::ROOT.join('test_app/lib/test_app/module_function.rb') }
+
+    it_behaves_like 'a method matcher'
+
+    it 'returns a module function subject' do
+      expect(subject.first).to be_instance_of(Mutant::Subject::Method::Instance::ModuleFunction)
+    end
+
+    it 'returns private visibility' do
+      expect(subject.first.visibility).to be(:private)
+    end
+  end
+
+  context 'when module_function copy is made private' do
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithPrivateClassMethodModuleFunction
+      )
+    end
+
+    it 'returns a plain instance subject' do
+      expect(subject.first).to be_instance_of(Mutant::Subject::Method::Instance)
+    end
+  end
+
+  context 'when module extends itself' do
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithExtendSelf
+      )
+    end
+
+    it 'returns a plain instance subject' do
+      expect(subject.first).to be_instance_of(Mutant::Subject::Method::Instance)
+    end
+  end
+
+  context 'when private method has a separately defined singleton method' do
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithSeparateSingletonMethod
+      )
+    end
+
+    it 'returns a plain instance subject' do
+      expect(subject.first).to be_instance_of(Mutant::Subject::Method::Instance)
+    end
+  end
+
+  context 'when private method has no singleton method' do
+    let(:method_name) { :bar }
+
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        base::WithMemoizer
+      )
+    end
+
+    before { scope.raw.__send__(:private, method_name) }
+    after  { scope.raw.__send__(:public, method_name) }
+
+    it 'returns a plain instance subject' do
+      expect(subject.first).to be_instance_of(Mutant::Subject::Method::Instance)
+    end
+  end
+
   context 'when method is defined multiple times' do
     context 'on different lines' do
       let(:scope) do
