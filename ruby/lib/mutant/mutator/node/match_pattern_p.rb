@@ -14,7 +14,7 @@ module Mutant
       private
 
         def dispatch
-          emit(N_FALSE)
+          emit(N_FALSE) unless contains_lvar_assignment?(pattern)
           emit_expression_mutations
           emit_pattern_mutations
         end

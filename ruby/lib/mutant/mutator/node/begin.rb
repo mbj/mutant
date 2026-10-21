@@ -36,22 +36,6 @@ module Mutant
             emit_type(*dup_children)
           end
         end
-
-        def contains_lvar_assignment?(node)
-          case node.type
-          when Unparser::AST::ASSIGN_NODES
-            true
-          when *Unparser::AST::RESET_NODES
-            false
-          else
-            node.children.each do |child|
-              if child.instance_of?(::Parser::AST::Node) && contains_lvar_assignment?(child)
-                return true
-              end
-            end
-            false
-          end
-        end
       end # Begin
     end # Node
   end # Mutator

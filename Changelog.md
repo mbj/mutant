@@ -6,6 +6,11 @@
   `Utils.camelize` kept running the original and every mutation survived.
   Mutant now copies each inserted mutation onto the singleton class again.
 
+* Keep pattern matches that bind local variables. Mutating
+  `h => { a: }; a.upcase` emitted `a.upcase` alone, and `x in { a: }; a`
+  emitted `false; a`. Both read an undefined `a`, so `mutant util mutation`
+  reported a Mutation-Generation-Error, and a run discarded them.
+
 * Fix a crash on pattern matching and `**nil` parameters. Mutating a block
   without parameters whose body used either, such as `foo { x in {a: 1} }`,
   raised `KeyError: key not found: :match_pattern_p`. The same error stopped
