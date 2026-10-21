@@ -1,4 +1,4 @@
-# unreleased
+# v0.17.1 2026-10-21
 
 * Mutate methods exposed via `module_function` where callers use them.
   `module_function` copies a method onto the module's singleton class, and
