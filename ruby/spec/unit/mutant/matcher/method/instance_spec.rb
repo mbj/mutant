@@ -49,12 +49,13 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
 
     let(:source_location) { [file, instance_double(Integer)] }
     let(:file)            { 'example.erb'                    }
+    let(:method_owner) { Module.new { def some_method; end } }
 
     let(:method) do
       instance_double(
         Method,
         name:            :some_method,
-        owner:           nil,
+        owner:           method_owner,
         source_location:
       )
     end
