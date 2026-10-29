@@ -40,6 +40,10 @@ module Mutant
         end
       end
 
+      def own_method(method)
+        Method.own_method(method, candidate_scope)
+      end
+
       def candidate_names
         CANDIDATE_NAMES
           .map { |name| candidate_scope.public_send(name, false) }
@@ -55,7 +59,7 @@ module Mutant
       private
 
         def access(_env, method_name)
-          scope.raw.method(method_name)
+          own_method(scope.raw.method(method_name))
         end
 
         def candidate_scope
@@ -97,7 +101,7 @@ module Mutant
       private
 
         def access(env, method_name)
-          candidate_scope.instance_method(method_name)
+          own_method(candidate_scope.instance_method(method_name))
         rescue => exception
           env.warn(
             MESSAGE % { scope:, method_name:, exception: exception.inspect }

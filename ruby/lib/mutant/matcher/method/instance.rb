@@ -45,6 +45,7 @@ module Mutant
         #
         # module_function makes the instance method private and copies it
         # onto the singleton class, where it keeps the source location.
+        # Both sides ignore ancestors, so prepended wrappers do not hide the copy.
         #
         # @param [Scope] scope
         # @param [UnboundMethod] target_method
@@ -52,11 +53,13 @@ module Mutant
         # @return [Boolean]
         def self.module_function?(scope, target_method)
           raw         = scope.raw
+          singleton   = raw.singleton_class
           method_name = target_method.name
 
-          raw.private_method_defined?(method_name) &&
-            raw.singleton_class.public_method_defined?(method_name) &&
-            raw.singleton_class.instance_method(method_name).source_location.eql?(target_method.source_location)
+          raw.private_method_defined?(method_name, false) &&
+            singleton.public_method_defined?(method_name, false) &&
+            own_method(singleton.instance_method(method_name), singleton)
+              .source_location.eql?(target_method.source_location)
         end
         private_class_method :module_function?
 
@@ -72,10 +75,11 @@ module Mutant
             node.children.fetch(NAME_INDEX).equal?(method_name)
           end
 
+          # Ignore ancestors, as a prepended wrapper can have a different visibility
           def visibility
-            if scope.raw.private_method_defined?(method_name)
+            if scope.raw.private_method_defined?(method_name, false)
               :private
-            elsif scope.raw.protected_method_defined?(method_name)
+            elsif scope.raw.protected_method_defined?(method_name, false)
               :protected
             else
               :public

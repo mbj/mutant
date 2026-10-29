@@ -165,4 +165,34 @@ RSpec.describe Mutant::Matcher::Method::Singleton, '#call' do
       end
     end
   end
+
+  context 'when a public prepended wrapper surrounds a private method' do
+    let(:method) { scope.raw.method(method_name).super_method }
+
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        TestApp::PrependedWrapperTests::WithPrivateSingletonMethod
+      )
+    end
+
+    it 'returns the visibility of the method defined on the scope' do
+      expect(subject.first.visibility).to be(:private)
+    end
+  end
+
+  context 'when a protected prepended wrapper surrounds a public method' do
+    let(:method) { scope.raw.method(method_name).super_method }
+
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        TestApp::PrependedWrapperTests::WithPublicSingletonMethod
+      )
+    end
+
+    it 'returns the visibility of the method defined on the scope' do
+      expect(subject.first.visibility).to be(:public)
+    end
+  end
 end
