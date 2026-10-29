@@ -149,7 +149,18 @@ module Mutant
         end
 
         def sorbet_signature
-          T::Private::Methods.signature_for_method(target_method)
+          T::Private::Methods.signature_for_method(target_method) || prepended_sorbet_signature
+        end
+
+        def prepended_sorbet_signature
+          method = target_method.owner.instance_method(method_name)
+
+          until method.owner.equal?(target_method.owner)
+            signature = T::Private::Methods.signature_for_method(method)
+            return signature if signature && signature.owner.equal?(target_method.owner)
+
+            method = method.super_method
+          end
         end
 
         def subject_config(node)
