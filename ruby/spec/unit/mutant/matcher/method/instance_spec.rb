@@ -443,4 +443,75 @@ RSpec.describe Mutant::Matcher::Method::Instance, '#call' do
       end
     end
   end
+
+  context 'when a public prepended wrapper surrounds a private method' do
+    let(:method) { scope.raw.instance_method(method_name).super_method }
+
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        TestApp::PrependedWrapperTests::WithPrivateMethod
+      )
+    end
+
+    it 'returns the visibility of the method defined on the scope' do
+      expect(subject.first.visibility).to be(:private)
+    end
+  end
+
+  context 'when module_function singleton copy has a prepended wrapper' do
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        TestApp::PrependedWrapperTests::WithModuleFunction
+      )
+    end
+
+    it 'returns a module function subject' do
+      expect(subject.first).to be_instance_of(Mutant::Subject::Method::Instance::ModuleFunction)
+    end
+  end
+
+  context 'when a protected prepended wrapper surrounds a public method' do
+    let(:method) { scope.raw.instance_method(method_name).super_method }
+
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        TestApp::PrependedWrapperTests::WithPublicMethod
+      )
+    end
+
+    it 'returns the visibility of the method defined on the scope' do
+      expect(subject.first.visibility).to be(:public)
+    end
+  end
+
+  context 'when module_function instance copy is public behind a private prepended wrapper' do
+    let(:method) { scope.raw.instance_method(method_name).super_method }
+
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        TestApp::PrependedWrapperTests::WithPublicModuleFunction
+      )
+    end
+
+    it 'returns a plain instance subject' do
+      expect(subject.first).to be_instance_of(Mutant::Subject::Method::Instance)
+    end
+  end
+
+  context 'when module_function singleton copy is private behind a public prepended wrapper' do
+    let(:scope) do
+      Mutant::Scope.new(
+        expression: instance_double(Mutant::Expression),
+        raw:        TestApp::PrependedWrapperTests::WithPrivateModuleFunctionCopy
+      )
+    end
+
+    it 'returns a plain instance subject' do
+      expect(subject.first).to be_instance_of(Mutant::Subject::Method::Instance)
+    end
+  end
 end

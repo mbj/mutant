@@ -1,3 +1,12 @@
+# unreleased
+
+* Mutate methods wrapped by a prepended module, such as those memoized with
+  the `memosa` gem. Reflection returned the wrapper, whose source lives in
+  the gem, so mutant found no subject and skipped the method without a
+  warning. Mutant now matches the method defined on the scope itself, and
+  the wrapper keeps running around each mutation.
+  [#1682](https://github.com/mbj/mutant/issues/1682)
+
 # v0.17.1 2026-10-21
 
 * Mutate methods exposed via `module_function` where callers use them.

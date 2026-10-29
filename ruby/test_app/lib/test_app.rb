@@ -159,4 +159,5 @@ end
 require 'test_app/metaclasses'
 require 'test_app/literal'
 require 'test_app/module_function'
+require 'test_app/prepended_wrapper'
 $VERBOSE = original

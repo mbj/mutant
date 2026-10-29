@@ -56,10 +56,10 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
       end
     end
 
-    let(:subject_a) { instance_double(Mutant::Subject)  }
-    let(:subject_b) { instance_double(Mutant::Subject)  }
-    let(:subject_c) { instance_double(Mutant::Subject)  }
-    let(:subject_d) { instance_double(Mutant::Subject)  }
+    let(:subject_a) { instance_double(Mutant::Subject) }
+    let(:subject_b) { instance_double(Mutant::Subject) }
+    let(:subject_c) { instance_double(Mutant::Subject) }
+    let(:subject_d) { instance_double(Mutant::Subject) }
 
     let(:subjects) do
       [subject_a, subject_b, subject_c, subject_d]
@@ -85,6 +85,51 @@ RSpec.describe Mutant::Matcher::Methods::Instance, '#call' do
 
     it 'returns expected subjects' do
       expect(object.call(env)).to eql(subjects)
+    end
+  end
+
+  context 'when a prepended module wraps a method' do
+    let(:class_under_test) do
+      wrapper = Module.new do
+        def wrapped_method; end
+      end
+
+      outer = Module.new do
+        def wrapped_method; end
+      end
+
+      Class.new do
+        prepend wrapper, outer
+
+        def wrapped_method; end
+      end
+    end
+
+    let(:subject_a) { instance_double(Mutant::Subject) }
+
+    before do
+      matcher = instance_double(Mutant::Matcher)
+      expect(matcher).to receive(:call).with(env).and_return([subject_a])
+
+      expect(Mutant::Matcher::Method::Instance).to receive(:new)
+        .with(scope:, target_method: class_under_test.instance_method(:wrapped_method).super_method.super_method)
+        .and_return(matcher)
+    end
+
+    it 'returns the subject defined on the scope' do
+      expect(object.call(env)).to eql([subject_a])
+    end
+  end
+
+  context 'when a method is not defined on the scope' do
+    let(:class_under_test) do
+      Class.new(DelegateClass(Class.new { def delegated_method; end }))
+    end
+
+    it 'returns no subjects' do
+      expect(Mutant::Matcher::Method::Instance).not_to receive(:new)
+
+      expect(object.call(env)).to eql([])
     end
   end
 
