@@ -14,6 +14,7 @@ module Mutant
           def dispatch
             emit_singletons
             emit(N_EMPTY_STRING)
+            SqlHeredoc.mutate(input).each(&method(:emit))
           end
 
         end # String

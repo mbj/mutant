@@ -31,6 +31,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency('diff-lcs',       '>= 1.6', '< 3')
   gem.add_dependency('irb',            '~> 1.15')
   gem.add_dependency('parser',         '~> 3.3.10')
+  gem.add_dependency('pg_query',       '~> 6.2')
   gem.add_dependency('regexp_parser',  '~> 2.10')
   gem.add_dependency('securerandom',   '>= 0.3')
   gem.add_dependency('sorbet-runtime', '~> 0.6.0')

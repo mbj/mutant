@@ -9,6 +9,7 @@ source 'https://rubygems.org'
 gem 'rails', ENV.fetch('RAILS_VERSION')
 
 gem 'pg'
+gem 'pg_query'
 gem 'sqlite3'
 
 # Provides a throwaway PostgreSQL server for the parallel-worker verification
