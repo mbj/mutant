@@ -24,3 +24,9 @@ matcher:
   - Mutant::Mutator::Node::Arguments#emit_argument_presence
   - Mutant::Mutator::Node::Arguments#removed_block_arg?
   - Mutant::Mutator::Node::BlockPass#dispatch
+  # mutation crashes killfork in zombie mode; Timer#now is used by mutant infrastructure
+  - Mutant::Timer#now
+  # unkillable: mutate_child on arg nodes within procarg0 produces no observable mutations
+  - Mutant::Mutator::Node::ProcargZero#dispatch  # 5 alive
+  # unkillable: Zombifier is mutant infrastructure in zombie mode; mutations corrupt zombification, crashing the killfork
+  - Mutant::Zombifier#include?  # 9 alive

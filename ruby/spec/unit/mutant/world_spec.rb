@@ -81,7 +81,9 @@ RSpec.describe Mutant::World do
     end
 
     before do
-      allow(open3).to receive_messages(capture3: [stdout, stderr, process_status])
+      allow(open3).to receive(:capture3)
+        .with(*command, binmode: true)
+        .and_return([stdout, stderr, process_status])
     end
 
     context 'when process exists successful' do
